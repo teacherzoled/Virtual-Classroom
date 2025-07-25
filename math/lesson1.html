@@ -9,7 +9,14 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #fdfbf8; /* Cream */
+            background-color: #f0f9ff; /* Light blue-50 */
+            color: #1a202c;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content-wrapper {
+            flex-grow: 1;
         }
         .lesson-title {
             font-family: 'Lilita+One', cursive;
@@ -18,15 +25,40 @@
             background-color: white;
             border-radius: 1rem;
             padding: 2rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
         .activity-box {
-            background-color: #f3f4f6;
+            background-color: #f3e8ff; /* Purple-50 for activities */
+            border: 2px dashed #9333ea; /* Purple-600 dashed border */
             padding: 1.5rem;
             border-radius: 0.75rem;
             margin-top: 1.5rem;
-            border-left: 4px solid #3b82f6;
+        }
+         .activity-box h3 {
+            color: #7e22ce; /* Purple-700 */
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+            border-radius: 0.75rem;
+            margin-top: 1.5rem;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
         .btn {
             padding: 0.75rem 1.5rem;
@@ -34,20 +66,29 @@
             font-weight: 600;
             color: white;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.1s ease;
             border: none;
         }
+        .btn:active {
+            transform: scale(0.97);
+        }
         .btn-primary {
-            background-color: #2563eb; /* Blue */
+            background-color: #4f46e5; /* Indigo-600 */
         }
         .btn-primary:hover {
-            background-color: #1d4ed8;
+            background-color: #4338ca; /* Indigo-700 */
         }
         .btn-secondary {
-            background-color: #f59e0b; /* Yellow/Orange */
+            background-color: #f59e0b;
         }
         .btn-secondary:hover {
             background-color: #d97706;
+        }
+        .btn-challenge {
+            background-color: #db2777; /* Fuchsia-600 */
+        }
+        .btn-challenge:hover {
+            background-color: #be185d;
         }
         input[type="text"] {
             border: 2px solid #cbd5e1;
@@ -58,22 +99,31 @@
         }
         input:focus {
             outline: none;
-            border-color: #2563eb;
+            border-color: #4f46e5;
         }
-        .feedback {
+        .feedback, .challenge-div {
             margin-top: 1rem;
             padding: 0.75rem;
             border-radius: 0.5rem;
             font-weight: 500;
             text-align: center;
+            opacity: 0;
+            transform: scale(0.95) translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+        }
+        .feedback.visible, .challenge-div.visible {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
         }
         .feedback-correct {
-            background-color: #dcfce7;
-            color: #166534;
+            background-color: #d1fae5; /* Green-100 */
+            color: #047857; /* Green-700 */
         }
         .feedback-incorrect {
-            background-color: #fee2e2;
-            color: #991b1b;
+            background-color: #fee2e2; /* Red-100 */
+            color: #dc2626; /* Red-700 */
         }
         .place-value-chart {
             display: grid;
@@ -93,7 +143,7 @@
             font-weight: 700;
             background-color: #bae6fd;
         }
-        ul {
+        ul, ol {
             list-style-type: disc;
             padding-left: 1.5rem;
         }
@@ -101,9 +151,9 @@
             max-width: none;
         }
         .prose strong {
-            color: #1e293b;
+            color: #1e40af; /* Blue-800 */
         }
-        .prose ul {
+        .prose ul, .prose ol {
             margin-top: 1em;
             margin-bottom: 1em;
         }
@@ -111,165 +161,222 @@
             margin-top: 0.5em;
             margin-bottom: 0.5em;
         }
+        .prose h3 {
+            margin-top: 2rem; /* Added space before headings */
+        }
+        .header {
+            background-color: #fef3c7; /* Light beige/tan */
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            min-height: 80px;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .header-logo {
+            height: 50px;
+            width: auto;
+            border-radius: 0.5rem;
+        }
+        .header-title {
+            color: #f97316; /* Vibrant orange */
+            font-size: 2.25rem;
+            font-weight: 700;
+            text-align: center;
+        }
+        .footer {
+            background-color: #ea580c; /* Orange-700 */
+            color: white;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            margin-top: auto;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .footer p {
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+        .footer a {
+            color: #bfdbfe;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
-<body class="antialiased text-slate-800">
+<body>
 
-    <header class="p-4 md:p-8" style="background-color: #f3e9db;">
-        <div class="container mx-auto text-center p-8 rounded-lg" style="background-color: #fdfbf8;">
-            <h1 class="lesson-title text-4xl md:text-6xl text-slate-900">Week 1: Numbers and Rounding!</h1>
+    <header class="header">
+        <div class="header-left">
+            <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Teacher Ed Logo" class="header-logo">
+            <div class="header-title lesson-title">Teacher Ed Classroom</div>
         </div>
     </header>
 
-    <main class="container mx-auto p-4 md:p-8">
+    <div class="main-content-wrapper">
+        <main class="container mx-auto p-4 md:p-8">
 
-        <section class="card prose">
-            <h2 class="text-2xl font-bold text-slate-900 mb-4">Hey, Standard 6 Super Students!</h2>
-            <p>This week, we’re going on an exciting adventure into the world of numbers. We'll learn how to understand the "value" of each number, no matter how big or small, and how to "round off" numbers to make them simpler for everyday use. Think of numbers as your tools for understanding the world around you, from counting the fish caught by a fisherman in Caye Caulker to figuring out the change you get at the market in San Ignacio!</p>
-            <h3 class="text-xl font-bold text-slate-800 mb-2">What You Will Learn This Week:</h3>
-            <ul>
-                <li>Explain the value of digits in numbers, even tiny ones like 0.001, using a place value chart and connecting it to real life.</li>
-                <li>Round off decimal numbers up to two significant figures.</li>
-                <li>Round off large numbers up to three significant figures.</li>
-            </ul>
-        </section>
+            <section class="card prose">
+                <h1 class="text-4xl text-center font-bold text-blue-800">Week 1: Numbers and Rounding!</h1>
+                <h2 class="text-2xl font-bold text-slate-900 mt-8">Hey, Standard 6 Super Students!</h2>
+                <p>This week, we’re going on an exciting adventure into the world of numbers. We'll learn how to understand the "value" of each number, no matter how big or small, and how to "round off" numbers to make them simpler for everyday use. Think of numbers as your tools for understanding the world around you, from counting the fish caught by a fisherman in Caye Caulker to figuring out the change you get at the market in San Ignacio!</p>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">What You Will Learn This Week:</h3>
+                <ul>
+                    <li>Explain the value of digits in numbers, even tiny ones like 0.001, using a place value chart and connecting it to real life.</li>
+                    <li>Round off decimal numbers up to two significant figures.</li>
+                    <li>Round off large numbers up to three significant figures.</li>
+                </ul>
+            </section>
 
-        <section class="card prose">
-            <h2 class="text-2xl font-bold text-slate-900 mb-4">1. The Power of Place Value: Where Numbers Live!</h2>
-            <p>Imagine numbers living in houses on a street. Each house has a special "value" or importance based on its position. This is called <strong>place value</strong>.</p>
-            <h3>Whole Numbers</h3>
-            <p>In whole numbers, digits have values like ones, tens, hundreds, thousands, and so on. For example, in the number <strong>4,567</strong>:</p>
-            <ul>
-                <li>The <strong>4</strong> is in the thousands place, so its value is 4,000.</li>
-                <li>The <strong>5</strong> is in the hundreds place, so its value is 500.</li>
-                <li>The <strong>6</strong> is in the tens place, so its value is 60.</li>
-                <li>The <strong>7</strong> is in the ones place, so its value is 7.</li>
-            </ul>
-             <h3>Tiny Numbers, Big Ideas: Understanding Decimals</h3>
-            <p>What about numbers smaller than 1? These are called <strong>decimal numbers</strong>. After the decimal point, the values become smaller: tenths, hundredths, thousandths, and so on. For example, in the number <strong>0.005089</strong>:</p>
-            <ul>
-                <li>The <strong>5</strong> is in the thousandths place (0.005).</li>
-                <li>The <strong>0</strong> after the 5 is in the ten-thousandths place (0.0000).</li>
-                <li>The <strong>8</strong> is in the hundred-thousandths place (0.00008).</li>
-                <li>The <strong>9</strong> is in the millionths place (0.000009).</li>
-            </ul>
-
-            <div class="activity-box">
-                <h3 class="text-xl font-bold text-slate-800 mb-2">Activity 1: Place Value Explorer</h3>
-                <p class="mb-4">Type in a number like <strong>8,352</strong> or <strong>0.005089</strong> to see its place value breakdown!</p>
-                <div class="flex flex-col sm:flex-row gap-4 items-center">
-                    <input type="text" id="placeValueInput" placeholder="e.g., 8,352.197" class="flex-grow">
-                    <button id="placeValueBtn" class="btn btn-primary w-full sm:w-auto">Explore!</button>
+            <section class="card prose">
+                <h2 class="text-3xl font-bold text-blue-700">1. The Power of Place Value: Where Numbers Live!</h2>
+                <p>Imagine numbers living in houses on a street. Each house has a special "value" or importance based on its position. This is called <strong>place value</strong>.</p>
+                <h3 class="text-2xl font-bold text-indigo-700">Whole Numbers</h3>
+                <p><strong>Example:</strong> If the population of a small village in Belize is <strong>8,352</strong> people: The <strong>8</strong> means 8 thousand people, the <strong>3</strong> means 3 hundred people, the <strong>5</strong> means 5 tens (or 50) people, and the <strong>2</strong> means 2 ones (or 2) people.</p>
+                
+                <h3 class="text-2xl font-bold text-indigo-700">Tiny Numbers, Big Ideas: Understanding Decimals</h3>
+                <p>What about numbers smaller than 1? These are called <strong>decimal numbers</strong>. After the decimal point, the values become smaller: tenths, hundredths, thousandths, and so on.</p>
+                <p><strong>Example:</strong> Let's think about the Belizean dollar exchange rate. Sometimes, it's shown with very small decimals, like BZ$2.0175 to US$1. The <strong>1</strong> is in the hundredths place (1 cent), the <strong>7</strong> is in the thousandths place, and the <strong>5</strong> is in the ten-thousandths place! These tiny numbers really matter in banking and finance.</p>
+                
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/Hk_9MEI6V9M" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
-                <div id="placeValueChart" class="place-value-chart mt-6"></div>
-            </div>
-        </section>
 
-        <section class="card prose">
-            <h2 class="text-2xl font-bold text-slate-900 mb-4">2. Rounding Up! Making Numbers Simpler</h2>
-            <p>Sometimes, we don't need super-exact numbers. That's where <strong>rounding off</strong> comes in! To round a number, you look at the digit <strong>next door</strong> to the place you are rounding to.</p>
-            <h3 class="text-xl font-bold text-slate-800 mb-2">The "Neighbour Rule"</h3>
-            <ul>
-                <li>If the "neighbour" digit is <strong>5 or more</strong> (5, 6, 7, 8, 9), you <strong>round up</strong> (add 1 to the digit you are rounding).</li>
-                <li>If the "neighbour" digit is <strong>less than 5</strong> (0, 1, 2, 3, 4), you <strong>keep the digit the same</strong>.</li>
-            </ul>
-            <p><strong>Belizean Example:</strong> Imagine a product at a local market costs BZ$12.87. If you only deal with whole dollars, you might round it to BZ$13!</p>
+                <div class="activity-box">
+                    <h3 class="text-2xl font-bold">Activity 1: Place Value Explorer</h3>
+                    <p class="mb-4">Type in a number like <strong>8,352</strong> or <strong>2.0175</strong> to see its place value breakdown!</p>
+                    <div class="flex flex-col sm:flex-row gap-4 items-center">
+                        <input type="text" id="placeValueInput" placeholder="e.g., 8,352.197" class="flex-grow">
+                        <button id="placeValueBtn" class="btn btn-primary w-full sm:w-auto">Explore!</button>
+                    </div>
+                    <div id="placeValueChart" class="place-value-chart mt-6"></div>
+                </div>
+            </section>
 
-            <div class="activity-box">
-                <h3 class="text-xl font-bold text-slate-800 mb-2">Activity 2: Basic Rounding Practice</h3>
-                <p class="mb-4">Let's practice the "Neighbour Rule". Get a new problem and test your skills!</p>
-                <div class="bg-amber-100 p-4 rounded-lg text-center">
-                    <p id="basicRoundingProblem" class="text-xl font-semibold text-amber-800"></p>
+            <section class="card prose">
+                <h2 class="text-3xl font-bold text-blue-700">2. Rounding Up! Making Numbers Simpler</h2>
+                <p>Sometimes, we don't need super-exact numbers. That's where <strong>rounding off</strong> comes in! To round a number, you look at the digit <strong>next door</strong> to the place you are rounding to.</p>
+                <h3 class="text-2xl font-bold text-indigo-700">The "Neighbour Rule"</h3>
+                <ul>
+                    <li>If the "neighbour" digit is <strong>5 or more</strong> (5, 6, 7, 8, 9), you <strong>round up</strong>.</li>
+                    <li>If the "neighbour" digit is <strong>less than 5</strong> (0, 1, 2, 3, 4), you <strong>keep the digit the same</strong>.</li>
+                </ul>
+                <p><strong>Example:</strong> Imagine a product at a local market in San Ignacio costs BZ$12.87. If you only want to deal with whole dollars, you look at the "neighbour" to the ones place (the 8 in the tenths place). Since 8 is 5 or more, you round up the 2 to a 3. The rounded cost is <strong>BZ$13</strong>!</p>
+                
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/fd-E18EqSVk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
-                <div class="flex flex-col sm:flex-row gap-4 items-center mt-4">
-                    <input type="text" id="basicRoundingInput" placeholder="Your Answer" class="flex-grow">
-                    <button id="checkBasicRoundingBtn" class="btn btn-primary w-full sm:w-auto">Check</button>
-                    <button id="newBasicRoundingBtn" class="btn btn-secondary w-full sm:w-auto">New</button>
+
+                <div class="activity-box">
+                    <h3 class="text-2xl font-bold">Activity 2: Basic Rounding Practice</h3>
+                    <p class="mb-4">Let's practice the "Neighbour Rule". Get a new problem and test your skills!</p>
+                    <div class="bg-amber-100 p-4 rounded-lg text-center">
+                        <p id="basicRoundingProblem" class="text-xl font-semibold text-amber-800"></p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-4 items-center mt-4">
+                        <input type="text" id="basicRoundingInput" placeholder="Your Answer" class="flex-grow">
+                        <button id="checkBasicRoundingBtn" class="btn btn-primary w-full sm:w-auto">Check</button>
+                        <button id="newBasicRoundingBtn" class="btn btn-secondary w-full sm:w-auto">New</button>
+                    </div>
+                    <div id="challenge-basic-div" class="challenge-div">
+                        <p class="font-semibold text-green-700 mb-2">You're on a roll! Try a harder problem.</p>
+                        <button id="challenge-basic-btn" class="btn btn-challenge">Challenge Mode</button>
+                    </div>
+                    <div id="basicRoundingFeedback" class="feedback"></div>
                 </div>
-                <div id="basicRoundingFeedback" class="feedback hidden"></div>
-            </div>
-        </section>
-        
-        <section class="card prose">
-            <h2 class="text-2xl font-bold text-slate-900 mb-4">3. Rounding with Significant Figures</h2>
-            <p><strong>Significant figures</strong> are the digits in a number that are important for its precision. We use them for rounding very large or very small numbers.</p>
-            <h3 class="text-xl font-bold text-slate-800 mb-2">Rounding Decimals to Two Significant Figures</h3>
-            <p>Let's try an example: Round <strong>0.005089</strong> to two significant figures.</p>
-            <ol>
-                <li>Find the first non-zero digit. This is <strong>5</strong>.</li>
-                <li>Count two significant figures: <strong>5</strong> (first) and <strong>0</strong> (second).</li>
-                <li>Look at the "neighbour" digit. It's <strong>8</strong>.</li>
-                <li>Since 8 is 5 or more, we round up the second significant figure (the 0). So, 0 becomes 1.</li>
-                <li>So, 0.005089 rounded to two significant figures is <strong>0.0051</strong>.</li>
-            </ol>
-            <h3 class="text-xl font-bold text-slate-800 mb-2">Rounding Large Numbers to Three Significant Figures</h3>
-            <p>Let's try an example: Round <strong>53,879</strong> to three significant figures.</p>
-            <ol>
-                <li>Find the first non-zero digit. This is <strong>5</strong>.</li>
-                <li>Count three significant figures: <strong>5, 3, 8</strong>.</li>
-                <li>Look at the "neighbour" digit. It's <strong>7</strong>.</li>
-                <li>Since 7 is 5 or more, we round up the third significant figure (the 8). So, 8 becomes 9.</li>
-                <li>All digits after the third significant figure become 0.</li>
-                <li>So, 53,879 rounded to three significant figures is <strong>53,900</strong>.</li>
-            </ol>
+            </section>
             
-            <div class="activity-box">
-                <h3 class="text-xl font-bold text-slate-800 mb-2">Activity 3: Significant Figure Rodeo</h3>
-                <p class="mb-4">Now, let's practice rounding with significant figures!</p>
-                <div class="bg-green-100 p-4 rounded-lg text-center">
-                    <p id="sigFigProblemNumber" class="text-3xl font-bold text-green-800"></p>
-                    <p id="sigFigProblemRule" class="font-semibold text-green-700 mt-1"></p>
+            <section class="card prose">
+                <h2 class="text-3xl font-bold text-blue-700">3. Rounding with Significant Figures</h2>
+                <p><strong>Significant figures</strong> are the digits in a number that are important for its precision. We use them for rounding very large or very small numbers.</p>
+                <h3 class="text-2xl font-bold text-indigo-700">Rounding Decimals to Two Significant Figures</h3>
+                <p><strong>Example:</strong> Imagine a biologist in the Cayo District finds a very rare butterfly and measures its wingspan as <strong>0.08055</strong> meters. For a quick report, they might round this to two significant figures. The first significant figure is 8, the second is 0. The 'neighbour' is 5, so we round up. The reported wingspan becomes <strong>0.081 meters</strong>.</p>
+                <h3 class="text-2xl font-bold text-indigo-700">Rounding Large Numbers to Three Significant Figures</h3>
+                <p><strong>Example:</strong> According to the Statistical Institute of Belize, the population was estimated to be around <strong>419,199</strong> people at one point. If a newspaper wants to report this in a simpler way, they might round it to three significant figures. The first three are 4, 1, and 9. The 'neighbour' is 1, so we keep the 9 the same. The population would be reported as <strong>419,000</strong>.</p>
+                
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/9lKB5WbkyeI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
-                <div class="flex flex-col sm:flex-row gap-4 items-center mt-4">
-                    <input type="text" id="sigFigAnswerInput" placeholder="Your Answer" class="flex-grow">
-                    <button id="checkSigFigBtn" class="btn btn-primary w-full sm:w-auto">Check Answer</button>
-                    <button id="newSigFigProblemBtn" class="btn btn-secondary w-full sm:w-auto">New Number</button>
+                
+                <div class="activity-box">
+                    <h3 class="text-2xl font-bold">Activity 3: Significant Figure Rodeo</h3>
+                    <p class="mb-4">Now, let's practice rounding with significant figures!</p>
+                    <div class="bg-green-100 p-4 rounded-lg text-center">
+                        <p id="sigFigProblemNumber" class="text-3xl font-bold text-green-800"></p>
+                        <p id="sigFigProblemRule" class="font-semibold text-green-700 mt-1"></p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-4 items-center mt-4">
+                        <input type="text" id="sigFigAnswerInput" placeholder="Your Answer" class="flex-grow">
+                        <button id="checkSigFigBtn" class="btn btn-primary w-full sm:w-auto">Check Answer</button>
+                        <button id="newSigFigProblemBtn" class="btn btn-secondary w-full sm:w-auto">New Number</button>
+                    </div>
+                     <div id="challenge-sigfig-div" class="challenge-div">
+                        <p class="font-semibold text-green-700 mb-2">Amazing! Ready for an expert level problem?</p>
+                        <button id="challenge-sigfig-btn" class="btn btn-challenge">Expert Challenge</button>
+                    </div>
+                    <div id="sigFigFeedback" class="feedback"></div>
                 </div>
-                <div id="sigFigFeedback" class="feedback hidden"></div>
-            </div>
-        </section>
+            </section>
 
-        <section class="card prose">
-            <h2 class="text-2xl font-bold text-slate-900 mb-4">4. Final Math Challenge!</h2>
-            <p>Mr. Alex, a tour guide in San Ignacio, recorded the following weights of some ancient Mayan artefacts he found (in kilograms). Help him by rounding these weights for his report.</p>
-            
-            <div id="final-challenge" class="space-y-6 mt-6">
-                <div>
-                    <label for="q1" class="block font-semibold mb-2">1. Round <strong>47.345 kg</strong> to <strong>two</strong> significant figures.</label>
-                    <input type="text" id="q1" data-answer="47" placeholder="Answer for 47.345 kg" class="quiz-input">
-                    <div id="feedback-q1" class="text-sm mt-1"></div>
+            <section class="card prose">
+                <h2 class="text-3xl font-bold text-blue-700">4. Final Math Challenge!</h2>
+                <p>Mr. Alex, a tour guide in San Ignacio, recorded the following weights of some ancient Mayan artefacts he found (in kilograms). Help him by rounding these weights for his report.</p>
+                
+                <div id="final-challenge" class="space-y-6 mt-6">
+                    <div>
+                        <label for="q1" class="block font-semibold mb-2">1. Round <strong>47.345 kg</strong> to <strong>two</strong> significant figures.</label>
+                        <input type="text" id="q1" data-answer="47" placeholder="Answer for 47.345 kg" class="quiz-input">
+                        <div id="feedback-q1" class="text-sm mt-1"></div>
+                    </div>
+                    <div>
+                        <label for="q2" class="block font-semibold mb-2">2. Round <strong>1,234.9 kg</strong> to <strong>three</strong> significant figures.</label>
+                        <input type="text" id="q2" data-answer="1230" placeholder="Answer for 1,234.9 kg" class="quiz-input">
+                        <div id="feedback-q2" class="text-sm mt-1"></div>
+                    </div>
+                    <div>
+                        <label for="q3" class="block font-semibold mb-2">3. Round <strong>0.00782 kg</strong> to <strong>two</strong> significant figures.</label>
+                        <input type="text" id="q3" data-answer="0.0078" placeholder="Answer for 0.00782 kg" class="quiz-input">
+                        <div id="feedback-q3" class="text-sm mt-1"></div>
+                    </div>
+                    <div>
+                        <label for="q4" class="block font-semibold mb-2">4. Round <strong>85.67 kg</strong> to <strong>two</strong> significant figures.</label>
+                        <input type="text" id="q4" data-answer="86" placeholder="Answer for 85.67 kg" class="quiz-input">
+                        <div id="feedback-q4" class="text-sm mt-1"></div>
+                    </div>
                 </div>
-                <div>
-                    <label for="q2" class="block font-semibold mb-2">2. Round <strong>1,234.9 kg</strong> to <strong>three</strong> significant figures.</label>
-                    <input type="text" id="q2" data-answer="1230" placeholder="Answer for 1,234.9 kg" class="quiz-input">
-                    <div id="feedback-q2" class="text-sm mt-1"></div>
-                </div>
-                <div>
-                    <label for="q3" class="block font-semibold mb-2">3. Round <strong>0.00782 kg</strong> to <strong>two</strong> significant figures.</label>
-                    <input type="text" id="q3" data-answer="0.0078" placeholder="Answer for 0.00782 kg" class="quiz-input">
-                    <div id="feedback-q3" class="text-sm mt-1"></div>
-                </div>
-                <div>
-                    <label for="q4" class="block font-semibold mb-2">4. Round <strong>85.67 kg</strong> to <strong>two</strong> significant figures.</label>
-                    <input type="text" id="q4" data-answer="86" placeholder="Answer for 85.67 kg" class="quiz-input">
-                    <div id="feedback-q4" class="text-sm mt-1"></div>
-                </div>
-            </div>
 
-            <div class="mt-8 text-center">
-                <button id="submitQuizBtn" class="btn btn-primary">Check My Report</button>
-                <div id="quizResult" class="feedback hidden"></div>
-            </div>
-        </section>
-    </main>
+                <div class="mt-8 text-center">
+                    <button id="submitQuizBtn" class="btn btn-primary">Check My Report</button>
+                    <div id="quizResult" class="feedback"></div>
+                </div>
+            </section>
+        </main>
+    </div>
 
-    <footer class="text-center p-6 text-white" style="background-color: #e69a58;">
-        <p>Good luck, Super Students!</p>
+    <footer class="footer">
+        <p>📫 Contact | 💬 Chat | © 2025</p>
+        <p>Email: <a href="mailto:teacherzoloed@gmail.com">teacherzoloed@gmail.com</a></p>
+        <p>Chat: Reach me on Google Chat using the same email</p>
+        <p>© 2025 Mr. Edwin's Virtual Classroom — All rights reserved.</p>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             
+            function formatNumberWithCommas(number) {
+                let parts = number.toString().split(".");
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                return parts.join(".");
+            }
+
             // --- Activity 1: Place Value Explorer ---
             const placeValueInput = document.getElementById('placeValueInput');
             const placeValueBtn = document.getElementById('placeValueBtn');
@@ -283,31 +390,25 @@
             function updatePlaceValue() {
                 const numStr = placeValueInput.value.trim().replace(/,/g, '');
                 if (numStr === '') {
-                    placeValueChart.innerHTML = '';
-                    return;
+                    placeValueChart.innerHTML = ''; return;
                 }
                 if (isNaN(parseFloat(numStr))) {
-                    placeValueChart.innerHTML = '<p class="text-red-500 col-span-full">Please enter a valid number.</p>';
-                    return;
+                    placeValueChart.innerHTML = '<p class="text-red-500 col-span-full">Please enter a valid number.</p>'; return;
                 }
                 const [wholePartStr, decimalPartStr] = numStr.split('.');
-                let chartHeaders = [];
-                let chartValues = [];
+                let chartHeaders = [], chartValues = [];
                 const places = [
-                    { name: 'Millions' }, { name: 'Hundred Thousands' },
-                    { name: 'Ten Thousands' }, { name: 'Thousands' },
+                    { name: 'Millions' }, { name: 'Hundred Thousands' }, { name: 'Ten Thousands' }, { name: 'Thousands' },
                     { name: 'Hundreds' }, { name: 'Tens' }, { name: 'Ones' }
                 ];
                 const decimalPlaces = [
-                    { name: 'Tenths' }, { name: 'Hundredths' }, { name: 'Thousandths' }, 
-                    { name: 'Ten-Thousandths' }, { name: 'Hundred-Thousandths' }, { name: 'Millionths' }
+                    { name: 'Tenths' }, { name: 'Hundredths' }, { name: 'Thousandths' }, { name: 'Ten-Thousandths' },
+                    { name: 'Hundred-Thousandths' }, { name: 'Millionths' }
                 ];
-                
                 if (wholePartStr && wholePartStr.length > 0 && !(wholePartStr.length === 1 && wholePartStr[0] === '0' && decimalPartStr)) {
                     const len = wholePartStr.length;
                     if (len > 7) {
-                        placeValueChart.innerHTML = '<p class="text-red-500 col-span-full">Number is too large.</p>';
-                        return;
+                        placeValueChart.innerHTML = '<p class="text-red-500 col-span-full">Number is too large.</p>'; return;
                     }
                     for (let i = 0; i < len; i++) {
                         const digit = parseInt(wholePartStr[i], 10);
@@ -321,12 +422,10 @@
                     chartHeaders.push(`<div class="header">Ones</div>`);
                     chartValues.push(`<div>0</div>`);
                 }
-
                 if (decimalPartStr !== undefined) {
                     chartHeaders.push(`<div class="header text-3xl font-bold leading-tight">.</div>`);
                     chartValues.push(`<div class="text-3xl font-bold leading-tight">.</div>`);
                 }
-                
                 if (decimalPartStr) {
                     for(let i = 0; i < decimalPartStr.length; i++) {
                         if(i < decimalPlaces.length) {
@@ -336,7 +435,6 @@
                         }
                     }
                 }
-                
                 placeValueChart.style.gridTemplateColumns = `repeat(${chartHeaders.length}, minmax(0, 1fr))`;
                 placeValueChart.innerHTML = chartHeaders.join('') + chartValues.join('');
             }
@@ -347,47 +445,37 @@
             const checkBasicRoundingBtn = document.getElementById('checkBasicRoundingBtn');
             const newBasicRoundingBtn = document.getElementById('newBasicRoundingBtn');
             const basicRoundingFeedback = document.getElementById('basicRoundingFeedback');
+            const challengeBasicDiv = document.getElementById('challenge-basic-div');
+            const challengeBasicBtn = document.getElementById('challenge-basic-btn');
             let basicRoundingAnswer = 0;
+            let basicRoundingStreak = 0;
+            let basicChallengeMode = false;
 
             function generateBasicRoundingProblem() {
                 basicRoundingInput.value = '';
-                basicRoundingFeedback.classList.add('hidden');
-
+                basicRoundingFeedback.classList.remove('visible');
                 const places = [
-                    { name: 'millionth', value: 0.000001, type: 'decimal' },
-                    { name: 'hundred-thousandth', value: 0.00001, type: 'decimal' },
-                    { name: 'ten-thousandth', value: 0.0001, type: 'decimal' },
-                    { name: 'thousandth', value: 0.001, type: 'decimal' },
-                    { name: 'hundredth', value: 0.01, type: 'decimal' },
-                    { name: 'tenth', value: 0.1, type: 'decimal' },
-                    { name: 'whole number', value: 1, type: 'any' },
-                    { name: 'ten', value: 10, type: 'whole' },
-                    { name: 'hundred', value: 100, type: 'whole' },
-                    { name: 'thousand', value: 1000, type: 'whole' },
-                    { name: 'ten thousand', value: 10000, type: 'whole' },
-                    { name: 'hundred thousand', value: 100000, type: 'whole' },
-                    { name: 'million', value: 1000000, type: 'whole' }
+                    { name: 'tenth', value: 0.1, type: 'decimal' }, { name: 'whole number', value: 1, type: 'any' },
+                    { name: 'ten', value: 10, type: 'whole' }, { name: 'hundred', value: 100, type: 'whole' }
                 ];
-
-                const place = places[Math.floor(Math.random() * places.length)];
+                const challengePlaces = [
+                    { name: 'millionth', value: 0.000001, type: 'decimal' }, { name: 'hundred-thousandth', value: 0.00001, type: 'decimal' },
+                    { name: 'ten thousand', value: 10000, type: 'whole' }, { name: 'million', value: 1000000, type: 'whole' }
+                ];
+                const placeSet = basicChallengeMode ? [...places, ...challengePlaces] : places;
+                const place = placeSet[Math.floor(Math.random() * placeSet.length)];
                 let num;
-
                 if (place.type === 'decimal') {
                     const precision = (place.value.toString().split('.')[1] || '').length;
-                    num = parseFloat(Math.random().toFixed(precision + 1));
+                    num = parseFloat(Math.random().toFixed(precision + 2));
                 } else {
                     const min = place.value;
                     const max = place.value * 50;
                     num = Math.floor(Math.random() * (max - min + 1)) + min;
-                    if (place.type === 'any') {
-                        num += parseFloat(Math.random().toFixed(2));
-                    }
+                    if (place.type === 'any') { num += parseFloat(Math.random().toFixed(2)); }
                 }
-
-                basicRoundingProblemEl.textContent = `Round ${num} to the nearest ${place.name}.`;
-                
+                basicRoundingProblemEl.textContent = `Round ${formatNumberWithCommas(num)} to the nearest ${place.name}.`;
                 const roundedValue = Math.round(num / place.value) * place.value;
-
                 if (place.type === 'decimal' || place.type === 'any') {
                     const precision = (place.value.toString().split('.')[1] || '').length;
                     basicRoundingAnswer = parseFloat(roundedValue.toFixed(precision));
@@ -398,17 +486,28 @@
             
             checkBasicRoundingBtn.addEventListener('click', () => {
                 const userAnswer = parseFloat(basicRoundingInput.value.replace(/,/g, ''));
-                basicRoundingFeedback.classList.remove('hidden', 'feedback-correct', 'feedback-incorrect');
+                basicRoundingFeedback.classList.remove('feedback-correct', 'feedback-incorrect');
+                basicRoundingFeedback.classList.add('visible');
                 if (userAnswer === basicRoundingAnswer) {
                     basicRoundingFeedback.classList.add('feedback-correct');
-                    basicRoundingFeedback.textContent = `Correct! ${basicRoundingAnswer} is right!`;
+                    basicRoundingFeedback.textContent = `Correct! ${formatNumberWithCommas(basicRoundingAnswer)} is right!`;
+                    basicRoundingStreak++;
+                    if (basicRoundingStreak >= 3 && !basicChallengeMode) {
+                        challengeBasicDiv.classList.add('visible');
+                    }
                 } else {
                     basicRoundingFeedback.classList.add('feedback-incorrect');
-                    basicRoundingFeedback.textContent = `Not quite. The correct answer is ${basicRoundingAnswer}. Try again!`;
+                    basicRoundingFeedback.innerHTML = `Not quite. Remember the 'Neighbour Rule'! Is the digit to the right 5 or more? <br> The correct answer is <strong>${formatNumberWithCommas(basicRoundingAnswer)}</strong>.`;
+                    basicRoundingStreak = 0;
+                    challengeBasicDiv.classList.remove('visible');
                 }
             });
             newBasicRoundingBtn.addEventListener('click', generateBasicRoundingProblem);
-
+            challengeBasicBtn.addEventListener('click', () => {
+                basicChallengeMode = true;
+                challengeBasicDiv.classList.remove('visible');
+                generateBasicRoundingProblem();
+            });
 
             // --- Activity 3: Significant Figure Rodeo ---
             const sigFigProblemNumber = document.getElementById('sigFigProblemNumber');
@@ -417,22 +516,28 @@
             const checkSigFigBtn = document.getElementById('checkSigFigBtn');
             const newSigFigProblemBtn = document.getElementById('newSigFigProblemBtn');
             const sigFigFeedback = document.getElementById('sigFigFeedback');
+            const challengeSigFigDiv = document.getElementById('challenge-sigfig-div');
+            const challengeSigFigBtn = document.getElementById('challenge-sigfig-btn');
             let sigFigCorrectAnswer = '';
+            let sigFigStreak = 0;
+            let sigFigChallengeMode = false;
 
             function generateSigFigProblem() {
                 sigFigAnswerInput.value = '';
-                sigFigFeedback.classList.add('hidden');
+                sigFigFeedback.classList.remove('visible');
                 const isDecimal = Math.random() > 0.4;
-                const sigFigs = Math.random() > 0.5 ? 2 : 3;
+                let sigFigs = Math.random() > 0.5 ? 2 : 3;
+                if (sigFigChallengeMode) { sigFigs = Math.random() > 0.5 ? 4 : 5; }
                 let num;
                 if (isDecimal) {
                     const leadingZeros = Math.floor(Math.random() * 3);
                     const randomPart = Math.random().toString().substring(2, 7);
                     num = parseFloat('0.' + '0'.repeat(leadingZeros) + randomPart);
                 } else {
-                    num = Math.floor(Math.random() * (999999 - 1000 + 1) + 1000);
+                    let maxNum = sigFigChallengeMode ? 9999999 : 999999;
+                    num = Math.floor(Math.random() * (maxNum - 1000 + 1) + 1000);
                 }
-                sigFigProblemNumber.textContent = num;
+                sigFigProblemNumber.textContent = formatNumberWithCommas(num);
                 sigFigProblemRule.textContent = `Round to ${sigFigs} significant figures.`;
                 sigFigCorrectAnswer = roundToSignificantFigures(num, sigFigs).toString();
             }
@@ -448,10 +553,7 @@
                     let numStr = num.toString();
                     let firstSigFigIndex = -1;
                     for(let i=0; i<numStr.length; i++){
-                        if(numStr[i] >= '1' && numStr[i] <= '9'){
-                            firstSigFigIndex = i;
-                            break;
-                        }
+                        if(numStr[i] >= '1' && numStr[i] <= '9'){ firstSigFigIndex = i; break; }
                     }
                     if(firstSigFigIndex !== -1){
                         let decimalPointIndex = numStr.indexOf('.');
@@ -466,21 +568,28 @@
 
             checkSigFigBtn.addEventListener('click', () => {
                 const userAnswer = sigFigAnswerInput.value.trim().replace(/,/g, '');
-                sigFigFeedback.classList.remove('hidden', 'feedback-correct', 'feedback-incorrect');
+                sigFigFeedback.classList.remove('feedback-correct', 'feedback-incorrect');
+                sigFigFeedback.classList.add('visible');
                 if (userAnswer === sigFigCorrectAnswer) {
                     sigFigFeedback.classList.add('feedback-correct');
                     sigFigFeedback.textContent = `Correct! Well done!`;
+                    sigFigStreak++;
+                    if (sigFigStreak >= 3 && !sigFigChallengeMode) {
+                        challengeSigFigDiv.classList.add('visible');
+                    }
                 } else {
                     sigFigFeedback.classList.add('feedback-incorrect');
-                    sigFigFeedback.textContent = `Not quite. The correct answer is ${sigFigCorrectAnswer}. Try again!`;
+                    sigFigFeedback.innerHTML = `Not quite. Remember to count the significant figures from the first non-zero digit. <br> The correct answer is <strong>${formatNumberWithCommas(sigFigCorrectAnswer)}</strong>.`;
+                    sigFigStreak = 0;
+                    challengeSigFigDiv.classList.remove('visible');
                 }
             });
-            
-            sigFigAnswerInput.addEventListener('keyup', (e) => {
-                if(e.key === 'Enter') checkSigFigBtn.click();
-            });
-
             newSigFigProblemBtn.addEventListener('click', generateSigFigProblem);
+            challengeSigFigBtn.addEventListener('click', () => {
+                sigFigChallengeMode = true;
+                challengeSigFigDiv.classList.remove('visible');
+                generateSigFigProblem();
+            });
 
             // --- Final Challenge ---
             const submitQuizBtn = document.getElementById('submitQuizBtn');
@@ -505,13 +614,14 @@
                         feedbackEl.style.color = '#991b1b';
                     }
                 });
-                quizResult.classList.remove('hidden', 'feedback-correct', 'feedback-incorrect');
+                quizResult.classList.remove('feedback-correct', 'feedback-incorrect');
+                quizResult.classList.add('visible');
                 if (correctCount === quizInputs.length) {
                     quizResult.classList.add('feedback-correct');
-                    quizResult.textContent = `Excellent! You got ${correctCount}/${quizInputs.length} correct. You're a rounding master!`;
+                    quizResult.textContent = `Excellent! You got ${correctCount}/${quizInputs.length} correct. You have mastered this lesson!`;
                 } else {
                     quizResult.classList.add('feedback-incorrect');
-                    quizResult.textContent = `Good effort! You got ${correctCount}/${quizInputs.length} correct. Review your answers and try again!`;
+                    quizResult.textContent = `Good effort! You got ${correctCount}/${quizInputs.length} correct. Please correct the highlighted answers to complete the lesson.`;
                 }
             });
 
@@ -524,3 +634,5 @@
     </script>
 </body>
 </html>
+
+
