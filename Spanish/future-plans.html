@@ -47,9 +47,58 @@
             cursor: not-allowed;
             transform: none;
         }
+        /* Feedback Animations */
+        @keyframes shake-incorrect {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        @keyframes flash-correct {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7); }
+            50% { box-shadow: 0 0 0 4px rgba(34, 197, 94, 0); }
+        }
+        .animate-shake {
+            animation: shake-incorrect 0.6s ease-in-out;
+            border-color: #ef4444; /* red-500 */
+        }
+        .animate-flash {
+            animation: flash-correct 1s ease-out;
+            border-color: #22c55e; /* green-500 */
+        }
+        /* Confetti Animation */
+        #confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 20px;
+            background-color: #f00;
+            opacity: 0.7;
+            animation: fall 4s ease-in-out forwards;
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body class="bg-sky-50 text-gray-800">
+
+    <div id="confetti-container"></div>
 
     <!-- Header -->
     <header class="bg-amber-100 p-4 shadow-md">
@@ -223,7 +272,7 @@
                 <!-- Question 1 -->
                 <div class="quiz-question" id="q1">
                     <p class="font-semibold text-lg mb-2">1. Complete the sentence: "Nosotros ____ a estudiar para el examen."</p>
-                    <input type="text" id="q1-input" class="mt-1 block w-full md:w-1/2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Type the correct form of 'ir'">
+                    <input type="text" id="q1-input" class="mt-1 block w-full md:w-1/2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                     <div id="q1-feedback" class="text-sm mt-1"></div>
                 </div>
 
@@ -252,7 +301,7 @@
                 <!-- Question 4 -->
                 <div class="quiz-question" id="q4">
                      <p class="font-semibold text-lg mb-2">4. Translate the following sentence: "You are going to swim."</p>
-                    <input type="text" id="q4-input" class="mt-1 block w-full md:w-1/2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Type the full Spanish sentence">
+                    <input type="text" id="q4-input" class="mt-1 block w-full md:w-1/2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                     <div id="q4-feedback" class="text-sm mt-1"></div>
                 </div>
 
@@ -305,6 +354,33 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
+    // --- Animation Functions ---
+    const applyAnimation = (element, animationClass) => {
+        element.classList.add(animationClass);
+        element.addEventListener('animationend', () => {
+            element.classList.remove(animationClass);
+        }, { once: true });
+    };
+
+    // --- Confetti Animation ---
+    const confettiContainer = document.getElementById('confetti-container');
+    const triggerConfetti = () => {
+        for (let i = 0; i < 100; i++) {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti');
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.animationDelay = Math.random() * 2 + 's';
+            const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800'];
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confettiContainer.appendChild(confetti);
+
+            setTimeout(() => {
+                confetti.remove();
+            }, 4000);
+        }
+    };
+
+
     // --- Activity 1: Conjugation Quick-Draw ---
     const conjugationActivity = {
         questions: [
@@ -328,7 +404,6 @@ document.addEventListener('DOMContentLoaded', () => {
             this.feedbackEl.classList.remove('show');
             this.feedbackEl.textContent = '';
             
-            // Randomize question order
             if (this.currentQuestionIndex >= this.questions.length) {
                 this.currentQuestionIndex = 0; // Loop back
             }
@@ -340,12 +415,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const button = document.createElement('button');
                 button.textContent = option;
                 button.className = 'btn bg-purple-100 text-purple-800 font-bold py-3 px-4 rounded-lg hover:bg-purple-200 border border-purple-300';
-                button.addEventListener('click', () => this.checkAnswer(option));
+                button.addEventListener('click', (e) => this.checkAnswer(option, e.target));
                 this.optionsContainerEl.appendChild(button);
             });
         },
 
-        checkAnswer(selectedOption) {
+        checkAnswer(selectedOption, buttonElement) {
             const correctAnswer = this.questions[this.currentQuestionIndex].answer;
             const pronoun = this.questions[this.currentQuestionIndex].pronoun;
 
@@ -353,11 +428,13 @@ document.addEventListener('DOMContentLoaded', () => {
             this.feedbackEl.classList.add('show');
 
             if (selectedOption === correctAnswer) {
+                applyAnimation(buttonElement, 'animate-flash');
                 this.feedbackEl.classList.add('bg-green-100', 'text-green-800');
                 this.feedbackEl.innerHTML = `&#10004; ¡Correcto! For <strong>${pronoun}</strong>, we use <strong>${correctAnswer}</strong>.`;
                 this.currentQuestionIndex++;
                 setTimeout(() => this.loadQuestion(), 1500);
             } else {
+                applyAnimation(buttonElement, 'animate-shake');
                 this.feedbackEl.classList.add('bg-red-100', 'text-red-800');
                 this.feedbackEl.innerHTML = `&#10060; Not quite. That's not the right form for <strong>${pronoun}</strong>. Look at the chart above and try again!`;
             }
@@ -440,10 +517,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         addWordToAnswer(button) {
             if (button.classList.contains('used')) return;
-
             button.classList.add('used');
             this.userAnswer.push(button.textContent);
-            
             const answerButton = document.createElement('button');
             answerButton.textContent = button.textContent;
             answerButton.className = 'answer-area-button btn bg-indigo-100 text-indigo-800 font-semibold py-2 px-4 rounded-md';
@@ -475,6 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.feedbackEl.classList.add('show');
             
             if (userAnswerStr === correctAnswerStr) {
+                applyAnimation(this.answerAreaEl, 'animate-flash');
                 this.feedbackEl.classList.add('bg-green-100', 'text-green-800');
                 this.feedbackEl.innerHTML = `&#10004; ¡Excelente! That's a perfect sentence.`;
                 this.correctInARow++;
@@ -483,6 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 setTimeout(() => this.loadNewSentence(), 2000);
             } else {
+                applyAnimation(this.answerAreaEl, 'animate-shake');
                 this.feedbackEl.classList.add('bg-red-100', 'text-red-800');
                 this.feedbackEl.innerHTML = `&#10060; Not quite. The word order seems wrong. Remember the formula: <strong>Person + IR + a + Action</strong>. Reset and try again!`;
                 this.correctInARow = 0;
@@ -526,22 +603,26 @@ document.addEventListener('DOMContentLoaded', () => {
             this.questions.forEach(q => {
                 q.feedbackEl.textContent = '';
                 q.feedbackEl.classList.remove('text-red-600', 'text-green-600');
+                let elementToAnimate;
                 
                 let isCorrect = false;
                 if (q.type === 'text') {
-                    // Trim whitespace, convert to lower case, and remove an optional period at the end.
+                    elementToAnimate = q.inputEl;
                     const userAnswer = q.inputEl.value.trim().toLowerCase().replace(/\.?$/, '');
                     isCorrect = (userAnswer === q.answer) || (q.alt_answer && userAnswer === q.alt_answer);
                 } else if (q.type === 'radio') {
                     const selected = this.formEl.querySelector(`input[name="${q.id}"]:checked`);
+                    elementToAnimate = selected ? selected.parentElement : this.formEl.querySelector(`input[name="${q.id}"]`).parentElement;
                     isCorrect = selected ? selected.value === q.answer : false;
                 }
 
                 if (isCorrect) {
+                    applyAnimation(elementToAnimate, 'animate-flash');
                     q.feedbackEl.textContent = '✓ Correct!';
                     q.feedbackEl.classList.add('text-green-600');
                     correctCount++;
                 } else {
+                    applyAnimation(elementToAnimate, 'animate-shake');
                     q.feedbackEl.textContent = `✗ Incorrect. Hint: ${q.hint}`;
                     q.feedbackEl.classList.add('text-red-600');
                     allCorrect = false;
@@ -550,6 +631,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             this.feedbackEl.classList.add('show');
             if (allCorrect) {
+                triggerConfetti();
                 this.feedbackEl.classList.add('bg-green-100', 'text-green-800');
                 this.feedbackEl.classList.remove('bg-red-100', 'text-red-800');
                 this.feedbackEl.innerHTML = `<h2>&#127881; ¡Felicitaciones! &#127881;</h2><p>You got 100% correct! You are now a master of future plans in Spanish!</p>`;
