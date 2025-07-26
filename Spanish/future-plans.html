@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Ed Classroom | Spanish Future Plans</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles to complement Tailwind CSS */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .content-card {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .btn {
+            transition: transform 0.1s ease-in-out, background-color 0.2s;
+        }
+        .btn:active {
+            transform: scale(0.95);
+        }
+        .feedback-box, .challenge-box {
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, opacity 0.5s ease-in-out;
+        }
+        .feedback-box.show, .challenge-box.show {
+            opacity: 1;
+            max-height: 500px; /* Adjust as needed */
+        }
+        /* For the sentence builder activity */
+        .word-bank-button, .answer-area-button {
+            transition: all 0.2s ease;
+        }
+        .word-bank-button:hover {
+            transform: translateY(-2px);
+            background-color: #e9d5ff; /* lighter purple */
+        }
+        .word-bank-button.used {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+    </style>
+</head>
+<body class="bg-sky-50 text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-amber-100 p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Teacher Ed Classroom Logo" class="h-16 w-16">
+                <div>
+                    <h1 class="text-3xl font-bold text-orange-600">Teacher Ed Classroom</h1>
+                    <p class="text-indigo-800 font-semibold">Spanish Lesson: Planning Our Future!</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 md:p-8">
+
+        <!-- Introduction Card -->
+        <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8 content-card">
+            <h2 class="text-3xl font-bold text-indigo-800 mb-4">Hey, Future Explorers!</h2>
+            <p class="text-lg mb-4">
+                Welcome to our exciting journey into Spanish! Today, we're going to learn a <strong class="text-orange-600">super easy and magical formula</strong> to talk about what we are going to do in the future. Have you ever thought about what you’re going to do this weekend? Or what you're going to do when you're older? Today, you'll learn how to say it in Spanish!
+            </p>
+            <div class="bg-sky-100 border-l-4 border-sky-500 text-sky-800 p-4 rounded-r-lg">
+                <p><strong class="font-bold">Learning Outcome SP 1.22:</strong> To tell and express future plans using the present tense of `ir + a + infinitive`, just like saying <em class="font-semibold">"voy a seguir estudiando"</em> (I am going to continue studying).</p>
+            </div>
+        </div>
+
+        <!-- The Magic Formula Card -->
+        <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8 content-card">
+            <h2 class="text-3xl font-bold text-indigo-800 mb-4 mt-8">The Magic Formula: "Ir + a + Infinitivo"</h2>
+            <p class="mb-4">Imagine you want to travel from Belize City to San Ignacio. You need to know <strong class="text-indigo-600">how to get there</strong>. To talk about the near future in Spanish, we have a very clear "route" or simple formula: the verb "IR" + the word "a" + a verb in its "infinitive" form.</p>
+            <p class="mb-6">Think of this formula like a <strong class="text-indigo-600">"Future Plan GPS"</strong>. It has three important steps to guide you!</p>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Step 1 -->
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <h3 class="text-xl font-bold text-indigo-700 mb-2">Step 1: The Verb "IR" (To Go)</h3>
+                    <p class="mb-3">This verb is the start of your journey. You need to <strong class="font-semibold">conjugate</strong> it, or change it, so it matches the person doing the action.</p>
+                    <ul class="list-disc list-inside space-y-1 text-gray-700">
+                        <li><strong class="font-mono text-blue-800">Yo</strong> &rarr; voy</li>
+                        <li><strong class="font-mono text-blue-800">Tú</strong> &rarr; vas</li>
+                        <li><strong class="font-mono text-blue-800">Él/Ella/Usted</strong> &rarr; va</li>
+                        <li><strong class="font-mono text-blue-800">Nosotros/as</strong> &rarr; vamos</li>
+                        <li><strong class="font-mono text-blue-800">Ustedes/Ellos/as</strong> &rarr; van</li>
+                    </ul>
+                </div>
+                <!-- Step 2 -->
+                <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                    <h3 class="text-xl font-bold text-green-800 mb-2">Step 2: The Preposition "a"</h3>
+                    <p>The "a" is like the <strong class="font-semibold">bridge</strong> that connects "IR" to the action. We <strong class="font-semibold">always</strong> use it in this formula!</p>
+                </div>
+                <!-- Step 3 -->
+                <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                    <h3 class="text-xl font-bold text-yellow-800 mb-2">Step 3: The Infinitive</h3>
+                    <p class="mb-3">The infinitive is the <strong class="font-semibold">basic form</strong> of the verb (ending in -ar, -er, or -ir). This is the action you are going to do. You <strong class="font-semibold text-red-600">do not change</strong> this verb!</p>
+                    <p class="text-sm">e.g., <em class="font-semibold">estudiar, jugar, visitar, comer, bailar</em>.</p>
+                </div>
+            </div>
+
+            <div class="mt-6 bg-indigo-800 text-white p-4 rounded-lg text-center font-mono text-lg shadow-inner">
+                [Person] + [Conjugated verb IR] + a + [Verb in infinitive]
+            </div>
+        </div>
+        
+        <!-- Video Placeholder 1 -->
+        <div class="text-center my-10">
+            <div class="inline-block bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
+                <h3 class="text-xl font-bold text-indigo-600 mb-2">Watch the Video Explainer!</h3>
+                <p class="mb-4">Watch this video to review how to use the "ir + a + infinitive" formula.</p>
+                <div class="aspect-video">
+                     <iframe class="w-full h-full rounded-lg shadow-lg" src="https://www.youtube.com/embed/7UTtV6NPmzc?start=261" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity 1: Conjugation Quick-Draw -->
+        <div class="bg-purple-50 border-2 border-purple-500 rounded-lg p-6 md:p-8 my-8">
+            <h3 class="text-2xl font-bold text-purple-800 mb-4">Activity 1: Conjugation Quick-Draw</h3>
+            <p class="mb-4">Let's practice conjugating the verb "IR". Choose the correct form for the pronoun shown.</p>
+            <div id="conjugation-activity" class="bg-white p-6 rounded-lg shadow-md">
+                <div class="text-center text-2xl font-bold mb-4">
+                    <p>Pronoun: <span id="pronoun" class="text-purple-700 font-mono"></span></p>
+                </div>
+                <div id="options-container" class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    <!-- Options will be injected here by JS -->
+                </div>
+                <div id="conjugation-feedback" class="feedback-box mt-4 p-4 rounded-lg font-semibold"></div>
+            </div>
+        </div>
+
+        <!-- Examples Card -->
+        <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8 content-card">
+            <h2 class="text-3xl font-bold text-indigo-800 mb-4 mt-8">Examples of Our Plans</h2>
+            <p class="mb-4">Let's see how our friends use this formula to talk about their plans! This will help you construct simple sentences like <em class="text-indigo-600 font-semibold">"Vas a ir a la plaza mañana"</em> (You are going to go to the plaza tomorrow).</p>
+            <ul class="space-y-3">
+                <li class="p-4 bg-sky-50 rounded-lg flex items-start space-x-3">
+                    <span class="text-sky-500 font-bold text-xl">&raquo;</span>
+                    <p>Yo <strong class="text-orange-600">voy a visitar</strong> las ruinas de Altún Ha el próximo mes. <br><em class="text-gray-500">(I am going to visit the Altun Ha ruins next month.)</em></p>
+                </li>
+                <li class="p-4 bg-sky-50 rounded-lg flex items-start space-x-3">
+                    <span class="text-sky-500 font-bold text-xl">&raquo;</span>
+                    <p>Mi hermana Elena <strong class="text-orange-600">va a comprar</strong> 'fry jacks' en la panadería de San Ignacio mañana. <br><em class="text-gray-500">(My sister Elena is going to buy fry jacks at the bakery in San Ignacio tomorrow.)</em></p>
+                </li>
+                <li class="p-4 bg-sky-50 rounded-lg flex items-start space-x-3">
+                    <span class="text-sky-500 font-bold text-xl">&raquo;</span>
+                    <p>Nosotros <strong class="text-orange-600">vamos a comer</strong> pescado frito en Caye Caulker. <br><em class="text-gray-500">(We are going to eat fried fish in Caye Caulker.)</em></p>
+                </li>
+                 <li class="p-4 bg-sky-50 rounded-lg flex items-start space-x-3">
+                    <span class="text-sky-500 font-bold text-xl">&raquo;</span>
+                    <p>Mis amigos y yo <strong class="text-orange-600">vamos a jugar</strong> baloncesto en la cancha de nuestra escuela en Belmopan. <br><em class="text-gray-500">(My friends and I are going to play basketball on our school court in Belmopan.)</em></p>
+                </li>
+                 <li class="p-4 bg-sky-50 rounded-lg flex items-start space-x-3">
+                    <span class="text-sky-500 font-bold text-xl">&raquo;</span>
+                    <p>Tú <strong class="text-orange-600">vas a ir</strong> a la playa en Placencia durante las vacaciones. <br><em class="text-gray-500">(You are going to go to the beach in Placencia during vacation.)</em></p>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Video Placeholder 2 -->
+        <div class="text-center my-10">
+            <div class="inline-block bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
+                <h3 class="text-xl font-bold text-indigo-600 mb-2">Watch Another Example!</h3>
+                <p class="mb-4">This video shows a conversation using the future tense.</p>
+                 <div class="aspect-video">
+                    <iframe class="w-full h-full rounded-lg shadow-lg" src="https://www.youtube.com/embed/E5Ky33j_N4Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity 2: Sentence Builder -->
+        <div class="bg-purple-50 border-2 border-purple-500 rounded-lg p-6 md:p-8 my-8">
+            <h3 class="text-2xl font-bold text-purple-800 mb-4">Activity 2: Sentence Builder</h3>
+            <p class="mb-4">Translate the English sentence by clicking the Spanish words in the correct order. It’s like a puzzle!</p>
+            <div id="sentence-builder-activity" class="bg-white p-6 rounded-lg shadow-md">
+                <div class="mb-4">
+                    <p class="text-lg">Translate this:</p>
+                    <p id="english-sentence" class="text-2xl font-bold text-purple-700"></p>
+                </div>
+
+                <div id="answer-area" class="w-full bg-gray-100 p-3 rounded-md min-h-[5rem] mb-4 border-2 border-dashed border-gray-300 flex flex-wrap gap-2 items-center">
+                    <!-- User's answer words will go here -->
+                </div>
+
+                <div id="word-bank" class="flex flex-wrap gap-3 justify-center mb-4">
+                    <!-- Word buttons will be injected here -->
+                </div>
+
+                <div class="flex flex-wrap gap-4 justify-center items-center">
+                    <button id="check-sentence-btn" class="btn bg-indigo-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-indigo-700">Check Answer</button>
+                    <button id="new-sentence-btn" class="btn bg-orange-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-orange-600">New Sentence</button>
+                    <button id="reset-sentence-btn" class="text-gray-500 hover:text-gray-800 text-sm">Reset</button>
+                </div>
+                
+                <div id="challenge-box" class="challenge-box mt-6 bg-yellow-100 border-2 border-yellow-400 p-4 rounded-lg text-center">
+                    <p class="font-bold text-yellow-800">You're on a roll! 🔥</p>
+                    <p class="mb-3">You've answered 3 in a row correctly. Ready for a harder puzzle?</p>
+                    <button id="challenge-mode-btn" class="btn bg-purple-600 text-white font-bold py-2 px-5 rounded-lg hover:bg-purple-700">Start Challenge Mode</button>
+                </div>
+
+                <div id="sentence-feedback" class="feedback-box mt-4 p-4 rounded-lg font-semibold"></div>
+            </div>
+        </div>
+
+        <!-- Activity 3: Final Quiz -->
+        <div class="bg-purple-50 border-2 border-purple-500 rounded-lg p-6 md:p-8 my-8">
+            <h3 class="text-2xl font-bold text-purple-800 mb-4">Activity 3: Future Planner Final Quiz</h3>
+            <p class="mb-4">Let's check your understanding. Answer all questions. You must get 100% to complete the quiz!</p>
+            <form id="final-quiz" class="bg-white p-6 rounded-lg shadow-md space-y-8">
+                
+                <!-- Question 1 -->
+                <div class="quiz-question" id="q1">
+                    <p class="font-semibold text-lg mb-2">1. Complete the sentence: "Nosotros ____ a estudiar para el examen."</p>
+                    <input type="text" id="q1-input" class="mt-1 block w-full md:w-1/2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Type the correct form of 'ir'">
+                    <div id="q1-feedback" class="text-sm mt-1"></div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="quiz-question" id="q2">
+                    <p class="font-semibold text-lg mb-2">2. Which sentence is grammatically correct?</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center"><input type="radio" name="q2" value="incorrect" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"> <span class="ml-3">Ella va comer en el restaurante.</span></label>
+                        <label class="flex items-center"><input type="radio" name="q2" value="correct" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"> <span class="ml-3">Ella va a comer en el restaurante.</span></label>
+                        <label class="flex items-center"><input type="radio" name="q2" value="incorrect" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"> <span class="ml-3">Ella vas a comer en el restaurante.</span></label>
+                    </div>
+                    <div id="q2-feedback" class="text-sm mt-1"></div>
+                </div>
+                
+                <!-- Question 3 -->
+                <div class="quiz-question" id="q3">
+                    <p class="font-semibold text-lg mb-2">3. How do you say "They are going to play" in Spanish?</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center"><input type="radio" name="q3" value="incorrect" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"> <span class="ml-3">Ellos van jugar.</span></label>
+                        <label class="flex items-center"><input type="radio" name="q3" value="incorrect" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"> <span class="ml-3">Ellos vamos a jugar.</span></label>
+                        <label class="flex items-center"><input type="radio" name="q3" value="correct" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"> <span class="ml-3">Ellos van a jugar.</span></label>
+                    </div>
+                    <div id="q3-feedback" class="text-sm mt-1"></div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="quiz-question" id="q4">
+                     <p class="font-semibold text-lg mb-2">4. Translate the following sentence: "You are going to swim."</p>
+                    <input type="text" id="q4-input" class="mt-1 block w-full md:w-1/2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Type the full Spanish sentence">
+                    <div id="q4-feedback" class="text-sm mt-1"></div>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" id="check-quiz-btn" class="btn bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-indigo-700 text-lg">Check My Answers</button>
+                </div>
+
+                 <div id="quiz-final-feedback" class="feedback-box mt-4 p-4 rounded-lg font-semibold text-center"></div>
+
+            </form>
+        </div>
+
+        <!-- Your Turn Card -->
+        <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8 content-card">
+            <h2 class="text-3xl font-bold text-indigo-800 mb-4 mt-8">Your Turn! Talk About Your Plans</h2>
+            <p class="mb-4">Now that you're an expert in "ir + a + infinitivo", it's time to share your own plans! You can imagine your life in the next four years and tell your future plans. You can also draw where you would like to go for vacations and answer in Spanish.</p>
+            <div class="bg-purple-50 border-2 border-dashed border-purple-300 rounded-lg p-6">
+                <p class="font-bold text-purple-800 text-lg">Task:</p>
+                <p class="mb-4"><strong>Draw</strong> a place in Belize where you would like to go for a vacation, or an activity you would like to do. Then, <strong>write 3 sentences</strong> in Spanish using the formula `"ir + a + infinitivo"` to describe your plans.</p>
+                <p class="font-semibold">For example:</p>
+                <ul class="list-disc list-inside mt-2 space-y-1 text-gray-700">
+                    <li><em class="font-semibold">Voy a visitar el Zoológico de Belice.</em> (I am going to visit the Belize Zoo.)</li>
+                    <li><em class="font-semibold">Voy a explorar la Gran Agujero Azul.</em> (I am going to explore the Great Blue Hole.)</li>
+                    <li><em class="font-semibold">Voy a nadar en el Río Macal.</em> (I am going to swim in the Macal River.)</li>
+                </ul>
+            </div>
+            <p class="mt-6 text-lg">Share your drawings and sentences with your classmates! We are excited to hear about your future plans!</p>
+        </div>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-orange-600 text-white p-8 mt-12">
+        <div class="container mx-auto text-center text-amber-100">
+            <div class="flex justify-center items-center space-x-4 md:space-x-6 mb-4 text-lg">
+                <span>📫 Contact</span>
+                <span>|</span>
+                <span>💬 Chat</span>
+                <span>|</span>
+                <span>© 2025</span>
+            </div>
+            <div class="text-sm mb-4">
+                <p>Email: <a href="mailto:teacherzoloed@gmail.com" class="hover:underline">teacherzoloed@gmail.com</a></p>
+                <p>Chat: Reach me on Google Chat using the same email</p>
+            </div>
+            <p class="text-xs mt-6">&copy; 2025 Mr. Edwin's Virtual Classroom — All rights reserved.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    // --- Activity 1: Conjugation Quick-Draw ---
+    const conjugationActivity = {
+        questions: [
+            { pronoun: 'Yo', answer: 'voy' },
+            { pronoun: 'Tú', answer: 'vas' },
+            { pronoun: 'Él/Ella/Usted', answer: 'va' },
+            { pronoun: 'Nosotros', answer: 'vamos' },
+            { pronoun: 'Ustedes/Ellos', answer: 'van' }
+        ],
+        allOptions: ['voy', 'vas', 'va', 'vamos', 'van'],
+        currentQuestionIndex: 0,
+        pronounEl: document.getElementById('pronoun'),
+        optionsContainerEl: document.getElementById('options-container'),
+        feedbackEl: document.getElementById('conjugation-feedback'),
+
+        init() {
+            this.loadQuestion();
+        },
+
+        loadQuestion() {
+            this.feedbackEl.classList.remove('show');
+            this.feedbackEl.textContent = '';
+            
+            // Randomize question order
+            if (this.currentQuestionIndex >= this.questions.length) {
+                this.currentQuestionIndex = 0; // Loop back
+            }
+            const question = this.questions[this.currentQuestionIndex];
+            this.pronounEl.textContent = question.pronoun;
+            this.optionsContainerEl.innerHTML = '';
+
+            this.allOptions.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.className = 'btn bg-purple-100 text-purple-800 font-bold py-3 px-4 rounded-lg hover:bg-purple-200 border border-purple-300';
+                button.addEventListener('click', () => this.checkAnswer(option));
+                this.optionsContainerEl.appendChild(button);
+            });
+        },
+
+        checkAnswer(selectedOption) {
+            const correctAnswer = this.questions[this.currentQuestionIndex].answer;
+            const pronoun = this.questions[this.currentQuestionIndex].pronoun;
+
+            this.feedbackEl.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+            this.feedbackEl.classList.add('show');
+
+            if (selectedOption === correctAnswer) {
+                this.feedbackEl.classList.add('bg-green-100', 'text-green-800');
+                this.feedbackEl.innerHTML = `&#10004; ¡Correcto! For <strong>${pronoun}</strong>, we use <strong>${correctAnswer}</strong>.`;
+                this.currentQuestionIndex++;
+                setTimeout(() => this.loadQuestion(), 1500);
+            } else {
+                this.feedbackEl.classList.add('bg-red-100', 'text-red-800');
+                this.feedbackEl.innerHTML = `&#10060; Not quite. That's not the right form for <strong>${pronoun}</strong>. Look at the chart above and try again!`;
+            }
+        }
+    };
+    conjugationActivity.init();
+
+    // --- Activity 2: Sentence Builder ---
+    const sentenceBuilderActivity = {
+        sentences: {
+            normal: [
+                { en: "I am going to eat.", es: ["Yo", "voy", "a", "comer"] },
+                { en: "You are going to play.", es: ["Tú", "vas", "a", "jugar"] },
+                { en: "She is going to study.", es: ["Ella", "va", "a", "estudiar"] },
+                { en: "We are going to swim.", es: ["Nosotros", "vamos", "a", "nadar"] },
+                { en: "They are going to travel.", es: ["Ellos", "van", "a", "viajar"] }
+            ],
+            challenge: [
+                { en: "My sister is going to buy food.", es: ["Mi", "hermana", "va", "a", "comprar", "comida"], distractors: ["yo", "vamos"] },
+                { en: "You all are going to visit the museum.", es: ["Ustedes", "van", "a", "visitar", "el", "museo"], distractors: ["vas", "visito"] },
+                { en: "My friends and I are going to the beach.", es: ["Mis", "amigos", "y", "yo", "vamos", "a", "la", "playa"], distractors: ["va", "el"] }
+            ]
+        },
+        currentSentence: {},
+        userAnswer: [],
+        correctInARow: 0,
+        inChallengeMode: false,
+        
+        englishSentenceEl: document.getElementById('english-sentence'),
+        answerAreaEl: document.getElementById('answer-area'),
+        wordBankEl: document.getElementById('word-bank'),
+        feedbackEl: document.getElementById('sentence-feedback'),
+        checkBtn: document.getElementById('check-sentence-btn'),
+        newBtn: document.getElementById('new-sentence-btn'),
+        resetBtn: document.getElementById('reset-sentence-btn'),
+        challengeBoxEl: document.getElementById('challenge-box'),
+        challengeModeBtn: document.getElementById('challenge-mode-btn'),
+
+        init() {
+            this.loadNewSentence();
+            this.checkBtn.addEventListener('click', () => this.checkSentence());
+            this.newBtn.addEventListener('click', () => this.loadNewSentence());
+            this.resetBtn.addEventListener('click', () => this.resetCurrentSentence());
+            this.challengeModeBtn.addEventListener('click', () => this.startChallengeMode());
+        },
+
+        shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        },
+
+        loadNewSentence() {
+            this.feedbackEl.classList.remove('show');
+            this.resetCurrentSentence();
+            
+            const sentencePool = this.inChallengeMode ? this.sentences.challenge : this.sentences.normal;
+            const randomIndex = Math.floor(Math.random() * sentencePool.length);
+            this.currentSentence = sentencePool[randomIndex];
+            
+            this.englishSentenceEl.textContent = this.currentSentence.en;
+            
+            let words = [...this.currentSentence.es];
+            if (this.currentSentence.distractors) {
+                words.push(...this.currentSentence.distractors);
+            }
+            words = this.shuffle(words);
+
+            this.wordBankEl.innerHTML = '';
+            words.forEach(word => {
+                const button = document.createElement('button');
+                button.textContent = word;
+                button.className = 'word-bank-button btn bg-purple-200 text-purple-900 font-semibold py-2 px-4 rounded-md shadow-sm';
+                button.addEventListener('click', () => this.addWordToAnswer(button));
+                this.wordBankEl.appendChild(button);
+            });
+        },
+
+        addWordToAnswer(button) {
+            if (button.classList.contains('used')) return;
+
+            button.classList.add('used');
+            this.userAnswer.push(button.textContent);
+            
+            const answerButton = document.createElement('button');
+            answerButton.textContent = button.textContent;
+            answerButton.className = 'answer-area-button btn bg-indigo-100 text-indigo-800 font-semibold py-2 px-4 rounded-md';
+            answerButton.addEventListener('click', () => this.removeWordFromAnswer(answerButton, button));
+            this.answerAreaEl.appendChild(answerButton);
+        },
+
+        removeWordFromAnswer(answerButton, originalButton) {
+            const wordToRemove = answerButton.textContent;
+            const index = this.userAnswer.indexOf(wordToRemove);
+            if (index > -1) {
+                this.userAnswer.splice(index, 1);
+            }
+            answerButton.remove();
+            originalButton.classList.remove('used');
+        },
+        
+        resetCurrentSentence() {
+            this.userAnswer = [];
+            this.answerAreaEl.innerHTML = '';
+            Array.from(this.wordBankEl.children).forEach(btn => btn.classList.remove('used'));
+        },
+
+        checkSentence() {
+            const userAnswerStr = this.userAnswer.join(' ');
+            const correctAnswerStr = this.currentSentence.es.join(' ');
+
+            this.feedbackEl.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+            this.feedbackEl.classList.add('show');
+            
+            if (userAnswerStr === correctAnswerStr) {
+                this.feedbackEl.classList.add('bg-green-100', 'text-green-800');
+                this.feedbackEl.innerHTML = `&#10004; ¡Excelente! That's a perfect sentence.`;
+                this.correctInARow++;
+                if (this.correctInARow >= 3 && !this.inChallengeMode) {
+                    this.challengeBoxEl.classList.add('show');
+                }
+                setTimeout(() => this.loadNewSentence(), 2000);
+            } else {
+                this.feedbackEl.classList.add('bg-red-100', 'text-red-800');
+                this.feedbackEl.innerHTML = `&#10060; Not quite. The word order seems wrong. Remember the formula: <strong>Person + IR + a + Action</strong>. Reset and try again!`;
+                this.correctInARow = 0;
+                this.challengeBoxEl.classList.remove('show');
+            }
+        },
+        
+        startChallengeMode() {
+            this.inChallengeMode = true;
+            this.correctInARow = 0;
+            this.challengeBoxEl.classList.remove('show');
+            this.loadNewSentence();
+        }
+    };
+    sentenceBuilderActivity.init();
+    
+    // --- Activity 3: Final Quiz ---
+    const finalQuiz = {
+        formEl: document.getElementById('final-quiz'),
+        checkBtn: document.getElementById('check-quiz-btn'),
+        feedbackEl: document.getElementById('quiz-final-feedback'),
+        questions: [
+            { id: 'q1', type: 'text', answer: 'vamos', feedbackEl: document.getElementById('q1-feedback'), inputEl: document.getElementById('q1-input'), hint: 'Remember the conjugation for "Nosotros" (We).' },
+            { id: 'q2', type: 'radio', answer: 'correct', feedbackEl: document.getElementById('q2-feedback'), hint: 'The magic formula always needs the bridge word "a" after the verb "ir".' },
+            { id: 'q3', type: 'radio', answer: 'correct', feedbackEl: document.getElementById('q3-feedback'), hint: 'Think about the correct conjugation for "Ellos" (They).' },
+            { id: 'q4', type: 'text', answer: 'tú vas a nadar', alt_answer: 'vas a nadar', feedbackEl: document.getElementById('q4-feedback'), inputEl: document.getElementById('q4-input'), hint: 'The formula is [Person] + [ir] + [a] + [infinitive]. The verb for "to swim" is "nadar".'}
+        ],
+
+        init() {
+            this.formEl.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.checkAllAnswers();
+            });
+        },
+
+        checkAllAnswers() {
+            let allCorrect = true;
+            let correctCount = 0;
+            this.feedbackEl.classList.remove('show');
+
+            this.questions.forEach(q => {
+                q.feedbackEl.textContent = '';
+                q.feedbackEl.classList.remove('text-red-600', 'text-green-600');
+                
+                let isCorrect = false;
+                if (q.type === 'text') {
+                    // Trim whitespace, convert to lower case, and remove an optional period at the end.
+                    const userAnswer = q.inputEl.value.trim().toLowerCase().replace(/\.?$/, '');
+                    isCorrect = (userAnswer === q.answer) || (q.alt_answer && userAnswer === q.alt_answer);
+                } else if (q.type === 'radio') {
+                    const selected = this.formEl.querySelector(`input[name="${q.id}"]:checked`);
+                    isCorrect = selected ? selected.value === q.answer : false;
+                }
+
+                if (isCorrect) {
+                    q.feedbackEl.textContent = '✓ Correct!';
+                    q.feedbackEl.classList.add('text-green-600');
+                    correctCount++;
+                } else {
+                    q.feedbackEl.textContent = `✗ Incorrect. Hint: ${q.hint}`;
+                    q.feedbackEl.classList.add('text-red-600');
+                    allCorrect = false;
+                }
+            });
+
+            this.feedbackEl.classList.add('show');
+            if (allCorrect) {
+                this.feedbackEl.classList.add('bg-green-100', 'text-green-800');
+                this.feedbackEl.classList.remove('bg-red-100', 'text-red-800');
+                this.feedbackEl.innerHTML = `<h2>&#127881; ¡Felicitaciones! &#127881;</h2><p>You got 100% correct! You are now a master of future plans in Spanish!</p>`;
+            } else {
+                this.feedbackEl.classList.add('bg-red-100', 'text-red-800');
+                this.feedbackEl.classList.remove('bg-green-100', 'text-green-800');
+                this.feedbackEl.textContent = `You have ${correctCount} out of ${this.questions.length} correct. Please fix the highlighted answers and try again.`;
+            }
+        }
+    };
+    finalQuiz.init();
+
+});
+</script>
+
+</body>
+</html>
