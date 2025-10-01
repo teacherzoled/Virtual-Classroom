@@ -69,10 +69,7 @@ function initializeSubjectPage() {
                 const scriptPath = contentWrapper.dataset.script;
                 if (scriptPath) {
                     // Dynamically import the content-specific script relative to the current page
-                    // Use a root-relative path to ensure it works from any subject page.
-                    // The path in data-script is relative to the /js/modules/ directory.
-                    const rootRelativeScriptPath = `/js/modules/${scriptPath}`;
-                    import(rootRelativeScriptPath).catch(err => console.error(`Failed to load script: ${rootRelativeScriptPath}`, err));
+                    import(`./${scriptPath}`).catch(err => console.error(`Failed to load script: ${scriptPath}`, err));
                 }
             }
 
@@ -94,9 +91,7 @@ function initializeSubjectPage() {
             listView.querySelectorAll('a[data-content-src]').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    // Construct the full, root-relative path here to prevent modification issues.
-                    const contentPath = `/js/modules/${link.dataset.contentSrc}`;
-                    loadContent(contentPath, listView, contentView);
+                    loadContent(link.dataset.contentSrc, listView, contentView);
                 });
             });
         }
