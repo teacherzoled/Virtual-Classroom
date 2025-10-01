@@ -83,11 +83,6 @@ function initializeSubjectPage() {
         }
     }
 
-    // --- Adjust data-script paths to be relative to the /js/modules/ folder ---
-    document.querySelectorAll('a[data-content-src]').forEach(link => {
-        link.dataset.contentSrc = `/js/modules/${link.dataset.contentSrc}`;
-    });
-
     // --- Setup Event Listeners for all content types ---
     const contentTypes = ['lesson', 'tool', 'game', 'worksheet'];
 
@@ -99,7 +94,9 @@ function initializeSubjectPage() {
             listView.querySelectorAll('a[data-content-src]').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    loadContent(link.dataset.contentSrc, listView, contentView);
+                    // Construct the full, root-relative path here to prevent modification issues.
+                    const contentPath = `/js/modules/${link.dataset.contentSrc}`;
+                    loadContent(contentPath, listView, contentView);
                 });
             });
         }
