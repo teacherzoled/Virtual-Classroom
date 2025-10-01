@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science - Virtual Classroom</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Lilita+One&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Teacher Ed Logo" class="header-logo">
+            <div class="header-title">Teacher Ed Classroom</div>
+        </div>
+        <nav>
+            <ul id="main-navigation" class="nav-tabs">
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../about/index.html">About</a></li>
+                <li><a href="../math/index.html">Math</a></li>
+                <li class="active"><a href="index.html">Science</a></li>
+                <li><a href="../scriptures/index.html">Scriptures</a></li>
+                <li><a href="../spanish/index.html">Spanish</a></li>
+                <li><a href="../Google-Classroom/index.html">Google Classroom</a></li>
+            </ul>
+            <button id="mobile-menu-toggle" class="mobile-menu-button" aria-controls="main-navigation" aria-expanded="false" aria-label="Toggle navigation menu">☰</button>
+        </nav>
+    </header>
+
+    <main class="main-content-wrapper">
+        <div class="container">
+            <div class="subject-header">
+                <h1>Science</h1>
+            </div>
+
+            <div class="intro-header">
+                <h2>Welcome to the Science Hub!</h2>
+                <p>Select a category below to begin your exploration.</p>
+            </div>
+
+            <div class="feature-grid">
+                <a href="#lessons" class="feature-card bg-green-light active">
+                    <div class="feature-icon" aria-hidden="true">📚</div>
+                    <h3>Lessons</h3>
+                    <p>Build your knowledge with guided modules.</p>
+                </a>
+                <a href="#tools" class="feature-card bg-purple-light ">
+                    <div class="feature-icon" aria-hidden="true">🔬</div>
+                    <h3>Learning Tools</h3>
+                    <p>Use interactive tools for hands-on fun.</p>
+                </a>
+                <a href="#games" class="feature-card bg-orange-light ">
+                    <div class="feature-icon" aria-hidden="true">🎮</div>
+                    <h3>Games</h3>
+                    <p>Test your skills and have some fun.</p>
+                </a>
+                <a href="#worksheets" class="feature-card bg-blue-light ">
+                    <div class="feature-icon" aria-hidden="true">📝</div>
+                    <h3>Worksheets</h3>
+                    <p>Practice what you've learned offline.</p>
+                </a>
+            </div>
+
+            <!-- Main content sections -->
+            <div id="lessons" class="tab-content active">
+                <!-- This view shows the list of lessons -->
+                <div id="lesson-list-view">
+                    <h2>Available Lessons</h2>
+                    <ul class="content-list">
+                        <!-- Use data-lesson-src to specify the content file -->
+                        <li><a href="#" data-content-src="lessons/carbon-footprint/index.html">Carbon Footprint</a></li>
+                    </ul>
+                </div>
+                <!-- This view will display the content of a selected lesson -->
+                <div id="lesson-content-view" style="display: none;"></div>
+            </div>
+
+            <div id="tools" class="tab-content">
+                <!-- This view shows the list of tools -->
+                <div id="tool-list-view">
+                    <h2>Available Learning Tools</h2>
+                    <ul class="content-list">
+                        <li><a href="#" data-content-src="tools/carbon-footprint-calculator/index.html">Carbon Footprint Calculator</a></li>
+                    </ul>
+                </div>
+                <!-- This view will display the content of a selected tool -->
+                <div id="tool-content-view" style="display: none;"></div>
+            </div>
+
+            <div id="games" class="tab-content">
+                <div id="game-list-view">
+                    <h2>Games</h2>
+                    <p>No games available yet. Check back soon!</p>
+                </div>
+                <div id="game-content-view" style="display: none;"></div>
+            </div>
+
+            <div id="worksheets" class="tab-content">
+                <div id="worksheet-list-view">
+                    <h2>Worksheets</h2>
+                    <p>No worksheets available yet. Check back soon!</p>
+                </div>
+                <div id="worksheet-content-view" style="display: none;"></div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p class="font-semibold">Explore, discover, and learn something new every day!</p>
+        <p class="text-xs mt-1">© 2025 Mr. Edwin's Virtual Classroom — All rights reserved.</p>
+    </footer>
+
+    <button id="back-to-top-btn" title="Go to top" aria-label="Back to top">↑</button>
+    <script src="../../../js/main.js"></script>
+
+    <script src="../../../js/subject-page.js" type="module"></script>
+
+</body>
+</html>

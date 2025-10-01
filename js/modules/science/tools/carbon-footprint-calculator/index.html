@@ -1,0 +1,89 @@
+<!-- This data-script attribute will tell our main script which JS file to load for this tool's interactivity -->
+<div data-script="tools/carbon-footprint-calculator/script.js">
+    <div id="calculator" class="tool-content active">
+                <div id="calculator-form">
+                    <div class="calculator-question">
+                        <p>1. How do you usually get to school?</p>
+                        <div class="calculator-options">
+                            <label><input type="radio" name="q1" value="1"> Walking/Biking</label>
+                            <label><input type="radio" name="q1" value="2"> School Bus</label>
+                            <label><input type="radio" name="q1" value="3"> Family Car</label>
+                        </div>
+                    </div>
+                    <div class="calculator-question">
+                        <p>2. How often do you eat beef (stew beef, burgers)?</p>
+                        <div class="calculator-options">
+                            <label><input type="radio" name="q2" value="1"> Rarely</label>
+                            <label><input type="radio" name="q2" value="2"> Sometimes</label>
+                            <label><input type="radio" name="q2" value="3"> Often</label>
+                        </div>
+                    </div>
+                    <div class="calculator-question">
+                        <p>3. What do you do with plastic bottles?</p>
+                        <div class="calculator-options">
+                            <label><input type="radio" name="q3" value="1"> Recycle or reuse them</label>
+                            <label><input type="radio" name="q3" value="2"> Sometimes recycle</label>
+                            <label><input type="radio" name="q3" value="3"> Throw them away</label>
+                        </div>
+                    </div>
+                    <div class="calculator-question">
+                        <p>4. When you leave a room, do you turn off the lights?</p>
+                        <div class="calculator-options">
+                            <label><input type="radio" name="q4" value="1"> Always</label>
+                            <label><input type="radio" name="q4" value="2"> Sometimes</label>
+                            <label><input type="radio" name="q4" value="3"> Rarely</label>
+                        </div>
+                    </div>
+                    <div class="calculator-question">
+                        <p>5. How long are your showers?</p>
+                        <div class="calculator-options">
+                            <label><input type="radio" name="q5" value="1"> Short & quick (under 5 mins)</label>
+                            <label><input type="radio" name="q5" value="2"> About 10 minutes</label>
+                            <label><input type="radio" name="q5" value="3"> Long and relaxing (15+ mins)</label>
+                        </div>
+                    </div>
+                    <div class="calculator-question">
+                        <p>6. Do you use a reusable bag when you go shopping?</p>
+                        <div class="calculator-options">
+                            <label><input type="radio" name="q6" value="1"> Always</label>
+                            <label><input type="radio" name="q6" value="2"> Sometimes</label>
+                            <label><input type="radio" name="q6" value="3"> Never</label>
+                        </div>
+                    </div>
+                    <div class="calculator-question">
+                        <p>7. How much of your food is locally grown in Belize?</p>
+                        <div class="calculator-options">
+                            <label><input type="radio" name="q7" value="1"> Most of it</label>
+                            <label><input type="radio" name="q7" value="2"> Some of it</label>
+                            <label><input type="radio" name="q7" value="3"> Not much</label>
+                        </div>
+                    </div>
+                    <div class="calculator-question">
+                        <p>8. Do you unplug chargers and appliances when not in use?</p>
+                        <div class="calculator-options">
+                            <label><input type="radio" name="q8" value="1"> Yes, always</label>
+                            <label><input type="radio" name="q8" value="2"> Sometimes</label>
+                            <label><input type="radio" name="q8" value="3"> No, never</label>
+                        </div>
+                    </div>
+                    <div class="calculator-question">
+                        <p>9. What do you do with your food scraps?</p>
+                        <div class="calculator-options">
+                            <label><input type="radio" name="q9" value="1"> Compost or feed to animals</label>
+                            <label><input type="radio" name="q9" value="2"> Some get thrown away</label>
+                            <label><input type="radio" name="q9" value="3"> All in the trash</label>
+                        </div>
+                    </div>
+                    <div class="calculator-question">
+                        <p>10. How often do you choose to repair something instead of buying new?</p>
+                        <div class="calculator-options">
+                            <label><input type="radio" name="q10" value="1"> Often</label>
+                            <label><input type="radio" name="q10" value="2"> Sometimes</label>
+                            <label><input type="radio" name="q10" value="3"> Rarely</label>
+                        </div>
+                    </div>
+                    <button id="calculate-footprint-btn" class="button-primary btn">Calculate My Footprint</button>
+                </div>
+                <div id="calculator-result-display" style="display: none;"></div>
+            </div>
+</div>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scriptures - Virtual Classroom</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Lilita+One&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Teacher Ed Logo" class="header-logo">
+            <div class="header-title">Teacher Ed Classroom</div>
+        </div>
+        <nav>
+            <ul class="nav-tabs">
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../about/index.html">About</a></li>
+                <li><a href="../math/index.html">Math</a></li>
+                <li><a href="../science/index.html">Science</a></li>
+                <li class="active"><a href="index.html">Scriptures</a></li>
+                <li><a href="../spanish/index.html">Spanish</a></li>
+                <li><a href="../Google-Classroom/index.html">Google Classroom</a></li>
+            </ul>
+            <button id="mobile-menu-toggle" class="mobile-menu-button">☰</button>
+        </nav>
+    </header>
+
+    <div class="main-content-wrapper">
+        <div class="container">
+            <div class="subject-header">
+                <h1>Scriptures</h1>
+            </div>
+
+            <div class="intro-header">
+                <h2>Welcome to the Scriptures Hub</h2>
+                <p>Select a category below to begin your study.</p>
+            </div>
+
+            <div class="feature-grid">
+                <a href="#lessons" class="feature-card bg-green-light active">
+                    <div class="feature-icon">📚</div>
+                    <h3>Lessons</h3>
+                    <p>Explore stories and their meanings.</p>
+                </a>
+                <a href="#tools" class="feature-card bg-purple-light">
+                    <div class="feature-icon">📖</div>
+                    <h3>Learning Tools</h3>
+                    <p>Use study aids and devotionals.</p>
+                </a>
+                <a href="#games" class="feature-card bg-orange-light">
+                    <div class="feature-icon">🎮</div>
+                    <h3>Games</h3>
+                    <p>Play fun games to test your knowledge.</p>
+                </a>
+                <a href="#worksheets" class="feature-card bg-blue-light">
+                    <div class="feature-icon">📝</div>
+                    <h3>Worksheets</h3>
+                    <p>Download and practice offline.</p>
+                </a>
+            </div>
+
+            <!-- Main content sections -->
+            <div id="lessons" class="tab-content active">
+                <div id="lesson-list-view">
+                    <h2>Available Lessons</h2>
+                    <p>No lessons available yet. Check back soon!</p>
+                </div>
+                <div id="lesson-content-view" style="display: none;"></div>
+            </div>
+
+            <div id="tools" class="tab-content">
+                <div id="tool-list-view">
+                    <h2>Available Learning Tools</h2>
+                    <p>No tools available yet. Check back soon!</p>
+                </div>
+                <div id="tool-content-view" style="display: none;"></div>
+            </div>
+
+            <div id="games" class="tab-content">
+                <div id="game-list-view">
+                    <h2>Games</h2>
+                    <p>No games available yet. Check back soon!</p>
+                </div>
+                <div id="game-content-view" style="display: none;"></div>
+            </div>
+
+            <div id="worksheets" class="tab-content">
+                <div id="worksheet-list-view">
+                    <h2>Worksheets</h2>
+                    <p>No worksheets available yet. Check back soon!</p>
+                </div>
+                <div id="worksheet-content-view" style="display: none;"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p class="font-semibold">Explore, discover, and learn something new every day!</p>
+        <p class="text-xs mt-1">© 2025 Mr. Edwin's Virtual Classroom — All rights reserved.</p>
+    </footer>
+
+    <button id="back-to-top-btn" title="Go to top">↑</button>
+    <script src="../../../js/main.js"></script>
+
+    <script src="../../../js/subject-page.js" type="module"></script>
+
+</body>
+</html>
