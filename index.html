@@ -1,71 +1,525 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Virtual Classroom</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Lilita+One&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mr. EdLo's Virtual Classroom — Standard 6</title>
+<link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ═══════════════════════════════════════════
+     THEME VARIABLES
+  ═══════════════════════════════════════════ */
+
+  /* 🌙 Night (default) */
+  :root, body.theme-night {
+    --bg:            #1a1a2e;
+    --body-color:    #ffffff;
+    --card-bg:       rgba(255,255,255,0.07);
+    --card-border:   rgba(255,255,255,0.10);
+    --card-border-h: rgba(255,255,255,0.28);
+    --card-shadow:   rgba(0,0,0,0.40);
+    --card-desc:     rgba(255,255,255,0.50);
+    --section-lbl:   rgba(255,255,255,0.35);
+    --subtitle-c:    rgba(255,255,255,0.55);
+    --welcome-bg:    linear-gradient(135deg,#20293d,#1e2d45);
+    --welcome-border:rgba(255,255,255,0.08);
+    --welcome-text:  rgba(255,255,255,0.65);
+    --header-name:   rgba(255,255,255,0.55);
+    --badge-bg:      rgba(255,255,255,0.08);
+    --badge-border:  rgba(255,255,255,0.12);
+    --badge-color:   rgba(255,255,255,0.45);
+    --top-badge-bg:  #FFD43B;
+    --top-badge-c:   #1a1a2e;
+    --h1-grad:       linear-gradient(135deg,#fff 0%,#4DABF7 50%,#20C997 100%);
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.45) 100%);
+    --footer-border: rgba(255,255,255,0.07);
+    --footer-name:   rgba(255,255,255,0.40);
+    --footer-tag:    rgba(255,255,255,0.45);
+    --footer-copy:   rgba(255,255,255,0.20);
+    --back-top-bg:   #20C997;
+    --back-top-c:    #1a1a2e;
+    --radial1:       #1e3a5f55;
+    --radial2:       #2d1b6955;
+    --star-show:     1;
+    --feat-strong:   rgba(255,255,255,0.90);
+    --a-spanish:     #FF922B;
+    --a-science:     #20C997;
+    --a-math:        #4DABF7;
+    --a-scripture:   #FFD43B;
+    --a-cs:          #9775FA;
+    --a-pe:          #69DB7C;
+    --a-gclass:      #FF6B6B;
+    --a-worksheet:   #FFD43B;
+    --a-portfolio:   #F783AC;
+  }
+
+  /* ☀️ Sunny */
+  body.theme-sunny {
+    --bg:            #fffbea;
+    --body-color:    #2d2000;
+    --card-bg:       rgba(255,255,255,0.75);
+    --card-border:   rgba(200,150,0,0.18);
+    --card-border-h: rgba(200,120,0,0.45);
+    --card-shadow:   rgba(180,100,0,0.18);
+    --card-desc:     rgba(80,50,0,0.55);
+    --section-lbl:   rgba(120,80,0,0.50);
+    --subtitle-c:    rgba(100,60,0,0.65);
+    --welcome-bg:    linear-gradient(135deg,#fff8d6,#ffeea0);
+    --welcome-border:rgba(200,150,0,0.25);
+    --welcome-text:  rgba(80,50,0,0.70);
+    --header-name:   #b35c00;
+    --badge-bg:      rgba(255,180,0,0.15);
+    --badge-border:  rgba(255,160,0,0.30);
+    --badge-color:   #8a4800;
+    --top-badge-bg:  #FF922B;
+    --top-badge-c:   #fff;
+    --h1-grad:       linear-gradient(135deg,#b35c00 0%,#e67e00 50%,#f5a623 100%);
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(255,200,50,0.18) 100%);
+    --footer-border: rgba(200,150,0,0.20);
+    --footer-name:   rgba(100,60,0,0.50);
+    --footer-tag:    rgba(100,60,0,0.55);
+    --footer-copy:   rgba(100,60,0,0.30);
+    --back-top-bg:   #FF922B;
+    --back-top-c:    #fff;
+    --radial1:       rgba(255,220,80,0.25);
+    --radial2:       rgba(255,160,30,0.18);
+    --star-show:     0;
+    --feat-strong:   #5a3000;
+    --a-spanish:     #c45000;
+    --a-science:     #2d8a00;
+    --a-math:        #0077cc;
+    --a-scripture:   #b8860b;
+    --a-cs:          #7a3abf;
+    --a-pe:          #2e7d32;
+    --a-gclass:      #c62828;
+    --a-worksheet:   #a07000;
+    --a-portfolio:   #c2185b;
+  }
+
+  /* ☁️ Cloudy */
+  body.theme-cloudy {
+    --bg:            #e8edf2;
+    --body-color:    #1c2533;
+    --card-bg:       rgba(255,255,255,0.72);
+    --card-border:   rgba(100,130,160,0.18);
+    --card-border-h: rgba(80,110,150,0.40);
+    --card-shadow:   rgba(50,80,120,0.15);
+    --card-desc:     rgba(40,60,90,0.55);
+    --section-lbl:   rgba(60,90,130,0.50);
+    --subtitle-c:    rgba(40,65,100,0.65);
+    --welcome-bg:    linear-gradient(135deg,#dce6f0,#c8d8e8);
+    --welcome-border:rgba(100,140,180,0.22);
+    --welcome-text:  rgba(30,55,85,0.70);
+    --header-name:   #2c5282;
+    --badge-bg:      rgba(100,140,200,0.12);
+    --badge-border:  rgba(80,120,180,0.25);
+    --badge-color:   #2c5282;
+    --top-badge-bg:  #4A90D9;
+    --top-badge-c:   #fff;
+    --h1-grad:       linear-gradient(135deg,#1a365d 0%,#2b6cb0 50%,#4299e1 100%);
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(100,140,200,0.15) 100%);
+    --footer-border: rgba(80,120,180,0.18);
+    --footer-name:   rgba(30,60,100,0.50);
+    --footer-tag:    rgba(30,60,100,0.55);
+    --footer-copy:   rgba(30,60,100,0.30);
+    --back-top-bg:   #4A90D9;
+    --back-top-c:    #fff;
+    --radial1:       rgba(150,190,240,0.30);
+    --radial2:       rgba(100,140,200,0.20);
+    --star-show:     0;
+    --feat-strong:   #1a365d;
+    --a-spanish:     #d97706;
+    --a-science:     #0d9488;
+    --a-math:        #2563eb;
+    --a-scripture:   #92400e;
+    --a-cs:          #7c3aed;
+    --a-pe:          #059669;
+    --a-gclass:      #dc2626;
+    --a-worksheet:   #b45309;
+    --a-portfolio:   #db2777;
+  }
+
+  /* 🌿 Nature */
+  body.theme-nature {
+    --bg:            #f0f7ee;
+    --body-color:    #1a2e10;
+    --card-bg:       rgba(255,255,255,0.72);
+    --card-border:   rgba(60,120,40,0.18);
+    --card-border-h: rgba(40,100,20,0.40);
+    --card-shadow:   rgba(20,80,10,0.15);
+    --card-desc:     rgba(30,70,15,0.55);
+    --section-lbl:   rgba(40,90,20,0.50);
+    --subtitle-c:    rgba(30,75,15,0.65);
+    --welcome-bg:    linear-gradient(135deg,#d8f0ce,#c4e8b8);
+    --welcome-border:rgba(60,140,30,0.22);
+    --welcome-text:  rgba(20,65,10,0.70);
+    --header-name:   #276221;
+    --badge-bg:      rgba(60,140,30,0.12);
+    --badge-border:  rgba(50,120,20,0.28);
+    --badge-color:   #276221;
+    --top-badge-bg:  #4CAF50;
+    --top-badge-c:   #fff;
+    --h1-grad:       linear-gradient(135deg,#1b4d0f 0%,#2e7d1a 50%,#66bb44 100%);
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(60,140,30,0.12) 100%);
+    --footer-border: rgba(50,120,20,0.18);
+    --footer-name:   rgba(20,70,10,0.50);
+    --footer-tag:    rgba(20,70,10,0.55);
+    --footer-copy:   rgba(20,70,10,0.30);
+    --back-top-bg:   #4CAF50;
+    --back-top-c:    #fff;
+    --radial1:       rgba(100,200,60,0.22);
+    --radial2:       rgba(60,160,30,0.16);
+    --star-show:     0;
+    --feat-strong:   #1b4d0f;
+    --a-spanish:     #e65100;
+    --a-science:     #1b5e20;
+    --a-math:        #1565c0;
+    --a-scripture:   #f57f17;
+    --a-cs:          #4a148c;
+    --a-pe:          #2e7d32;
+    --a-gclass:      #b71c1c;
+    --a-worksheet:   #e65100;
+    --a-portfolio:   #880e4f;
+  }
+
+  /* ═══════════════════════════════════════════
+     BASE STYLES
+  ═══════════════════════════════════════════ */
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--body-color);
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.5s ease, color 0.5s ease;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, var(--radial1) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, var(--radial2) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+    transition: background 0.5s ease;
+  }
+
+  /* Stars */
+  .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; opacity: var(--star-show,1); transition: opacity 0.5s ease; }
+  .star { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--d,3s) ease-in-out infinite var(--delay,0s); opacity: 0; }
+  @keyframes twinkle {
+    0%,100% { opacity: 0; transform: scale(1); }
+    50%      { opacity: var(--op,0.6); transform: scale(1.3); }
+  }
+
+  /* Layout */
+  .wrapper { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 0 1in 2rem; flex: 1; }
+
+  /* ── Theme bar ── */
+  .theme-bar {
+    position: relative; z-index: 10;
+    display: flex; justify-content: center; gap: 0.5rem;
+    padding: 0.55rem 1rem;
+    background: rgba(0,0,0,0.18);
+    border-bottom: 1px solid rgba(0,0,0,0.10);
+    flex-wrap: wrap;
+  }
+  body.theme-sunny  .theme-bar,
+  body.theme-cloudy .theme-bar,
+  body.theme-nature .theme-bar { background: rgba(0,0,0,0.06); }
+
+  .theme-btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.85rem;
+    padding: 5px 18px; border-radius: 999px;
+    border: 2px solid transparent;
+    background: rgba(128,128,128,0.12);
+    color: var(--body-color);
+    cursor: pointer; opacity: 0.6;
+    transition: all 0.22s ease;
+  }
+  .theme-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .theme-btn.active {
+    opacity: 1;
+    background: var(--top-badge-bg);
+    color: var(--top-badge-c);
+    box-shadow: 0 3px 12px rgba(0,0,0,0.20);
+  }
+
+  /* Site header */
+  .site-header { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 0 0; animation: fadeDown 0.6s ease both; }
+  .site-header-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+  .site-header-logo img { height: 48px; width: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
+  .site-header-logo span { font-family: 'Fredoka One', cursive; font-size: 1.15rem; color: var(--header-name); letter-spacing: 0.02em; transition: color 0.4s; }
+  .header-badge { display: inline-block; background: var(--badge-bg); border: 1px solid var(--badge-border); color: var(--badge-color); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 14px; border-radius: 999px; transition: all 0.4s; }
+
+  /* Page header */
+  header { text-align: center; padding: 2.5rem 1rem 2rem; animation: fadeDown 0.7s ease both; }
+  @keyframes fadeDown { from { opacity:0; transform:translateY(-24px); } to { opacity:1; transform:translateY(0); } }
+  .badge { display: inline-block; background: var(--top-badge-bg); color: var(--top-badge-c); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 14px; border-radius: 999px; margin-bottom: 1rem; animation: pop 0.5s cubic-bezier(.36,1.5,.6,1) 0.3s both; transition: background 0.4s, color 0.4s; }
+  @keyframes pop { from { opacity:0; transform:scale(0.7); } to { opacity:1; transform:scale(1); } }
+  h1 { font-family: 'Fredoka One', cursive; font-size: clamp(2.4rem,6vw,3.8rem); line-height: 1.1; margin-bottom: 0.5rem; background: var(--h1-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { font-size: 1.05rem; font-weight: 600; color: var(--subtitle-c); transition: color 0.4s; }
+
+  /* Section label */
+  .section-label { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--section-lbl); margin: 2.5rem 0 1rem; transition: color 0.4s; }
+
+  /* Welcome */
+  .welcome { background: var(--welcome-bg); border: 1.5px solid var(--welcome-border); border-radius: 18px; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; animation: fadeDown 0.7s ease 0.2s both; transition: background 0.4s, border-color 0.4s; }
+  .welcome-icon { font-size: 2rem; flex-shrink: 0; }
+  .welcome-text { font-size: 0.9rem; color: var(--welcome-text); line-height: 1.6; transition: color 0.4s; }
+  .welcome-text strong { color: var(--body-color); }
+
+  /* Cards */
+  .grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+  .grid .card { flex: 0 1 260px; }
+  .grid .card.portfolio { flex: 1 1 100%; }
+
+  .card {
+    position: relative; display: flex; flex-direction: column; align-items: flex-start;
+    padding: 1.4rem 1.3rem 1.2rem; border-radius: 18px;
+    background: var(--card-bg); border: 1.5px solid var(--card-border);
+    text-decoration: none; color: var(--body-color); overflow: hidden;
+    transition: transform 0.22s cubic-bezier(.22,.68,0,1.2), border-color 0.2s, box-shadow 0.2s, background 0.4s;
+    animation: riseUp 0.5s ease both; cursor: pointer;
+  }
+  .card:hover { transform: translateY(-6px) scale(1.02); border-color: var(--card-border-h); box-shadow: 0 12px 40px var(--card-shadow); }
+  .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: 18px 18px 0 0; background: var(--accent,#999); }
+  .card-icon { font-size: 2.2rem; margin-bottom: 0.75rem; line-height: 1; }
+  .card-title { font-family: 'Fredoka One', cursive; font-size: 1.25rem; margin-bottom: 0.25rem; color: var(--accent, var(--body-color)); }
+  .card-desc { font-size: 0.8rem; color: var(--card-desc); font-weight: 600; line-height: 1.4; transition: color 0.4s; }
+  .card-arrow { position: absolute; bottom: 1rem; right: 1.1rem; font-size: 1rem; opacity: 0; transform: translateX(-6px); transition: opacity 0.2s, transform 0.2s; color: var(--accent, var(--body-color)); }
+  .card:hover .card-arrow { opacity: 1; transform: translateX(0); }
+
+  @keyframes riseUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  .card:nth-child(1){animation-delay:.10s}.card:nth-child(2){animation-delay:.18s}.card:nth-child(3){animation-delay:.26s}
+  .card:nth-child(4){animation-delay:.34s}.card:nth-child(5){animation-delay:.42s}.card:nth-child(6){animation-delay:.50s}
+  .card:nth-child(7){animation-delay:.58s}.card:nth-child(8){animation-delay:.66s}
+
+  /* Portfolio card */
+  .card.portfolio { flex-direction: row; align-items: center; gap: 1.2rem; padding: 1.3rem 1.5rem; }
+  .card.portfolio .card-icon { margin-bottom: 0; font-size: 2.4rem; flex-shrink: 0; }
+  .card.portfolio .card-body { flex: 1; }
+  .card.portfolio .card-title { font-size: 1.35rem; }
+  .card.portfolio .card-desc { font-size: 0.82rem; }
+  .card.portfolio .card-arrow { position: static; opacity: 1; transform: none; font-size: 1.3rem; flex-shrink: 0; margin-left: auto; transition: transform 0.2s; }
+  .card.portfolio:hover .card-arrow { transform: translateX(5px); }
+
+  /* Feature cards */
+  .features-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+  .feature-card { flex: 0 1 260px; background: var(--card-bg); border: 1.5px solid var(--card-border); border-radius: 18px; padding: 1.3rem 1.2rem; display: flex; align-items: flex-start; gap: 1rem; animation: riseUp 0.5s ease both; transition: transform 0.22s cubic-bezier(.22,.68,0,1.2), border-color 0.2s, box-shadow 0.2s, background 0.4s; }
+  .feature-card:hover { transform: translateY(-5px) scale(1.015); border-color: var(--card-border-h); box-shadow: 0 10px 32px var(--card-shadow); }
+  .feature-card:nth-child(1){animation-delay:.12s}.feature-card:nth-child(2){animation-delay:.20s}.feature-card:nth-child(3){animation-delay:.28s}.feature-card:nth-child(4){animation-delay:.36s}
+  .feature-card-icon { font-size: 1.9rem; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+  .feature-card-text { font-size: 0.83rem; color: var(--card-desc); font-weight: 600; line-height: 1.5; }
+  .feature-card-text strong { display: block; font-family: 'Fredoka One', cursive; font-size: 1rem; color: var(--feat-strong); margin-bottom: 2px; transition: color 0.4s; }
+
+  /* Footer */
+  .site-footer { position: relative; z-index: 1; background: var(--footer-bg); border-top: 1px solid var(--footer-border); padding: 2rem 1in; margin-top: 3rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; transition: background 0.4s, border-color 0.4s; }
+  .site-footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--a-science), var(--a-math), var(--a-cs), var(--a-portfolio)); }
+  .footer-logo { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem; }
+  .footer-logo img { height: 36px; width: auto; border-radius: 8px; opacity: 0.75; }
+  .footer-logo span { font-family: 'Fredoka One', cursive; font-size: 1rem; color: var(--footer-name); transition: color 0.4s; }
+  .footer-tagline { font-size: 0.82rem; font-weight: 700; color: var(--footer-tag); letter-spacing: 0.03em; font-style: italic; transition: color 0.4s; }
+  .footer-copy { font-size: 0.72rem; color: var(--footer-copy); font-weight: 600; letter-spacing: 0.04em; margin-top: 0.2rem; transition: color 0.4s; }
+
+  /* Back to top */
+  #back-to-top { display: none; position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 99; background: var(--back-top-bg); color: var(--back-top-c); border: none; border-radius: 12px; width: 42px; height: 42px; font-size: 1.2rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.25); transition: background 0.2s, transform 0.2s, color 0.4s; align-items: center; justify-content: center; }
+  #back-to-top:hover { transform: translateY(-3px); filter: brightness(1.1); }
+</style>
 </head>
-<body>
+<body class="theme-night">
 
-    <header class="header">
-        <div class="header-left">
-            <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Teacher Ed Logo" class="header-logo">
-            <div class="header-title">Teacher Ed Classroom</div>
-        </div>
-        <nav>
-            <ul id="main-navigation" class="nav-tabs">
-                <li class="active"><a href="index.html">Home</a></li>
-                <li><a href="js/modules/about/index.html">About</a></li>
-                <li><a href="js/modules/math/index.html">Math</a></li>
-                <li><a href="js/modules/science/index.html">Science</a></li>
-                <li><a href="js/modules/scriptures/index.html">Scriptures</a></li>
-                <li><a href="js/modules/spanish/index.html">Spanish</a></li>
-                <li><a href="js/modules/Google-Classroom/index.html">Google Classroom</a></li>
-            </ul>
-            <button id="mobile-menu-toggle" class="mobile-menu-button" aria-controls="main-navigation" aria-expanded="false" aria-label="Toggle navigation menu">☰</button>
-        </nav>
-    </header>
+<!-- Stars -->
+<div class="stars" id="stars"></div>
 
-    <main class="main-content-wrapper">
-        <div class="container">
-            <div class="welcome-section">
-                <h1>👋 Welcome!</h1>
-                <p class="subtitle" lang="es">¡Bienvenidos, estudiantes y padres!</p>
-                <p class="intro-text">This is our digital classroom — a place to explore, learn, and grow together. Use the navigation above to jump into any subject!</p>
-            </div>
+<!-- Theme switcher -->
+<div class="theme-bar">
+  <button class="theme-btn active" onclick="setTheme('night',this)">🌙 Night</button>
+  <button class="theme-btn" onclick="setTheme('sunny',this)">☀️ Sunny</button>
+  <button class="theme-btn" onclick="setTheme('cloudy',this)">☁️ Cloudy</button>
+  <button class="theme-btn" onclick="setTheme('nature',this)">🌿 Nature</button>
+</div>
 
-            <h2 class="features-header">Here’s What You Can Do</h2>
-            <div class="features-grid">
-                <div class="feature-item-card">
-                    <div class="icon" aria-hidden="true">🧠</div>
-                    <p>Review lessons and explore subjects at your own pace.</p>
-                </div>
-                <div class="feature-item-card">
-                    <div class="icon" aria-hidden="true">📚</div>
-                    <p>Access weekly learning materials for all your subjects.</p>
-                </div>
-                <div class="feature-item-card">
-                    <div class="icon" aria-hidden="true">📝</div>
-                    <p>Download worksheets and complete interactive activities.</p>
-                </div>
-                <div class="feature-item-card">
-                    <div class="icon" aria-hidden="true">📥</div>
-                    <p>Submit your assignments easily via Google Classroom.</p>
-                </div>
-            </div>
-        </div>
-    </main>
+<div class="wrapper">
 
-    <footer class="footer">
-        <p class="font-semibold">Explore, discover, and learn something new every day!</p>
-        <p class="text-xs mt-1">© 2025 Mr. Edwin's Virtual Classroom — All rights reserved.</p>
-    </footer>
+  <!-- Site header -->
+  <div class="site-header">
+    <a class="site-header-logo" href="#">
+      <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+      <span>Mr. EdLo's Virtual Classroom</span>
+    </a>
+    <span class="header-badge">Standard 6 &nbsp;·&nbsp; Belize</span>
+  </div>
 
-    <button id="back-to-top-btn" title="Go to top" aria-label="Back to top">↑</button>
-    <script src="js/main.js"></script>
+  <header>
+    <h1>Welcome to Our Classroom!</h1>
+    <p class="subtitle">Pick a subject and start learning, Standard 6!</p>
+  </header>
 
+  <!-- Welcome banner -->
+  <div class="welcome">
+    <div class="welcome-icon">👋</div>
+    <div class="welcome-text">
+      <strong>Hello, Standard 6!</strong> This is your online home for all our subjects.
+      Click any subject card below to find lessons, activities, and resources.
+      You can also check your student portfolio link in the Student Work section.
+    </div>
+  </div>
+
+  <!-- What You Can Do -->
+  <p class="section-label">What You Can Do Here</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-card-icon">📖</div>
+      <div class="feature-card-text"><strong>Review Lessons</strong>Explore subjects and go over lessons at your own pace, any time.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-card-icon">📋</div>
+      <div class="feature-card-text"><strong>Weekly Materials</strong>Access learning materials for all your subjects each week.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-card-icon">📝</div>
+      <div class="feature-card-text"><strong>Activities & Worksheets</strong>Download worksheets and complete interactive activities.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-card-icon">📤</div>
+      <div class="feature-card-text"><strong>Submit Work</strong>Turn in your assignments easily through Google Classroom.</div>
+    </div>
+  </div>
+
+  <!-- Subjects -->
+  <p class="section-label">Our Subjects</p>
+  <div class="grid">
+
+    <a class="card" href="https://teacherzoled.github.io/spanish/" style="--accent:var(--a-spanish);">
+      <div class="card-icon">🌎</div>
+      <div class="card-title">Spanish</div>
+      <div class="card-desc">Mis aspiraciones, future plans & more</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a class="card" href="https://teacherzoled.github.io/science/" style="--accent:var(--a-science);">
+      <div class="card-icon">🔬</div>
+      <div class="card-title">Science</div>
+      <div class="card-desc">Experiments, concepts & discoveries</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a class="card" href="https://teacherzoled.github.io/math/" style="--accent:var(--a-math);">
+      <div class="card-icon">➗</div>
+      <div class="card-title">Mathematics</div>
+      <div class="card-desc">Numbers, operations & problem solving</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a class="card" href="https://teacherzoled.github.io/scriptures/" style="--accent:var(--a-scripture);">
+      <div class="card-icon">✝️</div>
+      <div class="card-title">Scriptures</div>
+      <div class="card-desc">Bible stories, verses & devotions</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a class="card" href="https://teacherzoled.github.io/computersc/" style="--accent:var(--a-cs);">
+      <div class="card-icon">💻</div>
+      <div class="card-title">Computer Science</div>
+      <div class="card-desc">Technology, coding & digital skills</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a class="card" href="https://teacherzoled.github.io/pe/" style="--accent:var(--a-pe);">
+      <div class="card-icon">⚽</div>
+      <div class="card-title">Physical Education</div>
+      <div class="card-desc">Fitness, sports & healthy living</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a class="card" href="https://classroom.google.com" target="_blank" style="--accent:var(--a-gclass);">
+      <div class="card-icon"><img src="https://ssl.gstatic.com/classroom/favicon.png" alt="Google Classroom" style="width:2.2rem;height:2.2rem;object-fit:contain;border-radius:6px;"></div>
+      <div class="card-title">Google Classroom</div>
+      <div class="card-desc">Sign in to submit assignments & access class materials</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a class="card" href="#" style="--accent:var(--a-worksheet);">
+      <div class="card-icon">📄</div>
+      <div class="card-title">Worksheets</div>
+      <div class="card-desc">Download and print worksheets for all subjects</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+  </div>
+
+  <!-- Student Work -->
+  <p class="section-label">Student Work</p>
+  <div class="grid">
+    <a class="card portfolio" href="https://teacherzoled.github.io/portfolios/" style="--accent:var(--a-portfolio);">
+      <div class="card-icon">🗂️</div>
+      <div class="card-body">
+        <div class="card-title">Student Portfolios</div>
+        <div class="card-desc">Click here to access individual student portfolio links — Google Docs, projects & collected work</div>
+      </div>
+      <span class="card-arrow">→</span>
+    </a>
+  </div>
+
+</div><!-- /wrapper -->
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-logo">
+    <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+    <span>Mr. EdLo's Virtual Classroom</span>
+  </div>
+  <p class="footer-tagline">Explore, discover, and learn something new every day!</p>
+  <p class="footer-copy">© 2025 Mr. EdLo's Virtual Classroom — Standard 6 · Belize · All rights reserved.</p>
+</footer>
+
+<button id="back-to-top" title="Back to top" aria-label="Back to top">↑</button>
+
+<script>
+  /* Stars */
+  const sc = document.getElementById('stars');
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const sz = Math.random()*2.5+1;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*4+2).toFixed(1)}s;--delay:-${(Math.random()*6).toFixed(1)}s;--op:${(Math.random()*0.5+0.2).toFixed(2)};`;
+    sc.appendChild(s);
+  }
+
+  /* Theme switcher */
+  const THEMES = ['night','sunny','cloudy','nature'];
+  function setTheme(theme, btn) {
+    THEMES.forEach(t => document.body.classList.remove('theme-'+t));
+    document.body.classList.add('theme-'+theme);
+    document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    localStorage.setItem('vc-theme', theme);
+  }
+
+  /* Restore saved theme */
+  (function(){
+    const saved = localStorage.getItem('vc-theme');
+    if (saved && THEMES.includes(saved)) {
+      THEMES.forEach(t => document.body.classList.remove('theme-'+t));
+      document.body.classList.add('theme-'+saved);
+      document.querySelectorAll('.theme-btn').forEach(b => {
+        b.classList.toggle('active', b.textContent.toLowerCase().includes(saved));
+      });
+    }
+  })();
+
+  /* Back to top */
+  const topBtn = document.getElementById('back-to-top');
+  window.addEventListener('scroll', () => {
+    topBtn.style.display = window.scrollY > 300 ? 'flex' : 'none';
+  });
+  topBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+</script>
 </body>
 </html>
