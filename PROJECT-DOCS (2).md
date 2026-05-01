@@ -173,9 +173,48 @@ Theme preference saves to `localStorage` key: `vc-theme` — persists across all
 - URL: https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png
 
 ### Layout Rules
-- Wrapper: `max-width: 1400px`, padding `0 1in` on left and right
+- Wrapper: `max-width: 1400px`, padding `max(1rem, 4vw)` on left and right
 - Cards: `flex: 0 1 260px`, centered with flexbox
 - Each subject has its own accent color
+
+### 📱 Mobile Responsiveness Rules
+
+These rules are REQUIRED on every new page. Learned from debugging sessions.
+
+#### Padding
+- NEVER use `1in` for horizontal padding — on a 320px phone it leaves only 128px of content
+- Always use `max(1rem, 4vw)` in both `.wrapper` and `.site-footer`
+
+#### Overflow
+- Always add `html { overflow-x: hidden }` — `body` alone is NOT enough on mobile Chrome
+- Overflow on `body` only propagates to `html` and the browser still allows horizontal scrolling
+- Any horizontal overflow will misalign the header and footer even if those elements are coded correctly
+
+#### White-space and nowrap — DANGER RULE
+- NEVER use `white-space: nowrap` on labels, badges, or dividers that contain long text
+- Long nowrap text (e.g. cycle divider labels) renders at full pixel width and blows out the entire page layout on mobile, misaligning everything below it
+- If `nowrap` is needed on desktop, always add a `≤640px` media query override:
+```css
+  @media (max-width: 640px) {
+    .your-label {
+      white-space: normal;
+      flex-shrink: 1;
+    }
+  }
+```
+
+#### Media query breakpoints
+- All hub pages use `max-width: 640px` for mobile overrides — keep this consistent
+- Do NOT use `700px` — it fires on screens that are not mobile and causes the header to stack unnecessarily
+
+#### Touch targets
+- Minimum tap target size: `44px × 44px` (back-to-top button and any icon buttons)
+- `42px` is too small — always use at least `44px`
+
+#### Flex layouts on mobile
+- `.site-header`: add `flex-wrap: wrap` so it reflows cleanly at all zoom levels
+- `.site-footer`: always `display: flex; flex-direction: column; align-items: center`
+- Cards: always `flex-wrap: wrap; justify-content: center` so incomplete rows center automatically
 
 ### Subject Accent Colors
 | Subject | Color | Hex |
@@ -568,9 +607,48 @@ Theme preference saves to `localStorage` key: `vc-theme` — persists across all
 - URL: https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png
 
 ### Layout Rules
-- Wrapper: `max-width: 1400px`, padding `0 1in` on left and right
+- Wrapper: `max-width: 1400px`, padding `max(1rem, 4vw)` on left and right
 - Cards: `flex: 0 1 260px`, centered with flexbox
 - Each subject has its own accent color
+
+### 📱 Mobile Responsiveness Rules
+
+These rules are REQUIRED on every new page. Learned from debugging sessions.
+
+#### Padding
+- NEVER use `1in` for horizontal padding — on a 320px phone it leaves only 128px of content
+- Always use `max(1rem, 4vw)` in both `.wrapper` and `.site-footer`
+
+#### Overflow
+- Always add `html { overflow-x: hidden }` — `body` alone is NOT enough on mobile Chrome
+- Overflow on `body` only propagates to `html` and the browser still allows horizontal scrolling
+- Any horizontal overflow will misalign the header and footer even if those elements are coded correctly
+
+#### White-space and nowrap — DANGER RULE
+- NEVER use `white-space: nowrap` on labels, badges, or dividers that contain long text
+- Long nowrap text (e.g. cycle divider labels) renders at full pixel width and blows out the entire page layout on mobile, misaligning everything below it
+- If `nowrap` is needed on desktop, always add a `≤640px` media query override:
+```css
+  @media (max-width: 640px) {
+    .your-label {
+      white-space: normal;
+      flex-shrink: 1;
+    }
+  }
+```
+
+#### Media query breakpoints
+- All hub pages use `max-width: 640px` for mobile overrides — keep this consistent
+- Do NOT use `700px` — it fires on screens that are not mobile and causes the header to stack unnecessarily
+
+#### Touch targets
+- Minimum tap target size: `44px × 44px` (back-to-top button and any icon buttons)
+- `42px` is too small — always use at least `44px`
+
+#### Flex layouts on mobile
+- `.site-header`: add `flex-wrap: wrap` so it reflows cleanly at all zoom levels
+- `.site-footer`: always `display: flex; flex-direction: column; align-items: center`
+- Cards: always `flex-wrap: wrap; justify-content: center` so incomplete rows center automatically
 
 ### Subject Accent Colors
 | Subject | Color | Hex |
