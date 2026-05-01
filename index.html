@@ -217,7 +217,7 @@
   }
 
   /* Layout */
-  .wrapper { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 0 1in 2rem; flex: 1; }
+  .wrapper { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 0 max(1rem, 4vw) 2rem; flex: 1; }
 
   /* ── Theme bar ── */
   .theme-bar {
@@ -319,7 +319,7 @@
   .feature-card-text strong { display: block; font-family: 'Fredoka One', cursive; font-size: 1rem; color: var(--feat-strong); margin-bottom: 2px; transition: color 0.4s; }
 
   /* Footer */
-  .site-footer { position: relative; z-index: 1; background: var(--footer-bg); border-top: 1px solid var(--footer-border); padding: 2rem 1in; margin-top: 3rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; transition: background 0.4s, border-color 0.4s; }
+  .site-footer { position: relative; z-index: 1; background: var(--footer-bg); border-top: 1px solid var(--footer-border); padding: 2rem max(1rem, 4vw); margin-top: 3rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; transition: background 0.4s, border-color 0.4s; }
   .site-footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--a-science), var(--a-math), var(--a-cs), var(--a-portfolio)); }
   .footer-logo { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem; }
   .footer-logo img { height: 36px; width: auto; border-radius: 8px; opacity: 0.75; }
