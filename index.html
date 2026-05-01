@@ -324,12 +324,23 @@
   .footer-logo { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem; }
   .footer-logo img { height: 36px; width: auto; border-radius: 8px; opacity: 0.75; }
   .footer-logo span { font-family: 'Fredoka One', cursive; font-size: 1rem; color: var(--footer-name); transition: color 0.4s; }
-  .footer-tagline { font-size: 0.82rem; font-weight: 700; color: var(--footer-tag); letter-spacing: 0.03em; font-style: italic; transition: color 0.4s; }
-  .footer-copy { font-size: 0.72rem; color: var(--footer-copy); font-weight: 600; letter-spacing: 0.04em; margin-top: 0.2rem; transition: color 0.4s; }
+  .footer-tagline { font-size: 0.82rem; font-weight: 700; color: var(--footer-tag); letter-spacing: 0.03em; font-style: italic; transition: color 0.4s; text-align: center; }
+  .footer-copy { font-size: 0.72rem; color: var(--footer-copy); font-weight: 600; letter-spacing: 0.04em; margin-top: 0.2rem; transition: color 0.4s; text-align: center; }
 
   /* Back to top */
   #back-to-top { display: none; position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 99; background: var(--back-top-bg); color: var(--back-top-c); border: none; border-radius: 12px; width: 42px; height: 42px; font-size: 1.2rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.25); transition: background 0.2s, transform 0.2s, color 0.4s; align-items: center; justify-content: center; }
   #back-to-top:hover { transform: translateY(-3px); filter: brightness(1.1); }
+
+  @media (max-width:640px) {
+    .site-header { flex-direction:column; align-items:flex-start; gap:.5rem; }
+    .card.portfolio { flex-direction:column; align-items:flex-start; gap:.75rem; }
+    .card.portfolio .card-arrow { margin-left:0; transform:none; }
+    .site-footer { padding:1.5rem 1rem; }
+  }
+  @media (max-width:480px) {
+    .grid .card { flex:0 1 100%; }
+    .features-grid .feature-card { flex:0 1 100%; }
+  }
 </style>
 </head>
 <body class="theme-night">
