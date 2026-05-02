@@ -169,12 +169,25 @@ Theme preference saves to `localStorage` key: `vc-theme` — persists across all
 - URL: https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png
 
 ### Layout Rules
-- Wrapper: `max-width: 1400px`, padding `max(1rem, 4vw)` — **NEVER use `1in`** (on a 320px phone `1in` = 96px each side, leaving only 128px of content)
-- Site footer: same rule — `padding: 2rem max(1rem, 4vw)` — never `1in`
-- Cards: `flex: 0 1 260px`, centered with flexbox so incomplete rows center automatically
+- Wrapper: `max-width: 1400px`, padding `0 max(1rem, 4vw)` — never use `1in`
+- Same `max(1rem, 4vw)` in `.site-footer` padding
+- Cards: `flex: 0 1 260px`, centered with flexbox, incomplete rows center automatically
 - Wide cards (activities/assessments): `flex: 0 1 340px`
 - Lab cards: `flex: 0 1 420px`
-- Every card has a 4px top accent bar in its assigned subject color
+- Footer year: always `© 2026`
+
+### Mobile Rules (apply to every subject hub page)
+- At `max-width: 640px`: `.wide-card` and `.lab-card` → `flex: 0 1 100%`
+- At `max-width: 480px`: `.grid .card` → `flex: 0 1 100%`
+- `html`, `body`, and `.wrapper` must all have `overflow-x: hidden`
+- h1 font size must use `clamp(1.8rem, 8vw, 3.8rem)` — never a fixed size
+- `.welcome-text` must have `min-width: 0` and `word-break: break-word`
+
+### Cycle Divider Mobile Rules
+- `.cycle-divider-label`: always `white-space: normal` and `text-align: center`
+- At `max-width: 640px`: `.cycle-divider` → `flex-wrap: wrap; justify-content: center`
+- At `max-width: 640px`: `.cycle-divider-label` → `width: 100%; text-align: center`
+- At `max-width: 640px`: `.cycle-divider-line` → `display: none`
 
 ### Copyright Footer
 Every page footer must read exactly:
