@@ -383,13 +383,13 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
 
 <div class="wrapper">
   <div class="site-header">
-    <a class="site-header-logo" href="https://teacherzoled.github.io/Virtual-Classroom/">
+    <a class="site-header-logo" href="https://edlovirtualclassroom.com/Virtual-Classroom/">
       <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
       <span>Mr. EdLo's Virtual Classroom</span>
     </a>
     <span class="header-badge">Standard 6 &nbsp;·&nbsp; Belize</span>
   </div>
-  <a class="back-link" href="https://teacherzoled.github.io/science/">← Back to Science</a>
+  <a class="back-link" href="https://edlovirtualclassroom.com/science/">← Back to Science</a>
 
   <header>
     <div class="badge">Standard 6 &nbsp;·&nbsp; Science &nbsp;·&nbsp; SC 6.20</div>
@@ -405,7 +405,7 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
     <div class="lock-scores" id="lockScores"></div>
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
       <button class="btn-primary" onclick="downloadPDF()">📄 Download PDF Report</button>
-      <a class="btn-secondary" href="https://teacherzoled.github.io/science/" style="display:inline-flex;align-items:center;text-decoration:none;">← Back to Science</a>
+      <a class="btn-secondary" href="https://edlovirtualclassroom.com/science/" style="display:inline-flex;align-items:center;text-decoration:none;">← Back to Science</a>
     </div>
     <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px dashed var(--card-border);">
       <p style="font-size:.7rem;font-weight:700;color:var(--section-lbl);margin-bottom:.6rem;letter-spacing:.06em;text-transform:uppercase;">Teacher Access</p>
@@ -1142,7 +1142,7 @@ function downloadPDF(){
   for(let p=1;p<=pageCount;p++){
     doc.setPage(p);doc.setFillColor(32,201,151);doc.rect(0,290,210,7,'F');
     doc.setFont('helvetica','normal');doc.setFontSize(6.5);doc.setTextColor(255,255,255);
-    doc.text('teacherzoled.github.io/Virtual-Classroom  ·  SC 6.20 Plant Diversity Test  ·  Page '+p+' of '+pageCount,pageW/2,294.5,{align:'center'});
+    doc.text('edlovirtualclassroom.com/Virtual-Classroom  ·  SC 6.20 Plant Diversity Test  ·  Page '+p+' of '+pageCount,pageW/2,294.5,{align:'center'});
   }
   const safeName=name.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
   doc.save('PlantDiversity_SC620_'+safeName+'.pdf');
