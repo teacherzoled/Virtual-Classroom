@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Math Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .question-container {
+            transition: background-color 0.3s ease;
+        }
+        .correct {
+            background-color: #d1fae5; /* Green-100 */
+            border-left: 5px solid #10b981; /* Green-500 */
+        }
+        .question-container.correct {
+            animation: pulse-green 1s;
+        }
+        .question-container.incorrect {
+            animation: shake-horizontal 0.5s;
+        }
+        .incorrect {
+            background-color: #fee2e2; /* Red-100 */
+            border-left: 5px solid #ef4444; /* Red-500 */
+        }
+        .correct-answer-text {
+            color: #10b981; /* Green-600 */
+            font-weight: 500;
+        }
+        .solution {
+            background-color: #f0f9ff; /* Sky-50 */
+            border-left: 4px solid #38bdf8; /* Sky-400 */
+            padding: 12px;
+            margin-top: 8px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
+        }
+        .print-only {
+            display: none;
+        }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: flex !important;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 2rem;
+            }
+            .bg-white {
+                box-shadow: none !important;
+                border: 1px solid #e2e8f0;
+            }
+            input[type="text"] {
+                border: none !important;
+                border-bottom: 1px solid #9ca3af !important;
+                border-radius: 0;
+                background-color: transparent !important;
+                padding: 4px 0 !important;
+            }
+            /* Ensure WP answers are visible on print */
+            .wp-input.has-value {
+                color: #000 !important;
+                text-shadow: none !important;
+            }
+            .solution {
+                display: none !important;
+            }
+            .correct, .incorrect {
+                background-color: transparent !important;
+                border-left: none !important;
+            }
+            .feedback-text {
+                 display: none !important;
+            }
+            .question-container {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Animations for feedback */
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        @keyframes shake-horizontal {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        /* Custom border colors for questions */
+        .border-l-q-blue { border-left-color: #60a5fa; }
+        .border-l-q-purple { border-left-color: #c084fc; }
+        .border-l-q-pink { border-left-color: #f9a8d4; }
+        .border-l-q-teal { border-left-color: #5eead4; }
+        .wp-input {
+            background-color: #f8fafc; /* slate-50 */
+        }
+        /* Make text in answered WP inputs transparent unless hovered/focused */
+        .wp-input.has-value:not(:focus) {
+            color: transparent;
+            text-shadow: 0 0 8px rgba(0,0,0,0.5); /* Optional: blur effect */
+        }
+        .wp-input.has-value:hover,
+        .wp-input.has-value:focus {
+            color: #1e293b; /* slate-800 */
+            text-shadow: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto max-w-4xl px-4 py-8 sm:py-12">
+        <div class="print-only mb-8">
+             <p><strong>Name:</strong> _________________________________________</p>
+             <p><strong>Date:</strong> ___________________</p>
+        </div>
+        <header class="relative text-center mb-8">
+            <div class="mb-6 no-print">
+                <label for="studentName" class="block text-lg font-medium text-slate-700 mb-2">Enter Your Full Name:</label>
+                <input type="text" id="studentName" name="studentName" placeholder="e.g., John Doe" class="w-full max-w-md mx-auto p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <h1 class="text-4xl font-bold text-slate-900 mt-4">Mathematics Test</h1>
+            <div id="finalScoreContainer" class="hidden absolute top-0 right-0 bg-white px-4 py-2 rounded-lg shadow-md border border-slate-200 text-center">
+                <span id="scoreTitle" class="text-lg font-medium text-slate-600">Final Score</span>
+                <div id="results" class="text-3xl font-bold text-slate-800">0 / 0</div>
+            </div>
+            <p class="text-slate-600 mt-2">Part 1: Multiple Choice</p>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="sticky top-0 z-10 w-full bg-slate-200 rounded-full h-4 mb-8 no-print shadow-inner">
+            <div id="progressBar" class="bg-green-500 h-4 rounded-full text-xs font-medium text-white text-center p-0.5 leading-none transition-all duration-500" style="width: 0%">0%</div>
+        </div>
+
+        <form id="quizForm" class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg space-y-8">
+            
+            <!-- Questions will be injected here by JavaScript -->
+            <div class="pt-6 border-t border-slate-200 no-print">
+                <button type="button" id="gradeMCBtn" class="w-full bg-sky-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-700 focus:outline-none focus:ring-4 focus:ring-sky-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>Check Multiple Choice Answers</button>
+            </div>
+        </form>
+
+        <div class="mt-12">
+             <header class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-slate-900">Part 2: Word Problems</h2>
+                <p class="text-slate-600 mt-2 no-print">Solve the following problems.</p>
+            </header>
+
+            <div id="wordProblems" class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg space-y-10">
+                <!-- Question 21 -->
+                <div class="question-container p-4 rounded-lg border border-slate-200 border-l-4 border-l-q-blue">
+                    <div class="flex justify-between items-start">
+                        <p class="font-semibold text-lg mb-4 text-slate-900">21. Complete the table below.</p>
+                        <span class="font-bold text-slate-500 text-lg">14 Pts</span>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-2">a. Round each population number to two significant figures.</p>
+                    <p class="text-sm text-slate-600 mb-4">b. Calculate the estimated total population of Belize and round it to 1 significant figure.</p>
+                    <table class="w-full text-left border-collapse" id="q21-table">
+                        <thead>
+                            <tr>
+                                <th class="border-b-2 p-2 font-medium text-slate-600">District</th>
+                                <th class="border-b-2 p-2 font-medium text-slate-600">Population in 2019</th>
+                                <th class="border-b-2 p-2 font-medium text-slate-600">Rounded figures (2 s.f.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="h-12"><td class="border-b p-2">Belize</td><td class="border-b p-2">124,096</td><td class="border-b p-2"><input type="text" class="w-full p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q21-1"></td></tr>
+                            <tr class="h-12"><td class="border-b p-2">Cayo</td><td class="border-b p-2">99,118</td><td class="border-b p-2"><input type="text" class="w-full p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q21-2"></td></tr>
+                            <tr class="h-12"><td class="border-b p-2">Corozal</td><td class="border-b p-2">49,446</td><td class="border-b p-2"><input type="text" class="w-full p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q21-3"></td></tr>
+                            <tr class="h-12"><td class="border-b p-2">Orange Walk</td><td class="border-b p-2">52,550</td><td class="border-b p-2"><input type="text" class="w-full p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q21-4"></td></tr>
+                            <tr class="h-12"><td class="border-b p-2">Stann Creek</td><td class="border-b p-2">44,720</td><td class="border-b p-2"><input type="text" class="w-full p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q21-5"></td></tr>
+                            <tr class="h-12"><td class="border-b p-2">Toledo</td><td class="border-b p-2">38,557</td><td class="border-b p-2"><input type="text" class="w-full p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q21-6"></td></tr>
+                            <tr class="h-12"><td class="font-semibold border-b p-2" colspan="2">Sum of rounded figures (2 s.f.)</td><td class="border-b p-2"><input type="text" class="w-full p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q21-sum"></td></tr>
+                            <tr class="h-12"><td class="font-bold border-b p-2" colspan="2">Estimated Population of Belize (1 s.f.)</td><td class="border-b p-2"><input type="text" class="w-full p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q21-total"></td></tr>
+                        </tbody>
+                    </table>
+                    <div id="solution21" class="solution hidden"></div>
+                </div>
+
+                <!-- Question 22 -->
+                <div class="question-container p-4 rounded-lg border border-slate-200 border-l-4 border-l-q-purple">
+                    <div class="flex justify-between items-start">
+                        <p class="font-semibold text-lg mb-4 text-slate-900">22. Choose the correct subset for each universal set.</p>
+                        <span class="font-bold text-slate-500 text-lg">8 Pts</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4" id="q22-inputs">
+                        <div>
+                            <label for="q22-1" class="font-medium text-slate-700">a. Prime Numbers:</label>
+                            <select id="q22-1" class="w-full mt-1 p-2 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none">
+                                <option value="">Select an answer</option>
+                                <option value="wrong1">{2, 5, 9}</option>
+                                <option value="correct">{2, 5, 11}</option>
+                                <option value="wrong2">{1, 2, 3}</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="q22-2" class="font-medium text-slate-700">b. Composite Numbers:</label>
+                            <select id="q22-2" class="w-full mt-1 p-2 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none">
+                                <option value="">Select an answer</option>
+                                <option value="wrong1">{4, 7, 12}</option>
+                                <option value="wrong2">{1, 4, 9}</option>
+                                <option value="correct">{4, 9, 12}</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="q22-3" class="font-medium text-slate-700">c. Even Numbers:</label>
+                            <select id="q22-3" class="w-full mt-1 p-2 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none">
+                                <option value="">Select an answer</option>
+                                <option value="correct">{10, 22, 34}</option>
+                                <option value="wrong1">{10, 21, 34}</option>
+                                <option value="wrong2">{1, 2, 4}</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="q22-4" class="font-medium text-slate-700">d. Odd Numbers:</label>
+                            <select id="q22-4" class="w-full mt-1 p-2 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none">
+                                <option value="">Select an answer</option>
+                                <option value="wrong1">{1, 2, 5}</option>
+                                <option value="correct">{1, 3, 9}</option>
+                                <option value="wrong2">{0, 1, 3}</option>
+                            </select>
+                        </div>
+                    </div>
+                     <div id="solution22" class="solution hidden"></div>
+                </div>
+
+                <!-- Question 23 -->
+                 <div class="question-container p-4 rounded-lg border border-slate-200 border-l-4 border-l-q-pink">
+                    <div class="flex justify-between items-start">
+                        <p class="font-semibold text-lg mb-4 text-slate-900">23. An estimated number is given to the nearest ten thousand. Choose a possible exact number from the options.</p>
+                        <span class="font-bold text-slate-500 text-lg">8 Pts</span>
+                    </div>
+                     <div class="space-y-4" id="q23-inputs">
+                        <div>
+                            <label for="q23-1" class="font-medium text-slate-700">a. If the estimate is 40,000, a possible exact number is:</label>
+                            <select id="q23-1" class="w-full mt-1 p-2 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none">
+                                <option value="">Select an answer</option>
+                                <option value="wrong1">34,999</option>
+                                <option value="correct">44,950</option>
+                                <option value="wrong2">45,000</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="q23-2" class="font-medium text-slate-700">b. If the estimate is 60,000, a possible exact number is:</label>
+                            <select id="q23-2" class="w-full mt-1 p-2 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none">
+                                <option value="">Select an answer</option>
+                                <option value="wrong1">54,999</option>
+                                <option value="wrong2">65,000</option>
+                                <option value="correct">55,001</option>
+                            </select>
+                        </div>
+                     </div>
+                     <div id="solution23" class="solution hidden"></div>
+                </div>
+
+                <!-- Question 24 -->
+                <div class="question-container p-4 rounded-lg border border-slate-200 border-l-4 border-l-q-teal">
+                    <div class="flex justify-between items-start">
+                        <p class="font-semibold text-lg mb-4 text-slate-900">24. What is the prime factorization of 72? Complete the factor tree below and write your answer.</p>
+                        <span class="font-bold text-slate-500 text-lg">10 Pts</span>
+                    </div>
+                    
+                    <!-- Interactive Factor Tree -->
+                    <div class="space-y-6 text-center max-w-sm mx-auto py-4" id="q24-inputs">
+                        <!-- Level 1 -->
+                        <div>
+                            <span class="inline-block bg-slate-200 px-4 py-2 rounded-lg font-bold text-lg">72</span>
+                        </div>
+                        
+                        <!-- Level 2 -->
+                        <div class="flex justify-around items-center">
+                            <span class="inline-block bg-slate-100 px-4 py-2 rounded-lg">4</span>
+                            <span class="font-bold">x</span>
+                            <input type="text" class="w-16 text-center border rounded-lg p-2 wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" aria-label="Factor of 72" id="q24-1">
+                        </div>
+
+                        <!-- Level 3 -->
+                        <div class="flex justify-between items-center">
+                            <!-- Branch from 4 -->
+                            <div class="flex items-center space-x-2">
+                                <input type="text" class="w-16 text-center border rounded-lg p-2 wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" aria-label="Factor of 4" id="q24-2">
+                                <span class="font-bold">x</span>
+                                <span class="inline-block bg-green-200 px-4 py-2 rounded-lg font-bold">2</span>
+                            </div>
+                            <!-- Branch from other number -->
+                            <div class="flex items-center space-x-2">
+                                 <span class="inline-block bg-green-200 px-4 py-2 rounded-lg font-bold">3</span>
+                                 <span class="font-bold">x</span>
+                                 <span class="inline-block bg-slate-100 px-4 py-2 rounded-lg">6</span>
+                            </div>
+                        </div>
+                         <!-- Level 4 -->
+                         <div class="flex justify-end items-center" style="padding-right: 1.5rem;">
+                            <!-- Branch from 6 -->
+                            <div class="flex items-center space-x-2">
+                                 <input type="text" class="w-16 text-center border rounded-lg p-2 wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" aria-label="Factor of 6" id="q24-3">
+                                 <span class="font-bold">x</span>
+                                 <input type="text" class="w-16 text-center border rounded-lg p-2 wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" aria-label="Factor of 6" id="q24-4">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <label class="font-semibold text-lg mt-4 mb-2 block" for="q24-result">The prime factorization of 72 is:</label>
+                    <input id="q24-result" type="text" placeholder="Enter prime factorization" class="w-full p-2 border rounded-lg wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none">
+                    <div id="solution24" class="solution hidden"></div>
+                </div>
+
+                <!-- Question 25 -->
+                <div class="question-container p-4 rounded-lg border border-slate-200 border-l-4 border-l-q-blue">
+                     <div class="flex justify-between items-start">
+                        <p class="font-semibold text-lg mb-4 text-slate-900">25. Write the complete figures for Belize's top imports.</p>
+                        <span class="font-bold text-slate-500 text-lg">10 Pts</span>
+                    </div>
+                     <ul class="space-y-2" id="q25-inputs">
+                        <li class="flex items-center gap-2">Refined Petroleum ($119M): <input type="text" class="flex-grow p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q25-1"></li>
+                        <li class="flex items-center gap-2">Rolled Tobacco ($59.1M): <input type="text" class="flex-grow p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q25-2"></li>
+                        <li class="flex items-center gap-2">Recreational Boats ($32.8M): <input type="text" class="flex-grow p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q25-3"></li>
+                        <li class="flex items-center gap-2">Passenger and Cargo Ships ($21.5M): <input type="text" class="flex-grow p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q25-4"></li>
+                        <li class="flex items-center gap-2">Ethers ($17.5M): <input type="text" class="flex-grow p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q25-5"></li>
+                     </ul>
+                     <div id="solution25" class="solution hidden"></div>
+                </div>
+
+                <div class="pt-8 border-t border-slate-200 no-print flex flex-col sm:flex-row gap-4">
+                     <button type="button" id="gradeWPBtn" class="w-full bg-blue-600 text-white font-bold py-4 px-8 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100" disabled>
+                        Check Word Problems & Get Final Score
+                     </button>
+                     <button id="printBtn" class="w-full sm:w-auto bg-gray-700 text-white font-bold py-4 px-8 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-gray-300 transition-all no-print">Print Test</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA ---
+        const quizData = [
+            { id: 'mc1', question: "1. Use words to write 908,064,000.", options: ["nine hundred eight thousand, sixty-four.","nine hundred eight million, sixty-four.","nine hundred eight million, sixty-four thousand.","ninety-eight million, sixty-four thousand."], answer: "nine hundred eight million, sixty-four thousand.", points: 2 },
+            { id: 'mc2', question: "2. In which of the following numbers does 8 have the greatest value?", options: ["4,891", "8,219", "9,287", "9,998"], answer: "8,219", points: 2 },
+            { id: 'mc3', question: "3. Which of the following numbers is a prime number?", options: ["9", "8", "21", "19"], answer: "19", points: 2 },
+            { id: 'mc4', question: "4. What is the value of 6 in the number 1,063,292?", options: ["Six thousand", "Sixty thousand", "Sixty-three thousand", "Seven hundred thousand"], answer: "Sixty thousand", points: 2 },
+            { id: 'mc5', question: "5. 613.159 rounded to the nearest hundredths is:", options: ["600.12", "613.16", "613.29", "613.50"], answer: "613.16", points: 2 },
+            { id: 'mc6', question: "6. What is the place value of the 3 in the number 2.347?", options: ["tenths", "hundredths", "tens", "hundreds"], answer: "tenths", points: 2 },
+            { id: 'mc7', question: "7. Based on the number 125,389, what is the difference in value between the 5 and the 8?", options: ["3", "13", "4,920", "4,992"], answer: "4,920", points: 3 },
+            { id: 'mc8', question: "8. The sun's temperature is 15,400,000°C. This is written as:", options: ["fifteen million, four thousand degrees celsius.","fifteen thousand, four hundred degrees celsius.","fifteen million, four hundred thousand degrees celsius.","fifteen hundred thousand, four hundred degrees celsius."], answer: "fifteen million, four hundred thousand degrees celsius.", points: 2 },
+            { id: 'mc9', question: "9. Round 36.9763 to the nearest hundredth.", options: ["36.90", "36.97", "36.98", "37.00"], answer: "36.98", points: 2 },
+            { id: 'mc10', question: "10. Which of the following is a composite number?", options: ["424", "113", "53", "97"], answer: "424", points: 2 },
+            { id: 'mc11', question: "11. One hundred thirty-six of the two hundred sixty students in the school were boys. How many girls were there in the school?", options: ["124", "134", "136", "260"], answer: "124", points: 2 },
+            { id: 'mc12', question: "12. How would seven hundredths be written as a decimal number?", options: ["0.007", "0.07", "0.7", "700"], answer: "0.07", points: 2 },
+            { id: 'mc13', question: "13. What is the only even-prime number?", options: ["1", "2", "3", "4"], answer: "2", points: 2 },
+            { id: 'mc14', question: "14. What is the smallest composite number?", options: ["1", "2", "3", "4"], answer: "4", points: 2 },
+            { id: 'mc15', question: "15. When you add 15 and 15, the sum is an:", options: ["Odd number", "Even number"], answer: "Even number", points: 1 },
+            { id: 'mc16', question: "16. A whole number is given as 421,000 to the nearest 1000. What would be the smallest possible value of the actual number?", options: ["421,001", "421,099", "421,499", "420,500"], answer: "420,500", points: 3 },
+            { id: 'mc17', question: "17. What is the standard form of the following number? (5 x 10,000) + (7 x 1)", options: ["5,700", "5,070", "5,007", "50,007"], answer: "50,007", points: 2 },
+            { id: 'mc18', question: "18. The number 123,487 rounded to 1 significant figure is:", options: ["120,000", "100,000", "123,000", "123,500"], answer: "100,000", points: 3 },
+            { id: 'mc19', question: "19. Which of the following list of factors are the factors of 12?", options: ["1, 2, 3, 4", "1, 4, 5, 6", "1, 2, 3, 4, 6, 12", "1, 12"], answer: "1, 2, 3, 4, 6, 12", points: 2 },
+            { id: 'mc20', question: "20. Is the expression below true or false? 0.307 > 0.31", options: ["True", "False"], answer: "False", points: 2 }
+        ];
+
+        const wordProblemData = [
+            { 
+                id: 'q21',
+                points: 14,
+                answers: {
+                    'q21-1': ['120000', '120,000'],
+                    'q21-2': ['99000', '99,000'],
+                    'q21-3': ['49000', '49,000'],
+                    'q21-4': ['53000', '53,000'],
+                    'q21-5': ['45000', '45,000'],
+                    'q21-6': ['39000', '39,000'],
+                    'q21-sum': ['405000', '405,000'],
+                    'q21-total': ['400000', '400,000'],
+                }
+            },
+            {
+                id: 'q22',
+                points: 8, // 2 points per correct dropdown
+                answers: {
+                    'q22-1': 'correct',
+                    'q22-2': 'correct',
+                    'q22-3': 'correct',
+                    'q22-4': 'correct',
+                }
+            },
+            {
+                id: 'q23',
+                points: 8, // 4 points per correct choice
+                answers: {
+                    'q23-1': 'correct',
+                    'q23-2': 'correct',
+                }
+            },
+            {
+                id: 'q24',
+                points: 10, // 1 pt for each of the 4 tree inputs, 6 pts for the final answer
+                answers: {
+                    'q24-1': '18',
+                    'q24-2': '2',
+                    'q24-3': '2',
+                    'q24-4': '3',
+                    'q24-result': ['2x2x2x3x3', '2 x 2 x 2 x 3 x 3', '3x3x2x2x2', '3 x 3 x 2 x 2 x 2', '2^3 x 3^2', '2^3x3^2'],
+                }
+            },
+            {
+                id: 'q25',
+                points: 10,
+                answers: {
+                    'q25-1': ['119000000', '119,000,000'],
+                    'q25-2': ['59100000', '59,100,000'],
+                    'q25-3': ['32800000', '32,800,000'],
+                    'q25-4': ['21500000', '21,500,000'],
+                    'q25-5': ['17500000', '17,500,000'],
+                }
+            }
+        ];
+
+        const wordProblemSolutions = {
+            solution21: `<strong>a. Rounded figures (2 s.f.):</strong><br>
+                Belize: 120,000 | Cayo: 99,000 | Corozal: 49,000 | Orange Walk: 53,000 | Stann Creek: 45,000 | Toledo: 39,000<br>
+                <strong>b. Sum and Final Estimate:</strong><br>
+                Sum of rounded figures: 405,000. Rounded to 1 s.f. is <strong>400,000</strong>.`,
+            solution22: `<strong>Correct Subsets:</strong><br>
+                a. Prime Numbers: <strong>{2, 5, 11}</strong> (9 and 1 are not prime).<br>b. Composite Numbers: <strong>{4, 9, 12}</strong> (7 is prime, 1 is not composite).<br>c. Even Numbers: <strong>{10, 22, 34}</strong> (21 and 1 are odd).`,
+            solution23: `<strong>Correct Answers:</strong><br>
+                a. <strong>44,950</strong> rounds to 40,000. The range is [35,000 to 44,999]. 34,999 is too low, and 45,000 rounds up to 50,000.<br>
+                b. <strong>55,001</strong> rounds to 60,000. The range is [55,000 to 64,999]. 54,999 is too low, and 65,000 rounds up to 70,000.`,
+            solution24: `The factor tree should be completed with 18, 2, 2, and 3. <br>The prime factorization of 72 is <strong>2 x 2 x 2 x 3 x 3</strong> or <strong>2³ x 3²</strong>.`,
+            solution25: `Refined Petroleum: <strong>$119,000,000</strong> | Rolled Tobacco: <strong>$59,100,000</strong> | Recreational Boats: <strong>$32,800,000</strong> | Passenger and Cargo Ships: <strong>$21,500,000</strong> | Ethers: <strong>$17,500,000</strong>`
+        };
+
+        // --- DOM ELEMENTS ---
+        const quizForm = document.getElementById('quizForm');
+        const resultsContainer = document.getElementById('results');
+        const wordProblemsContainer = document.getElementById('wordProblems');
+        const gradeMCBtn = document.getElementById('gradeMCBtn');
+        const gradeWPBtn = document.getElementById('gradeWPBtn');
+        const studentNameInput = document.getElementById('studentName');
+        const progressBar = document.getElementById('progressBar');
+        let totalFields = 0;
+
+        // --- STATE ---
+        const mcMaxScore = quizData.reduce((sum, q) => sum + q.points, 0); // Total possible MC score
+        const wpMaxScore = wordProblemData.reduce((sum, p) => sum + p.points, 0); // Total possible score for all word problems
+        let mcScore = 0;
+        let wpScore = 0;
+
+        let testIsComplete = false; // Flag to disable unload warnings after completion
+        // --- FUNCTIONS ---
+        /**
+         * Shuffles an array in place using the Fisher-Yates algorithm.
+         * @param {Array} array The array to shuffle.
+         */
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function buildQuiz() {
+            const colorClasses = ['border-l-q-blue', 'border-l-q-purple', 'border-l-q-pink', 'border-l-q-teal'];
+            const output = [];
+            quizData.forEach((currentQuestion, questionNumber) => {
+                const options = [];
+                const shuffledOptions = [...currentQuestion.options];
+                shuffleArray(shuffledOptions); // Randomize the order of options for this question
+
+                shuffledOptions.forEach(option => {
+                    options.push(
+                        `<label class="flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-100 cursor-pointer transition-colors duration-200">
+                            <input type="radio" name="question-${currentQuestion.id}" value="${option}" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-slate-300">
+                            <span class="text-slate-700">${option}</span>
+                        </label>`
+                    );
+                });
+                const colorClass = colorClasses[questionNumber % colorClasses.length];
+                output.push(
+                    `<div class="question-container p-4 rounded-lg border border-slate-200 border-l-4 ${colorClass}" id="q-container-${currentQuestion.id}">
+                        <div class="flex justify-between items-start">
+                            <p class="font-semibold text-lg mb-4 text-slate-900">${currentQuestion.question}</p>
+                            <span class="font-bold text-slate-500 text-lg">${currentQuestion.points} Pts</span>
+                        </div>
+                        <div class="question-body space-y-2">${options.join('')}</div>
+                        <div id="feedback-${questionNumber}" class="mt-3 text-sm feedback-text"></div>
+                    </div>`
+                );
+            });
+            // Insert the questions at the beginning of the form
+            quizForm.insertAdjacentHTML('afterbegin', output.join(''));
+        }
+
+        function initializeProgressBar() {
+            const mcQuestions = quizData.length;
+            const wpInputs = wordProblemsContainer.querySelectorAll('input[type="text"], select.wp-input').length;
+            const hasStudentName = 1;
+            totalFields = mcQuestions + wpInputs + hasStudentName;
+            updateProgressBar(); // Initial call to set to 0%
+        }
+
+        function updateProgressBar() {
+            if (totalFields === 0) return;
+
+            let answeredFields = 0;
+            // 1. Check student name
+            if (studentNameInput.value.trim() !== '') {
+                answeredFields++;
+            }
+            // 2. Check MC questions
+            quizData.forEach(q => {
+                if (document.querySelector(`input[name=question-${q.id}]:checked`)) {
+                    answeredFields++;
+                }
+            });
+            // 3. Check WP inputs
+            wordProblemsContainer.querySelectorAll('input[type="text"], select.wp-input').forEach(input => {
+                if (input.value.trim() !== '') answeredFields++;
+            });
+            const percentage = Math.round((answeredFields / totalFields) * 100);
+            progressBar.style.width = `${percentage}%`;
+            progressBar.textContent = `${percentage}%`;
+        }
+
+        function gradeMC() {
+            mcScore = 0;
+            // 1. Grade Multiple Choice
+            quizData.forEach((currentQuestion, questionNumber) => {
+                const questionContainer = document.getElementById(`q-container-${currentQuestion.id}`);
+                const feedbackContainer = document.getElementById(`feedback-${questionNumber}`);
+                const selector = `input[name=question-${currentQuestion.id}]:checked`;
+                const userAnswer = (document.querySelector(selector) || {}).value;
+                questionContainer.classList.remove('correct', 'incorrect');
+                feedbackContainer.innerHTML = '';
+                if (userAnswer === currentQuestion.answer) {
+                    mcScore += currentQuestion.points;
+                    questionContainer.classList.add('correct');
+                } else {
+                    questionContainer.classList.add('incorrect');
+                    if(userAnswer) {
+                        feedbackContainer.innerHTML = `<span class="correct-answer-text">Correct answer: ${currentQuestion.answer}</span>`;
+                    } else {
+                        feedbackContainer.innerHTML = `<span class="text-red-600 font-medium">No answer selected. The correct answer is: ${currentQuestion.answer}</span>`;
+                    }
+                }
+            });
+
+            // Disable MC section
+            document.querySelectorAll('#quizForm .question-container').forEach(qc => {
+                qc.classList.remove('is-reviewing'); // Ensure all are collapsed
+                qc.style.cursor = 'default'; // Remove pointer cursor after grading
+            });
+            quizForm.querySelectorAll('input[type=radio]').forEach(input => input.disabled = true);
+            gradeMCBtn.disabled = true;
+            
+            // Display the MC score
+            document.getElementById('scoreTitle').textContent = 'MC Score';
+            resultsContainer.innerHTML = `${mcScore} / ${mcMaxScore}`;
+            document.getElementById('finalScoreContainer').classList.remove('hidden');
+
+            checkWPCompletion(); // Check if WP can be enabled now
+        }
+        
+        function gradeWordProblems() {
+            wpScore = 0;
+            // 2. Grade Word Problems
+            wordProblemData.forEach(problem => { // This logic was already correct, no changes needed here.
+                const problemContainer = document.getElementById(problem.id) || document.getElementById(problem.id + '-inputs') || document.getElementById(problem.id + '-table');
+                if (!problemContainer) return;
+
+                if (!problem.isSubjective) {
+                    let correctAnswersForProblem = 0;
+                    const totalInputsForProblem = Object.keys(problem.answers).length;
+
+                    for (const inputId in problem.answers) {
+                        const inputEl = document.getElementById(inputId);
+                        let userAns = inputEl.value.trim().replace(/,/g, '');
+                        const correctAns = problem.answers[inputId];
+                        
+                        // Normalization for specific flexible-input questions like prime factorization
+                        if (inputId === 'q24-result') {
+                            // Remove all whitespace and 'x' characters to make comparison flexible
+                            const normalize = (str) => str.replace(/\s|x/g, '').toLowerCase();
+                            userAns = normalize(userAns);
+                            const normalizedCorrectAns = correctAns.map(ans => normalize(ans));
+
+                            if (normalizedCorrectAns.includes(userAns)) {
+                                correctAnswersForProblem++;
+                                inputEl.classList.add('border-green-500', 'border-2');
+                            } else {
+                                inputEl.classList.add('border-red-500', 'border-2');
+                            }
+                        } else {
+                            // Original strict checking for other questions
+                            if ((Array.isArray(correctAns) && correctAns.includes(userAns)) || userAns === correctAns) {
+                                correctAnswersForProblem++;
+                                inputEl.classList.add('border-green-500', 'border-2');
+                            } else {
+                                inputEl.classList.add('border-red-500', 'border-2');
+                            }
+                        }
+                    }
+                    // Award partial credit
+                    if (correctAnswersForProblem > 0) {
+                        wpScore += (correctAnswersForProblem / totalInputsForProblem) * problem.points;
+                    }
+                }
+            });
+
+            // 3. Display Final Score & Reveal Solutions
+            const totalScore = Math.round(mcScore + wpScore);
+            const maxScore = mcMaxScore + wpMaxScore;
+
+            document.getElementById('scoreTitle').textContent = 'Final Score';
+            resultsContainer.innerHTML = `${totalScore} / ${maxScore}`; // Update the score display
+            document.getElementById('finalScoreContainer').classList.remove('hidden');
+
+            for (const solutionId in wordProblemSolutions) {
+                const solutionDiv = document.getElementById(solutionId);
+                if (solutionDiv) {
+                    solutionDiv.innerHTML = wordProblemSolutions[solutionId];
+                    solutionDiv.classList.remove('hidden');
+                }
+            }
+
+            // 5. Freeze the entire test
+            wordProblemsContainer.querySelectorAll('.question-container').forEach(qc => {
+                qc.classList.remove('is-reviewing');
+                qc.style.cursor = 'default';
+            });
+            wordProblemsContainer.querySelectorAll('input, select').forEach(input => input.disabled = true);
+            gradeWPBtn.disabled = true;
+            testIsComplete = true; // Test is finished, allow refresh without warning
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function checkMCCompletion() {
+            const isNameFilled = studentNameInput.value.trim() !== '';
+            let answeredCount = 0;
+            quizData.forEach(q => {
+                const selector = `input[name=question-${q.id}]:checked`;
+                if (document.querySelector(selector)) {
+                    answeredCount++;
+                }
+            });
+            gradeMCBtn.disabled = !(answeredCount === quizData.length && isNameFilled);
+        }
+
+        function checkWPCompletion() {
+            // WP button should only be enabled if MC is done and all WP fields are filled.
+            const isMCGraded = gradeMCBtn.disabled;
+            if (!isMCGraded) {
+                gradeWPBtn.disabled = true;
+                return;
+            }
+
+            const wpInputs = wordProblemsContainer.querySelectorAll('input[type="text"], select.wp-input');
+            let allWPFilled = true;
+            wpInputs.forEach(input => {
+                if (input.value.trim() === '') {
+                    allWPFilled = false;
+                }
+            });
+            gradeWPBtn.disabled = !allWPFilled;
+        }
+
+        function runTeacherMode() {
+            // 1. Fill in student name
+            studentNameInput.value = "TEACHER ANSWER KEY";
+            console.log("Teacher mode activated. Populating answers...");
+
+            // 2. Fill in Multiple Choice answers
+            quizData.forEach(currentQuestion => {
+                const selector = `input[name=question-${currentQuestion.id}][value="${currentQuestion.answer}"]`;
+                const correctRadio = document.querySelector(selector);
+                if (correctRadio) {
+                    correctRadio.checked = true;
+                }
+            });
+
+            // 3. Fill in Word Problem answers
+            wordProblemData.forEach(problem => {
+                if (problem.isSubjective) {
+                    const container = document.getElementById(problem.id + '-inputs') || document.getElementById(problem.id + '-table');
+                    if (container) {
+                        const inputs = container.querySelectorAll('input[type="text"]');
+                        inputs.forEach(input => {
+                            input.value = "Example Answer"; // Placeholder for subjective Qs
+                        });
+                    }
+                } else {
+                    for (const inputId in problem.answers) {
+                        const inputEl = document.getElementById(inputId);
+                        if (inputEl) {
+                            const correctAns = problem.answers[inputId];
+                            // If the answer is an array, take the first option as the canonical answer
+                            inputEl.value = Array.isArray(correctAns) ? correctAns[0] : correctAns;
+                        }
+                    }
+                }
+            });
+
+            // 4. Automatically grade the entire test
+            gradeMC();
+            gradeWordProblems();
+        }
+
+        // --- INITIALIZATION & EVENT LISTENERS ---
+        buildQuiz();
+        initializeProgressBar(); // Set up the progress bar, values will be updated on load
+        gradeMCBtn.addEventListener('click', () => {
+            if (window.confirm("Are you sure you want to grade the multiple choice section? You will not be able to change your answers.")) {
+                gradeMC();
+            }
+        });
+        gradeWPBtn.addEventListener('click', () => {
+            if (window.confirm("Are you sure you want to grade the word problems and get your final score? You will not be able to change your answers.")) {
+                gradeWordProblems();
+            }
+        });
+        quizForm.addEventListener('change', (e) => {
+            // If a radio button was changed, auto-scroll to the next question
+            if (e.target.type === 'radio') {
+                const currentQuestionContainer = e.target.closest('.question-container');
+                if (currentQuestionContainer) {
+                    // Use a short timeout to ensure the UI has updated before we scroll.
+                    setTimeout(() => {
+                        const nextElement = currentQuestionContainer.nextElementSibling;
+                        if (nextElement && nextElement.classList.contains('question-container')) {
+                            // Scroll the top of the next question into view, with a small offset for the sticky progress bar.
+                            const elementPosition = nextElement.getBoundingClientRect().top;
+                            const offsetPosition = elementPosition + window.pageYOffset - 50; // 50px offset
+                            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                        }
+                    }, 100); // 100ms delay
+                }
+            }
+            checkMCCompletion();
+            updateProgressBar();
+        });
+        studentNameInput.addEventListener('input', () => {
+            checkMCCompletion();
+            updateProgressBar();
+        });
+        wordProblemsContainer.addEventListener('input', (e) => {
+            // Add/remove 'has-value' class for transparent text effect
+            if (e.target.classList.contains('wp-input')) {
+                if (e.target.value.trim() !== '') {
+                    e.target.classList.add('has-value');
+                } else {
+                    e.target.classList.remove('has-value');
+                }
+            }
+            checkWPCompletion(); updateProgressBar(); 
+        });
+
+        // --- Other Buttons ---
+        const printBtn = document.getElementById('printBtn');
+        printBtn.addEventListener('click', () => {
+            // This opens the browser's print dialog, which has a "Save as PDF" option.
+            window.print();
+        });
+
+        // Check for teacher mode on page load
+        window.addEventListener('load', () => {
+            // This logic runs after the page and all resources are fully loaded.
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('teacher') === 'true') {
+                runTeacherMode();
+            }
+
+            // After loading state or running teacher mode, update the UI.
+            wordProblemsContainer.querySelectorAll('.wp-input').forEach(input => {
+                if (input.value) {
+                    input.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            });
+            updateProgressBar();
+            checkMCCompletion();
+            checkWPCompletion();
+        });
+
+        // Warn user before they refresh the page
+        window.addEventListener('beforeunload', (e) => {
+            if (!testIsComplete) {
+                e.preventDefault();
+                e.returnValue = ''; // Standard way to trigger the browser's confirmation dialog
+            }
+        });
+    </script>
+</body>
+</html>

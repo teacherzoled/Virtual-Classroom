@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Caracol Field Report</title>
+    <style>
+        /* General Body and Font Styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #3d5266;
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER STYLES --- */
+        header {
+            background-color: #fff3e0; /* Light orange from your site */
+            padding: 10px 40px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .logo {
+            height: 50px;
+            margin-right: 15px;
+        }
+        .header-title {
+            color: #f57c00; /* Darker orange from your site */
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        /* Main content area to grow and push footer down */
+        main {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2em 0;
+        }
+
+        /* Main Container for the Lab */
+        #lab-container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            width: 90%;
+            max-width: 650px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* --- PROGRESS BAR STYLES --- */
+        #progress-bar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; /* Allow stars to wrap on smaller screens */
+            gap: 10px;
+            padding: 1.2em;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .star {
+            width: 28px; /* Slightly smaller for 10 stars */
+            height: 28px;
+            fill: #dbe2e8;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .star.filled {
+            fill: #ffc107;
+            transform: scale(1.1);
+        }
+
+        /* Styling for each 'view' or 'screen' of the lab */
+        .view {
+            padding: 2.5em;
+            display: none;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        .view.active {
+            display: block;
+        }
+
+        /* Headers */
+        h2 {
+            color: #005a87;
+            margin-top: 0;
+            font-size: 1.8em;
+        }
+
+        /* Paragraph and Scenario Text */
+        p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        .scenario-text {
+            font-size: 1.25em;
+            font-weight: 500;
+            color: #1c3d5a;
+        }
+
+        /* Container for Multiple Choice Buttons */
+        #choices-container {
+            margin-top: 2em;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Styling for Buttons */
+        .btn {
+            padding: 16px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover {
+            background-color: #0069d9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .choice-btn {
+            background-color: white;
+            color: #007bff;
+            border: 2px solid #007bff;
+        }
+        .choice-btn:hover {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .try-again-btn {
+            background-color: #ffc107;
+            color: #333;
+            margin-top: 1em;
+        }
+        .try-again-btn:hover {
+            background-color: #e0a800;
+        }
+        
+        .video-btn {
+            background-color: #dc3545;
+            margin-top: 1em;
+        }
+        .video-btn:hover {
+            background-color: #c82333;
+        }
+
+        .feedback-box {
+            margin-top: 1.5em;
+            padding: 1.2em;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 1.1em;
+            line-height: 1.5;
+        }
+        .feedback-box.incorrect {
+            background-color: #fff3f3;
+            border-left: 5px solid #dc3545;
+            color: #58151c;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .video-modal-content {
+            position: relative;
+            background-color: #000;
+            padding: 0;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .close-btn {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: #fff;
+            border: 2px solid #333;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1;
+            z-index: 1001;
+        }
+
+        /* --- COMPLETION VIEW & MASTERY STYLES --- */
+        #mastery-stars {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin: 1.5em 0;
+        }
+        #mastery-stars .star {
+            width: 45px;
+            height: 45px;
+        }
+        #mastery-text {
+            font-size: 1.15em;
+            font-weight: 500;
+            color: #005a87;
+        }
+        #restart-btn {
+            margin-top: 1.5em;
+            background-color: #28a745;
+        }
+        #restart-btn:hover {
+            background-color: #218838;
+        }
+
+
+        /* --- FOOTER STYLES --- */
+        footer {
+            background-color: #d84315; /* Dark orange from your site */
+            color: #ffffff;
+            text-align: center;
+            padding: 25px;
+            line-height: 1.8;
+        }
+        footer p {
+            margin: 0;
+            font-size: 1em;
+        }
+        footer .copyright {
+            font-size: 0.9em;
+            color: #f5f5f5;
+            margin-top: 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+    <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Teacher Ed Logo" class="logo" onerror="this.onerror=null;this.src='https://placehold.co/100x50/fff3e0/f57c00?text=Logo';">
+    <span class="header-title">Teacher Ed Classroom</span>
+</header>
+
+<main>
+    <div id="lab-container">
+        <!-- PROGRESS BAR -->
+        <div id="progress-bar">
+            <!-- 10 Stars for 10 Questions -->
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+        </div>
+
+        <!-- VIEW 1: START SCREEN -->
+        <div id="start-view" class="view active">
+            <h2>The Caracol Field Report</h2>
+            <p>Your mission: Round off field data from the Caracol site for the official report to the Belize Institute of Archaeology.</p>
+            <img src="https://i.postimg.cc/FR3KHnnd/jaguar-and-caracol.png" alt="Jaguar at Caracol" style="width: 80%; max-width: 300px; margin: 1em 0; border-radius: 8px;" onerror="this.onerror=null;this.src='https://placehold.co/300x200/eeeeee/333333?text=Caracol+Site';">
+            <button id="start-btn" class="btn">BEGIN</button>
+        </div>
+
+        <!-- VIEW 2: QUESTION SCREEN -->
+        <div id="question-view" class="view">
+            <h2 id="question-title"></h2>
+            <p id="scenario" class="scenario-text"></p>
+            <div id="choices-container"></div>
+        </div>
+        
+        <!-- VIEW 3: CORRECTION/FEEDBACK SCREEN -->
+        <div id="correction-view" class="view">
+            <h2>Correction Needed</h2>
+            <div class="feedback-box incorrect">
+                <p id="feedback-text"></p>
+            </div>
+            <div id="correction-actions">
+                <button id="video-link-btn" class="btn video-btn">Watch Video Explanation</button>
+                <button id="remediation-btn" class="btn try-again-btn">Let's Try a New Problem</button>
+            </div>
+        </div>
+
+        <!-- VIEW 4: COMPLETION SCREEN -->
+        <div id="completion-view" class="view">
+            <h2>Report Accepted!</h2>
+            <p id="mastery-text"></p>
+            <div id="mastery-stars">
+                <!-- Mastery stars will be generated here by JavaScript -->
+            </div>
+            <button id="restart-btn" class="btn">Try for Mastery</button>
+        </div>
+    </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+    <p>Every challenge you overcome makes you stronger. Keep learning and growing!</p>
+    <p class="copyright">© 2025 Mr. Edwin's Virtual Classroom — All rights reserved.</p>
+</footer>
+
+<!-- VIDEO MODAL STRUCTURE -->
+<div id="video-modal-overlay" class="modal-overlay">
+    <div id="video-modal" class="video-modal-content">
+        <button id="close-video-btn" class="close-btn">&times;</button>
+        <div class="video-container">
+            <iframe id="video-iframe" width="100%" height="100%" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- DATA STORE ---
+        const labData = {
+            // --- First 5 Questions ---
+            q1: {
+                title: 'Data Point 1: Population Estimate',
+                scenario: 'Our survey of the Caana pyramid complex at Caracol suggests the ancient population was 38,462 people. How must this be written in the report (rounded to 3 significant figures)?',
+                choices: [ { text: '38,000', isCorrect: false, nextId: 'q1_remediation' }, { text: '38,500', isCorrect: true, nextId: 'q2' } ],
+                correctionText: 'Remember, for 3 significant figures in 38,462, we look at the first three digits (3, 8, 4) and then the next digit (6). Since 6 is 5 or greater, we round up to get 38,500.',
+                videoUrl: 'https://www.youtube.com/embed/hQ2if_1Jp04'
+            },
+            q1_remediation: {
+                title: 'Remediation: Let\'s Try Again',
+                scenario: 'An older survey estimated the population of nearby Xunantunich at 12,681. Round this to three significant figures.',
+                choices: [ { text: '12,600', isCorrect: false, nextId: 'q1_remediation' }, { text: '12,700', isCorrect: true, nextId: 'q2' } ],
+                correctionText: 'Let\'s review: For 3 significant figures in 12,681, we look at 1, 2, and 6. The next digit is 8, so we round up to get 12,700.'
+            },
+            q2: {
+                title: 'Data Point 2: Artifact Measurement',
+                scenario: 'A jadeite bead found in a tomb at Caracol has a measured mass of 0.06284 grams. How must this be written (rounded to 2 significant figures)?',
+                choices: [ { text: '0.0628', isCorrect: false, nextId: 'q2_remediation' }, { text: '0.063', isCorrect: true, nextId: 'q3' } ],
+                correctionText: 'Remember, for 2 significant figures in 0.06284, the leading zeros don\'t count. The first two significant digits are 6 and 2. The next digit (8) tells us to round up, making it 0.063.',
+                videoUrl: 'https://www.youtube.com/embed/5Uu1gS-b_xM'
+            },
+            q2_remediation: {
+                title: 'Remediation: A Different Artifact',
+                scenario: 'A piece of sharpened obsidian has a measured thickness of 0.8529 cm. Round this to two significant figures.',
+                choices: [ { text: '0.85', isCorrect: true, nextId: 'q3' }, { text: '0.853', isCorrect: false, nextId: 'q2_remediation' } ],
+                correctionText: 'For 2 significant figures in 0.8529, we look at 8 and 5. The next digit is 2, which is less than 5, so we don\'t round up. The answer is 0.85.'
+            },
+            q3: {
+                title: 'Data Point 3: Carbon Dating',
+                scenario: 'A sample of pottery from the Lamanai site was carbon-dated to 8,729 years before present. How should this be written (3 significant figures)?',
+                choices: [ { text: '8,730', isCorrect: true, nextId: 'q4' }, { text: '8,700', isCorrect: false, nextId: 'q3_remediation' } ],
+                correctionText: 'For 3 significant figures in 8,729, we look at 8, 7, and 2. The next digit (9) tells us to round up to get 8,730.',
+                videoUrl: 'https://www.youtube.com/embed/hQ2if_1Jp04'
+            },
+            q3_remediation: {
+                title: 'Remediation: Another Sample',
+                scenario: 'A different sample was dated to 1,542 years old. Round this to three significant figures.',
+                choices: [ { text: '1,500', isCorrect: false, nextId: 'q3_remediation' }, { text: '1,540', isCorrect: true, nextId: 'q4' } ],
+                correctionText: 'For 3 significant figures in 1,542, we look at 1, 5, and 4. The next digit is 2, so we don\'t round up. The answer is 1,540.'
+            },
+            q4: {
+                title: 'Data Point 4: Artifact Dimension',
+                scenario: 'A carved stela at the Lubaantun site has a measured height of 2.051 meters. Round this to two significant figures.',
+                choices: [ { text: '2.0', isCorrect: false, nextId: 'q4_remediation' }, { text: '2.1', isCorrect: true, nextId: 'q5' } ],
+                correctionText: 'In 2.051, the first two significant figures are 2 and 0 (zeros between non-zero digits are significant). The next digit, 5, tells us to round up. So, 2.0 becomes 2.1.',
+                videoUrl: 'https://www.youtube.com/embed/5Uu1gS-b_xM'
+            },
+            q4_remediation: {
+                title: 'Remediation: A Tricky Decimal',
+                scenario: 'A different artifact has a length of 10.82 cm. Round this to two significant figures.',
+                choices: [ { text: '10', isCorrect: false, nextId: 'q4_remediation' }, { text: '11', isCorrect: true, nextId: 'q5' } ],
+                correctionText: 'In 10.82, the first two significant figures are 1 and 0. The next digit, 8, tells us to round the 0 up to 1. So, 10 becomes 11.'
+            },
+            q5: {
+                title: 'Data Point 5: Estimated Weight',
+                scenario: 'The estimated weight of a large stone altar is 789,500 kilograms. Round this to three significant figures.',
+                choices: [ { text: '789,000', isCorrect: false, nextId: 'q5_remediation' }, { text: '790,000', isCorrect: true, nextId: 'q6' } ],
+                correctionText: 'In 789,500, the first three significant figures are 7, 8, and 9. The next digit, 5, tells us to round up. Rounding up 9 makes it 10, so we carry the 1 over to the 8. This results in 790,000.',
+                videoUrl: 'https://www.youtube.com/embed/hQ2if_1Jp04'
+            },
+            q5_remediation: {
+                title: 'Remediation: Final Challenge',
+                scenario: 'The total number of pottery shards collected from all sites this year is 499,612. Round this to three significant figures.',
+                choices: [ { text: '499,000', isCorrect: false, nextId: 'q5_remediation' }, { text: '500,000', isCorrect: true, nextId: 'q6' } ],
+                correctionText: 'In 499,612, the first three significant figures are 4, 9, and 9. The next digit, 6, tells us to round up. Rounding up the last 9 makes it 10, which carries over to the next 9, making it 10, which carries over to the 4. This results in 500,000.'
+            },
+            q6: {
+                title: 'Data Point 6: Area Calculation',
+                scenario: 'A newly excavated plaza at Altun Ha covers 10,455 square meters. Report this area to three significant figures.',
+                choices: [ { text: '10,400', isCorrect: false, nextId: 'q6_remediation' }, { text: '10,500', isCorrect: true, nextId: 'q7' } ],
+                correctionText: 'In 10,455, the first three significant figures are 1, 0, and 4. The next digit, 5, tells us to round the 4 up to a 5. This gives us 10,500.',
+                videoUrl: 'https://www.youtube.com/embed/hQ2if_1Jp04'
+            },
+            q6_remediation: {
+                title: 'Remediation: Area Check',
+                scenario: 'Another area was measured to be 2,098 square meters. Round this to three significant figures.',
+                choices: [ { text: '2,090', isCorrect: false, nextId: 'q6_remediation' }, { text: '2,100', isCorrect: true, nextId: 'q7' } ],
+                correctionText: 'In 2,098, the first three significant figures are 2, 0, and 9. The next digit, 8, tells us to round the 9 up to 10. We write 0 and carry the 1 to the next digit, resulting in 2,100.'
+            },
+            q7: {
+                title: 'Data Point 7: Precise Measurement',
+                scenario: 'The thickness of a gold foil ornament is 0.00305 millimeters. Report this to two significant figures.',
+                choices: [ { text: '0.0030', isCorrect: false, nextId: 'q7_remediation' }, { text: '0.0031', isCorrect: true, nextId: 'q8' } ],
+                correctionText: 'In 0.00305, the first significant figure is 3, and the second is 0. The next digit, 5, tells us to round the 0 up to 1. The result is 0.0031.',
+                videoUrl: 'https://www.youtube.com/embed/5Uu1gS-b_xM'
+            },
+            q7_remediation: {
+                title: 'Remediation: Foil Check',
+                scenario: 'A different piece of foil measures 0.0198 millimeters. Round this to two significant figures.',
+                choices: [ { text: '0.019', isCorrect: false, nextId: 'q7_remediation' }, { text: '0.020', isCorrect: true, nextId: 'q8' } ],
+                correctionText: 'In 0.0198, the first two significant figures are 1 and 9. The next digit, 8, tells us to round the 9 up to 10. We write 0 and carry the 1, resulting in 0.020. The final zero is significant.'
+            },
+            q8: {
+                title: 'Data Point 8: Large Distance',
+                scenario: 'The estimated distance of an ancient trade route from Caracol to Tikal is 89,650 meters. Report this to two significant figures.',
+                choices: [ { text: '89,000', isCorrect: false, nextId: 'q8_remediation' }, { text: '90,000', isCorrect: true, nextId: 'q9' } ],
+                correctionText: 'In 89,650, the first two significant figures are 8 and 9. The next digit, 6, tells us to round the 9 up to 10. We write 0 and carry the 1 to the 8, resulting in 90,000.',
+                videoUrl: 'https://www.youtube.com/embed/hQ2if_1Jp04'
+            },
+            q8_remediation: {
+                title: 'Remediation: Distance Check',
+                scenario: 'The distance to another site is 49,800 meters. Round this to two significant figures.',
+                choices: [ { text: '49,000', isCorrect: false, nextId: 'q8_remediation' }, { text: '50,000', isCorrect: true, nextId: 'q9' } ],
+                correctionText: 'In 49,800, the first two significant figures are 4 and 9. The next digit, 8, tells us to round the 9 up, which results in 50,000.'
+            },
+            q9: {
+                title: 'Data Point 9: Liquid Volume',
+                scenario: 'A ceremonial vessel can hold 1.95 liters of liquid. Report this volume to two significant figures.',
+                choices: [ { text: '2.0', isCorrect: true, nextId: 'q10' }, { text: '1.9', isCorrect: false, nextId: 'q9_remediation' } ],
+                correctionText: 'In 1.95, the first two significant figures are 1 and 9. The next digit, 5, tells us to round the 9 up to 10. We write 0 and carry the 1, resulting in 2.0. The .0 is kept to show two significant figures.',
+                videoUrl: 'https://www.youtube.com/embed/5Uu1gS-b_xM'
+            },
+            q9_remediation: {
+                title: 'Remediation: Volume Check',
+                scenario: 'A smaller vessel holds 0.986 liters. Round this to two significant figures.',
+                choices: [ { text: '1.0', isCorrect: false, nextId: 'q9_remediation' }, { text: '0.99', isCorrect: true, nextId: 'q10' } ],
+                correctionText: 'In 0.986, the first two significant figures are 9 and 8. The next digit, 6, tells us to round the 8 up to 9, resulting in 0.99.'
+            },
+            q10: {
+                title: 'Data Point 10: Final Count',
+                scenario: 'The final count of all artifacts logged this season is 10,982. Report this number to three significant figures.',
+                choices: [ { text: '10,900', isCorrect: false, nextId: 'q10_remediation' }, { text: '11,000', isCorrect: true, nextId: 'complete' } ],
+                correctionText: 'In 10,982, the first three significant figures are 1, 0, and 9. The next digit, 8, tells us to round the 9 up to 10. We write 0 and carry the 1 to the next digit, resulting in 11,000.',
+                videoUrl: 'https://www.youtube.com/embed/hQ2if_1Jp04'
+            },
+            q10_remediation: {
+                title: 'Remediation: Final Tally',
+                scenario: 'Last season\'s count was 20,951 artifacts. Round this to three significant figures.',
+                choices: [ { text: '20,900', isCorrect: false, nextId: 'q10_remediation' }, { text: '21,000', isCorrect: true, nextId: 'complete' } ],
+                correctionText: 'In 20,951, the first three significant figures are 2, 0, and 9. The next digit, 5, tells us to round the 9 up, which results in 21,000.'
+            }
+        };
+
+        // --- DOM ELEMENT REFERENCES ---
+        const views = document.querySelectorAll('.view');
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const questionTitleEl = document.getElementById('question-title');
+        const scenarioEl = document.getElementById('scenario');
+        const choicesContainer = document.getElementById('choices-container');
+        const feedbackTextEl = document.getElementById('feedback-text');
+        const remediationBtn = document.getElementById('remediation-btn');
+        const videoLinkBtn = document.getElementById('video-link-btn');
+        const videoModalOverlay = document.getElementById('video-modal-overlay');
+        const videoIframe = document.getElementById('video-iframe');
+        const closeVideoBtn = document.getElementById('close-video-btn');
+        const progressStars = document.querySelectorAll('#progress-bar .star');
+
+        // --- STATE VARIABLES ---
+        let currentQuestionId = 'q1';
+        let remediationCount = 0;
+
+        // --- CORE FUNCTIONS ---
+        function showView(viewId) {
+            views.forEach(view => view.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+        }
+
+        function updateProgressBar(progress) {
+            progressStars.forEach((star, index) => {
+                star.classList.toggle('filled', index < progress);
+            });
+        }
+
+        function displayQuestion(questionId) {
+            currentQuestionId = questionId;
+            const question = labData[questionId];
+            if (!question) return;
+
+            // Update progress bar only for main questions
+            if (questionId.startsWith('q') && !questionId.includes('_remediation')) {
+                const questionNumber = parseInt(questionId.substring(1));
+                updateProgressBar(questionNumber - 1);
+            }
+
+            questionTitleEl.textContent = question.title;
+            scenarioEl.textContent = question.scenario;
+            choicesContainer.innerHTML = ''; 
+
+            question.choices.forEach(choice => {
+                const button = document.createElement('button');
+                button.textContent = choice.text;
+                button.classList.add('btn', 'choice-btn');
+                button.onclick = () => handleChoice(choice);
+                choicesContainer.appendChild(button);
+            });
+
+            showView('question-view');
+        }
+
+        function handleChoice(choice) {
+            if (choice.isCorrect) {
+                if (choice.nextId === 'complete') {
+                    updateProgressBar(10); // Fill all 10 stars on completion
+                    displayCompletionScreen();
+                } else {
+                    displayQuestion(choice.nextId);
+                }
+            } else {
+                // Increment remediation count only for primary questions
+                if (!currentQuestionId.includes('_remediation')) {
+                    remediationCount++;
+                }
+                
+                const question = labData[currentQuestionId];
+                feedbackTextEl.textContent = question.correctionText;
+                
+                if (question.videoUrl) {
+                    videoLinkBtn.style.display = 'inline-block';
+                    videoLinkBtn.onclick = () => openVideoModal(question.videoUrl);
+                } else {
+                    videoLinkBtn.style.display = 'none';
+                }
+
+                remediationBtn.onclick = () => displayQuestion(choice.nextId);
+                showView('correction-view');
+            }
+        }
+
+        function displayCompletionScreen() {
+            const masteryStarsEl = document.getElementById('mastery-stars');
+            const masteryTextEl = document.getElementById('mastery-text');
+            let starsToDisplay = 5;
+            let message = '';
+
+            // Determine star rating based on remediation count
+            if (remediationCount >= 1) starsToDisplay = 4;
+            if (remediationCount >= 3) starsToDisplay = 3;
+            if (remediationCount >= 5) starsToDisplay = 2;
+            if (remediationCount >= 7) starsToDisplay = 1;
+
+            // Generate star HTML
+            masteryStarsEl.innerHTML = ''; // Clear previous stars
+            for (let i = 0; i < 5; i++) {
+                const starSVG = `<svg class="star ${i < starsToDisplay ? 'filled' : ''}" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>`;
+                masteryStarsEl.innerHTML += starSVG;
+            }
+
+            // Set mastery message
+            if (starsToDisplay === 5) {
+                message = "Perfect Score! You've demonstrated complete mastery of this concept. Your report is flawless.";
+            } else if (starsToDisplay >= 3) {
+                message = "Excellent work! Your data has been accepted. You have a strong grasp of the requirements.";
+            } else {
+                message = "Good effort. Your report is accepted, but consider another attempt to achieve full mastery.";
+            }
+            masteryTextEl.textContent = message;
+
+            showView('completion-view');
+        }
+
+
+        function openVideoModal(embedUrl) {
+            videoIframe.src = embedUrl;
+            videoModalOverlay.classList.add('active');
+        }
+
+        function closeVideoModal() {
+            videoIframe.src = ''; 
+            videoModalOverlay.classList.remove('active');
+        }
+
+        function resetLab() {
+            remediationCount = 0;
+            updateProgressBar(0);
+            displayQuestion('q1');
+        }
+
+        // --- EVENT LISTENERS ---
+        startBtn.addEventListener('click', resetLab);
+        restartBtn.addEventListener('click', resetLab);
+
+        closeVideoBtn.addEventListener('click', closeVideoModal);
+        videoModalOverlay.addEventListener('click', (e) => {
+            if (e.target === videoModalOverlay) {
+                closeVideoModal();
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && videoModalOverlay.classList.contains('active')) {
+                closeVideoModal();
+            }
+        });
+    });
+</script>
+</body>
+</html>

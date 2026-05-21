@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis aspiraciones: Voy a…</title>
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Lilita+One&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles from template */
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: #eef2ff; /* Light indigo background */
+            color: #1a202c;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content-wrapper {
+            flex-grow: 1;
+        }
+        .container {
+            max-width: 90%;
+            margin: 0 auto;
+            padding: 1.5rem 0;
+        }
+
+        /* Header styles */
+        .header {
+            background-color: #fef3c7;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            min-height: 80px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .header-logo {
+            height: 50px;
+            width: auto;
+            border-radius: 0.5rem;
+        }
+        .header-title {
+            font-family: 'Lilita One', cursive;
+            color: #f97316;
+            font-size: 1.5rem; /* Adjusted for mobile */
+            font-weight: 400;
+            text-align: center;
+        }
+
+        /* Footer styles */
+        .footer {
+            background-color: #ea580c;
+            color: white;
+            padding: 1.25rem 2rem;
+            text-align: center;
+            margin-top: auto;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Card (lesson-section) styles */
+        .lesson-section {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            border-left-width: 4px;
+            border-bottom-width: 4px;
+            border-color: transparent;
+        }
+        .lesson-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .section-header {
+            padding: 0.75rem 1.5rem;
+            font-size: 1.5rem;
+            font-family: 'Lilita One', cursive;
+            font-weight: 400;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .section-content {
+            padding: 1.5rem;
+        }
+
+        /* Card Header/Border Colors */
+        .header-main { background-color: #3b82f6; } /* Blue */
+        .header-activity { background-color: #8b5cf6; } /* Violet/Purple */
+        .header-vocab { background-color: #f59e0b; } /* Amber/Yellow */
+        .header-quiz { background-color: #f97316; } /* Orange */
+
+        /* New styles from Math lesson for video */
+        .header-video { background-color: #dc2626; } /* Red */
+        .border-video { border-color: #dc2626; }
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .video-container iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        }
+        .video-wrapper {
+            transition: max-width 0.5s ease-in-out;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 800px; /* Limit video width on large screens */
+        }
+        .video-wrapper.collapsed {
+            max-width: 60%; /* Making the video smaller */
+        }
+        .video-wrapper.expanded {
+            max-width: 100%;
+        }
+        @media (max-width: 640px) {
+            .video-wrapper.collapsed { 
+                max-width: calc(100% + 3rem); /* Expand to counter parent padding */
+                margin-left: -1.5rem; /* Pull left */
+            }
+        }
+        /* End of new styles */
+
+        .border-main { border-color: #3b82f6; }
+        .border-activity { border-color: #8b5cf6; }
+        .border-vocab { border-color: #f59e0b; }
+        .border-quiz { border-color: #f97316; }
+
+        /* General text styles */
+        p { margin-bottom: 1rem; line-height: 1.6; font-size: 1.1rem; }
+        ul { margin-top: 1em; margin-bottom: 1em; padding-left: 1.5rem; list-style-type: disc; }
+        li { margin-top: 0.5em; margin-bottom: 0.5em; font-size: 1.1rem; }
+        strong { font-weight: 700; }
+
+        /* Button styles */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: none;
+            margin-top: 1rem;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        .btn:active { transform: translateY(0); box-shadow: none; }
+        .button-primary { background-color: #4f46e5; }
+        .button-primary:hover { background-color: #4338ca; }
+        .button-secondary { background-color: #6b7280; margin-left: 0.5rem; }
+        .button-secondary:hover { background-color: #4b5563; }
+
+        /* Quiz Option styles */
+        .quiz-option {
+            background-color: #f0f9ff; border: 2px solid #93c5fd; padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem; border-radius: 0.5rem; cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .quiz-option:hover { background-color: #e0f2fe; transform: translateX(5px); }
+        .quiz-option.selected { background-color: #bfdbfe; border-color: #2563eb; }
+        .quiz-option.correct-answer { background-color: #d1fae5; border-color: #10b981; animation: flashGreen 0.5s ease-out; }
+        .quiz-option.incorrect-answer { background-color: #fee2e2; border-color: #ef4444; animation: shake 0.5s ease-out, flashRed 0.5s ease-out; }
+
+        /* Quick Check Answer Box styles */
+        .answer-box {
+            background-color: #ecfdf5; border: 1px solid #34d399; padding: 1rem;
+            border-radius: 0.5rem; margin-top: 1rem; display: none;
+            animation: flashGreen 0.5s ease-out;
+        }
+
+        /* Visual Feedback Animations */
+        @keyframes flashGreen { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 50% { box-shadow: 0 0 15px 5px rgba(16, 185, 129, 0.7); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+        @keyframes flashRed { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 50% { box-shadow: 0 0 15px 5px rgba(239, 68, 68, 0.7); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25%, 75% { transform: translateX(-5px); } 50% { transform: translateX(5px); } }
+
+        /* Confetti styles */
+        .confetti-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+        .confetti { position: absolute; width: 10px; height: 10px; opacity: 0; animation: confetti-fall 3s forwards; }
+        @keyframes confetti-fall { 0% { opacity: 1; transform: translateY(-100vh) rotate(0deg); } 100% { opacity: 0; transform: translateY(100vh) rotate(720deg); } }
+
+        /* Feedback message styles */
+        .feedback { margin-top: 1rem; font-weight: 600; opacity: 0; transform: scale(0.95); transition: opacity 0.5s ease-out, transform 0.5s ease-out; }
+        .feedback.show { opacity: 1; transform: scale(1); }
+        .correct-feedback { color: #10b981; }
+        .incorrect-feedback { color: #ef4444; }
+
+        /* Drag & Drop styles */
+        .draggable {
+            background-color: #a78bfa; color: white; padding: 0.75rem 1.25rem; margin: 0.5rem;
+            border-radius: 0.5rem; cursor: grab; flex: 1 1 auto; max-width: calc(50% - 1rem);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); transition: all 0.2s ease-in-out;
+            display: flex; align-items: center; justify-content: center; text-align: center;
+            min-height: 50px;
+        }
+        .draggable:active { cursor: grabbing; transform: scale(1.05); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); z-index: 10; }
+        .dropzone {
+            padding: 1rem; border: 2px dashed #a5b4fc; background-color: #f0f9ff;
+            border-radius: 0.75rem; min-height: 100px; transition: all 0.3s ease;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .dropzone.hover { background-color: #e0e7ff; border-color: #6366f1; }
+        .dropzone.correct { border-style: solid; border-color: #10b981; background-color: #d1fae5; animation: flashGreen 0.5s ease-out; }
+        .dropzone.incorrect { border-style: solid; border-color: #ef4444; background-color: #fee2e2; animation: shake 0.5s ease-out, flashRed 0.5s ease-out; }
+        .dropzone-label { font-weight: 700; color: #4338ca; margin-bottom: 0.5rem; }
+        .dropzone .draggable {
+            max-width: 100%; /* Ensure dropped item fits */
+            margin: 0;
+        }
+        @media (max-width: 640px) { .draggable { max-width: calc(100% - 1rem); } }
+
+        /* Dialogue Order styles */
+        .dialogue-source { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; background-color: #f3f4f6; padding: 1rem; border-radius: 0.75rem; min-height: 150px; }
+        .dialogue-sentence { background-color: #c4b5fd; color: #3730a3; padding: 0.75rem; border-radius: 0.5rem; cursor: grab; width: 90%; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.2s ease; }
+        .dialogue-sentence:active { cursor: grabbing; transform: scale(1.02); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .dialogue-target-area { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
+        .dialogue-dropzone { border: 2px dashed #a5b4fc; background-color: #f0f9ff; border-radius: 0.75rem; min-height: 70px; display: flex; align-items: center; padding: 0.5rem 1rem; transition: all 0.3s ease; }
+        .dialogue-dropzone.hover { background-color: #e0e7ff; border-color: #6366f1; }
+        .dialogue-dropzone.correct { border-style: solid; border-color: #10b981; background-color: #d1fae5; }
+        .dialogue-dropzone.incorrect { border-style: solid; border-color: #ef4444; background-color: #fee2e2; }
+        .dialogue-dropzone .dialogue-sentence { width: 100%; margin: 0; }
+
+        /* Flowchart styles */
+        .flowchart-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 1.5rem; }
+        .flowchart-step { text-align: center; }
+        .flowchart-box { background-color: #f3f4f6; border: 2px solid #d1d5db; border-radius: 0.5rem; padding: 0.75rem; min-width: 120px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .flowchart-arrow { font-size: 2rem; color: #6b7280; align-self: center; }
+        @media (max-width: 768px) { .flowchart-container { flex-direction: column; gap: 1rem; } .flowchart-arrow { transform: rotate(90deg); } }
+
+        /* Memory Game styles */
+        .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; max-width: 600px; margin: 1.5rem auto; }
+        .memory-card { background-color: #a78bfa; border-radius: 0.5rem; height: 100px; cursor: pointer; position: relative; transform-style: preserve-3d; transition: transform 0.5s; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0.5rem; }
+        .memory-card .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
+        .card-face.front { background-color: #8b5cf6; }
+        .card-face.back { background-color: #ede9fe; color: #5b21b6; transform: rotateY(180deg); }
+        .memory-card.is-flipped { transform: rotateY(180deg); }
+        .memory-card.is-matched { transform: rotateY(180deg); background-color: #d1fae5 !important; border: 2px solid #10b981; cursor: default; }
+        .memory-card.is-matched .card-face.back { color: #065f46; }
+        @media (max-width: 640px) { .memory-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; } .memory-card { height: 120px; } }
+
+        /* Fill-in-the-blank styles */
+        .cloze-select {
+            border: 2px dashed #93c5fd; background-color: #f0f9ff; border-radius: 0.375rem;
+            padding: 0.25rem 0.5rem; margin: 0 0.25rem;
+            font-weight: bold; color: #2563eb; transition: all 0.3s;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1.5em;
+            padding-right: 2.5rem;
+        }
+        .cloze-select:focus { outline: none; border-style: solid; background-color: #e0f2fe; }
+    </style>
+    <script>
+        // TailwindCSS responsive configuration
+        tailwind.config = {
+          theme: {
+            extend: {
+              screens: { 'xs': '475px' }
+            }
+          }
+        }
+      </script>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Teacher Ed Logo" class="header-logo">
+            <div class="header-title sm:text-2xl">Teacher Ed Classroom</div>
+        </div>
+    </header>
+
+    <div class="main-content-wrapper">
+        <div class="container">
+
+            <!-- 1. Main Title Card -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">
+                    <span>Mis Planes Futuros: Usando "Creer" 🚀</span>
+                </div>
+                <div class="section-content">
+                    <p>¡Hola! 👋 Esta semana vamos a aprender a expresar creencias sobre el futuro. Combinaremos lo que ya sabes de <strong>ir + a + infinitivo</strong> con el nuevo verbo <strong>creer</strong> (to believe). ¡Esto te ayudará a compartir tus ideas y esperanzas con más confianza!</p>
+                </div>
+            </div>
+
+            <!-- 2. Mini-Explainer Card -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">
+                    <span>¿Cómo se dice el futuro? 🤔</span>
+                </div>
+                <div class="section-content">
+                    <p>Para hablar de lo que <strong>crees</strong> que va a pasar, usamos una nueva fórmula que une dos ideas. ¡Es más fácil de lo que parece!</p>
+                    <ul>
+                        <li><strong>La Fórmula:</strong> <strong>creer</strong> (conjugado) + <strong>que</strong> + <strong>ir + a + infinitivo</strong>.</li>
+                        <li><strong>Ejemplo 1:</strong> <em>Yo</em> <strong>creo que voy a estudiar</strong> <em>medicina</em>. (I believe that I am going to study medicine.)</li>
+                        <li><strong>Ejemplo 2:</strong> <em>Ella</em> <strong>cree que va a llover</strong>. (She believes that it is going to rain.)</li>
+                        <li><strong>Ejemplo 3:</strong> <em>Mis amigos</em> <strong>creen que vamos a ir</strong> <em>al cine</em>. (My friends believe that we are going to go to the movies.)</li>
+                    </ul>
+                    <p class="text-sm text-gray-600 mt-4">💡 <strong>Tip:</strong> Piensa en <strong>"que"</strong> como un puente que conecta tu creencia (Yo creo) con la acción futura (voy a estudiar).</p>
+                </div>
+            </div>
+
+            <!-- NEW: Vocabulary Section -->
+            <div class="lesson-section border-vocab">
+                <div class="section-header header-vocab">
+                    <span>Vocabulario: Verbos y Tiempo 📚</span>
+                </div>
+                <div class="section-content">
+                    <p>Primero, ¡el verbo <strong>creer</strong>! Así cambia según quién habla:</p>
+                    <ul class="list-disc pl-5 mt-4 grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-x-8">
+                        <li><strong>yo creo</strong> - I believe</li>
+                        <li><strong>tú crees</strong> - you believe</li>
+                        <li><strong>él/ella/usted cree</strong> - he/she/you (formal) believe</li>
+                        <li><strong>nosotros creemos</strong> - we believe</li>
+                        <li><strong>ellos/ellas/ustedes creen</strong> - they/you all believe</li>
+                    </ul>
+                    <hr class="my-6 border-t-2 border-gray-200">
+                    <p>Ahora, usa estos verbos de acción (infinitivos) para formar tus oraciones con <strong>"creo que voy a..."</strong>.</p>
+                    <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-2 mt-4">
+                        <ul>
+                            <li><strong>aprender</strong> - to learn</li>
+                            <li><strong>beber</strong> - to drink</li>
+                            <li><strong>caminar</strong> - to walk</li>
+                            <li><strong>cantar</strong> - to sing</li>
+                            <li><strong>comer</strong> - to eat</li>
+                            <li><strong>comprar</strong> - to buy</li>
+                            <li><strong>correr</strong> - to run</li>
+                            <li><strong>dibujar</strong> - to draw</li>
+                            <li><strong>dormir</strong> - to sleep</li>
+                            <li><strong>escribir</strong> - to write</li>
+                        </ul>
+                        <ul>
+                            <li><strong>escuchar</strong> - to listen</li>
+                            <li><strong>estudiar</strong> - to study</li>
+                            <li><strong>hablar</strong> - to speak</li>
+                            <li><strong>hacer</strong> - to do/make</li>
+                            <li><strong>ir</strong> - to go</li>
+                            <li><strong>jugar</strong> - to play</li>
+                            <li><strong>leer</strong> - to read</li>
+                            <li><strong>mirar</strong> - to watch</li>
+                            <li><strong>trabajar</strong> - to work</li>
+                            <li><strong>viajar</strong> - to travel</li>
+                        </ul>
+                    </div>
+                    <hr class="my-6 border-t-2 border-gray-200">
+                    <p>¡No te olvides de las <strong>expresiones de tiempo</strong> para decir CUÁNDO crees que algo pasará!</p>
+                    <ul class="list-disc pl-5 mt-4 grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-x-8">
+                        <li><strong>mañana</strong> - tomorrow</li>
+                        <li><strong>pasado mañana</strong> - the day after tomorrow</li>
+                        <li><strong>esta tarde</strong> - this afternoon</li>
+                        <li><strong>esta noche</strong> - tonight</li>
+                        <li><strong>el fin de semana</strong> - this weekend</li>
+                        <li><strong>la semana que viene</strong> - next week</li>
+                        <li><strong>el próximo mes</strong> - next month</li>
+                        <li><strong>el próximo año</strong> - next year</li>
+                        <li><strong>en el futuro</strong> - in the future</li>
+                        <li><strong>después de la graduación</strong> - after graduation</li>
+                        <li><strong>más tarde</strong> - later</li>
+                        <li><strong>pronto</strong> - soon</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- NEW: Flowchart Explainer -->
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">
+                    <span>Paso a Paso: Construyendo la Oración ⚙️</span>
+                </div>
+                <div class="section-content">
+                    <p class="text-center">Construir estas oraciones es como seguir una receta. ¡Sigue estos pasos!</p>
+                    <div class="flowchart-container">
+                        <div class="flowchart-step">
+                            <div class="flowchart-box"><strong>1. Sujeto</strong><br>(Yo, Tú, Él...)</div>
+                        </div>
+                        <div class="flowchart-arrow">➡️</div>
+                        <div class="flowchart-step">
+                            <div class="flowchart-box"><strong>2. Verbo Creer</strong><br>(creo, crees, cree...)</div>
+                        </div>
+                        <div class="flowchart-arrow">➡️</div>
+                        <div class="flowchart-step">
+                            <div class="flowchart-box"><strong>3. Conector</strong><br>(que)</div>
+                        </div>
+                        <div class="flowchart-arrow">➡️</div>
+                        <div class="flowchart-step">
+                            <div class="flowchart-box"><strong>4. Acción Futura</strong><br>(voy a estudiar...)</div>
+                        </div>
+                    </div>
+                    <p class="mt-6 text-center text-lg"><strong>Ejemplo Completo:</strong> <span class="text-blue-600 font-bold">Yo</span> <span class="text-purple-600 font-bold">creo</span> <span class="text-amber-600 font-bold">que</span> <span class="text-orange-600 font-bold">voy a viajar.</span></p>
+                </div>
+            </div>
+
+            <!-- NEW: Video Explainer -->
+            <div class="lesson-section border-video">
+                <div class="section-header header-video">
+                    <span>Ver: La Fórmula del Futuro 🎬</span>
+                </div>
+                <div class="section-content">
+                    <p>Este video explica la diferencia entre <strong>creer</strong> y otros verbos parecidos. ¡Te ayudará a entender bien su significado antes de usarlo en tus oraciones!</p>
+                    <div class="video-wrapper collapsed">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/7_zG9qURnUY?playsinline=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Quick Check #1 -->
+            <div class="lesson-section border-vocab">
+                <div class="section-header header-vocab">
+                    <span>¡Prueba Rápida!</span>
+                </div>
+                <div class="section-content text-center">
+                    <p>¿Cómo se dice "I believe" en español?</p>
+                    <button class="btn button-primary" onclick="toggleAnswer('qc1-answer')">Mostrar respuesta</button>
+                    <div id="qc1-answer" class="answer-box">
+                        <p class="text-lg font-bold">Yo creo ✅</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. NEW: Memory Game -->
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">
+                    <span>Juego de Memoria: ¡Conecta el Plan!</span>
+                </div>
+                <div class="section-content text-center">
+                    <p>¡Vamos a jugar! Encuentra los pares que forman una oración completa usando <strong>creer</strong>. Haz clic en una tarjeta para voltearla.</p>
+                    <div id="memory-game-grid" class="memory-grid">
+                        <!-- Memory cards will be inserted here by JavaScript -->
+                    </div>
+                    <div>
+                        <button class="btn button-secondary" onclick="initializeMemoryGame()">Reiniciar Juego</button>
+                    </div>
+                    <div id="memory-feedback" class="feedback text-lg"></div>
+                </div>
+            </div>
+
+            <!-- NEW: Drag and Drop Sentence Builder -->
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">
+                    <span>Actividad: Construye la Oración 🏗️</span>
+                </div>
+                <div class="section-content">
+                    <p class="text-center">Arrastra la forma correcta del verbo <strong>creer</strong> para completar cada oración.</p>
+                    
+                    <!-- Draggable verb options -->
+                    <div id="drag-options-container" class="flex flex-wrap justify-center items-center p-4 bg-indigo-100 rounded-lg my-6">
+                        <!-- Draggable items will be inserted here by JS -->
+                    </div>
+
+                    <!-- Dropzone sentences -->
+                    <div id="sentence-builder-container" class="space-y-4 max-w-2xl mx-auto">
+                        <div class="flex items-center justify-center text-lg flex-wrap">
+                            <span class="mr-2">1. Yo</span>
+                            <div class="dropzone" data-answer="creo"></div>
+                            <span class="ml-2">que voy a viajar a España.</span>
+                        </div>
+                        <div class="flex items-center justify-center text-lg flex-wrap">
+                            <span class="mr-2">2. ¿Tú</span>
+                            <div class="dropzone" data-answer="crees"></div>
+                            <span class="ml-2">que va a llover mañana?</span>
+                        </div>
+                        <div class="flex items-center justify-center text-lg flex-wrap">
+                            <span class="mr-2">3. Él</span>
+                            <div class="dropzone" data-answer="cree"></div>
+                            <span class="ml-2">que vamos a ganar el partido.</span>
+                        </div>
+                        <div class="flex items-center justify-center text-lg flex-wrap">
+                            <span class="mr-2">4. Nosotros</span>
+                            <div class="dropzone" data-answer="creemos"></div>
+                            <span class="ml-2">que el examen va a ser fácil.</span>
+                        </div>
+                    </div>
+                    <div class="text-center mt-6">
+                        <button class="btn button-primary" onclick="checkDragDropAnswers()">Revisar mis respuestas</button>
+                        <button class="btn button-secondary" onclick="initializeDragDrop()">Reiniciar</button>
+                        <div id="drag-drop-feedback" class="feedback text-lg"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fill-in-the-blank Activity -->
+            <div class="lesson-section border-quiz">
+                <div class="section-header header-quiz">
+                    <span>Actividad: Completa el Párrafo ✍️</span>
+                </div>
+                <div class="section-content">
+                    <p class="text-center">¡Demuestra lo que aprendiste! Lee el párrafo y elige la opción correcta en cada menú para completarlo.</p>
+                    <div id="cloze-passage-container" class="space-y-2 max-w-3xl mx-auto mt-6 text-lg bg-gray-50 p-4 sm:p-6 rounded-lg">
+                        <p>
+                            Mis amigos y yo estamos planeando una fiesta. Nosotros 
+                            <select id="cloze-1" class="cloze-select" data-answer="creemos">
+                                <option value="">--</option><option value="creo">creo</option><option value="creemos">creemos</option><option value="creen">creen</option>
+                            </select> 
+                            que 
+                            <select id="cloze-2" class="cloze-select" data-answer="vamos">
+                                <option value="">--</option><option value="voy">voy</option><option value="va">va</option><option value="vamos">vamos</option>
+                            </select> 
+                            a decorar la casa el sábado. Mi amigo Carlos 
+                            <select id="cloze-3" class="cloze-select" data-answer="cree">
+                                <option value="">--</option><option value="cree">cree</option><option value="crees">crees</option><option value="creo">creo</option>
+                            </select> 
+                            que su mamá 
+                            <select id="cloze-4" class="cloze-select" data-answer="va">
+                                <option value="">--</option><option value="va">va</option><option value="van">van</option><option value="vas">vas</option>
+                            </select> 
+                            a hacer un pastel delicioso. ¿Y tú? ¿Tú 
+                            <select id="cloze-5" class="cloze-select" data-answer="crees">
+                                <option value="">--</option><option value="crees">crees</option><option value="creen">creen</option><option value="cree">cree</option>
+                            </select> 
+                            que vas a venir a la fiesta?
+                        </p>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn button-primary" onclick="checkClozePassage()">Revisar mis respuestas</button>
+                        <div id="cloze-feedback" class="feedback text-lg"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEW: Dialogue Order Activity -->
+            <div class="lesson-section border-quiz">
+                <div class="section-header header-quiz">
+                    <span>Ordena el Diálogo: ¡Nuestra Graduación! 🎓</span>
+                </div>
+                <div class="section-content">
+                    <p class="text-center">¡La graduación de sexto grado en Benque Viejo se acerca! Arrastra las oraciones para poner en orden la conversación entre Ana y Luis.</p>
+                    
+                    <h3 class="text-lg font-bold text-center mt-6 mb-2 text-indigo-600">Oraciones Desordenadas</h3>
+                    <div id="dialogue-source-container" class="dialogue-source">
+                        <!-- Draggable sentences will be inserted here by JS -->
+                    </div>
+
+                    <h3 class="text-lg font-bold text-center mt-8 mb-2 text-indigo-600">Conversación</h3>
+                    <div id="dialogue-target-container" class="dialogue-target-area max-w-3xl mx-auto">
+                        <!-- Drop zones will be inserted here by JS -->
+                    </div>
+
+                    <div class="text-center mt-6">
+                        <button class="btn button-primary" onclick="checkDialogueOrder()">Revisar Orden</button>
+                        <button class="btn button-secondary" onclick="initializeDialogueOrder()">Reiniciar</button>
+                        <div id="dialogue-feedback" class="feedback text-lg"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exit Ticket -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">
+                    <span>¡Para Terminar! 🎉</span>
+                </div>
+                <div class="section-content text-center">
+                    <p class="text-xl font-bold">En voz alta: di <strong>una</strong> oración con ‘Creo que voy a…’.</p>
+                    <p class="mt-4 text-lg">¡Excelente! Ya puedes hablar del futuro en español. ¡Buen trabajo!</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p class="font-semibold">¡Sigue aprendiendo y soñando en grande!</p>
+        <p class="text-xs mt-1">© 2025 Teacher Ed Classroom — All rights reserved.</p>
+    </footer>
+
+    <script>
+        // --- Quick Check ---
+        function toggleAnswer(id) {
+            const answerBox = document.getElementById(id);
+            answerBox.style.display = answerBox.style.display === 'block' ? 'none' : 'block';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeMemoryGame();
+            initializeDragDrop();
+            initializeDialogueOrder();
+        });
+
+        // --- NEW: Memory Game ---
+        const memoryCardsData = [
+            { id: 1, content: 'Yo creo que...' },
+            { id: 1, content: '...voy a ser doctor.' },
+            { id: 2, content: 'Tú crees que...' },
+            { id: 2, content: '...vas a viajar pronto.' },
+            { id: 3, content: 'Ella cree que...' },
+            { id: 3, content: '...va a estudiar más tarde.' },
+            { id: 4, content: 'Nosotros creemos que...' },
+            { id: 4, content: '...vamos a jugar el fin de semana.' },
+        ];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let lockBoard = false;
+
+        function shuffle(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        function initializeMemoryGame() {
+            const gameGrid = document.getElementById('memory-game-grid');
+            gameGrid.innerHTML = '';
+            document.getElementById('memory-feedback').classList.remove('show');
+            flippedCards = [];
+            matchedPairs = 0;
+            lockBoard = false;
+
+            const shuffledCards = shuffle([...memoryCardsData]);
+
+            shuffledCards.forEach(cardData => {
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('memory-card');
+                cardElement.dataset.id = cardData.id;
+
+                cardElement.innerHTML = `
+                    <div class="card-face front"></div>
+                    <div class="card-face back">${cardData.content}</div>
+                `;
+
+                cardElement.addEventListener('click', flipCard);
+                gameGrid.appendChild(cardElement);
+            });
+        }
+
+        function flipCard() {
+            if (lockBoard) return;
+            if (this === flippedCards[0]) return;
+
+            this.classList.add('is-flipped');
+
+            if (flippedCards.length === 0) {
+                flippedCards.push(this);
+                return;
+            }
+
+            flippedCards.push(this);
+            checkForMatch();
+        }
+
+        function checkForMatch() {
+            const [cardOne, cardTwo] = flippedCards;
+            const isMatch = cardOne.dataset.id === cardTwo.dataset.id;
+
+            isMatch ? disableCards() : unflipCards();
+        }
+
+        function disableCards() {
+            const [cardOne, cardTwo] = flippedCards;
+            cardOne.removeEventListener('click', flipCard);
+            cardTwo.removeEventListener('click', flipCard);
+            cardOne.classList.add('is-matched'); // This might be overridden by background-color on the element itself
+            cardTwo.classList.add('is-matched');
+
+            matchedPairs++;
+            resetBoard();
+
+            if (matchedPairs === memoryCardsData.length / 2) {
+                const feedbackDiv = document.getElementById('memory-feedback');
+                feedbackDiv.className = 'feedback text-lg correct-feedback show';
+                feedbackDiv.textContent = '¡Felicidades! ¡Encontraste todos los pares! 🥳';
+                createConfetti();
+            }
+        }
+
+        function unflipCards() {
+            lockBoard = true;
+            setTimeout(() => {
+                flippedCards.forEach(card => card.classList.remove('is-flipped'));
+                resetBoard();
+            }, 1200);
+        }
+
+        function resetBoard() {
+            [flippedCards, lockBoard] = [[], false];
+        }
+
+        // --- NEW: Drag and Drop Sentence Builder ---
+        const dragOptions = ['creo', 'crees', 'cree', 'creemos', 'creen'];
+        let draggedItem = null;
+
+        function initializeDragDrop() {
+            const optionsContainer = document.getElementById('drag-options-container');
+            const dropzones = document.querySelectorAll('#sentence-builder-container .dropzone');
+            
+            optionsContainer.innerHTML = ''; // Clear existing options
+            dropzones.forEach(dz => {
+                dz.innerHTML = ''; // Clear dropzones
+                dz.classList.remove('correct', 'incorrect');
+            });
+            document.getElementById('drag-drop-feedback').classList.remove('show');
+
+            shuffle(dragOptions).forEach(optionText => {
+                const draggable = document.createElement('div');
+                draggable.className = 'draggable';
+                draggable.textContent = optionText;
+                draggable.draggable = true;
+                optionsContainer.appendChild(draggable);
+            });
+
+            addDragDropListeners();
+        }
+
+        function addDragDropListeners() {
+            const draggables = document.querySelectorAll('.draggable');
+            const dropzones = document.querySelectorAll('.dropzone');
+
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', (e) => {
+                    draggedItem = e.target;
+                    setTimeout(() => e.target.style.display = 'none', 0);
+                });
+                draggable.addEventListener('dragend', (e) => {
+                    setTimeout(() => {
+                        draggedItem.style.display = 'flex';
+                        draggedItem = null;
+                    }, 0);
+                });
+            });
+
+            dropzones.forEach(dropzone => {
+                dropzone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.target.classList.add('hover');
+                });
+                dropzone.addEventListener('dragleave', (e) => {
+                    e.target.classList.remove('hover');
+                });
+                dropzone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    e.target.classList.remove('hover');
+                    if (e.target.classList.contains('dropzone') && !e.target.hasChildNodes()) {
+                        e.target.appendChild(draggedItem);
+                    }
+                });
+            });
+        }
+
+        function checkDragDropAnswers() {
+            const dropzones = document.querySelectorAll('#sentence-builder-container .dropzone');
+            let allCorrect = true;
+            dropzones.forEach(dz => {
+                const droppedEl = dz.querySelector('.draggable');
+                const correctAnswer = dz.dataset.answer;
+                if (droppedEl && droppedEl.textContent === correctAnswer) {
+                    dz.classList.add('correct');
+                    dz.classList.remove('incorrect');
+                } else {
+                    dz.classList.add('incorrect');
+                    dz.classList.remove('correct');
+                    allCorrect = false;
+                }
+            });
+
+            const feedbackDiv = document.getElementById('drag-drop-feedback');
+            feedbackDiv.textContent = allCorrect ? '¡Muy bien! Todas las oraciones son correctas. 🎉' : '¡Casi! Revisa las cajas en rojo.';
+            feedbackDiv.className = `feedback text-lg ${allCorrect ? 'correct-feedback' : 'incorrect-feedback'} show`;
+        }
+
+        // --- NEW: Dialogue Order Activity ---
+        const dialogueSentences = [
+            { order: 1, text: "¡Hola Luis! ¿Estás emocionado? ¡Ya casi es nuestra graduación de sexto grado!" },
+            { order: 2, text: "¡Claro que sí, Ana! Yo creo que va a ser un día inolvidable." },
+            { order: 3, text: "Yo también lo creo. Mi mamá cree que voy a llorar de la emoción." },
+            { order: 4, text: "Jaja, ¡quizás! Después de la ceremonia, creo que mi familia y yo vamos a ir a comer a Hode's Place para celebrar." },
+            { order: 5, text: "¡Qué rico! Nosotros creemos que vamos a hacer una barbacoa en casa. ¡Estás invitado!" },
+            { order: 6, text: "¡Gracias! ¡Qué bien! Creo que va a ser la mejor graduación de todas." }
+        ];
+        let dialogueDraggedItem = null;
+
+        function initializeDialogueOrder() {
+            const sourceContainer = document.getElementById('dialogue-source-container');
+            const targetContainer = document.getElementById('dialogue-target-container');
+            sourceContainer.innerHTML = '';
+            targetContainer.innerHTML = '';
+            document.getElementById('dialogue-feedback').classList.remove('show');
+
+            shuffle(dialogueSentences).forEach(sentence => {
+                const sentenceEl = document.createElement('div');
+                sentenceEl.className = 'dialogue-sentence';
+                sentenceEl.textContent = sentence.text;
+                sentenceEl.dataset.order = sentence.order;
+                sentenceEl.draggable = true;
+                sourceContainer.appendChild(sentenceEl);
+            });
+
+            for (let i = 1; i <= dialogueSentences.length; i++) {
+                const dropzone = document.createElement('div');
+                dropzone.className = 'dialogue-dropzone';
+                dropzone.dataset.targetOrder = i;
+                dropzone.innerHTML = `<span class="font-bold text-gray-400 mr-4">${i}.</span>`;
+                targetContainer.appendChild(dropzone);
+            }
+
+            addDialogueListeners();
+        }
+
+        function addDialogueListeners() {
+            const sentences = document.querySelectorAll('.dialogue-sentence');
+            const dropzones = document.querySelectorAll('.dialogue-dropzone');
+
+            sentences.forEach(s => {
+                s.addEventListener('dragstart', e => { dialogueDraggedItem = e.target; });
+            });
+
+            dropzones.forEach(dz => {
+                dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('hover'); });
+                dz.addEventListener('dragleave', e => { dz.classList.remove('hover'); });
+                dz.addEventListener('drop', e => {
+                    e.preventDefault();
+                    dz.classList.remove('hover');
+                    // Allow dropping only if the dropzone is empty (doesn't have a sentence element yet)
+                    if (e.currentTarget.querySelectorAll('.dialogue-sentence').length === 0) {
+                        e.currentTarget.appendChild(dialogueDraggedItem);
+                    }
+                });
+            });
+        }
+
+        function checkDialogueOrder() {
+            const dropzones = document.querySelectorAll('.dialogue-dropzone');
+            let allCorrect = true;
+            dropzones.forEach(dz => {
+                const sentence = dz.querySelector('.dialogue-sentence');
+                const targetOrder = dz.dataset.targetOrder;
+                dz.classList.remove('correct', 'incorrect');
+
+                if (sentence && sentence.dataset.order === targetOrder) {
+                    dz.classList.add('correct');
+                } else {
+                    dz.classList.add('incorrect');
+                    allCorrect = false;
+                }
+            });
+
+            const feedbackDiv = document.getElementById('dialogue-feedback');
+            feedbackDiv.textContent = allCorrect ? '¡Perfecto! ¡Has ordenado el diálogo correctamente! 🥳' : '¡Casi! Revisa el orden de las oraciones en rojo.';
+            feedbackDiv.className = `feedback text-lg ${allCorrect ? 'correct-feedback' : 'incorrect-feedback'} show`;
+            if (allCorrect) createConfetti();
+        }
+
+        // --- NEW: Fill-in-the-blank Activity ---
+        function checkClozePassage() {
+            const selects = document.querySelectorAll('.cloze-select');
+            let allCorrect = true;
+            selects.forEach(select => {
+                const userAnswer = select.value;
+                const correctAnswer = select.dataset.answer;
+                select.style.borderColor = '#93c5fd'; // Reset border color
+
+                if (userAnswer === correctAnswer) {
+                    select.style.borderColor = '#10b981'; // Green for correct
+                } else {
+                    select.style.borderColor = '#ef4444'; // Red for incorrect
+                    allCorrect = false;
+                }
+            });
+
+            const feedbackDiv = document.getElementById('cloze-feedback');
+            if (allCorrect) {
+                feedbackDiv.className = 'feedback text-lg correct-feedback show';
+                feedbackDiv.textContent = '¡Excelente! Completaste el párrafo correctamente.';
+            } else {
+                feedbackDiv.className = 'feedback text-lg incorrect-feedback show';
+                feedbackDiv.textContent = '¡Casi! Revisa las respuestas en rojo e inténtalo de nuevo.';
+            }
+        }
+
+        function createConfetti() {
+            const confettiContainer = document.createElement('div');
+            confettiContainer.className = 'confetti-container';
+            document.body.appendChild(confettiContainer);
+            for (let i = 0; i < 80; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                const colors = ['#3b82f6', '#f59e0b', '#8b5cf6', '#10b981', '#ef4444'];
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confettiContainer.appendChild(confetti);
+            }
+            setTimeout(() => confettiContainer.remove(), 5000);
+        }
+
+        // Add an event listener to the form for a better user experience
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeMemoryGame();
+            initializeDragDrop();
+            initializeDialogueOrder();
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,1854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Science Test — Plant Adaptations in Belize · Mr. EdLo</title>
+<link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+/* ═══════════════════════════════════════════
+   THEME VARIABLES
+═══════════════════════════════════════════ */
+:root, body.theme-night {
+  --bg:            #1a1a2e;
+  --body-color:    #ffffff;
+  --card-bg:       rgba(255,255,255,0.07);
+  --card-border:   rgba(255,255,255,0.10);
+  --card-border-h: rgba(255,255,255,0.28);
+  --card-shadow:   rgba(0,0,0,0.40);
+  --card-desc:     rgba(255,255,255,0.50);
+  --section-lbl:   rgba(255,255,255,0.35);
+  --subtitle-c:    rgba(255,255,255,0.55);
+  --info-bg:       linear-gradient(135deg,#162d20,#163028);
+  --info-border:   rgba(32,201,151,0.18);
+  --header-name:   rgba(255,255,255,0.55);
+  --badge-bg:      rgba(255,255,255,0.08);
+  --badge-border:  rgba(255,255,255,0.12);
+  --badge-color:   rgba(255,255,255,0.45);
+  --top-badge-bg:  #20C997;
+  --top-badge-c:   #1a1a2e;
+  --h1-grad:       linear-gradient(135deg,#fff 0%,#20C997 50%,#4DABF7 100%);
+  --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.45) 100%);
+  --footer-border: rgba(255,255,255,0.07);
+  --footer-name:   rgba(255,255,255,0.40);
+  --footer-tag:    rgba(255,255,255,0.45);
+  --footer-copy:   rgba(255,255,255,0.20);
+  --back-color:    rgba(255,255,255,0.40);
+  --back-hover:    rgba(255,255,255,0.80);
+  --radial1:       #1e3a5f55;
+  --radial2:       #0d4d3955;
+  --star-show:     1;
+  --input-bg:      rgba(255,255,255,0.05);
+  --input-border:  rgba(255,255,255,0.15);
+  --input-focus:   #20C997;
+  --input-text:    #ffffff;
+  --opt-bg:        rgba(255,255,255,0.05);
+  --opt-border:    rgba(255,255,255,0.12);
+  --opt-hover:     rgba(32,201,151,0.12);
+  --opt-sel-bg:    rgba(32,201,151,0.15);
+  --opt-sel-b:     #20C997;
+  --opt-correct:   rgba(105,219,124,0.18);
+  --opt-correct-b: #69DB7C;
+  --opt-wrong:     rgba(255,107,107,0.18);
+  --opt-wrong-b:   #FF6B6B;
+  --score-bg:      rgba(32,201,151,0.08);
+  --score-border:  rgba(32,201,151,0.25);
+  --progress-bg:   rgba(255,255,255,0.10);
+  --modal-bg:      rgba(0,0,0,0.75);
+  --modal-card:    #1e2d3a;
+  --modal-border:  rgba(32,201,151,0.30);
+  --lock-bg:       linear-gradient(135deg,#162d20,#1a1a2e);
+  --lock-border:   rgba(32,201,151,0.22);
+  --fb-bg:         rgba(32,201,151,0.06);
+  --fb-border:     rgba(32,201,151,0.22);
+  --grad-bar:      linear-gradient(90deg,#20C997,#4DABF7,#9775FA,#F783AC);
+}
+
+body.theme-sunny {
+  --bg:            #fffbea;
+  --body-color:    #2d2000;
+  --card-bg:       rgba(255,255,255,0.75);
+  --card-border:   rgba(0,150,100,0.18);
+  --card-border-h: rgba(0,130,80,0.40);
+  --card-shadow:   rgba(0,100,70,0.15);
+  --card-desc:     rgba(0,80,50,0.55);
+  --section-lbl:   rgba(0,100,70,0.50);
+  --subtitle-c:    rgba(0,80,50,0.65);
+  --info-bg:       linear-gradient(135deg,#d8f5ee,#c0ede0);
+  --info-border:   rgba(0,150,100,0.22);
+  --header-name:   #006644;
+  --badge-bg:      rgba(0,180,120,0.12);
+  --badge-border:  rgba(0,150,100,0.22);
+  --badge-color:   #005a40;
+  --top-badge-bg:  #20C997;
+  --top-badge-c:   #fff;
+  --h1-grad:       linear-gradient(135deg,#00523a 0%,#009970 50%,#20C997 100%);
+  --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(0,180,120,0.10) 100%);
+  --footer-border: rgba(0,150,100,0.18);
+  --footer-name:   rgba(0,80,50,0.50);
+  --footer-tag:    rgba(0,80,50,0.55);
+  --footer-copy:   rgba(0,80,50,0.30);
+  --back-color:    rgba(0,80,50,0.50);
+  --back-hover:    #005a40;
+  --radial1:       rgba(0,210,150,0.15);
+  --radial2:       rgba(0,160,100,0.12);
+  --star-show:     0;
+  --input-bg:      rgba(0,150,100,0.06);
+  --input-border:  rgba(0,130,80,0.22);
+  --input-focus:   #20C997;
+  --input-text:    #2d2000;
+  --opt-bg:        rgba(0,150,100,0.05);
+  --opt-border:    rgba(0,130,80,0.18);
+  --opt-hover:     rgba(0,180,120,0.10);
+  --opt-sel-bg:    rgba(0,180,120,0.14);
+  --opt-sel-b:     #20C997;
+  --opt-correct:   rgba(0,160,80,0.12);
+  --opt-correct-b: #2e7d32;
+  --opt-wrong:     rgba(200,0,0,0.08);
+  --opt-wrong-b:   #c62828;
+  --score-bg:      rgba(0,180,120,0.07);
+  --score-border:  rgba(0,150,100,0.22);
+  --progress-bg:   rgba(0,150,100,0.12);
+  --modal-bg:      rgba(0,0,0,0.50);
+  --modal-card:    #f0fbf5;
+  --modal-border:  rgba(0,150,100,0.30);
+  --lock-bg:       linear-gradient(135deg,#d8f5ee,#f0fff8);
+  --lock-border:   rgba(0,150,100,0.22);
+  --fb-bg:         rgba(0,160,100,0.06);
+  --fb-border:     rgba(0,140,80,0.20);
+  --grad-bar:      linear-gradient(90deg,#20C997,#0077cc,#7a3abf,#c2185b);
+}
+
+body.theme-cloudy {
+  --bg:            #e8edf2;
+  --body-color:    #1c2533;
+  --card-bg:       rgba(255,255,255,0.72);
+  --card-border:   rgba(0,130,110,0.18);
+  --card-border-h: rgba(0,110,90,0.38);
+  --card-shadow:   rgba(0,90,70,0.15);
+  --card-desc:     rgba(0,70,55,0.55);
+  --section-lbl:   rgba(0,90,70,0.50);
+  --subtitle-c:    rgba(0,70,55,0.65);
+  --info-bg:       linear-gradient(135deg,#c8e8e0,#b5ddd6);
+  --info-border:   rgba(0,140,110,0.22);
+  --header-name:   #004d40;
+  --badge-bg:      rgba(0,170,130,0.12);
+  --badge-border:  rgba(0,150,110,0.22);
+  --badge-color:   #004d40;
+  --top-badge-bg:  #0d9488;
+  --top-badge-c:   #fff;
+  --h1-grad:       linear-gradient(135deg,#00332b 0%,#0d9488 50%,#20C997 100%);
+  --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(0,150,120,0.12) 100%);
+  --footer-border: rgba(0,140,110,0.18);
+  --footer-name:   rgba(0,60,50,0.50);
+  --footer-tag:    rgba(0,60,50,0.55);
+  --footer-copy:   rgba(0,60,50,0.30);
+  --back-color:    rgba(0,80,65,0.50);
+  --back-hover:    #004d40;
+  --radial1:       rgba(0,190,150,0.18);
+  --radial2:       rgba(0,150,120,0.15);
+  --star-show:     0;
+  --input-bg:      rgba(0,140,110,0.06);
+  --input-border:  rgba(0,120,95,0.22);
+  --input-focus:   #0d9488;
+  --input-text:    #1c2533;
+  --opt-bg:        rgba(0,140,110,0.05);
+  --opt-border:    rgba(0,120,95,0.18);
+  --opt-hover:     rgba(0,160,120,0.10);
+  --opt-sel-bg:    rgba(0,160,120,0.14);
+  --opt-sel-b:     #0d9488;
+  --opt-correct:   rgba(0,140,90,0.12);
+  --opt-correct-b: #0d9488;
+  --opt-wrong:     rgba(180,0,0,0.08);
+  --opt-wrong-b:   #dc2626;
+  --score-bg:      rgba(0,160,130,0.07);
+  --score-border:  rgba(0,140,110,0.22);
+  --progress-bg:   rgba(0,140,110,0.12);
+  --modal-bg:      rgba(0,0,0,0.45);
+  --modal-card:    #ecf4f2;
+  --modal-border:  rgba(0,140,110,0.30);
+  --lock-bg:       linear-gradient(135deg,#c8e8e0,#ecf4f2);
+  --lock-border:   rgba(0,140,110,0.22);
+  --fb-bg:         rgba(0,150,120,0.06);
+  --fb-border:     rgba(0,130,100,0.20);
+  --grad-bar:      linear-gradient(90deg,#0d9488,#2563eb,#7c3aed,#db2777);
+}
+
+body.theme-nature {
+  --bg:            #f0f7ee;
+  --body-color:    #1a2e10;
+  --card-bg:       rgba(255,255,255,0.72);
+  --card-border:   rgba(60,120,40,0.18);
+  --card-border-h: rgba(40,100,20,0.38);
+  --card-shadow:   rgba(20,80,10,0.15);
+  --card-desc:     rgba(30,70,15,0.55);
+  --section-lbl:   rgba(40,90,20,0.50);
+  --subtitle-c:    rgba(30,75,15,0.65);
+  --info-bg:       linear-gradient(135deg,#c8e8c0,#b8ddb0);
+  --info-border:   rgba(50,120,20,0.22);
+  --header-name:   #276221;
+  --badge-bg:      rgba(60,140,30,0.12);
+  --badge-border:  rgba(50,120,20,0.22);
+  --badge-color:   #1b4d0f;
+  --top-badge-bg:  #4CAF50;
+  --top-badge-c:   #fff;
+  --h1-grad:       linear-gradient(135deg,#1b4d0f 0%,#2e7d1a 50%,#4CAF50 100%);
+  --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(60,140,30,0.12) 100%);
+  --footer-border: rgba(50,120,20,0.18);
+  --footer-name:   rgba(20,70,10,0.50);
+  --footer-tag:    rgba(20,70,10,0.55);
+  --footer-copy:   rgba(20,70,10,0.30);
+  --back-color:    rgba(39,98,33,0.55);
+  --back-hover:    #276221;
+  --radial1:       rgba(100,200,60,0.22);
+  --radial2:       rgba(30,180,130,0.15);
+  --star-show:     0;
+  --input-bg:      rgba(60,140,30,0.06);
+  --input-border:  rgba(50,120,20,0.20);
+  --input-focus:   #4CAF50;
+  --input-text:    #1a2e10;
+  --opt-bg:        rgba(60,140,30,0.05);
+  --opt-border:    rgba(50,120,20,0.18);
+  --opt-hover:     rgba(76,175,80,0.10);
+  --opt-sel-bg:    rgba(76,175,80,0.15);
+  --opt-sel-b:     #4CAF50;
+  --opt-correct:   rgba(46,125,50,0.12);
+  --opt-correct-b: #2e7d32;
+  --opt-wrong:     rgba(180,0,0,0.08);
+  --opt-wrong-b:   #b71c1c;
+  --score-bg:      rgba(60,140,30,0.07);
+  --score-border:  rgba(50,120,20,0.22);
+  --progress-bg:   rgba(60,140,30,0.12);
+  --modal-bg:      rgba(0,0,0,0.45);
+  --modal-card:    #eef6ec;
+  --modal-border:  rgba(60,140,30,0.28);
+  --lock-bg:       linear-gradient(135deg,#c8e8c0,#eef6ec);
+  --lock-border:   rgba(60,140,30,0.22);
+  --fb-bg:         rgba(46,125,50,0.06);
+  --fb-border:     rgba(40,110,20,0.20);
+  --grad-bar:      linear-gradient(90deg,#4CAF50,#20C997,#1565c0,#7c3aed);
+}
+
+/* ═══════════════════════════════════════════
+   BASE
+═══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+body {
+  font-family:'Nunito',sans-serif;
+  background:var(--bg); color:var(--body-color);
+  min-height:100vh; overflow-x:hidden;
+  display:flex; flex-direction:column;
+  transition:background .5s, color .5s;
+}
+body::before {
+  content:''; position:fixed; inset:0;
+  background:
+    radial-gradient(ellipse at 15% 20%, var(--radial1) 0%, transparent 60%),
+    radial-gradient(ellipse at 85% 80%, var(--radial2) 0%, transparent 60%);
+  pointer-events:none; z-index:0; transition:background .5s;
+}
+
+.stars { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; opacity:var(--star-show,1); transition:opacity .5s; }
+.star  { position:absolute; border-radius:50%; background:#fff; animation:twinkle var(--d,3s) ease-in-out infinite var(--delay,0s); opacity:0; }
+@keyframes twinkle { 0%,100%{opacity:0;transform:scale(1)} 50%{opacity:var(--op,.6);transform:scale(1.3)} }
+
+/* Theme bar */
+.theme-bar {
+  position:relative; z-index:10;
+  display:flex; justify-content:center; gap:.5rem;
+  padding:.55rem 1rem;
+  background:rgba(0,0,0,.18);
+  border-bottom:1px solid rgba(0,0,0,.10);
+  flex-wrap:wrap;
+}
+body.theme-sunny  .theme-bar,
+body.theme-cloudy .theme-bar,
+body.theme-nature .theme-bar { background:rgba(0,0,0,.06); }
+.theme-btn {
+  font-family:'Fredoka One',cursive; font-size:.85rem;
+  padding:5px 18px; border-radius:999px;
+  border:2px solid transparent;
+  background:rgba(128,128,128,.12); color:var(--body-color);
+  cursor:pointer; opacity:.6; transition:all .22s;
+}
+.theme-btn:hover { opacity:.9; transform:translateY(-1px); }
+.theme-btn.active { opacity:1; background:var(--top-badge-bg); color:var(--top-badge-c); box-shadow:0 3px 12px rgba(0,0,0,.20); }
+
+/* Layout */
+.wrapper { position:relative; z-index:1; max-width:1400px; margin:0 auto; padding:0 max(1rem, 4vw) 2rem; flex:1; }
+
+/* Site header */
+.site-header { display:flex; align-items:center; justify-content:space-between; padding:1.2rem 0 0; animation:fadeDown .6s ease both; }
+.site-header-logo { display:flex; align-items:center; gap:.75rem; text-decoration:none; }
+.site-header-logo img { height:48px; width:auto; border-radius:10px; box-shadow:0 4px 14px rgba(0,0,0,.25); }
+.site-header-logo span { font-family:'Fredoka One',cursive; font-size:1.15rem; color:var(--header-name); letter-spacing:.02em; transition:color .4s; }
+.header-badge { display:inline-block; background:var(--badge-bg); border:1px solid var(--badge-border); color:var(--badge-color); font-size:.72rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:5px 14px; border-radius:999px; }
+.back-link { display:inline-flex; align-items:center; gap:6px; margin-top:1.4rem; font-size:.8rem; font-weight:700; color:var(--back-color); text-decoration:none; transition:color .2s; letter-spacing:.04em; }
+.back-link:hover { color:var(--back-hover); }
+
+header { text-align:center; padding:2rem 1rem 1.5rem; animation:fadeDown .7s ease both; }
+@keyframes fadeDown { from{opacity:0;transform:translateY(-22px)} to{opacity:1;transform:translateY(0)} }
+.badge { display:inline-block; background:var(--top-badge-bg); color:var(--top-badge-c); font-size:.75rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:4px 14px; border-radius:999px; margin-bottom:1rem; animation:pop .5s cubic-bezier(.36,1.5,.6,1) .3s both; }
+@keyframes pop { from{opacity:0;transform:scale(.7)} to{opacity:1;transform:scale(1)} }
+h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.9rem,5vw,3.1rem); line-height:1.1; margin-bottom:.4rem; background:var(--h1-grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.subtitle { font-size:.95rem; font-weight:600; color:var(--subtitle-c); transition:color .4s; }
+
+.section-label { font-size:.72rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--section-lbl); margin:2rem 0 .8rem; }
+
+/* ═══════════════════════════════════════════
+   ALREADY-COMPLETED SCREEN
+═══════════════════════════════════════════ */
+.lock-screen {
+  max-width:600px; margin:2rem auto;
+  background:var(--lock-bg);
+  border:1.5px solid var(--lock-border);
+  border-radius:24px;
+  padding:3rem 2.5rem;
+  text-align:center;
+  animation:riseUp .5s ease both;
+  display:none;
+}
+.lock-screen.show { display:block; }
+.lock-icon { font-size:4rem; margin-bottom:1rem; }
+.lock-title { font-family:'Fredoka One',cursive; font-size:1.8rem; margin-bottom:.6rem; color:var(--body-color); }
+.lock-msg { font-size:.9rem; font-weight:600; color:var(--card-desc); line-height:1.65; margin-bottom:1.5rem; }
+.lock-scores { display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; margin-bottom:1.5rem; }
+.lock-score-pill {
+  background:var(--card-bg); border:1.5px solid var(--card-border);
+  border-radius:14px; padding:.9rem 1.4rem; text-align:center; min-width:100px;
+}
+.lock-score-pill .lsp-label { font-size:.62rem; font-weight:800; letter-spacing:.10em; text-transform:uppercase; color:var(--section-lbl); margin-bottom:4px; }
+.lock-score-pill .lsp-val   { font-family:'Fredoka One',cursive; font-size:1.7rem; color:var(--top-badge-bg); }
+
+/* ═══════════════════════════════════════════
+   TEST CONTAINER
+═══════════════════════════════════════════ */
+.test-container { max-width:900px; margin:0 auto; }
+
+/* Student info */
+.student-card {
+  background:var(--info-bg); border:1.5px solid var(--info-border);
+  border-radius:18px; padding:1.3rem 1.5rem;
+  display:flex; align-items:center; gap:1rem;
+  margin-bottom:1.4rem;
+  animation:fadeDown .6s ease .1s both;
+  transition:background .4s, border-color .4s;
+}
+.student-card .sc-icon { font-size:2rem; flex-shrink:0; }
+.sc-fields { flex:1; display:flex; gap:.9rem; flex-wrap:wrap; }
+.sc-group { display:flex; flex-direction:column; gap:4px; flex:1; min-width:150px; }
+.sc-group label { font-size:.65rem; font-weight:800; letter-spacing:.10em; text-transform:uppercase; color:var(--section-lbl); }
+.sc-group input {
+  background:var(--input-bg); border:1.5px solid var(--input-border);
+  border-radius:10px; padding:8px 12px;
+  font-family:'Nunito',sans-serif; font-size:.85rem; font-weight:700;
+  color:var(--input-text); outline:none; transition:border-color .2s, background .4s;
+}
+.sc-group input:focus { border-color:var(--input-focus); }
+
+/* Section cards */
+.sec-card {
+  background:var(--card-bg); border:1.5px solid var(--card-border);
+  border-radius:18px; padding:1.5rem 1.7rem;
+  margin-bottom:1.1rem; position:relative; overflow:hidden;
+  animation:riseUp .5s ease both;
+  transition:background .4s, border-color .4s;
+}
+.sec-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:4px;
+  border-radius:18px 18px 0 0;
+  background:var(--sec-accent, var(--top-badge-bg));
+}
+@keyframes riseUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+.sec-card:nth-child(1){animation-delay:.04s}
+.sec-card:nth-child(2){animation-delay:.09s}
+.sec-card:nth-child(3){animation-delay:.14s}
+.sec-card:nth-child(4){animation-delay:.19s}
+.sec-card:nth-child(5){animation-delay:.24s}
+
+.sec-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:.9rem; flex-wrap:wrap; gap:.5rem; }
+.sec-title { font-family:'Fredoka One',cursive; font-size:1.2rem; color:var(--body-color); }
+.sec-pts   { font-size:.68rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; background:var(--badge-bg); border:1px solid var(--badge-border); color:var(--badge-color); padding:3px 11px; border-radius:999px; }
+
+/* ═══════════════════════════════════════════
+   QUESTION
+═══════════════════════════════════════════ */
+.question { margin-bottom:1.3rem; }
+.question:last-child { margin-bottom:0; }
+
+.q-label { font-size:.9rem; font-weight:800; color:var(--body-color); margin-bottom:.6rem; display:flex; align-items:flex-start; gap:.55rem; }
+.q-num   { font-family:'Fredoka One',cursive; color:var(--top-badge-bg); font-size:1rem; flex-shrink:0; min-width:26px; transition:color .4s; }
+.q-pts   { font-size:.62rem; font-weight:800; letter-spacing:.05em; color:var(--section-lbl); margin-left:auto; flex-shrink:0; }
+
+/* Options */
+.options { display:flex; flex-direction:column; gap:7px; }
+.opt {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 14px; border-radius:12px;
+  background:var(--opt-bg); border:1.5px solid var(--opt-border);
+  cursor:pointer; transition:all .18s;
+  font-size:.88rem; font-weight:700; color:var(--body-color);
+  user-select:none;
+}
+.opt:hover:not(.locked-opt) { background:var(--opt-hover); border-color:var(--opt-sel-b); }
+.opt.selected { background:var(--opt-sel-bg); border-color:var(--opt-sel-b); }
+.opt.correct  { background:var(--opt-correct); border-color:var(--opt-correct-b); }
+.opt.wrong    { background:var(--opt-wrong);   border-color:var(--opt-wrong-b); }
+.opt input[type="radio"],
+.opt input[type="checkbox"] { accent-color:var(--top-badge-bg); width:16px; height:16px; flex-shrink:0; pointer-events:none; }
+.opt-tick { margin-left:auto; font-size:.9rem; opacity:0; }
+.opt.correct .opt-tick { opacity:1; }
+.opt.wrong   .opt-tick { opacity:1; }
+
+/* Short answer / sentence fill */
+.answer-input {
+  width:100%; background:var(--input-bg); border:1.5px solid var(--input-border);
+  border-radius:12px; padding:10px 14px;
+  font-family:'Nunito',sans-serif; font-size:.88rem; font-weight:600;
+  color:var(--input-text); outline:none; resize:vertical;
+  transition:border-color .2s, background .4s;
+}
+.answer-input:focus { border-color:var(--input-focus); }
+
+.sentence-wrap { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:6px; }
+.sent-static   { font-size:.9rem; font-weight:700; color:var(--body-color); }
+.sent-input {
+  flex:1; min-width:160px;
+  border:none; border-bottom:2px solid var(--input-border);
+  background:transparent; padding:4px 6px;
+  font-family:'Nunito',sans-serif; font-size:.9rem; font-weight:700;
+  color:var(--input-text); outline:none;
+  transition:border-color .2s;
+}
+.sent-input:focus { border-bottom-color:var(--input-focus); }
+
+/* Matching */
+.match-grid { display:flex; flex-direction:column; gap:8px; }
+.match-row  { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.match-item { font-size:.85rem; font-weight:700; flex:1; min-width:160px; color:var(--body-color); }
+.match-sel {
+  flex:1; min-width:140px;
+  background:var(--input-bg); border:1.5px solid var(--input-border);
+  border-radius:10px; padding:8px 12px;
+  font-family:'Nunito',sans-serif; font-size:.82rem; font-weight:700;
+  color:var(--input-text); outline:none; cursor:pointer;
+  transition:border-color .2s;
+}
+.match-sel:focus { border-color:var(--input-focus); }
+.match-sel.correct { border-color:var(--opt-correct-b); background:var(--opt-correct); }
+.match-sel.wrong   { border-color:var(--opt-wrong-b);   background:var(--opt-wrong); }
+
+/* Feedback box (per question) */
+.fb-box {
+  margin-top:8px; padding:10px 14px;
+  background:var(--fb-bg); border:1.5px solid var(--fb-border);
+  border-radius:10px; font-size:.82rem; font-weight:600;
+  color:var(--body-color); line-height:1.55;
+  display:none; animation:riseUp .3s ease both;
+}
+.fb-box.show { display:block; }
+.fb-score { font-family:'Fredoka One',cursive; font-size:1rem; margin-bottom:3px; color:var(--top-badge-bg); }
+
+/* Submit */
+.submit-area { text-align:center; margin:1.8rem 0 .5rem; }
+.btn-primary {
+  font-family:'Fredoka One',cursive; font-size:1.1rem;
+  padding:14px 44px; border-radius:999px;
+  background:var(--top-badge-bg); color:var(--top-badge-c);
+  border:none; cursor:pointer;
+  box-shadow:0 6px 24px rgba(0,0,0,.20);
+  transition:transform .2s, filter .2s, opacity .2s;
+  letter-spacing:.02em;
+}
+.btn-primary:hover:not(:disabled) { transform:translateY(-2px); filter:brightness(1.1); }
+.btn-primary:disabled { opacity:.55; cursor:not-allowed; }
+.btn-secondary {
+  font-family:'Fredoka One',cursive; font-size:.95rem;
+  padding:10px 26px; border-radius:999px;
+  background:var(--card-bg); color:var(--body-color);
+  border:1.5px solid var(--card-border); cursor:pointer;
+  transition:all .2s;
+}
+.btn-secondary:hover { transform:translateY(-2px); filter:brightness(1.1); }
+
+/* Spinner */
+.spinner-wrap { display:none; justify-content:center; margin-top:1rem; }
+.spinner-wrap.show { display:flex; }
+.spinner {
+  width:32px; height:32px; border-radius:50%;
+  border:3px solid var(--card-border);
+  border-top-color:var(--top-badge-bg);
+  animation:spin .8s linear infinite;
+}
+@keyframes spin { to{transform:rotate(360deg)} }
+
+/* ═══════════════════════════════════════════
+   RESULTS SECTION
+═══════════════════════════════════════════ */
+.results-section {
+  background:var(--score-bg); border:1.5px solid var(--score-border);
+  border-radius:18px; padding:1.8rem 2rem;
+  margin-bottom:1.2rem; display:none;
+  animation:riseUp .4s ease both;
+}
+.results-section.show { display:block; }
+.res-title { font-family:'Fredoka One',cursive; font-size:1.5rem; text-align:center; margin-bottom:1.3rem; color:var(--body-color); }
+
+.score-grid { display:flex; flex-wrap:wrap; gap:1rem; margin-bottom:1.4rem; justify-content:center; }
+.score-box {
+  flex:1; min-width:120px; max-width:180px;
+  background:var(--card-bg); border:1.5px solid var(--card-border);
+  border-radius:14px; padding:1rem 1.1rem; text-align:center;
+}
+.score-box .sb-label { font-size:.62rem; font-weight:800; letter-spacing:.10em; text-transform:uppercase; color:var(--section-lbl); margin-bottom:6px; }
+.score-box .sb-val   { font-family:'Fredoka One',cursive; font-size:2rem; color:var(--body-color); line-height:1; }
+.score-box .sb-sub   { font-size:.65rem; font-weight:700; color:var(--card-desc); margin-top:3px; }
+.score-box.hl { border-color:var(--top-badge-bg); }
+.score-box.hl .sb-val { color:var(--top-badge-bg); }
+
+.prog-wrap { margin-bottom:1.3rem; }
+.prog-row  { display:flex; justify-content:space-between; margin-bottom:5px; }
+.prog-lbl  { font-size:.68rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--section-lbl); }
+.prog-pct  { font-family:'Fredoka One',cursive; font-size:1.1rem; color:var(--body-color); }
+.prog-bg   { height:16px; background:var(--progress-bg); border-radius:999px; overflow:hidden; }
+.prog-fill { height:100%; border-radius:999px; transition:width .8s cubic-bezier(.22,.68,0,1.2), background .5s; background:var(--top-badge-bg); }
+
+.perf-badge { display:block; text-align:center; font-family:'Fredoka One',cursive; font-size:1.4rem; padding:.9rem; border-radius:14px; background:var(--card-bg); border:1.5px solid var(--card-border); margin-bottom:1rem; }
+.pdf-row    { display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; }
+
+/* ═══════════════════════════════════════════
+   PASSKEY MODAL
+═══════════════════════════════════════════ */
+.modal-overlay {
+  position:fixed; inset:0; z-index:200;
+  background:var(--modal-bg);
+  display:flex; align-items:center; justify-content:center;
+  animation:fadeIn .2s ease both;
+  padding:1rem;
+}
+.modal-overlay.hidden { display:none; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.modal-card {
+  background:var(--modal-card); border:1.5px solid var(--modal-border);
+  border-radius:22px; padding:2rem 2.2rem;
+  max-width:400px; width:100%; text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.35);
+  animation:popIn .3s cubic-bezier(.36,1.5,.6,1) both;
+}
+@keyframes popIn { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.modal-icon  { font-size:2.5rem; margin-bottom:.8rem; }
+.modal-title { font-family:'Fredoka One',cursive; font-size:1.4rem; margin-bottom:.4rem; color:var(--body-color); }
+.modal-desc  { font-size:.83rem; font-weight:600; color:var(--card-desc); margin-bottom:1.2rem; line-height:1.6; }
+.modal-input {
+  width:100%; background:var(--input-bg); border:1.5px solid var(--input-border);
+  border-radius:12px; padding:11px 16px; margin-bottom:.8rem;
+  font-family:'Fredoka One',cursive; font-size:1.1rem; text-align:center;
+  color:var(--input-text); letter-spacing:.12em; outline:none;
+  transition:border-color .2s;
+}
+.modal-input:focus { border-color:var(--input-focus); }
+.modal-err { font-size:.78rem; font-weight:800; color:var(--opt-wrong-b); margin-top:.4rem; display:none; }
+.modal-err.show { display:block; }
+
+/* Footer */
+.site-footer { position:relative; z-index:1; background:var(--footer-bg); border-top:1px solid var(--footer-border); padding:2rem max(1rem, 4vw); margin-top:3rem; display:flex; flex-direction:column; align-items:center; gap:.5rem; transition:background .4s, border-color .4s; }
+.site-footer::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--grad-bar); }
+.footer-logo { display:flex; align-items:center; gap:.6rem; margin-bottom:.4rem; }
+.footer-logo img { height:36px; width:auto; border-radius:8px; opacity:.75; }
+.footer-logo span { font-family:'Fredoka One',cursive; font-size:1rem; color:var(--footer-name); transition:color .4s; }
+.footer-tagline { font-size:.82rem; font-weight:700; color:var(--footer-tag); letter-spacing:.03em; font-style:italic; }
+.footer-copy    { font-size:.72rem; color:var(--footer-copy); font-weight:600; letter-spacing:.04em; margin-top:.2rem; }
+
+#back-to-top { display:none; position:fixed; bottom:1.5rem; right:1.5rem; z-index:99; background:var(--top-badge-bg); color:var(--top-badge-c); border:none; border-radius:12px; width:42px; height:42px; font-size:1.2rem; font-weight:900; cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,.25); transition:all .2s; align-items:center; justify-content:center; }
+#back-to-top:hover { transform:translateY(-3px); filter:brightness(1.1); }
+
+/* Fully locked test */
+.test-locked .opt,
+.test-locked .match-sel,
+.test-locked .answer-input,
+.test-locked .sent-input { pointer-events:none; }
+.test-locked .opt { cursor:default; }
+
+/* ═══════════════════════════════════════════
+   QUESTION PROGRESS TRACKER
+═══════════════════════════════════════════ */
+.q-progress-wrap {
+  position:sticky; top:0; z-index:50;
+  background:var(--bg);
+  border-bottom:1px solid var(--card-border);
+  padding:.7rem 0 .6rem;
+  margin-bottom:1.2rem;
+  transition:background .5s;
+}
+.q-progress-inner { max-width:900px; margin:0 auto; padding:0 max(1rem, 4vw); }
+.q-progress-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:.45rem; gap:.5rem; }
+.q-progress-label { font-size:.7rem; font-weight:800; letter-spacing:.10em; text-transform:uppercase; color:var(--section-lbl); }
+.q-progress-count { font-family:'Fredoka One',cursive; font-size:.95rem; color:var(--body-color); white-space:nowrap; }
+.q-progress-bg   { height:8px; background:var(--progress-bg); border-radius:999px; overflow:hidden; }
+.q-progress-fill { height:100%; border-radius:999px; background:var(--top-badge-bg); transition:width .4s cubic-bezier(.22,.68,0,1.2), background .4s; }
+.q-progress-fill.done { background:#69DB7C; }
+.submit-hint {
+  font-size:.72rem; font-weight:700; color:var(--section-lbl);
+  margin-top:.5rem; text-align:center; transition:color .3s;
+}
+.submit-hint.ready { color:var(--top-badge-bg); }
+
+/* ═══════════════════════════════════════════
+   BLUR OVERLAY (idle / screen peek guard)
+═══════════════════════════════════════════ */
+.blur-overlay {
+  position:fixed; inset:0; z-index:150;
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  background:rgba(0,0,0,.55);
+  display:none; align-items:center; justify-content:center;
+  flex-direction:column; gap:1rem;
+  cursor:pointer;
+  animation:fadeIn .25s ease both;
+}
+.blur-overlay.show { display:flex; }
+.blur-icon  { font-size:3.5rem; }
+.blur-title { font-family:'Fredoka One',cursive; font-size:1.5rem; color:#fff; text-align:center; }
+.blur-sub   { font-size:.85rem; font-weight:700; color:rgba(255,255,255,.65); text-align:center; }
+
+/* ═══════════════════════════════════════════
+   TAB-SWITCH WARNING OVERLAY
+═══════════════════════════════════════════ */
+.warn-overlay {
+  position:fixed; inset:0; z-index:160;
+  background:rgba(0,0,0,.82);
+  display:none; align-items:center; justify-content:center;
+  padding:1.5rem;
+}
+.warn-overlay.show { display:flex; animation:fadeIn .2s ease both; }
+.warn-card {
+  background:var(--modal-card); border:2px solid var(--opt-wrong-b);
+  border-radius:22px; padding:2rem 2.2rem;
+  max-width:420px; width:100%; text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+  animation:popIn .3s cubic-bezier(.36,1.5,.6,1) both;
+}
+.warn-icon  { font-size:2.8rem; margin-bottom:.7rem; }
+.warn-title { font-family:'Fredoka One',cursive; font-size:1.4rem; color:var(--opt-wrong-b); margin-bottom:.5rem; }
+.warn-msg   { font-size:.85rem; font-weight:600; color:var(--card-desc); line-height:1.6; margin-bottom:1.2rem; }
+.warn-count { font-size:.75rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--section-lbl); margin-bottom:1rem; }
+
+/* ═══════════════════════════════════════════
+   ANSWERED FADE — anti-cheat: dims answered
+   questions; hover reveals them clearly
+═══════════════════════════════════════════ */
+.question {
+  border-radius: 12px;
+  padding: 4px 6px;
+  margin-left: -6px;
+  margin-right: -6px;
+  transition: opacity .5s ease, filter .5s ease;
+}
+.question.answered-fade {
+  opacity: 0.18;
+  filter: blur(2.5px);
+  transition: opacity .5s ease, filter .5s ease;
+}
+.question.answered-fade:hover {
+  opacity: 1;
+  filter: blur(0px);
+  transition: opacity .2s ease, filter .2s ease;
+}
+/* Keep fully visible after submit */
+.test-locked .question.answered-fade,
+.test-locked .question.answered-fade:hover {
+  opacity: 1 !important;
+  filter: blur(0px) !important;
+}
+</style>
+</head>
+<body class="theme-night">
+
+<!-- Stars -->
+<div class="stars" id="stars"></div>
+
+<!-- PASSKEY MODAL -->
+<div class="modal-overlay hidden" id="passkeyModal">
+  <div class="modal-card">
+    <div class="modal-icon">🔑</div>
+    <div class="modal-title">Enter Class Code</div>
+    <div class="modal-desc">Ask Mr. EdLo for today's class code to submit your answers.</div>
+    <input class="modal-input" type="text" id="passkeyInput" placeholder="" autocomplete="off" spellcheck="false">
+    <button class="btn-primary" style="width:100%;margin-bottom:.5rem" onclick="validatePasskey()">Submit →</button>
+    <div class="modal-err" id="passkeyErr">❌ Wrong code — ask Mr. EdLo for the correct code.</div>
+  </div>
+</div>
+
+
+<!-- Question Progress Bar (sticky) -->
+<div class="q-progress-wrap" id="qProgressWrap">
+  <div class="q-progress-inner">
+    <div class="q-progress-row">
+      <span class="q-progress-label">Questions answered</span>
+      <span class="q-progress-count" id="qProgressCount">0 / 10</span>
+    </div>
+    <div class="q-progress-bg">
+      <div class="q-progress-fill" id="qProgressFill" style="width:0%"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Blur overlay — shows on idle / screen peek -->
+<div class="blur-overlay" id="blurOverlay" onclick="dismissBlur()">
+  <div class="blur-icon">🙈</div>
+  <div class="blur-title">Screen Hidden</div>
+  <div class="blur-sub">Click anywhere to continue your test</div>
+</div>
+
+<!-- Tab-switch warning overlay -->
+<div class="warn-overlay" id="warnOverlay">
+  <div class="warn-card">
+    <div class="warn-icon">⚠️</div>
+    <div class="warn-title">Focus Warning</div>
+    <div class="warn-msg">You left this test page. This has been noted.<br>Please stay on this page until you have submitted your test.</div>
+    <div class="warn-count" id="warnCount">Warning 1 of 3</div>
+    <button class="btn-primary" style="width:100%" onclick="dismissWarning()">I Understand — Return to Test</button>
+  </div>
+</div>
+
+<!-- Theme bar -->
+<div class="theme-bar">
+  <button class="theme-btn active" onclick="setTheme('night',this)">🌙 Night</button>
+  <button class="theme-btn" onclick="setTheme('sunny',this)">☀️ Sunny</button>
+  <button class="theme-btn" onclick="setTheme('cloudy',this)">☁️ Cloudy</button>
+  <button class="theme-btn" onclick="setTheme('nature',this)">🌿 Nature</button>
+</div>
+
+<div class="wrapper">
+
+  <!-- Site header -->
+  <div class="site-header">
+    <a class="site-header-logo" href="https://teacherzoled.github.io/Virtual-Classroom/">
+      <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+      <span>Mr. EdLo's Virtual Classroom</span>
+    </a>
+    <span class="header-badge">Standard 6 &nbsp;·&nbsp; Belize</span>
+  </div>
+
+  <a class="back-link" href="https://teacherzoled.github.io/science/">← Back to Science</a>
+
+  <header>
+    <div class="badge">Standard 6 &nbsp;·&nbsp; Science</div>
+    <h1>🌿 Plant Adaptations in Belize</h1>
+    <p class="subtitle">Read each question carefully — choose the best answer</p>
+  </header>
+
+  <!-- ALREADY-COMPLETED SCREEN (shown if quiz was already done) -->
+  <div class="lock-screen" id="lockScreen">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">Test Already Submitted</div>
+    <div class="lock-msg">You have already completed this test. Your results are saved below. Download your PDF report or go back to Science.</div>
+    <div class="lock-scores" id="lockScores"></div>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <button class="btn-primary" onclick="downloadPDF()">📄 Download PDF Report</button>
+      <a class="btn-secondary" href="https://teacherzoled.github.io/science/" style="display:inline-flex;align-items:center;text-decoration:none;">← Back to Science</a>
+    </div>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px dashed var(--card-border);">
+      <p style="font-size:.7rem;font-weight:700;color:var(--section-lbl);margin-bottom:.6rem;letter-spacing:.06em;text-transform:uppercase;">Teacher Access</p>
+      <button class="btn-secondary" style="font-size:.8rem;padding:7px 20px;" onclick="teacherReset()">🔑 Reset Quiz for Testing</button>
+    </div>
+  </div>
+
+  <!-- TEST CONTAINER -->
+  <div class="test-container" id="testContainer">
+
+    <!-- Student info -->
+    <div class="student-card">
+      <div class="sc-icon">🎓</div>
+      <div class="sc-fields">
+        <div class="sc-group">
+          <label>Your Name</label>
+          <input type="text" id="studentName" placeholder="Enter your full name" autocomplete="off">
+        </div>
+        <div class="sc-group">
+          <label>Date</label>
+          <input type="text" id="testDate" readonly>
+        </div>
+        <div class="sc-group">
+          <label>Teacher</label>
+          <input type="text" value="Mr. EdLo" readonly>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SECTION A (9 marks) ══ -->
+    <div class="sec-card" style="--sec-accent:#20C997;">
+      <div class="sec-head">
+        <div class="sec-title">📗 Section A</div>
+        <div class="sec-pts">9 points</div>
+      </div>
+
+      <div class="question" data-q="q1">
+        <div class="q-label"><span class="q-num">1.</span><span>Adaptation means:</span><span class="q-pts">3 pts</span></div>
+        <div class="options" id="q1-opts">
+          <label class="opt" data-val="a"><input type="radio" name="q1" value="a"> A plant dying<span class="opt-tick">❌</span></label>
+          <label class="opt" data-val="b"><input type="radio" name="q1" value="b"> A feature that helps a plant survive in its environment<span class="opt-tick">✅</span></label>
+          <label class="opt" data-val="c"><input type="radio" name="q1" value="c"> A type of soil<span class="opt-tick">❌</span></label>
+        </div>
+        <div class="fb-box" id="q1-fb"></div>
+      </div>
+
+      <div class="question" data-q="q2">
+        <div class="q-label"><span class="q-num">2.</span><span>Select ALL the correct types of plant adaptations:</span><span class="q-pts">3 pts</span></div>
+        <div class="options" id="q2-opts">
+          <label class="opt" data-val="structural"><input type="checkbox" name="q2" value="structural"> Structural<span class="opt-tick">✅</span></label>
+          <label class="opt" data-val="behavioural"><input type="checkbox" name="q2" value="behavioural"> Behavioural<span class="opt-tick">✅</span></label>
+          <label class="opt" data-val="emotional"><input type="checkbox" name="q2" value="emotional"> Emotional<span class="opt-tick">❌</span></label>
+          <label class="opt" data-val="physiological"><input type="checkbox" name="q2" value="physiological"> Physiological<span class="opt-tick">✅</span></label>
+        </div>
+        <div class="fb-box" id="q2-fb"></div>
+      </div>
+
+      <div class="question" data-q="q3">
+        <div class="q-label"><span class="q-num">3.</span><span>The cohune palm has very large, wide leaves that capture as much sunlight as possible under the rainforest canopy. This is an example of a:</span><span class="q-pts">3 pts</span></div>
+        <div class="options" id="q3-opts">
+          <label class="opt" data-val="structural"><input type="radio" name="q3" value="structural"> Structural adaptation<span class="opt-tick">✅</span></label>
+          <label class="opt" data-val="behavioural"><input type="radio" name="q3" value="behavioural"> Behavioural adaptation<span class="opt-tick">❌</span></label>
+          <label class="opt" data-val="physiological"><input type="radio" name="q3" value="physiological"> Physiological adaptation<span class="opt-tick">❌</span></label>
+        </div>
+        <div class="fb-box" id="q3-fb"></div>
+      </div>
+    </div>
+
+    <!-- ══ SECTION B (9 marks) ══ -->
+    <div class="sec-card" style="--sec-accent:#4DABF7;">
+      <div class="sec-head">
+        <div class="sec-title">📘 Section B</div>
+        <div class="sec-pts">9 points</div>
+      </div>
+
+      <div class="question" data-q="q4">
+        <div class="q-label"><span class="q-num">4.</span><span>Plants need adaptations because:</span><span class="q-pts">3 pts</span></div>
+        <div class="options" id="q4-opts">
+          <label class="opt" data-val="a"><input type="radio" name="q4" value="a"> They can move away from danger<span class="opt-tick">❌</span></label>
+          <label class="opt" data-val="b"><input type="radio" name="q4" value="b"> Environments are different and can be harsh<span class="opt-tick">✅</span></label>
+          <label class="opt" data-val="c"><input type="radio" name="q4" value="c"> They just like sunlight<span class="opt-tick">❌</span></label>
+        </div>
+        <div class="fb-box" id="q4-fb"></div>
+      </div>
+
+      <div class="question" data-q="q5">
+        <div class="q-label"><span class="q-num">5.</span><span>The Belize savanna has a long dry season where rainfall is very low. A plant growing there would most likely have:</span><span class="q-pts">3 pts</span></div>
+        <div class="options" id="q5-opts">
+          <label class="opt" data-val="a"><input type="radio" name="q5" value="a"> Very large, thin leaves to collect as much rain as possible<span class="opt-tick">❌</span></label>
+          <label class="opt" data-val="b"><input type="radio" name="q5" value="b"> Deep roots and a thick stem or bark to store water<span class="opt-tick">✅</span></label>
+          <label class="opt" data-val="c"><input type="radio" name="q5" value="c"> A very thin, weak stem that needs a lot of water daily<span class="opt-tick">❌</span></label>
+        </div>
+        <div class="fb-box" id="q5-fb"></div>
+      </div>
+
+      <div class="question" data-q="q6">
+        <div class="q-label"><span class="q-num">6.</span><span>Many large trees in the Belize rainforest, like the mahogany tree, have wide buttress roots spreading out from the base of the trunk. These roots help the tree to:</span><span class="q-pts">3 pts</span></div>
+        <div class="options" id="q6-opts">
+          <label class="opt" data-val="a"><input type="radio" name="q6" value="a"> Produce more fruit and seeds<span class="opt-tick">❌</span></label>
+          <label class="opt" data-val="b"><input type="radio" name="q6" value="b"> Stay anchored in the shallow rainforest soil and absorb more water and nutrients<span class="opt-tick">✅</span></label>
+          <label class="opt" data-val="c"><input type="radio" name="q6" value="c"> Protect the tree from insects<span class="opt-tick">❌</span></label>
+        </div>
+        <div class="fb-box" id="q6-fb"></div>
+      </div>
+    </div>
+
+    <!-- ══ SECTION C — Matching (3 marks) ══ -->
+    <div class="sec-card" style="--sec-accent:#9775FA;">
+      <div class="sec-head">
+        <div class="sec-title">📙 Section C — Matching</div>
+        <div class="sec-pts">3 points</div>
+      </div>
+
+      <div class="question" data-q="q7">
+        <div class="q-label"><span class="q-num">7.</span><span>Match each adaptation to its type:</span><span class="q-pts">3 pts</span></div>
+        <div class="match-grid">
+          <div class="match-row">
+            <div class="match-item">🌴 The cohune palm's large, arching leaves that spread wide to catch sunlight in the rainforest</div>
+            <select class="match-sel" id="m1">
+              <option value="">— Choose —</option>
+              <option value="structural">Structural</option>
+              <option value="behavioural">Behavioural</option>
+              <option value="physiological">Physiological</option>
+            </select>
+          </div>
+          <div class="match-row">
+            <div class="match-item">🌿 The bay cedar tree dropping its leaves during the dry season to reduce water loss</div>
+            <select class="match-sel" id="m2">
+              <option value="">— Choose —</option>
+              <option value="structural">Structural</option>
+              <option value="behavioural">Behavioural</option>
+              <option value="physiological">Physiological</option>
+            </select>
+          </div>
+          <div class="match-row">
+            <div class="match-item">🧬 The mangrove producing special proteins in its cells that filter out salt from seawater</div>
+            <select class="match-sel" id="m3">
+              <option value="">— Choose —</option>
+              <option value="structural">Structural</option>
+              <option value="behavioural">Behavioural</option>
+              <option value="physiological">Physiological</option>
+            </select>
+          </div>
+        </div>
+        <div class="fb-box" id="q7-fb"></div>
+      </div>
+    </div>
+
+    <!-- ══ SECTION D — Short Response (9 marks) ══ -->
+    <div class="sec-card" style="--sec-accent:#F783AC;">
+      <div class="sec-head">
+        <div class="sec-title">📕 Section D — Short Response</div>
+        <div class="sec-pts">9 points</div>
+      </div>
+
+      <div class="question" data-q="q8">
+        <div class="q-label"><span class="q-num">8.</span><span>Complete the sentence: (3 pts)</span></div>
+        <div class="sentence-wrap">
+          <span class="sent-static">"A rainforest plant in Belize is adapted to survive because</span>
+          <input class="sent-input" type="text" id="q8" placeholder="your answer…">
+          <span class="sent-static">"</span>
+        </div>
+        <div class="fb-box" id="q8-fb"></div>
+      </div>
+
+      <div class="question" data-q="q9">
+        <div class="q-label"><span class="q-num">9.</span><span>Two plants are growing in the Belize savanna during the dry season. Which one is more likely to survive? Choose one, then explain why. (3 pts)</span></div>
+        <div class="options" id="q9-opts" style="margin-bottom:.8rem;">
+          <label class="opt" data-val="thin"><input type="radio" name="q9pick" value="thin"> Plant A — Wide, thin leaves and shallow roots close to the surface<span class="opt-tick"></span></label>
+          <label class="opt" data-val="thick"><input type="radio" name="q9pick" value="thick"> Plant B — Small, waxy leaves and long roots that reach deep into the ground<span class="opt-tick">✅</span></label>
+        </div>
+        <div class="sentence-wrap">
+          <span class="sent-static">"Plant B survives better because</span>
+          <input class="sent-input" type="text" id="q9" placeholder="your reason…">
+          <span class="sent-static">"</span>
+        </div>
+        <div class="fb-box" id="q9-fb"></div>
+      </div>
+
+      <div class="question" data-q="q10">
+        <div class="q-label"><span class="q-num">10.</span><span>The red mangrove is found all along the coast of Belize, including around the cayes and in river mouths. Answer both parts, then complete the sentence. (3 pts)</span></div>
+        <p style="font-size:.82rem;font-weight:700;color:var(--card-desc);margin:.5rem 0 .4rem;">Where does the red mangrove grow?</p>
+        <div class="options" id="q10-opts1" style="margin-bottom:.8rem;">
+          <label class="opt" data-val="desert"><input type="radio" name="q10a" value="desert"> In the deep rainforest, far from water<span class="opt-tick">❌</span></label>
+          <label class="opt" data-val="water"><input type="radio" name="q10a" value="water"> In coastal saltwater and river mouth swamps<span class="opt-tick">✅</span></label>
+        </div>
+        <p style="font-size:.82rem;font-weight:700;color:var(--card-desc);margin:.0rem 0 .4rem;">What is the red mangrove's key structural adaptation?</p>
+        <div class="options" id="q10-opts2" style="margin-bottom:.8rem;">
+          <label class="opt" data-val="weak"><input type="radio" name="q10b" value="weak"> Thin underground roots that rot in saltwater<span class="opt-tick">❌</span></label>
+          <label class="opt" data-val="aerial"><input type="radio" name="q10b" value="aerial"> Curved prop roots that arch above the water and mud<span class="opt-tick">✅</span></label>
+        </div>
+        <div class="sentence-wrap">
+          <span class="sent-static">"These prop roots help the mangrove because</span>
+          <input class="sent-input" type="text" id="q10" placeholder="your reason…">
+          <span class="sent-static">"</span>
+        </div>
+        <div class="fb-box" id="q10-fb"></div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-area">
+      <button class="btn-primary" id="submitBtn" onclick="handleSubmit()" disabled>✅ Submit Test</button>
+      <p class="submit-hint" id="submitHint">Answer all 10 questions to submit</p>
+      <div class="spinner-wrap" id="spinnerWrap"><div class="spinner"></div></div>
+    </div>
+
+    <!-- Results -->
+    <div class="results-section" id="resultsSection">
+      <div class="res-title">🏆 Your Results</div>
+      <div class="score-grid">
+        <div class="score-box">
+          <div class="sb-label">Section A–C</div>
+          <div class="sb-val" id="s-obj">—</div>
+          <div class="sb-sub">out of 21</div>
+        </div>
+        <div class="score-box">
+          <div class="sb-label">Section D</div>
+          <div class="sb-val" id="s-d">—</div>
+          <div class="sb-sub">out of 9</div>
+        </div>
+        <div class="score-box hl">
+          <div class="sb-label">Total Score</div>
+          <div class="sb-val" id="s-total">—</div>
+          <div class="sb-sub">out of 30</div>
+        </div>
+        <div class="score-box">
+          <div class="sb-label">Percentage</div>
+          <div class="sb-val" id="s-pct">—</div>
+          <div class="sb-sub"> </div>
+        </div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-row">
+          <span class="prog-lbl">Performance</span>
+          <span class="prog-pct" id="prog-pct-lbl">—%</span>
+        </div>
+        <div class="prog-bg">
+          <div class="prog-fill" id="progFill" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="perf-badge" id="perfBadge">Submit your test to see results!</div>
+      <div class="pdf-row">
+        <button class="btn-primary" onclick="downloadPDF()">📄 Download PDF Report</button>
+      </div>
+    </div>
+
+  </div><!-- /test-container -->
+</div><!-- /wrapper -->
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-logo">
+    <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+    <span>Mr. EdLo's Virtual Classroom</span>
+  </div>
+  <p class="footer-tagline">Explore, discover, and learn something new every day!</p>
+  <p class="footer-copy">© 2026 Mr. EdLo's Virtual Classroom — Standard 6 · Belize · All rights reserved.</p>
+</footer>
+<button id="back-to-top" title="Back to top">↑</button>
+
+<script>
+// ═══════════════════════════════════════════
+// THEME
+// ═══════════════════════════════════════════
+const THEMES = ['night','sunny','cloudy','nature'];
+function setTheme(t, btn) {
+  THEMES.forEach(x => document.body.classList.remove('theme-'+x));
+  document.body.classList.add('theme-'+t);
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  localStorage.setItem('vc-theme', t);
+}
+(function(){
+  const s = localStorage.getItem('vc-theme');
+  if (s && THEMES.includes(s)) {
+    THEMES.forEach(x => document.body.classList.remove('theme-'+x));
+    document.body.classList.add('theme-'+s);
+    document.querySelectorAll('.theme-btn').forEach(b => {
+      b.classList.toggle('active', b.textContent.toLowerCase().includes(s));
+    });
+  }
+})();
+
+// Stars
+const sc = document.getElementById('stars');
+for (let i = 0; i < 80; i++) {
+  const s = document.createElement('div'); s.className = 'star';
+  const sz = Math.random()*2.5+1;
+  s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*4+2).toFixed(1)}s;--delay:-${(Math.random()*6).toFixed(1)}s;--op:${(Math.random()*0.5+0.2).toFixed(2)};`;
+  sc.appendChild(s);
+}
+
+// Date
+document.getElementById('testDate').value = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+
+// Back to top
+const topBtn = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => { topBtn.style.display = window.scrollY > 300 ? 'flex' : 'none'; });
+topBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+
+// Option interaction (visual only — does not affect locked state)
+document.querySelectorAll('.options').forEach(container => {
+  const isRadio = container.querySelector('input')?.type === 'radio';
+  container.querySelectorAll('.opt').forEach(opt => {
+    opt.addEventListener('click', function() {
+      if (this.classList.contains('locked-opt')) return;
+      if (isRadio) {
+        container.querySelectorAll('.opt').forEach(o => {
+          o.classList.remove('selected');
+          o.querySelector('input').checked = false;
+        });
+      }
+      const inp = this.querySelector('input');
+      if (isRadio) {
+        inp.checked = true;
+        this.classList.add('selected');
+      } else {
+        inp.checked = !inp.checked;
+        this.classList.toggle('selected', inp.checked);
+      }
+      // Update question progress whenever an option is clicked
+      if (typeof updateQuestionProgress === 'function') updateQuestionProgress();
+    });
+  });
+});
+
+// ═══════════════════════════════════════════
+// LOCK KEY — unique per quiz page
+// ═══════════════════════════════════════════
+
+// ═══════════════════════════════════════════
+// QUESTION PROGRESS TRACKER
+// ═══════════════════════════════════════════
+
+// Map of question IDs → how they are detected as "answered"
+// Each entry: { type: 'radio'|'checkbox'|'text'|'match', selector or id }
+const QUESTION_MAP = [
+  { id:'q1',  type:'radio',    name:'q1' },
+  { id:'q2',  type:'checkbox', name:'q2', required:1 },   // at least 1 checked
+  { id:'q3',  type:'radio',    name:'q3' },
+  { id:'q4',  type:'radio',    name:'q4' },
+  { id:'q5',  type:'radio',    name:'q5' },
+  { id:'q6',  type:'radio',    name:'q6' },
+  { id:'q7',  type:'match',    ids:['m1','m2','m3'] },     // all 3 selected
+  { id:'q8',  type:'text',     el:'q8' },
+  { id:'q9',  type:'multi',    parts:[{type:'radio',name:'q9pick'},{type:'text',el:'q9'}] },
+  { id:'q10', type:'multi',    parts:[{type:'radio',name:'q10a'},{type:'radio',name:'q10b'},{type:'text',el:'q10'}] },
+];
+const TOTAL_Q = QUESTION_MAP.length;
+
+function isAnswered(q) {
+  switch(q.type) {
+    case 'radio':
+      return !!document.querySelector(`input[name="${q.name}"]:checked`);
+    case 'checkbox':
+      return document.querySelectorAll(`input[name="${q.name}"]:checked`).length >= q.required;
+    case 'text':
+      return document.getElementById(q.el).value.trim().length > 0;
+    case 'match':
+      return q.ids.every(id => document.getElementById(id).value !== '');
+    case 'multi':
+      return q.parts.every(p => {
+        if (p.type === 'radio')    return !!document.querySelector(`input[name="${p.name}"]:checked`);
+        if (p.type === 'text')     return document.getElementById(p.el).value.trim().length > 0;
+        return false;
+      });
+    default: return false;
+  }
+}
+
+function updateQuestionProgress() {
+  const answered = QUESTION_MAP.filter(isAnswered).length;
+  const pct = Math.round((answered / TOTAL_Q) * 100);
+
+  document.getElementById('qProgressCount').textContent = answered + ' / ' + TOTAL_Q;
+  const fill = document.getElementById('qProgressFill');
+  fill.style.width = pct + '%';
+  fill.classList.toggle('done', answered === TOTAL_Q);
+
+  const btn  = document.getElementById('submitBtn');
+  const hint = document.getElementById('submitHint');
+  const ready = answered === TOTAL_Q;
+  btn.disabled = !ready;
+  if (hint) {
+    hint.textContent = ready
+      ? '✅ All questions answered — ready to submit!'
+      : `Answer all ${TOTAL_Q} questions to submit (${TOTAL_Q - answered} remaining)`;
+    hint.classList.toggle('ready', ready);
+  }
+  // Fade answered questions (anti-cheat)
+  if (typeof updateFade === 'function') updateFade();
+}
+
+function attachProgressListeners() {
+  // Radio + checkbox options
+  document.querySelectorAll('.options input[type="radio"], .options input[type="checkbox"]').forEach(inp => {
+    inp.addEventListener('change', updateQuestionProgress);
+  });
+  // Matching selects
+  ['m1','m2','m3'].forEach(id => {
+    document.getElementById(id).addEventListener('change', updateQuestionProgress);
+  });
+  // Text inputs (sentence fills)
+  ['q8','q9','q10'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateQuestionProgress);
+  });
+}
+
+
+// ═══════════════════════════════════════════
+// ANSWERED FADE — dims each question once answered
+// ═══════════════════════════════════════════
+function updateFade() {
+  QUESTION_MAP.forEach(q => {
+    const el = document.querySelector(`.question[data-q="${q.id}"]`);
+    if (!el) return;
+    if (isAnswered(q)) {
+      // Small delay so student sees their selection before it fades
+      setTimeout(() => el.classList.add('answered-fade'), 800);
+    } else {
+      el.classList.remove('answered-fade');
+    }
+  });
+}
+// ═══════════════════════════════════════════
+// ANTI-CHEAT — IDLE BLUR
+// ═══════════════════════════════════════════
+const IDLE_SECONDS = 10;  // blur after this many seconds of no interaction
+let idleTimer = null;
+let blurActive = false;
+let testSubmitted = false;
+
+function resetIdleTimer() {
+  if (testSubmitted) return;
+  clearTimeout(idleTimer);
+  if (blurActive) return;
+  idleTimer = setTimeout(showBlur, IDLE_SECONDS * 1000);
+}
+
+function showBlur() {
+  if (testSubmitted) return;
+  blurActive = true;
+  document.getElementById('blurOverlay').classList.add('show');
+}
+
+function dismissBlur() {
+  blurActive = false;
+  document.getElementById('blurOverlay').classList.remove('show');
+  resetIdleTimer();
+}
+
+function attachIdleListeners() {
+  ['mousemove','mousedown','keydown','touchstart','scroll','click'].forEach(evt => {
+    document.addEventListener(evt, resetIdleTimer, { passive:true });
+  });
+  resetIdleTimer();
+}
+
+// ═══════════════════════════════════════════
+// ANTI-CHEAT — TAB SWITCH WARNING
+// ═══════════════════════════════════════════
+let tabWarnings = 0;
+const MAX_WARNINGS = 3;
+
+function handleVisibilityChange() {
+  if (testSubmitted) return;
+  if (document.hidden) {
+    tabWarnings++;
+    document.getElementById('warnCount').textContent =
+      'Warning ' + tabWarnings + ' of ' + MAX_WARNINGS;
+    document.getElementById('warnOverlay').classList.add('show');
+    // Also hide content behind the warning
+    showBlur();
+  }
+}
+
+function dismissWarning() {
+  document.getElementById('warnOverlay').classList.remove('show');
+  dismissBlur();
+}
+
+document.addEventListener('visibilitychange', handleVisibilityChange);
+
+// Also catch window blur (Alt+Tab, clicking taskbar etc.)
+window.addEventListener('blur', () => {
+  if (!testSubmitted && !document.hidden) {
+    // Small delay — don't fire on legit focus events like clicking an input
+    setTimeout(() => {
+      if (!document.hasFocus() && !testSubmitted) {
+        tabWarnings++;
+        document.getElementById('warnCount').textContent =
+          'Warning ' + tabWarnings + ' of ' + MAX_WARNINGS;
+        document.getElementById('warnOverlay').classList.add('show');
+        showBlur();
+      }
+    }, 300);
+  }
+});
+
+const QUIZ_KEY    = 'vc-quiz-plant-adaptations';
+const PK_KEY      = 'vc-passkey';
+const WORKER_URL  = 'https://edlo-gemini.smartstandardsix.workers.dev/';
+
+// Check on page load — if already done, show lock screen
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = getSavedResult();
+  if (saved) {
+    showLockScreen(saved);
+    // Hide the progress bar on lock screen
+    const pw = document.getElementById('qProgressWrap');
+    if (pw) pw.style.display = 'none';
+  } else {
+    // Only attach these for active test-takers
+    attachProgressListeners();
+    attachIdleListeners();
+    updateQuestionProgress(); // set initial state
+  }
+});
+
+function getSavedResult() {
+  try { return JSON.parse(localStorage.getItem(QUIZ_KEY)); }
+  catch(e) { return null; }
+}
+function saveResult(data) {
+  localStorage.setItem(QUIZ_KEY, JSON.stringify(data));
+}
+
+function showLockScreen(data) {
+  document.getElementById('testContainer').style.display = 'none';
+  const ls = document.getElementById('lockScreen');
+  ls.classList.add('show');
+
+  // Populate saved scores
+  const pills = [
+    {label:'Section A–C', val: data.sObj + '/21'},
+    {label:'Section D',   val: data.sD + '/9'},
+    {label:'Total',       val: data.sTotal + '/30'},
+    {label:'Percentage',  val: data.sPct + '%'},
+  ];
+  const container = document.getElementById('lockScores');
+  container.innerHTML = '';
+  pills.forEach(p => {
+    const el = document.createElement('div');
+    el.className = 'lock-score-pill';
+    el.innerHTML = `<div class="lsp-label">${p.label}</div><div class="lsp-val">${p.val}</div>`;
+    container.appendChild(el);
+  });
+
+  // Restore data for PDF
+  window._savedData = data;
+}
+
+// ═══════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════
+function getRadio(name) {
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? el.value : null;
+}
+function getChecked(name) {
+  return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(e => e.value);
+}
+function getSavedPasskey() { return localStorage.getItem(PK_KEY) || ''; }
+
+// Teacher reset — opens passkey modal pre-focused for reset code
+function teacherReset() {
+  document.getElementById('passkeyModal').classList.remove('hidden');
+  document.getElementById('passkeyInput').value = '';
+  document.getElementById('passkeyInput').placeholder = '';
+  document.getElementById('passkeyErr').classList.remove('show');
+  setTimeout(() => document.getElementById('passkeyInput').focus(), 100);
+}
+function savePasskey(k)    { localStorage.setItem(PK_KEY, k); }
+function clearPasskey()    { localStorage.removeItem(PK_KEY); }
+
+function showFeedback(id, score, maxScore, msg) {
+  const el = document.getElementById(id);
+  el.innerHTML = `<div class="fb-score">${score}/${maxScore}</div>${msg}`;
+  el.classList.add('show');
+}
+
+// ═══════════════════════════════════════════
+// AUTO GRADING
+// ═══════════════════════════════════════════
+let objScore = 0;
+let aiResults = null;
+
+function runAutoGrade() {
+  let score = 0;
+
+  // Q1
+  const a1 = getRadio('q1');
+  const c1 = a1 === 'b';
+  if (c1) score += 3;
+  document.querySelectorAll('#q1-opts .opt').forEach(o => {
+    const v = o.dataset.val;
+    if (v === 'b') o.classList.add('correct');
+    else if (a1 === v) o.classList.add('wrong');
+    o.classList.add('locked-opt');
+  });
+  showFeedback('q1-fb', c1?3:0, 3, c1 ? 'Correct! An adaptation is a feature that helps a plant survive.' : 'The correct answer is: a feature that helps a plant survive in its environment.');
+
+  // Q2
+  const a2 = getChecked('q2');
+  const correctQ2 = ['structural','behavioural','physiological'];
+  const wrongPicked = a2.includes('emotional');
+  const rightPicked = correctQ2.filter(v => a2.includes(v)).length;
+  const q2pts = !wrongPicked && rightPicked === 3 ? 3 : (!wrongPicked && rightPicked === 2 ? 2 : 0);
+  score += q2pts;
+  document.querySelectorAll('#q2-opts .opt').forEach(o => {
+    const v = o.dataset.val;
+    if (correctQ2.includes(v)) o.classList.add('correct');
+    else if (a2.includes(v)) o.classList.add('wrong');
+    o.classList.add('locked-opt');
+  });
+  showFeedback('q2-fb', q2pts, 3, 'Structural, Behavioural and Physiological are the three types. Emotional is not a type of adaptation.');
+
+  // Q3
+  const a3 = getRadio('q3');
+  const c3 = a3 === 'structural';
+  if (c3) score += 3;
+  document.querySelectorAll('#q3-opts .opt').forEach(o => {
+    const v = o.dataset.val;
+    if (v === 'structural') o.classList.add('correct');
+    else if (a3 === v) o.classList.add('wrong');
+    o.classList.add('locked-opt');
+  });
+  showFeedback('q3-fb', c3?3:0, 3, 'Correct answer: Structural — the cohune palm\'s large leaves are a physical feature of the plant\'s body that help it capture sunlight in the shaded rainforest.');
+
+  // Q4
+  const a4 = getRadio('q4');
+  const c4 = a4 === 'b';
+  if (c4) score += 3;
+  document.querySelectorAll('#q4-opts .opt').forEach(o => {
+    const v = o.dataset.val;
+    if (v === 'b') o.classList.add('correct');
+    else if (a4 === v) o.classList.add('wrong');
+    o.classList.add('locked-opt');
+  });
+  showFeedback('q4-fb', c4?3:0, 3, 'Correct: Environments are different and can be harsh. Plants cannot move, so they need built-in features to survive.');
+
+  // Q5
+  const a5 = getRadio('q5');
+  const c5 = a5 === 'b';
+  if (c5) score += 3;
+  document.querySelectorAll('#q5-opts .opt').forEach(o => {
+    const v = o.dataset.val;
+    if (v === 'b') o.classList.add('correct');
+    else if (a5 === v) o.classList.add('wrong');
+    o.classList.add('locked-opt');
+  });
+  showFeedback('q5-fb', c5?3:0, 3, 'Correct: In the Belize savanna dry season, deep roots reach underground water and a thick stem or bark stores water — just like the bay cedar and other savanna plants.');
+
+  // Q6
+  const a6 = getRadio('q6');
+  const c6 = a6 === 'b';
+  if (c6) score += 3;
+  document.querySelectorAll('#q6-opts .opt').forEach(o => {
+    const v = o.dataset.val;
+    if (v === 'b') o.classList.add('correct');
+    else if (a6 === v) o.classList.add('wrong');
+    o.classList.add('locked-opt');
+  });
+  showFeedback('q6-fb', c6?3:0, 3, 'Correct: Buttress roots keep the mahogany tree anchored in the shallow rainforest soil and spread out wide to absorb water and nutrients from a larger area.');
+
+  // Q7 matching
+  const matchAns = {m1:'structural', m2:'behavioural', m3:'physiological'};
+  let q7pts = 0;
+  for (const [id, correct] of Object.entries(matchAns)) {
+    const sel = document.getElementById(id);
+    if (sel.value === correct) { q7pts++; sel.classList.add('correct'); }
+    else sel.classList.add('wrong');
+    sel.disabled = true;
+  }
+  score += q7pts;
+  showFeedback('q7-fb', q7pts, 3, 'Cohune palm\'s large leaves → Structural | Bay cedar dropping leaves in dry season → Behavioural | Mangrove salt-filtering proteins → Physiological');
+
+  objScore = score;
+  return score;
+}
+
+// ═══════════════════════════════════════════
+// SUBMIT HANDLER
+// ═══════════════════════════════════════════
+async function handleSubmit() {
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+
+  // Remove all question fades so results are fully readable
+  document.querySelectorAll('.question.answered-fade').forEach(el => {
+    el.classList.remove('answered-fade');
+  });
+
+  // Stop anti-cheat timers
+  testSubmitted = true;
+  clearTimeout(idleTimer);
+  dismissBlur();
+  document.getElementById('warnOverlay').classList.remove('show');
+  const hint = document.getElementById('submitHint');
+  if (hint) hint.style.display = 'none';
+  const pw = document.getElementById('qProgressWrap');
+  if (pw) pw.style.display = 'none';
+
+  // Lock all inputs
+  document.getElementById('testContainer').classList.add('test-locked');
+  document.querySelectorAll('.sent-input, .answer-input').forEach(el => el.readOnly = true);
+  document.querySelectorAll('.opt').forEach(el => el.classList.add('locked-opt'));
+
+  const auto = runAutoGrade();
+
+  // Check passkey
+  const pk = getSavedPasskey();
+  if (!pk) {
+    document.getElementById('passkeyModal').classList.remove('hidden');
+    // Show partial results while waiting
+    displayPartialResults(auto, null);
+  } else {
+    displayPartialResults(auto, null);
+    await callAIGrading(pk, auto);
+  }
+}
+
+// Called from modal confirm
+function validatePasskey() {
+  const input = document.getElementById('passkeyInput').value.trim().toUpperCase();
+  if (!input) return;
+
+  // Teacher reset code — clears quiz lock and reloads fresh
+  if (input === 'RESET-QUIZ') {
+    localStorage.removeItem(QUIZ_KEY);
+    clearPasskey();
+    document.getElementById('passkeyModal').classList.add('hidden');
+    location.reload();
+    return;
+  }
+
+  savePasskey(input);
+  document.getElementById('passkeyModal').classList.add('hidden');
+  document.getElementById('passkeyErr').classList.remove('show');
+  callAIGrading(input, objScore);
+}
+document.getElementById('passkeyInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') validatePasskey();
+});
+
+// ═══════════════════════════════════════════
+// API CALL
+// ═══════════════════════════════════════════
+async function callAIGrading(passkey, auto) {
+  document.getElementById('spinnerWrap').classList.add('show');
+
+  const q9pick  = getRadio('q9pick') || 'not answered';
+  const q10a    = getRadio('q10a')   || 'not answered';
+  const q10b    = getRadio('q10b')   || 'not answered';
+
+  const answers = {
+    q8:  document.getElementById('q8').value.trim()  || '(blank)',
+    q9:  `Chose: ${q9pick}. Explanation: ${document.getElementById('q9').value.trim() || '(blank)'}`,
+    q10: `Habitat: ${q10a}. Adaptation: ${q10b}. Explanation: ${document.getElementById('q10').value.trim() || '(blank)'}`,
+  };
+
+  const systemPrompt = `You are a warm, encouraging Science teacher grading a Standard 6 test on Plant Adaptations in Belize for a primary school. Students are around 11–12 years old and live in Belize.
+
+Grade Q8, Q9, and Q10 out of 3 marks each using these rubrics:
+
+Q8 — "A rainforest plant in Belize is adapted to survive because ___" (3 marks)
+  3/3 → Mentions at least TWO of: large leaves to capture sunlight under the canopy, deep/buttress roots for poor soil, thick bark, waxy leaves to retain moisture, grows tall to reach light, adapted to heavy rainfall/flooding
+  2/3 → Mentions ONE relevant rainforest adaptation with some explanation
+  1/3 → Vague but related (e.g. "it has special features" with no specific detail)
+  0/3 → Blank, mentions desert or irrelevant environment, or completely wrong
+
+Q9 — Belize savanna dry season: chose Plant B (small waxy leaves + deep roots) and explained why (3 marks)
+  3/3 → Chose Plant B AND gave a clear reason linked to the dry season (e.g. waxy leaves reduce water loss, deep roots reach underground water during dry season)
+  2/3 → Chose Plant B but explanation is vague or only partially correct
+  1/3 → Chose Plant B but gave no explanation
+  0/3 → Chose Plant A, or blank
+
+Q10 — Red mangrove in Belize: habitat + prop roots + explanation (3 marks)
+  3/3 → Chose coastal/saltwater swamp AND chose prop roots AND explained correctly (e.g. prop roots anchor the tree in soft mud, allow the tree to breathe, protect the coastline)
+  2/3 → Got habitat and adaptation right but explanation is weak or missing
+  1/3 → Got one part right (habitat or adaptation) with partial explanation
+  0/3 → Mostly wrong or blank
+
+FEEDBACK RULES — follow these exactly:
+- If the student scores 3/3: Give genuine, specific praise. Name what they did well. You may reference Belize (e.g. "Just like the real mangroves along the Belize cayes!").
+- If the student scores 1/3 or 2/3:
+    (a) Briefly praise what they got right
+    (b) Clearly state what was MISSING or WEAK — name the specific feature or concept they left out
+    (c) Give a short simple hint of what the full answer should include, using Belize examples where possible (cohune palm, mahogany, bay cedar, red mangrove, savanna)
+- If the student scores 0/3:
+    (a) Be kind and encouraging — do NOT make them feel bad
+    (b) Clearly explain the correct answer using a Belize example they would know
+    (c) End with an encouraging sentence
+- Keep each feedback to 2–4 sentences. Write in simple, warm English.
+- Never use the word "AI" or mention grading systems.
+
+Reply ONLY with valid JSON — no preamble, no markdown, no extra text:
+{"q8":{"score":2,"feedback":"..."},"q9":{"score":3,"feedback":"..."},"q10":{"score":1,"feedback":"..."},"totalAI":6}`;
+
+  const userMessage = `Q8 (3 marks) — Complete: "A rainforest plant in Belize is adapted to survive because ___"
+Student answer: "${answers.q8}"
+
+Q9 (3 marks) — Two plants in the Belize savanna dry season. Student chose Plant B (small waxy leaves + deep roots) as the survivor and explained why.
+Student answer: ${answers.q9}
+
+Q10 (3 marks) — Red mangrove along Belize coast: where it grows, its prop root adaptation, and why that helps.
+Student answer: ${answers.q10}
+
+Return ONLY the JSON object. No other text.`;
+
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        passkey,
+        model: 'gpt-4o-mini',
+        max_tokens: 700,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user',   content: userMessage }
+        ]
+      })
+    });
+
+    if (res.status === 403) {
+      clearPasskey();
+      document.getElementById('passkeyErr').classList.add('show');
+      document.getElementById('passkeyModal').classList.remove('hidden');
+      document.getElementById('spinnerWrap').classList.remove('show');
+      return;
+    }
+
+    const data = await res.json();
+    let text = '';
+    if (data.choices?.[0]) text = data.choices[0].message?.content || '';
+    else if (data.content) text = data.content.map(b => b.text||'').join('');
+
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('No JSON');
+    const result = JSON.parse(jsonMatch[0]);
+
+    aiResults = result;
+    displayFinalResults(auto, result);
+
+  } catch (err) {
+    console.error('Grading error:', err);
+    // Show results without Section D score
+    displayFinalResults(auto, null);
+  } finally {
+    document.getElementById('spinnerWrap').classList.remove('show');
+  }
+}
+
+// ═══════════════════════════════════════════
+// DISPLAY RESULTS
+// ═══════════════════════════════════════════
+function displayPartialResults(auto, ai) {
+  document.getElementById('s-obj').textContent   = auto + '/21';
+  document.getElementById('s-d').textContent     = ai !== null ? ai + '/9' : '…';
+  document.getElementById('s-total').textContent = auto + (ai !== null ? '+'+ai : '') + '/30';
+  updateProgress(auto, 30);
+  document.getElementById('resultsSection').classList.add('show');
+  setTimeout(() => {
+    document.getElementById('resultsSection').scrollIntoView({behavior:'smooth', block:'start'});
+  }, 400);
+}
+
+function displayFinalResults(auto, aiData) {
+  const aiScore = aiData ? aiData.totalAI : 0;
+  const total   = auto + aiScore;
+  const pct     = Math.round((total / 30) * 100);
+
+  document.getElementById('s-obj').textContent   = auto + '/21';
+  document.getElementById('s-d').textContent     = aiScore + '/9';
+  document.getElementById('s-total').textContent = total + '/30';
+  document.getElementById('s-pct').textContent   = pct + '%';
+  updateProgress(total, 30);
+
+  // Show per-question feedback for Section D
+  if (aiData) {
+    ['q8','q9','q10'].forEach((q, i) => {
+      if (!aiData[q]) return;
+      const fb = document.getElementById(q + '-fb');
+      fb.innerHTML = `<div class="fb-score">${aiData[q].score}/3</div>${aiData[q].feedback}`;
+      fb.classList.add('show');
+    });
+  } else {
+    // Fallback message if AI unavailable
+    ['q8','q9','q10'].forEach(q => {
+      const fb = document.getElementById(q + '-fb');
+      fb.innerHTML = '<div class="fb-score">?/3</div>Mr. EdLo will review this answer.';
+      fb.classList.add('show');
+    });
+  }
+
+  // Save to localStorage — locks the quiz
+  const saveData = {
+    name:   document.getElementById('studentName').value || '',
+    date:   document.getElementById('testDate').value,
+    sObj:   auto,
+    sD:     aiScore,
+    sTotal: total,
+    sPct:   pct,
+    perf:   document.getElementById('perfBadge').textContent,
+    ai:     aiData,
+    // Save answers for PDF on revisit
+    answers: {
+      q1:   document.querySelector('input[name="q1"]:checked')?.parentElement?.textContent?.trim() || '',
+      q2:   getChecked('q2').join(', '),
+      q3:   getRadio('q3') || '',
+      q4:   getRadio('q4') || '',
+      q5:   getRadio('q5') || '',
+      q6:   getRadio('q6') || '',
+      q7:   `Leaves→${document.getElementById('m1').value} | Waxy→${document.getElementById('m2').value} | Proteins→${document.getElementById('m3').value}`,
+      q8:   document.getElementById('q8').value,
+      q9:   `${getRadio('q9pick')||''}: ${document.getElementById('q9').value}`,
+      q10:  `Habitat:${getRadio('q10a')||''} Adapt:${getRadio('q10b')||''}: ${document.getElementById('q10').value}`,
+    }
+  };
+  saveResult(saveData);
+  window._savedData = saveData;
+
+  document.getElementById('submitBtn').textContent = '✅ Submitted';
+}
+
+function updateProgress(score, total) {
+  const pct  = Math.round((score / total) * 100);
+  document.getElementById('prog-pct-lbl').textContent = pct + '%';
+  document.getElementById('s-pct').textContent = pct + '%';
+  const fill = document.getElementById('progFill');
+  fill.style.width = pct + '%';
+  fill.style.background = pct >= 80 ? '#69DB7C' : pct >= 50 ? '#FFD43B' : '#FF6B6B';
+
+  const sName = (document.getElementById('studentName').value || 'Standard 6').split(' ')[0];
+  let label = '';
+  if      (pct >= 80) label = '🌟 Excellent — Amazing work, ' + sName + '!';
+  else if (pct >= 70) label = '👍 Good — Well done, ' + sName + '! Keep it up!';
+  else if (pct >= 50) label = '📚 Satisfactory — Keep studying, ' + sName + '! You\'re getting there!';
+  else                label = '💪 Needs Improvement — Don\'t give up, ' + sName + '! Review with Mr. EdLo.';
+  document.getElementById('perfBadge').textContent = label;
+}
+
+// ═══════════════════════════════════════════
+// PDF EXPORT
+// ═══════════════════════════════════════════
+function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({orientation:'p', unit:'mm', format:'a4'});
+
+  // Use saved data if available (lock screen scenario)
+  const d = window._savedData || {};
+  const name   = d.name   || document.getElementById('studentName').value || 'Not entered';
+  const date   = d.date   || document.getElementById('testDate').value;
+  const sObj   = d.sObj   !== undefined ? d.sObj + '/21' : document.getElementById('s-obj').textContent;
+  const sD     = d.sD     !== undefined ? d.sD   + '/9'  : document.getElementById('s-d').textContent;
+  const sTotal = d.sTotal !== undefined ? d.sTotal+'/30' : document.getElementById('s-total').textContent;
+  const sPct   = d.sPct   !== undefined ? d.sPct + '%'   : document.getElementById('s-pct').textContent;
+  const perf   = (d.perf  || document.getElementById('perfBadge').textContent).replace(/[^\x00-\x7F]/g,'').trim();
+  const ai     = d.ai || aiResults;
+  const ans    = d.answers || {};
+
+  const margin = 20, pageW = 210, colW = pageW - margin*2;
+  let y = 0;
+
+  // Header bar
+  doc.setFillColor(32,201,151);
+  doc.rect(0, 0, 210, 8, 'F');
+  y = 18;
+
+  doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(110,110,110);
+  doc.text('Howard Smith Nazarene School  |  Standard 6  |  Belize', pageW/2, y, {align:'center'});
+  y += 7;
+
+  doc.setFont('helvetica','bold'); doc.setFontSize(17); doc.setTextColor(20,20,40);
+  doc.text('Plant Adaptations in Belize — Science Test', pageW/2, y, {align:'center'});
+  y += 5;
+  doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(80,80,100);
+  doc.text("Mr. EdLo's Virtual Classroom  |  Standard 6  |  Belize", pageW/2, y, {align:'center'});
+  y += 9;
+
+  doc.setDrawColor(32,201,151); doc.setLineWidth(0.5);
+  doc.line(margin, y, pageW-margin, y); y += 8;
+
+  // Student info
+  doc.setFillColor(243,255,252); doc.setDrawColor(32,201,151); doc.setLineWidth(0.4);
+  doc.roundedRect(margin, y, colW, 22, 3, 3, 'FD');
+  doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(40,40,60);
+  doc.text('STUDENT:', margin+5, y+8);
+  doc.setFont('helvetica','normal'); doc.text(name, margin+25, y+8);
+  doc.setFont('helvetica','bold'); doc.text('DATE:', margin+5, y+16);
+  doc.setFont('helvetica','normal'); doc.text(date, margin+18, y+16);
+  doc.setFont('helvetica','bold'); doc.text('TEACHER:', pageW/2, y+8);
+  doc.setFont('helvetica','normal'); doc.text('Mr. Edwin Lopez', pageW/2+23, y+8);
+  doc.setFont('helvetica','bold'); doc.text('SCHOOL:', pageW/2, y+16);
+  doc.setFont('helvetica','normal'); doc.text('Howard Smith Nazarene', pageW/2+20, y+16);
+  y += 28;
+
+  // Score boxes
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(32,201,151);
+  doc.text('RESULTS', margin, y); y += 5;
+  const boxes = [
+    {label:'SECTIONS A–C', val:sObj},
+    {label:'SECTION D',    val:sD},
+    {label:'TOTAL SCORE',  val:sTotal, hl:true},
+    {label:'PERCENTAGE',   val:sPct},
+  ];
+  const bw = colW/4 - 2;
+  boxes.forEach((b,i) => {
+    const bx = margin + i*(bw+2.7);
+    doc.setFillColor(b.hl?32:240, b.hl?201:252, b.hl?151:248);
+    doc.setDrawColor(b.hl?20:200, b.hl?180:230, b.hl?100:230);
+    doc.roundedRect(bx, y, bw, 18, 2, 2, 'FD');
+    doc.setFont('helvetica','bold'); doc.setFontSize(6.5);
+    doc.setTextColor(b.hl?10:80, b.hl?70:80, b.hl?10:80);
+    doc.text(b.label, bx+bw/2, y+5, {align:'center'});
+    doc.setFontSize(b.hl?13:11);
+    doc.setTextColor(b.hl?10:40, b.hl?70:40, b.hl?10:60);
+    doc.text(b.val, bx+bw/2, y+14, {align:'center'});
+  });
+  y += 24;
+
+  // Performance
+  doc.setFillColor(245,255,250); doc.setDrawColor(180,235,215);
+  doc.roundedRect(margin, y, colW, 13, 3, 3, 'FD');
+  doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(30,100,70);
+  doc.text('PERFORMANCE: ' + perf, margin+5, y+8);
+  y += 19;
+
+  doc.setDrawColor(200,225,215); doc.setLineWidth(0.3);
+  doc.line(margin, y, pageW-margin, y); y += 7;
+
+  // Answers
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(32,201,151);
+  doc.text('STUDENT ANSWERS', margin, y); y += 5;
+
+  const qRows = [
+    {num:'Q1', q:'Adaptation means:',              a: ans.q1 || document.querySelector('input[name="q1"]:checked')?.parentElement?.textContent?.trim() || '(not answered)'},
+    {num:'Q2', q:'Types of adaptations:',           a: ans.q2 || getChecked('q2').join(', ') || '(not answered)'},
+    {num:'Q3', q:'Cactus adaptation type:',         a: ans.q3 || getRadio('q3') || '(not answered)'},
+    {num:'Q4', q:'Plants need adaptations because:', a: ans.q4 || getRadio('q4') || '(not answered)'},
+    {num:'Q5', q:'Dry place adaptation:',           a: ans.q5 || getRadio('q5') || '(not answered)'},
+    {num:'Q6', q:'Deep roots help a plant to:',     a: ans.q6 || getRadio('q6') || '(not answered)'},
+    {num:'Q7', q:'Matching (cohune / bay cedar / mangrove):',  a: ans.q7 || `Leaves→${document.getElementById('m1').value} | Waxy→${document.getElementById('m2').value} | Proteins→${document.getElementById('m3').value}`},
+    {num:'Q8', q:'"A rainforest plant in Belize is adapted to survive because…"', a: ans.q8 || document.getElementById('q8').value || '(not answered)'},
+    {num:'Q9', q:'Belize savanna — plant choice + reason:',   a: ans.q9 || `${getRadio('q9pick')||'?'}: ${document.getElementById('q9').value||'(not answered)'}` },
+    {num:'Q10',q:'Red mangrove — habitat + adaptation + reason:', a: ans.q10 || `Habitat:${getRadio('q10a')||'?'} Adapt:${getRadio('q10b')||'?'}: ${document.getElementById('q10').value||'(not answered)'}`},
+  ];
+
+  const lh = 4.5;
+  doc.setFontSize(8);
+  qRows.forEach(row => {
+    if (y > 260) { doc.addPage(); y = 20; }
+    doc.setFont('helvetica','bold'); doc.setTextColor(50,50,80);
+    doc.text(row.num + ' — ' + row.q, margin, y); y += lh;
+    doc.setFont('helvetica','normal'); doc.setTextColor(80,80,80);
+    doc.splitTextToSize('  ' + row.a, colW-4).forEach(l => {
+      if (y > 270) { doc.addPage(); y = 20; }
+      doc.text(l, margin, y); y += lh;
+    });
+    y += 2;
+  });
+
+  // Section D feedback
+  if (ai) {
+    if (y > 235) { doc.addPage(); y = 20; }
+    doc.setDrawColor(200,225,215); doc.setLineWidth(0.3);
+    doc.line(margin, y, pageW-margin, y); y += 6;
+    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(80,50,160);
+    doc.text('SECTION D FEEDBACK', margin, y); y += 5;
+    ['q8','q9','q10'].forEach((q,i) => {
+      if (!ai[q]) return;
+      if (y > 265) { doc.addPage(); y = 20; }
+      doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(50,50,80);
+      doc.text(`Q${8+i}  ${ai[q].score}/3`, margin, y); y += 4;
+      doc.setFont('helvetica','normal'); doc.setTextColor(80,80,100);
+      doc.splitTextToSize('  ' + ai[q].feedback, colW-4).forEach(l => {
+        if (y > 270) { doc.addPage(); y = 20; }
+        doc.text(l, margin, y); y += 4;
+      });
+      y += 2;
+    });
+  }
+
+  // Footer
+  const pageCount = doc.getNumberOfPages();
+  for (let p = 1; p <= pageCount; p++) {
+    doc.setPage(p);
+    doc.setFillColor(32,201,151);
+    doc.rect(0, 290, 210, 7, 'F');
+    doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(255,255,255);
+    doc.text('teacherzoled.github.io/Virtual-Classroom  ·  Standard 6 Science Test  ·  Page ' + p + ' of ' + pageCount, pageW/2, 294.5, {align:'center'});
+  }
+
+  const safeName = name.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
+  doc.save('PlantAdaptations_' + safeName + '.pdf');
+}
+</script>
+</body>
+</html>

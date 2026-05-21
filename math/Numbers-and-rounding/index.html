@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 1: Numbers and Rounding</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Lilita+One&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #eef2ff; /* Light indigo background */
+            color: #1a202c;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content-wrapper {
+            flex-grow: 1;
+        }
+        .container {
+            max-width: 90%;
+            margin: 0 auto;
+            padding: 1.5rem 0;
+        }
+        .lesson-section {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            border-left-width: 3px;
+            border-bottom-width: 3px;
+            border-color: transparent;
+        }
+        .lesson-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .section-header {
+            padding: 0.75rem 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .section-content {
+            padding: 1.5rem;
+        }
+        .header-main { background-color: #3b82f6; } /* Blue */
+        .header-objective { background-color: #1d4ed8; } /* Darker Blue */
+        .header-video { background-color: #dc2626; } /* Red */
+        .header-activity { background-color: #f97316; } /* Orange */
+        .header-vocab { background-color: #f59e0b; } /* Amber */
+        .header-quiz { background-color: #8b5cf6; } /* Violet */
+
+        .border-main { border-color: #3b82f6; }
+        .border-objective { border-color: #1d4ed8; }
+        .border-video { border-color: #dc2626; }
+        .border-activity { border-color: #f97316; }
+        .border-vocab { border-color: #f59e0b; }
+        .border-quiz { border-color: #8b5cf6; }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: none;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .btn-primary { background-color: #4f46e5; }
+        .btn-primary:hover { background-color: #4338ca; }
+        .btn-secondary { background-color: #f59e0b; }
+        .btn-secondary:hover { background-color: #d97706; }
+        .btn-challenge { background-color: #db2777; }
+        .btn-challenge:hover { background-color: #be185d; }
+        input[type="text"] {
+            border: 2px solid #cbd5e1;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input:focus {
+            outline: none;
+            border-color: #4f46e5;
+        }
+        .feedback, .challenge-div {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            pointer-events: none;
+        }
+        .feedback.visible, .challenge-div.visible {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+        .feedback-correct { background-color: #d1fae5; color: #047857; }
+        .feedback-incorrect { background-color: #fee2e2; color: #dc2626; }
+        .place-value-chart {
+            display: grid;
+            gap: 0.5rem;
+            text-align: center;
+            margin-top: 1.5rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+        .place-value-chart div {
+            padding: 0.5rem;
+            background-color: #e0f2fe;
+            border-radius: 0.5rem;
+            min-width: 60px;
+        }
+        .place-value-chart .header {
+            font-weight: 700;
+            background-color: #bae6fd;
+        }
+        .prose strong { color: #1e40af; }
+        .prose ul, .prose ol { margin-top: 1em; margin-bottom: 1em; padding-left: 1.5rem; }
+        .prose li { margin-top: 0.5em; margin-bottom: 0.5em; }
+        .prose h2 { color: #1e3a8a; font-size: 1.75rem; margin-top: 0; }
+        .prose h3 { color: #4338ca; font-size: 1.25rem; margin-top: 1.5rem; }
+        .header {
+            background-color: #fef3c7;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            min-height: 80px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .header-left { display: flex; align-items: center; gap: 1rem; }
+        .header-logo { height: 50px; width: auto; border-radius: 0.5rem; }
+        .header-title { color: #f97316; font-size: 2.25rem; font-weight: 700; text-align: center; }
+        .footer {
+            background-color: #ea580c;
+            color: white;
+            padding: 1.25rem 2rem;
+            text-align: center;
+            margin-top: auto;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .footer p {
+            margin: 0;
+            line-height: 1.5;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        @keyframes flashGreen {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            50% { box-shadow: 0 0 15px 5px rgba(16, 185, 129, 0.7); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        @keyframes flashRed {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); border-color: rgba(239, 68, 68, 0.7); }
+            50% { box-shadow: 0 0 15px 5px rgba(239, 68, 68, 0.7); border-color: rgba(239, 68, 68, 0.7); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); border-color: rgba(239, 68, 68, 0); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25%, 75% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+        }
+        .confetti-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; overflow: hidden; z-index: 9999;
+        }
+        .confetti {
+            position: absolute; width: 10px; height: 10px; opacity: 0;
+            animation: confetti-fall 3s forwards;
+        }
+        @keyframes confetti-fall {
+            0% { opacity: 1; transform: translateY(-100vh) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Teacher Ed Logo" class="header-logo">
+            <div class="header-title">Teacher Ed Classroom</div>
+        </div>
+    </header>
+
+    <div class="main-content-wrapper">
+        <div class="container">
+            
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    <span>Introduction to Numbers and Rounding</span>
+                </div>
+            </div>
+
+            <div class="lesson-section border-objective">
+                <div class="section-header header-objective">Lesson Objectives</div>
+                <div class="section-content prose">
+                    <p>This week, we’re going on an exciting adventure into the world of numbers. We'll learn how to understand the "value" of each number, no matter how big or small, and how to "round off" numbers to make them simpler for everyday use. Think of numbers as your tools for understanding the world around you, from counting the fish caught by a fisherman in Caye Caulker to figuring out the change you get at the market in San Ignacio!</p>
+                    <h3>What You Will Learn This Week:</h3>
+                    <ul>
+                        <li>Explain the value of digits in numbers, even tiny ones like 0.001, using a place value chart and connecting it to real life.</li>
+                        <li>Round off decimal numbers up to two significant figures.</li>
+                        <li>Round off large numbers up to three significant figures.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="lesson-section border-vocab">
+                <div class="section-header header-vocab">Learn: The Power of Place Value</div>
+                <div class="section-content prose">
+                    <h2>Where Numbers Live!</h2>
+                    <p>Imagine numbers living in houses on a street. Each house has a special "value" or importance based on its position. This is called <strong>place value</strong>.</p>
+                </div>
+            </div>
+
+            <div class="lesson-section border-video">
+                <div class="section-header header-video">Watch: Place Value</div>
+                <div class="section-content prose">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/Hk_9MEI6V9M" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">Do: Place Value Explorer</div>
+                <div class="section-content activity-box-content">
+                    <p class="mb-4">Type in a number like <strong>8,352</strong> or <strong>2.0175</strong> to see its place value breakdown!</p>
+                    <div class="flex flex-col sm:flex-row gap-4 items-center">
+                        <input type="text" id="placeValueInput" placeholder="e.g., 8,352.197" class="flex-grow">
+                        <button id="placeValueBtn" class="btn btn-primary w-full sm:w-auto">Explore!</button>
+                    </div>
+                    <div id="placeValueChart" class="place-value-chart mt-6"></div>
+                </div>
+            </div>
+
+            <div class="lesson-section border-vocab">
+                <div class="section-header header-vocab">Learn: The "Neighbour Rule"</div>
+                <div class="section-content prose">
+                    <h2>Rounding Up!</h2>
+                    <p>Sometimes, we don't need super-exact numbers. That's where <strong>rounding off</strong> comes in!</p>
+                    <ul>
+                        <li>If the "neighbour" digit is <strong>5 or more</strong> (5, 6, 7, 8, 9), you <strong>round up</strong>.</li>
+                        <li>If the "neighbour" digit is <strong>less than 5</strong> (0, 1, 2, 3, 4), you <strong>keep the digit the same</strong>.</li>
+                    </ul>
+                    <p><strong>Example:</strong> Imagine a product at a local market in San Ignacio costs BZ$12.87. If you only want to deal with whole dollars, you round to the nearest whole number. The "neighbour" is 8, so you round up. The cost becomes <strong>BZ$13</strong>!</p>
+                </div>
+            </div>
+
+            <div class="lesson-section border-video">
+                <div class="section-header header-video">Watch: Basic Rounding</div>
+                <div class="section-content prose">
+                    <div class="video-container">
+                         <iframe src="https://www.youtube.com/embed/fd-E18EqSVk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">Do: Basic Rounding Practice</div>
+                <div class="section-content activity-box-content">
+                    <p class="mb-4">Let's practice the "Neighbour Rule". Get a new problem and test your skills!</p>
+                    <div class="bg-amber-100 p-4 rounded-lg text-center">
+                        <p id="basicRoundingProblem" class="text-xl font-semibold text-amber-800"></p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-4 items-center mt-4">
+                        <input type="text" id="basicRoundingInput" placeholder="Your Answer" class="flex-grow">
+                        <button id="checkBasicRoundingBtn" class="btn btn-primary w-full sm:w-auto">Check</button>
+                        <button id="newBasicRoundingBtn" class="btn btn-secondary w-full sm:w-auto">New</button>
+                    </div>
+                    <div id="challenge-basic-div" class="challenge-div">
+                        <p class="font-semibold text-green-700 mb-2">You're on a roll! Try a harder problem.</p>
+                        <button id="challenge-basic-btn" class="btn btn-challenge">Challenge Mode</button>
+                    </div>
+                    <div id="basicRoundingFeedback" class="feedback"></div>
+                </div>
+            </div>
+
+            <div class="lesson-section border-vocab">
+                <div class="section-header header-vocab">Learn: Significant Figures</div>
+                <div class="section-content prose">
+                     <h2>Rounding with Significant Figures</h2>
+                    <p><strong>Significant figures</strong> are the digits in a number that are important for its precision.</p>
+                    <p><strong>Example:</strong> The population of Belize was estimated to be around <strong>419,199</strong> people. To report this simply, we might round to three significant figures. The first three are 4, 1, and 9. The 'neighbour' is 1, so we keep the 9. The population would be reported as <strong>419,000</strong>.</p>
+                </div>
+            </div>
+
+            <div class="lesson-section border-video">
+                <div class="section-header header-video">Watch: Significant Figures</div>
+                <div class="section-content prose">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/9lKB5WbkyeI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">Do: Significant Figure Rodeo</div>
+                 <div class="section-content activity-box-content">
+                    <p class="mb-4">Now, let's practice rounding with significant figures!</p>
+                    <div class="bg-green-100 p-4 rounded-lg text-center">
+                        <p id="sigFigProblemNumber" class="text-3xl font-bold text-green-800"></p>
+                        <p id="sigFigProblemRule" class="font-semibold text-green-700 mt-1"></p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-4 items-center mt-4">
+                        <input type="text" id="sigFigAnswerInput" placeholder="Your Answer" class="flex-grow">
+                        <button id="checkSigFigBtn" class="btn btn-primary w-full sm:w-auto">Check Answer</button>
+                        <button id="newSigFigProblemBtn" class="btn btn-secondary w-full sm:w-auto">New Number</button>
+                    </div>
+                     <div id="challenge-sigfig-div" class="challenge-div">
+                        <p class="font-semibold text-green-700 mb-2">Amazing! Ready for an expert level problem?</p>
+                        <button id="challenge-sigfig-btn" class="btn btn-challenge">Expert Challenge</button>
+                    </div>
+                    <div id="sigFigFeedback" class="feedback"></div>
+                </div>
+            </div>
+
+            <div class="lesson-section border-quiz">
+                <div class="section-header header-quiz">Quiz: Final Math Challenge!</div>
+                <div class="section-content activity-box-content">
+                    <p>Mr. Alex, a tour guide in San Ignacio, recorded the following weights of some ancient Mayan artefacts he found (in kilograms). Help him by rounding these weights for his report.</p>
+                    <div id="final-challenge" class="space-y-6 mt-6 text-left">
+                        <div>
+                            <label for="q1" class="block font-semibold mb-2">1. Round <strong>47.345 kg</strong> to <strong>two</strong> significant figures.</label>
+                            <input type="text" id="q1" data-answer="47" placeholder="Answer for 47.345 kg" class="quiz-input">
+                            <div id="feedback-q1" class="text-sm mt-1"></div>
+                        </div>
+                        <div>
+                            <label for="q2" class="block font-semibold mb-2">2. Round <strong>1,234.9 kg</strong> to <strong>three</strong> significant figures.</label>
+                            <input type="text" id="q2" data-answer="1230" placeholder="Answer for 1,234.9 kg" class="quiz-input">
+                            <div id="feedback-q2" class="text-sm mt-1"></div>
+                        </div>
+                        <div>
+                            <label for="q3" class="block font-semibold mb-2">3. Round <strong>0.00782 kg</strong> to <strong>two</strong> significant figures.</label>
+                            <input type="text" id="q3" data-answer="0.0078" placeholder="Answer for 0.00782 kg" class="quiz-input">
+                            <div id="feedback-q3" class="text-sm mt-1"></div>
+                        </div>
+                        <div>
+                            <label for="q4" class="block font-semibold mb-2">4. Round <strong>85.67 kg</strong> to <strong>two</strong> significant figures.</label>
+                            <input type="text" id="q4" data-answer="86" placeholder="Answer for 85.67 kg" class="quiz-input">
+                            <div id="feedback-q4" class="text-sm mt-1"></div>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center">
+                        <button id="submitQuizBtn" class="btn btn-primary">Check My Report</button>
+                        <div id="quizResult" class="feedback"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p class="font-semibold">Keep up the great work!</p>
+        <p class="text-xs mt-1">© 2025 Mr. Edwin's Virtual Classroom — All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function formatNumberWithCommas(number) {
+                let parts = number.toString().split(".");
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                return parts.join(".");
+            }
+
+            function createConfetti() {
+                const confettiContainer = document.createElement('div');
+                confettiContainer.classList.add('confetti-container');
+                document.body.appendChild(confettiContainer);
+                for (let i = 0; i < 100; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    confettiContainer.appendChild(confetti);
+                }
+                setTimeout(() => { confettiContainer.remove(); }, 3000);
+            }
+
+            // --- Activity 1: Place Value Explorer ---
+            const placeValueInput = document.getElementById('placeValueInput');
+            const placeValueBtn = document.getElementById('placeValueBtn');
+            const placeValueChart = document.getElementById('placeValueChart');
+            placeValueBtn.addEventListener('click', updatePlaceValue);
+            placeValueInput.addEventListener('keyup', (e) => { if (e.key === 'Enter') updatePlaceValue(); });
+            function updatePlaceValue() {
+                const numStr = placeValueInput.value.trim().replace(/,/g, '');
+                if (numStr === '') { placeValueChart.innerHTML = ''; return; }
+                if (isNaN(parseFloat(numStr))) { placeValueChart.innerHTML = '<p class="text-red-500 col-span-full">Please enter a valid number.</p>'; return; }
+                const [wholePartStr, decimalPartStr] = numStr.split('.');
+                let chartHeaders = [], chartValues = [];
+                const places = [ { name: 'Millions' }, { name: 'Hundred Thousands' }, { name: 'Ten Thousands' }, { name: 'Thousands' }, { name: 'Hundreds' }, { name: 'Tens' }, { name: 'Ones' } ];
+                const decimalPlaces = [ { name: 'Tenths' }, { name: 'Hundredths' }, { name: 'Thousandths' }, { name: 'Ten-Thousandths' }, { name: 'Hundred-Thousandths' }, { name: 'Millionths' } ];
+                if (wholePartStr && wholePartStr.length > 0 && !(wholePartStr.length === 1 && wholePartStr[0] === '0' && decimalPartStr)) {
+                    const len = wholePartStr.length;
+                    if (len > 7) { placeValueChart.innerHTML = '<p class="text-red-500 col-span-full">Number is too large.</p>'; return; }
+                    for (let i = 0; i < len; i++) {
+                        const digit = parseInt(wholePartStr[i], 10);
+                        const placeIndex = places.length - len + i;
+                        if (places[placeIndex]) {
+                            chartHeaders.push(`<div class="header">${places[placeIndex].name}</div>`);
+                            chartValues.push(`<div>${digit}</div>`);
+                        }
+                    }
+                } else {
+                    chartHeaders.push(`<div class="header">Ones</div>`);
+                    chartValues.push(`<div>0</div>`);
+                }
+                if (decimalPartStr !== undefined) {
+                    chartHeaders.push(`<div class="header text-3xl font-bold leading-tight">.</div>`);
+                    chartValues.push(`<div class="text-3xl font-bold leading-tight">.</div>`);
+                }
+                if (decimalPartStr) {
+                    for(let i = 0; i < decimalPartStr.length; i++) {
+                        if(i < decimalPlaces.length) {
+                            const digit = parseInt(decimalPartStr[i], 10);
+                            chartHeaders.push(`<div class="header">${decimalPlaces[i].name}</div>`);
+                            chartValues.push(`<div>${digit}</div>`);
+                        }
+                    }
+                }
+                placeValueChart.style.gridTemplateColumns = `repeat(${chartHeaders.length}, minmax(0, 1fr))`;
+                placeValueChart.innerHTML = chartHeaders.join('') + chartValues.join('');
+            }
+
+            // --- Activity 2: Basic Rounding ---
+            const basicRoundingProblemEl = document.getElementById('basicRoundingProblem');
+            const basicRoundingInput = document.getElementById('basicRoundingInput');
+            const checkBasicRoundingBtn = document.getElementById('checkBasicRoundingBtn');
+            const newBasicRoundingBtn = document.getElementById('newBasicRoundingBtn');
+            const basicRoundingFeedback = document.getElementById('basicRoundingFeedback');
+            const challengeBasicDiv = document.getElementById('challenge-basic-div');
+            const challengeBasicBtn = document.getElementById('challenge-basic-btn');
+            let basicRoundingAnswer = 0, basicRoundingStreak = 0, basicChallengeMode = false;
+            function generateBasicRoundingProblem() {
+                basicRoundingInput.value = '';
+                basicRoundingFeedback.classList.remove('visible');
+                const places = [ { name: 'tenth', value: 0.1, type: 'decimal' }, { name: 'whole number', value: 1, type: 'any' }, { name: 'ten', value: 10, type: 'whole' }, { name: 'hundred', value: 100, type: 'whole' } ];
+                const challengePlaces = [ { name: 'millionth', value: 0.000001, type: 'decimal' }, { name: 'hundred-thousandth', value: 0.000001, type: 'decimal' }, { name: 'ten thousand', value: 10000, type: 'whole' }, { name: 'million', value: 1000000, type: 'whole' } ];
+                const placeSet = basicChallengeMode ? [...places, ...challengePlaces] : places;
+                const place = placeSet[Math.floor(Math.random() * placeSet.length)];
+                let num;
+                if (place.type === 'decimal') {
+                    const precision = (place.value.toString().split('.')[1] || '').length;
+                    num = parseFloat(Math.random().toFixed(precision + 2));
+                } else {
+                    const min = place.value, max = place.value * 50;
+                    num = Math.floor(Math.random() * (max - min + 1)) + min;
+                    if (place.type === 'any') { num += parseFloat(Math.random().toFixed(2)); }
+                }
+                basicRoundingProblemEl.textContent = `Round ${formatNumberWithCommas(num)} to the nearest ${place.name}.`;
+                const roundedValue = Math.round(num / place.value) * place.value;
+                if (place.type === 'decimal' || place.type === 'any') {
+                    const precision = (place.value.toString().split('.')[1] || '').length;
+                    basicRoundingAnswer = parseFloat(roundedValue.toFixed(precision));
+                } else {
+                    basicRoundingAnswer = roundedValue;
+                }
+            }
+            checkBasicRoundingBtn.addEventListener('click', () => {
+                const userAnswer = parseFloat(basicRoundingInput.value.replace(/,/g, ''));
+                basicRoundingFeedback.classList.remove('feedback-correct', 'feedback-incorrect');
+                basicRoundingFeedback.classList.add('visible');
+                basicRoundingInput.style.animation = 'none';
+                void basicRoundingInput.offsetWidth;
+                if (userAnswer === basicRoundingAnswer) {
+                    basicRoundingFeedback.classList.add('feedback-correct');
+                    basicRoundingFeedback.textContent = `Correct! ${formatNumberWithCommas(basicRoundingAnswer)} is right!`;
+                    basicRoundingInput.style.animation = 'flashGreen 0.5s ease-out';
+                    basicRoundingStreak++;
+                    if (basicRoundingStreak >= 3 && !basicChallengeMode) {
+                        challengeBasicDiv.classList.add('visible');
+                    }
+                } else {
+                    basicRoundingFeedback.classList.add('feedback-incorrect');
+                    basicRoundingFeedback.innerHTML = `Not quite. Remember the 'Neighbour Rule'! Is the digit to the right 5 or more? <br> The correct answer is <strong>${formatNumberWithCommas(basicRoundingAnswer)}</strong>.`;
+                    basicRoundingInput.style.animation = 'shake 0.5s ease-out, flashRed 0.5s ease-out';
+                    basicRoundingStreak = 0;
+                    challengeBasicDiv.classList.remove('visible');
+                }
+            });
+            newBasicRoundingBtn.addEventListener('click', generateBasicRoundingProblem);
+            challengeBasicBtn.addEventListener('click', () => {
+                basicChallengeMode = true;
+                challengeBasicDiv.classList.remove('visible');
+                generateBasicRoundingProblem();
+            });
+
+            // --- Activity 3: Significant Figure Rodeo ---
+            const sigFigProblemNumber = document.getElementById('sigFigProblemNumber');
+            const sigFigProblemRule = document.getElementById('sigFigProblemRule');
+            const sigFigAnswerInput = document.getElementById('sigFigAnswerInput');
+            const checkSigFigBtn = document.getElementById('checkSigFigBtn');
+            const newSigFigProblemBtn = document.getElementById('newSigFigProblemBtn');
+            const sigFigFeedback = document.getElementById('sigFigFeedback');
+            const challengeSigFigDiv = document.getElementById('challenge-sigfig-div');
+            const challengeSigFigBtn = document.getElementById('challenge-sigfig-btn');
+            let sigFigCorrectAnswer = '', sigFigStreak = 0, sigFigChallengeMode = false;
+            function generateSigFigProblem() {
+                sigFigAnswerInput.value = '';
+                sigFigFeedback.classList.remove('visible');
+                const isDecimal = Math.random() > 0.4;
+                let sigFigs = Math.random() > 0.5 ? 2 : 3;
+                if (sigFigChallengeMode) { sigFigs = Math.random() > 0.5 ? 4 : 5; }
+                let num;
+                if (isDecimal) {
+                    const leadingZeros = Math.floor(Math.random() * 3);
+                    const randomPart = Math.random().toString().substring(2, 7);
+                    num = parseFloat('0.' + '0'.repeat(leadingZeros) + randomPart);
+                } else {
+                    let maxNum = sigFigChallengeMode ? 9999999 : 999999;
+                    num = Math.floor(Math.random() * (maxNum - 1000 + 1) + 1000);
+                }
+                sigFigProblemNumber.textContent = formatNumberWithCommas(num);
+                sigFigProblemRule.textContent = `Round to ${sigFigs} significant figures.`;
+                sigFigCorrectAnswer = roundToSignificantFigures(num, sigFigs).toString();
+            }
+            function roundToSignificantFigures(num, n) {
+                if (num === 0) return 0;
+                const d = Math.ceil(Math.log10(num < 0 ? -num : num));
+                const power = n - d;
+                const magnitude = Math.pow(10, power);
+                const shifted = Math.round(num * magnitude);
+                const result = shifted / magnitude;
+                if (num.toString().includes('.')) {
+                    let numStr = num.toString(), firstSigFigIndex = -1;
+                    for(let i=0; i<numStr.length; i++){ if(numStr[i] >= '1' && numStr[i] <= '9'){ firstSigFigIndex = i; break; } }
+                    if(firstSigFigIndex !== -1){
+                        let decimalPointIndex = numStr.indexOf('.');
+                        if(decimalPointIndex !== -1 && firstSigFigIndex > decimalPointIndex){
+                            let decimalPlacesToKeep = (firstSigFigIndex - decimalPointIndex - 1) + n;
+                             return parseFloat(result.toFixed(decimalPlacesToKeep));
+                        }
+                    }
+                }
+                return result;
+            }
+            checkSigFigBtn.addEventListener('click', () => {
+                const userAnswer = sigFigAnswerInput.value.trim().replace(/,/g, '');
+                sigFigFeedback.classList.remove('feedback-correct', 'feedback-incorrect');
+                sigFigFeedback.classList.add('visible');
+                sigFigAnswerInput.style.animation = 'none';
+                void sigFigAnswerInput.offsetWidth;
+                if (userAnswer === sigFigCorrectAnswer) {
+                    sigFigFeedback.classList.add('feedback-correct');
+                    sigFigFeedback.textContent = `Correct! Well done!`;
+                    sigFigAnswerInput.style.animation = 'flashGreen 0.5s ease-out';
+                    sigFigStreak++;
+                    if (sigFigStreak >= 3 && !sigFigChallengeMode) {
+                        challengeSigFigDiv.classList.add('visible');
+                    }
+                } else {
+                    sigFigFeedback.classList.add('feedback-incorrect');
+                    sigFigFeedback.innerHTML = `Not quite. Remember to count the significant figures from the first non-zero digit. <br> The correct answer is <strong>${formatNumberWithCommas(sigFigCorrectAnswer)}</strong>.`;
+                    sigFigAnswerInput.style.animation = 'shake 0.5s ease-out, flashRed 0.5s ease-out';
+                    sigFigStreak = 0;
+                    challengeSigFigDiv.classList.remove('visible');
+                }
+            });
+            newSigFigProblemBtn.addEventListener('click', generateSigFigProblem);
+            challengeSigFigBtn.addEventListener('click', () => {
+                sigFigChallengeMode = true;
+                challengeSigFigDiv.classList.remove('visible');
+                generateSigFigProblem();
+            });
+
+            // --- Final Challenge ---
+            const submitQuizBtn = document.getElementById('submitQuizBtn');
+            const quizInputs = document.querySelectorAll('.quiz-input');
+            const quizResult = document.getElementById('quizResult');
+            submitQuizBtn.addEventListener('click', () => {
+                let correctCount = 0;
+                quizInputs.forEach(input => {
+                    const questionId = input.id;
+                    const feedbackEl = document.getElementById(`feedback-${questionId}`);
+                    const userAnswer = input.value.trim().replace(/,/g, '');
+                    const correctAnswer = input.dataset.answer;
+                    input.style.animation = 'none';
+                    void input.offsetWidth;
+                    if (userAnswer === correctAnswer) {
+                        correctCount++;
+                        input.style.borderColor = '#22c55e';
+                        input.style.animation = 'flashGreen 0.5s ease-out';
+                        feedbackEl.textContent = 'Correct!';
+                        feedbackEl.style.color = '#166534';
+                    } else {
+                        input.style.borderColor = '#ef4444';
+                        input.style.animation = 'shake 0.5s ease-out, flashRed 0.5s ease-out';
+                        feedbackEl.textContent = `Incorrect. The correct answer is ${correctAnswer}.`;
+                        feedbackEl.style.color = '#991b1b';
+                    }
+                });
+                quizResult.classList.remove('feedback-correct', 'feedback-incorrect');
+                quizResult.classList.add('visible');
+                if (correctCount === quizInputs.length) {
+                    quizResult.classList.add('feedback-correct');
+                    quizResult.textContent = `Excellent! You got ${correctCount}/${quizInputs.length} correct. You have mastered this lesson!`;
+                    createConfetti();
+                } else {
+                    quizResult.classList.add('feedback-incorrect');
+                    quizResult.textContent = `Good effort! You got ${correctCount}/${quizInputs.length} correct. Please correct the highlighted answers to complete the lesson.`;
+                }
+            });
+
+            // Initial load
+            generateBasicRoundingProblem();
+            generateSigFigProblem();
+            placeValueInput.value = '8,352.45';
+            updatePlaceValue();
+        });
+    </script>
+</body>
+</html>

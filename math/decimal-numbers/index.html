@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place Value with Decimals</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Lilita+One&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #eef2ff; /* Light indigo background */
+            color: #1a202c;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content-wrapper {
+            flex-grow: 1;
+        }
+        .container {
+            max-width: 90%;
+            margin: 0 auto;
+            padding: 1.5rem 0;
+        }
+        .lesson-section {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            border-left-width: 3px;
+            border-bottom-width: 3px;
+            border-color: transparent;
+        }
+        .lesson-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .section-header {
+            padding: 0.75rem 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .section-content {
+            padding: 1.5rem;
+        }
+        .header-main { background-color: #3b82f6; } /* Blue */
+        .header-objective { background-color: #1d4ed8; } /* Darker Blue */
+        .header-video { background-color: #dc2626; } /* Red */
+        .header-activity { background-color: #f97316; } /* Orange */
+        .header-vocab { background-color: #f59e0b; } /* Amber */
+        .header-quiz { background-color: #8b5cf6; } /* Violet */
+
+        .border-main { border-color: #3b82f6; }
+        .border-objective { border-color: #1d4ed8; }
+        .border-video { border-color: #dc2626; }
+        .border-activity { border-color: #f97316; }
+        .border-vocab { border-color: #f59e0b; }
+        .border-quiz { border-color: #8b5cf6; }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: none;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .btn-primary { background-color: #4f46e5; }
+        .btn-primary:hover { background-color: #4338ca; }
+        .btn-secondary { background-color: #f59e0b; }
+        .btn-secondary:hover { background-color: #d97706; }
+        .btn-challenge { background-color: #db2777; }
+        .btn-challenge:hover { background-color: #be185d; }
+        input[type="text"], input[type="number"] {
+            border: 2px solid #cbd5e1;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input:focus {
+            outline: none;
+            border-color: #4f46e5;
+        }
+        .feedback, .challenge-div {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            pointer-events: none;
+        }
+        .feedback.visible, .challenge-div.visible {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+        .feedback-correct { background-color: #d1fae5; color: #047857; }
+        .feedback-incorrect { background-color: #fee2e2; color: #dc2626; }
+
+        /* Styles for new activities */
+        .drop-zone { border: 2px dashed #cbd5e1; padding: 1rem; min-height: 60px; transition: all 0.3s; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; }
+        .drop-zone.over { background-color: #e0f2fe; border-style: solid; }
+        .drop-zone.correct { background-color: #d1fae5; border-color: #047857; }
+        .drop-zone.incorrect { background-color: #fee2e2; border-color: #dc2626; }
+        .draggable { cursor: grab; background-color: #f1f5f9; padding: 0.5rem 1rem; border-radius: 0.5rem; border: 1px solid #94a3b8; user-select: none; touch-action: none; }
+        .draggable:active { cursor: grabbing; }
+        .dragging { opacity: 0.5; }
+
+        .match-container { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .match-item { padding: 1rem; border: 2px solid #cbd5e1; border-radius: 0.5rem; cursor: pointer; transition: all 0.3s; text-align: center; font-size: 1.25rem; font-weight: 600; }
+        .match-item.selected { border-color: #4f46e5; background-color: #eef2ff; transform: scale(1.05); }
+        .match-item.correct { border-color: #16a34a; background-color: #dcfce7; color: #15803d; cursor: not-allowed; opacity: 0.7; }
+        .match-item.incorrect { animation: shake 0.5s; border-color: #dc2626; }
+
+        .prose strong { color: #1e40af; }
+        .prose ul, .prose ol { margin-top: 1em; margin-bottom: 1em; padding-left: 1.5rem; }
+        .prose li { margin-top: 0.5em; margin-bottom: 0.5em; }
+        .prose h2 { color: #1e3a8a; font-size: 1.75rem; margin-top: 0; }
+        .prose h3 { color: #4338ca; font-size: 1.25rem; margin-top: 1.5rem; }
+        .header {
+            background-color: #fef3c7;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            min-height: 80px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .header-left { display: flex; align-items: center; gap: 1rem; }
+        .header-logo { height: 50px; width: auto; border-radius: 0.5rem; }
+        .header-title { color: #f97316; font-size: 2.25rem; font-weight: 700; text-align: center; }
+        .footer {
+            background-color: #ea580c;
+            color: white;
+            padding: 1.25rem 2rem;
+            text-align: center;
+            margin-top: auto;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .footer p {
+            margin: 0;
+            line-height: 1.5;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .video-wrapper {
+            transition: max-width 0.5s ease-in-out;
+            margin: 0 auto;
+        }
+        .video-wrapper.collapsed {
+            max-width: 50%;
+        }
+        .video-wrapper.expanded {
+            max-width: 100%;
+        }
+        @keyframes flashGreen {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            50% { box-shadow: 0 0 15px 5px rgba(16, 185, 129, 0.7); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        @keyframes flashRed {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); border-color: rgba(239, 68, 68, 0.7); }
+            50% { box-shadow: 0 0 15px 5px rgba(239, 68, 68, 0.7); border-color: rgba(239, 68, 68, 0.7); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); border-color: rgba(239, 68, 68, 0); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25%, 75% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+        }
+        .confetti-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; overflow: hidden; z-index: 9999;
+        }
+        .confetti {
+            position: absolute; width: 10px; height: 10px; opacity: 0;
+            animation: confetti-fall 3s forwards;
+        }
+        @keyframes confetti-fall {
+            0% { opacity: 1; transform: translateY(-100vh) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Teacher Ed Logo" class="header-logo">
+            <div class="header-title">Teacher Ed Classroom</div>
+        </div>
+    </header>
+
+    <div class="main-content-wrapper">
+        <div class="container">
+            
+            <!-- Updated Section: Introduction -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    <span>Place Value: Decimal Numbers smaller than 0.001</span>
+                </div>
+                <div class="section-content prose">
+                    <p>Decimals are another way of showing fractions whose denominators are powers of ten. They help us describe parts of a whole in daily life — like money, measurements, and time.</p>
+                </div>
+            </div>
+
+            <!-- Updated Section: Objectives -->
+            <div class="lesson-section border-objective">
+                <div class="section-header header-objective">Lesson Objectives</div>
+                <div class="section-content prose">
+                    <h3>What You Will Learn This Week:</h3>
+                    <ul>
+                        <li>Illustrate and interpret the value of digits in decimals up to hundredths using a place value chart.</li>
+                        <li>Create real-life scenarios using decimal numbers up to hundredths.</li>
+                        <li>Explain and present the value of digits in decimal numbers up to hundredths using models or a place value chart.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- New Section: Learn -->
+            <div class="lesson-section border-vocab">
+                <div class="section-header header-vocab">Learn: All About Decimals</div>
+                <div class="section-content prose">
+					<h3>Decimal Notation</h3>
+                    <p>A decimal is a way of writing parts of a whole when the whole is a power of ten.</p>
+                    <p>For example: <strong>3.245</strong> → 3 ones, 2 tenths, 4 hundredths, 5 thousandths.</p>
+					<h3>Decimals and Fractions</h3>
+                    <p>Fractions and decimals are two names for the same value, like <strong>1/2 = 0.5</strong>.</p>
+                    <p>Decimals are used in money, measurements, and everyday problem solving.</p>
+					<h3>Decimals in the Real World: Belize's Barrier Reef</h3>
+                    <p>Even tiny decimals that are smaller than 0.001 have important jobs, especially in science! Scientists in Belize use these precise numbers to protect our natural treasures, like the Belize Barrier Reef.</p>
+                    <p>For example, when testing the water quality, a marine biologist might find that a certain pollutant measures only <strong>0.002</strong> grams per liter. That's two-thousandths of a gram! This tiny measurement, which is smaller than one cent of a dollar, can tell them if the water is safe for the coral and fish.</p>
+                    <p>In the number 0.002, the '2' is in the <strong>thousandths</strong> place. Understanding this helps scientists make critical decisions to keep our beautiful reef healthy for generations to come.</p>
+                </div>
+            </div>
+
+            <!-- New Section: Watch -->
+            <div class="lesson-section border-video">
+                <div class="section-header header-video">Watch: Place Value with Decimals</div>
+                <div class="section-content prose">
+                    <div class="video-wrapper collapsed">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/wtrrr15mbvQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button class="btn btn-secondary expand-video-btn">Expand Video</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- New Section: Watch -->
+            <div class="lesson-section border-video">
+                <div class="section-header header-video">Watch: Fractions and Decimals</div>
+                <div class="section-content prose">
+                    <div class="video-wrapper collapsed">
+                        <div class="video-container">
+                             <iframe src="https://www.youtube.com/embed/Mst8iZjIpFE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button class="btn btn-secondary expand-video-btn">Expand Video</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Activity 1: Place Value Chart Explorer -->
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">Do: Place Value Chart Explorer</div>
+                <div class="section-content activity-box-content">
+                    <p class="mb-4">Drag the digits of the number below into their correct place value columns.</p>
+                    <div class="bg-amber-100 p-4 rounded-lg text-center mb-4">
+                        <p class="text-lg">Your number is:</p>
+                        <p id="dnd-number" class="text-3xl font-bold text-amber-800"></p>
+                    </div>
+                    <div id="dnd-digit-source" class="flex justify-center gap-2 mb-6 p-2 bg-slate-100 rounded-lg min-h-[60px]">
+                        <!-- Draggable digits will be generated here -->
+                    </div>
+                    <div id="dnd-chart" class="grid grid-cols-4 gap-2 text-center">
+                        <!-- Drop zones will be generated here -->
+                    </div>
+                    <div class="flex gap-4 items-center mt-6">
+                        <button id="dnd-check-btn" class="btn btn-primary w-full sm:w-auto">Check Answer</button>
+                        <button id="dnd-new-btn" class="btn btn-secondary w-full sm:w-auto">New Number</button>
+                    </div>
+                    <div id="dnd-feedback" class="feedback mt-4"></div>
+                </div>
+            </div>
+
+            <!-- New Activity 2: Fractions to Decimals Match -->
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">Do: Fractions to Decimals Match</div>
+                <div class="section-content activity-box-content">
+                    <p class="mb-4">Match the fractions to their equivalent decimals. Click one from each column to make a pair.</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-semibold">Score: <span id="match-score">0</span></h3>
+                        <button id="match-reset-btn" class="btn btn-secondary">Reset</button>
+                    </div>
+                    <div id="match-game-container" class="match-container">
+                        <div id="match-col-1" class="flex flex-col gap-4"></div>
+                        <div id="match-col-2" class="flex flex-col gap-4"></div>
+                    </div>
+                    <div id="match-feedback" class="feedback mt-4"></div>
+                </div>
+            </div>
+
+            <!-- New Section: Learn about smaller decimals -->
+            <div class="lesson-section border-vocab">
+                <div class="section-header header-vocab">Learn: Going Smaller! Beyond Thousandths</div>
+                <div class="section-content prose">
+                    <p>While thousandths are tiny, sometimes scientists and engineers need to be even more precise! We can have decimal places that are even smaller.</p>
+                    <ul>
+                        <li>After thousandths comes <strong>ten-thousandths</strong> (0.0001).</li>
+                        <li>After that is <strong>hundred-thousandths</strong> (0.00001).</li>
+                    </ul>
+                    <p>Imagine a single grain of sand from the Belize Barrier Reef. A scientist might measure a mineral in that grain and find it weighs <strong>0.00012</strong> grams. That's 1 ten-thousandth and 2 hundred-thousandths of a gram! These ultra-small numbers are critical in fields like chemistry and medicine.</p>
+                </div>
+            </div>
+
+            <!-- New Activity 3: Belizean Science Scenarios -->
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">Do: Belizean Science Scenarios</div>
+                <div class="section-content activity-box-content">
+                    <p class="mb-4">Read the real-life science scenario from Belize and answer the question to show you understand these tiny decimals!</p>
+                    <div id="scenario-container" class="bg-indigo-100 p-6 rounded-lg text-left mb-4 prose">
+                        <!-- Scenario will be loaded here -->
+                    </div>
+                    <div class="flex gap-4 items-center mt-6">
+                        <button id="scenario-check-btn" class="btn btn-primary w-full sm:w-auto">Check Answer</button>
+                        <button id="scenario-new-btn" class="btn btn-secondary w-full sm:w-auto">New Scenario</button>
+                    </div>
+                    <div id="scenario-feedback" class="feedback mt-4"></div>
+                </div>
+            </div>
+
+            <!-- Updated Section: Quiz -->
+            <div class="lesson-section border-quiz">
+                <div class="section-header header-quiz">Quiz: Final Math Challenge!</div>
+                <div class="section-content activity-box-content">
+                    <p>Test your knowledge on decimals and place value.</p>
+                    <div id="final-challenge" class="space-y-6 mt-6 text-left">
+                        <div>
+                            <label for="q1" class="block font-semibold mb-2">1. Round <strong>3.276</strong> to the nearest tenth.</label>
+                            <input type="number" id="q1" data-answer="3.3" placeholder="Answer for 3.276" class="quiz-input" step="any">
+                            <div id="feedback-q1" class="text-sm mt-1"></div>
+                        </div>
+                        <div>
+                            <label for="q2" class="block font-semibold mb-2">2. What is the value of the digit 5 in <strong>4.305</strong>?</label>
+                            <input type="text" id="q2" data-answer="thousandths" placeholder="e.g., tenths, hundredths" class="quiz-input">
+                            <div id="feedback-q2" class="text-sm mt-1"></div>
+                        </div>
+                        <div>
+                            <label for="q3" class="block font-semibold mb-2">3. Which decimal equals <strong>1/4</strong>?</label>
+                            <input type="number" id="q3" data-answer="0.25" placeholder="Answer for 1/4" class="quiz-input" step="any">
+                            <div id="feedback-q3" class="text-sm mt-1"></div>
+                        </div>
+                        <div>
+                            <label for="q4" class="block font-semibold mb-2">4. Write <strong>7 hundredths</strong> as a decimal.</label>
+                            <input type="number" id="q4" data-answer="0.07" placeholder="Answer for 7 hundredths" class="quiz-input" step="any">
+                            <div id="feedback-q4" class="text-sm mt-1"></div>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center">
+                        <button id="submitQuizBtn" class="btn btn-primary">Check My Report</button>
+                        <div id="quizResult" class="feedback"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p class="font-semibold">Great work this week! Keep practicing with decimals in real-life examples like money and measurements.</p>
+        <p class="text-xs mt-1">© 2025 Mr. Edwin's Virtual Classroom — All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function formatNumberWithCommas(number) {
+                let parts = number.toString().split(".");
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                return parts.join(".");
+            }
+
+            function createConfetti() {
+                const confettiContainer = document.createElement('div');
+                confettiContainer.classList.add('confetti-container');
+                document.body.appendChild(confettiContainer);
+                for (let i = 0; i < 100; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    confettiContainer.appendChild(confetti);
+                }
+                setTimeout(() => { confettiContainer.remove(); }, 3000);
+            }
+
+            // --- Video Expander ---
+            const expandVideoBtns = document.querySelectorAll('.expand-video-btn');
+            expandVideoBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const wrapper = btn.closest('.section-content').querySelector('.video-wrapper');
+                    if (wrapper.classList.contains('collapsed')) {
+                        wrapper.classList.remove('collapsed');
+                        wrapper.classList.add('expanded');
+                        btn.textContent = 'Collapse Video';
+                    } else {
+                        wrapper.classList.remove('expanded');
+                        wrapper.classList.add('collapsed');
+                        btn.textContent = 'Expand Video';
+                    }
+                });
+            });
+
+            // --- Week-specific Logic ---
+
+            // --- Activity 1: Place Value Chart Explorer (Drag and Drop) ---
+            const dndNumberEl = document.getElementById('dnd-number');
+            const dndDigitSourceEl = document.getElementById('dnd-digit-source');
+            const dndChartEl = document.getElementById('dnd-chart');
+            const dndCheckBtn = document.getElementById('dnd-check-btn');
+            const dndNewBtn = document.getElementById('dnd-new-btn');
+            const dndFeedbackEl = document.getElementById('dnd-feedback');
+            let dndCurrentNumberStr;
+            let dndCorrectPlacements = {};
+
+            function generateDndProblem() {
+                dndFeedbackEl.classList.remove('visible');
+                const num = (Math.random() * 9 + 1).toFixed(3); // e.g., 3.457
+                dndCurrentNumberStr = num;
+                dndNumberEl.textContent = num;
+
+                dndCorrectPlacements = {
+                    'ones': num[0],
+                    'tenths': num[2],
+                    'hundredths': num[3],
+                    'thousandths': num[4]
+                };
+
+                const digits = num.split('');
+                dndDigitSourceEl.innerHTML = '';
+                digits.forEach(digit => {
+                    if (digit === '.') return;
+                    const digitEl = document.createElement('div');
+                    digitEl.textContent = digit;
+                    digitEl.className = 'draggable';
+                    digitEl.draggable = true;
+                    digitEl.dataset.digit = digit;
+                    dndDigitSourceEl.appendChild(digitEl);
+                });
+
+                dndChartEl.innerHTML = `
+                    <div><div class="font-bold mb-2">Ones</div><div class="drop-zone" data-place="ones"></div></div>
+                    <div><div class="font-bold mb-2">Tenths</div><div class="drop-zone" data-place="tenths"></div></div>
+                    <div><div class="font-bold mb-2">Hundredths</div><div class="drop-zone" data-place="hundredths"></div></div>
+                    <div><div class="font-bold mb-2">Thousandths</div><div class="drop-zone" data-place="thousandths"></div></div>
+                `;
+                addDnDHandlers();
+            }
+
+            function addDnDHandlers() {
+                const draggables = document.querySelectorAll('.draggable');
+                const dropZones = document.querySelectorAll('.drop-zone');
+                let draggedItem = null;
+
+                draggables.forEach(draggable => {
+                    draggable.addEventListener('dragstart', () => {
+                        draggedItem = draggable;
+                        setTimeout(() => draggable.classList.add('dragging'), 0);
+                    });
+                    draggable.addEventListener('dragend', () => {
+                        draggedItem.classList.remove('dragging');
+                        draggedItem = null;
+                    });
+                });
+
+                dropZones.forEach(zone => {
+                    zone.addEventListener('dragover', e => {
+                        e.preventDefault();
+                        zone.classList.add('over');
+                    });
+                    zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+                    zone.addEventListener('drop', e => {
+                        e.preventDefault();
+                        zone.classList.remove('over');
+                        if (zone.children.length === 0) { // Allow only one item per zone
+                            zone.appendChild(draggedItem);
+                        }
+                    });
+                });
+            }
+
+            dndCheckBtn.addEventListener('click', () => {
+                let allCorrect = true;
+                const dropZones = document.querySelectorAll('.drop-zone');
+                dropZones.forEach(zone => {
+                    zone.classList.remove('correct', 'incorrect');
+                    const place = zone.dataset.place;
+                    const placedDigitEl = zone.querySelector('.draggable');
+                    if (placedDigitEl) {
+                        const placedDigit = placedDigitEl.dataset.digit;
+                        if (placedDigit === dndCorrectPlacements[place]) {
+                            zone.classList.add('correct');
+                        } else {
+                            zone.classList.add('incorrect');
+                            allCorrect = false;
+                        }
+                    } else {
+                        allCorrect = false; // Mark as incorrect if a zone is empty
+                    }
+                });
+
+                dndFeedbackEl.classList.remove('feedback-correct', 'feedback-incorrect');
+                dndFeedbackEl.classList.add('visible');
+                if (allCorrect) {
+                    dndFeedbackEl.classList.add('feedback-correct');
+                    dndFeedbackEl.textContent = 'Perfect! All digits are in the right place!';
+                    createConfetti();
+                } else {
+                    dndFeedbackEl.classList.add('feedback-incorrect');
+                    dndFeedbackEl.textContent = 'Not quite. Check the highlighted boxes and try again.';
+                }
+            });
+            dndNewBtn.addEventListener('click', generateDndProblem);
+
+            // --- Activity 2: Fractions to Decimals Match ---
+            const matchScoreEl = document.getElementById('match-score');
+            const matchResetBtn = document.getElementById('match-reset-btn');
+            const matchCol1 = document.getElementById('match-col-1');
+            const matchCol2 = document.getElementById('match-col-2');
+            const matchFeedbackEl = document.getElementById('match-feedback');
+            let matchPairs = [];
+            let selectedItems = [];
+            let score = 0;
+            let correctMatches = 0;
+
+			function generateMatchPairs() {
+				const pairs = [
+					{ fraction: '1/2', decimal: '0.5' },
+					{ fraction: '1/4', decimal: '0.25' },
+					{ fraction: '3/4', decimal: '0.75' },
+					{ fraction: '1/10', decimal: '0.1' },
+					{ fraction: '3/10', decimal: '0.3' },
+					{ fraction: '1/5', decimal: '0.2' },
+					{ fraction: '2/5', decimal: '0.4' },
+					{ fraction: '3/5', decimal: '0.6' },
+					{ fraction: '4/5', decimal: '0.8' },
+					{ fraction: '1/8', decimal: '0.125' },
+					{ fraction: '3/8', decimal: '0.375' },
+					{ fraction: '5/8', decimal: '0.625' },
+					{ fraction: '7/8', decimal: '0.875' },
+				];
+				const shuffled = pairs.sort(() => 0.5 - Math.random());
+				return shuffled.slice(0, 5).map((pair, index) => ({ ...pair, id: index + 1 }));
+			}
+
+            function shuffle(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            function setupMatchGame() {
+                score = 0;
+                correctMatches = 0;
+                selectedItems = [];
+				matchPairs = generateMatchPairs();
+                matchScoreEl.textContent = score;
+                matchFeedbackEl.classList.remove('visible');
+                matchCol1.innerHTML = '';
+                matchCol2.innerHTML = '';
+
+                const shuffledDecimals = shuffle([...matchPairs]);
+
+                matchPairs.forEach((pair, index) => {
+                    matchCol1.innerHTML += `<div class="match-item" data-id="${pair.id}" data-type="fraction">${pair.fraction}</div>`;
+                    matchCol2.innerHTML += `<div class="match-item" data-id="${shuffledDecimals[index].id}" data-type="decimal">${shuffledDecimals[index].decimal}</div>`;
+                });
+
+                document.querySelectorAll('.match-item').forEach(item => {
+                    item.addEventListener('click', handleMatchItemClick);
+                });
+            }
+
+            function handleMatchItemClick(e) {
+                const clickedItem = e.target;
+                if (clickedItem.classList.contains('correct') || selectedItems.includes(clickedItem)) return;
+
+                // Prevent selecting two from the same column
+                if (selectedItems.length === 1 && selectedItems[0].dataset.type === clickedItem.dataset.type) {
+                    selectedItems[0].classList.remove('selected');
+                    selectedItems = [clickedItem];
+                    clickedItem.classList.add('selected');
+                    return;
+                }
+
+                clickedItem.classList.add('selected');
+                selectedItems.push(clickedItem);
+
+                if (selectedItems.length === 2) {
+                    const [item1, item2] = selectedItems;
+                    if (item1.dataset.id === item2.dataset.id) {
+                        // Correct match
+                        score += 10;
+                        correctMatches++;
+                        matchScoreEl.textContent = score;
+                        item1.classList.remove('selected');
+                        item2.classList.remove('selected');
+                        item1.classList.add('correct');
+                        item2.classList.add('correct');
+                        if (correctMatches === matchPairs.length) {
+                            matchFeedbackEl.classList.add('visible', 'feedback-correct');
+                            matchFeedbackEl.textContent = 'Congratulations! You matched them all!';
+                            createConfetti();
+                        }
+                    } else {
+                        // Incorrect match
+                        score = Math.max(0, score - 5);
+                        matchScoreEl.textContent = score;
+                        item1.classList.add('incorrect');
+                        item2.classList.add('incorrect');
+                        setTimeout(() => {
+                            item1.classList.remove('selected', 'incorrect');
+                            item2.classList.remove('selected', 'incorrect');
+                        }, 800);
+                    }
+                    selectedItems = [];
+                }
+            }
+            matchResetBtn.addEventListener('click', setupMatchGame);
+
+            // --- Final Challenge ---
+            const submitQuizBtn = document.getElementById('submitQuizBtn');
+            const quizInputs = document.querySelectorAll('.quiz-input');
+            const quizResult = document.getElementById('quizResult');
+            submitQuizBtn.addEventListener('click', () => {
+                let correctCount = 0;
+                quizInputs.forEach(input => {
+                    const questionId = input.id;
+                    const feedbackEl = document.getElementById(`feedback-${questionId}`);
+                    const userAnswer = input.value.trim().replace(/,/g, '');
+                    const correctAnswer = input.dataset.answer.toLowerCase();
+                    input.style.animation = 'none';
+                    void input.offsetWidth; // Trigger reflow
+
+					if (input.type === 'number' && isNaN(parseFloat(userAnswer))) {
+						input.style.borderColor = '#ef4444';
+                        input.style.animation = 'shake 0.5s ease-out, flashRed 0.5s ease-out';
+                        feedbackEl.textContent = 'Please enter a valid number.';
+                        feedbackEl.style.color = '#991b1b';
+						return;
+					}
+
+                    if (userAnswer.toLowerCase() === correctAnswer) {
+                        correctCount++;
+                        input.style.borderColor = '#22c55e';
+                        input.style.animation = 'flashGreen 0.5s ease-out';
+                        feedbackEl.textContent = 'Correct!';
+                        feedbackEl.style.color = '#166534';
+                    } else {
+                        input.style.borderColor = '#ef4444';
+                        input.style.animation = 'shake 0.5s ease-out, flashRed 0.5s ease-out';
+                        feedbackEl.textContent = `Incorrect. The correct answer is ${correctAnswer}.`;
+                        feedbackEl.style.color = '#991b1b';
+                    }
+                });
+                quizResult.classList.remove('feedback-correct', 'feedback-incorrect');
+                quizResult.classList.add('visible');
+                if (correctCount === quizInputs.length) {
+                    quizResult.classList.add('feedback-correct');
+                    quizResult.textContent = `Excellent! You got ${correctCount}/${quizInputs.length} correct. You have mastered this lesson!`;
+                    createConfetti();
+                } else {
+                    quizResult.classList.add('feedback-incorrect');
+                    quizResult.textContent = `Good effort! You got ${correctCount}/${quizInputs.length} correct. Please correct the highlighted answers to complete the lesson.`;
+                }
+            });
+
+            // --- Activity 3: Belizean Science Scenarios ---
+            const scenarioContainerEl = document.getElementById('scenario-container');
+            const scenarioCheckBtn = document.getElementById('scenario-check-btn');
+            const scenarioNewBtn = document.getElementById('scenario-new-btn');
+            const scenarioFeedbackEl = document.getElementById('scenario-feedback');
+            let currentScenario;
+
+            const scenarios = [
+                {
+                    title: "Water Purity Test",
+                    text: "A marine biologist is testing water from the reef. She finds a trace of a chemical at <strong>0.00015</strong> grams per liter. This is a very tiny amount!",
+                    question: "The digit '5' is in which place value, representing parts of a gram?",
+                    answer: "hundred-thousandths"
+                },
+                {
+                    title: "Coral Growth Study",
+                    text: "Scientists are tracking the growth of a specific coral. It grows an average of <strong>0.0025</strong> centimeters per day.",
+                    question: "How would you read the '5' in this measurement?",
+                    answer: "five ten-thousandths"
+                },
+                {
+                    title: "Fish Larvae Analysis",
+                    text: "A researcher is measuring newly hatched fish larvae. One tiny larva measures <strong>0.0108</strong> centimeters long.",
+                    question: "What is the value of the digit 8 in this measurement?",
+                    answer: "ten-thousandths"
+                },
+                {
+                    title: "Sediment Analysis",
+                    text: "A geologist is analyzing sand from a deep-sea core. She finds that a rare mineral makes up <strong>0.00009</strong> of the sample's weight.",
+                    question: "The digit '9' in this number is in the ______ place.",
+                    answer: "hundred-thousandths"
+                }
+            ];
+
+            function generateScenario() {
+                scenarioFeedbackEl.classList.remove('visible');
+                currentScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+
+                let inputHtml = `<input type="text" id="scenario-answer" placeholder="Your answer here" class="mt-2 w-full text-center">`;
+
+                scenarioContainerEl.innerHTML = `
+                    <h4 class="font-bold text-xl text-indigo-800">${currentScenario.title}</h4>
+                    <p>${currentScenario.text}</p>
+                    <p class="font-semibold mt-4">${currentScenario.question}</p>
+                    ${inputHtml}
+                `;
+                const answerInput = document.getElementById('scenario-answer');
+                if(answerInput) {
+                    answerInput.style.borderColor = '#cbd5e1';
+                }
+            }
+
+            scenarioCheckBtn.addEventListener('click', () => {
+                const answerInput = document.getElementById('scenario-answer');
+                const userAnswer = answerInput.value.trim().toLowerCase();
+                scenarioFeedbackEl.classList.remove('feedback-correct', 'feedback-incorrect');
+                scenarioFeedbackEl.classList.add('visible');
+
+                if (userAnswer === currentScenario.answer) {
+                    scenarioFeedbackEl.classList.add('feedback-correct');
+                    scenarioFeedbackEl.textContent = 'That\'s correct! Great job applying decimals to a real-world problem!';
+                    answerInput.style.borderColor = '#22c55e';
+                    createConfetti();
+                } else {
+                    scenarioFeedbackEl.classList.add('feedback-incorrect');
+                    scenarioFeedbackEl.textContent = `Not quite. The correct answer is "${currentScenario.answer}". Keep trying!`;
+                    answerInput.style.borderColor = '#ef4444';
+                }
+            });
+
+            scenarioNewBtn.addEventListener('click', generateScenario);
+
+            // Initial load
+            generateDndProblem();
+            setupMatchGame();
+            generateScenario();
+
+        });
+    </script>
+</body>
+</html>

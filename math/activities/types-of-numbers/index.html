@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Number Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { slate: tailwind.colors.slate } } } }</script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Simple transition for the conclusions section */
+        #conclusions {
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        #conclusions.show {
+            max-height: 500px; /* Adjust as needed */
+            opacity: 1;
+        }
+        .tab-btn.active {
+            border-color: #3b82f6; /* blue-500 */
+            color: #3b82f6;
+            font-weight: 600;
+        }
+
+        /* Styles for Integer Number Line Tab */
+        :root {
+            --line-color: #3b82f6; /* blue-500 */
+            --highlight-color: #ef4444; /* red-500 */
+            --text-color: #334155; /* slate-700 */
+        }
+        #number-line-container {
+            position: relative;
+            height: 120px;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        #main-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background-color: var(--line-color);
+            transform: translateY(-50%);
+        }
+        .tick {
+            position: absolute;
+            width: 2px;
+            background-color: var(--line-color);
+            transform: translateX(-50%);
+            top: 50%;
+        }
+        .major-tick { height: 20px; transform: translate(-50%, -50%); }
+        .zero-tick { height: 28px; background-color: #10b981; transform: translate(-50%, -50%); }
+        .label { position: absolute; bottom: 10px; color: var(--text-color); font-weight: 600; transform: translateX(-50%); }
+        .highlight-dot {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: var(--highlight-color);
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transition: left 0.3s ease-in-out;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.7);
+            z-index: 10;
+        }
+        .highlight-label {
+            position: absolute;
+            top: -25px;
+            color: var(--highlight-color);
+            font-weight: bold;
+            font-size: 1.125rem; /* 18px */
+            transform: translateX(-50%);
+            transition: left 0.3s ease-in-out;
+            z-index: 10;
+        }
+
+        /* Styles for Word Problems Tab */
+        #tab-content-word-problems {
+            --wp-primary-color: #00529b; /* Belizean Blue */
+            --wp-secondary-color: #e3111a; /* Red */
+            --wp-correct-color: #28a745;
+            --wp-incorrect-color: #dc3545;
+        }
+        #wp-problem-selector {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        #wp-category-select {
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            color: #333;
+        }
+        .dark #wp-category-select {
+            background-color: #4b5563; /* gray-600 */
+            border-color: #6b7280; /* gray-500 */
+            color: #e5e7eb; /* gray-200 */
+        }
+        #wp-problem-container {
+            border-top: 2px solid var(--wp-primary-color);
+            padding-top: 20px;
+        }
+        #wp-problem-statement {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        #wp-simulation-container {
+            border: 1px dashed #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            min-height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        .dark #wp-simulation-container {
+            background-color: #374151; /* gray-700 */
+            border-color: #4b5563; /* gray-600 */
+        }
+        #wp-answer-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        #wp-user-answer {
+            padding: 10px;
+            font-size: 1em;
+            width: 100px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .dark #wp-user-answer {
+            background-color: #4b5563;
+            border-color: #6b7280;
+        }
+        #wp-check-answer-btn {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: var(--wp-primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        #wp-check-answer-btn:hover { background-color: #003d73; }
+        #wp-next-problem-btn {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #10b981; /* green-500 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        #wp-next-problem-btn:hover { background-color: #059669; } /* green-600 */
+        #wp-feedback { font-size: 1.1em; font-weight: bold; padding: 10px; border-radius: 5px; }
+        #wp-feedback.correct { color: var(--wp-correct-color); background-color: #e9f7ef; }
+        #wp-feedback.incorrect { color: var(--wp-incorrect-color); background-color: #fdecea; }
+        .dark #wp-feedback.correct { background-color: #103c23; }
+        .dark #wp-feedback.incorrect { background-color: #4a1d21; }
+
+        /* Word Problem Simulation Styles */
+        .wp-thermometer { width: 30px; height: 150px; background: #eee; border: 2px solid #555; border-radius: 15px; position: relative; margin: 0 20px; }
+        .wp-thermometer .mercury { background: var(--wp-secondary-color); width: 100%; position: absolute; bottom: 0; border-radius: 15px 15px 15px 0; transition: height 1s ease-in-out; }
+        .wp-sea-level-sim { width: 100%; position: relative; height: 180px; }
+        .wp-sea-level-line { width: 100%; border-top: 2px dashed var(--wp-primary-color); margin: 10px 0; position: relative; }
+        .wp-sea-level-line span { background-color: #fff; padding: 0 5px; position: relative; top: -12px; }
+        .dark .wp-sea-level-line span { background-color: #1f2937; } /* dark:bg-gray-800 */
+        .wp-sea-level-sim .object { position: absolute; left: 50%; transform: translateX(-50%); transition: top 1.5s ease-in-out; font-size: 2em; }
+        .wp-sea-level-sim .labels { position: absolute; width: 40%; text-align: right; font-size: 0.9em; color: #555; }
+        .dark .wp-sea-level-sim .labels { color: #d1d5db; } /* dark:text-gray-300 */
+        .wp-money-sim { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .wp-money-transaction { padding: 5px 10px; border-radius: 5px; width: 150px; text-align: center; color: white; }
+        .wp-money-gain { background-color: var(--wp-correct-color); }
+        .wp-money-loss { background-color: var(--wp-incorrect-color); }
+    </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-900 flex items-start sm:items-center justify-center min-h-screen py-0 sm:py-10">
+    <div class="bg-white dark:bg-slate-800 p-4 sm:p-8 rounded-none sm:rounded-2xl shadow-lg w-full max-w-5xl sm:mx-4 min-h-screen sm:min-h-0">
+        <div class="text-center mb-8">
+            <h1 id="main-title" class="text-3xl sm:text-4xl font-bold text-slate-800 dark:text-white">Visualizing Number Types</h1>
+            <p id="main-subtitle" class="text-slate-600 dark:text-slate-300 mt-2">Select different number types to see how they overlap on the chart.</p>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="border-b border-slate-200 dark:border-slate-700 mb-6">
+            <nav class="flex -mb-px space-x-6 overflow-x-auto pb-2">
+                <button id="tab-types" class="tab-btn active flex-shrink-0 py-4 px-1 border-b-2 text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400">Number Types</button>
+                <button id="tab-integer" class="tab-btn flex-shrink-0 py-4 px-1 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400">Integer Line</button>
+                <button id="tab-prime" class="tab-btn flex-shrink-0 py-4 px-1 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400">Prime & Composite</button>
+                <button id="tab-word-problems" class="tab-btn flex-shrink-0 py-4 px-1 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400">Word Problems</button>
+            </nav>
+        </div>
+
+        <!-- Tab Content -->
+        <div id="tab-content-prime" class="hidden">
+            <div id="prime-legend" class="flex justify-center items-center space-x-6 mb-6">
+                <div class="flex items-center">
+                    <div class="w-5 h-5 rounded-full bg-yellow-300 mr-2 border border-yellow-400"></div>
+                    <span class="text-slate-700 dark:text-slate-200">Prime</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-5 h-5 rounded-full bg-red-300 mr-2 border border-red-400"></div>
+                    <span class="text-slate-700 dark:text-slate-200">Composite</span>
+                </div>
+                 <div class="flex items-center">
+                    <div class="w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-600 mr-2 border border-slate-300 dark:border-slate-500"></div>
+                    <span class="text-slate-700 dark:text-slate-200">Neither</span>
+                </div>
+            </div>
+            <div id="number-chart" class="grid grid-cols-5 sm:grid-cols-10 md:grid-cols-10 gap-3 sm:gap-4">
+                <!-- Numbers will be generated by JavaScript -->
+            </div>
+            <!-- Conclusions Section -->
+            <div id="conclusions-container" class="text-center mt-8">
+                <button id="conclusion-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-200">
+                    What Does It All Mean?
+                </button>
+                <div id="conclusions" class="mt-6 text-left bg-slate-50 dark:bg-slate-700 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-4">Fun Facts & Secrets of Numbers!</h3>
+                    <ul class="space-y-4 text-slate-700 dark:text-slate-200 list-disc list-inside">
+                        <li><strong class="text-blue-500 dark:text-blue-400">The Number 1 is Unique!</strong> It's not prime or composite. It's in a class of its own because it only has one factor: itself!</li>
+                        <li>A <strong class="text-yellow-500 dark:text-yellow-400">Prime Number</strong> is like a lonely number. It only has two factors (friends): 1 and itself. (Examples: 2, 3, 5, 7)</li>
+                        <li>A <strong class="text-red-500 dark:text-red-400">Composite Number</strong> is a social number! It has more than two factors, meaning it has lots of friends. (Examples: 4, 6, 8, 9)</li>
+                        <li><strong class="text-yellow-500 dark:text-yellow-400">2 is the Only Even Prime!</strong> Every other even number can be divided by 2, so they are all composite. That makes the number 2 very special.</li>
+                        <li><strong class="text-slate-800 dark:text-white">Primes are Building Blocks!</strong> Just like LEGOs, you can build any composite number by multiplying prime numbers together. For example, 12 is made from 2 x 2 x 3!</li>
+                        <li><strong class="text-slate-800 dark:text-white">A Prime Number Secret:</strong> Except for 2 and 5, every prime number must end in a 1, 3, 7, or 9. Check the chart and see for yourself!</li>
+                        <li><strong class="text-slate-800 dark:text-white">They Get Rarer:</strong> As you count higher and higher, prime numbers become harder to find. They are like hidden treasures in the world of math!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-content-types">
+            <div id="types-controls" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-6 p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
+                <!-- Checkboxes will be generated here -->
+            </div>
+            <div id="number-types-chart" class="grid grid-cols-5 sm:grid-cols-10 md:grid-cols-10 gap-3 sm:gap-4">
+                <!-- Number types chart will be generated here -->
+            </div>
+        </div>
+
+        <div id="tab-content-integer" class="hidden">
+             <div class="max-w-4xl mx-auto">
+                <p class="text-slate-600 dark:text-slate-300 mb-6">Integers are all the whole numbers (including zero) and their negative counterparts. Use the slider below to select an integer and visualize its position.</p>
+
+                <!-- Display Card -->
+                <div class="flex flex-col items-center justify-center p-4 bg-blue-50 dark:bg-slate-700 border border-blue-200 dark:border-slate-600 rounded-lg mb-8">
+                    <div class="text-2xl font-semibold text-slate-800 dark:text-slate-200">Selected Integer:</div>
+                    <div id="selected-integer-display" class="text-6xl font-extrabold text-red-600 my-2">0</div>
+                </div>
+
+                <!-- Number Line Container -->
+                <div id="number-line-container" class="mb-10">
+                    <!-- Main Line -->
+                    <div id="main-line"></div>
+                    <!-- Ticks and Labels will be generated by JavaScript -->
+                </div>
+
+                <!-- Control Slider -->
+                <div class="flex flex-col items-center">
+                    <input
+                        type="range"
+                        id="integer-slider"
+                        min="-10"
+                        max="10"
+                        value="0"
+                        class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer range-lg transition duration-300 ease-in-out"
+                    />
+                    <div class="mt-4 flex justify-between w-full text-slate-500 dark:text-slate-400 font-medium text-sm">
+                        <span class="p-1 rounded-full bg-red-100 text-red-600">-10 (Negative)</span>
+                        <span class="p-1 rounded-full bg-green-100 text-green-600">0 (Zero)</span>
+                        <span class="p-1 rounded-full bg-blue-100 text-blue-600">10 (Positive)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-content-word-problems" class="hidden">
+            <p class="text-slate-600 dark:text-slate-300 mb-4 text-center">Solve real-life integer adventures from Belize!</p>
+            
+            <div id="wp-score-container" class="flex justify-center items-center gap-4 mb-6 text-slate-700 dark:text-slate-200">
+                <div class="text-lg">
+                    <span class="font-bold">Score:</span>
+                    <span id="wp-score-display" class="font-mono bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded-md">0 / 0</span>
+                </div>
+                <button id="wp-reset-score-btn" class="text-sm bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded-lg shadow-sm transition-colors">Reset</button>
+            </div>
+
+            <section id="wp-problem-selector" class="border-t border-slate-200 dark:border-slate-700 pt-6">
+                <label for="wp-category-select" class="text-slate-700 dark:text-slate-200">Choose a Category:</label>
+                <select id="wp-category-select">
+                    <option value="">--Select a problem type--</option>
+                    <option value="temperature">Temperature Changes</option>
+                    <option value="money">Money (Debt & Credit)</option>
+                    <option value="elevation">Elevation (Sea Level)</option>
+                </select>
+            </section>
+
+            <section id="wp-problem-container" style="display:none;">
+                <div id="wp-problem-statement" class="text-slate-800 dark:text-slate-100"></div>
+                <div id="wp-simulation-container"></div>
+                <div id="wp-answer-section" class="text-slate-700 dark:text-slate-200">
+                    <label for="wp-user-answer">Your Answer:</label>
+                    <input type="number" id="wp-user-answer" placeholder="Enter number">
+                    <button id="wp-check-answer-btn">Check Answer</button>
+                    <button id="wp-next-problem-btn" class="hidden">Next Problem</button>
+                </div>
+                <div id="wp-feedback"></div>
+            </section>
+        </div>
+
+    </div>
+
+    <!-- Factors Modal -->
+    <div id="factors-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 w-full max-w-md text-center">
+            <h2 id="modal-title" class="text-2xl font-bold text-slate-800 dark:text-white mb-4">Factors of X</h2>
+            <div id="modal-factors" class="flex flex-wrap justify-center gap-2 mb-6">
+                <!-- Factors will be injected here -->
+            </div>
+            <button id="close-modal-btn" class="bg-slate-500 hover:bg-slate-600 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- DOM Element Selection ---
+        const tabPrime = document.getElementById('tab-prime');
+        const tabTypes = document.getElementById('tab-types');
+        const tabInteger = document.getElementById('tab-integer');
+        const tabWordProblems = document.getElementById('tab-word-problems');
+        const contentPrime = document.getElementById('tab-content-prime');
+        const contentTypes = document.getElementById('tab-content-types');
+        const contentInteger = document.getElementById('tab-content-integer');
+        const contentWordProblems = document.getElementById('tab-content-word-problems');
+        const mainTitle = document.getElementById('main-title');
+        const mainSubtitle = document.getElementById('main-subtitle');
+
+        const chartContainer = document.getElementById('number-chart');
+        const conclusionsContainer = document.getElementById('conclusions-container');
+        const conclusionBtn = document.getElementById('conclusion-btn');
+        const conclusionsDiv = document.getElementById('conclusions');
+
+        const factorsModal = document.getElementById('factors-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalFactorsContainer = document.getElementById('modal-factors');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+
+        const typesControls = document.getElementById('types-controls');
+        const typesChartContainer = document.getElementById('number-types-chart');
+
+        // --- State ---
+        const numberCells = []; // To hold references to the prime chart cells
+
+        // --- Core Logic Functions ---
+        
+        // Function to check if a number is prime
+        function isPrime(num) {
+            if (num <= 1) return false;
+            if (num <= 3) return true;
+            if (num % 2 === 0 || num % 3 === 0) return false;
+            for (let i = 5; i * i <= num; i = i + 6) {
+                if (num % i === 0 || num % (i + 2) === 0) return false;
+            }
+            return true;
+        }
+
+        // Function to get all factors of a number
+        function getFactors(num) {
+            const factors = [];
+            for (let i = 1; i <= num; i++) {
+                if (num % i === 0) {
+                    factors.push(i);
+                }
+            }
+            return factors;
+        }
+
+        // --- UI Generation & Logic for Prime/Composite Chart ---
+        function generatePrimeChart() {
+            chartContainer.innerHTML = ''; // Clear existing chart
+            for (let i = 1; i <= 100; i++) {
+                const numberCell = document.createElement('button');
+                numberCell.textContent = i;
+                numberCell.setAttribute('aria-label', `Show factors of ${i}`);
+                numberCell.className = 'flex items-center justify-center h-14 w-full text-xl font-semibold rounded-lg transition-transform transform hover:scale-110 duration-200';
+
+                // Set background color based on number type
+                if (i === 1) {
+                    numberCell.classList.add('bg-slate-200', 'dark:bg-slate-600', 'text-slate-700', 'dark:text-slate-200');
+                } else if (isPrime(i)) {
+                    numberCell.classList.add('bg-yellow-300', 'text-yellow-900');
+                } else {
+                    numberCell.classList.add('bg-red-300', 'text-red-900');
+                }
+
+                // Add click event to show factors
+                numberCell.addEventListener('click', () => {
+                    const factors = getFactors(i);
+                    modalTitle.textContent = `Factors of ${i}`;
+                    modalFactorsContainer.innerHTML = ''; // Clear previous factors
+                    
+                    factors.forEach(factor => {
+                        const factorChip = document.createElement('span');
+                        factorChip.textContent = factor;
+                        factorChip.className = 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 font-medium px-3 py-1 rounded-full';
+                        modalFactorsContainer.appendChild(factorChip);
+                    });
+                    
+                    factorsModal.classList.remove('hidden');
+                });
+                
+                chartContainer.appendChild(numberCell);
+            }
+        }
+
+        // --- UI Generation & Logic for Number Types Chart ---
+        const numberTypeCells = [];
+        const numberTypeDefinitions = {
+            integers: { label: 'Integers', check: (n) => Number.isInteger(n), color: 'bg-blue-200 dark:bg-blue-800' },
+            whole: { label: 'Whole Numbers', check: (n) => Number.isInteger(n) && n >= 0, color: 'bg-green-200 dark:bg-green-800' },
+            counting: { label: 'Counting Numbers', check: (n) => Number.isInteger(n) && n > 0, color: 'bg-indigo-200 dark:bg-indigo-800' },
+            even: { label: 'Even Numbers', check: (n) => n % 2 === 0, color: 'bg-purple-200 dark:bg-purple-800' },
+            odd: { label: 'Odd Numbers', check: (n) => n % 2 !== 0, color: 'bg-pink-200 dark:bg-pink-800' },
+            prime: { label: 'Prime Numbers', check: (n) => isPrime(n), color: 'bg-yellow-200 dark:bg-yellow-800' },
+            composite: { label: 'Composite Numbers', check: (n) => n > 1 && !isPrime(n), color: 'bg-red-200 dark:bg-red-800' },
+        };
+
+        function generateNumberTypesChart() {
+            typesChartContainer.innerHTML = '';
+            for (let i = -10; i <= 49; i++) {
+                const cell = document.createElement('div');
+                cell.textContent = i;
+                cell.dataset.number = i;
+                cell.className = 'flex items-center justify-center h-14 w-full text-xl font-semibold rounded-lg transition-colors duration-200 bg-slate-100 dark:bg-slate-600 text-slate-700 dark:text-slate-200';
+                typesChartContainer.appendChild(cell);
+                numberTypeCells.push(cell);
+            }
+        }
+
+        function generateTypeControls() {
+            typesControls.innerHTML = '';
+            Object.keys(numberTypeDefinitions).forEach(key => {
+                const def = numberTypeDefinitions[key];
+                const label = document.createElement('label');
+                label.className = 'flex items-center space-x-2 text-slate-700 dark:text-slate-200 cursor-pointer';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.dataset.type = key;
+                checkbox.className = 'h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500';
+                
+                const span = document.createElement('span');
+                span.textContent = def.label;
+
+                label.appendChild(checkbox);
+                label.appendChild(span);
+                typesControls.appendChild(label);
+            });
+
+            typesControls.addEventListener('change', updateNumberTypeHighlights);
+        }
+
+        function updateNumberTypeHighlights() {
+            const activeTypes = Array.from(typesControls.querySelectorAll('input:checked')).map(cb => cb.dataset.type);
+
+            numberTypeCells.forEach(cell => {
+                const num = parseInt(cell.dataset.number, 10);
+                cell.className = 'flex items-center justify-center h-14 w-full text-xl font-semibold rounded-lg transition-colors duration-200 bg-slate-100 dark:bg-slate-600 text-slate-700 dark:text-slate-200'; // Reset
+
+                if (activeTypes.length > 0) {
+                    const isMatch = activeTypes.every(type => numberTypeDefinitions[type].check(num));
+                    if (isMatch) {
+                        cell.classList.remove('bg-slate-100', 'dark:bg-slate-600');
+                        cell.classList.add('bg-blue-500', 'dark:bg-blue-500', 'text-white');
+                    }
+                }
+            });
+        }
+
+        // --- UI Generation & Logic for Integer Number Line ---
+        const integerLine = {
+            MIN_INT: -10,
+            MAX_INT: 10,
+            isInitialized: false,
+            init() {
+                if (this.isInitialized) return;
+
+                this.LINE_RANGE = this.MAX_INT - this.MIN_INT;
+                this.lineContainer = document.getElementById('number-line-container');
+                this.display = document.getElementById('selected-integer-display');
+                this.slider = document.getElementById('integer-slider');
+
+                this.drawNumberLine();
+                this.addHighlightMarkers();
+
+                this.slider.addEventListener('input', () => this.updateNumberLine(this.slider.value));
+                window.addEventListener('resize', () => this.updateNumberLine(this.slider.value));
+
+                this.updateNumberLine(this.slider.value); // Initial call
+                this.isInitialized = true;
+            },
+            getPositionPercentage(value) {
+                return ((value - this.MIN_INT) / this.LINE_RANGE) * 100;
+            },
+            drawNumberLine() {
+                for (let i = this.MIN_INT; i <= this.MAX_INT; i++) {
+                    const percentage = this.getPositionPercentage(i);
+
+                    const tick = document.createElement('div');
+                    tick.className = 'tick';
+                    tick.style.left = `${percentage}%`;
+                    tick.classList.add(i === 0 ? 'zero-tick' : 'major-tick');
+                    this.lineContainer.appendChild(tick);
+
+                    const label = document.createElement('div');
+                    label.className = 'label text-xs sm:text-base';
+                    label.textContent = i;
+                    label.style.left = `${percentage}%`;
+                    this.lineContainer.appendChild(label);
+                }
+            },
+            addHighlightMarkers() {
+                this.highlightDot = document.createElement('div');
+                this.highlightDot.className = 'highlight-dot';
+
+                this.highlightLabel = document.createElement('div');
+                this.highlightLabel.className = 'highlight-label text-sm sm:text-xl';
+
+                this.lineContainer.appendChild(this.highlightDot);
+                this.lineContainer.appendChild(this.highlightLabel);
+            },
+            updateNumberLine(value) {
+                const integerValue = parseInt(value, 10);
+                const percentage = this.getPositionPercentage(integerValue);
+
+                this.display.textContent = integerValue;
+                this.highlightDot.style.left = `${percentage}%`;
+                this.highlightLabel.textContent = integerValue;
+                this.highlightLabel.style.left = `${percentage}%`;
+
+                // Reset colors
+                this.display.classList.remove('text-red-600', 'text-blue-600', 'text-green-600');
+                
+                if (integerValue === 0) {
+                    this.display.classList.add('text-green-600');
+                    this.highlightDot.style.backgroundColor = '#10b981'; // Green-500
+                    this.highlightLabel.style.color = '#10b981';
+                } else if (integerValue > 0) {
+                    this.display.classList.add('text-blue-600');
+                    this.highlightDot.style.backgroundColor = '#3b82f6'; // Blue-500
+                    this.highlightLabel.style.color = '#3b82f6';
+                } else { // Negative
+                    this.display.classList.add('text-red-600');
+                    this.highlightDot.style.backgroundColor = '#ef4444'; // Red-500
+                    this.highlightLabel.style.color = '#ef4444';
+                }
+            }
+        };
+
+        // --- UI Generation & Logic for Word Problems ---
+        const wordProblems = {
+            isInitialized: false,
+            currentProblem: null,
+            score: 0,
+            totalAttempted: 0,
+            isAnswered: false,
+            problems: {
+                temperature: [
+                    { text: "In the Mountain Pine Ridge, the temperature was 15°C. It dropped by 7°C overnight. What is the new temperature?", answer: 8, simulation: (c) => { c.innerHTML = `<div>Start: 15°C</div><div class="wp-thermometer"><div class="mercury" style="height: 60%;"></div></div><div>End: ?</div>`; setTimeout(() => { c.querySelector('.mercury').style.height = '32%'; }, 500); }},
+                    { text: "It was a hot day in Belize City at 32°C. A cold front arrived and the temperature fell by 5°C. What is the new temperature?", answer: 27, simulation: (c) => { c.innerHTML = `<div>Start: 32°C</div><div class="wp-thermometer"><div class="mercury" style="height: 90%;"></div></div><div>End: ?</div>`; setTimeout(() => { c.querySelector('.mercury').style.height = '77%'; }, 500); }},
+                    { text: "During a cool morning in San Ignacio, the temperature was 18°C. By midday, it had risen by 6°C. What was the temperature at midday?", answer: 24, simulation: (c) => { c.innerHTML = `<div>Start: 18°C</div><div class="wp-thermometer"><div class="mercury" style="height: 51%;"></div></div><div>End: ?</div>`; setTimeout(() => { c.querySelector('.mercury').style.height = '68%'; }, 500); }},
+                    { text: "A large freezer at a grocery store is at -10°C. The door is left open and the temperature rises by 8°C. What is the new temperature?", answer: -2, simulation: (c) => { c.innerHTML = `<div>Start: -10°C</div><div class="wp-thermometer"><div class="mercury" style="height: 10%;"></div></div><div>End: ?</div>`; setTimeout(() => { c.querySelector('.mercury').style.height = '22%'; }, 500); }},
+                    { text: "On a very cold day in the Maya Mountains, the temperature is -2°C. It gets even colder and drops by another 3°C. What is the final temperature?", answer: -5, simulation: (c) => { c.innerHTML = `<div>Start: -2°C</div><div class="wp-thermometer"><div class="mercury" style="height: 22%;"></div></div><div>End: ?</div>`; setTimeout(() => { c.querySelector('.mercury').style.height = '14%'; }, 500); }}
+                ],
+                money: [
+                    { text: "Maria had $50 in her savings. She bought a snack for $5 and a book for $15. How much money does she have left?", answer: 30, simulation: (c) => { c.innerHTML = `<div class="wp-money-sim"><p>Start: $50</p><div class="wp-money-transaction wp-money-loss">Spent $5</div><div class="wp-money-transaction wp-money-loss">Spent $15</div><p><strong>Final: ?</strong></p></div>`; }},
+                    { text: "John sells oranges at the market for $10. He then pays a $3 fee for his stall. How much money did John make in total?", answer: 7, simulation: (c) => { c.innerHTML = `<div class="wp-money-sim"><p>Start: $0</p><div class="wp-money-transaction wp-money-gain">Earned $10</div><div class="wp-money-transaction wp-money-loss">Paid Fee $3</div><p><strong>Final: ?</strong></p></div>`; }},
+                    { text: "You borrow $20 from your friend for a trip to the Caye. You do a job and earn $25. After you pay your friend back, how much money do you have?", answer: 5, simulation: (c) => { c.innerHTML = `<div class="wp-money-sim"><p>Start (Debt): -$20</p><div class="wp-money-transaction wp-money-gain">Earned $25</div><p><strong>Final (After paying debt): ?</strong></p></div>`; }},
+                    { text: "A fisherman sells his catch for $80. He has to spend $15 on fuel for his boat and $5 on ice. How much profit did he make?", answer: 60, simulation: (c) => { c.innerHTML = `<div class="wp-money-sim"><div class="wp-money-transaction wp-money-gain">Sold fish for $80</div><div class="wp-money-transaction wp-money-loss">Fuel: -$15</div><div class="wp-money-transaction wp-money-loss">Ice: -$5</div><p><strong>Profit: ?</strong></p></div>`; }},
+                    { text: "Lisa has $12. She buys a plate of rice and beans for $8, but then finds a $5 bill on the ground. How much money does she have now?", answer: 9, simulation: (c) => { c.innerHTML = `<div class="wp-money-sim"><p>Start: $12</p><div class="wp-money-transaction wp-money-loss">Bought food: -$8</div><div class="wp-money-transaction wp-money-gain">Found: +$5</div><p><strong>Final: ?</strong></p></div>`; }}
+                ],
+                elevation: [
+                    { text: "A diver exploring the Great Blue Hole is 10 meters below sea level. He swims up 4 meters. What is his new position relative to sea level? (Use a negative number).", answer: -6, simulation: (c) => { c.innerHTML = `<div class="wp-sea-level-sim"><div class="labels" style="top: 85px;">Start (-10m)</div><div class="wp-sea-level-line"><span>Sea Level (0m)</span></div><div class="object" style="top: 100px;">🐠</div></div>`; setTimeout(() => { c.querySelector('.object').style.top = '70px'; }, 500); }},
+                    { text: "A Keel-Billed Toucan is sitting on a branch 15 meters high. It dives down 10 meters to catch an insect. How high is the toucan now?", answer: 5, simulation: (c) => { c.innerHTML = `<div class="wp-sea-level-sim"><div class="labels" style="top: 10px;">Start (+15m)</div><div class="wp-sea-level-line"><span>Ground Level (0m)</span></div><div class="object" style="top: 20px;">🦜</div></div>`; setTimeout(() => { c.querySelector('.object').style.top = '70px'; }, 500); }},
+                    { text: "A submarine is 50 meters below sea level. It rises 20 meters. What is its new depth? (Use a negative number).", answer: -30, simulation: (c) => { c.innerHTML = `<div class="wp-sea-level-sim"><div class="labels" style="top: 140px;">Start (-50m)</div><div class="wp-sea-level-line"><span>Sea Level (0m)</span></div><div class="object" style="top: 150px;"> SUB </div></div>`; setTimeout(() => { c.querySelector('.object').style.top = '120px'; }, 500); }},
+                    { text: "You are hiking Victoria Peak. You start at a camp that is 800 meters above sea level and climb up another 324 meters to the summit. What is the summit's elevation?", answer: 1124, simulation: (c) => { c.innerHTML = `<p>Start at 800m. Climb <strong>up</strong> 324m. 800 + 324 = ?</p>`; }},
+                    { text: "A researcher sends a probe into the Great Blue Hole. It starts at sea level (0m) and goes down 45 meters. What is the probe's depth?", answer: -45, simulation: (c) => { c.innerHTML = `<div class="wp-sea-level-sim"><div class="labels" style="top: 40px;">Start (0m)</div><div class="wp-sea-level-line"><span>Sea Level (0m)</span></div><div class="object" style="top: 50px;">🤖</div></div>`; setTimeout(() => { c.querySelector('.object').style.top = '140px'; }, 500); }}
+                ]
+            },
+            init() {
+                if (this.isInitialized) return;
+
+                this.categorySelect = document.getElementById('wp-category-select');
+                this.problemContainer = document.getElementById('wp-problem-container');
+                this.problemStatement = document.getElementById('wp-problem-statement');
+                this.simulationContainer = document.getElementById('wp-simulation-container');
+                this.userAnswer = document.getElementById('wp-user-answer');
+                this.checkAnswerBtn = document.getElementById('wp-check-answer-btn');
+                this.feedback = document.getElementById('wp-feedback');
+                this.nextProblemBtn = document.getElementById('wp-next-problem-btn');
+                this.scoreDisplay = document.getElementById('wp-score-display');
+                this.resetScoreBtn = document.getElementById('wp-reset-score-btn');
+
+                this.nextProblemBtn.addEventListener('click', () => this.loadProblem(this.categorySelect.value));
+                this.categorySelect.addEventListener('change', (e) => this.loadProblem(e.target.value));
+                this.checkAnswerBtn.addEventListener('click', () => this.checkAnswer());
+                this.resetScoreBtn.addEventListener('click', () => this.resetScore());
+
+                this.updateScoreDisplay();
+
+                this.isInitialized = true;
+            },
+            resetScore() {
+                this.score = 0;
+                this.totalAttempted = 0;
+                this.updateScoreDisplay();
+            },
+            updateScoreDisplay() {
+                this.scoreDisplay.textContent = `${this.score} / ${this.totalAttempted}`;
+            },
+            loadProblem(category) {
+                this.isAnswered = false; // Allow answering of the new problem
+                this.nextProblemBtn.classList.add('hidden');
+                if (category && this.problems[category]) {
+                    const problemSet = this.problems[category];
+                    const randomIndex = Math.floor(Math.random() * problemSet.length);
+                    this.currentProblem = problemSet[randomIndex];
+                    this.displayProblem(this.currentProblem);
+                } else {
+                    this.problemContainer.style.display = 'none';
+                    this.currentProblem = null;
+                }
+            },
+            displayProblem(problem) {
+                this.problemStatement.textContent = problem.text;
+                problem.simulation(this.simulationContainer);
+                this.userAnswer.value = '';
+                this.feedback.innerHTML = '';
+                this.feedback.className = '';
+                this.problemContainer.style.display = 'block';
+            },
+            checkAnswer() {
+                if (this.currentProblem === null || this.isAnswered) return;
+
+                const answer = parseInt(this.userAnswer.value, 10);
+                if (isNaN(answer)) {
+                    this.feedback.textContent = "Please enter a number.";
+                    this.feedback.className = 'incorrect';
+                    return;
+                }
+
+                this.isAnswered = true; // Prevent re-scoring the same question
+                this.totalAttempted++;
+
+                if (answer === this.currentProblem.answer) {
+                    this.score++;
+                    this.feedback.textContent = `Correct! The answer is ${this.currentProblem.answer}. Well done!`;
+                    this.feedback.className = 'correct';
+                } else {
+                    this.feedback.textContent = `Not quite. The correct answer was ${this.currentProblem.answer}.`;
+                    this.feedback.className = 'incorrect';
+                }
+
+                this.updateScoreDisplay();
+                this.nextProblemBtn.classList.remove('hidden');
+            }
+        };
+
+
+        // --- Event Listeners ---
+
+        function setActiveTab(activeTab) {
+            const tabs = { prime: tabPrime, types: tabTypes, integer: tabInteger, wordProblems: tabWordProblems };
+            const contents = { prime: contentPrime, types: contentTypes, integer: contentInteger, wordProblems: contentWordProblems };
+            
+            for (const key in tabs) {
+                tabs[key].classList.toggle('active', key === activeTab);
+                contents[key].classList.toggle('hidden', key !== activeTab);
+            }
+        }
+
+        // Tab switching
+        tabTypes.addEventListener('click', () => {
+            setActiveTab('types');
+            mainTitle.textContent = 'Visualizing Number Types';
+            mainSubtitle.textContent = 'Select different number types to see how they overlap on the chart.';
+        });
+
+        tabInteger.addEventListener('click', () => {
+            setActiveTab('integer');
+            mainTitle.textContent = 'The Integer Number Line';
+            mainSubtitle.textContent = 'Use the slider to select an integer and visualize its position.';
+            integerLine.init(); // Initialize the number line on first click
+        });
+
+        tabPrime.addEventListener('click', () => {
+            setActiveTab('prime');
+            mainTitle.textContent = 'Prime & Composite Numbers';
+            mainSubtitle.textContent = 'A visual chart for numbers 1 to 100. Click any number to see its factors!';
+        });
+
+        tabWordProblems.addEventListener('click', () => {
+            setActiveTab('wordProblems');
+            mainTitle.textContent = 'Integer Word Problems';
+            mainSubtitle.textContent = 'Solve real-life integer adventures from Belize!';
+            wordProblems.init(); // Initialize the word problems on first click
+        });
+
+        // Toggle conclusions section
+        conclusionBtn.addEventListener('click', () => {
+            conclusionsDiv.classList.toggle('show');
+        });
+
+        // Modal controls
+        function hideModal() {
+            factorsModal.classList.add('hidden');
+        }
+        
+        closeModalBtn.addEventListener('click', hideModal);
+        factorsModal.addEventListener('click', (event) => {
+            if (event.target === factorsModal) {
+                hideModal();
+            }
+        });
+
+        // --- Initial Page Load ---
+        function initialize() {
+            generatePrimeChart();
+            generateNumberTypesChart();
+            generateTypeControls();
+            // The integer line chart is initialized on tab click to improve initial load performance.
+        }
+
+        initialize();
+    </script>
+</body>
+</html>

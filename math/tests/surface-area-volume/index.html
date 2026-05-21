@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mathematics Test — Surface Area & Volume · Mr. EdLo</title>
+<link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+/* ═══════════════════════════════════════════
+   THEME VARIABLES
+═══════════════════════════════════════════ */
+:root, body.theme-night {
+  --bg:            #0f1b2d;
+  --body-color:    #ffffff;
+  --card-bg:       rgba(255,255,255,0.07);
+  --card-border:   rgba(255,255,255,0.10);
+  --card-border-h: rgba(255,255,255,0.28);
+  --card-shadow:   rgba(0,0,0,0.40);
+  --card-desc:     rgba(255,255,255,0.50);
+  --section-lbl:   rgba(255,255,255,0.35);
+  --subtitle-c:    rgba(255,255,255,0.55);
+  --info-bg:       linear-gradient(135deg,#162038,#0d2a45);
+  --info-border:   rgba(77,171,247,0.20);
+  --header-name:   rgba(255,255,255,0.55);
+  --badge-bg:      rgba(255,255,255,0.08);
+  --badge-border:  rgba(255,255,255,0.12);
+  --badge-color:   rgba(255,255,255,0.45);
+  --top-badge-bg:  #4DABF7;
+  --top-badge-c:   #0f1b2d;
+  --h1-grad:       linear-gradient(135deg,#fff 0%,#4DABF7 50%,#9775FA 100%);
+  --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.45) 100%);
+  --footer-border: rgba(255,255,255,0.07);
+  --footer-name:   rgba(255,255,255,0.40);
+  --footer-tag:    rgba(255,255,255,0.45);
+  --footer-copy:   rgba(255,255,255,0.20);
+  --back-color:    rgba(255,255,255,0.40);
+  --back-hover:    rgba(255,255,255,0.80);
+  --radial1:       #1e3a5f55;
+  --radial2:       #2d1b6955;
+  --star-show:     1;
+  --input-bg:      rgba(255,255,255,0.05);
+  --input-border:  rgba(255,255,255,0.15);
+  --input-focus:   #4DABF7;
+  --input-text:    #ffffff;
+  --opt-bg:        rgba(255,255,255,0.05);
+  --opt-border:    rgba(255,255,255,0.12);
+  --opt-hover:     rgba(77,171,247,0.12);
+  --opt-sel-bg:    rgba(77,171,247,0.15);
+  --opt-sel-b:     #4DABF7;
+  --opt-correct:   rgba(105,219,124,0.18);
+  --opt-correct-b: #69DB7C;
+  --opt-wrong:     rgba(255,107,107,0.18);
+  --opt-wrong-b:   #FF6B6B;
+  --score-bg:      rgba(77,171,247,0.08);
+  --score-border:  rgba(77,171,247,0.25);
+  --progress-bg:   rgba(255,255,255,0.10);
+  --modal-bg:      rgba(0,0,0,0.75);
+  --modal-card:    #1a2639;
+  --modal-border:  rgba(77,171,247,0.30);
+  --lock-bg:       linear-gradient(135deg,#162038,#0f1b2d);
+  --lock-border:   rgba(77,171,247,0.22);
+  --fb-bg:         rgba(77,171,247,0.06);
+  --fb-border:     rgba(77,171,247,0.22);
+  --grad-bar:      linear-gradient(90deg,#4DABF7,#9775FA,#20C997,#F783AC);
+  --formula-bg:    rgba(77,171,247,0.08);
+  --formula-border:rgba(77,171,247,0.25);
+  --adj-bg:        rgba(255,212,59,0.08);
+  --adj-border:    rgba(255,212,59,0.30);
+}
+
+body.theme-sunny {
+  --bg:            #fffbf0;
+  --body-color:    #1a1a3e;
+  --card-bg:       rgba(255,255,255,0.80);
+  --card-border:   rgba(30,80,200,0.15);
+  --card-border-h: rgba(30,80,200,0.35);
+  --card-shadow:   rgba(30,60,150,0.12);
+  --card-desc:     rgba(20,50,150,0.55);
+  --section-lbl:   rgba(30,80,200,0.50);
+  --subtitle-c:    rgba(20,50,150,0.65);
+  --info-bg:       linear-gradient(135deg,#dce8ff,#ccd9ff);
+  --info-border:   rgba(30,80,200,0.20);
+  --header-name:   #0033aa;
+  --badge-bg:      rgba(30,80,200,0.10);
+  --badge-border:  rgba(30,80,200,0.20);
+  --badge-color:   #00228a;
+  --top-badge-bg:  #4DABF7;
+  --top-badge-c:   #fff;
+  --h1-grad:       linear-gradient(135deg,#001a80 0%,#0055cc 50%,#4DABF7 100%);
+  --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(30,80,200,0.08) 100%);
+  --footer-border: rgba(30,80,200,0.15);
+  --footer-name:   rgba(10,40,130,0.50);
+  --footer-tag:    rgba(10,40,130,0.55);
+  --footer-copy:   rgba(10,40,130,0.30);
+  --back-color:    rgba(20,60,180,0.50);
+  --back-hover:    #00228a;
+  --radial1:       rgba(77,171,247,0.18);
+  --radial2:       rgba(151,117,250,0.12);
+  --star-show:     0;
+  --input-bg:      rgba(30,80,200,0.05);
+  --input-border:  rgba(30,80,200,0.20);
+  --input-focus:   #4DABF7;
+  --input-text:    #1a1a3e;
+  --opt-bg:        rgba(30,80,200,0.04);
+  --opt-border:    rgba(30,80,200,0.15);
+  --opt-hover:     rgba(77,171,247,0.10);
+  --opt-sel-bg:    rgba(77,171,247,0.14);
+  --opt-sel-b:     #4DABF7;
+  --opt-correct:   rgba(0,150,80,0.10);
+  --opt-correct-b: #2e7d32;
+  --opt-wrong:     rgba(200,0,0,0.08);
+  --opt-wrong-b:   #c62828;
+  --score-bg:      rgba(30,80,200,0.06);
+  --score-border:  rgba(30,80,200,0.20);
+  --progress-bg:   rgba(30,80,200,0.10);
+  --modal-bg:      rgba(0,0,0,0.50);
+  --modal-card:    #eef4ff;
+  --modal-border:  rgba(30,80,200,0.28);
+  --lock-bg:       linear-gradient(135deg,#dce8ff,#fffbf0);
+  --lock-border:   rgba(30,80,200,0.20);
+  --fb-bg:         rgba(30,80,200,0.05);
+  --fb-border:     rgba(30,80,200,0.18);
+  --grad-bar:      linear-gradient(90deg,#4DABF7,#9775FA,#20C997,#F783AC);
+  --formula-bg:    rgba(30,80,200,0.06);
+  --formula-border:rgba(30,80,200,0.22);
+  --adj-bg:        rgba(255,180,0,0.08);
+  --adj-border:    rgba(200,130,0,0.28);
+}
+
+body.theme-cloudy {
+  --bg:            #e4eaf2;
+  --body-color:    #1a1a3e;
+  --card-bg:       rgba(255,255,255,0.75);
+  --card-border:   rgba(60,80,180,0.18);
+  --card-border-h: rgba(60,80,180,0.38);
+  --card-shadow:   rgba(30,50,150,0.12);
+  --card-desc:     rgba(30,50,150,0.55);
+  --section-lbl:   rgba(60,80,180,0.50);
+  --subtitle-c:    rgba(30,50,150,0.65);
+  --info-bg:       linear-gradient(135deg,#c8d8f0,#b8cae8);
+  --info-border:   rgba(60,80,180,0.22);
+  --header-name:   #1a2e80;
+  --badge-bg:      rgba(60,80,180,0.10);
+  --badge-border:  rgba(60,80,180,0.20);
+  --badge-color:   #1a2e80;
+  --top-badge-bg:  #3b5bdb;
+  --top-badge-c:   #fff;
+  --h1-grad:       linear-gradient(135deg,#0d1a6e 0%,#3b5bdb 50%,#74c0fc 100%);
+  --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(60,80,180,0.10) 100%);
+  --footer-border: rgba(60,80,180,0.18);
+  --footer-name:   rgba(20,40,120,0.50);
+  --footer-tag:    rgba(20,40,120,0.55);
+  --footer-copy:   rgba(20,40,120,0.28);
+  --back-color:    rgba(40,60,170,0.50);
+  --back-hover:    #1a2e80;
+  --radial1:       rgba(100,140,240,0.20);
+  --radial2:       rgba(151,117,250,0.15);
+  --star-show:     0;
+  --input-bg:      rgba(60,80,180,0.06);
+  --input-border:  rgba(60,80,180,0.22);
+  --input-focus:   #3b5bdb;
+  --input-text:    #1a1a3e;
+  --opt-bg:        rgba(60,80,180,0.05);
+  --opt-border:    rgba(60,80,180,0.18);
+  --opt-hover:     rgba(77,171,247,0.10);
+  --opt-sel-bg:    rgba(77,171,247,0.14);
+  --opt-sel-b:     #3b5bdb;
+  --opt-correct:   rgba(0,120,60,0.10);
+  --opt-correct-b: #2e7d32;
+  --opt-wrong:     rgba(180,0,0,0.08);
+  --opt-wrong-b:   #dc2626;
+  --score-bg:      rgba(60,80,180,0.06);
+  --score-border:  rgba(60,80,180,0.22);
+  --progress-bg:   rgba(60,80,180,0.12);
+  --modal-bg:      rgba(0,0,0,0.45);
+  --modal-card:    #eaeffb;
+  --modal-border:  rgba(60,80,180,0.28);
+  --lock-bg:       linear-gradient(135deg,#c8d8f0,#e4eaf2);
+  --lock-border:   rgba(60,80,180,0.22);
+  --fb-bg:         rgba(60,80,180,0.05);
+  --fb-border:     rgba(60,80,180,0.18);
+  --grad-bar:      linear-gradient(90deg,#3b5bdb,#4DABF7,#9775FA,#F783AC);
+  --formula-bg:    rgba(60,80,180,0.06);
+  --formula-border:rgba(60,80,180,0.22);
+  --adj-bg:        rgba(255,200,0,0.08);
+  --adj-border:    rgba(180,130,0,0.28);
+}
+
+body.theme-nature {
+  --bg:            #f0f5e8;
+  --body-color:    #1a2e10;
+  --card-bg:       rgba(255,255,255,0.72);
+  --card-border:   rgba(60,120,40,0.18);
+  --card-border-h: rgba(40,100,20,0.38);
+  --card-shadow:   rgba(20,80,10,0.15);
+  --card-desc:     rgba(30,70,15,0.55);
+  --section-lbl:   rgba(40,90,20,0.50);
+  --subtitle-c:    rgba(30,75,15,0.65);
+  --info-bg:       linear-gradient(135deg,#d8efc8,#c8e0b8);
+  --info-border:   rgba(50,120,20,0.22);
+  --header-name:   #276221;
+  --badge-bg:      rgba(60,140,30,0.12);
+  --badge-border:  rgba(50,120,20,0.22);
+  --badge-color:   #1b4d0f;
+  --top-badge-bg:  #4CAF50;
+  --top-badge-c:   #fff;
+  --h1-grad:       linear-gradient(135deg,#1b4d0f 0%,#2e7d1a 50%,#4DABF7 100%);
+  --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(60,140,30,0.10) 100%);
+  --footer-border: rgba(50,120,20,0.18);
+  --footer-name:   rgba(20,70,10,0.50);
+  --footer-tag:    rgba(20,70,10,0.55);
+  --footer-copy:   rgba(20,70,10,0.28);
+  --back-color:    rgba(39,98,33,0.55);
+  --back-hover:    #276221;
+  --radial1:       rgba(100,200,60,0.20);
+  --radial2:       rgba(77,171,247,0.12);
+  --star-show:     0;
+  --input-bg:      rgba(60,140,30,0.06);
+  --input-border:  rgba(50,120,20,0.20);
+  --input-focus:   #4CAF50;
+  --input-text:    #1a2e10;
+  --opt-bg:        rgba(60,140,30,0.05);
+  --opt-border:    rgba(50,120,20,0.18);
+  --opt-hover:     rgba(76,175,80,0.10);
+  --opt-sel-bg:    rgba(76,175,80,0.15);
+  --opt-sel-b:     #4CAF50;
+  --opt-correct:   rgba(46,125,50,0.12);
+  --opt-correct-b: #2e7d32;
+  --opt-wrong:     rgba(180,0,0,0.08);
+  --opt-wrong-b:   #b71c1c;
+  --score-bg:      rgba(60,140,30,0.07);
+  --score-border:  rgba(50,120,20,0.22);
+  --progress-bg:   rgba(60,140,30,0.12);
+  --modal-bg:      rgba(0,0,0,0.45);
+  --modal-card:    #eef6ec;
+  --modal-border:  rgba(60,140,30,0.28);
+  --lock-bg:       linear-gradient(135deg,#c8e8c0,#eef6ec);
+  --lock-border:   rgba(60,140,30,0.22);
+  --fb-bg:         rgba(46,125,50,0.06);
+  --fb-border:     rgba(40,110,20,0.20);
+  --grad-bar:      linear-gradient(90deg,#4CAF50,#4DABF7,#9775FA,#F783AC);
+  --formula-bg:    rgba(46,125,50,0.06);
+  --formula-border:rgba(40,110,20,0.22);
+  --adj-bg:        rgba(255,200,0,0.08);
+  --adj-border:    rgba(160,120,0,0.26);
+}
+
+/* ═══════════════════════════════════════════
+   BASE
+═══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--body-color); min-height:100vh; overflow-x:hidden; display:flex; flex-direction:column; transition:background .5s, color .5s; }
+body::before { content:''; position:fixed; inset:0; background: radial-gradient(ellipse at 15% 20%, var(--radial1) 0%, transparent 60%), radial-gradient(ellipse at 85% 80%, var(--radial2) 0%, transparent 60%); pointer-events:none; z-index:0; transition:background .5s; }
+.stars { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; opacity:var(--star-show,1); transition:opacity .5s; }
+.star  { position:absolute; border-radius:50%; background:#fff; animation:twinkle var(--d,3s) ease-in-out infinite var(--delay,0s); opacity:0; }
+@keyframes twinkle { 0%,100%{opacity:0;transform:scale(1)} 50%{opacity:var(--op,.6);transform:scale(1.3)} }
+
+.theme-bar { position:relative; z-index:10; display:flex; justify-content:center; gap:.5rem; padding:.55rem 1rem; background:rgba(0,0,0,.18); border-bottom:1px solid rgba(0,0,0,.10); flex-wrap:wrap; }
+body.theme-sunny .theme-bar, body.theme-cloudy .theme-bar, body.theme-nature .theme-bar { background:rgba(0,0,0,.06); }
+.theme-btn { font-family:'Fredoka One',cursive; font-size:.85rem; padding:5px 18px; border-radius:999px; border:2px solid transparent; background:rgba(128,128,128,.12); color:var(--body-color); cursor:pointer; opacity:.6; transition:all .22s; }
+.theme-btn:hover { opacity:.9; transform:translateY(-1px); }
+.theme-btn.active { opacity:1; background:var(--top-badge-bg); color:var(--top-badge-c); box-shadow:0 3px 12px rgba(0,0,0,.20); }
+
+.wrapper { position:relative; z-index:1; max-width:1400px; margin:0 auto; padding:0 max(1rem,4vw) 2rem; flex:1; }
+.site-header { display:flex; align-items:center; justify-content:space-between; padding:1.2rem 0 0; animation:fadeDown .6s ease both; }
+.site-header-logo { display:flex; align-items:center; gap:.75rem; text-decoration:none; }
+.site-header-logo img { height:48px; width:auto; border-radius:10px; box-shadow:0 4px 14px rgba(0,0,0,.25); }
+.site-header-logo span { font-family:'Fredoka One',cursive; font-size:1.15rem; color:var(--header-name); letter-spacing:.02em; transition:color .4s; }
+.header-badge { display:inline-block; background:var(--badge-bg); border:1px solid var(--badge-border); color:var(--badge-color); font-size:.72rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:5px 14px; border-radius:999px; }
+.back-link { display:inline-flex; align-items:center; gap:6px; margin-top:1.4rem; font-size:.8rem; font-weight:700; color:var(--back-color); text-decoration:none; transition:color .2s; letter-spacing:.04em; }
+.back-link:hover { color:var(--back-hover); }
+header { text-align:center; padding:2rem 1rem 1.5rem; animation:fadeDown .7s ease both; }
+@keyframes fadeDown { from{opacity:0;transform:translateY(-22px)} to{opacity:1;transform:translateY(0)} }
+.badge { display:inline-block; background:var(--top-badge-bg); color:var(--top-badge-c); font-size:.75rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:4px 14px; border-radius:999px; margin-bottom:1rem; animation:pop .5s cubic-bezier(.36,1.5,.6,1) .3s both; }
+@keyframes pop { from{opacity:0;transform:scale(.7)} to{opacity:1;transform:scale(1)} }
+h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.9rem,5vw,3.1rem); line-height:1.1; margin-bottom:.4rem; background:var(--h1-grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.subtitle { font-size:.95rem; font-weight:600; color:var(--subtitle-c); transition:color .4s; }
+.section-label { font-size:.72rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--section-lbl); margin:2rem 0 .8rem; }
+
+/* ═══════════════════════════════════════════
+   LOCK SCREEN
+═══════════════════════════════════════════ */
+.lock-screen { max-width:600px; margin:2rem auto; background:var(--lock-bg); border:1.5px solid var(--lock-border); border-radius:24px; padding:3rem 2.5rem; text-align:center; animation:riseUp .5s ease both; display:none; }
+.lock-screen.show { display:block; }
+@keyframes riseUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.lock-icon { font-size:4rem; margin-bottom:1rem; }
+.lock-title { font-family:'Fredoka One',cursive; font-size:1.8rem; margin-bottom:.6rem; color:var(--body-color); }
+.lock-msg { font-size:.9rem; font-weight:600; color:var(--card-desc); line-height:1.65; margin-bottom:1.5rem; }
+.lock-scores { display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; margin-bottom:1.5rem; }
+.lock-score-pill { background:var(--card-bg); border:1.5px solid var(--card-border); border-radius:14px; padding:.9rem 1.4rem; text-align:center; min-width:100px; }
+.lock-score-pill .lsp-label { font-size:.62rem; font-weight:800; letter-spacing:.10em; text-transform:uppercase; color:var(--section-lbl); margin-bottom:4px; }
+.lock-score-pill .lsp-val   { font-family:'Fredoka One',cursive; font-size:1.7rem; color:var(--top-badge-bg); }
+
+/* ═══════════════════════════════════════════
+   TEST LAYOUT
+═══════════════════════════════════════════ */
+.test-container { max-width:900px; margin:0 auto; }
+.student-card { background:var(--info-bg); border:1.5px solid var(--info-border); border-radius:18px; padding:1.3rem 1.5rem; display:flex; align-items:center; gap:1rem; margin-bottom:1.4rem; animation:fadeDown .6s ease .1s both; transition:background .4s, border-color .4s; }
+.student-card .sc-icon { font-size:2rem; flex-shrink:0; }
+.sc-fields { flex:1; display:flex; gap:.9rem; flex-wrap:wrap; }
+.sc-group { display:flex; flex-direction:column; gap:4px; flex:1; min-width:150px; }
+.sc-group label { font-size:.65rem; font-weight:800; letter-spacing:.10em; text-transform:uppercase; color:var(--section-lbl); }
+.sc-group input { background:var(--input-bg); border:1.5px solid var(--input-border); border-radius:10px; padding:8px 12px; font-family:'Nunito',sans-serif; font-size:.85rem; font-weight:700; color:var(--input-text); outline:none; transition:border-color .2s, background .4s; }
+.sc-group input:focus { border-color:var(--input-focus); }
+
+/* ═══════════════════════════════════════════
+   SECTION CARDS
+═══════════════════════════════════════════ */
+.sec-card { background:var(--card-bg); border:1.5px solid var(--card-border); border-radius:20px; padding:1.6rem 1.8rem; margin-bottom:1.4rem; transition:border-color .3s, background .4s; box-shadow:0 4px 20px var(--card-shadow); animation:riseUp .5s ease both; }
+.sec-card:hover { border-color:var(--card-border-h); }
+.sec-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.2rem; padding-bottom:.8rem; border-bottom:1px solid var(--card-border); }
+.sec-title { font-family:'Fredoka One',cursive; font-size:1.15rem; }
+.sec-pts { font-size:.75rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--top-badge-bg); background:var(--score-bg); border:1px solid var(--score-border); padding:4px 12px; border-radius:999px; }
+
+/* ═══════════════════════════════════════════
+   QUESTIONS
+═══════════════════════════════════════════ */
+.question { border-radius:12px; padding:4px 6px; margin-left:-6px; margin-right:-6px; margin-bottom:1.4rem; transition:opacity .5s ease, filter .5s ease; }
+.question.answered-fade { opacity:0.18; filter:blur(2.5px); transition:opacity .5s ease, filter .5s ease; }
+.question.answered-fade:hover { opacity:1; filter:blur(0px); transition:opacity .2s ease, filter .2s ease; }
+.test-locked .question.answered-fade, .test-locked .question.answered-fade:hover { opacity:1 !important; filter:blur(0px) !important; }
+.q-label { display:flex; align-items:flex-start; gap:.6rem; margin-bottom:.85rem; font-size:.95rem; font-weight:700; line-height:1.5; }
+.q-num { font-family:'Fredoka One',cursive; font-size:1.05rem; color:var(--top-badge-bg); flex-shrink:0; min-width:1.5rem; }
+.q-pts { margin-left:auto; font-size:.7rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--section-lbl); white-space:nowrap; padding-left:.8rem; padding-top:3px; }
+
+/* Formula display box */
+.formula-box { background:var(--formula-bg); border:1px solid var(--formula-border); border-left:3px solid var(--top-badge-bg); border-radius:0 10px 10px 0; padding:.6rem 1rem; margin-bottom:.9rem; font-size:.88rem; font-weight:700; font-family:'Nunito',sans-serif; color:var(--body-color); }
+.formula-label { font-size:.62rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--section-lbl); margin-bottom:3px; }
+
+/* Options */
+.options { display:flex; flex-direction:column; gap:.55rem; }
+.opt { display:flex; align-items:center; gap:.75rem; background:var(--opt-bg); border:1.5px solid var(--opt-border); border-radius:12px; padding:.65rem 1rem; cursor:pointer; transition:all .18s; font-size:.9rem; font-weight:600; position:relative; }
+.opt:hover:not(.locked-opt) { background:var(--opt-hover); border-color:var(--opt-sel-b); }
+.opt.selected { background:var(--opt-sel-bg); border-color:var(--opt-sel-b); }
+.opt.correct  { background:var(--opt-correct); border-color:var(--opt-correct-b); }
+.opt.wrong    { background:var(--opt-wrong);   border-color:var(--opt-wrong-b); }
+.opt input    { width:16px; height:16px; flex-shrink:0; accent-color:var(--input-focus); }
+.opt-tick     { margin-left:auto; font-size:.85rem; min-width:1.2rem; text-align:right; }
+.locked-opt   { cursor:default; }
+
+/* Textarea working space */
+.working-area { width:100%; background:var(--input-bg); border:1.5px solid var(--input-border); border-radius:12px; padding:.75rem 1rem; font-family:'Nunito',sans-serif; font-size:.88rem; font-weight:600; color:var(--input-text); resize:vertical; min-height:110px; outline:none; transition:border-color .2s, background .4s; margin-bottom:.6rem; }
+.working-area:focus { border-color:var(--input-focus); }
+.answer-input { width:100%; background:var(--input-bg); border:1.5px solid var(--input-border); border-radius:12px; padding:.65rem 1rem; font-family:'Nunito',sans-serif; font-size:.9rem; font-weight:700; color:var(--input-text); outline:none; transition:border-color .2s, background .4s; }
+.answer-input:focus { border-color:var(--input-focus); }
+.field-label { font-size:.65rem; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--section-lbl); margin-bottom:.35rem; display:block; margin-top:.5rem; }
+
+/* Feedback box */
+.fb-box { display:none; margin-top:.9rem; background:var(--fb-bg); border:1px solid var(--fb-border); border-radius:12px; padding:.85rem 1.1rem; font-size:.88rem; font-weight:600; color:var(--body-color); line-height:1.6; }
+.fb-box.show { display:block; }
+.fb-score { font-family:'Fredoka One',cursive; font-size:1.35rem; color:var(--top-badge-bg); margin-bottom:.35rem; }
+
+/* Teacher adjustment panel */
+.adj-panel { margin-top:.8rem; background:var(--adj-bg); border:1px dashed var(--adj-border); border-radius:12px; padding:.75rem 1rem; display:none; }
+.adj-panel.show { display:block; }
+.adj-label { font-size:.62rem; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--section-lbl); margin-bottom:.5rem; }
+.adj-btns  { display:flex; gap:.4rem; flex-wrap:wrap; align-items:center; }
+.adj-btn   { font-family:'Fredoka One',cursive; font-size:.88rem; padding:4px 14px; border-radius:999px; border:1.5px solid var(--card-border); background:var(--card-bg); color:var(--body-color); cursor:pointer; transition:all .15s; }
+.adj-btn:hover { border-color:var(--top-badge-bg); }
+.adj-btn.sel   { background:var(--top-badge-bg); color:var(--top-badge-c); border-color:var(--top-badge-bg); }
+
+/* ═══════════════════════════════════════════
+   PROGRESS, SUBMIT, RESULTS
+═══════════════════════════════════════════ */
+.q-progress-wrap { position:sticky; top:0; z-index:50; background:var(--bg); border-bottom:1px solid var(--card-border); padding:.7rem 0 .6rem; margin-bottom:1.2rem; transition:background .5s; }
+.q-progress-inner { max-width:900px; margin:0 auto; padding:0 max(1rem,4vw); }
+.q-progress-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:.45rem; gap:.5rem; }
+.q-progress-label { font-size:.7rem; font-weight:800; letter-spacing:.10em; text-transform:uppercase; color:var(--section-lbl); }
+.q-progress-count { font-family:'Fredoka One',cursive; font-size:.95rem; color:var(--body-color); }
+.q-progress-bg   { height:8px; background:var(--progress-bg); border-radius:999px; overflow:hidden; }
+.q-progress-fill { height:100%; border-radius:999px; background:var(--top-badge-bg); transition:width .4s cubic-bezier(.22,.68,0,1.2), background .4s; }
+.q-progress-fill.done { background:#69DB7C; }
+.submit-hint { font-size:.72rem; font-weight:700; color:var(--section-lbl); margin-top:.5rem; text-align:center; transition:color .3s; }
+.submit-hint.ready { color:var(--top-badge-bg); }
+
+.submit-area { text-align:center; padding:2rem 0; }
+.btn-primary   { font-family:'Fredoka One',cursive; font-size:1rem; padding:.7rem 2rem; border-radius:14px; border:none; background:var(--top-badge-bg); color:var(--top-badge-c); cursor:pointer; transition:all .2s; box-shadow:0 4px 16px rgba(0,0,0,.20); }
+.btn-primary:hover:not(:disabled) { transform:translateY(-2px); filter:brightness(1.08); box-shadow:0 6px 20px rgba(0,0,0,.25); }
+.btn-primary:disabled { opacity:.4; cursor:not-allowed; }
+.btn-secondary { font-family:'Fredoka One',cursive; font-size:.9rem; padding:.6rem 1.5rem; border-radius:12px; border:1.5px solid var(--card-border); background:var(--card-bg); color:var(--body-color); cursor:pointer; transition:all .2s; }
+.btn-secondary:hover { border-color:var(--card-border-h); }
+.spinner-wrap { display:none; justify-content:center; margin-top:1rem; }
+.spinner-wrap.show { display:flex; }
+.spinner { width:36px; height:36px; border:3px solid var(--progress-bg); border-top-color:var(--top-badge-bg); border-radius:50%; animation:spin .7s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+.results-section { display:none; background:var(--card-bg); border:1.5px solid var(--score-border); border-radius:20px; padding:2rem; margin-top:1.5rem; animation:riseUp .5s ease both; }
+.results-section.show { display:block; }
+.res-title { font-family:'Fredoka One',cursive; font-size:1.6rem; text-align:center; margin-bottom:1.2rem; }
+.score-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:.9rem; margin-bottom:1.2rem; }
+.score-box { background:var(--score-bg); border:1.5px solid var(--score-border); border-radius:14px; padding:1rem; text-align:center; }
+.score-box.hl { background:var(--top-badge-bg); border-color:var(--top-badge-bg); }
+.score-box.hl .sb-label, .score-box.hl .sb-sub { color:rgba(0,0,0,.55); }
+.score-box.hl .sb-val { color:var(--top-badge-c); }
+.sb-label { font-size:.62rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--section-lbl); margin-bottom:4px; }
+.sb-val   { font-family:'Fredoka One',cursive; font-size:2rem; color:var(--top-badge-bg); }
+.sb-sub   { font-size:.68rem; font-weight:700; color:var(--section-lbl); }
+.prog-wrap { margin:1rem 0; }
+.prog-row  { display:flex; justify-content:space-between; margin-bottom:.4rem; }
+.prog-lbl  { font-size:.72rem; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:var(--section-lbl); }
+.prog-pct  { font-family:'Fredoka One',cursive; font-size:.9rem; color:var(--top-badge-bg); }
+.prog-bg   { height:10px; background:var(--progress-bg); border-radius:999px; overflow:hidden; }
+.prog-fill { height:100%; border-radius:999px; transition:width .8s cubic-bezier(.22,.68,0,1.2), background .4s; }
+.perf-badge { text-align:center; font-size:.95rem; font-weight:800; padding:1rem; background:var(--score-bg); border-radius:12px; margin:.8rem 0; }
+.pdf-row { display:flex; justify-content:center; gap:1rem; margin-top:1.2rem; flex-wrap:wrap; }
+
+/* Teacher toggle */
+.teacher-toggle { text-align:center; margin-top:.8rem; }
+.teacher-toggle button { font-size:.75rem; font-weight:700; padding:5px 16px; border-radius:999px; border:1px solid var(--card-border); background:transparent; color:var(--section-lbl); cursor:pointer; }
+.teacher-toggle button:hover { color:var(--body-color); border-color:var(--card-border-h); }
+
+/* ═══════════════════════════════════════════
+   FRACTION SYMBOLS — large & readable
+═══════════════════════════════════════════ */
+.frac {
+  font-size: 1.25em;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--top-badge-bg);
+  font-family: 'Nunito', sans-serif;
+}
+.msym .frac {
+  font-size: 1.1em;
+}
+
+/* ═══════════════════════════════════════════
+   MATH SYMBOL TOOLBAR
+═══════════════════════════════════════════ */
+.math-toolbar {
+  display:flex; flex-wrap:wrap; gap:5px;
+  margin-bottom:.5rem;
+  padding:.5rem .6rem;
+  background:var(--formula-bg);
+  border:1px solid var(--formula-border);
+  border-radius:10px;
+}
+.math-toolbar-label {
+  width:100%; font-size:.6rem; font-weight:800;
+  letter-spacing:.09em; text-transform:uppercase;
+  color:var(--section-lbl); margin-bottom:3px;
+}
+.msym {
+  font-family:'Nunito',sans-serif;
+  font-size:.88rem; font-weight:700;
+  padding:5px 10px; border-radius:8px;
+  border:1.5px solid var(--card-border);
+  background:var(--card-bg); color:var(--body-color);
+  cursor:pointer; transition:all .14s;
+  line-height:1; min-width:36px; text-align:center;
+}
+.msym:hover { background:var(--opt-sel-bg); border-color:var(--opt-sel-b); transform:translateY(-1px); }
+.msym:active { transform:translateY(0); }
+
+/* ═══════════════════════════════════════════
+   SCAFFOLDING AIDS
+═══════════════════════════════════════════ */
+.scaffold-box {
+  background:var(--formula-bg);
+  border:1px solid var(--formula-border);
+  border-radius:12px;
+  padding:.8rem 1rem;
+  margin-bottom:.9rem;
+}
+.scaffold-title {
+  font-size:.65rem; font-weight:800;
+  letter-spacing:.09em; text-transform:uppercase;
+  color:var(--top-badge-bg); margin-bottom:.6rem;
+  display:flex; align-items:center; gap:6px;
+}
+.scaffold-step {
+  display:flex; align-items:flex-start; gap:.6rem;
+  margin-bottom:.55rem;
+}
+.scaffold-step:last-child { margin-bottom:0; }
+.scaffold-num {
+  font-family:'Fredoka One',cursive; font-size:.9rem;
+  color:var(--top-badge-bg); flex-shrink:0;
+  width:1.4rem; text-align:center; padding-top:1px;
+}
+.scaffold-input {
+  flex:1; background:var(--input-bg);
+  border:1.5px solid var(--input-border);
+  border-radius:8px; padding:7px 10px;
+  font-family:'Nunito',sans-serif; font-size:.88rem;
+  font-weight:600; color:var(--input-text);
+  outline:none; transition:border-color .2s;
+  width:100%;
+}
+.scaffold-input:focus { border-color:var(--input-focus); }
+.scaffold-hint {
+  font-size:.72rem; font-weight:700;
+  color:var(--section-lbl); padding-top:9px;
+  flex-shrink:0; white-space:nowrap;
+}
+.sentence-starter {
+  display:flex; align-items:center; gap:.5rem;
+  margin-bottom:.5rem;
+}
+.starter-pill {
+  background:var(--opt-sel-bg);
+  border:1px solid var(--opt-sel-b);
+  border-radius:6px; padding:4px 10px;
+  font-size:.82rem; font-weight:700;
+  color:var(--body-color); cursor:pointer;
+  transition:all .14s; white-space:nowrap;
+}
+.starter-pill:hover { filter:brightness(1.15); transform:translateY(-1px); }
+.starter-label {
+  font-size:.65rem; font-weight:800;
+  letter-spacing:.07em; text-transform:uppercase;
+  color:var(--section-lbl);
+}
+
+/* ═══════════════════════════════════════════
+   MODAL & OVERLAYS
+═══════════════════════════════════════════ */
+.modal-overlay { position:fixed; inset:0; z-index:200; background:var(--modal-bg); display:flex; align-items:center; justify-content:center; padding:1.5rem; }
+.modal-overlay.hidden { display:none; }
+.modal-card { background:var(--modal-card); border:2px solid var(--modal-border); border-radius:22px; padding:2rem 2.2rem; max-width:400px; width:100%; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.35); animation:popIn .3s cubic-bezier(.36,1.5,.6,1) both; }
+@keyframes popIn { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.modal-icon  { font-size:2.5rem; margin-bottom:.8rem; }
+.modal-title { font-family:'Fredoka One',cursive; font-size:1.4rem; margin-bottom:.4rem; color:var(--body-color); }
+.modal-desc  { font-size:.83rem; font-weight:600; color:var(--card-desc); margin-bottom:1.2rem; line-height:1.6; }
+.modal-input { width:100%; background:var(--input-bg); border:1.5px solid var(--input-border); border-radius:12px; padding:11px 16px; margin-bottom:.8rem; font-family:'Fredoka One',cursive; font-size:1.1rem; text-align:center; color:var(--input-text); letter-spacing:.12em; outline:none; transition:border-color .2s; }
+.modal-input:focus { border-color:var(--input-focus); }
+.modal-err { font-size:.78rem; font-weight:800; color:var(--opt-wrong-b); margin-top:.4rem; display:none; }
+.modal-err.show { display:block; }
+
+.blur-overlay { position:fixed; inset:0; z-index:150; backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; flex-direction:column; gap:1rem; cursor:pointer; animation:fadeIn .25s ease both; }
+.blur-overlay.show { display:flex; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.blur-icon  { font-size:3.5rem; }
+.blur-title { font-family:'Fredoka One',cursive; font-size:1.5rem; color:#fff; text-align:center; }
+.blur-sub   { font-size:.85rem; font-weight:700; color:rgba(255,255,255,.65); text-align:center; }
+.warn-overlay { position:fixed; inset:0; z-index:160; background:rgba(0,0,0,.82); display:none; align-items:center; justify-content:center; padding:1.5rem; }
+.warn-overlay.show { display:flex; animation:fadeIn .2s ease both; }
+.warn-card { background:var(--modal-card); border:2px solid var(--opt-wrong-b); border-radius:22px; padding:2rem 2.2rem; max-width:420px; width:100%; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.4); animation:popIn .3s cubic-bezier(.36,1.5,.6,1) both; }
+.warn-icon  { font-size:2.8rem; margin-bottom:.7rem; }
+.warn-title { font-family:'Fredoka One',cursive; font-size:1.4rem; color:var(--opt-wrong-b); margin-bottom:.5rem; }
+.warn-msg   { font-size:.85rem; font-weight:600; color:var(--card-desc); line-height:1.6; margin-bottom:1.2rem; }
+.warn-count { font-size:.75rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--section-lbl); margin-bottom:1rem; }
+
+/* Footer */
+.site-footer { position:relative; z-index:1; background:var(--footer-bg); border-top:1px solid var(--footer-border); padding:2rem max(1rem,4vw); margin-top:3rem; display:flex; flex-direction:column; align-items:center; gap:.5rem; transition:background .4s, border-color .4s; }
+.site-footer::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--grad-bar); }
+.footer-logo { display:flex; align-items:center; gap:.6rem; margin-bottom:.4rem; }
+.footer-logo img { height:36px; width:auto; border-radius:8px; opacity:.75; }
+.footer-logo span { font-family:'Fredoka One',cursive; font-size:1rem; color:var(--footer-name); transition:color .4s; }
+.footer-tagline { font-size:.82rem; font-weight:700; color:var(--footer-tag); letter-spacing:.03em; font-style:italic; }
+.footer-copy    { font-size:.72rem; color:var(--footer-copy); font-weight:600; letter-spacing:.04em; margin-top:.2rem; }
+#back-to-top { display:none; position:fixed; bottom:1.5rem; right:1.5rem; z-index:99; background:var(--top-badge-bg); color:var(--top-badge-c); border:none; border-radius:12px; width:42px; height:42px; font-size:1.2rem; font-weight:900; cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,.25); transition:all .2s; align-items:center; justify-content:center; }
+#back-to-top:hover { transform:translateY(-3px); filter:brightness(1.1); }
+
+/* ═══════════════════════════════════════════
+   FLOATING CALCULATOR
+═══════════════════════════════════════════ */
+#calc-fab {
+  position:fixed; bottom:1.5rem; left:1.5rem; z-index:99;
+  background:var(--top-badge-bg); color:var(--top-badge-c);
+  border:none; border-radius:14px;
+  width:52px; height:52px; font-size:1.4rem;
+  cursor:pointer; box-shadow:0 4px 18px rgba(0,0,0,.30);
+  transition:all .2s; display:flex; align-items:center; justify-content:center;
+}
+#calc-fab:hover { transform:translateY(-3px) scale(1.07); filter:brightness(1.1); }
+
+#calc-panel {
+  position:fixed; bottom:5rem; left:1.5rem; z-index:100;
+  background:var(--modal-card); border:2px solid var(--modal-border);
+  border-radius:20px; padding:1rem; width:300px;
+  box-shadow:0 12px 40px rgba(0,0,0,.40);
+  display:none; flex-direction:column; gap:.6rem;
+  animation:popIn .25s cubic-bezier(.36,1.5,.6,1) both;
+}
+#calc-panel.open { display:flex; }
+
+.calc-screen {
+  background:var(--input-bg); border:1.5px solid var(--input-border);
+  border-radius:12px; padding:.6rem 1rem;
+  text-align:right; min-height:64px;
+}
+.calc-expr {
+  font-size:.72rem; color:var(--section-lbl);
+  font-family:'DM Mono','Courier New',monospace;
+  min-height:1rem; word-break:break-all;
+  margin-bottom:3px;
+}
+.calc-display {
+  font-family:'Fredoka One',cursive; font-size:1.7rem;
+  color:var(--body-color); word-break:break-all;
+}
+
+.calc-grid {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:6px;
+}
+.calc-btn {
+  font-family:'Nunito',sans-serif; font-weight:700; font-size:.88rem;
+  padding:10px 4px; border-radius:10px; border:1.5px solid var(--card-border);
+  background:var(--card-bg); color:var(--body-color); cursor:pointer;
+  transition:all .12s; text-align:center;
+}
+.calc-btn:hover  { background:var(--opt-hover); border-color:var(--opt-sel-b); transform:scale(1.05); }
+.calc-btn:active { transform:scale(.96); }
+.calc-btn.op     { background:var(--formula-bg); border-color:var(--formula-border); color:var(--top-badge-bg); }
+.calc-btn.eq     { background:var(--top-badge-bg); color:var(--top-badge-c); border-color:var(--top-badge-bg); font-size:1.1rem; }
+.calc-btn.eq:hover { filter:brightness(1.1); }
+.calc-btn.clr    { background:var(--danger-bg,rgba(255,100,100,.12)); color:#ff6b6b; border-color:rgba(255,100,100,.25); }
+.calc-btn.span2  { grid-column:span 2; }
+.calc-btn.pi     { font-style:italic; }
+.calc-memory-row { display:flex; gap:5px; }
+.calc-memory-row .calc-btn { flex:1; font-size:.75rem; padding:7px 2px; }
+.calc-label {
+  font-size:.6rem; font-weight:800; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--section-lbl); text-align:center; margin-bottom:2px;
+}
+.calc-mem-display {
+  font-size:.7rem; color:var(--section-lbl); text-align:right;
+  font-family:'Nunito',sans-serif; min-height:.9rem;
+}
+
+.test-locked .opt, .test-locked .match-sel, .test-locked .answer-input, .test-locked .working-area { pointer-events:none; }
+.test-locked .opt { cursor:default; }
+
+/* ═══════════════════════════════════════════
+   QUESTION DIAGRAMS
+═══════════════════════════════════════════ */
+.q-diagram {
+  display:block;
+  max-width:300px;
+  width:100%;
+  border-radius:14px;
+  margin:0 0 1rem 0;
+  border:1.5px solid var(--card-border);
+  background:rgba(255,255,255,0.03);
+}
+.q-diagram-pair {
+  display:flex;
+  gap:1rem;
+  flex-wrap:wrap;
+  margin-bottom:1rem;
+}
+.q-diagram-pair .q-diagram {
+  flex:1;
+  min-width:140px;
+  max-width:220px;
+  margin:0;
+}
+.q-diagram-pair .q-diagram-label {
+  font-size:.65rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--section-lbl);
+  text-align:center;
+  margin-top:.35rem;
+}
+.q-diagram-wrap { text-align:left; }
+</style>
+</head>
+<body class="theme-night">
+
+<div class="stars" id="stars"></div>
+
+<!-- PASSKEY MODAL -->
+<div class="modal-overlay hidden" id="passkeyModal">
+  <div class="modal-card">
+    <div class="modal-icon">🔑</div>
+    <div class="modal-title">Enter Class Code</div>
+    <div class="modal-desc">Ask Mr. EdLo for today's class code to submit your answers and get your Teacher Feedback.</div>
+    <input class="modal-input" type="text" id="passkeyInput" placeholder="" autocomplete="off" spellcheck="false">
+    <button class="btn-primary" style="width:100%;margin-bottom:.5rem" onclick="validatePasskey()">Submit →</button>
+    <div class="modal-err" id="passkeyErr">❌ Wrong code — ask Mr. EdLo for the correct code.</div>
+  </div>
+</div>
+
+<!-- Blur overlay -->
+<div class="blur-overlay" id="blurOverlay" onclick="dismissBlur()">
+  <div class="blur-icon">🙈</div>
+  <div class="blur-title">Screen Hidden</div>
+  <div class="blur-sub">Click anywhere to continue your test</div>
+</div>
+
+<!-- Tab-switch warning -->
+<div class="warn-overlay" id="warnOverlay">
+  <div class="warn-card">
+    <div class="warn-icon">⚠️</div>
+    <div class="warn-title">Focus Warning</div>
+    <div class="warn-msg">You left this test page. This has been noted.<br>Please stay on this page until you have submitted your test.</div>
+    <div class="warn-count" id="warnCount">Warning 1 of 3</div>
+    <button class="btn-primary" style="width:100%" onclick="dismissWarning()">I Understand — Return to Test</button>
+  </div>
+</div>
+
+<!-- Theme bar -->
+<div class="theme-bar">
+  <button class="theme-btn active" onclick="setTheme('night',this)">🌙 Night</button>
+  <button class="theme-btn" onclick="setTheme('sunny',this)">☀️ Sunny</button>
+  <button class="theme-btn" onclick="setTheme('cloudy',this)">☁️ Cloudy</button>
+  <button class="theme-btn" onclick="setTheme('nature',this)">🌿 Nature</button>
+</div>
+
+<!-- Question progress bar -->
+<div class="q-progress-wrap" id="qProgressWrap">
+  <div class="q-progress-inner">
+    <div class="q-progress-row">
+      <span class="q-progress-label">Questions answered</span>
+      <span class="q-progress-count" id="qProgressCount">0 / 12</span>
+    </div>
+    <div class="q-progress-bg"><div class="q-progress-fill" id="qProgressFill" style="width:0%"></div></div>
+  </div>
+</div>
+
+<div class="wrapper">
+  <!-- Site header -->
+  <div class="site-header">
+    <a class="site-header-logo" href="https://teacherzoled.github.io/Virtual-Classroom/">
+      <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+      <span>Mr. EdLo's Virtual Classroom</span>
+    </a>
+    <span class="header-badge">Standard 6 &nbsp;·&nbsp; Belize</span>
+  </div>
+
+  <a class="back-link" href="https://teacherzoled.github.io/Virtual-Classroom/">← Back to Mathematics</a>
+
+  <header>
+    <div class="badge">Standard 6 &nbsp;·&nbsp; Mathematics · Cycle 3</div>
+    <h1>📐 Surface Area &amp; Volume</h1>
+    <p class="subtitle">MA 6.42 &amp; MA 6.43 · 34 marks · Show all working · Label all units · Use π = 3.14</p>
+  </header>
+
+  <!-- LOCK SCREEN -->
+  <div class="lock-screen" id="lockScreen">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">Test Already Submitted</div>
+    <div class="lock-msg">You have already completed this test. Your results are saved below. Download your PDF report or return to Mathematics.</div>
+    <div class="lock-scores" id="lockScores"></div>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <button class="btn-primary" onclick="downloadPDF()">📄 Download PDF Report</button>
+      <a class="btn-secondary" href="https://teacherzoled.github.io/Virtual-Classroom/" style="display:inline-flex;align-items:center;text-decoration:none;">← Back to Mathematics</a>
+    </div>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px dashed var(--card-border);">
+      <p style="font-size:.7rem;font-weight:700;color:var(--section-lbl);margin-bottom:.6rem;letter-spacing:.06em;text-transform:uppercase;">Teacher Access</p>
+      <button class="btn-secondary" style="font-size:.8rem;padding:7px 20px;" onclick="teacherReset()">🔑 Reset Quiz for Testing</button>
+    </div>
+  </div>
+
+  <!-- TEST CONTAINER -->
+  <div class="test-container" id="testContainer">
+
+    <!-- Student info -->
+    <div class="student-card">
+      <div class="sc-icon">🎓</div>
+      <div class="sc-fields">
+        <div class="sc-group">
+          <label>Your Name</label>
+          <input type="text" id="studentName" placeholder="Enter your full name" autocomplete="off">
+        </div>
+        <div class="sc-group">
+          <label>Date</label>
+          <input type="text" id="testDate" readonly>
+        </div>
+        <div class="sc-group">
+          <label>Teacher</label>
+          <input type="text" value="Mr. Edwin D. Lopez" readonly>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PART A — Surface Area (12 marks) ══ -->
+    <div class="sec-card" style="--sec-accent:#4DABF7;">
+      <div class="sec-head">
+        <div class="sec-title">📘 Part A — Surface Area</div>
+        <div class="sec-pts">12 marks</div>
+      </div>
+      <p style="font-size:.82rem;font-weight:700;color:var(--card-desc);margin-bottom:1.2rem;">MA 6.42 · Use π = 3.14 · Show formula before substituting · Label all units</p>
+
+      <!-- A1 -->
+      <div class="question" data-q="a1">
+        <div class="q-label"><span class="q-num">A1.</span><span>Calculate the total surface area of a cylinder with radius 5 cm and height 12 cm.</span><span class="q-pts">4 marks</span></div>
+        <img src="images/a1-cylinder.png" alt="Cylinder with radius 5 cm and height 12 cm" class="q-diagram">
+        <div class="formula-box"><div class="formula-label">Formula given</div>SA = 2πr² + 2πrh</div>
+        <label class="field-label">Working — show every step</label>
+        <div class="math-toolbar"><div class="math-toolbar-label">Tap to insert symbol</div><button type="button" class="msym" onclick="ins('a1w','+')">+</button><button type="button" class="msym" onclick="ins('a1w','−')">−</button><button type="button" class="msym" onclick="ins('a1w','π')">π</button><button type="button" class="msym" onclick="ins('a1w','²')">x²</button><button type="button" class="msym" onclick="ins('a1w','³')">x³</button><button type="button" class="msym" onclick="ins('a1w','×')">×</button><button type="button" class="msym" onclick="ins('a1w','÷')">÷</button><button type="button" class="msym" onclick="ins('a1w','(1/2)')"><span class="frac">½</span></button><button type="button" class="msym" onclick="ins('a1w','(1/3)')"><span class="frac">⅓</span></button><button type="button" class="msym" onclick="ins('a1w','√')">√</button><button type="button" class="msym" onclick="ins('a1w',' cm²')">cm²</button><button type="button" class="msym" onclick="ins('a1w',' cm³')">cm³</button><button type="button" class="msym" onclick="ins('a1w',' m²')">m²</button><button type="button" class="msym" onclick="ins('a1w',' m³')">m³</button></div>
+        <textarea class="working-area" id="a1w" placeholder="Show your working step by step. Start by writing the formula, then substitute the values."></textarea>
+        <label class="field-label">Final answer</label>
+        <div class="math-toolbar"><div class="math-toolbar-label">Tap to insert symbol</div><button type="button" class="msym" onclick="ins('a1a','+')">+</button><button type="button" class="msym" onclick="ins('a1a','−')">−</button><button type="button" class="msym" onclick="ins('a1a','π')">π</button><button type="button" class="msym" onclick="ins('a1a','²')">x²</button><button type="button" class="msym" onclick="ins('a1a','³')">x³</button><button type="button" class="msym" onclick="ins('a1a','×')">×</button><button type="button" class="msym" onclick="ins('a1a',' cm²')">cm²</button><button type="button" class="msym" onclick="ins('a1a',' cm³')">cm³</button><button type="button" class="msym" onclick="ins('a1a',' m²')">m²</button><button type="button" class="msym" onclick="ins('a1a',' m³')">m³</button></div>
+        <input class="answer-input" type="text" id="a1a" placeholder="Write your final answer with units e.g. SA = ___ cm²">
+        <div class="fb-box" id="a1-fb"></div>
+        <div class="adj-panel" id="a1-adj">
+          <div class="adj-label">🔑 Teacher — adjust mark (max 4)</div>
+          <div class="adj-btns" id="a1-adj-btns"></div>
+        </div>
+      </div>
+
+      <!-- A2 -->
+      <div class="question" data-q="a2">
+        <div class="q-label"><span class="q-num">A2.</span><span>Calculate the total surface area of a rectangular pyramid with a square base of side 8 cm and slant height 10 cm.</span><span class="q-pts">5 marks</span></div>
+        <img src="images/a2-pyramid.png" alt="Rectangular pyramid with square base 8 cm and slant height 10 cm" class="q-diagram">
+        <div class="formula-box"><div class="formula-label">Formula given</div>SA = base area + 4 × (<span class="frac">½</span> × base edge × slant height)</div>
+        <label class="field-label">Working — show every step</label>
+        <div class="math-toolbar"><div class="math-toolbar-label">Tap to insert symbol</div><button type="button" class="msym" onclick="ins('a2w','+')">+</button><button type="button" class="msym" onclick="ins('a2w','−')">−</button><button type="button" class="msym" onclick="ins('a2w','π')">π</button><button type="button" class="msym" onclick="ins('a2w','²')">x²</button><button type="button" class="msym" onclick="ins('a2w','³')">x³</button><button type="button" class="msym" onclick="ins('a2w','×')">×</button><button type="button" class="msym" onclick="ins('a2w','÷')">÷</button><button type="button" class="msym" onclick="ins('a2w','(1/2)')"><span class="frac">½</span></button><button type="button" class="msym" onclick="ins('a2w','(1/3)')"><span class="frac">⅓</span></button><button type="button" class="msym" onclick="ins('a2w',' cm²')">cm²</button><button type="button" class="msym" onclick="ins('a2w',' cm³')">cm³</button><button type="button" class="msym" onclick="ins('a2w',' m²')">m²</button><button type="button" class="msym" onclick="ins('a2w',' m³')">m³</button></div>
+        <textarea class="working-area" id="a2w" placeholder="Step 1 — Calculate the base area&#10;Step 2 — Calculate one triangular face&#10;Step 3 — Multiply by four faces&#10;Step 4 — Add base area and four faces for total SA"></textarea>
+        <label class="field-label">Final answer</label>
+        <div class="math-toolbar"><div class="math-toolbar-label">Tap to insert symbol</div><button type="button" class="msym" onclick="ins('a2a','+')">+</button><button type="button" class="msym" onclick="ins('a2a','−')">−</button><button type="button" class="msym" onclick="ins('a2a','²')">x²</button><button type="button" class="msym" onclick="ins('a2a','×')">×</button><button type="button" class="msym" onclick="ins('a2a','(1/2)')"><span class="frac">½</span></button><button type="button" class="msym" onclick="ins('a2a',' cm²')">cm²</button><button type="button" class="msym" onclick="ins('a2a',' cm³')">cm³</button><button type="button" class="msym" onclick="ins('a2a',' m²')">m²</button></div>
+        <input class="answer-input" type="text" id="a2a" placeholder="Write your final answer with units e.g. SA = ___ cm²">
+        <div class="fb-box" id="a2-fb"></div>
+        <div class="adj-panel" id="a2-adj">
+          <div class="adj-label">🔑 Teacher — adjust mark (max 5)</div>
+          <div class="adj-btns" id="a2-adj-btns"></div>
+        </div>
+      </div>
+
+      <!-- A3 -->
+      <div class="question" data-q="a3">
+        <div class="q-label"><span class="q-num">A3.</span><span>A cylindrical storage tank has a diameter of 14 m and a height of 6 m. Calculate its total surface area.</span><span class="q-pts">3 marks</span></div>
+        <img src="images/a3-tank.png" alt="Cylindrical tank with diameter 14 m and height 6 m" class="q-diagram">
+        <div class="formula-box"><div class="formula-label">Hint</div>Diameter is given — find radius first: r = diameter ÷ 2</div>
+        <label class="field-label">Working</label>
+        <div class="math-toolbar"><div class="math-toolbar-label">Tap to insert symbol</div><button type="button" class="msym" onclick="ins('a3w','+')">+</button><button type="button" class="msym" onclick="ins('a3w','−')">−</button><button type="button" class="msym" onclick="ins('a3w','π')">π</button><button type="button" class="msym" onclick="ins('a3w','²')">x²</button><button type="button" class="msym" onclick="ins('a3w','³')">x³</button><button type="button" class="msym" onclick="ins('a3w','×')">×</button><button type="button" class="msym" onclick="ins('a3w','÷')">÷</button><button type="button" class="msym" onclick="ins('a3w','(1/2)')"><span class="frac">½</span></button><button type="button" class="msym" onclick="ins('a3w',' m²')">m²</button><button type="button" class="msym" onclick="ins('a3w',' m³')">m³</button></div>
+        <textarea class="working-area" id="a3w" placeholder="Remember: diameter is given — find radius first&#10;Then apply the cylinder surface area formula"></textarea>
+        <label class="field-label">Final answer</label>
+        <div class="math-toolbar"><div class="math-toolbar-label">Tap to insert symbol</div><button type="button" class="msym" onclick="ins('a3a','+')">+</button><button type="button" class="msym" onclick="ins('a3a','−')">−</button><button type="button" class="msym" onclick="ins('a3a','²')">x²</button><button type="button" class="msym" onclick="ins('a3a','×')">×</button><button type="button" class="msym" onclick="ins('a3a',' m²')">m²</button><button type="button" class="msym" onclick="ins('a3a',' m³')">m³</button></div>
+        <input class="answer-input" type="text" id="a3a" placeholder="Write your final answer with units e.g. SA = ___ m²">
+        <div class="fb-box" id="a3-fb"></div>
+        <div class="adj-panel" id="a3-adj">
+          <div class="adj-label">🔑 Teacher — adjust mark (max 3)</div>
+          <div class="adj-btns" id="a3-adj-btns"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══ PART B — Volume (12 marks) ══ -->
+    <div class="sec-card" style="--sec-accent:#9775FA;">
+      <div class="sec-head">
+        <div class="sec-title">📗 Part B — Volume</div>
+        <div class="sec-pts">12 marks</div>
+      </div>
+      <p style="font-size:.82rem;font-weight:700;color:var(--card-desc);margin-bottom:1.2rem;">MA 6.43 · State formula before substituting · Label units · Use π = 3.14</p>
+
+      <!-- B1 -->
+      <div class="question" data-q="b1">
+        <div class="q-label"><span class="q-num">B1.</span><span>Calculate the volume of a cylinder with diameter 10 cm and height 8 cm.</span><span class="q-pts">4 marks</span></div>
+        <img src="images/b1-cylinder.png" alt="Cylinder with diameter 10 cm and height 8 cm" class="q-diagram">
+        <div class="formula-box"><div class="formula-label">Formula given</div>V = πr²h</div>
+        <label class="field-label">Working</label>
+        <div class="math-toolbar"><div class="math-toolbar-label">Tap to insert symbol</div><button type="button" class="msym" onclick="ins('b1w','+')">+</button><button type="button" class="msym" onclick="ins('b1w','−')">−</button><button type="button" class="msym" onclick="ins('b1w','π')">π</button><button type="button" class="msym" onclick="ins('b1w','²')">x²</button><button type="button" class="msym" onclick="ins('b1w','³')">x³</button><button type="button" class="msym" onclick="ins('b1w','×')">×</button><button type="button" class="msym" onclick="ins('b1w','÷')">÷</button><button type="button" class="msym" onclick="ins('b1w',' cm²')">cm²</button><button type="button" class="msym" onclick="ins('b1w',' cm³')">cm³</button></div>
+        <textarea class="working-area" id="b1w" placeholder="Remember: diameter is given — find radius first&#10;Then apply the cylinder volume formula"></textarea>
+        <label class="field-label">Final answer</label>
+        <div class="math-toolbar"><div class="math-toolbar-label">Tap to insert symbol</div><button type="button" class="msym" onclick="ins('b1a','+')">+</button><button type="button" class="msym" onclick="ins('b1a','−')">−</button><button type="button" class="msym" onclick="ins('b1a','²')">x²</button><button type="button" class="msym" onclick="ins('b1a','³')">x³</button><button type="button" class="msym" onclick="ins('b1a',' cm³')">cm³</button><button type="button" class="msym" onclick="ins('b1a',' m³')">m³</button></div>
+        <input class="answer-input" type="text" id="b1a" placeholder="Write your final answer with units e.g. V = ___ cm³">
+        <div class="fb-box" id="b1-fb"></div>
+        <div class="adj-panel" id="b1-adj">
+          <div class="adj-label">🔑 Teacher — adjust mark (max 4)</div>
+          <div class="adj-btns" id="b1-adj-btns"></div>
+        </div>
+      </div>
+
+      <!-- B2 -->
+      <div class="question" data-q="b2">
+        <div class="q-label"><span class="q-num">B2.</span><span>Calculate the volume of a rectangular pyramid with a base measuring 9 cm × 6 cm and perpendicular height 10 cm.</span><span class="q-pts">4 marks</span></div>
+        <img src="images/b2-pyramid.png" alt="Rectangular pyramid with base 9 cm by 6 cm and height 10 cm" class="q-diagram">
+        <div class="formula-box"><div class="formula-label">Formula given</div>V = <span class="frac">⅓</span> × base area × h</div>
+        <label class="field-label">Working</label>
+        <div class="math-toolbar"><div class="math-toolbar-label">Tap to insert symbol</div><button type="button" class="msym" onclick="ins('b2w','+')">+</button><button type="button" class="msym" onclick="ins('b2w','−')">−</button><button type="button" class="msym" onclick="ins('b2w','π')">π</button><button type="button" class="msym" onclick="ins('b2w','²')">x²</button><button type="button" class="msym" onclick="ins('b2w','×')">×</button><button type="button" class="msym" onclick="ins('b2w','÷')">÷</button><button type="button" class="msym" onclick="ins('b2w','(1/3)')"><span class="frac">⅓</span></button><button type="button" class="msym" onclick="ins('b2w',' cm²')">cm²</button><button type="button" class="msym" onclick="ins('b2w',' cm³')">cm³</button></div>
+        <textarea class="working-area" id="b2w" placeholder="Step 1 — Calculate the base area&#10;Step 2 — Apply the pyramid volume formula with the 1/3 factor"></textarea>
+        <label class="field-label">Final answer</label>
+        <div class="math-toolbar"><div class="math-toolbar-label">Tap to insert symbol</div><button type="button" class="msym" onclick="ins('b2a','+')">+</button><button type="button" class="msym" onclick="ins('b2a','−')">−</button><button type="button" class="msym" onclick="ins('b2a','³')">x³</button><button type="button" class="msym" onclick="ins('b2a','(1/3)')"><span class="frac">⅓</span></button><button type="button" class="msym" onclick="ins('b2a',' cm³')">cm³</button></div>
+        <input class="answer-input" type="text" id="b2a" placeholder="Write your final answer with units e.g. V = ___ cm³">
+        <div class="fb-box" id="b2-fb"></div>
+        <div class="adj-panel" id="b2-adj">
+          <div class="adj-label">🔑 Teacher — adjust mark (max 4)</div>
+          <div class="adj-btns" id="b2-adj-btns"></div>
+        </div>
+      </div>
+
+      <!-- B3 -->
+      <div class="question" data-q="b3">
+        <div class="q-label"><span class="q-num">B3.</span><span>Calculate the volume of a cone with radius 7 cm and height 15 cm.</span><span class="q-pts">4 marks</span></div>
+        <img src="images/b3-cone.png" alt="Cone with radius 7 cm and height 15 cm" class="q-diagram">
+        <div class="formula-box"><div class="formula-label">Formula given</div>V = <span class="frac">⅓</span> × π × r² × h</div>
+        <label class="field-label">Working</label>
+        <div class="math-toolbar"><div class="math-toolbar-label">Tap to insert symbol</div><button type="button" class="msym" onclick="ins('b3w','+')">+</button><button type="button" class="msym" onclick="ins('b3w','−')">−</button><button type="button" class="msym" onclick="ins('b3w','π')">π</button><button type="button" class="msym" onclick="ins('b3w','²')">x²</button><button type="button" class="msym" onclick="ins('b3w','³')">x³</button><button type="button" class="msym" onclick="ins('b3w','×')">×</button><button type="button" class="msym" onclick="ins('b3w','(1/3)')"><span class="frac">⅓</span></button><button type="button" class="msym" onclick="ins('b3w',' cm³')">cm³</button></div>
+        <textarea class="working-area" id="b3w" placeholder="Show your full working. Remember the 1/3 factor in the cone formula."></textarea>
+        <label class="field-label">Final answer</label>
+        <div class="math-toolbar"><div class="math-toolbar-label">Tap to insert symbol</div><button type="button" class="msym" onclick="ins('b3a','+')">+</button><button type="button" class="msym" onclick="ins('b3a','−')">−</button><button type="button" class="msym" onclick="ins('b3a','³')">x³</button><button type="button" class="msym" onclick="ins('b3a','(1/3)')"><span class="frac">⅓</span></button><button type="button" class="msym" onclick="ins('b3a',' cm³')">cm³</button></div>
+        <input class="answer-input" type="text" id="b3a" placeholder="Write your final answer with units e.g. V = ___ cm³">
+        <div class="fb-box" id="b3-fb"></div>
+        <div class="adj-panel" id="b3-adj">
+          <div class="adj-label">🔑 Teacher — adjust mark (max 4)</div>
+          <div class="adj-btns" id="b3-adj-btns"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PART C — Reasoning (10 marks) ══ -->
+    <div class="sec-card" style="--sec-accent:#F783AC;">
+      <div class="sec-head">
+        <div class="sec-title">📕 Part C — Mixed Reasoning</div>
+        <div class="sec-pts">10 marks</div>
+      </div>
+      <p style="font-size:.82rem;font-weight:700;color:var(--card-desc);margin-bottom:1.2rem;">MA 6.42 &amp; MA 6.43 · Use complete mathematical reasoning · Show all steps</p>
+
+      <!-- C1 -->
+      <div class="question" data-q="c1">
+        <div class="q-label"><span class="q-num">C1.</span><span>In your own words, explain the difference between surface area and volume. Use the word <em>cylinder</em> in your explanation.</span><span class="q-pts">2 marks</span></div>
+        <div class="scaffold-box">
+          <div class="scaffold-title">💡 Sentence Starters <span style="font-size:.75em;font-weight:600;opacity:.7;font-family:'Nunito',sans-serif;">(optional — tap to add to your answer)</span></div>
+          <div style="margin-bottom:.5rem;">
+            <div class="starter-label" style="margin-bottom:.4rem;">Start with surface area:</div>
+            <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+              <span class="starter-pill" onclick="appendStarter('c1a','Surface area is the total area of the outside of a 3D shape. ')">Surface area is the total area of the outside...</span>
+              <span class="starter-pill" onclick="appendStarter('c1a','Surface area measures how much material covers the outside of a shape. ')">Surface area measures how much covers the outside...</span>
+            </div>
+          </div>
+          <div style="margin-bottom:.5rem;">
+            <div class="starter-label" style="margin-bottom:.4rem;">Then explain volume:</div>
+            <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+              <span class="starter-pill" onclick="appendStarter('c1a','Volume is the amount of space inside a 3D shape. ')">Volume is the amount of space inside...</span>
+              <span class="starter-pill" onclick="appendStarter('c1a','Volume measures how much a shape can hold. ')">Volume measures how much a shape can hold...</span>
+            </div>
+          </div>
+          <div>
+            <div class="starter-label" style="margin-bottom:.4rem;">Use the word cylinder:</div>
+            <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+              <span class="starter-pill" onclick="appendStarter('c1a','For example, a cylinder has surface area on its curved side and two circular ends, while its volume is the space inside it.')">For example, a cylinder has surface area on...</span>
+            </div>
+          </div>
+        </div>
+        <label class="field-label">Your explanation</label>
+        <textarea class="working-area" id="c1a" style="min-height:100px;" placeholder="Write your full explanation here. You can tap the starters above to help, then add your own words."></textarea>
+        <div class="fb-box" id="c1-fb"></div>
+        <div class="adj-panel" id="c1-adj">
+          <div class="adj-label">🔑 Teacher — adjust mark (max 2)</div>
+          <div class="adj-btns" id="c1-adj-btns"></div>
+        </div>
+      </div>
+
+      <!-- C2 -->
+      <div class="question" data-q="c2">
+        <div class="q-label"><span class="q-num">C2.</span><span>Write the correct volume formula for each shape below, then explain why the cone and pyramid formulas both contain the factor <span class="frac">⅓</span>.</span><span class="q-pts">2 marks</span></div>
+        <div class="scaffold-box">
+          <div class="scaffold-title">💡 Formula Helper <span style="font-size:.75em;font-weight:600;opacity:.7;font-family:'Nunito',sans-serif;">(optional — tap to fill each box)</span></div>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem;">
+            <span class="starter-pill" onclick="fillField('c2cone','V = (1/3) x pi x r2 x h')">Cone: V = <span class="frac">⅓</span> × π × r² × h</span>
+            <span class="starter-pill" onclick="fillField('c2pyr','V = (1/3) x base area x h')">Pyramid: V = <span class="frac">⅓</span> × base area × h</span>
+            <span class="starter-pill" onclick="fillField('c2cyl','V = π × r² × h')">Cylinder: V = π × r² × h</span>
+          </div>
+          <div class="starter-label" style="margin-bottom:.4rem;">Starter for the explanation:</div>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+            <span class="starter-pill" onclick="appendStarter('c2a','The 1/3 appears because ')">The <span class="frac">⅓</span> appears because...</span>
+            <span class="starter-pill" onclick="appendStarter('c2a','A cone fits exactly 3 times into a cylinder with the same base and height. ')">A cone fits exactly 3 times into a cylinder...</span>
+            <span class="starter-pill" onclick="appendStarter('c2a','A pyramid fits exactly 3 times into a prism with the same base and height. ')">A pyramid fits exactly 3 times into a prism...</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.7rem;margin-bottom:.8rem;">
+          <div><label class="field-label">Cone formula</label><input class="answer-input" type="text" id="c2cone" placeholder="V = ..."></div>
+          <div><label class="field-label">Pyramid formula</label><input class="answer-input" type="text" id="c2pyr" placeholder="V = ..."></div>
+          <div><label class="field-label">Cylinder formula</label><input class="answer-input" type="text" id="c2cyl" placeholder="V = ..."></div>
+        </div>
+        <label class="field-label">Why does <span class="frac">⅓</span> appear in both the cone and pyramid formulas?</label>
+        <textarea class="working-area" id="c2a" style="min-height:80px;" placeholder="Write your explanation here."></textarea>
+        <div class="fb-box" id="c2-fb"></div>
+        <div class="adj-panel" id="c2-adj">
+          <div class="adj-label">🔑 Teacher — adjust mark (max 2)</div>
+          <div class="adj-btns" id="c2-adj-btns"></div>
+        </div>
+      </div>
+
+      <!-- C3 -->
+      <div class="question" data-q="c3">
+        <div class="q-label"><span class="q-num">C3.</span><span>A farmer stores grain in a cone-shaped silo with radius 3 m and perpendicular height 4 m. Calculate the volume of grain the silo can hold. State your answer in context.</span><span class="q-pts">3 marks</span></div>
+        <img src="images/c3-silo.png" alt="Cone-shaped silo with radius 3 m and height 4 m" class="q-diagram">
+        <div class="scaffold-box">
+          <div class="scaffold-title">📋 Step-by-Step Guide <span style="font-size:.75em;font-weight:600;opacity:.7;font-family:'Nunito',sans-serif;">(optional — use to organise your thinking)</span></div>
+          <div class="scaffold-step"><span class="scaffold-num">1</span><input class="scaffold-input" id="c3s1" placeholder="Write the correct formula for this shape" oninput="updateQuestionProgress()"><span class="scaffold-hint">Formula</span></div>
+          <div class="scaffold-step"><span class="scaffold-num">2</span><input class="scaffold-input" id="c3s2" placeholder="Replace r and h with the values given in the question" oninput="updateQuestionProgress()"><span class="scaffold-hint">Substitute</span></div>
+          <div class="scaffold-step"><span class="scaffold-num">3</span><input class="scaffold-input" id="c3s3" placeholder="Work out the answer step by step" oninput="updateQuestionProgress()"><span class="scaffold-hint">Calculate</span></div>
+          <div class="scaffold-step"><span class="scaffold-num">4</span><input class="scaffold-input" id="c3s4" placeholder="Write your answer as a sentence relating to the farmer and grain" oninput="updateQuestionProgress()"><span class="scaffold-hint">In context</span></div>
+        </div>
+        <label class="field-label">Full working (use steps above to guide you)</label>
+        <div class="math-toolbar"><div class="math-toolbar-label">Tap to insert symbol</div><button type="button" class="msym" onclick="ins('c3w','+')">+</button><button type="button" class="msym" onclick="ins('c3w','−')">−</button><button type="button" class="msym" onclick="ins('c3w','π')">π</button><button type="button" class="msym" onclick="ins('c3w','²')">x²</button><button type="button" class="msym" onclick="ins('c3w','³')">x³</button><button type="button" class="msym" onclick="ins('c3w','×')">×</button><button type="button" class="msym" onclick="ins('c3w','(1/3)')"><span class="frac">⅓</span></button><button type="button" class="msym" onclick="ins('c3w',' m³')">m³</button></div>
+        <textarea class="working-area" id="c3w" placeholder="Show your full working here using the steps above as a guide"></textarea>
+        <label class="field-label">Answer in context</label>
+        <input class="answer-input" type="text" id="c3a" placeholder="Write your answer as a complete sentence in context">
+        <div class="fb-box" id="c3-fb"></div>
+        <div class="adj-panel" id="c3-adj">
+          <div class="adj-label">🔑 Teacher — adjust mark (max 3)</div>
+          <div class="adj-btns" id="c3-adj-btns"></div>
+        </div>
+      </div>
+
+      <!-- C4 -->
+      <div class="question" data-q="c4">
+        <div class="q-label"><span class="q-num">C4.</span><span>A student wrote: <em style="background:var(--formula-bg);padding:2px 8px;border-radius:6px;font-style:normal;">V = 2 × π × 4 × 10 = 251.2 cm³</em> for a cylinder with radius 4 cm and height 10 cm. Identify the error, state the correct formula, and calculate the correct answer.</span><span class="q-pts">3 marks</span></div>
+        <div class="scaffold-box">
+          <div class="scaffold-title">🔍 Error-Finding Guide <span style="font-size:.75em;font-weight:600;opacity:.7;font-family:'Nunito',sans-serif;">(optional — use to organise your thinking)</span></div>
+          <div class="scaffold-step"><span class="scaffold-num">1</span><input class="scaffold-input" id="c4s1" placeholder="Describe exactly what the student did incorrectly" oninput="updateQuestionProgress()"><span class="scaffold-hint">Find error</span></div>
+          <div class="scaffold-step"><span class="scaffold-num">2</span><input class="scaffold-input" id="c4s2" placeholder="Write the correct formula for this shape" oninput="updateQuestionProgress()"><span class="scaffold-hint">Correct formula</span></div>
+          <div class="scaffold-step"><span class="scaffold-num">3</span><input class="scaffold-input" id="c4s3" placeholder="Show the correct calculation from start to finish" oninput="updateQuestionProgress()"><span class="scaffold-hint">Recalculate</span></div>
+          <div style="margin-top:.6rem;">
+            <div class="starter-label" style="margin-bottom:.4rem;">Starter phrases for Step 1:</div>
+            <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+              <span class="starter-pill" onclick="fillField('c4err','The student used 2 × π × r × h instead of π × r² × h')">Used 2πrh instead of πr²h</span>
+              <span class="starter-pill" onclick="fillField('c4err','The student used the surface area formula instead of the volume formula')">Used SA formula instead of V formula</span>
+              <span class="starter-pill" onclick="fillField('c4err','The student did not square the radius (r²)')">Did not square the radius</span>
+            </div>
+          </div>
+        </div>
+        <label class="field-label">Error identified</label>
+        <input class="answer-input" type="text" id="c4err" placeholder="Describe the error clearly">
+        <label class="field-label">Correct formula</label>
+        <div class="math-toolbar"><div class="math-toolbar-label">Tap to insert symbol</div><button type="button" class="msym" onclick="ins('c4form','+')">+</button><button type="button" class="msym" onclick="ins('c4form','−')">−</button><button type="button" class="msym" onclick="ins('c4form','π')">π</button><button type="button" class="msym" onclick="ins('c4form','²')">x²</button><button type="button" class="msym" onclick="ins('c4form','×')">×</button><button type="button" class="msym" onclick="ins('c4form','(1/3)')"><span class="frac">⅓</span></button></div>
+        <input class="answer-input" type="text" id="c4form" placeholder="V = ..." style="margin-top:.4rem;">
+        <label class="field-label">Correct working and answer</label>
+        <div class="math-toolbar"><div class="math-toolbar-label">Tap to insert symbol</div><button type="button" class="msym" onclick="ins('c4a','+')">+</button><button type="button" class="msym" onclick="ins('c4a','−')">−</button><button type="button" class="msym" onclick="ins('c4a','π')">π</button><button type="button" class="msym" onclick="ins('c4a','²')">x²</button><button type="button" class="msym" onclick="ins('c4a','³')">x³</button><button type="button" class="msym" onclick="ins('c4a','×')">×</button><button type="button" class="msym" onclick="ins('c4a',' cm³')">cm³</button></div>
+        <textarea class="working-area" id="c4a" style="min-height:80px;" placeholder="Show your correct working and final answer"></textarea>
+        <div class="fb-box" id="c4-fb"></div>
+        <div class="adj-panel" id="c4-adj">
+          <div class="adj-label">🔑 Teacher — adjust mark (max 3)</div>
+          <div class="adj-btns" id="c4-adj-btns"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-area">
+      <button class="btn-primary" id="submitBtn" onclick="handleSubmit()" disabled>✅ Submit Test</button>
+      <p class="submit-hint" id="submitHint">Answer all 12 questions to submit</p>
+      <div class="spinner-wrap" id="spinnerWrap"><div class="spinner"></div></div>
+    </div>
+
+    <!-- Results -->
+    <div class="results-section" id="resultsSection">
+      <div class="res-title">🏆 Your Results</div>
+      <div class="score-grid">
+        <div class="score-box"><div class="sb-label">Part A</div><div class="sb-val" id="s-a">—</div><div class="sb-sub">out of 12</div></div>
+        <div class="score-box"><div class="sb-label">Part B</div><div class="sb-val" id="s-b">—</div><div class="sb-sub">out of 12</div></div>
+        <div class="score-box"><div class="sb-label">Part C</div><div class="sb-val" id="s-c">—</div><div class="sb-sub">out of 10</div></div>
+        <div class="score-box hl"><div class="sb-label">Total Score</div><div class="sb-val" id="s-total">—</div><div class="sb-sub">out of 34</div></div>
+        <div class="score-box"><div class="sb-label">Percentage</div><div class="sb-val" id="s-pct">—</div><div class="sb-sub"> </div></div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-row"><span class="prog-lbl">Performance</span><span class="prog-pct" id="prog-pct-lbl">—%</span></div>
+        <div class="prog-bg"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+      </div>
+      <div class="perf-badge" id="perfBadge">Submit your test to see results!</div>
+      <div class="teacher-toggle">
+        <button onclick="toggleTeacherPanels()">🔑 Teacher — Show/Hide Mark Adjustment</button>
+      </div>
+      <div class="pdf-row">
+        <button class="btn-primary" onclick="downloadPDF()">📄 Download PDF Report</button>
+      </div>
+    </div>
+
+  </div><!-- /test-container -->
+</div><!-- /wrapper -->
+
+<footer class="site-footer">
+  <div class="footer-logo">
+    <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+    <span>Mr. EdLo's Virtual Classroom</span>
+  </div>
+  <p class="footer-tagline">Explore, discover, and learn something new every day!</p>
+  <p class="footer-copy">© 2026 Mr. EdLo's Virtual Classroom — Standard 6 · Belize · All rights reserved.</p>
+</footer>
+<button id="back-to-top" title="Back to top">↑</button>
+
+<!-- FLOATING CALCULATOR -->
+<button id="calc-fab" title="Open Calculator" onclick="toggleCalc()">🧮</button>
+
+<div id="calc-panel">
+  <div class="calc-label">📐 Calculator — π = 3.14 built in</div>
+  <div class="calc-screen">
+    <div class="calc-expr" id="calc-expr"></div>
+    <div class="calc-display" id="calc-display">0</div>
+  </div>
+  <div class="calc-mem-display" id="calc-mem-display"></div>
+
+  <!-- Memory row -->
+  <div class="calc-memory-row">
+    <button class="calc-btn" onclick="calcMem('mc')">MC</button>
+    <button class="calc-btn" onclick="calcMem('mr')">MR</button>
+    <button class="calc-btn" onclick="calcMem('m+')">M+</button>
+    <button class="calc-btn" onclick="calcMem('m-')">M−</button>
+    <button class="calc-btn" onclick="calcMem('ms')">MS</button>
+  </div>
+
+  <!-- Main grid -->
+  <div class="calc-grid">
+    <!-- Row 1: special functions -->
+    <button class="calc-btn op" onclick="calcFn('sq')">x²</button>
+    <button class="calc-btn op" onclick="calcFn('sqrt')">√</button>
+    <button class="calc-btn op pi" onclick="calcInsert('3.14')">π</button>
+    <button class="calc-btn clr" onclick="calcClear()">C</button>
+
+    <!-- Row 2 -->
+    <button class="calc-btn op" onclick="calcInsert('(')">( </button>
+    <button class="calc-btn op" onclick="calcInsert(')')"> )</button>
+    <button class="calc-btn op" onclick="calcInsert('%')">%</button>
+    <button class="calc-btn op" onclick="calcOp('/')">÷</button>
+
+    <!-- Row 3 -->
+    <button class="calc-btn" onclick="calcInsert('7')">7</button>
+    <button class="calc-btn" onclick="calcInsert('8')">8</button>
+    <button class="calc-btn" onclick="calcInsert('9')">9</button>
+    <button class="calc-btn op" onclick="calcOp('*')">×</button>
+
+    <!-- Row 4 -->
+    <button class="calc-btn" onclick="calcInsert('4')">4</button>
+    <button class="calc-btn" onclick="calcInsert('5')">5</button>
+    <button class="calc-btn" onclick="calcInsert('6')">6</button>
+    <button class="calc-btn op" onclick="calcOp('-')">−</button>
+
+    <!-- Row 5 -->
+    <button class="calc-btn" onclick="calcInsert('1')">1</button>
+    <button class="calc-btn" onclick="calcInsert('2')">2</button>
+    <button class="calc-btn" onclick="calcInsert('3')">3</button>
+    <button class="calc-btn op" onclick="calcOp('+')">+</button>
+
+    <!-- Row 6 -->
+    <button class="calc-btn" onclick="calcInsert('0')">0</button>
+    <button class="calc-btn" onclick="calcInsert('.')">.</button>
+    <button class="calc-btn op" onclick="calcBackspace()">⌫</button>
+    <button class="calc-btn eq" onclick="calcEquals()">=</button>
+  </div>
+
+  <!-- History -->
+  <div class="calc-label" style="margin-top:.2rem;">Last 3 results</div>
+  <div id="calc-history" style="font-size:.72rem;color:var(--section-lbl);font-family:'Nunito',sans-serif;line-height:1.7;min-height:1.2rem;"></div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   CONFIG
+═══════════════════════════════════════════ */
+const QUIZ_KEY   = 'vc-quiz-surface-area-volume-v2';
+const PK_KEY     = 'vc-passkey';
+const WORKER_URL = 'https://edlo-gemini.smartstandardsix.workers.dev/';
+
+/* ═══════════════════════════════════════════
+   MATH TOOLBAR — insert symbol at cursor
+═══════════════════════════════════════════ */
+function ins(id, sym) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.focus();
+  const s = el.selectionStart, e = el.selectionEnd;
+  el.value = el.value.slice(0,s) + sym + el.value.slice(e);
+  el.selectionStart = el.selectionEnd = s + sym.length;
+  el.dispatchEvent(new Event('input'));
+}
+
+function appendStarter(id, text) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const v = el.value;
+  el.value = v + (v.length && !v.endsWith(' ') ? ' ' : '') + text;
+  el.focus();
+  el.selectionStart = el.selectionEnd = el.value.length;
+  el.dispatchEvent(new Event('input'));
+}
+
+function fillField(id, text) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.value = text;
+  el.dispatchEvent(new Event('input'));
+  updateQuestionProgress();
+}
+
+/* ═══════════════════════════════════════════
+   THEME
+═══════════════════════════════════════════ */
+const THEMES = ['night','sunny','cloudy','nature'];
+function setTheme(t, btn) {
+  THEMES.forEach(x => document.body.classList.remove('theme-'+x));
+  document.body.classList.add('theme-'+t);
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  localStorage.setItem('vc-theme', t);
+}
+(function(){
+  const s = localStorage.getItem('vc-theme');
+  if (s && THEMES.includes(s)) {
+    THEMES.forEach(x => document.body.classList.remove('theme-'+x));
+    document.body.classList.add('theme-'+s);
+    document.querySelectorAll('.theme-btn').forEach(b => {
+      b.classList.toggle('active', b.textContent.toLowerCase().includes(s));
+    });
+  }
+})();
+
+/* ═══════════════════════════════════════════
+   STARS
+═══════════════════════════════════════════ */
+const sc = document.getElementById('stars');
+for (let i = 0; i < 80; i++) {
+  const s = document.createElement('div'); s.className = 'star';
+  const sz = Math.random()*2.5+1;
+  s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*4+2).toFixed(1)}s;--delay:-${(Math.random()*6).toFixed(1)}s;--op:${(Math.random()*0.5+0.2).toFixed(2)};`;
+  sc.appendChild(s);
+}
+
+document.getElementById('testDate').value = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+const topBtn = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => { topBtn.style.display = window.scrollY > 300 ? 'flex' : 'none'; });
+topBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+
+/* ═══════════════════════════════════════════
+   QUESTION PROGRESS
+═══════════════════════════════════════════ */
+const QUESTION_MAP = [
+  { id:'a1', type:'text2', w:'a1w', a:'a1a' },
+  { id:'a2', type:'text2', w:'a2w', a:'a2a' },
+  { id:'a3', type:'text2', w:'a3w', a:'a3a' },
+  { id:'b1', type:'text2', w:'b1w', a:'b1a' },
+  { id:'b2', type:'text2', w:'b2w', a:'b2a' },
+  { id:'b3', type:'text2', w:'b3w', a:'b3a' },
+  { id:'c1', type:'text1', a:'c1a' },
+  { id:'c2', type:'text4', ids:['c2cone','c2pyr','c2cyl','c2a'] },
+  { id:'c3', type:'text2', w:'c3w', a:'c3a' },
+  { id:'c4', type:'text4', ids:['c4err','c4form','c4a'] },
+];
+const TOTAL_Q = QUESTION_MAP.length;
+
+function isAnswered(q) {
+  const hasText = id => document.getElementById(id)?.value.trim().length > 0;
+  switch(q.type) {
+    case 'text1': return hasText(q.a);
+    case 'text2': return hasText(q.w) && hasText(q.a);
+    case 'text3': return hasText(q.w1) && hasText(q.a);
+    case 'text4': return q.ids.some(id => hasText(id));
+    default: return false;
+  }
+}
+
+function updateQuestionProgress() {
+  const answered = QUESTION_MAP.filter(isAnswered).length;
+  const pct = Math.round((answered / TOTAL_Q) * 100);
+  document.getElementById('qProgressCount').textContent = answered + ' / ' + TOTAL_Q;
+  const fill = document.getElementById('qProgressFill');
+  fill.style.width = pct + '%';
+  fill.classList.toggle('done', answered === TOTAL_Q);
+  const btn  = document.getElementById('submitBtn');
+  const hint = document.getElementById('submitHint');
+  const ready = answered === TOTAL_Q;
+  btn.disabled = !ready;
+  if (hint) {
+    hint.textContent = ready
+      ? '✅ All questions answered — ready to submit!'
+      : `Answer all ${TOTAL_Q} questions to submit (${TOTAL_Q - answered} remaining)`;
+    hint.classList.toggle('ready', ready);
+  }
+  if (typeof updateFade === 'function') updateFade();
+}
+
+function attachProgressListeners() {
+  document.querySelectorAll('.working-area, .answer-input, .scaffold-input').forEach(el => {
+    el.addEventListener('input', updateQuestionProgress);
+  });
+}
+
+function updateFade() {
+  QUESTION_MAP.forEach(q => {
+    const el = document.querySelector(`.question[data-q="${q.id}"]`);
+    if (!el) return;
+    if (isAnswered(q)) {
+      setTimeout(() => el.classList.add('answered-fade'), 800);
+    } else {
+      el.classList.remove('answered-fade');
+    }
+  });
+}
+
+/* ═══════════════════════════════════════════
+   ANTI-CHEAT
+═══════════════════════════════════════════ */
+const IDLE_SECONDS = 90;
+let idleTimer = null, blurActive = false, testSubmitted = false;
+let tabWarnings = 0;
+
+function resetIdleTimer() {
+  if (testSubmitted) return;
+  clearTimeout(idleTimer);
+  if (blurActive) return;
+  idleTimer = setTimeout(showBlur, IDLE_SECONDS * 1000);
+}
+function showBlur()    { if (testSubmitted) return; blurActive = true; document.getElementById('blurOverlay').classList.add('show'); }
+function dismissBlur() { blurActive = false; document.getElementById('blurOverlay').classList.remove('show'); resetIdleTimer(); }
+function dismissWarning() { document.getElementById('warnOverlay').classList.remove('show'); dismissBlur(); }
+
+function handleVisibilityChange() {
+  if (testSubmitted) return;
+  if (document.hidden) {
+    tabWarnings++;
+    document.getElementById('warnCount').textContent = 'Warning ' + tabWarnings + ' of 3';
+    document.getElementById('warnOverlay').classList.add('show');
+    showBlur();
+  }
+}
+document.addEventListener('visibilitychange', handleVisibilityChange);
+window.addEventListener('blur', () => {
+  if (!testSubmitted && !document.hidden) {
+    setTimeout(() => {
+      if (!document.hasFocus() && !testSubmitted) {
+        tabWarnings++;
+        document.getElementById('warnCount').textContent = 'Warning ' + tabWarnings + ' of 3';
+        document.getElementById('warnOverlay').classList.add('show');
+        showBlur();
+      }
+    }, 300);
+  }
+});
+function attachIdleListeners() {
+  ['mousemove','mousedown','keydown','touchstart','scroll','click'].forEach(evt => {
+    document.addEventListener(evt, resetIdleTimer, { passive:true });
+  });
+  resetIdleTimer();
+}
+
+/* ═══════════════════════════════════════════
+   STORAGE & LOCK
+═══════════════════════════════════════════ */
+function getSavedResult() { try { return JSON.parse(localStorage.getItem(QUIZ_KEY)); } catch(e) { return null; } }
+function saveResult(data) { localStorage.setItem(QUIZ_KEY, JSON.stringify(data)); }
+function getSavedPasskey() { return localStorage.getItem(PK_KEY) || ''; }
+function savePasskey(k)    { localStorage.setItem(PK_KEY, k); }
+function clearPasskey()    { localStorage.removeItem(PK_KEY); }
+
+function showLockScreen(data) {
+  document.getElementById('testContainer').style.display = 'none';
+  const ls = document.getElementById('lockScreen');
+  ls.classList.add('show');
+  const pills = [
+    {label:'Part A', val: data.sA + '/12'},
+    {label:'Part B', val: data.sB + '/12'},
+    {label:'Part C', val: data.sC + '/10'},
+    {label:'Total',  val: data.sTotal + '/34'},
+    {label:'%',      val: data.sPct + '%'},
+  ];
+  const container = document.getElementById('lockScores');
+  container.innerHTML = '';
+  pills.forEach(p => {
+    const el = document.createElement('div');
+    el.className = 'lock-score-pill';
+    el.innerHTML = `<div class="lsp-label">${p.label}</div><div class="lsp-val">${p.val}</div>`;
+    container.appendChild(el);
+  });
+  window._savedData = data;
+}
+
+function teacherReset() {
+  document.getElementById('passkeyModal').classList.remove('hidden');
+  document.getElementById('passkeyInput').value = '';
+  document.getElementById('passkeyErr').classList.remove('show');
+  setTimeout(() => document.getElementById('passkeyInput').focus(), 100);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = getSavedResult();
+  if (saved) {
+    showLockScreen(saved);
+    const pw = document.getElementById('qProgressWrap');
+    if (pw) pw.style.display = 'none';
+  } else {
+    attachProgressListeners();
+    attachIdleListeners();
+    updateQuestionProgress();
+  }
+});
+
+/* ═══════════════════════════════════════════
+   SUBMIT HANDLER
+═══════════════════════════════════════════ */
+async function handleSubmit() {
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  document.querySelectorAll('.question.answered-fade').forEach(el => el.classList.remove('answered-fade'));
+  testSubmitted = true;
+  clearTimeout(idleTimer);
+  dismissBlur();
+  document.getElementById('warnOverlay').classList.remove('show');
+  const hint = document.getElementById('submitHint');
+  if (hint) hint.style.display = 'none';
+  const pw = document.getElementById('qProgressWrap');
+  if (pw) pw.style.display = 'none';
+  document.getElementById('testContainer').classList.add('test-locked');
+  document.querySelectorAll('.answer-input, .working-area, .scaffold-input').forEach(el => el.readOnly = true);
+
+  const pk = getSavedPasskey();
+  if (!pk) {
+    document.getElementById('passkeyModal').classList.remove('hidden');
+  } else {
+    await callAIGrading(pk);
+  }
+}
+
+function validatePasskey() {
+  const input = document.getElementById('passkeyInput').value.trim().toUpperCase();
+  if (!input) return;
+  if (input === 'RESET-QUIZ') {
+    localStorage.removeItem(QUIZ_KEY);
+    clearPasskey();
+    document.getElementById('passkeyModal').classList.add('hidden');
+    location.reload();
+    return;
+  }
+  savePasskey(input);
+  document.getElementById('passkeyModal').classList.add('hidden');
+  document.getElementById('passkeyErr').classList.remove('show');
+  callAIGrading(input);
+}
+document.getElementById('passkeyInput').addEventListener('keydown', e => { if (e.key === 'Enter') validatePasskey(); });
+
+/* ═══════════════════════════════════════════
+   COLLECT ANSWERS
+═══════════════════════════════════════════ */
+function val(id) { return (document.getElementById(id)?.value || '').trim() || '(blank)'; }
+
+function collectAnswers() {
+  // Merge scaffold step inputs into the answer strings so AI sees everything
+  const c3steps = [val('c3s1'),val('c3s2'),val('c3s3'),val('c3s4')].filter(v=>v!=='(blank)').join(' | ');
+  const c4steps = [val('c4s1'),val('c4s2'),val('c4s3')].filter(v=>v!=='(blank)').join(' | ');
+  return {
+    a1: `Working: ${val('a1w')} | Answer: ${val('a1a')}`,
+    a2: `Working: ${val('a2w')} | Answer: ${val('a2a')}`,
+    a3: `Working: ${val('a3w')} | Answer: ${val('a3a')}`,
+    b1: `Working: ${val('b1w')} | Answer: ${val('b1a')}`,
+    b2: `Working: ${val('b2w')} | Answer: ${val('b2a')}`,
+    b3: `Working: ${val('b3w')} | Answer: ${val('b3a')}`,
+    c1: val('c1a'),
+    c2: `Cone: ${val('c2cone')} | Pyramid: ${val('c2pyr')} | Cylinder: ${val('c2cyl')} | Why ⅓: ${val('c2a')}`,
+    c3: `Steps: ${c3steps} | Working: ${val('c3w')} | Answer: ${val('c3a')}`,
+    c4: `Steps: ${c4steps} | Error: ${val('c4err')} | Formula: ${val('c4form')} | Working: ${val('c4a')}`,
+  };
+}
+
+/* ═══════════════════════════════════════════
+   AI GRADING
+═══════════════════════════════════════════ */
+let aiResults = null;
+let currentScores = {};
+
+async function callAIGrading(passkey) {
+  document.getElementById('spinnerWrap').classList.add('show');
+  const ans = collectAnswers();
+  const name = document.getElementById('studentName').value || 'Student';
+
+  const systemPrompt = `You are a warm, encouraging Mathematics teacher grading a Standard 6 test on Surface Area and Volume for primary school students aged 12–13 in Belize. The curriculum codes are MA 6.42 (surface area of cylinders and pyramids) and MA 6.43 (volume of cylinders, rectangular pyramids and cones). All calculations use π = 3.14.
+
+Grade all 12 questions using these rubrics:
+
+A1 — Cylinder SA, r=5cm, h=12cm. Correct: SA = 2×3.14×25 + 2×3.14×5×12 = 157 + 376.8 = 533.8 cm². (4 marks)
+  4/4 Formula stated + r and h identified + both components computed + correct total with cm²
+  3/4 Correct method, minor arithmetic error
+  2/4 One component only (e.g. lateral only) or correct formula but wrong substitution
+  1/4 Formula stated but not applied correctly
+  0/4 Blank or completely wrong approach
+
+A2 — Rectangular pyramid SA, square base 8cm, slant height 10cm. Correct: base=64, triangle=½×8×10=40, 4 triangles=160, total SA=224 cm². (5 marks)
+  5/5 Base area + 4 triangular faces all correct + formula stated + cm²
+  4/5 One arithmetic error but correct method
+  3/5 Base area correct + triangles but missing ⅓ confusion or one wrong face
+  2/5 Base area correct only or triangular faces only
+  1/5 Formula stated with attempt
+  0/5 Wrong formula (using perpendicular height as slant, or volume formula)
+
+A3 — Cylinder SA, diameter=14m (radius=7m), h=6m. Correct: r=7, SA=2×3.14×49+2×3.14×7×6=307.72+263.76=571.48 m². (3 marks)
+  3/3 r correctly halved from diameter + formula correct + answer ≈571 m²
+  2/3 Correct r and method but arithmetic error, OR correct formula but used d=14 as r
+  1/3 r conversion noted but formula wrong
+  0/3 Diameter used as radius throughout with no correction, or blank
+
+B1 — Cylinder V, diameter=10cm (radius=5cm), h=8cm. Correct: V=3.14×25×8=628 cm³. (4 marks)
+  4/4 r=5 from diameter + formula + substitution + 628 cm³
+  3/4 r=5 but arithmetic error, OR correct formula but used d=10 as r and shows partial working
+  2/4 Correct formula, r error, but some working shown
+  1/4 Formula stated only
+  0/4 Used d=10 as radius throughout with answer 2512, OR blank
+
+B2 — Rectangular pyramid V, base 9×6=54cm², h=10cm. Correct: V=⅓×54×10=180 cm³. (4 marks)
+  4/4 Base area computed + ⅓ factor applied + 180 cm³
+  3/4 Correct method but arithmetic error in base area or final step
+  2/4 Base area correct but ⅓ omitted (answer 540)
+  1/4 Formula stated, base area attempted
+  0/4 Blank or volume formula for wrong shape
+
+B3 — Cone V, r=7cm, h=15cm. Correct: V=⅓×3.14×49×15=769.3 cm³. (4 marks)
+  4/4 Formula + r² computed + ⅓ applied + answer ≈769 cm³
+  3/4 Correct formula and method but arithmetic error
+  2/4 Omitted ⅓ (answer ≈2307)
+  1/4 Formula written but not applied or confused with SA formula
+  0/4 Blank
+
+C1 — Conceptual explanation using 'cylinder'. (2 marks)
+  2/2 Clearly distinguishes surface area (total outside area) from volume (space inside) AND uses the word cylinder in a meaningful sentence
+  1/2 Partial distinction made OR cylinder mentioned but distinction vague
+  0/2 Blank or no meaningful distinction
+
+C2 — Formulas + explanation of ⅓. (2 marks)
+  2/2 All three formulas correct (cone: ⅓πr²h, pyramid: ⅓×base×h, cylinder: πr²h) AND explanation of ⅓ references the relationship to the corresponding prism/cylinder
+  1/2 Formulas correct but ⅓ explanation missing or weak OR explanation good but one formula wrong
+  0/2 Blank or all formulas wrong
+
+C3 — Cone silo r=3m, h=4m. Correct: V=⅓×3.14×9×4=37.68 m³. State in context. (3 marks)
+  3/3 Formula + correct calculation ≈37.68 m³ (accept 37.5–37.8) + contextual answer (silo holds this volume of grain)
+  2/3 Calculation correct but no contextual statement OR context correct but answer slightly off
+  1/3 Formula correct, attempt made, major arithmetic error
+  0/3 Blank or wrong formula entirely
+
+C4 — Error in V=2×π×4×10=251.2 for cylinder r=4, h=10. Error: used 2πrh instead of πr²h. Correct: V=3.14×16×10=502.4 cm³. (3 marks)
+  3/3 Error specifically identified (used 2πrh or SA formula, not r²) + correct formula stated (V=πr²h) + correct answer 502.4 cm³
+  2/3 Error identified + correct formula but arithmetic error in recalculation
+  1/3 Error identified only, no correction
+  0/3 Blank or identified wrong error
+
+FEEDBACK RULES:
+- If full marks: Give specific praise, name exactly what they did well.
+- If partial: (a) Praise what is correct, (b) Name specifically what was wrong or missing, (c) Give a short targeted hint.
+- If zero: Be kind, explain the correct approach briefly and encouragingly.
+- Keep each feedback to 2–4 sentences. Warm, simple English. Never mention AI. Use maths vocabulary appropriate for Standard 6.
+- For calculation questions, show the correct answer in the feedback when the student was wrong.
+
+Reply ONLY with valid JSON — no preamble, no markdown fences, no extra text:
+{"a1":{"score":4,"feedback":"..."},"a2":{"score":5,"feedback":"..."},"a3":{"score":3,"feedback":"..."},"b1":{"score":4,"feedback":"..."},"b2":{"score":4,"feedback":"..."},"b3":{"score":4,"feedback":"..."},"c1":{"score":2,"feedback":"..."},"c2":{"score":2,"feedback":"..."},"c3":{"score":3,"feedback":"..."},"c4":{"score":3,"feedback":"..."},"totalScore":34}`;
+
+  const userMessage = `Student: ${name}
+
+A1 (4 marks) — Cylinder SA, r=5cm, h=12cm
+${ans.a1}
+
+A2 (5 marks) — Pyramid SA, base 8cm, slant 10cm
+${ans.a2}
+
+A3 (3 marks) — Cylinder SA, diameter 14m, h=6m
+${ans.a3}
+
+B1 (4 marks) — Cylinder V, diameter 10cm, h=8cm
+${ans.b1}
+
+B2 (4 marks) — Pyramid V, base 9×6cm, h=10cm
+${ans.b2}
+
+B3 (4 marks) — Cone V, r=7cm, h=15cm
+${ans.b3}
+
+C1 (2 marks) — Explain SA vs Volume using 'cylinder'
+${ans.c1}
+
+C2 (2 marks) — Volume formulas + explain (1/3)
+${ans.c2}
+
+C3 (3 marks) — Cone silo problem in context
+${ans.c3}
+
+C4 (3 marks) — Find and correct student error
+${ans.c4}
+
+Return ONLY the JSON object.`;
+
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        passkey,
+        model: 'gpt-4o-mini',
+        max_tokens: 2000,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user',   content: userMessage }
+        ]
+      })
+    });
+
+    if (res.status === 403) {
+      clearPasskey();
+      document.getElementById('passkeyErr').classList.add('show');
+      document.getElementById('passkeyModal').classList.remove('hidden');
+      document.getElementById('spinnerWrap').classList.remove('show');
+      return;
+    }
+
+    const data = await res.json();
+    let text = '';
+    if (data.choices?.[0]) text = data.choices[0].message?.content || '';
+    else if (data.content) text = data.content.map(b => b.text||'').join('');
+
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('No JSON in response');
+    const result = JSON.parse(jsonMatch[0]);
+
+    aiResults = result;
+    displayResults(result, ans);
+
+  } catch (err) {
+    console.error('Grading error:', err);
+    displayResults(null, ans);
+  } finally {
+    document.getElementById('spinnerWrap').classList.remove('show');
+  }
+}
+
+/* ═══════════════════════════════════════════
+   DISPLAY RESULTS
+═══════════════════════════════════════════ */
+const MAX_MARKS = { a1:4, a2:5, a3:3, b1:4, b2:4, b3:4, c1:2, c2:2, c3:3, c4:3 };
+
+function displayResults(aiData, ans) {
+  const keys = Object.keys(MAX_MARKS);
+  keys.forEach(q => {
+    const score = aiData ? aiData[q]?.score ?? 0 : 0;
+    const feedback = aiData ? aiData[q]?.feedback || 'Mr. EdLo will review this answer.' : 'Mr. EdLo will review this answer.';
+    currentScores[q] = score;
+
+    const fb = document.getElementById(q + '-fb');
+    fb.innerHTML = `<div class="fb-score">📝 Teacher Feedback &nbsp;·&nbsp; ${score}/${MAX_MARKS[q]}</div>${feedback}`;
+    fb.classList.add('show');
+
+    buildAdjPanel(q, score);
+  });
+
+  updateTotals();
+
+  document.getElementById('resultsSection').classList.add('show');
+  setTimeout(() => {
+    document.getElementById('resultsSection').scrollIntoView({behavior:'smooth', block:'start'});
+  }, 400);
+
+  document.getElementById('submitBtn').textContent = '✅ Submitted';
+
+  const name = document.getElementById('studentName').value || '';
+  const date = document.getElementById('testDate').value;
+  const sA = [0,1,2].map(i=>currentScores[keys[i]]).reduce((a,b)=>a+b,0);
+  const sB = [3,4,5].map(i=>currentScores[keys[i]]).reduce((a,b)=>a+b,0);
+  const sC = [6,7,8,9].map(i=>currentScores[keys[i]]).reduce((a,b)=>a+b,0);
+  const sTotal = sA + sB + sC;
+  const sPct = Math.round((sTotal/34)*100);
+
+  const saveData = {
+    name, date, sA, sB, sC, sTotal, sPct,
+    perf: document.getElementById('perfBadge').textContent,
+    ai: aiData,
+    scores: { ...currentScores },
+    answers: ans
+  };
+  saveResult(saveData);
+  window._savedData = saveData;
+}
+
+function updateTotals() {
+  const keys = Object.keys(MAX_MARKS);
+  const sA = [0,1,2].map(i=>currentScores[keys[i]]||0).reduce((a,b)=>a+b,0);
+  const sB = [3,4,5].map(i=>currentScores[keys[i]]||0).reduce((a,b)=>a+b,0);
+  const sC = [6,7,8,9].map(i=>currentScores[keys[i]]||0).reduce((a,b)=>a+b,0);
+  const total = sA + sB + sC;
+  const pct = Math.round((total/34)*100);
+
+  document.getElementById('s-a').textContent = sA;
+  document.getElementById('s-b').textContent = sB;
+  document.getElementById('s-c').textContent = sC;
+  document.getElementById('s-total').textContent = total;
+  document.getElementById('s-pct').textContent = pct + '%';
+  document.getElementById('prog-pct-lbl').textContent = pct + '%';
+  const fill = document.getElementById('progFill');
+  fill.style.width = pct + '%';
+  fill.style.background = pct >= 80 ? '#69DB7C' : pct >= 50 ? '#FFD43B' : '#FF6B6B';
+
+  const sName = (document.getElementById('studentName').value || 'Standard 6').split(' ')[0];
+  let label = '';
+  if      (pct >= 90) label = '🌟 Distinction — Outstanding work, ' + sName + '!';
+  else if (pct >= 72) label = '✅ Mastery — Great job, ' + sName + '! Keep it up!';
+  else if (pct >= 50) label = '📚 Proficient — Good effort, ' + sName + '! Keep studying!';
+  else if (pct >= 35) label = '💪 Developing — Don\'t give up, ' + sName + '! Review with Mr. EdLo.';
+  else                label = '📖 Keep going, ' + sName + '! Practice makes perfect. Talk to Mr. EdLo.';
+  document.getElementById('perfBadge').textContent = label;
+}
+
+/* ═══════════════════════════════════════════
+   TEACHER MARK ADJUSTMENT
+═══════════════════════════════════════════ */
+function buildAdjPanel(q, currentScore) {
+  const max = MAX_MARKS[q];
+  const container = document.getElementById(q + '-adj-btns');
+  if (!container) return;
+  container.innerHTML = '';
+  for (let m = 0; m <= max; m++) {
+    const btn = document.createElement('button');
+    btn.className = 'adj-btn' + (m === currentScore ? ' sel' : '');
+    btn.textContent = m;
+    btn.onclick = () => applyAdjustment(q, m);
+    container.appendChild(btn);
+  }
+  // Label
+  const panel = document.getElementById(q + '-adj');
+  if (panel) {
+    const lbl = panel.querySelector('.adj-label');
+    if (lbl) lbl.textContent = `🔑 Adjust Mark (max ${max})`;
+  }
+}
+
+function applyAdjustment(q, newScore) {
+  currentScores[q] = newScore;
+  const container = document.getElementById(q + '-adj-btns');
+  container.querySelectorAll('.adj-btn').forEach((btn, i) => {
+    btn.classList.toggle('sel', i === newScore);
+  });
+  const fb = document.getElementById(q + '-fb');
+  const oldScore = fb.querySelector('.fb-score');
+  if (oldScore) oldScore.textContent = `📝 Teacher Feedback &nbsp;·&nbsp; ${newScore}/${MAX_MARKS[q]} (adjusted)`;
+  updateTotals();
+  // Update saved data
+  if (window._savedData) {
+    const sA = currentScores.a1+currentScores.a2+currentScores.a3;
+    const sB = currentScores.b1+currentScores.b2+currentScores.b3;
+    const sC = currentScores.c1+currentScores.c2+currentScores.c3+currentScores.c4;
+    window._savedData.sA = sA; window._savedData.sB = sB; window._savedData.sC = sC;
+    window._savedData.sTotal = sA+sB+sC; window._savedData.sPct = Math.round(((sA+sB+sC)/34)*100);
+    window._savedData.scores = { ...currentScores };
+    saveResult(window._savedData);
+  }
+}
+
+let adjVisible = false;
+function toggleTeacherPanels() {
+  adjVisible = !adjVisible;
+  document.querySelectorAll('.adj-panel').forEach(p => p.classList.toggle('show', adjVisible));
+}
+
+/* ═══════════════════════════════════════════
+   PDF EXPORT
+═══════════════════════════════════════════ */
+function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({orientation:'p', unit:'mm', format:'a4'});
+  const d = window._savedData || {};
+  const name   = d.name   || document.getElementById('studentName').value || 'Not entered';
+  const date   = d.date   || document.getElementById('testDate').value;
+  const sA     = d.sA     !== undefined ? d.sA + '/12'  : document.getElementById('s-a').textContent + '/12';
+  const sB     = d.sB     !== undefined ? d.sB + '/12'  : document.getElementById('s-b').textContent + '/12';
+  const sC     = d.sC     !== undefined ? d.sC + '/10'  : document.getElementById('s-c').textContent + '/10';
+  const sTotal = d.sTotal !== undefined ? d.sTotal+'/34': document.getElementById('s-total').textContent + '/34';
+  const sPct   = d.sPct   !== undefined ? d.sPct + '%'  : document.getElementById('s-pct').textContent;
+  const perf   = (d.perf  || document.getElementById('perfBadge').textContent).replace(/[^\x00-\x7F]/g,'').trim();
+  const ai     = d.ai || aiResults;
+  const sc     = d.scores || currentScores;
+  const ans    = d.answers || collectAnswers();
+
+  // Sanitise text for jsPDF — replace Unicode chars it cannot render
+  function clean(str) {
+    if (!str) return '';
+    return str
+      .replace(/⅓/g, '(1/3)')
+      .replace(/½/g,  '(1/2)')
+      .replace(/π/g,  'pi')
+      .replace(/²/g,  '^2')
+      .replace(/³/g,  '^3')
+      .replace(/×/g,  'x')
+      .replace(/÷/g,  '/')
+      .replace(/−/g,  '-')
+      .replace(/≈/g,  '~')
+      .replace(/[^\x00-\x7F]/g, '');
+  }
+
+  const margin = 20, pageW = 210, colW = pageW - margin*2;
+  let y = 0;
+
+  doc.setFillColor(77,171,247); doc.rect(0, 0, 210, 8, 'F'); y = 18;
+  doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(110,110,110);
+  doc.text('Howard Smith Nazarene School  |  Standard 6  |  Belize', pageW/2, y, {align:'center'}); y += 7;
+  doc.setFont('helvetica','bold'); doc.setFontSize(17); doc.setTextColor(20,20,40);
+  doc.text('Surface Area & Volume — Mathematics Test', pageW/2, y, {align:'center'}); y += 5;
+  doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(80,80,100);
+  doc.text("Mr. EdLo's Virtual Classroom  |  MA 6.42 & MA 6.43  |  Standard 6", pageW/2, y, {align:'center'}); y += 9;
+  doc.setDrawColor(77,171,247); doc.setLineWidth(0.5); doc.line(margin, y, pageW-margin, y); y += 8;
+
+  doc.setFillColor(240,246,255); doc.setDrawColor(77,171,247); doc.setLineWidth(0.4);
+  doc.roundedRect(margin, y, colW, 22, 3, 3, 'FD');
+  doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(40,40,60);
+  doc.text('STUDENT:', margin+5, y+8); doc.setFont('helvetica','normal'); doc.text(name, margin+25, y+8);
+  doc.setFont('helvetica','bold'); doc.text('DATE:', margin+5, y+16); doc.setFont('helvetica','normal'); doc.text(date, margin+18, y+16);
+  doc.setFont('helvetica','bold'); doc.text('TEACHER:', pageW/2, y+8); doc.setFont('helvetica','normal'); doc.text('Mr. Edwin D. Lopez', pageW/2+23, y+8);
+  doc.setFont('helvetica','bold'); doc.text('SCHOOL:', pageW/2, y+16); doc.setFont('helvetica','normal'); doc.text('Howard Smith Nazarene', pageW/2+20, y+16);
+  y += 28;
+
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(77,171,247);
+  doc.text('RESULTS', margin, y); y += 5;
+  const boxes = [
+    {label:'PART A (SA)', val:sA},
+    {label:'PART B (VOL)', val:sB},
+    {label:'PART C (REASON)', val:sC},
+    {label:'TOTAL SCORE', val:sTotal, hl:true},
+    {label:'PERCENTAGE', val:sPct},
+  ];
+  const bw = colW/5 - 2;
+  boxes.forEach((b,i) => {
+    const bx = margin + i*(bw+2.5);
+    doc.setFillColor(b.hl?77:235, b.hl?171:244, b.hl?247:255);
+    doc.setDrawColor(b.hl?50:180, b.hl?140:210, b.hl?200:255);
+    doc.roundedRect(bx, y, bw, 18, 2, 2, 'FD');
+    doc.setFont('helvetica','bold'); doc.setFontSize(6); doc.setTextColor(b.hl?10:80, b.hl?70:80, b.hl?10:80);
+    doc.text(b.label, bx+bw/2, y+5, {align:'center'});
+    doc.setFontSize(b.hl?12:10); doc.setTextColor(b.hl?10:40, b.hl?70:40, b.hl?10:60);
+    doc.text(b.val, bx+bw/2, y+14, {align:'center'});
+  });
+  y += 24;
+
+  doc.setFillColor(240,246,255); doc.setDrawColor(180,210,240);
+  doc.roundedRect(margin, y, colW, 13, 3, 3, 'FD');
+  doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(30,70,130);
+  doc.text('PERFORMANCE: ' + perf, margin+5, y+8); y += 19;
+
+  doc.setDrawColor(200,220,240); doc.setLineWidth(0.3); doc.line(margin, y, pageW-margin, y); y += 7;
+
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(77,171,247);
+  doc.text('STUDENT ANSWERS', margin, y); y += 5;
+
+  const qRows = [
+    {num:'A1', q:'Cylinder SA (r=5cm, h=12cm)', a: ans?.a1 || '(not saved)'},
+    {num:'A2', q:'Pyramid SA (base 8cm, slant 10cm)', a: ans?.a2 || '(not saved)'},
+    {num:'A3', q:'Cylinder SA (diameter 14m, h=6m)', a: ans?.a3 || '(not saved)'},
+    {num:'B1', q:'Cylinder V (diameter 10cm, h=8cm)', a: ans?.b1 || '(not saved)'},
+    {num:'B2', q:'Pyramid V (base 9x6cm, h=10cm)', a: ans?.b2 || '(not saved)'},
+    {num:'B3', q:'Cone V (r=7cm, h=15cm)', a: ans?.b3 || '(not saved)'},
+    {num:'C1', q:'Explain SA vs Volume (use cylinder)', a: ans?.c1 || '(not saved)'},
+    {num:'C2', q:'Volume formulas + explain (1/3)', a: ans?.c2 || '(not saved)'},
+    {num:'C3', q:'Cone silo — r=3m, h=4m, context', a: ans?.c3 || '(not saved)'},
+    {num:'C4', q:'Find and correct student error', a: ans?.c4 || '(not saved)'},
+  ];
+
+  const lh = 4.5;
+  doc.setFontSize(8);
+  qRows.forEach((row, i) => {
+    if (y > 260) { doc.addPage(); y = 20; }
+    const scoreVal = sc ? (sc[row.num.toLowerCase()] !== undefined ? sc[row.num.toLowerCase()] + '/' + MAX_MARKS[row.num.toLowerCase()] : '—') : '—';
+    doc.setFont('helvetica','bold'); doc.setTextColor(50,50,80);
+    doc.text(`${row.num} [${scoreVal}] — ${row.q}`, margin, y); y += lh;
+    doc.setFont('helvetica','normal'); doc.setTextColor(80,80,80);
+    doc.splitTextToSize('  ' + clean(row.a), colW-4).forEach(l => {
+      if (y > 270) { doc.addPage(); y = 20; }
+      doc.text(l, margin, y); y += lh;
+    });
+    if (ai && ai[row.num.toLowerCase()]?.feedback) {
+      doc.setFont('helvetica','italic'); doc.setTextColor(80,50,150);
+      doc.splitTextToSize('  Teacher Feedback: ' + clean(ai[row.num.toLowerCase()].feedback), colW-4).forEach(l => {
+        if (y > 270) { doc.addPage(); y = 20; }
+        doc.text(l, margin, y); y += lh;
+      });
+    }
+    doc.setTextColor(80,80,80);
+    y += 2;
+  });
+
+  const pageCount = doc.getNumberOfPages();
+  for (let p = 1; p <= pageCount; p++) {
+    doc.setPage(p);
+    doc.setFillColor(77,171,247);
+    doc.rect(0, 290, 210, 7, 'F');
+    doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(255,255,255);
+    doc.text('teacherzoled.github.io/Virtual-Classroom  ·  Standard 6 Mathematics · SA & Volume  ·  Page ' + p + ' of ' + pageCount, pageW/2, 294.5, {align:'center'});
+  }
+
+  const safeName = name.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
+  doc.save('SurfaceArea_Volume_' + safeName + '.pdf');
+}
+
+/* ═══════════════════════════════════════════
+   FLOATING CALCULATOR
+═══════════════════════════════════════════ */
+let calcExpr    = '';
+let calcResult  = '0';
+let calcMemory  = 0;
+let calcHistArr = [];
+let calcOpen    = false;
+
+function toggleCalc() {
+  calcOpen = !calcOpen;
+  const panel = document.getElementById('calc-panel');
+  panel.classList.toggle('open', calcOpen);
+  document.getElementById('calc-fab').textContent = calcOpen ? '✕' : '🧮';
+  document.getElementById('calc-fab').title = calcOpen ? 'Close Calculator' : 'Open Calculator';
+}
+
+function calcRefresh() {
+  document.getElementById('calc-display').textContent = calcResult;
+  document.getElementById('calc-expr').textContent    = calcExpr;
+}
+
+function calcInsert(val) {
+  // If last action was equals, start fresh expression with new digit
+  if (calcExpr === '' && calcResult !== '0' && '0123456789('.includes(val)) {
+    // start new calculation
+  }
+  calcExpr += val;
+  calcRefresh();
+}
+
+function calcOp(op) {
+  // If expression is empty and we have a result, continue from it
+  if (calcExpr === '' && calcResult !== '0') {
+    calcExpr = calcResult;
+  }
+  // Avoid double operators
+  const last = calcExpr.slice(-1);
+  if (['+','-','*','/'].includes(last)) {
+    calcExpr = calcExpr.slice(0,-1);
+  }
+  calcExpr += op;
+  calcRefresh();
+}
+
+function calcFn(fn) {
+  try {
+    let base = calcExpr !== '' ? evalExpr(calcExpr) : parseFloat(calcResult);
+    if (isNaN(base)) base = 0;
+    let res;
+    if (fn === 'sq')   res = base * base;
+    if (fn === 'sqrt') res = Math.sqrt(base);
+    calcHistArr.unshift(calcExpr + (fn==='sq'?'²':'√') + ' = ' + roundResult(res));
+    if (calcHistArr.length > 3) calcHistArr.pop();
+    calcResult = String(roundResult(res));
+    calcExpr   = '';
+    updateHistory();
+    calcRefresh();
+  } catch(e) { calcResult = 'Error'; calcExpr = ''; calcRefresh(); }
+}
+
+function calcEquals() {
+  if (!calcExpr) return;
+  try {
+    const res = evalExpr(calcExpr);
+    if (isNaN(res) || !isFinite(res)) throw new Error('Invalid');
+    const rounded = roundResult(res);
+    calcHistArr.unshift(calcExpr + ' = ' + rounded);
+    if (calcHistArr.length > 3) calcHistArr.pop();
+    updateHistory();
+    calcResult = String(rounded);
+    calcExpr   = '';
+    calcRefresh();
+  } catch(e) {
+    calcResult = 'Error';
+    calcExpr   = '';
+    calcRefresh();
+  }
+}
+
+function evalExpr(expr) {
+  // Safe evaluation — only allow numbers, operators, parens, dot, percent
+  const safe = expr.replace(/[^0-9+\-*/.()%]/g, '');
+  // Handle percent: replace X% with (X/100)
+  const withPct = safe.replace(/(\d+\.?\d*)%/g, '($1/100)');
+  // eslint-disable-next-line no-new-func
+  return Function('"use strict"; return (' + withPct + ')')();
+}
+
+function roundResult(n) {
+  // Round to max 6 decimal places, remove trailing zeros
+  return parseFloat(n.toFixed(6));
+}
+
+function calcClear() {
+  calcExpr   = '';
+  calcResult = '0';
+  calcRefresh();
+}
+
+function calcBackspace() {
+  if (calcExpr.length > 0) {
+    calcExpr = calcExpr.slice(0, -1);
+  } else {
+    calcResult = '0';
+  }
+  calcRefresh();
+}
+
+function calcMem(action) {
+  const current = calcExpr !== '' ? (() => { try { return evalExpr(calcExpr); } catch(e){ return parseFloat(calcResult)||0; } })() : parseFloat(calcResult)||0;
+  switch(action) {
+    case 'mc': calcMemory = 0; break;
+    case 'mr':
+      calcExpr += String(calcMemory);
+      calcRefresh();
+      return;
+    case 'm+': calcMemory = roundResult(calcMemory + current); break;
+    case 'm-': calcMemory = roundResult(calcMemory - current); break;
+    case 'ms': calcMemory = current; break;
+  }
+  const memEl = document.getElementById('calc-mem-display');
+  memEl.textContent = calcMemory !== 0 ? 'M = ' + calcMemory : '';
+}
+
+function updateHistory() {
+  const el = document.getElementById('calc-history');
+  el.innerHTML = calcHistArr.map(h => `<div>${h}</div>`).join('');
+}
+
+// Close calculator when clicking outside
+document.addEventListener('click', e => {
+  if (calcOpen && !document.getElementById('calc-panel').contains(e.target) && e.target.id !== 'calc-fab') {
+    toggleCalc();
+  }
+});
+
+// Keyboard support for calculator
+document.addEventListener('keydown', e => {
+  if (!calcOpen) return;
+  const key = e.key;
+  if ('0123456789.'.includes(key))       { calcInsert(key); e.preventDefault(); }
+  else if (key === '+')                   { calcOp('+');     e.preventDefault(); }
+  else if (key === '-')                   { calcOp('-');     e.preventDefault(); }
+  else if (key === '*')                   { calcOp('*');     e.preventDefault(); }
+  else if (key === '/')                   { calcOp('/');     e.preventDefault(); }
+  else if (key === '(' || key === ')')    { calcInsert(key); e.preventDefault(); }
+  else if (key === 'Enter' || key === '='){ calcEquals();    e.preventDefault(); }
+  else if (key === 'Backspace')           { calcBackspace(); e.preventDefault(); }
+  else if (key === 'Escape')              { toggleCalc();    e.preventDefault(); }
+});
+</script>
+</body>
+</html>

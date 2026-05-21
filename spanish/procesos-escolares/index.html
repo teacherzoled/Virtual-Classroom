@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Procesos Escolares — Español Estándar 6</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f2d52;
+    --teal: #0b7a75;
+    --teal-light: #12b5b0;
+    --gold: #e8a020;
+    --gold-light: #fcd980;
+    --cream: #fdf8f0;
+    --red: #c0392b;
+    --green: #1a7a3c;
+    --white: #ffffff;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --border: #d1d5db;
+    --shadow: 0 4px 24px rgba(15,45,82,0.10);
+    --radius: 14px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--navy);
+    color: white;
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.3);
+  }
+  .site-header .brand { display: flex; flex-direction: column; gap: 0.1rem; }
+  .site-header .brand .subject { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 900; color: var(--gold-light); letter-spacing: 0.02em; }
+  .site-header .brand .lesson-title { font-size: 0.8rem; color: rgba(255,255,255,0.65); letter-spacing: 0.04em; text-transform: uppercase; }
+  .site-header .teacher { font-size: 0.85rem; color: rgba(255,255,255,0.75); }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap { background: rgba(255,255,255,0.12); border-radius: 20px; height: 6px; width: 160px; overflow: hidden; }
+  .progress-bar { height: 100%; background: var(--gold); border-radius: 20px; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
+  .progress-label { font-size: 0.72rem; color: rgba(255,255,255,0.6); margin-top: 3px; text-align: right; }
+
+  /* ── MAIN LAYOUT ── */
+  main { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+  /* ── SLIDES ── */
+  .slide { display: none; animation: slideIn 0.4s cubic-bezier(.4,0,.2,1); }
+  .slide.active { display: block; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTION BADGE ── */
+  .badge {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: var(--navy); color: var(--gold-light);
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 0.3rem 0.85rem;
+    border-radius: 40px; margin-bottom: 1rem;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 2rem 2.2rem;
+    margin-bottom: 1.5rem;
+    border-left: 5px solid var(--teal);
+  }
+  .card.gold { border-color: var(--gold); }
+  .card.red  { border-color: var(--red); }
+  .card.green{ border-color: var(--green); }
+  .card.navy { border-color: var(--navy); }
+
+  /* ── TITLES ── */
+  h1 { font-family: 'Fraunces', serif; font-size: 2.8rem; font-weight: 900; line-height: 1.1; color: var(--navy); }
+  h2 { font-family: 'Fraunces', serif; font-size: 1.8rem; font-weight: 700; color: var(--navy); margin-bottom: 0.6rem; }
+  h3 { font-size: 1.05rem; font-weight: 600; color: var(--navy); margin-bottom: 0.4rem; }
+  p  { line-height: 1.7; margin-bottom: 0.8rem; font-size: 1rem; }
+
+  /* ── HERO (slide 1) ── */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #1a4b8c 60%, var(--teal) 100%);
+    border-radius: 20px;
+    padding: 3.5rem 3rem;
+    color: white;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content:'';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 20%, rgba(232,160,32,0.18) 0%, transparent 60%);
+  }
+  .hero .eyebrow { font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 0.8rem; }
+  .hero h1 { color: white; font-size: 3.6rem; margin-bottom: 0.3rem; }
+  .hero .sub { font-size: 1.1rem; color: rgba(255,255,255,0.75); margin-bottom: 0.5rem; }
+  .hero .meta { font-size: 0.85rem; color: rgba(255,255,255,0.5); }
+
+  /* ── VOCAB GRID ── */
+  .vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.2rem 0; }
+  .vocab-item {
+    background: white;
+    border-radius: var(--radius);
+    padding: 1.1rem 1.2rem;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    transition: all 0.22s;
+    position: relative;
+    overflow: hidden;
+  }
+  .vocab-item:hover { border-color: var(--teal-light); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(11,122,117,0.12); }
+  .vocab-item .word { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 700; color: var(--navy); margin-bottom: 0.25rem; }
+  .vocab-item .def  { font-size: 0.87rem; color: var(--muted); line-height: 1.5; }
+  .vocab-item .check { position: absolute; top: 0.7rem; right: 0.8rem; font-size: 1.2rem; opacity: 0; transition: opacity 0.2s; }
+  .vocab-item.seen .check { opacity: 1; }
+  .vocab-item.seen { border-color: var(--teal); background: #f0fbfb; }
+
+  .vocab-note {
+    background: var(--navy);
+    color: white;
+    border-radius: 10px;
+    padding: 0.85rem 1.2rem;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+  .vocab-note strong { color: var(--gold-light); }
+
+  /* ── LISTENING PASSAGE ── */
+  .passage-box {
+    background: #f0f4ff;
+    border-left: 4px solid var(--navy);
+    border-radius: 10px;
+    padding: 1.2rem 1.4rem;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text);
+    margin: 1rem 0;
+    font-style: italic;
+  }
+  .reveal-btn {
+    background: var(--teal);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.65rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .reveal-btn:hover { background: var(--navy); transform: translateY(-1px); }
+  .reveal-btn:disabled { background: #aaa; cursor: default; transform: none; }
+  .hidden-content { display: none; }
+  .hidden-content.shown { display: block; animation: slideIn 0.3s ease; }
+
+  /* ── COMPREHENSION QUESTIONS ── */
+  .question-block { margin-bottom: 1.4rem; }
+  .question-text { font-weight: 600; font-size: 1rem; color: var(--navy); margin-bottom: 0.6rem; }
+  .options { display: flex; flex-direction: column; gap: 0.45rem; }
+  .option-btn {
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 0.65rem 1.1rem;
+    font-size: 0.95rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--teal-light); background: #f0fbfb; }
+  .option-btn.correct { border-color: var(--green); background: #e8f8ee; color: var(--green); font-weight: 600; }
+  .option-btn.wrong   { border-color: var(--red);   background: #fdecea; color: var(--red); }
+  .option-btn:disabled { cursor: default; }
+  .feedback { font-size: 0.85rem; margin-top: 0.4rem; padding: 0.4rem 0.8rem; border-radius: 8px; font-weight: 500; }
+  .feedback.ok  { color: var(--green); background: #e8f8ee; }
+  .feedback.err { color: var(--red);   background: #fdecea; }
+
+  /* ── PRACTICE SENTENCES ── */
+  .sentence-item {
+    display: flex; align-items: flex-start; gap: 1rem;
+    background: white; border: 2px solid var(--border);
+    border-radius: var(--radius); padding: 1rem 1.2rem;
+    margin-bottom: 0.75rem; transition: border-color 0.2s;
+  }
+  .sentence-item .num {
+    background: var(--navy); color: var(--gold-light);
+    font-family: 'Fraunces', serif; font-weight: 700;
+    font-size: 1.1rem; border-radius: 8px;
+    width: 2.2rem; height: 2.2rem; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .sentence-item .sentence-text { font-size: 1.1rem; font-weight: 600; color: var(--navy); padding-top: 0.25rem; }
+
+  /* ── PAIR DISCUSSION ── */
+  .discussion-question {
+    font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 700;
+    color: var(--navy); text-align: center; margin-bottom: 1.2rem;
+    line-height: 1.3;
+  }
+  .rules-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.2rem; }
+  .rules-list li { display: flex; align-items: center; gap: 0.8rem; font-size: 0.95rem; }
+  .rules-list li .rule-num {
+    background: var(--gold); color: var(--navy); font-weight: 700;
+    border-radius: 50%; width: 1.6rem; height: 1.6rem; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 0.8rem;
+  }
+  .support-box {
+    background: #f0fbfb; border: 2px solid var(--teal-light);
+    border-radius: 10px; padding: 0.9rem 1.2rem;
+  }
+  .support-box .label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--teal); margin-bottom: 0.4rem; }
+  .support-box p { margin: 0; font-size: 0.95rem; color: var(--text); }
+
+  /* ── ORAL OUTPUT BOX ── */
+  .oral-prompt {
+    background: linear-gradient(135deg, var(--teal) 0%, var(--teal-light) 100%);
+    color: white; border-radius: var(--radius);
+    padding: 1.8rem 2rem; text-align: center; margin-bottom: 1.2rem;
+  }
+  .oral-prompt .icon { font-size: 2.4rem; margin-bottom: 0.6rem; }
+  .oral-prompt p { color: rgba(255,255,255,0.9); margin: 0; font-size: 1rem; }
+  .oral-prompt h3 { color: white; font-size: 1.3rem; margin-bottom: 0.4rem; }
+
+  .example-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .example-list li {
+    background: white; border-radius: 10px; padding: 0.7rem 1rem;
+    border-left: 4px solid var(--teal); font-size: 0.95rem;
+    color: var(--text); font-weight: 500;
+  }
+
+  .constraint-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.8rem; justify-content: center; }
+  .chip {
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px; padding: 0.3rem 0.85rem;
+    font-size: 0.78rem; color: white; font-weight: 500;
+  }
+
+  /* ── SUMMARY ── */
+  .checklist { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .checklist li {
+    display: flex; align-items: center; gap: 0.8rem;
+    font-size: 1rem; font-weight: 600; color: var(--navy);
+  }
+  .checklist li::before {
+    content: '✓'; background: var(--green); color: white;
+    border-radius: 50%; width: 1.5rem; height: 1.5rem; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 700;
+  }
+  .next-class {
+    background: var(--navy); color: white; border-radius: var(--radius);
+    padding: 1.2rem 1.5rem; display: flex; align-items: center; gap: 1rem;
+    margin-top: 1.2rem;
+  }
+  .next-class .arrow { font-size: 1.8rem; }
+  .next-class p { margin: 0; font-size: 0.95rem; color: rgba(255,255,255,0.85); }
+  .next-class strong { color: var(--gold-light); }
+
+  /* ── SCORE WIDGET ── */
+  .score-banner {
+    background: linear-gradient(135deg, var(--gold) 0%, #f5c518 100%);
+    border-radius: var(--radius); padding: 1.2rem 1.8rem;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.4rem;
+  }
+  .score-banner .label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--navy); }
+  .score-banner .score { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 900; color: var(--navy); }
+
+  /* ── NAV BUTTONS ── */
+  .nav-row { display: flex; gap: 1rem; justify-content: space-between; margin-top: 2rem; }
+  .btn-nav {
+    background: var(--navy);
+    color: white;
+    border: none; border-radius: 12px;
+    padding: 0.85rem 2rem;
+    font-size: 0.95rem; font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    display: flex; align-items: center; gap: 0.5rem;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-nav:hover { background: var(--teal); transform: translateY(-1px); }
+  .btn-nav:disabled { background: #d1d5db; color: #9ca3af; cursor: default; transform: none; }
+  .btn-nav.primary { background: var(--teal); }
+  .btn-nav.primary:hover { background: var(--navy); }
+
+  /* ── STEP INDICATOR ── */
+  .step-dots { display: flex; gap: 0.4rem; justify-content: center; margin-bottom: 1.5rem; }
+  .step-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--border); transition: background 0.3s, transform 0.2s;
+  }
+  .step-dot.done { background: var(--teal); }
+  .step-dot.active { background: var(--navy); transform: scale(1.35); }
+
+  /* ── ACTIVATION (slide 2) ── */
+  .activation-question {
+    background: var(--navy); color: white;
+    border-radius: var(--radius); padding: 1.4rem 1.8rem;
+    margin-bottom: 1rem;
+  }
+  .activation-question .q-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 0.5rem; }
+  .activation-question .q-text { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 700; }
+
+  .starter-chips { display: flex; flex-direction: column; gap: 0.5rem; margin: 0.8rem 0 0; }
+  .starter-chip {
+    background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px; padding: 0.55rem 1rem;
+    font-size: 0.95rem; color: rgba(255,255,255,0.85);
+  }
+
+  .think-box {
+    background: white; border-radius: var(--radius);
+    border: 2px dashed var(--gold);
+    padding: 1.2rem 1.5rem;
+  }
+  .think-box textarea {
+    width: 100%; border: none; outline: none; resize: none;
+    font-family: 'DM Sans', sans-serif; font-size: 1rem;
+    color: var(--text); background: transparent;
+    min-height: 80px;
+  }
+  .think-box .char-hint { font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .vocab-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 2.4rem; }
+    .site-header { flex-wrap: wrap; gap: 0.5rem; }
+    .nav-row { flex-direction: column; }
+    .btn-nav { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="brand">
+    <span class="subject">Español</span>
+    <span class="lesson-title">Standard 6 · Día 1 · Procesos Escolares</span>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.4rem">
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel">Paso 1 de 7</div>
+  </div>
+  <span class="teacher">Mr. Edwin D. López</span>
+</header>
+
+<main>
+
+  <!-- STEP DOTS -->
+  <div class="step-dots" id="stepDots"></div>
+
+  <!-- ══════════════════════════════════════
+       SLIDE 1 · TITLE / INTRO
+       ══════════════════════════════════════ -->
+  <div class="slide active" id="slide-1">
+    <div class="hero">
+      <div class="eyebrow">Español · Standard 6</div>
+      <h1>Procesos<br>Escolares</h1>
+      <p class="sub">Día 1 &nbsp;·&nbsp; Sesión 1 &nbsp;·&nbsp; Vocabulario Oral</p>
+      <p class="meta">Mr. Edwin D. López</p>
+    </div>
+
+    <div class="card gold">
+      <h3>¿Qué aprenderás hoy?</h3>
+      <p>En esta lección aprenderás <strong>6 palabras nuevas</strong> sobre los procesos escolares. Practicarás escuchando, hablando y respondiendo preguntas.</p>
+      <p style="margin:0;font-size:0.9rem;color:var(--muted)">👆 Usa los botones de navegación para avanzar. ¡Toma tu tiempo!</p>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-nav" disabled>← Anterior</button>
+      <button class="btn-nav primary" onclick="nextSlide()">Comenzar →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SLIDE 2 · ACTIVACIÓN
+       ══════════════════════════════════════ -->
+  <div class="slide" id="slide-2">
+    <div class="badge">💭 Activación · Conocimiento previo</div>
+
+    <div class="activation-question">
+      <div class="q-label">Pregunta 1</div>
+      <div class="q-text">¿Qué haces el primer día de clases?</div>
+      <div class="starter-chips">
+        <div class="starter-chip">Yo voy a la escuela…</div>
+        <div class="starter-chip">Yo hablo con el maestro…</div>
+        <div class="starter-chip">Yo me registro…</div>
+      </div>
+    </div>
+
+    <div class="activation-question" style="margin-bottom:1rem">
+      <div class="q-label">Pregunta 2</div>
+      <div class="q-text">¿Qué es la inscripción?</div>
+    </div>
+
+    <div class="think-box">
+      <p style="font-size:0.8rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.5rem">Mis pensamientos (opcional)</p>
+      <textarea placeholder="Escribe tus ideas aquí…" id="activationText"></textarea>
+      <div class="char-hint">Escribe en español. Esta es tu práctica personal.</div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-nav" onclick="prevSlide()">← Anterior</button>
+      <button class="btn-nav primary" onclick="nextSlide()">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SLIDE 3 · VOCABULARIO
+       ══════════════════════════════════════ -->
+  <div class="slide" id="slide-3">
+    <div class="badge">📚 Vocabulario Nuevo · Procesos Escolares</div>
+    <h2>Palabras nuevas</h2>
+    <p style="margin-bottom:1rem;color:var(--muted)">Haz clic en cada tarjeta para marcarla como vista. ¡Aprende las 6 palabras!</p>
+
+    <div class="vocab-grid" id="vocabGrid">
+      <div class="vocab-item" onclick="markVocab(this)">
+        <div class="word">Matriculación</div>
+        <div class="def">Entrar a una escuela oficialmente</div>
+        <div class="check">✅</div>
+      </div>
+      <div class="vocab-item" onclick="markVocab(this)">
+        <div class="word">Inscripción</div>
+        <div class="def">Registrarse para comenzar</div>
+        <div class="check">✅</div>
+      </div>
+      <div class="vocab-item" onclick="markVocab(this)">
+        <div class="word">Asistencia</div>
+        <div class="def">Venir a la escuela todos los días</div>
+        <div class="check">✅</div>
+      </div>
+      <div class="vocab-item" onclick="markVocab(this)">
+        <div class="word">Promoción</div>
+        <div class="def">Pasar al siguiente grado</div>
+        <div class="check">✅</div>
+      </div>
+      <div class="vocab-item" onclick="markVocab(this)" style="border-left:4px solid var(--green)">
+        <div class="word" style="color:var(--green)">Aprobar ✔</div>
+        <div class="def">Pasar el año</div>
+        <div class="check">✅</div>
+      </div>
+      <div class="vocab-item" onclick="markVocab(this)" style="border-left:4px solid var(--red)">
+        <div class="word" style="color:var(--red)">Reprobar ✖</div>
+        <div class="def">No pasar el año</div>
+        <div class="check">✅</div>
+      </div>
+    </div>
+
+    <div class="vocab-note">
+      <strong>Aprobar</strong> = pasar &nbsp;|&nbsp; <strong>Reprobar</strong> = no pasar
+    </div>
+
+    <div class="card" style="margin-top:1rem;background:#f0fbfb;border-color:var(--teal-light)">
+      <p style="margin:0;font-size:0.9rem">👄 <strong>Practica oralmente:</strong> Di cada palabra en voz alta tres veces. ¡Pronuncia con cuidado!</p>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-nav" onclick="prevSlide()">← Anterior</button>
+      <button class="btn-nav primary" id="vocabNextBtn" onclick="nextSlide()">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SLIDE 4 · ESCUCHAR + COMPRENSIÓN
+       ══════════════════════════════════════ -->
+  <div class="slide" id="slide-4">
+    <div class="badge">👂 Escuchar · Tarea de Comprensión Oral</div>
+    <h2>Escucha el cuento</h2>
+
+    <div class="card">
+      <p style="font-size:0.85rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:0.8rem">📖 Lee el texto en voz alta o escúchalo de tu maestro</p>
+      <div class="passage-box">
+        El primer día de clases, María completa su inscripción. Ella empieza el año escolar con buena asistencia. María estudia mucho y aprueba sus exámenes. Al final del año, recibe la promoción al siguiente grado.
+      </div>
+    </div>
+
+    <div class="card gold">
+      <h3 style="margin-bottom:1rem">Preguntas de comprensión</h3>
+
+      <!-- Q1 -->
+      <div class="question-block">
+        <div class="question-text">1. ¿Qué hace María el primer día?</div>
+        <div class="options">
+          <button class="option-btn" onclick="answer(this,false,'1','completa su inscripción')">Va de vacaciones</button>
+          <button class="option-btn" onclick="answer(this,true,'1','completa su inscripción')">Completa su inscripción</button>
+          <button class="option-btn" onclick="answer(this,false,'1','completa su inscripción')">Recibe su promoción</button>
+        </div>
+        <div class="feedback" id="fb-1" style="display:none"></div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="question-block">
+        <div class="question-text">2. ¿Tiene buena asistencia María?</div>
+        <div class="options">
+          <button class="option-btn" onclick="answer(this,false,'2','Sí, tiene buena asistencia')">No, falta mucho</button>
+          <button class="option-btn" onclick="answer(this,true,'2','Sí, tiene buena asistencia')">Sí, tiene buena asistencia</button>
+          <button class="option-btn" onclick="answer(this,false,'2','Sí, tiene buena asistencia')">No se menciona</button>
+        </div>
+        <div class="feedback" id="fb-2" style="display:none"></div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="question-block">
+        <div class="question-text">3. ¿Aprueba o reprueba María?</div>
+        <div class="options">
+          <button class="option-btn" onclick="answer(this,true,'3','Aprueba sus exámenes')">Aprueba sus exámenes</button>
+          <button class="option-btn" onclick="answer(this,false,'3','Aprueba sus exámenes')">Reprueba sus exámenes</button>
+          <button class="option-btn" onclick="answer(this,false,'3','Aprueba sus exámenes')">No hace exámenes</button>
+        </div>
+        <div class="feedback" id="fb-3" style="display:none"></div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="question-block">
+        <div class="question-text">4. ¿Qué recibe María al final del año?</div>
+        <div class="options">
+          <button class="option-btn" onclick="answer(this,false,'4','Recibe la promoción al siguiente grado')">Una certificación</button>
+          <button class="option-btn" onclick="answer(this,false,'4','Recibe la promoción al siguiente grado')">Una matrícula nueva</button>
+          <button class="option-btn" onclick="answer(this,true,'4','Recibe la promoción al siguiente grado')">La promoción al siguiente grado</button>
+        </div>
+        <div class="feedback" id="fb-4" style="display:none"></div>
+      </div>
+
+      <div class="score-banner" id="scoreBanner" style="display:none">
+        <div>
+          <div class="label">Tu puntuación</div>
+          <div class="score" id="scoreText">0 / 4</div>
+        </div>
+        <div style="font-size:2rem" id="scoreEmoji">🤔</div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-nav" onclick="prevSlide()">← Anterior</button>
+      <button class="btn-nav primary" onclick="nextSlide()">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SLIDE 5 · PRÁCTICA GUIADA
+       ══════════════════════════════════════ -->
+  <div class="slide" id="slide-5">
+    <div class="badge">👄 Práctica Guiada · Oraciones Modelo</div>
+    <h2>Practica las oraciones</h2>
+    <p style="color:var(--muted);margin-bottom:1.2rem">Di cada oración en voz alta. Luego completa el ejercicio de producción oral.</p>
+
+    <div class="sentence-item">
+      <div class="num">1</div>
+      <div class="sentence-text">Yo apruebo el año.</div>
+    </div>
+    <div class="sentence-item">
+      <div class="num">2</div>
+      <div class="sentence-text">La asistencia es importante.</div>
+    </div>
+    <div class="sentence-item">
+      <div class="num">3</div>
+      <div class="sentence-text">La inscripción es necesaria.</div>
+    </div>
+
+    <div class="card gold" style="margin-top:1.5rem">
+      <h3 style="margin-bottom:0.8rem">¡Ahora di tu propia oración!</h3>
+      <p style="color:var(--muted);font-size:0.9rem;margin-bottom:0.8rem">Escoge una palabra de vocabulario y forma una oración completa. Escríbela aquí:</p>
+      <div class="think-box">
+        <textarea placeholder="Escribe tu oración aquí… (ej: La promoción es importante para mí.)" id="ownSentence"></textarea>
+        <div class="char-hint">Una oración · Una palabra de vocabulario · ¡Sin inglés!</div>
+      </div>
+      <button class="reveal-btn" style="margin-top:0.8rem" onclick="checkSentence()">Verificar mi oración ✓</button>
+      <div id="sentenceFeedback" style="margin-top:0.7rem;display:none"></div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-nav" onclick="prevSlide()">← Anterior</button>
+      <button class="btn-nav primary" onclick="nextSlide()">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SLIDE 6 · PRÁCTICA EN PARES
+       ══════════════════════════════════════ -->
+  <div class="slide" id="slide-6">
+    <div class="badge">🗣️ Práctica en Pares · Discusión Estructurada</div>
+
+    <div class="discussion-question">¿Es importante la asistencia?<br>¿Por qué?</div>
+
+    <div class="card">
+      <h3 style="margin-bottom:0.8rem">Reglas de la discusión</h3>
+      <ul class="rules-list">
+        <li><span class="rule-num">1</span>Uno habla, el otro escucha.</li>
+        <li><span class="rule-num">2</span>Usen palabras nuevas de vocabulario.</li>
+        <li><span class="rule-num">3</span>No inglés — ¡solo español!</li>
+      </ul>
+
+      <div class="support-box">
+        <div class="label">Apoyo lingüístico</div>
+        <p><strong>Sí, es importante porque…</strong><br><strong>No, no es importante porque…</strong></p>
+      </div>
+    </div>
+
+    <div class="card gold">
+      <h3 style="margin-bottom:0.8rem">¿Qué dijiste?</h3>
+      <p style="font-size:0.9rem;color:var(--muted);margin-bottom:0.6rem">Escribe un resumen de lo que dijiste en la discusión:</p>
+      <div class="think-box">
+        <textarea placeholder="Ej: Yo dije que la asistencia es importante porque…" id="pairText"></textarea>
+        <div class="char-hint">Mínimo una oración completa en español.</div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-nav" onclick="prevSlide()">← Anterior</button>
+      <button class="btn-nav primary" onclick="nextSlide()">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SLIDE 7 · CIERRE + RESUMEN
+       ══════════════════════════════════════ -->
+  <div class="slide" id="slide-7">
+    <div class="badge">🎯 Cierre · Verificación de Producción Oral</div>
+
+    <div class="oral-prompt">
+      <div class="icon">👄</div>
+      <h3>Di UNA oración completa</h3>
+      <p>Usa una palabra de vocabulario nueva. ¡Sin inglés!</p>
+      <div class="constraint-chips">
+        <span class="chip">Oración completa</span>
+        <span class="chip">Una palabra de vocabulario</span>
+        <span class="chip">¡Sin inglés!</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:0.8rem">Ejemplos de oraciones correctas</h3>
+      <ul class="example-list">
+        <li>La asistencia es importante.</li>
+        <li>Yo apruebo el año.</li>
+        <li>La matriculación es necesaria.</li>
+      </ul>
+    </div>
+
+    <div class="card green" style="margin-top:0.5rem">
+      <h3 style="margin-bottom:1rem;color:var(--green)">✅ Resumen del día</h3>
+      <p style="margin-bottom:0.8rem;font-weight:600;">Hoy aprendiste:</p>
+      <ul class="checklist">
+        <li>Matriculación</li>
+        <li>Inscripción</li>
+        <li>Asistencia</li>
+        <li>Promoción</li>
+        <li>Aprobar</li>
+        <li>Reprobar</li>
+      </ul>
+
+      <div class="next-class">
+        <span class="arrow">→</span>
+        <p><strong>Próxima clase:</strong> Vamos a escribir con estas palabras.</p>
+      </div>
+    </div>
+
+    <div class="card navy" style="background:var(--navy);color:white;border:none;margin-top:1rem">
+      <h3 style="color:var(--gold-light);margin-bottom:0.6rem">Mi oración final</h3>
+      <p style="color:rgba(255,255,255,0.8);font-size:0.9rem;margin-bottom:0.6rem">Escribe aquí tu oración de cierre para recordarla:</p>
+      <div class="think-box" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.2)">
+        <textarea placeholder="Escribe tu oración final…" id="closingText" style="color:white;background:transparent"></textarea>
+      </div>
+      <button class="reveal-btn" style="margin-top:0.8rem;background:var(--gold);color:var(--navy)" onclick="finishLesson()">Terminar lección 🎉</button>
+    </div>
+
+    <div id="finishMessage" style="display:none;margin-top:1rem"></div>
+
+    <div class="nav-row">
+      <button class="btn-nav" onclick="prevSlide()">← Anterior</button>
+      <button class="btn-nav" disabled style="opacity:0.4">Fin →</button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  const TOTAL = 7;
+  let current = 1;
+  let correctCount = 0;
+  let answered = {};
+  const vocabWords = ['matriculación','inscripción','asistencia','promoción','aprobar','reprobar'];
+
+  function buildDots() {
+    const container = document.getElementById('stepDots');
+    container.innerHTML = '';
+    for (let i = 1; i <= TOTAL; i++) {
+      const d = document.createElement('div');
+      d.className = 'step-dot' + (i < current ? ' done' : i === current ? ' active' : '');
+      container.appendChild(d);
+    }
+  }
+
+  function updateProgress() {
+    const pct = ((current - 1) / (TOTAL - 1)) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = `Paso ${current} de ${TOTAL}`;
+    buildDots();
+  }
+
+  function showSlide(n) {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    document.getElementById('slide-' + n).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    updateProgress();
+  }
+
+  function nextSlide() {
+    if (current < TOTAL) { current++; showSlide(current); }
+  }
+  function prevSlide() {
+    if (current > 1) { current--; showSlide(current); }
+  }
+
+  function markVocab(el) {
+    el.classList.add('seen');
+  }
+
+  function answer(btn, correct, qId, explanation) {
+    if (answered[qId]) return;
+    answered[qId] = true;
+
+    const siblings = btn.closest('.options').querySelectorAll('.option-btn');
+    siblings.forEach(b => b.disabled = true);
+
+    const fb = document.getElementById('fb-' + qId);
+    if (correct) {
+      btn.classList.add('correct');
+      fb.textContent = '✅ ¡Correcto! — ' + explanation;
+      fb.className = 'feedback ok';
+      correctCount++;
+    } else {
+      btn.classList.add('wrong');
+      fb.textContent = '❌ Respuesta correcta: ' + explanation;
+      fb.className = 'feedback err';
+      // Highlight correct
+      siblings.forEach(b => {
+        if (b !== btn) {
+          b.style.opacity = '0.55';
+        }
+      });
+    }
+    fb.style.display = 'block';
+
+    // Show score after all 4 answered
+    if (Object.keys(answered).length === 4) {
+      const banner = document.getElementById('scoreBanner');
+      document.getElementById('scoreText').textContent = correctCount + ' / 4';
+      const emojis = ['😟','😕','🙂','😊','🌟'];
+      document.getElementById('scoreEmoji').textContent = emojis[correctCount];
+      banner.style.display = 'flex';
+    }
+  }
+
+  function checkSentence() {
+    const val = document.getElementById('ownSentence').value.trim().toLowerCase();
+    const fb = document.getElementById('sentenceFeedback');
+    fb.style.display = 'block';
+
+    const hasVocab = vocabWords.some(w => val.includes(w));
+    const hasEnough = val.split(' ').length >= 3;
+
+    if (!val) {
+      fb.innerHTML = '<div class="feedback err">Escribe una oración primero.</div>';
+    } else if (!hasEnough) {
+      fb.innerHTML = '<div class="feedback err">Tu oración necesita más palabras. Intenta de nuevo.</div>';
+    } else if (!hasVocab) {
+      fb.innerHTML = '<div class="feedback err">No encontré ninguna palabra de vocabulario. Usa: matriculación, inscripción, asistencia, promoción, aprobar, o reprobar.</div>';
+    } else {
+      fb.innerHTML = '<div class="feedback ok">✅ ¡Muy bien! Tu oración usa vocabulario nuevo.</div>';
+    }
+  }
+
+  function finishLesson() {
+    const closing = document.getElementById('closingText').value.trim();
+    const div = document.getElementById('finishMessage');
+    div.style.display = 'block';
+    div.innerHTML = `
+      <div style="background:linear-gradient(135deg,#0f2d52,#0b7a75);border-radius:16px;padding:2rem;text-align:center;color:white">
+        <div style="font-size:3rem;margin-bottom:0.8rem">🎉</div>
+        <h2 style="color:#fcd980;font-family:'Fraunces',serif;margin-bottom:0.5rem">¡Lección completada!</h2>
+        <p style="color:rgba(255,255,255,0.85);margin-bottom:0.3rem">Puntuación de comprensión: <strong style="color:#fcd980">${correctCount} / 4</strong></p>
+        ${closing ? `<p style="color:rgba(255,255,255,0.75);font-style:italic;margin-top:0.8rem">"${closing}"</p>` : ''}
+        <p style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-top:1rem">Próxima clase: Sesión de escritura con estas palabras.</p>
+      </div>`;
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }
+
+  // Init
+  updateProgress();
+</script>
+</body>
+</html>

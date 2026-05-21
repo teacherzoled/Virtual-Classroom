@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technology: Friend or Foe? (Belize)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Lilita+One&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles from template */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #eef2ff; /* Light indigo background */
+            color: #1a202c;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content-wrapper {
+            flex-grow: 1;
+        }
+        .container {
+            max-width: 90%;
+            margin: 0 auto;
+            padding: 1.5rem 0;
+        }
+
+        /* Header styles */
+        .header {
+            background-color: #fef3c7;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            min-height: 80px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .header-logo {
+            height: 50px;
+            width: auto;
+            border-radius: 0.5rem;
+        }
+        .header-title {
+            color: #f97316;
+            font-size: 2.25rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        /* Footer styles */
+        .footer {
+            background-color: #ea580c;
+            color: white;
+            padding: 1.25rem 2rem;
+            text-align: center;
+            margin-top: auto;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .footer p {
+            margin: 0;
+            line-height: 1.5;
+        }
+        .footer a {
+            color: #bfdbfe;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Card (lesson-section) styles */
+        .lesson-section {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            border-left-width: 3px;
+            border-bottom-width: 3px;
+            border-color: transparent; /* Default transparent, overridden by specific border classes */
+        }
+        .lesson-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .section-header {
+            padding: 0.75rem 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .section-content {
+            padding: 1.5rem;
+        }
+
+        /* Card Header/Border Colors */
+        .header-main { background-color: #3b82f6; } /* Blue */
+        .header-objective { background-color: #1d4ed8; } /* Darker Blue */
+        .header-video { background-color: #dc2626; } /* Red */
+        .header-activity { background-color: #f97316; } /* Orange */
+        .header-vocab { background-color: #f59e0b; } /* Amber/Yellow */
+        .header-quiz { background-color: #8b5cf6; } /* Violet/Purple */
+
+        .border-main { border-color: #3b82f6; }
+        .border-objective { border-color: #1d4ed8; }
+        .border-video { border-color: #dc2626; }
+        .border-activity { border-color: #f97316; }
+        .border-vocab { border-color: #f59e0b; }
+        .border-quiz { border-color: #8b5cf6; }
+
+        /* General text styles */
+        h1 {
+            font-weight: 700;
+            color: #1e40af; /* Blue-800 */
+            font-size: 2.5rem; /* text-4xl */
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        h2 {
+            font-weight: 700;
+            color: #2563eb; /* Blue-700 */
+            font-size: 2rem; /* text-3xl */
+            margin-top: 0; /* Reset top margin as it's within a card */
+            margin-bottom: 1rem;
+        }
+        h3 {
+            font-weight: 700;
+            color: #4338ca; /* Indigo-700 */
+            font-size: 1.5rem; /* text-2xl */
+            margin-top: 1rem; /* Adjusted for spacing within card content */
+            margin-bottom: 1rem;
+        }
+        p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        ul, ol {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            padding-left: 1.5rem;
+        }
+        li {
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+        }
+
+        /* Color Psychology for text/feedback */
+        .benefit-text { color: #047857; font-weight: 600; } /* Green-700 */
+        .burden-text { color: #dc2626; font-weight: 600; } /* Red-700 */
+        .text-purple-700 { color: #7e22ce; }
+        .text-indigo-700 { color: #4338ca; }
+        .text-blue-700 { color: #2563eb; }
+        .text-green-700 { color: #047857; }
+        .text-red-700 { color: #dc2626; }
+        .text-blue-800 { color: #1e40af; }
+
+        /* Button styles */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: none;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .button-primary { background-color: #4f46e5; }
+        .button-primary:hover { background-color: #4338ca; }
+        .button-secondary { /* New style for reset button */
+            background-color: #6b7280; /* Gray-500 */
+            margin-left: 0.5rem; /* Space from check button */
+        }
+        .button-secondary:hover {
+            background-color: #4b5563; /* Gray-700 */
+        }
+
+        /* Quiz Option styles */
+        .quiz-option {
+            background-color: #f0f9ff;
+            border: 1px solid #93c5fd;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+        }
+        .quiz-option:hover {
+            background-color: #e0f2fe;
+            transform: translateX(5px);
+        }
+        .quiz-option.selected {
+            background-color: #bfdbfe;
+            border-color: #2563eb;
+        }
+        .quiz-option.correct-answer {
+            background-color: #d1fae5;
+            border-color: #10b981;
+            animation: flashGreen 0.5s ease-out;
+        }
+        .quiz-option.incorrect-answer {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+            animation: shake 0.5s ease-out, flashRed 0.5s ease-out;
+        }
+
+        /* Quick Check Answer Box styles */
+        .answer-box {
+            background-color: #ecfdf5;
+            border: 1px solid #34d399;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            display: none;
+            text-align: left;
+            animation: flashGreen 0.5s ease-out;
+        }
+
+        /* Responsive video container */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Visual Feedback Animations */
+        @keyframes flashGreen {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            50% { box-shadow: 0 0 15px 5px rgba(16, 185, 129, 0.7); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        @keyframes flashRed {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); border-color: rgba(239, 68, 68, 0.7); }
+            50% { box-shadow: 0 0 15px 5px rgba(239, 68, 68, 0.7); border-color: rgba(239, 68, 68, 0.7); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); border-color: rgba(239, 68, 68, 0); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25%, 75% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+        }
+
+        /* Confetti animation styles */
+        .confetti-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; overflow: hidden; z-index: 9999;
+        }
+        .confetti {
+            position: absolute; width: 10px; height: 10px; opacity: 0;
+            animation: confetti-fall 3s forwards;
+        }
+        .confetti:nth-child(3n) { background-color: #0f0; }
+        .confetti:nth-child(3n+1) { background-color: #00f; }
+        .confetti:nth-child(3n+2) { background-color: #ff0; }
+        @keyframes confetti-fall {
+            0% { opacity: 1; transform: translateY(-100vh) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+        }
+
+        /* Feedback message styles */
+        .feedback {
+            margin-top: 1rem;
+            font-weight: 600;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .feedback.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .correct-feedback { color: #10b981; }
+        .incorrect-feedback { color: #ef4444; }
+
+        /* Activity/Quick Check content alignment */
+        .activity-box-content { text-align: center; }
+        .quick-check-box-content { text-align: center; }
+
+        /* Draggable items specific styles to ensure visibility and responsiveness */
+        .draggable {
+            background-color: #a78bfa; /* Purple-400 */
+            color: white;
+            padding: 0.75rem 1.25rem;
+            margin: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: grab;
+            min-width: 120px;
+            flex: 1 1 auto;
+            max-width: calc(50% - 1rem); /* Allows two items per row on larger mobile/tablet */
+            min-height: 40px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            position: relative;
+            z-index: 10;
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .draggable:active {
+            cursor: grabbing;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        /* Media query to ensure items stack on very small screens if needed */
+        @media (max-width: 640px) { /* Tailwind's 'sm' breakpoint */
+            .draggable {
+                max-width: calc(100% - 1rem); /* One item per row on very small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Teacher Ed Logo" class="header-logo">
+            <div class="header-title">Teacher Ed Classroom</div>
+        </div>
+    </header>
+
+    <div class="main-content-wrapper">
+        <div class="container">
+            <!-- Main Title of the Lesson -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    <span>Technology – Our Super Tools!</span>
+                </div>
+            </div>
+
+            <p class="text-center text-xl text-gray-700 mb-8">Hello, Awesome Explorers! 👋</p>
+            <p class="text-lg text-gray-800">Welcome to our first adventure in Standard 6 Science! We're kicking off our journey by looking at something super important that's all around us: <span class="text-blue-700 font-bold">Technology</span>! Over the next two weeks (Weeks 1 and 2), we'll be figuring out if technology is mostly our <span class="text-green-700 font-bold">friend</span> or sometimes a <span class="text-red-700 font-bold">foe</span>. Get ready to think, discuss, and become real science detectives!</p>
+
+            <!-- What in the World is Technology? Section -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">What in the World is Technology? 🤔</div>
+                <div class="section-content">
+                    <p class="text-lg">Let's start with a big question: <span class="text-indigo-700 font-bold">What</span> is <span class="text-indigo-700 font-bold">technology</span>?</p>
+                    <p>Imagine you want to crack a stubborn coconut. You could try hitting it with your bare hands (ouch!), or you could grab a big, sharp rock. That rock, used to make your life easier, is a simple form of technology!</p>
+                    <p>So, <span class="text-indigo-700 font-bold">technology</span> is basically <span class="text-indigo-700 font-bold">any tool, machine, or process that humans create to make life easier or to solve problems.</span> It's not just computers or phones! A bicycle, a cooking pot, or even the way we build a stilt house to withstand floods are all examples of technology. Think of technology as our <span class="text-indigo-700 font-bold">human-made helpers!</span></p>
+                </div>
+            </div>
+
+            <!-- Video: What is Technology? Section -->
+            <div class="lesson-section border-video">
+                <div class="section-header header-video">Watch: What is Technology?</div>
+                <div class="section-content">
+                    <p class="text-md mb-4">This short video will help you understand the many forms of technology around us!</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/Fno0L_XsdWM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Check 1 Section -->
+            <div class="lesson-section border-vocab">
+                <div class="section-header header-vocab">Quick Check! 🤔</div>
+                <div class="section-content quick-check-box-content">
+                    <p class="text-lg mb-4">True or False: A natural river is an example of technology.</p>
+                    <button class="button-primary btn" onclick="toggleAnswer('qc1-answer')">Show Answer</button>
+                    <div id="qc1-answer" class="answer-box">
+                        <p><strong>False.</strong> A natural river is not created by humans. Technology is something humans create to solve problems or make life easier!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Power of Color for Your Brain! Section -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">The Power of Color for Your Brain! 🧠</div>
+                <div class="section-content">
+                    <p class="text-lg">Did you know that colors can actually help your brain remember things better? It's true! This is called the <span class="text-purple-700 font-bold">psychology of color for memory</span>.</p>
+                    <ul>
+                        <li><span class="text-green-700 font-bold">Green</span>: Often associated with growth, nature, and positivity. We'll use green for the <span class="benefit-text">benefits</span> of technology to help you remember the good things!</li>
+                        <li><span class="text-red-700 font-bold">Red</span>: Can signal caution, warning, or importance. We'll use red for the <span class="burden-text">burdens</span> of technology to highlight things we need to be careful about.</li>
+                        <li><span class="text-blue-700 font-bold">Blue</span>: Often linked to calmness, trust, and intelligence. We'll use blue for main ideas and important definitions to help you focus and understand.</li>
+                        <li><span class="text-purple-700 font-bold">Purple</span>: Associated with creativity and wisdom. We'll use purple for our fun <span class="text-purple-700 font-bold">interactive activities</span>!</li>
+                    </ul>
+                    <p>Keep an eye out for these colors as you explore the lesson!</p>
+                </div>
+            </div>
+
+            <!-- Technology's Superpowers (Benefits!) Section -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">Technology's Superpowers (<span class="benefit-text">Benefits!</span>) ✨</div>
+                <div class="section-content">
+                    <p class="text-lg">Technology brings a lot of amazing things into our lives. We call these the <span class="benefit-text">benefits</span> or <span class="benefit-text">positive impacts</span>. They are like technology's superpowers!</p>
+                    <ul>
+                        <li><span class="benefit-text">Better Ways to Travel:</span> Buses, boats, and planes help us zoom from one place to another much faster and more comfortably than walking. Imagine trying to get from Belize City to Punta Gorda without a bus or a boat ride!</li>
+                        <li><span class="benefit-text">Staying Healthy:</span> Technology helps doctors treat illnesses and keep us well. Think of X-ray machines at the KHMH or the tools nurses use during check-ups at the community clinic.</li>
+                        <li><span class="benefit-text">Connecting with Anyone, Anywhere:</span> The internet and phones help us talk to family and friends, even if they live far away, perhaps in another district or even in the diaspora. This helps create <span class="benefit-text">global communities</span>. It's like having a magical rope that connects you to people all over the world!</li>
+                        <li><span class="benefit-text">Learning & Knowledge at Our Fingertips:</span> With technology, we can find information and learn new things super quickly, whether it's for school projects or just out of curiosity. Many of you might even use tablets or computers for your classes now!</li>
+                    </ul>
+                    <p>We'll spend time thinking about how these benefits specifically help people and communities right here in <span class="text-blue-700 font-bold">Belize</span>.</p>
+                </div>
+            </div>
+
+            <!-- Quick Check 2 Section -->
+            <div class="lesson-section border-vocab">
+                <div class="section-header header-vocab">Quick Check! ✅</div>
+                <div class="section-content quick-check-box-content">
+                    <p class="text-lg mb-4">Name one way technology helps people in Belize stay healthy.</p>
+                    <button class="button-primary btn" onclick="toggleAnswer('qc2-answer')">Show Answer</button>
+                    <div id="qc2-answer" class="answer-box">
+                        <p>Technology helps doctors treat illnesses with tools like X-ray machines, and helps nurses during check-ups at clinics.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technology's Tricky Bits (Burdens!) Section -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">Technology's Tricky Bits (<span class="burden-text">Burdens!</span>) 🚧</div>
+                <div class="section-content">
+                    <p class="text-lg">But, just like even the best superheroes have a weakness, technology can also have some <span class="burden-text">not-so-good sides</span>, which we call <span class="burden-text">burdens</span> or <span class="burden-text">negative impacts</span>.</p>
+                    <ul>
+                        <li><span class="burden-text">Too Much Screen Time:</span> Spending too much time glued to screens can sometimes make us feel tired, grumpy, or even affect our <span class="burden-text">mental health</span>. It's like eating too much fry jack – a little is fun, but too much makes you feel sick!</li>
+                        <li><span class="burden-text">Feeling Alone (Even with Many Friends):</span> Sometimes, using technology too much can make people feel less connected in real life, even if they have many "friends" online. This can lead to <span class="burden-text">social division</span>. We might forget to play outside with our neighbors or visit our grandparents.</li>
+                        <li><span class="burden-text">Private Info (Stay Safe Online!):</span> When we use the internet, it's important to be careful about what we share. Our <span class="burden-text">privacy</span> can be a concern, meaning our personal information might not always stay private. Always think before you post, and never share your personal details with strangers online!</li>
+                    </ul>
+                    <p>We'll have cool <span class="text-blue-700 font-bold">discussions and a debate</span> in class about these challenges and how they might show up in <span class="text-blue-700 font-bold">Belize</span> too. You'll get to share your own ideas and listen to what your classmates think!</p>
+                </div>
+            </div>
+
+            <!-- Video: Technology Advantages and Disadvantages Section -->
+            <div class="lesson-section border-video">
+                <div class="section-header header-video">Watch: Technology Advantages and Disadvantages</div>
+                <div class="section-content">
+                    <p class="text-md mb-4">This video gives a quick overview of both the good and not-so-good sides of technology.</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/xKmOmgd18aI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Check 3 Section -->
+            <div class="lesson-section border-vocab">
+                <div class="section-header header-vocab">Quick Check! 🚧</div>
+                <div class="section-content quick-check-box-content">
+                    <p class="text-lg mb-4">What is one potential "burden" of technology related to too much screen time?</p>
+                    <button class="button-primary btn" onclick="toggleAnswer('qc3-answer')">Show Answer</button>
+                    <div id="qc3-answer" class="answer-box">
+                        <p>Spending too much time on screens can make you feel tired, grumpy, or affect your mental health.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity 1: Drag and Drop Section -->
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">Activity 1: Friend or Foe? 🤝⚔️</div>
+                <div class="section-content activity-box-content">
+                    <p class="text-lg mb-4">Drag each technology example into the box that best describes its primary impact: <span class="text-green-700 font-bold">Friend (Benefit)</span> or <span class="text-red-700 font-bold">Foe (Burdens)</span>. Think about how it affects daily life in Belize!</p>
+                    <div class="flex flex-wrap justify-center mb-6" id="draggable-items">
+                        <div class="draggable" draggable="true" id="item1" data-type="friend">Online learning platforms for remote villages</div>
+                        <div class="draggable" draggable="true" id="item2" data-type="foe">Spending 6 hours a day playing video games</div>
+                        <div class="draggable" draggable="true" id="item3" data-type="friend">Weather forecasting apps for hurricane season</div>
+                        <div class="draggable" draggable="true" id="item4" data-type="foe">Sharing your home address with an online stranger</div>
+                        <div class="draggable" draggable="true" id="item5" data-type="friend">Mobile banking for easy transactions</div>
+                        <div class="draggable" draggable="true" id="item6" data-type="foe">Cyberbullying on social media</div>
+                    </div>
+                    <div class="flex flex-col md:flex-row justify-center gap-4">
+                        <div class="dropzone flex-1 p-4 border-2 border-green-500 bg-green-50 rounded-lg" id="friend-zone" data-accept="friend">
+                            <p class="text-green-700 font-bold text-xl">Friend (Benefits)</p>
+                        </div>
+                        <div class="dropzone flex-1 p-4 border-2 border-red-500 bg-red-50 rounded-lg" id="foe-zone" data-accept="foe">
+                            <p class="text-red-700 font-bold text-xl">Foe (Burdens)</p>
+                        </div>
+                    </div>
+                    <button class="button-primary btn" onclick="checkDragAndDrop()">Check My Answers</button>
+                    <button class="button-primary btn button-secondary" onclick="resetDragAndDrop()">Reset Activity</button>
+                    <div id="drag-drop-feedback" class="feedback text-lg mt-4"></div>
+                </div>
+            </div>
+
+            <!-- Activity 2: Multiple Choice Quiz Section -->
+            <div class="lesson-section border-quiz">
+                <div class="section-header header-quiz">Activity 2: Tech Knowledge Check! ✅</div>
+                <div class="section-content activity-box-content">
+                    <p class="text-lg mb-4">Test your understanding! Choose the best answer for each question.</p>
+                    <div id="quiz-container" class="text-left max-w-2xl mx-auto">
+                        <!-- Quiz questions will be inserted here by JavaScript -->
+                    </div>
+                    <button class="button-primary btn" onclick="submitQuiz()">Submit Quiz</button>
+                    <div id="quiz-feedback" class="feedback text-lg mt-4"></div>
+                </div>
+            </div>
+
+            <!-- Activity 3: Scenario-Based Reflection Section -->
+            <div class="lesson-section border-quiz">
+                <div class="section-header header-quiz">Activity 3: Belizean Tech Challenge! 🇧🇿</div>
+                <div class="section-content activity-box-content">
+                    <p class="text-lg mb-4">Read the scenario below and share your thoughts. How does technology play a role here?</p>
+                    <div class="text-left p-4 bg-white rounded-lg shadow-md mb-6">
+                        <p class="font-bold text-lg mb-2">Scenario:</p>
+                        <p>Maria lives in a small fishing village in southern Belize. During a recent storm, the village's only landline phone service went out. However, her family had a solar-powered radio and a mobile phone (charged from a small solar panel). They were able to get updates on the storm from a local radio station and use the mobile phone to send a text message to relatives in Belize City, letting them know they were safe.</p>
+                    </div>
+                    <p class="text-left text-lg mb-2">Your Turn to Reflect:</p>
+                    <ol class="list-decimal list-inside text-left mb-4">
+                        <li>Identify at least <span class="text-green-700 font-bold">two ways technology was a "friend"</span> to Maria's family in this scenario.</li>
+                        <li>Can you think of any potential <span class="text-red-700 font-bold">"foe" aspects</span> related to technology in a similar situation (e.g., if they only relied on one type of technology)?</li>
+                        <li>What is one important lesson about using technology responsibly that Maria's family demonstrated?</li>
+                    </ol>
+                    <textarea id="reflection-answer" rows="8" class="w-full p-3 border-2 border-blue-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Write your answers here..."></textarea>
+                    <button class="button-primary btn" onclick="showReflectionFeedback()">Submit Reflection</button>
+                    <div id="reflection-feedback" class="feedback text-lg mt-4 text-left"></div>
+                </div>
+            </div>
+
+            <!-- Ready to Learn More? Section -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">Ready to Learn More?</div>
+                <div class="section-content">
+                    <p class="text-lg">Want to explore more about technology and its impact? Click on these links!</p>
+                    <ul class="list-disc list-inside">
+                        <li><a href="https://tech.co/vpn/main-ways-technology-impacts-daily-life" target="_blank" class="text-blue-600 hover:underline">"How Technology Impacts Your Daily Life"</a>: This article shares more ways technology touches your everyday world.</li>
+                        <li><a href="https://www.javaassignmenthelp.com/blog/uses-of-technology/" target="_blank" class="text-blue-600 hover:underline">"Uses of Technology"</a>: Discover even more uses of technology in different areas.</li>
+                        <li><a href="http://www.youtube.com/watch?v=DENG7Q7VRgo" target="_blank" class="text-blue-600 hover:underline">"Past and Present | Technology Then and Now" (Video)</a>: Watch this video to see how technology has changed over time.</li>
+                        <li><a href="http://www.youtube.com/watch?v=Fno0L_XsdWM" target="_blank" class="text-blue-600 hover:underline">"Technology for Kids: What is Technology?" (Video)</a>: A short video explaining technology in simple terms.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Your Turn to Think! Section -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">Your Turn to Think! 🤔</div>
+                <div class="section-content text-center">
+                    <p class="text-lg">Imagine you have to choose <span class="text-indigo-700 font-bold">one piece of technology</span> that you use every day. Would you say it is more of a <span class="text-green-700 font-bold">friend</span> (mostly benefits) or a <span class="text-red-700 font-bold">foe</span> (mostly burdens) to you? Explain why, giving at least two reasons!</p>
+                    <p class="text-xl mt-4 text-blue-800 font-bold">Remember, technology is like a powerful tool; it's <span class="text-purple-700">how we use it that makes the biggest difference!</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p class="font-semibold">Explore, discover, and learn something new every day!</p>
+        <p class="text-xs mt-1">© 2025 Mr. Edwin's Virtual Classroom — All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Global variables for quiz and drag-and-drop
+        let currentQuizAnswers = {};
+
+        const quizQuestions = [
+            {
+                question: "Which of these is NOT an example of technology, as defined in the lesson?",
+                options: [
+                    "A traditional dory (canoe) used for fishing",
+                    "A natural rock formation in the Blue Hole",
+                    "A mobile phone used to call family",
+                    "A solar panel charging a battery"
+                ],
+                answer: "A natural rock formation in the Blue Hole"
+            },
+            {
+                question: "A major benefit of technology mentioned is 'Connecting with Anyone, Anywhere'. How does this specifically relate to Belize?",
+                options: [
+                    "It helps people travel faster by bus.",
+                    "It allows communication with family in the diaspora or other districts.",
+                    "It makes fry jack taste better.",
+                    "It helps doctors perform surgery."
+                ],
+                answer: "It allows communication with family in the diaspora or other districts."
+            },
+            {
+                question: "Spending too much time on screens can lead to which of these burdens?",
+                options: [
+                    "Better physical health",
+                    "Increased real-life social connections",
+                    "Feeling tired, grumpy, or affecting mental health", // Corrected the options list here
+                    "Improved academic performance"
+                ],
+                answer: "Feeling tired, grumpy, or affecting mental health"
+            },
+            {
+                question: "Why is it important to be careful about what you share online?",
+                options: [
+                    "Because it can make your internet faster.",
+                    "To protect your privacy and personal information.",
+                    "So you can get more online friends.",
+                    "It helps you win video games."
+                ],
+                answer: "To protect your privacy and personal information."
+            }
+        ];
+
+
+        // Function to toggle the visibility of quick check answers
+        function toggleAnswer(id) {
+            const answerBox = document.getElementById(id);
+            if (answerBox.style.display === 'block') {
+                answerBox.style.display = 'none';
+            } else {
+                answerBox.style.display = 'block';
+                // Apply green flash animation when answer is shown
+                answerBox.classList.add('correct-answer');
+                setTimeout(() => {
+                    answerBox.classList.remove('correct-answer');
+                }, 500); // Remove class after animation
+            }
+        }
+
+        // Confetti animation function
+        function createConfetti() {
+            const confettiContainer = document.createElement('div');
+            confettiContainer.classList.add('confetti-container');
+            document.body.appendChild(confettiContainer);
+
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`; // Random color
+                confettiContainer.appendChild(confetti);
+            }
+
+            setTimeout(() => {
+                confettiContainer.remove();
+            }, 3000); // Remove confetti after 3 seconds
+        }
+
+        // --- Activity 1: Drag and Drop ---
+        const draggableItems = document.querySelectorAll('.draggable');
+        const dropzones = document.querySelectorAll('.dropzone');
+        const draggableItemsContainer = document.getElementById('draggable-items'); // Get the original container
+
+        // Store initial HTML of draggable items for reset
+        const initialDraggableItemsHTML = draggableItemsContainer.innerHTML;
+
+        draggableItems.forEach(item => {
+            item.addEventListener('dragstart', (e) => {
+                draggedItem = e.target;
+                e.dataTransfer.setData('text/plain', e.target.id);
+                setTimeout(() => {
+                    e.target.style.opacity = '0.5';
+                    e.target.style.transform = 'scale(1.1) translateY(-5px)'; /* Lift effect */
+                    e.target.style.boxShadow = '0 8px 16px rgba(0,0,0,0.2)'; /* Stronger shadow */
+                }, 0);
+            });
+
+            item.addEventListener('dragend', (e) => {
+                e.target.style.opacity = '1';
+                e.target.style.transform = 'scale(1)'; /* Reset transform */
+                e.target.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)'; /* Reset shadow */
+                draggedItem = null;
+            });
+        });
+
+        dropzones.forEach(zone => {
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault(); // Allow drop
+                zone.classList.add('hover');
+            });
+
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('hover');
+            });
+
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('hover');
+                const id = e.dataTransfer.getData('text/plain');
+                const draggable = document.getElementById(id);
+
+                // Check if the dropzone already contains the item
+                if (!zone.contains(draggable)) {
+                    zone.appendChild(draggable);
+                }
+            });
+        });
+
+        function checkDragAndDrop() {
+            const feedbackDiv = document.getElementById('drag-drop-feedback');
+            let allCorrect = true;
+            const friendZone = document.getElementById('friend-zone');
+            const foeZone = document.getElementById('foe-zone');
+
+            // Reset classes and remove animations
+            friendZone.classList.remove('correct', 'incorrect');
+            foeZone.classList.remove('correct', 'incorrect');
+            friendZone.style.animation = 'none';
+            foeZone.style.animation = 'none';
+            void friendZone.offsetWidth; // Trigger reflow
+            void foeZone.offsetWidth; // Trigger reflow
+
+
+            // Check friend zone
+            const friendItems = Array.from(friendZone.children).filter(el => el.classList.contains('draggable'));
+            let friendZoneCorrect = true;
+            if (friendItems.length === 0) friendZoneCorrect = false; // No items in zone
+            friendItems.forEach(item => {
+                if (item.dataset.type !== 'friend') {
+                    friendZoneCorrect = false;
+                    allCorrect = false;
+                }
+            });
+            if (friendItems.length !== 3) { // Ensure correct number of items
+                friendZoneCorrect = false;
+                allCorrect = false;
+            }
+            if (friendZoneCorrect) {
+                friendZone.classList.add('correct');
+            } else {
+                friendZone.classList.add('incorrect');
+                allCorrect = false;
+            }
+
+
+            // Check foe zone
+            const foeItems = Array.from(foeZone.children).filter(el => el.classList.contains('draggable'));
+            let foeZoneCorrect = true;
+            if (foeItems.length === 0) foeZoneCorrect = false; // No items in zone
+            foeItems.forEach(item => {
+                if (item.dataset.type !== 'foe') {
+                    foeZoneCorrect = false;
+                    allCorrect = false;
+                }
+            });
+            if (foeItems.length !== 3) { // Ensure correct number of items
+                foeZoneCorrect = false;
+                allCorrect = false;
+            }
+            if (foeZoneCorrect) {
+                foeZone.classList.add('correct');
+            } else {
+                foeZone.classList.add('incorrect');
+                allCorrect = false;
+            }
+
+            // Apply animations based on correctness
+            if (friendZoneCorrect) {
+                friendZone.style.animation = 'flashGreen 0.5s ease-out';
+            } else {
+                friendZone.style.animation = 'shake 0.5s ease-out, flashRed 0.5s ease-out';
+            }
+            if (foeZoneCorrect) {
+                foeZone.style.animation = 'flashGreen 0.5s ease-out';
+            } else {
+                foeZone.style.animation = 'shake 0.5s ease-out, flashRed 0.5s ease-out';
+            }
+
+
+            if (allCorrect) {
+                feedbackDiv.className = 'feedback text-lg mt-4 correct-feedback show';
+                feedbackDiv.textContent = 'Great job! All items are in the correct places!';
+            } else {
+                feedbackDiv.className = 'feedback text-lg mt-4 incorrect-feedback show';
+                feedbackDiv.textContent = 'Keep trying! Some items are in the wrong zone. Review the concepts and try again.';
+            }
+        }
+
+        // --- Reset Drag and Drop Activity ---
+        function resetDragAndDrop() {
+            // Clear items from dropzones and return to original container
+            const allDraggables = document.querySelectorAll('.draggable');
+            allDraggables.forEach(item => {
+                draggableItemsContainer.appendChild(item); // Move back to original parent
+                item.style.opacity = '1'; // Reset opacity
+                item.style.transform = 'scale(1)'; // Reset transform
+                item.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)'; // Reset shadow
+            });
+
+            // Clear dropzone styling
+            dropzones.forEach(zone => {
+                zone.classList.remove('correct', 'incorrect', 'hover');
+                zone.style.animation = 'none'; // Clear any animations
+                void zone.offsetWidth; // Trigger reflow
+            });
+
+            // Clear feedback message
+            const feedbackDiv = document.getElementById('drag-drop-feedback');
+            feedbackDiv.classList.remove('show', 'correct-feedback', 'incorrect-feedback');
+            feedbackDiv.textContent = '';
+        }
+
+
+        // --- Activity 2: Multiple Choice Quiz ---
+        function loadQuiz() {
+            const quizContainer = document.getElementById('quiz-container');
+            quizContainer.innerHTML = ''; // Clear previous questions
+
+            quizQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('mb-6', 'p-4', 'bg-white', 'rounded-lg', 'shadow-sm');
+                questionDiv.innerHTML = `<p class="font-bold text-lg mb-3">${index + 1}. ${q.question}</p>`;
+
+                q.options.forEach(option => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.classList.add('quiz-option');
+                    optionDiv.textContent = option;
+                    optionDiv.dataset.questionIndex = index;
+                    optionDiv.dataset.option = option;
+                    optionDiv.addEventListener('click', () => selectOption(index, option, optionDiv));
+                    questionDiv.appendChild(optionDiv);
+                });
+                quizContainer.appendChild(questionDiv);
+            });
+        }
+
+        function selectOption(qIndex, option, clickedElement) {
+            // Remove 'selected' from other options for this question
+            const optionsForThisQuestion = document.querySelectorAll(`[data-question-index="${qIndex}"]`);
+            optionsForThisQuestion.forEach(el => {
+                el.classList.remove('selected', 'correct-answer', 'incorrect-answer');
+                el.style.animation = 'none'; // Reset animation
+                void el.offsetWidth; // Trigger reflow
+            });
+
+            // Add 'selected' to the clicked option
+            clickedElement.classList.add('selected');
+            currentQuizAnswers[qIndex] = option;
+        }
+
+        function submitQuiz() {
+            const feedbackDiv = document.getElementById('quiz-feedback');
+            let score = 0;
+
+            quizQuestions.forEach((q, index) => {
+                const selectedOption = currentQuizAnswers[index];
+                const optionsForThisQuestion = document.querySelectorAll(`[data-question-index="${index}"]`);
+
+                optionsForThisQuestion.forEach(el => {
+                    el.classList.remove('selected', 'correct-answer', 'incorrect-answer');
+                    el.style.animation = 'none'; // Reset animation
+                    void el.offsetWidth; // Trigger reflow
+
+                    if (el.dataset.option === q.answer) {
+                        el.classList.add('correct-answer'); // Mark correct answer
+                        el.style.animation = 'flashGreen 0.5s ease-out';
+                    }
+                    if (el.dataset.option === selectedOption && selectedOption !== q.answer) {
+                        el.classList.add('incorrect-answer'); // Mark user's incorrect choice
+                        el.style.animation = 'shake 0.5s ease-out, flashRed 0.5s ease-out';
+                    }
+                });
+
+                if (selectedOption === q.answer) {
+                    score++;
+                }
+            });
+
+            feedbackDiv.className = 'feedback text-lg mt-4 ' + (score === quizQuestions.length ? 'correct-feedback' : 'incorrect-feedback') + ' show';
+            feedbackDiv.textContent = `You scored ${score} out of ${quizQuestions.length}! Review the highlighted answers.`;
+
+            if (score === quizQuestions.length) {
+                createConfetti(); // Trigger confetti on 100% score
+            }
+        }
+
+        // --- Activity 3: Scenario-Based Reflection ---
+        function showReflectionFeedback() {
+            const reflectionText = document.getElementById('reflection-answer').value.trim();
+            const feedbackDiv = document.getElementById('reflection-feedback');
+
+            if (reflectionText.length < 50) { // Simple check for minimal response
+                feedbackDiv.className = 'feedback text-lg mt-4 incorrect-feedback show';
+                feedbackDiv.textContent = 'Please write a more detailed reflection. Try to answer all three questions!';
+                // Add shake and red flash to the textarea if too short
+                const textarea = document.getElementById('reflection-answer');
+                textarea.style.animation = 'shake 0.5s ease-out, flashRed 0.5s ease-out';
+                setTimeout(() => {
+                    textarea.style.animation = 'none';
+                }, 500);
+                return;
+            }
+
+            feedbackDiv.className = 'feedback text-lg mt-4 correct-feedback show';
+            feedbackDiv.innerHTML = `
+                <p class="font-bold mb-2">Thank you for your thoughtful reflection!</p>
+                <p>Here are some points to consider for discussion:</p>
+                <ul class="list-disc list-inside">
+                    <li><span class="font-bold text-green-700">Friend aspects:</span> The solar-powered radio provided vital storm updates (information/safety). The mobile phone allowed communication with relatives, reducing worry (connection/peace of mind).</li>
+                    <li><span class="font-bold text-red-700">Foe aspects (potential):</span> Over-reliance on a single technology (e.g., only landline) could leave them isolated. If the mobile phone battery died without a solar charger, they'd lose communication. Sharing location data during a storm could be a privacy concern.</li>
+                    <li><span class="font-bold text-blue-700">Lesson on responsible use:</span> Maria's family demonstrated resilience and smart use by having multiple forms of communication (radio, mobile) and a backup power source (solar). This highlights the importance of not relying on just one technology and having contingency plans, especially in vulnerable areas like Belize during hurricane season.</li>
+                </ul>
+                <p class="mt-2">Your answer will be a great starting point for class discussion!</p>
+            `;
+            // Add green flash animation to the feedback div on success
+            feedbackDiv.style.animation = 'flashGreen 0.5s ease-out';
+            setTimeout(() => {
+                feedbackDiv.style.animation = 'none';
+            }, 500);
+        }
+
+        // Initialize activities on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadQuiz();
+        });
+    </script>
+</body>
+</html>

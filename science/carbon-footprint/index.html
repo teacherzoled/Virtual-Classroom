@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Carbon Footprint: A Belizean Perspective</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Lilita+One&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles from template */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #eef2ff; /* Light indigo background */
+            color: #1a202c;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content-wrapper {
+            flex-grow: 1;
+        }
+        .container {
+            max-width: 90%;
+            margin: 0 auto;
+            padding: 1.5rem 0;
+        }
+
+        /* Header styles */
+        .header {
+            background-color: #fef3c7;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            min-height: 80px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .header-logo {
+            height: 50px;
+            width: auto;
+            border-radius: 0.5rem;
+        }
+        .header-title {
+            color: #f97316;
+            font-size: 2.25rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        /* Footer styles */
+        .footer {
+            background-color: #ea580c;
+            color: white;
+            padding: 1.25rem 2rem;
+            text-align: center;
+            margin-top: auto;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .footer p {
+            margin: 0;
+            line-height: 1.5;
+        }
+        .footer a {
+            color: #bfdbfe;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Card (lesson-section) styles */
+        .lesson-section {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            border-left-width: 3px;
+            border-bottom-width: 3px;
+            border-color: transparent; /* Default transparent, overridden by specific border classes */
+        }
+        .lesson-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .section-header {
+            padding: 0.75rem 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .section-content {
+            padding: 1.5rem;
+        }
+
+        /* Card Header/Border Colors */
+        .header-main { background-color: #3b82f6; } /* Blue */
+        .header-objective { background-color: #1d4ed8; } /* Darker Blue */
+        .header-video { background-color: #dc2626; } /* Red */
+        .header-activity { background-color: #f97316; } /* Orange */
+        .header-vocab { background-color: #f59e0b; } /* Amber/Yellow */
+        .header-quiz { background-color: #8b5cf6; } /* Violet/Purple */
+
+        .border-main { border-color: #3b82f6; }
+        .border-objective { border-color: #1d4ed8; }
+        .border-video { border-color: #dc2626; }
+        .border-activity { border-color: #f97316; }
+        .border-vocab { border-color: #f59e0b; }
+        .border-quiz { border-color: #8b5cf6; }
+
+        /* General text styles */
+        h1 {
+            font-weight: 700;
+            color: #1e40af; /* Blue-800 */
+            font-size: 2.5rem; /* text-4xl */
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        h2 {
+            font-weight: 700;
+            color: #2563eb; /* Blue-700 */
+            font-size: 2rem; /* text-3xl */
+            margin-top: 0; /* Reset top margin as it's within a card */
+            margin-bottom: 1rem;
+        }
+        h3 {
+            font-weight: 700;
+            color: #4338ca; /* Indigo-700 */
+            font-size: 1.5rem; /* text-2xl */
+            margin-top: 1rem; /* Adjusted for spacing within card content */
+            margin-bottom: 1rem;
+        }
+        p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        ul, ol {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            padding-left: 1.5rem;
+        }
+        li {
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+        }
+
+        /* Color Psychology for text/feedback */
+        .benefit-text { color: #047857; font-weight: 600; } /* Green-700 */
+        .burden-text { color: #dc2626; font-weight: 600; } /* Red-700 */
+        .text-purple-700 { color: #7e22ce; }
+        .text-indigo-700 { color: #4338ca; }
+        .text-blue-700 { color: #2563eb; }
+        .text-green-700 { color: #047857; }
+        .text-red-700 { color: #dc2626; }
+        .text-blue-800 { color: #1e40af; }
+
+        /* Button styles */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: none;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .button-primary { background-color: #4f46e5; }
+        .button-primary:hover { background-color: #4338ca; }
+        .button-secondary { /* New style for reset button */
+            background-color: #6b7280; /* Gray-500 */
+            margin-left: 0.5rem; /* Space from check button */
+        }
+        .button-secondary:hover {
+            background-color: #4b5563; /* Gray-700 */
+        }
+
+        /* Quiz Option styles */
+        .quiz-option {
+            background-color: #f0f9ff;
+            border: 1px solid #93c5fd;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+        }
+        .quiz-option:hover {
+            background-color: #e0f2fe;
+            transform: translateX(5px);
+        }
+        .quiz-option.selected {
+            background-color: #bfdbfe;
+            border-color: #2563eb;
+        }
+        .quiz-option.correct-answer {
+            background-color: #d1fae5;
+            border-color: #10b981;
+            animation: flashGreen 0.5s ease-out;
+        }
+        .quiz-option.incorrect-answer {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+            animation: shake 0.5s ease-out, flashRed 0.5s ease-out;
+        }
+
+        /* Quick Check Answer Box styles */
+        .answer-box {
+            background-color: #ecfdf5;
+            border: 1px solid #34d399;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            display: none;
+            text-align: left;
+            animation: flashGreen 0.5s ease-out;
+        }
+
+        /* Responsive video container */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Visual Feedback Animations */
+        @keyframes flashGreen {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            50% { box-shadow: 0 0 15px 5px rgba(16, 185, 129, 0.7); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        @keyframes flashRed {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); border-color: rgba(239, 68, 68, 0.7); }
+            50% { box-shadow: 0 0 15px 5px rgba(239, 68, 68, 0.7); border-color: rgba(239, 68, 68, 0.7); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); border-color: rgba(239, 68, 68, 0); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25%, 75% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+        }
+
+        /* Confetti animation styles */
+        .confetti-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; overflow: hidden; z-index: 9999;
+        }
+        .confetti {
+            position: absolute; width: 10px; height: 10px; opacity: 0;
+            animation: confetti-fall 3s forwards;
+        }
+        .confetti:nth-child(3n) { background-color: #0f0; }
+        .confetti:nth-child(3n+1) { background-color: #00f; }
+        .confetti:nth-child(3n+2) { background-color: #ff0; }
+        @keyframes confetti-fall {
+            0% { opacity: 1; transform: translateY(-100vh) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+        }
+
+        /* Feedback message styles */
+        .feedback {
+            margin-top: 1rem;
+            font-weight: 600;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .feedback.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .correct-feedback { color: #10b981; }
+        .incorrect-feedback { color: #ef4444; }
+
+        /* Activity/Quick Check content alignment */
+        .activity-box-content { text-align: center; }
+        .quick-check-box-content { text-align: center; }
+
+        /* Draggable items specific styles to ensure visibility and responsiveness */
+        .draggable {
+            background-color: #a78bfa; /* Purple-400 */
+            color: white;
+            padding: 0.75rem 1.25rem;
+            margin: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: grab;
+            min-width: 120px;
+            flex: 1 1 auto;
+            max-width: calc(50% - 1rem); /* Allows two items per row on larger mobile/tablet */
+            min-height: 40px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            position: relative;
+            z-index: 10;
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .draggable:active {
+            cursor: grabbing;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        /* Media query to ensure items stack on very small screens if needed */
+        @media (max-width: 640px) { /* Tailwind's 'sm' breakpoint */
+            .draggable {
+                max-width: calc(100% - 1rem); /* One item per row on very small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Teacher Ed Logo" class="header-logo">
+            <div class="header-title">Teacher Ed Classroom</div>
+        </div>
+    </header>
+
+    <div class="main-content-wrapper">
+        <div class="container">
+            <!-- Main Title of the Lesson -->
+            <div class="lesson-section border-main" style="border-color: #16a34a;">
+                <div class="section-header" style="background-color: #16a34a;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.54 15H17a2 2 0 0 0-2 2v4.54"></path><path d="M7 3.34V5a3 3 0 0 0 3 3v0a2 2 0 0 1 2 2v0c0 1.1.9 2 2 2v0a2 2 0 0 0 2-2v0c0-1.1.9-2 2-2h3.17"></path><path d="M11 21.95V18a2 2 0 0 0-2-2v0a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05"></path><line x1="12" x2="12" y1="22" y2="2"></line></svg>
+                    <span>Our Carbon Footprint: A Belizean Perspective</span>
+                </div>
+            </div>
+
+            <p class="text-center text-xl text-gray-700 mb-8">Hello, Planet Protectors! 👋</p>
+            <p class="text-lg text-gray-800">Welcome to our next big topic in Science & Technology! We've learned about harmful gases in our atmosphere, and now we're going to dive deeper. We'll explore our <span class="text-green-700 font-bold">Carbon Footprint</span>, what it means for <span class="text-blue-700 font-bold">climate change</span>, and how we, right here in Belize, can take practical steps to make a positive difference. Let's become advocates for a sustainable future!</p>
+
+            <!-- Learning Objectives Section -->
+            <div class="lesson-section border-objective">
+                <div class="section-header header-objective">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                    <span>Our Learning Goals</span>
+                </div>
+                <div class="section-content">
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul class="list-disc list-inside">
+                        <li>Define and explain what a <span class="text-blue-700 font-bold">carbon footprint</span> is.</li>
+                        <li>Describe the relationship between an individual’s carbon footprint and <span class="text-red-700 font-bold">climate change</span>.</li>
+                        <li>Develop a plan of action to <span class="text-green-700 font-bold">reduce your carbon footprint</span> at home and in our community.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- What is a Carbon Footprint? Section -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">What is a Carbon Footprint? 🤔</div>
+                <div class="section-content">
+                    <p class="text-lg">Let's start with the big idea: <span class="text-indigo-700 font-bold">What is a carbon footprint?</span></p>
+                    <p>A carbon footprint is the <span class="text-indigo-700 font-bold">total amount of greenhouse gases</span> (like carbon dioxide and methane) that are generated by our actions. Think of it as an invisible footprint we leave on the planet every day.</p>
+                    <p>Many of our daily activities—like using electricity for lights and fans, driving in a car, or even the food we eat and the waste we create—cause these gas emissions. These gases trap heat in the atmosphere, which leads to <span class="text-red-700 font-bold">global warming</span> and <span class="text-red-700 font-bold">climate change</span>.</p>
+                    <p>For most people, the biggest parts of their carbon footprint come from three main areas: <span class="text-blue-700 font-bold">transportation, housing (energy use), and food.</span></p>
+                </div>
+            </div>
+
+            <!-- Video: What is a Carbon Footprint? Section -->
+            <div class="lesson-section border-video">
+                <div class="section-header header-video">Watch: What is a Carbon Footprint?</div>
+                <div class="section-content">
+                    <p class="text-md mb-4">This short video explains the idea of a carbon footprint in a simple and fun way!</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/a9yO-K8mwL0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wonder Question Section -->
+            <div class="lesson-section border-vocab">
+                <div class="section-header header-vocab">Wonder Question! 🤔</div>
+                <div class="section-content quick-check-box-content">
+                    <p class="text-lg mb-4">According to the video, what is the average global carbon footprint per person each year (in tons)?</p>
+                    <input type="text" id="wonder-q-input" class="w-full md:w-1/2 p-2 border-2 border-gray-300 rounded-lg mb-4 text-center" placeholder="Type your guess here...">
+                    <button class="button-primary btn" onclick="toggleAnswer('wonder-q-answer')">Reveal Answer</button>
+                    <div id="wonder-q-answer" class="answer-box">
+                        <p><strong>Answer:</strong> Globally, the average carbon footprint is about <strong>4 tons</strong> per person per year. The video also mentions that in the United States, it's much higher at 16 tons!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Check 1 Section -->
+            <div class="lesson-section border-vocab">
+                <div class="section-header header-vocab">Quick Check! ✅</div>
+                <div class="section-content quick-check-box-content">
+                    <p class="text-lg mb-4">What are the three main areas that usually make up the bulk of a person's carbon footprint?</p>
+                    <button class="button-primary btn" onclick="toggleAnswer('qc1-answer')">Show Answer</button>
+                    <div id="qc1-answer" class="answer-box">
+                        <p><strong>Answer:</strong> Transportation, housing (home energy), and food.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How to Reduce Our Carbon Footprint Section -->
+            <div class="lesson-section border-main" style="border-color: #16a34a;">
+                <div class="section-header" style="background-color: #16a34a;">How Can We Reduce Our Footprint? 👣</div>
+                <div class="section-content">
+                    <p class="text-lg">The good news is that we can all make small changes to lower our carbon footprints. It doesn't have to happen overnight! Here are some of the most effective ways:</p>
+                    <ul>
+                        <li><span class="benefit-text">Drive or Travel Less:</span> Walk or use a bicycle for short trips. In Belize, this is a great way to get around your town or village! Using public transport like buses also helps.</li>
+                        <li><span class="benefit-text">Eat Less Red Meat:</span> The production of red meat uses a lot of feed, water, and land. Cows also release methane, a powerful greenhouse gas. Eating more chicken, fish, or plant-based meals can make a big difference.</li>
+                        <li><span class="benefit-text">Save Energy:</span> Turn off lights, fans, and appliances when you're not using them. This is a simple but powerful habit for every household.</li>
+                        <li><span class="benefit-text">Waste Less & Recycle:</span> Try to reduce the amount of waste your family produces. Recycle plastic bottles and other materials whenever possible. Composting food scraps is another great way to reduce waste.</li>
+                        <li><span class="benefit-text">Make Your Home Energy Efficient:</span> Using energy-efficient light bulbs or appliances can significantly reduce the electricity your home uses.</li>
+                    </ul>
+                    <p>We will brainstorm more ideas that are specific to our communities in <span class="text-blue-700 font-bold">Belize</span>.</p>
+                </div>
+            </div>
+
+            <!-- Activity 1: Drag and Drop - High vs. Low Carbon Actions -->
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">Activity 1: High vs. Low Carbon? ⚖️</div>
+                <div class="section-content activity-box-content">
+                    <p class="text-lg mb-4">Drag each action into the box that best describes its impact on a carbon footprint: <span class="text-red-700 font-bold">High Carbon Action</span> or <span class="text-green-700 font-bold">Low Carbon Action</span>.</p>
+                    <div class="flex flex-wrap justify-center mb-6" id="draggable-items">
+                        <div class="draggable" draggable="true" id="item1" data-type="low">Walking to the corner store</div>
+                        <div class="draggable" draggable="true" id="item2" data-type="high">Leaving the lights on in an empty room</div>
+                        <div class="draggable" draggable="true" id="item3" data-type="low">Recycling plastic bottles</div>
+                        <div class="draggable" draggable="true" id="item4" data-type="high">Driving a car for a very short distance</div>
+                        <div class="draggable" draggable="true" id="item5" data-type="low">Using a reusable bag for shopping</div>
+                        <div class="draggable" draggable="true" id="item6" data-type="high">Eating red meat every day of the week</div>
+                    </div>
+                    <div class="flex flex-col md:flex-row justify-center gap-4">
+                        <div class="dropzone flex-1 p-4 border-2 border-red-500 bg-red-50 rounded-lg" id="high-zone" data-accept="high">
+                            <p class="text-red-700 font-bold text-xl">High Carbon Action</p>
+                        </div>
+                        <div class="dropzone flex-1 p-4 border-2 border-green-500 bg-green-50 rounded-lg" id="low-zone" data-accept="low">
+                            <p class="text-green-700 font-bold text-xl">Low Carbon Action</p>
+                        </div>
+                    </div>
+                    <button class="button-primary btn" onclick="checkDragAndDrop()">Check My Answers</button>
+                    <button class="button-primary btn button-secondary" onclick="resetDragAndDrop()">Reset Activity</button>
+                    <div id="drag-drop-feedback" class="feedback text-lg mt-4"></div>
+                </div>
+            </div>
+
+            <!-- Activity 2: Knowledge Check Quiz Section -->
+            <div class="lesson-section border-quiz">
+                <div class="section-header header-quiz">Activity 2: Footprint Knowledge Check! ✅</div>
+                <div class="section-content activity-box-content">
+                    <p class="text-lg mb-4">Test your understanding! Choose the best answer for each question.</p>
+                    <div id="quiz-container" class="text-left max-w-2xl mx-auto">
+                        <!-- Quiz questions will be inserted here by JavaScript -->
+                    </div>
+                    <button class="button-primary btn" onclick="submitQuiz()">Submit Quiz</button>
+                    <div id="quiz-feedback" class="feedback text-lg mt-4"></div>
+                </div>
+            </div>
+
+            <!-- Activity 3: Class Action Plan Ideas -->
+            <div class="lesson-section border-quiz">
+                <div class="section-header header-quiz">Activity 3: Our Class Action Plan! 🇧🇿</div>
+                <div class="section-content activity-box-content">
+                    <p class="text-lg mb-4">Let's start thinking about our class action plan. Read the ideas below and write down your own commitment.</p>
+                    <div class="text-left p-4 bg-white rounded-lg shadow-md mb-6">
+                        <p class="font-bold text-lg mb-2">Action Plan Focus Areas:</p>
+                        <ul class="list-disc list-inside">
+                            <li><span class="font-bold text-blue-700">Energy:</span> Creating posters to remind students to turn off lights and fans in empty classrooms.</li>
+                            <li><span class="font-bold text-green-700">Waste:</span> Setting up a classroom recycling bin for plastic bottles and paper.</li>
+                            <li><span class="font-bold text-orange-500">Transportation:</span> Organizing a "Walk to School Day" once a month.</li>
+                            <li><span class="font-bold text-purple-700">Advocacy:</span> Making a short presentation for another class about reducing carbon footprints.</li>
+                        </ul>
+                    </div>
+                    <p class="text-left text-lg mb-2">Your Personal Green Pledge:</p>
+                    <ol class="list-decimal list-inside text-left mb-4">
+                        <li>What is <span class="text-green-700 font-bold">one action</span> you will commit to doing this week to reduce your carbon footprint? (e.g., take shorter showers, eat less meat for one day, turn off the TV when no one is watching).</li>
+                        <li>How will this action help the environment in Belize?</li>
+                    </ol>
+                    <textarea id="reflection-answer" rows="8" class="w-full p-3 border-2 border-blue-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Example:&#10;1. My commitment is to turn off the fan every time I leave a room.&#10;2. This will help by using less electricity. When we use less electricity, power plants in Belize don't have to burn as much fuel, which means fewer harmful gases go into the air. This helps protect our air and fight climate change."></textarea>
+                    <button class="button-primary btn" onclick="showReflectionFeedback()">Submit My Pledge</button>
+                    <div id="reflection-feedback" class="feedback text-lg mt-4 text-left"></div>
+                </div>
+            </div>
+
+            <!-- Ready to Learn More? Section -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">Explore More!</div>
+                <div class="section-content">
+                    <p class="text-lg">Want to dive deeper into carbon footprints? Check out these resources!</p>
+                    <ul class="list-disc list-inside">
+                        <li><a href="https://www.nature.org/en-us/get-involved/how-to-help/carbon-footprint-calculator/" target="_blank" class="text-blue-600 hover:underline">The Nature Conservancy: Carbon Footprint Calculator</a> - See how different choices impact your footprint.</li>
+                        <li><a href="https://www3.epa.gov/carbon-footprint-calculator/" target="_blank" class="text-blue-600 hover:underline">EPA Carbon Footprint Calculator</a> - Another tool to estimate your impact.</li>
+                        <li><a href="https://www.nytimes.com/guides/year-of-living-better/how-to-reduce-your-carbon-footprint" target="_blank" class="text-blue-600 hover:underline">NY Times: How to Reduce Your Carbon Footprint</a> - A guide with many practical tips.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Your Turn to Think! Section -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">Final Thought! 🤔</div>
+                <div class="section-content text-center">
+                    <p class="text-lg">Think about our beautiful country of Belize, from the coral reefs to the rainforests. How can our class inspire others in our school and community to reduce their carbon footprints and protect our natural treasures?</p>
+                    <p class="text-xl mt-4 text-blue-800 font-bold">Remember, many small actions added together can create a <span class="text-green-700">huge positive change!</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p class="font-semibold">Explore, discover, and learn something new every day!</p>
+        <p class="text-xs mt-1">© 2025 Mr. Edwin's Virtual Classroom — All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Global variables for quiz and drag-and-drop
+        let currentQuizAnswers = {};
+
+        const quizQuestions = [
+            {
+                question: "What is a carbon footprint?",
+                options: [
+                    "The amount of water a person drinks in a day.",
+                    "The total amount of greenhouse gases generated by our actions.",
+                    "The size of your shoe.",
+                    "A type of fossil found in the ground."
+                ],
+                answer: "The total amount of greenhouse gases generated by our actions."
+            },
+            {
+                question: "Which of the following is an effective way to reduce your carbon footprint?",
+                options: [
+                    "Leaving all the lights on to see better.",
+                    "Asking for a ride in a car to go a very short distance.",
+                    "Walking, cycling, or using public transport.",
+                    "Using a new plastic bag every time you shop."
+                ],
+                answer: "Walking, cycling, or using public transport."
+            },
+            {
+                question: "Greenhouse gases, like carbon dioxide, contribute to climate change by...",
+                options: [
+                    "Cooling the planet.",
+                    "Making the oceans cleaner.",
+                    "Trapping heat in the atmosphere.",
+                    "Creating more oxygen."
+                ],
+                answer: "Trapping heat in the atmosphere."
+            },
+            {
+                question: "Which of these is NOT one of the three main sources of an individual's carbon footprint mentioned in the lesson?",
+                options: [
+                    "Housing (Energy Use)",
+                    "Transportation",
+                    "Food",
+                    "The clothes you wear"
+                ],
+                answer: "The clothes you wear"
+            }
+        ];
+
+
+        // Function to toggle the visibility of quick check answers
+        function toggleAnswer(id) {
+            const answerBox = document.getElementById(id);
+            if (answerBox.style.display === 'block') {
+                answerBox.style.display = 'none';
+            } else {
+                answerBox.style.display = 'block';
+                // Apply green flash animation when answer is shown
+                answerBox.classList.add('correct-answer');
+                setTimeout(() => {
+                    answerBox.classList.remove('correct-answer');
+                }, 500); // Remove class after animation
+            }
+        }
+
+        // Confetti animation function
+        function createConfetti() {
+            const confettiContainer = document.createElement('div');
+            confettiContainer.classList.add('confetti-container');
+            document.body.appendChild(confettiContainer);
+
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`; // Random color
+                confettiContainer.appendChild(confetti);
+            }
+
+            setTimeout(() => {
+                confettiContainer.remove();
+            }, 3000); // Remove confetti after 3 seconds
+        }
+
+        // --- Activity 1: Drag and Drop ---
+        const draggableItems = document.querySelectorAll('.draggable');
+        const dropzones = document.querySelectorAll('.dropzone');
+        const draggableItemsContainer = document.getElementById('draggable-items'); // Get the original container
+
+        // Store initial HTML of draggable items for reset
+        const initialDraggableItemsHTML = draggableItemsContainer.innerHTML;
+
+        draggableItems.forEach(item => {
+            item.addEventListener('dragstart', (e) => {
+                draggedItem = e.target;
+                e.dataTransfer.setData('text/plain', e.target.id);
+                setTimeout(() => {
+                    e.target.style.opacity = '0.5';
+                    e.target.style.transform = 'scale(1.1) translateY(-5px)'; /* Lift effect */
+                    e.target.style.boxShadow = '0 8px 16px rgba(0,0,0,0.2)'; /* Stronger shadow */
+                }, 0);
+            });
+
+            item.addEventListener('dragend', (e) => {
+                e.target.style.opacity = '1';
+                e.target.style.transform = 'scale(1)'; /* Reset transform */
+                e.target.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)'; /* Reset shadow */
+                draggedItem = null;
+            });
+        });
+
+        dropzones.forEach(zone => {
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault(); // Allow drop
+                zone.classList.add('hover');
+            });
+
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('hover');
+            });
+
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('hover');
+                const id = e.dataTransfer.getData('text/plain');
+                const draggable = document.getElementById(id);
+
+                // Check if the dropzone already contains the item
+                if (!zone.contains(draggable)) {
+                    zone.appendChild(draggable);
+                }
+            });
+        });
+
+        function checkDragAndDrop() {
+            const feedbackDiv = document.getElementById('drag-drop-feedback');
+            let allCorrect = true;
+            const highZone = document.getElementById('high-zone');
+            const lowZone = document.getElementById('low-zone');
+
+            // Reset classes and remove animations
+            highZone.classList.remove('correct', 'incorrect');
+            lowZone.classList.remove('correct', 'incorrect');
+            highZone.style.animation = 'none';
+            lowZone.style.animation = 'none';
+            void highZone.offsetWidth; // Trigger reflow
+            void lowZone.offsetWidth; // Trigger reflow
+
+
+            // Check high carbon zone
+            const highItems = Array.from(highZone.children).filter(el => el.classList.contains('draggable'));
+            let highZoneCorrect = true;
+            if (highItems.length === 0) highZoneCorrect = false; // No items in zone
+            highItems.forEach(item => {
+                if (item.dataset.type !== 'high') {
+                    highZoneCorrect = false;
+                    allCorrect = false;
+                }
+            });
+            if (highItems.length !== 3) { // Ensure correct number of items
+                highZoneCorrect = false;
+                allCorrect = false;
+            }
+            if (highZoneCorrect) {
+                highZone.classList.add('correct');
+            } else {
+                highZone.classList.add('incorrect');
+                allCorrect = false;
+            }
+
+
+            // Check low carbon zone
+            const lowItems = Array.from(lowZone.children).filter(el => el.classList.contains('draggable'));
+            let lowZoneCorrect = true;
+            if (lowItems.length === 0) lowZoneCorrect = false; // No items in zone
+            lowItems.forEach(item => {
+                if (item.dataset.type !== 'low') {
+                    lowZoneCorrect = false;
+                    allCorrect = false;
+                }
+            });
+            if (lowItems.length !== 3) { // Ensure correct number of items
+                lowZoneCorrect = false;
+                allCorrect = false;
+            }
+            if (lowZoneCorrect) {
+                lowZone.classList.add('correct');
+            } else {
+                lowZone.classList.add('incorrect');
+                allCorrect = false;
+            }
+
+            if (highZoneCorrect) {
+                highZone.style.animation = 'flashGreen 0.5s ease-out';
+            } else {
+                highZone.style.animation = 'shake 0.5s ease-out, flashRed 0.5s ease-out';
+            }
+            if (lowZoneCorrect) {
+                lowZone.style.animation = 'flashGreen 0.5s ease-out';
+            } else {
+                lowZone.style.animation = 'shake 0.5s ease-out, flashRed 0.5s ease-out';
+            }
+
+
+            if (allCorrect) {
+                feedbackDiv.className = 'feedback text-lg mt-4 correct-feedback show';
+                feedbackDiv.textContent = 'Great job! All items are in the correct places!';
+            } else {
+                feedbackDiv.className = 'feedback text-lg mt-4 incorrect-feedback show';
+                feedbackDiv.textContent = 'Keep trying! Some items are in the wrong zone. Review the concepts and try again.';
+            }
+        }
+
+        // --- Reset Drag and Drop Activity ---
+        function resetDragAndDrop() {
+            // Clear items from dropzones and return to original container
+            const allDraggables = document.querySelectorAll('.draggable');
+            allDraggables.forEach(item => {
+                draggableItemsContainer.appendChild(item); // Move back to original parent
+                item.style.opacity = '1'; // Reset opacity
+                item.style.transform = 'scale(1)'; // Reset transform
+                item.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)'; // Reset shadow
+            });
+
+            // Clear dropzone styling
+            dropzones.forEach(zone => {
+                zone.classList.remove('correct', 'incorrect', 'hover');
+                zone.style.animation = 'none'; // Clear any animations
+                void zone.offsetWidth; // Trigger reflow
+            });
+
+            // Clear feedback message
+            const feedbackDiv = document.getElementById('drag-drop-feedback');
+            feedbackDiv.classList.remove('show', 'correct-feedback', 'incorrect-feedback');
+            feedbackDiv.textContent = '';
+        }
+
+
+        // --- Activity 2: Multiple Choice Quiz ---
+        function loadQuiz() {
+            const quizContainer = document.getElementById('quiz-container');
+            quizContainer.innerHTML = ''; // Clear previous questions
+
+            quizQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('mb-6', 'p-4', 'bg-white', 'rounded-lg', 'shadow-sm');
+                questionDiv.innerHTML = `<p class="font-bold text-lg mb-3">${index + 1}. ${q.question}</p>`;
+
+                q.options.forEach(option => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.classList.add('quiz-option');
+                    optionDiv.textContent = option;
+                    optionDiv.dataset.questionIndex = index;
+                    optionDiv.dataset.option = option;
+                    optionDiv.addEventListener('click', () => selectOption(index, option, optionDiv));
+                    questionDiv.appendChild(optionDiv);
+                });
+                quizContainer.appendChild(questionDiv);
+            });
+        }
+
+        function selectOption(qIndex, option, clickedElement) {
+            // Remove 'selected' from other options for this question
+            const optionsForThisQuestion = document.querySelectorAll(`[data-question-index="${qIndex}"]`);
+            optionsForThisQuestion.forEach(el => {
+                el.classList.remove('selected', 'correct-answer', 'incorrect-answer');
+                el.style.animation = 'none'; // Reset animation
+                void el.offsetWidth; // Trigger reflow
+            });
+
+            // Add 'selected' to the clicked option
+            clickedElement.classList.add('selected');
+            currentQuizAnswers[qIndex] = option;
+        }
+
+        function submitQuiz() {
+            const feedbackDiv = document.getElementById('quiz-feedback');
+            let score = 0;
+
+            quizQuestions.forEach((q, index) => {
+                const selectedOption = currentQuizAnswers[index];
+                const optionsForThisQuestion = document.querySelectorAll(`[data-question-index="${index}"]`);
+
+                optionsForThisQuestion.forEach(el => {
+                    el.classList.remove('selected', 'correct-answer', 'incorrect-answer');
+                    el.style.animation = 'none'; // Reset animation
+                    void el.offsetWidth; // Trigger reflow
+
+                    if (el.dataset.option === q.answer) {
+                        el.classList.add('correct-answer'); // Mark correct answer
+                        el.style.animation = 'flashGreen 0.5s ease-out';
+                    }
+                    if (el.dataset.option === selectedOption && selectedOption !== q.answer) {
+                        el.classList.add('incorrect-answer'); // Mark user's incorrect choice
+                        el.style.animation = 'shake 0.5s ease-out, flashRed 0.5s ease-out';
+                    }
+                });
+
+                if (selectedOption === q.answer) {
+                    score++;
+                }
+            });
+
+            feedbackDiv.className = 'feedback text-lg mt-4 ' + (score === quizQuestions.length ? 'correct-feedback' : 'incorrect-feedback') + ' show';
+            feedbackDiv.textContent = `You scored ${score} out of ${quizQuestions.length}! Review the highlighted answers.`;
+
+            if (score === quizQuestions.length) {
+                createConfetti(); // Trigger confetti on 100% score
+            }
+        }
+
+        // --- Activity 3: Scenario-Based Reflection ---
+        function showReflectionFeedback() {
+            const reflectionText = document.getElementById('reflection-answer').value.trim();
+            const feedbackDiv = document.getElementById('reflection-feedback');
+
+            if (reflectionText.length < 50) { // Simple check for minimal response
+                feedbackDiv.className = 'feedback text-lg mt-4 incorrect-feedback show';
+                feedbackDiv.textContent = 'Please write a more detailed pledge. Try to answer both questions!';
+                // Add shake and red flash to the textarea if too short
+                const textarea = document.getElementById('reflection-answer');
+                textarea.style.animation = 'shake 0.5s ease-out, flashRed 0.5s ease-out';
+                setTimeout(() => {
+                    textarea.style.animation = 'none';
+                }, 500);
+                return;
+            }
+
+            feedbackDiv.className = 'feedback text-lg mt-4 correct-feedback show';
+            feedbackDiv.innerHTML = `
+                <p class="font-bold mb-2">Thank you for your Green Pledge! This is a fantastic commitment.</p>
+                <p>Here are some great ideas to think about for our class discussion:</p>
+                <ul class="list-disc list-inside">
+                    <li><span class="font-bold text-green-700">Individual Actions:</span> Your personal pledge is a great start. Small changes, like turning off a fan or using a reusable bottle, add up quickly when we all do them.</li>
+                    <li><span class="font-bold text-blue-700">Household Impact:</span> How can you encourage your family to join you? Maybe you can be in charge of a "lights out" check before leaving the house or help with sorting recyclables.</li>
+                    <li><span class="font-bold text-purple-700">Community Power:</span> When our whole class works together on our action plan, we can make a real difference at school and even inspire other classes to join in!</li>
+                </ul>
+                <p class="mt-2">Your pledge will be a wonderful addition to our classroom's "Green Pledge Wall"!</p>
+            `;
+            // Add green flash animation to the feedback div on success
+            feedbackDiv.style.animation = 'flashGreen 0.5s ease-out';
+            setTimeout(() => {
+                feedbackDiv.style.animation = 'none';
+            }, 500);
+        }
+
+        // Initialize activities on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadQuiz();
+        });
+    </script>
+</body>
+</html>

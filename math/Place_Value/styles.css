@@ -1,0 +1,469 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f0f4f8; /* Soft blue-gray background */
+    padding: 20px;
+    background-image: linear-gradient(to bottom right, #f0f4f8, #d9e2ec);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    border-top: 5px solid #9b59b6; /* Purple accent at top */
+}
+
+h1 {
+    text-align: center;
+    color: #34495e; /* Dark blue - matches decimal point */
+    margin-bottom: 20px;
+    font-size: 32px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    position: relative;
+    padding-bottom: 10px;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(to right, #9b59b6, #3498db, #2ecc71); /* Purple to blue to green gradient */
+}
+
+h2 {
+    color: #34495e;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 22px;
+    border-left: 4px solid #3498db; /* Blue accent */
+    padding-left: 10px;
+}
+
+.input-section {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+#number-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #9b59b6; /* Purple border to match header */
+    border-radius: 5px;
+    width: 250px;
+    text-align: center;
+    margin-right: 10px;
+    transition: border-color 0.3s;
+}
+
+#number-input:focus {
+    outline: none;
+    border-color: #3498db; /* Blue when focused */
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+#visualize-btn {
+    padding: 10px 20px;
+    background-color: #9b59b6; /* Purple - matches the hundred millions header */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#visualize-btn:hover {
+    background-color: #8e44ad; /* Darker purple */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.chart-container {
+    position: relative;
+    margin-bottom: 20px;
+    overflow: hidden;
+    background-color: #e6f7ff; /* Light blue background */
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(52, 152, 219, 0.3), /* Outer blue glow */
+               0 0 40px rgba(52, 152, 219, 0.2), /* Middle blue glow */
+               0 0 60px rgba(52, 152, 219, 0.1); /* Faint outer glow */
+    padding: 15px;
+    border: 1px solid #bde0ff;
+}
+
+.place-value-chart {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow-x: auto;
+    background-color: white;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.place-value-row {
+    display: flex;
+    width: 100%;
+}
+
+.place-value-cell {
+    flex: 1;
+    min-width: 80px;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.decimal-point {
+    flex: 0.3;
+    min-width: 30px;
+    font-weight: bold;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 2px solid #3498db;
+    border-right: 2px solid #3498db;
+}
+
+.header .place-value-cell[data-place^="hundred"] {
+    background-color: #9b59b6; /* Purple - promotes creativity and wisdom */
+    color: white;
+    font-weight: bold;
+}
+
+.header .place-value-cell[data-place^="ten"] {
+    background-color: #3498db; /* Blue - promotes trust and intelligence */
+    color: white;
+    font-weight: bold;
+}
+
+.header .place-value-cell[data-place="ones"] {
+    background-color: #2ecc71; /* Green - promotes balance and growth */
+    color: white;
+    font-weight: bold;
+}
+
+.header .place-value-cell[data-place="tenths"] {
+    background-color: #f1c40f; /* Yellow - promotes optimism and clarity */
+    color: #333;
+    font-weight: bold;
+}
+
+.header .place-value-cell[data-place="hundredths"] {
+    background-color: #e67e22; /* Orange - promotes enthusiasm and energy */
+    color: white;
+    font-weight: bold;
+}
+
+.header .place-value-cell[data-place="thousandths"] {
+    background-color: #e74c3c; /* Red - promotes attention and excitement */
+    color: white;
+    font-weight: bold;
+}
+
+.header .decimal-point {
+    background-color: #34495e; /* Dark blue - creates separation and focus */
+    color: white;
+}
+
+.digits .place-value-cell {
+    font-size: 24px;
+    font-weight: bold;
+    height: 60px;
+}
+
+.values .place-value-cell {
+    font-size: 14px;
+    color: #666;
+    height: 40px;
+}
+
+.chart-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.scroll-btn {
+    padding: 5px 15px;
+    background-color: #34495e; /* Dark blue - matches decimal point */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.scroll-btn:hover {
+    background-color: #2c3e50; /* Darker blue */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.expanded-form-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f0f8ff; /* Light blue background */
+    border-radius: 5px;
+    border-left: 5px solid #3498db;
+}
+
+.feedback-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    border-left: 5px solid #2ecc71; /* Green border for feedback */
+}
+
+#expanded-form, #feedback-message {
+    font-size: 18px;
+    line-height: 1.5;
+    color: #333;
+}
+
+.digits .highlight[data-place^="hundred"] {
+    background-color: #d6b5e5; /* Light purple */
+    transition: background-color 0.5s;
+}
+
+.digits .highlight[data-place^="ten"] {
+    background-color: #a9d5f9; /* Light blue */
+    transition: background-color 0.5s;
+}
+
+.digits .highlight[data-place="ones"] {
+    background-color: #a9f9c0; /* Light green */
+    transition: background-color 0.5s;
+}
+
+.digits .highlight[data-place="tenths"] {
+    background-color: #fef3b0; /* Light yellow */
+    transition: background-color 0.5s;
+}
+
+.digits .highlight[data-place="hundredths"] {
+    background-color: #f9d0b0; /* Light orange */
+    transition: background-color 0.5s;
+}
+
+.digits .highlight[data-place="thousandths"] {
+    background-color: #f9b0b0; /* Light red */
+    transition: background-color 0.5s;
+}
+
+.values .highlight {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    transition: background-color 0.5s;
+}
+
+.correct {
+    color: #27ae60; /* Green */
+    font-weight: bold;
+    animation: fadeIn 0.5s;
+}
+
+.incorrect {
+    color: #e74c3c; /* Red */
+    font-weight: bold;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.hidden {
+    display: none;
+}
+
+/* Practice Mode UI */
+#practice-mode {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #ddd;
+}
+
+#practice-mode h2 {
+    text-align: center;
+    border-left: none;
+    padding-left: 0;
+}
+
+.pm_controls {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.pm_controls p {
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: #333;
+}
+
+#pm_start-btn,
+.pm_action-buttons button {
+    padding: 10px 20px;
+    background-color: #2ecc71; /* Green for practice */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 0 5px;
+}
+
+#pm_start-btn:hover,
+.pm_action-buttons button:hover {
+    background-color: #27ae60;
+    transform: translateY(-2px);
+}
+
+#pm_reset-btn { background-color: #f1c40f; color: #333; }
+#pm_reset-btn:hover { background-color: #f39c12; }
+#pm_quit-btn { background-color: #e74c3c; }
+#pm_quit-btn:hover { background-color: #c0392b; }
+
+.pm_info {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    background: #f0f4f8;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.pm_challenge {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.pm_challenge p {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+#pm_number-display {
+    font-size: 2.5em;
+    color: #34495e;
+    letter-spacing: 2px;
+}
+
+.pm_drop-container,
+.pm_tile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    min-height: 80px;
+    max-width: 500px;
+}
+
+.pm_tile-container {
+    background-color: #eaf2f8;
+    border-radius: 8px;
+    padding: 10px;
+    flex-wrap: wrap;
+}
+
+.pm_drop-zone {
+    border: 2px dashed #bdc3c7;
+    width: 70px;
+    height: 70px;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: background-color 0.3s;
+}
+
+.pm_zone-label {
+    color: #bdc3c7;
+    font-size: 14px;
+    position: absolute;
+    bottom: 5px;
+}
+
+.pm_drop-zone.pm_decimal-zone { width: 30px; }
+
+.pm_tile {
+    background-color: #fff;
+    border: 1px solid #95a5a6;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: grab;
+    border-radius: 5px;
+    user-select: none;
+}
+
+.pm_tile.pm_dragging { opacity: 0.5; cursor: grabbing; }
+.pm_drop-zone.pm_correct { background-color: #d4efdf; border-color: #2ecc71; }
+.pm_drop-zone.pm_incorrect { background-color: #f5b7b1; border-color: #e74c3c; }
+.pm_feedback-message { text-align: center; font-size: 1.2em; min-height: 1.5em; margin-top: 15px; font-weight: bold; }
+
+@media (max-width: 768px) {
+    .place-value-cell {
+        padding: 5px;
+        font-size: 12px;
+        min-width: 60px;
+    }
+    
+    .decimal-point {
+        min-width: 20px;
+        font-size: 20px;
+    }
+    
+    .digits .place-value-cell {
+        font-size: 18px;
+        height: 50px;
+    }
+    
+    .values .place-value-cell {
+        font-size: 12px;
+        height: 30px;
+    }
+    
+    #number-input {
+        width: 200px;
+    }
+}

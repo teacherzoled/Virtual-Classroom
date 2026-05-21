@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Science Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .question-container {
+            transition: background-color 0.3s ease;
+        }
+        .correct {
+            background-color: #d1fae5; /* Green-100 */
+            border-left: 5px solid #10b981; /* Green-500 */
+        }
+        .question-container.correct {
+            animation: pulse-green 1s;
+        }
+        .question-container.incorrect {
+            animation: shake-horizontal 0.5s;
+        }
+        .incorrect {
+            background-color: #fee2e2; /* Red-100 */
+            border-left: 5px solid #ef4444; /* Red-500 */
+        }
+        .correct-answer-text {
+            color: #10b981; /* Green-600 */
+            font-weight: 500;
+        }
+        .solution {
+            background-color: #f0f9ff; /* Sky-50 */
+            border-left: 4px solid #38bdf8; /* Sky-400 */
+            padding: 12px;
+            margin-top: 8px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
+        }
+        .print-only {
+            display: none;
+        }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: flex !important;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 2rem;
+            }
+            .bg-white {
+                box-shadow: none !important;
+                border: 1px solid #e2e8f0;
+            }
+            input[type="text"] {
+                border: none !important;
+                border-bottom: 1px solid #9ca3af !important;
+                border-radius: 0;
+                background-color: transparent !important;
+                padding: 4px 0 !important;
+            }
+            /* Ensure WP answers are visible on print */
+            .wp-input.has-value {
+                color: #000 !important;
+                text-shadow: none !important;
+            }
+            .solution {
+                display: none !important;
+            }
+            .correct, .incorrect {
+                background-color: transparent !important;
+                border-left: none !important;
+            }
+            .feedback-text {
+                 display: none !important;
+            }
+            .question-container {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Animations for feedback */
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        @keyframes shake-horizontal {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        /* Custom border colors for questions */
+        .border-l-q-blue { border-left-color: #60a5fa; }
+        .border-l-q-purple { border-left-color: #c084fc; }
+        .border-l-q-pink { border-left-color: #f9a8d4; }
+        .border-l-q-teal { border-left-color: #5eead4; }
+        .wp-input {
+            background-color: #f8fafc; /* slate-50 */
+        }
+        /* Make text in answered WP inputs transparent unless hovered/focused */
+        .wp-input.has-value:not(:focus) {
+            color: transparent;
+            text-shadow: 0 0 8px rgba(0,0,0,0.5); /* Optional: blur effect */
+        }
+        .wp-input.has-value:hover,
+        .wp-input.has-value:focus {
+            color: #1e293b; /* slate-800 */
+            text-shadow: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto max-w-4xl px-4 py-8 sm:py-12">
+        <div class="print-only mb-8">
+             <p><strong>Name:</strong> _________________________________________</p>
+             <p><strong>Date:</strong> ___________________</p>
+        </div>
+        <header class="relative text-center mb-8">
+            <div class="mb-6 no-print">
+                <label for="studentName" class="block text-lg font-medium text-slate-700 mb-2">Enter Your Full Name:</label>
+                <input type="text" id="studentName" name="studentName" placeholder="e.g., John Doe" class="w-full max-w-md mx-auto p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <h1 class="text-4xl font-bold text-slate-900 mt-4">Technology's Impact: Benefits, Burdens & Carbon Footprint</h1>
+            <div id="finalScoreContainer" class="hidden absolute top-0 right-0 bg-white px-4 py-2 rounded-lg shadow-md border border-slate-200 text-center">
+                <span id="scoreTitle" class="text-lg font-medium text-slate-600">Final Score</span>
+                <div id="results" class="text-3xl font-bold text-slate-800">0 / 0</div>
+            </div>
+            <p class="text-slate-600 mt-2">Part I: Knowledge and Understanding</p>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="sticky top-0 z-10 w-full bg-slate-200 rounded-full h-4 mb-8 no-print shadow-inner">
+            <div id="progressBar" class="bg-green-500 h-4 rounded-full text-xs font-medium text-white text-center p-0.5 leading-none transition-all duration-500" style="width: 0%">0%</div>
+        </div>
+
+        <form id="quizForm" class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg space-y-8">
+            
+            <!-- Questions will be injected here by JavaScript -->
+            <div class="pt-6 border-t border-slate-200 no-print">
+                <button type="button" id="gradeMCBtn" class="w-full bg-sky-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-700 focus:outline-none focus:ring-4 focus:ring-sky-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>Check Part I Answers</button>
+            </div>
+        </form>
+
+        <div class="mt-12">
+             <header class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-slate-900">Part II: Application and Analysis</h2>
+                <p class="text-slate-600 mt-2 no-print">Answer the following questions.</p>
+            </header>
+
+            <div id="wordProblems" class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg space-y-10">
+                <!-- Question 19 -->
+                <div class="question-container p-4 rounded-lg border border-slate-200 border-l-4 border-l-q-blue">
+                    <div class="flex justify-between items-start">
+                        <p class="font-semibold text-lg mb-4 text-slate-900">19. Classify the following actions as either resulting in a <strong>High Carbon Action</strong> (H) or a <strong>Low Carbon Action</strong> (L).</p>
+                        <span class="font-bold text-slate-500 text-lg">5 Pts</span>
+                    </div>
+                    <table class="w-full text-left border-collapse" id="q19-table">
+                        <thead>
+                            <tr>
+                                <th class="border-b-2 p-2 font-medium text-slate-600 w-3/4">Action</th>
+                                <th class="border-b-2 p-2 font-medium text-slate-600 text-center">Classification (H or L)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="h-12"><td class="border-b p-2"><strong>A.</strong> Driving a car for a very short distance.</td><td class="border-b p-2"><input type="text" class="w-full text-center p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q19-1" maxlength="1"></td></tr>
+                            <tr class="h-12"><td class="border-b p-2"><strong>B.</strong> Walking to the corner store.</td><td class="border-b p-2"><input type="text" class="w-full text-center p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q19-2" maxlength="1"></td></tr>
+                            <tr class="h-12"><td class="border-b p-2"><strong>C.</strong> Eating red meat every day of the week.</td><td class="border-b p-2"><input type="text" class="w-full text-center p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q19-3" maxlength="1"></td></tr>
+                            <tr class="h-12"><td class="border-b p-2"><strong>D.</strong> Using a reusable bag for shopping.</td><td class="border-b p-2"><input type="text" class="w-full text-center p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q19-4" maxlength="1"></td></tr>
+                            <tr class="h-12"><td class="border-b p-2"><strong>E.</strong> Leaving the lights on in an empty room.</td><td class="border-b p-2"><input type="text" class="w-full text-center p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q19-5" maxlength="1"></td></tr>
+                        </tbody>
+                    </table>
+                    <div id="solution19" class="solution hidden"></div>
+                </div>
+
+                <!-- Question 20 -->
+                <div class="question-container p-4 rounded-lg border border-slate-200 border-l-4 border-l-q-purple">
+                    <div class="flex justify-between items-start">
+                        <p class="font-semibold text-lg mb-4 text-slate-900">20. Classify the following scenarios as a Technology <strong>Benefit</strong> (B) or a Technology <strong>Burden</strong> (D).</p>
+                        <span class="font-bold text-slate-500 text-lg">5 Pts</span>
+                    </div>
+                    <table class="w-full text-left border-collapse" id="q20-table">
+                        <thead>
+                            <tr>
+                                <th class="border-b-2 p-2 font-medium text-slate-600 w-3/4">Scenario</th>
+                                <th class="border-b-2 p-2 font-medium text-slate-600 text-center">Classification (B or D)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="h-12"><td class="border-b p-2"><strong>A.</strong> Online learning platforms providing education to remote areas.</td><td class="border-b p-2"><input type="text" class="w-full text-center p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q20-1" maxlength="1"></td></tr>
+                            <tr class="h-12"><td class="border-b p-2"><strong>B.</strong> Spending 6 hours a day playing video games and feeling grumpy.</td><td class="border-b p-2"><input type="text" class="w-full text-center p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q20-2" maxlength="1"></td></tr>
+                            <tr class="h-12"><td class="border-b p-2"><strong>C.</strong> Using X-ray tools to help doctors at a major hospital.</td><td class="border-b p-2"><input type="text" class="w-full text-center p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q20-3" maxlength="1"></td></tr>
+                            <tr class="h-12"><td class="border-b p-2"><strong>D.</strong> Sharing your home address and school with an online stranger.</td><td class="border-b p-2"><input type="text" class="w-full text-center p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q20-4" maxlength="1"></td></tr>
+                            <tr class="h-12"><td class="border-b p-2"><strong>E.</strong> Weather forecasting apps helping coastal communities prepare for storms.</td><td class="border-b p-2"><input type="text" class="w-full text-center p-1 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" id="q20-5" maxlength="1"></td></tr>
+                        </tbody>
+                    </table>
+                     <div id="solution20" class="solution hidden"></div>
+                </div>
+
+                <!-- Question 21 -->
+                <div class="question-container p-4 rounded-lg border border-slate-200 border-l-4 border-l-q-pink">
+                    <div class="flex justify-between items-start">
+                        <p class="font-semibold text-lg mb-4 text-slate-900">21. Explain how a washing machine or refrigerator contributes to a person's carbon footprint.</p>
+                        <span class="font-bold text-slate-500 text-lg">5 Pts</span>
+                    </div>
+                    <textarea id="q21" rows="3" class="w-full p-2 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" placeholder="Type your explanation here..."></textarea>
+                    <div id="solution21" class="solution hidden"></div>
+                </div>
+
+                <!-- Question 22 -->
+                <div class="question-container p-4 rounded-lg border border-slate-200 border-l-4 border-l-q-teal">
+                    <div class="flex justify-between items-start">
+                        <p class="font-semibold text-lg mb-4 text-slate-900">22. Why is <strong>composting food scraps</strong> considered an effective way to help reduce the overall carbon footprint?</p>
+                        <span class="font-bold text-slate-500 text-lg">5 Pts</span>
+                    </div>
+                    <textarea id="q22" rows="3" class="w-full p-2 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" placeholder="Type your explanation here..."></textarea>
+                    <div id="solution22" class="solution hidden"></div>
+                </div>
+
+                <!-- Question 23 -->
+                <div class="question-container p-4 rounded-lg border border-slate-200 border-l-4 border-l-q-blue">
+                     <div class="flex justify-between items-start">
+                        <p class="font-semibold text-lg mb-4 text-slate-900">23. Identify two major industries in the local area that are specifically mentioned as sources of a carbon footprint due to their use of machinery or the burning of fields.</p>
+                        <span class="font-bold text-slate-500 text-lg">3 Pts</span>
+                    </div>
+                    <input id="q23" type="text" placeholder="Type the industries here..." class="w-full p-2 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none">
+                    <div id="solution23" class="solution hidden"></div>
+                </div>
+
+                <!-- Question 24 -->
+                <div class="question-container p-4 rounded-lg border border-slate-200 border-l-4 border-l-q-purple">
+                     <div class="flex justify-between items-start">
+                        <p class="font-semibold text-lg mb-4 text-slate-900">24. What is one specific action you can take at home to reduce your carbon footprint by saving energy?</p>
+                        <span class="font-bold text-slate-500 text-lg">3 Pts</span>
+                    </div>
+                    <textarea id="q24" rows="2" class="w-full p-2 border rounded wp-input focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none" placeholder="Type your example action here..."></textarea>
+                    <div id="solution24" class="solution hidden"></div>
+                </div>
+
+                <div class="pt-8 border-t border-slate-200 no-print flex flex-col sm:flex-row gap-4">
+                     <button type="button" id="gradeWPBtn" class="w-full bg-blue-600 text-white font-bold py-4 px-8 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100" disabled>
+                        Check Part II & Get Final Score
+                     </button>
+                     <button id="printBtn" class="w-full sm:w-auto bg-gray-700 text-white font-bold py-4 px-8 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-gray-300 transition-all no-print">Print Test</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA ---
+        const quizData = [
+            { id: 'mc1', question: "1. What is a <strong>carbon footprint</strong>?", options: ["The amount of water vapor released by oceans.", "The total amount of greenhouse gases emitted by our activities.", "The number of trees planted in a year.", "The mark left by a shoe made of carbon fiber."], answer: "The total amount of greenhouse gases emitted by our activities.", points: 2 },
+            { id: 'mc2', question: "2. Globally, the average carbon footprint per person each year is estimated to be about:", options: ["16 tons", "1 ton", "10 tons", "4 tons"], answer: "4 tons", points: 2 },
+            { id: 'mc3', question: "3. What are the three main areas that usually make up the bulk of a person's carbon footprint?", options: ["Clothing, recycling, and reading", "Transportation, housing (energy use), and food", "Water usage, education, and farming", "Exercise, social media, and travel"], answer: "Transportation, housing (energy use), and food", points: 2 },
+            { id: 'mc4', question: "4. When garbage rots in a landfill, it releases a powerful greenhouse gas known as:", options: ["Carbon dioxide", "Oxygen", "Nitrogen", "Methane"], answer: "Methane", points: 2 },
+            { id: 'mc5', question: "5. What is the definition of <strong>technology</strong>?", options: ["Only computers and cell phones.", "A complex machine created in the last 10 years.", "A naturally occurring object used to solve problems.", "Any tool, machine, or process that humans create to make life easier or to solve problems."], answer: "Any tool, machine, or process that humans create to make life easier or to solve problems.", points: 2 },
+            { id: 'mc6', question: "6. A student argues that since Belize has large forests and a barrier reef, individual actions to reduce carbon footprints are not very important. Which statement would best counter this argument?", options: ["In the United States, the average footprint is much higher at 16 tons.", "Technology helps doctors treat illnesses and keep us well.", "Many small actions added together can create a huge positive change.", "Globally, the average carbon footprint is about 4 tons per person per year."], answer: "Many small actions added together can create a huge positive change.", points: 2 },
+            { id: 'mc7', question: "7. Which activity in a typical household causes a carbon footprint to get bigger?", options: ["Cooking dinner on a stove", "Turning off the fan when leaving a room", "Leaving the TV on all night", "Walking to the shop"], answer: "Leaving the TV on all night", points: 2 },
+            { id: 'mc8', question: "8. In local contexts, the use of <strong>diesel generators</strong> for backup power contributes to the carbon footprint by:", options: ["Producing hydroelectricity.", "Importing energy from Mexico.", "Releasing carbon dioxide when the fuel is burned.", "Reducing water usage."], answer: "Releasing carbon dioxide when the fuel is burned.", points: 2 },
+            { id: 'mc9', question: "9. Which statement is <strong>True</strong>?", options: ["Technology only includes digital devices like tablets and computers.", "A bicycle is too simple to be considered an example of technology.", "X-ray machines are examples of technology used to help doctors treat illnesses.", "Technology has no impact on mental health."], answer: "X-ray machines are examples of technology used to help doctors treat illnesses.", points: 2 },
+            { id: 'mc10', question: "10. A major concern related to <strong>privacy</strong> when using the internet is that:", options: ["You will forget to play outside.", "You will run out of electricity.", "Personal information might not always stay private.", "You will talk to too many people in real life."], answer: "Personal information might not always stay private.", points: 2 },
+            { id: 'mc11', question: "11. What powerful greenhouse gas is released by cows, contributing to the carbon footprint associated with red meat production?", options: ["Oxygen", "Carbon Monoxide", "Methane", "Nitrogen"], answer: "Methane", points: 2 },
+            { id: 'mc12', question: "12. A student is asked to create a plan to reduce their school's carbon footprint. Based on the 'Class Action Plan' ideas, which of the following is the most comprehensive approach?", options: ["Making posters to remind students to turn off lights.", "Implementing strategies across multiple areas like energy, waste, and advocacy.", "Focusing solely on a 'Walk to School Day' to address transportation.", "Setting up a recycling bin for plastic bottles in the classroom."], answer: "Implementing strategies across multiple areas like energy, waste, and advocacy.", points: 2 },
+            { id: 'mc13', question: "13. Which statement is <strong>False</strong>?", options: ["Greenhouse gases trap heat in the atmosphere, leading to climate change.", "Burning sugar cane fields releases smoke and carbon.", "Appliances like washing machines and refrigerators use electricity and contribute to the carbon footprint.", "A natural river is considered an example of technology because it helps move water."], answer: "A natural river is considered an example of technology because it helps move water.", points: 2 },
+            { id: 'mc14', question: "14. One burden of technology is that too much screen time can negatively affect a person's:", options: ["Ability to travel faster", "Access to knowledge", "Mental health (potentially making them feel tired or grumpy)", "Physical ability to walk short distances"], answer: "Mental health (potentially making them feel tired or grumpy)", points: 2 },
+            { id: 'mc15', question: "15. What type of bulb or appliance should people use to make their home more energy efficient?", options: ["Standard", "Heavy-duty", "Energy-efficient", "Imported"], answer: "Energy-efficient", points: 2 },
+            { id: 'mc16', question: "16. The ability of phones and the internet to help us communicate with relatives who live far away helps create:", options: ["Social division.", "Isolation.", "Global communities.", "Excessive personal information sharing."], answer: "Global communities.", points: 2 },
+            { id: 'mc17', question: "17. If a student chooses to walk instead of asking for a ride for a short trip, how does this help the environment?", options: ["It increases the amount of methane released.", "It uses more electricity.", "It means less fuel is burned.", "It adds more waste to the landfill."], answer: "It means less fuel is burned.", points: 2 },
+            { id: 'mc18', question: "18. Which statement best analyzes the relationship between 'digital citizenship' and reducing one's carbon footprint, based on the provided materials?", options: ["Reducing your carbon footprint is the most important skill of a digital citizen.", "Digital citizenship is only about being safe and responsible online, which is separate from environmental issues.", "Digital citizenship focuses on reducing e-waste, while carbon footprints are about energy and transport.", "Being a good digital citizen involves making responsible choices about technology, including how its use affects the environment."], answer: "Being a good digital citizen involves making responsible choices about technology, including how its use affects the environment.", points: 2 }
+        ];
+
+        const wordProblemData = [
+            { 
+                id: 'q19',
+                points: 5,
+                answers: {
+                    'q19-1': 'H',
+                    'q19-2': 'L',
+                    'q19-3': 'H',
+                    'q19-4': 'L',
+                    'q19-5': 'H',
+                }
+            },
+            {
+                id: 'q20',
+                points: 5,
+                answers: {
+                    'q20-1': 'B',
+                    'q20-2': 'D',
+                    'q20-3': 'B',
+                    'q20-4': 'D',
+                    'q20-5': 'B',
+                }
+            },
+            {
+                id: 'q21',
+                points: 5,
+                isSubjective: true,
+                keywords: ['electricity', 'fuel', 'carbon', 'power'],
+                answerText: "Appliances use a lot of electricity, and generating that electricity often requires burning fuel (like diesel or from imported sources) in power plants, which releases carbon dioxide."
+            },
+            {
+                id: 'q22',
+                points: 5,
+                isSubjective: true,
+                keywords: ['landfill', 'methane', 'rotting', 'garbage'],
+                answerText: "Composting reduces the amount of garbage that goes into the landfill. This prevents the food scraps from rotting and releasing methane, a powerful greenhouse gas."
+            },
+            {
+                id: 'q23',
+                points: 3,
+                isSubjective: true,
+                keywords: ['sugar', 'banana', 'poultry'],
+                answerText: "Sugar, Bananas, and/or Poultry."
+            },
+            {
+                id: 'q24',
+                points: 3,
+                isSubjective: true,
+                keywords: ['light', 'fan', 'appliance', 'tv', 'turn off', 'unplug'],
+                answerText: "Turn off lights, fans, or appliances when they are not being used, or turn off the TV when no one is watching it."
+            }
+        ];
+
+        const wordProblemSolutions = {
+            solution19: `<strong>Correct Classifications:</strong><br>A: <strong>H</strong> | B: <strong>L</strong> | C: <strong>H</strong> | D: <strong>L</strong> | E: <strong>H</strong>`,
+            solution20: `<strong>Correct Classifications:</strong><br>A: <strong>B</strong> | B: <strong>D</strong> | C: <strong>B</strong> | D: <strong>D</strong> | E: <strong>B</strong>`,
+            solution21: `<strong>Example Explanation:</strong> Appliances use a lot of electricity, and generating that electricity often requires burning fuel (like diesel or from imported sources) in power plants, which releases carbon dioxide.`,
+            solution22: `<strong>Example Explanation:</strong> Composting reduces the amount of garbage that goes into the landfill. This prevents the food scraps from rotting and releasing methane, a powerful greenhouse gas.`,
+            solution23: `<strong>Example Industries:</strong> Sugar, Bananas, and/or Poultry.`,
+            solution24: `<strong>Example Action:</strong> Turn off lights, fans, or appliances when they are not being used, or turn off the TV when no one is watching it.`
+        };
+
+        // --- DOM ELEMENTS ---
+        const quizForm = document.getElementById('quizForm');
+        const resultsContainer = document.getElementById('results');
+        const wordProblemsContainer = document.getElementById('wordProblems');
+        const gradeMCBtn = document.getElementById('gradeMCBtn');
+        const gradeWPBtn = document.getElementById('gradeWPBtn');
+        const studentNameInput = document.getElementById('studentName');
+        const progressBar = document.getElementById('progressBar');
+        let totalFields = 0;
+
+        // --- STATE ---
+        const mcMaxScore = quizData.reduce((sum, q) => sum + q.points, 0); // Total possible MC score
+        const wpMaxScore = wordProblemData.reduce((sum, p) => sum + p.points, 0); // Total possible score for all word problems
+        let mcScore = 0;
+        let wpScore = 0;
+
+        let testIsComplete = false; // Flag to disable unload warnings after completion
+        // --- FUNCTIONS ---
+        /**
+         * Shuffles an array in place using the Fisher-Yates algorithm.
+         * @param {Array} array The array to shuffle.
+         */
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function buildQuiz() {
+            const colorClasses = ['border-l-q-blue', 'border-l-q-purple', 'border-l-q-pink', 'border-l-q-teal'];
+            const output = [];
+            quizData.forEach((currentQuestion, questionNumber) => {
+                const options = [];
+                const shuffledOptions = [...currentQuestion.options];
+                shuffleArray(shuffledOptions); // Randomize the order of options for this question
+
+                shuffledOptions.forEach(option => {
+                    options.push(
+                        `<label class="flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-100 cursor-pointer transition-colors duration-200">
+                            <input type="radio" name="question-${currentQuestion.id}" value="${option}" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-slate-300">
+                            <span class="text-slate-700">${option}</span>
+                        </label>`
+                    );
+                });
+                const colorClass = colorClasses[questionNumber % colorClasses.length];
+                output.push(
+                    `<div class="question-container p-4 rounded-lg border border-slate-200 border-l-4 ${colorClass}" id="q-container-${currentQuestion.id}">
+                        <div class="flex justify-between items-start">
+                            <p class="font-semibold text-lg mb-4 text-slate-900">${currentQuestion.question}</p>
+                            <span class="font-bold text-slate-500 text-lg">${currentQuestion.points} Pts</span>
+                        </div>
+                        <div class="question-body space-y-2">${options.join('')}</div>
+                        <div id="feedback-${questionNumber}" class="mt-3 text-sm feedback-text"></div>
+                    </div>`
+                );
+            });
+            // Insert the questions at the beginning of the form
+            quizForm.insertAdjacentHTML('afterbegin', output.join(''));
+        }
+
+        function initializeProgressBar() {
+            const mcQuestions = quizData.length;
+            const wpInputs = wordProblemsContainer.querySelectorAll('.wp-input').length;
+            const hasStudentName = 1;
+            totalFields = mcQuestions + wpInputs + hasStudentName;
+            updateProgressBar(); // Initial call to set to 0%
+        }
+
+        function updateProgressBar() {
+            if (totalFields === 0) return;
+
+            let answeredFields = 0;
+            // 1. Check student name
+            if (studentNameInput.value.trim() !== '') {
+                answeredFields++;
+            }
+            // 2. Check MC questions
+            quizData.forEach(q => {
+                if (document.querySelector(`input[name=question-${q.id}]:checked`)) {
+                    answeredFields++;
+                }
+            });
+            // 3. Check WP inputs
+            wordProblemsContainer.querySelectorAll('.wp-input').forEach(input => {
+                if (input.value.trim() !== '') answeredFields++;
+            });
+            const percentage = Math.round((answeredFields / totalFields) * 100);
+            progressBar.style.width = `${percentage}%`;
+            progressBar.textContent = `${percentage}%`;
+        }
+
+        function gradeMC() {
+            mcScore = 0;
+            // 1. Grade Multiple Choice
+            quizData.forEach((currentQuestion, questionNumber) => {
+                const questionContainer = document.getElementById(`q-container-${currentQuestion.id}`);
+                const feedbackContainer = document.getElementById(`feedback-${questionNumber}`);
+                const selector = `input[name=question-${currentQuestion.id}]:checked`;
+                const userAnswer = (document.querySelector(selector) || {}).value;
+                questionContainer.classList.remove('correct', 'incorrect');
+                feedbackContainer.innerHTML = '';
+                if (userAnswer === currentQuestion.answer) {
+                    mcScore += currentQuestion.points;
+                    questionContainer.classList.add('correct');
+                } else {
+                    questionContainer.classList.add('incorrect');
+                    if(userAnswer) {
+                        feedbackContainer.innerHTML = `<span class="correct-answer-text">Correct answer: ${currentQuestion.answer}</span>`;
+                    } else {
+                        feedbackContainer.innerHTML = `<span class="text-red-600 font-medium">No answer selected. The correct answer is: ${currentQuestion.answer}</span>`;
+                    }
+                }
+            });
+
+            // Disable MC section
+            document.querySelectorAll('#quizForm .question-container').forEach(qc => {
+                qc.classList.remove('is-reviewing'); // Ensure all are collapsed
+                qc.style.cursor = 'default'; // Remove pointer cursor after grading
+            });
+            quizForm.querySelectorAll('input[type=radio]').forEach(input => input.disabled = true);
+            gradeMCBtn.disabled = true;
+            
+            // Display the MC score
+            document.getElementById('scoreTitle').textContent = 'Part I Score';
+            resultsContainer.innerHTML = `${mcScore} / ${mcMaxScore}`;
+            document.getElementById('finalScoreContainer').classList.remove('hidden');
+
+            checkWPCompletion(); // Check if WP can be enabled now
+        }
+        
+        function gradeWordProblems() {
+            wpScore = 0;
+            // 2. Grade Word Problems
+            wordProblemData.forEach(problem => {
+                const problemContainer = document.getElementById(problem.id) || document.getElementById(problem.id + '-inputs') || document.getElementById(problem.id + '-table');
+                if (!problemContainer) return;
+
+                if (problem.isSubjective) {
+                    const inputEl = document.getElementById(problem.id);
+                    const userAns = inputEl.value.toLowerCase();
+                    const hasKeyword = problem.keywords.some(kw => userAns.includes(kw));
+                    if (hasKeyword) {
+                        wpScore += problem.points;
+                        inputEl.classList.add('border-green-500', 'border-2');
+                    } else {
+                        inputEl.classList.add('border-red-500', 'border-2');
+                    }
+                } else { // For classification tables
+                    let correctAnswersForProblem = 0;
+                    const totalInputsForProblem = Object.keys(problem.answers).length;
+
+                    for (const inputId in problem.answers) {
+                        const inputEl = document.getElementById(inputId);
+                        let userAns = inputEl.value.trim().toUpperCase();
+                        const correctAns = problem.answers[inputId];
+                        
+                        if (userAns === correctAns) {
+                            correctAnswersForProblem++;
+                            inputEl.classList.add('border-green-500', 'border-2');
+                        } else {
+                            inputEl.classList.add('border-red-500', 'border-2');
+                        }
+                    }
+                    // Award partial credit
+                    if (correctAnswersForProblem > 0) {
+                        wpScore += (correctAnswersForProblem / totalInputsForProblem) * problem.points;
+                    }
+                }
+            });
+
+            // 3. Display Final Score & Reveal Solutions
+            const totalScore = Math.round(mcScore + wpScore);
+            const maxScore = mcMaxScore + wpMaxScore;
+
+            document.getElementById('scoreTitle').textContent = 'Final Score';
+            resultsContainer.innerHTML = `${totalScore} / ${maxScore}`; // Update the score display
+            document.getElementById('finalScoreContainer').classList.remove('hidden');
+
+            for (const solutionId in wordProblemSolutions) {
+                const solutionDiv = document.getElementById(solutionId);
+                if (solutionDiv) {
+                    solutionDiv.innerHTML = wordProblemSolutions[solutionId];
+                    solutionDiv.classList.remove('hidden');
+                }
+            }
+
+            // 5. Freeze the entire test
+            wordProblemsContainer.querySelectorAll('.question-container').forEach(qc => {
+                qc.classList.remove('is-reviewing');
+                qc.style.cursor = 'default';
+            });
+            wordProblemsContainer.querySelectorAll('input, select, textarea').forEach(input => input.disabled = true);
+            gradeWPBtn.disabled = true;
+            testIsComplete = true; // Test is finished, allow refresh without warning
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function checkMCCompletion() {
+            const isNameFilled = studentNameInput.value.trim() !== '';
+            let answeredCount = 0;
+            quizData.forEach(q => {
+                const selector = `input[name=question-${q.id}]:checked`;
+                if (document.querySelector(selector)) {
+                    answeredCount++;
+                }
+            });
+            gradeMCBtn.disabled = !(answeredCount === quizData.length && isNameFilled);
+        }
+
+        function checkWPCompletion() {
+            // WP button should only be enabled if MC is done and all WP fields are filled.
+            const isMCGraded = gradeMCBtn.disabled;
+            if (!isMCGraded) {
+                gradeWPBtn.disabled = true;
+                return;
+            }
+
+            const wpInputs = wordProblemsContainer.querySelectorAll('.wp-input');
+            let allWPFilled = true;
+            wpInputs.forEach(input => {
+                if (input.value.trim() === '') {
+                    allWPFilled = false;
+                }
+            });
+            gradeWPBtn.disabled = !allWPFilled;
+        }
+
+        function runTeacherMode() {
+            // 1. Fill in student name
+            studentNameInput.value = "TEACHER ANSWER KEY";
+            console.log("Teacher mode activated. Populating answers...");
+
+            // 2. Fill in Multiple Choice answers
+            quizData.forEach(currentQuestion => {
+                const selector = `input[name=question-${currentQuestion.id}][value="${currentQuestion.answer}"]`;
+                const correctRadio = document.querySelector(selector);
+                if (correctRadio) {
+                    correctRadio.checked = true;
+                }
+            });
+
+            // 3. Fill in Word Problem answers
+            wordProblemData.forEach(problem => {
+                if (problem.isSubjective) { // For short answer questions
+                    const inputEl = document.getElementById(problem.id);
+                    if (inputEl) {
+                        inputEl.value = problem.answerText;
+                    }
+                } else { // For classification tables
+                    for (const inputId in problem.answers) {
+                        const inputEl = document.getElementById(inputId);
+                        if (inputEl) {
+                            const correctAns = problem.answers[inputId];
+                            inputEl.value = correctAns;
+                        }
+                    }
+                }
+            });
+
+            // 4. Automatically grade the entire test
+            gradeMC();
+            gradeWordProblems();
+        }
+
+        // --- INITIALIZATION & EVENT LISTENERS ---
+        buildQuiz();
+        initializeProgressBar(); // Set up the progress bar, values will be updated on load
+        gradeMCBtn.addEventListener('click', () => {
+            if (window.confirm("Are you sure you want to grade the multiple choice section? You will not be able to change your answers.")) {
+                gradeMC();
+            }
+        });
+        gradeWPBtn.addEventListener('click', () => {
+            if (window.confirm("Are you sure you want to grade the word problems and get your final score? You will not be able to change your answers.")) {
+                gradeWordProblems();
+            }
+        });
+        quizForm.addEventListener('change', (e) => {
+            // If a radio button was changed, auto-scroll to the next question
+            if (e.target.type === 'radio') {
+                const currentQuestionContainer = e.target.closest('.question-container');
+                if (currentQuestionContainer) {
+                    // Use a short timeout to ensure the UI has updated before we scroll.
+                    setTimeout(() => {
+                        const nextElement = currentQuestionContainer.nextElementSibling;
+                        if (nextElement && nextElement.classList.contains('question-container')) {
+                            // Scroll the top of the next question into view, with a small offset for the sticky progress bar.
+                            const elementPosition = nextElement.getBoundingClientRect().top;
+                            const offsetPosition = elementPosition + window.pageYOffset - 50; // 50px offset
+                            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                        }
+                    }, 100); // 100ms delay
+                }
+            }
+            checkMCCompletion();
+            updateProgressBar();
+        });
+        studentNameInput.addEventListener('input', () => {
+            checkMCCompletion();
+            updateProgressBar();
+        });
+        wordProblemsContainer.addEventListener('input', (e) => {
+            // Add/remove 'has-value' class for transparent text effect
+            if (e.target.classList.contains('wp-input')) {
+                if (e.target.value.trim() !== '') {
+                    e.target.classList.add('has-value');
+                } else {
+                    e.target.classList.remove('has-value');
+                }
+            }
+            checkWPCompletion(); updateProgressBar(); 
+        });
+
+        // --- Other Buttons ---
+        const printBtn = document.getElementById('printBtn');
+        printBtn.addEventListener('click', () => {
+            // This opens the browser's print dialog, which has a "Save as PDF" option.
+            window.print();
+        });
+
+        // Check for teacher mode on page load
+        window.addEventListener('load', () => {
+            // This logic runs after the page and all resources are fully loaded.
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('teacher') === 'true') {
+                runTeacherMode();
+            }
+
+            // After loading state or running teacher mode, update the UI.
+            wordProblemsContainer.querySelectorAll('.wp-input').forEach(input => {
+                if (input.value) {
+                    input.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            });
+            updateProgressBar();
+            checkMCCompletion();
+            checkWPCompletion();
+        });
+
+        // Warn user before they refresh the page
+        window.addEventListener('beforeunload', (e) => {
+            if (!testIsComplete) {
+                e.preventDefault();
+                e.returnValue = ''; // Standard way to trigger the browser's confirmation dialog
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Types of Numbers</title>
+    <link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Lilita+One&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #eef2ff; /* Light indigo background */
+            color: #1a202c;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content-wrapper {
+            flex-grow: 1;
+        }
+        .container {
+            max-width: 90%;
+            margin: 0 auto;
+            padding: 1.5rem 0;
+        }
+        .lesson-section {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            border-left-width: 3px;
+            border-bottom-width: 3px;
+            border-color: transparent;
+        }
+        .lesson-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .section-header {
+            padding: 0.75rem 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .section-content {
+            padding: 1.5rem;
+        }
+        .header-main { background-color: #3b82f6; } /* Blue */
+        .header-objective { background-color: #1d4ed8; } /* Darker Blue */
+        .header-video { background-color: #dc2626; } /* Red */
+        .header-activity { background-color: #f97316; } /* Orange */
+        .header-vocab { background-color: #f59e0b; } /* Amber */
+        .header-quiz { background-color: #8b5cf6; } /* Violet */
+
+        .border-main { border-color: #3b82f6; }
+        .border-objective { border-color: #1d4ed8; }
+        .border-video { border-color: #dc2626; }
+        .border-activity { border-color: #f97316; }
+        .border-vocab { border-color: #f59e0b; }
+        .border-quiz { border-color: #8b5cf6; }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: none;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .btn-primary { background-color: #4f46e5; }
+        .btn-primary:hover { background-color: #4338ca; }
+        .btn-secondary { background-color: #f59e0b; }
+        .btn-secondary:hover { background-color: #d97706; }
+        .btn-challenge { background-color: #db2777; }
+        .btn-challenge:hover { background-color: #be185d; }
+        
+        input[type="text"], input[type="number"] {
+            border: 2px solid #cbd5e1;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input:focus {
+            outline: none;
+            border-color: #4f46e5;
+        }
+        .feedback, .challenge-div {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            pointer-events: none;
+        }
+        .feedback.visible, .challenge-div.visible {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+        .feedback-correct { background-color: #d1fae5; color: #047857; }
+        .feedback-incorrect { background-color: #fee2e2; color: #dc2626; }
+
+        .prose strong { color: #1e40af; }
+        .prose ul, .prose ol { margin-top: 1em; margin-bottom: 1em; padding-left: 1.5rem; }
+        .prose li { margin-top: 0.5em; margin-bottom: 0.5em; }
+        .prose h2 { color: #1e3a8a; font-size: 1.75rem; margin-top: 0; }
+        .prose h3 { color: #4338ca; font-size: 1.25rem; margin-top: 1.5rem; }
+        .header {
+            background-color: #fef3c7;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            min-height: 80px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .header-left { display: flex; align-items: center; gap: 1rem; }
+        .header-logo { height: 50px; width: auto; border-radius: 0.5rem; }
+        .header-title { color: #f97316; font-size: 1.5rem; sm:font-size: 2.25rem; font-weight: 700; text-align: center; }
+        .footer {
+            background-color: #ea580c;
+            color: white;
+            padding: 1.25rem 2rem;
+            text-align: center;
+            margin-top: auto;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .footer p {
+            margin: 0;
+            line-height: 1.5;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        @keyframes flashGreen {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            50% { box-shadow: 0 0 15px 5px rgba(16, 185, 129, 0.7); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        @keyframes flashRed {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); border-color: rgba(239, 68, 68, 0.7); }
+            50% { box-shadow: 0 0 15px 5px rgba(239, 68, 68, 0.7); border-color: rgba(239, 68, 68, 0.7); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); border-color: rgba(239, 68, 68, 0); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25%, 75% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+        }
+        .confetti-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; overflow: hidden; z-index: 9999;
+        }
+        .confetti {
+            position: absolute; width: 10px; height: 10px; opacity: 0;
+            animation: confetti-fall 3s forwards;
+        }
+        @keyframes confetti-fall {
+            0% { opacity: 1; transform: translateY(-100vh) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Teacher Ed Logo" class="header-logo">
+            <div class="header-title">Teacher Ed Classroom</div>
+        </div>
+    </header>
+
+    <div class="main-content-wrapper">
+        <div class="container">
+            
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    <span>Introduction to Types of Numbers</span>
+                </div>
+                <div class="section-content prose">
+                    <p>Welcome to a new week of mathematical exploration! This week, we'll dive into the different "families" of numbers. Understanding these categories helps us see how numbers relate to each other and how they are used to solve problems all around us.</p>
+                </div>
+            </div>
+
+            <div class="lesson-section border-objective">
+                <div class="section-header header-objective">Lesson Objectives</div>
+                <div class="section-content prose">
+                    <h3>What You Will Learn This Week:</h3>
+                    <ul>
+                        <li>Identify and categorize <strong>natural, whole, even, and odd</strong> numbers.</li>
+                        <li>Recognize <strong>prime numbers</strong> and differentiate them from <strong>composite numbers</strong>.</li>
+                        <li>Practice factorization of composite numbers into primes.</li>
+                        <li>Investigate what <strong>integers</strong> are and their real-world applications.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="lesson-section border-vocab">
+                <div class="section-header header-vocab">Learn: The Building Blocks (Even, Odd, Whole)</div>
+                <div class="section-content prose">
+                    <h2>Natural, Whole, Even, and Odd Numbers</h2>
+                    <p>Let's start with the basics! These are the numbers we use every day.</p>
+                    <ul>
+                        <li><strong>Natural Numbers:</strong> These are the counting numbers: <strong>1, 2, 3, 4, ...</strong></li>
+                        <li><strong>Whole Numbers:</strong> These are all the natural numbers plus zero: <strong>0, 1, 2, 3, ...</strong></li>
+                        <li><strong>Even Numbers:</strong> Any whole number that can be divided exactly by 2: <strong>0, 2, 4, 6, ...</strong></li>
+                        <li><strong>Odd Numbers:</strong> Any whole number that cannot be divided exactly by 2: <strong>1, 3, 5, 7, ...</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="lesson-section border-video">
+                <div class="section-header header-video">Watch: Natural, Whole, Even, and Odd Numbers</div>
+                <div class="section-content prose">
+                    <p>These videos will help you understand the basic types of numbers we use every day.</p>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-center">Natural and Whole Numbers</h3>
+                            <div class="video-container">
+                                <iframe src="https://www.youtube.com/embed/x4olbdnAjnY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-center">Even and Odd Numbers</h3>
+                            <div class="video-container">
+                                <iframe src="https://www.youtube.com/embed/TQZh9yvxFSY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">Do: Even or Odd?</div>
+                <div class="section-content activity-box-content">
+                    <p class="mb-4">Let's see how quickly you can identify even and odd numbers. A number will appear below. Is it even or odd?</p>
+                    <div class="bg-amber-100 p-4 rounded-lg text-center mb-4 break-words">
+                        <p id="even-odd-number" class="text-3xl sm:text-4xl font-bold text-amber-800"></p>
+                    </div>
+                    <div class="flex justify-center gap-4 items-center mt-4">
+                        <button id="even-btn" class="btn btn-primary w-full sm:w-auto">Even</button>
+                        <button id="odd-btn" class="btn btn-secondary w-full sm:w-auto">Odd</button>
+                    </div>
+                    <div id="challenge-even-odd-div" class="challenge-div">
+                        <p class="font-semibold text-green-700 mb-2">You're on a roll! Try a harder problem.</p>
+                        <button id="challenge-even-odd-btn" class="btn btn-challenge">Challenge Mode</button>
+                    </div>
+                    <div id="even-odd-feedback" class="feedback mt-4"></div>
+                </div>
+            </div>
+
+            <div class="lesson-section border-vocab">
+                <div class="section-header header-vocab">Learn: The Special Numbers (Prime & Composite)</div>
+                <div class="section-content prose">
+                    <h2>Prime and Composite Numbers</h2>
+                    <p>Now for some special categories. These numbers have unique properties!</p>
+                    <ul>
+                        <li><strong>Prime Numbers:</strong> A whole number greater than 1 that has only two factors: <strong>1 and itself</strong>. Examples: <strong>2, 3, 5, 7, 11, 13...</strong> (Note: 2 is the only even prime number!)</li>
+                        <li><strong>Composite Numbers:</strong> A whole number greater than 1 that has <strong>more than two factors</strong>. Examples: <strong>4, 6, 8, 9, 10, 12...</strong></li>
+                    </ul>
+                    <p>Every composite number can be broken down into a product of prime numbers. This is called <strong>prime factorization</strong>. For example, the prime factorization of 12 is 2 × 2 × 3.</p>
+                </div>
+            </div>
+
+            <div class="lesson-section border-video">
+                <div class="section-header header-video">Watch: Prime and Composite Numbers</div>
+                <div class="section-content prose">
+                    <p>This video explains the special properties of prime and composite numbers.</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/ydm2cxacPIM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">Do: Prime or Composite?</div>
+                <div class="section-content activity-box-content">
+                    <p class="mb-4">Let's test your knowledge. Is the number below prime or composite? If it's composite, what are its prime factors?</p>
+                    <div class="bg-green-100 p-4 rounded-lg text-center mb-4 break-words">
+                        <p id="prime-composite-number" class="text-3xl sm:text-4xl font-bold text-green-800"></p>
+                    </div>
+                    <div class="flex justify-center gap-4 items-center mt-4">
+                        <button id="prime-btn" class="btn btn-primary w-full sm:w-auto">Prime</button>
+                        <button id="composite-btn" class="btn btn-secondary w-full sm:w-auto">Composite</button>
+                    </div>
+                    <div id="challenge-prime-composite-div" class="challenge-div">
+                        <p class="font-semibold text-green-700 mb-2">Amazing! Ready for an expert level problem?</p>
+                        <button id="challenge-prime-composite-btn" class="btn btn-challenge">Expert Challenge</button>
+                    </div>
+                    <div id="prime-composite-feedback" class="feedback mt-4"></div>
+                </div>
+            </div>
+
+            <div class="lesson-section border-vocab">
+                <div class="section-header header-vocab">Learn: The Whole Picture (Integers)</div>
+                <div class="section-content prose">
+                    <h2>Integers</h2>
+                    <p>Integers expand our number world to include negative numbers. They are crucial for describing situations involving direction or being below a starting point.</p>
+                    <ul>
+                        <li><strong>Integers:</strong> All positive and negative whole numbers, including zero: <strong>... -3, -2, -1, 0, 1, 2, 3 ...</strong></li>
+                    </ul>
+                    <p><strong>Real-world examples:</strong></p>
+                    <ul>
+                        <li><strong>Temperature:</strong> -5°C means 5 degrees below freezing.</li>
+                        <li><strong>Bank Accounts:</strong> A balance of -$50 means you owe the bank $50.</li>
+                        <li><strong>Elevation:</strong> The Dead Sea is at an elevation of -430 meters (below sea level).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="lesson-section border-video">
+                <div class="section-header header-video">Watch: Integers</div>
+                <div class="section-content prose">
+                    <p>Let's explore the world of positive and negative numbers with this video on integers.</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/OSfDRqxmXAE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">Do: Integer Scenarios</div>
+                <div class="section-content activity-box-content">
+                    <p class="mb-4">Read the real-life scenario and write the integer that represents it.</p>
+                    <div class="bg-indigo-100 p-4 rounded-lg text-center mb-4">
+                        <p id="integer-scenario" class="text-xl font-semibold text-indigo-800"></p>
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-4 items-center mt-4">
+                        <input type="text" inputmode="numeric" id="integer-input" placeholder="Your Answer (e.g., -10)" class="flex-grow">
+                        <button id="check-integer-btn" class="btn btn-primary w-full sm:w-auto">Check</button>
+                        <button id="new-integer-btn" class="btn btn-secondary w-full sm:w-auto">New Scenario</button>
+                    </div>
+                    <div id="challenge-integer-div" class="challenge-div">
+                        <p class="font-semibold text-green-700 mb-2">You've mastered this! Try a multi-step problem.</p>
+                        <button id="challenge-integer-btn" class="btn btn-challenge">Challenge Mode</button>
+                    </div>
+                    <div id="integer-feedback" class="feedback"></div>
+                </div>
+            </div>
+
+            <div class="lesson-section border-quiz">
+                <div class="section-header header-quiz">Quiz: Final Number Challenge!</div>
+                <div class="section-content activity-box-content">
+                    <form action="https://formspree.io/f/xrbandnz" method="POST">
+                        <p>Test your knowledge on all the types of numbers we learned this week!</p>
+                        <div id="final-challenge" class="space-y-6 mt-6 text-left">
+                            <div>
+                                <label for="student-name" class="block font-semibold mb-2">Full Name:</label>
+                                <input type="text" id="student-name" name="student_name" placeholder="Enter your full name" class="quiz-input" required>
+                            </div>
+                            <hr/>
+                            <div>
+                                <label for="q1" class="block font-semibold mb-2">1. Which of these is a prime number? (2, 4, 6, 9)</label>
+                                <input type="hidden" name="question_1" value="Which of these is a prime number? (2, 4, 6, 9)">
+                                <input type="number" id="q1" name="answer_1" data-answer="2" placeholder="Enter the number" class="quiz-input">
+                                <div id="feedback-q1" class="text-sm mt-1"></div>
+                            </div>
+                            <div>
+                                <label for="q2" class="block font-semibold mb-2">2. A diver is 25 meters below sea level. What integer represents this depth?</label>
+                                <input type="hidden" name="question_2" value="A diver is 25 meters below sea level. What integer represents this depth?">
+                                <input type="number" id="q2" name="answer_2" data-answer="-25" placeholder="Enter the integer" class="quiz-input">
+                                <div id="feedback-q2" class="text-sm mt-1"></div>
+                            </div>
+                            <div>
+                                <label for="q3" class="block font-semibold mb-2">3. Is the number 51 prime or composite?</label>
+                                <input type="hidden" name="question_3" value="Is the number 51 prime or composite?">
+                                <input type="text" id="q3" name="answer_3" data-answer="composite" placeholder="prime or composite" class="quiz-input">
+                                <div id="feedback-q3" class="text-sm mt-1"></div>
+                            </div>
+                            <div>
+                                <label for="q4" class="block font-semibold mb-2">4. What is the smallest whole number?</label>
+                                <input type="hidden" name="question_4" value="What is the smallest whole number?">
+                                <input type="number" id="q4" name="answer_4" data-answer="0" placeholder="Enter the number" class="quiz-input">
+                                <div id="feedback-q4" class="text-sm mt-1"></div>
+                            </div>
+                            <div>
+                                <label for="q5" class="block font-semibold mb-2">5. Which of these is a composite number? (17, 23, 29, 33)</label>
+                                <input type="hidden" name="question_5" value="Which of these is a composite number? (17, 23, 29, 33)">
+                                <input type="number" id="q5" name="answer_5" data-answer="33" placeholder="Enter the number" class="quiz-input">
+                                <div id="feedback-q5" class="text-sm mt-1"></div>
+                            </div>
+                            <div>
+                                <label for="q6" class="block font-semibold mb-2">6. A company made a profit of $5000. What integer represents this amount?</label>
+                                <input type="hidden" name="question_6" value="A company made a profit of $5000. What integer represents this amount?">
+                                <input type="number" id="q6" name="answer_6" data-answer="5000" placeholder="Enter the integer" class="quiz-input">
+                                <div id="feedback-q6" class="text-sm mt-1"></div>
+                            </div>
+                            <div>
+                                <label for="q7" class="block font-semibold mb-2">7. Is 0 an even or odd number?</label>
+                                <input type="hidden" name="question_7" value="Is 0 an even or odd number?">
+                                <input type="text" id="q7" name="answer_7" data-answer="even" placeholder="even or odd" class="quiz-input">
+                                <div id="feedback-q7" class="text-sm mt-1"></div>
+                            </div>
+                            <div>
+                                <label for="q8" class="block font-semibold mb-2">8. What is the only even prime number?</label>
+                                <input type="hidden" name="question_8" value="What is the only even prime number?">
+                                <input type="number" id="q8" name="answer_8" data-answer="2" placeholder="Enter the number" class="quiz-input">
+                                <div id="feedback-q8" class="text-sm mt-1"></div>
+                            </div>
+                            <div>
+                                <label for="q9" class="block font-semibold mb-2">9. A submarine is at -150 meters. It descends another 50 meters. What is its new depth?</label>
+                                <input type="hidden" name="question_9" value="A submarine is at -150 meters. It descends another 50 meters. What is its new depth?">
+                                <input type="number" id="q9" name="answer_9" data-answer="-200" placeholder="Enter the integer" class="quiz-input">
+                                <div id="feedback-q9" class="text-sm mt-1"></div>
+                            </div>
+                            <div>
+                                <label for="q10" class="block font-semibold mb-2">10. Is 1 a natural number, a whole number, or both?</label>
+                                <input type="hidden" name="question_10" value="Is 1 a natural number, a whole number, or both?">
+                                <input type="text" id="q10" name="answer_10" data-answer="both" placeholder="natural, whole, or both" class="quiz-input">
+                                <div id="feedback-q10" class="text-sm mt-1"></div>
+                            </div>
+                            <input type="hidden" id="final-score" name="final_score" value="">
+                        </div>
+                        <div class="mt-8 text-center">
+                            <button id="checkQuizBtn" type="button" class="btn btn-primary">Check My Report</button>
+                            <button id="submitQuizBtn" type="submit" class="btn btn-challenge hidden mt-4">Submit My Score</button>
+                            <div id="quizResult" class="feedback"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p class="font-semibold">Fantastic work this week! You've learned about the amazing families of numbers.</p>
+        <p class="text-xs mt-1">© 2025 Mr. Edwin's Virtual Classroom — All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function createConfetti() {
+                const confettiContainer = document.createElement('div');
+                confettiContainer.classList.add('confetti-container');
+                document.body.appendChild(confettiContainer);
+                for (let i = 0; i < 100; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    confettiContainer.appendChild(confetti);
+                }
+                setTimeout(() => { confettiContainer.remove(); }, 3000);
+            }
+
+            // --- Activity 1: Even or Odd ---
+            const evenOddNumberEl = document.getElementById('even-odd-number');
+            const evenBtn = document.getElementById('even-btn');
+            const oddBtn = document.getElementById('odd-btn');
+            const evenOddFeedbackEl = document.getElementById('even-odd-feedback');
+            const challengeEvenOddDiv = document.getElementById('challenge-even-odd-div');
+            const challengeEvenOddBtn = document.getElementById('challenge-even-odd-btn');
+            let currentEvenOddNumber;
+            let evenOddStreak = 0;
+            let evenOddChallengeMode = false;
+            let evenOddTimeoutId = null;
+
+            function generateEvenOddProblem() {
+                const maxNumber = evenOddChallengeMode ? 100000 : 1000;
+                currentEvenOddNumber = Math.floor(Math.random() * maxNumber);
+                evenOddNumberEl.textContent = currentEvenOddNumber;
+                evenOddFeedbackEl.classList.remove('visible');
+                challengeEvenOddDiv.classList.remove('visible');
+            }
+
+            function checkEvenOdd(isEvenGuess) {
+                if (evenOddTimeoutId) clearTimeout(evenOddTimeoutId);
+                const isActuallyEven = currentEvenOddNumber % 2 === 0;
+                evenOddFeedbackEl.classList.remove('feedback-correct', 'feedback-incorrect');
+                evenOddFeedbackEl.classList.add('visible');
+                
+                if (isEvenGuess === isActuallyEven) {
+                    evenOddFeedbackEl.classList.add('feedback-correct');
+                    evenOddFeedbackEl.textContent = `Correct! ${currentEvenOddNumber} is ${isActuallyEven ? 'even' : 'odd'}.`;
+                    createConfetti();
+                    evenOddStreak++;
+                    if (evenOddStreak >= 3 && !evenOddChallengeMode) {
+                        challengeEvenOddDiv.classList.add('visible');
+                        return; // Stop here and wait for user to click challenge button
+                    }
+                } else {
+                    evenOddFeedbackEl.classList.add('feedback-incorrect');
+                    evenOddFeedbackEl.textContent = `Incorrect! ${currentEvenOddNumber} is ${isActuallyEven ? 'even' : 'odd'}. Remember, numbers ending in 0, 2, 4, 6, or 8 are even.`;
+                    evenOddStreak = 0;
+                }
+                evenOddTimeoutId = setTimeout(generateEvenOddProblem, 2000);
+            }
+
+            evenBtn.addEventListener('click', () => checkEvenOdd(true));
+            oddBtn.addEventListener('click', () => checkEvenOdd(false));
+            challengeEvenOddBtn.addEventListener('click', () => {
+                evenOddChallengeMode = true;
+                generateEvenOddProblem();
+            });
+
+            // --- Activity 2: Prime or Composite ---
+            const primeCompositeNumberEl = document.getElementById('prime-composite-number');
+            const primeBtn = document.getElementById('prime-btn');
+            const compositeBtn = document.getElementById('composite-btn');
+            const primeCompositeFeedbackEl = document.getElementById('prime-composite-feedback');
+            const challengePrimeCompositeDiv = document.getElementById('challenge-prime-composite-div');
+            const challengePrimeCompositeBtn = document.getElementById('challenge-prime-composite-btn');
+            let currentPrimeCompositeNumber;
+            let primeCompositeStreak = 0;
+            let primeCompositeChallengeMode = false;
+            let primeCompositeTimeoutId = null;
+
+            function isPrime(num) {
+                if (num <= 1) return false;
+                for (let i = 2; i <= Math.sqrt(num); i++) {
+                    if (num % i === 0) return false;
+                }
+                return true;
+            }
+
+            function getPrimeFactors(num) {
+                const factors = [];
+                for (let i = 2; i * i <= num; i++) {
+                    while (num % i === 0) { factors.push(i); num /= i; }
+                }
+                if (num > 1) { factors.push(num); }
+                return factors.join(' × ');
+            }
+            function generatePrimeCompositeProblem() {
+                const maxNumber = primeCompositeChallengeMode ? 200 : 100;
+                currentPrimeCompositeNumber = Math.floor(Math.random() * (maxNumber - 2)) + 2;
+                primeCompositeNumberEl.textContent = currentPrimeCompositeNumber;
+                primeCompositeFeedbackEl.classList.remove('visible');
+                challengePrimeCompositeDiv.classList.remove('visible');
+            }
+
+            function checkPrimeComposite(isPrimeGuess) {
+                if (primeCompositeTimeoutId) clearTimeout(primeCompositeTimeoutId);
+                const isActuallyPrime = isPrime(currentPrimeCompositeNumber);
+                primeCompositeFeedbackEl.classList.remove('feedback-correct', 'feedback-incorrect');
+                primeCompositeFeedbackEl.classList.add('visible');
+                if (isPrimeGuess === isActuallyPrime) {
+                    primeCompositeFeedbackEl.classList.add('feedback-correct');
+                    if (isActuallyPrime) {
+                        primeCompositeFeedbackEl.textContent = `Correct! ${currentPrimeCompositeNumber} is prime. It only has two factors: 1 and itself.`;
+                    } else {
+                        primeCompositeFeedbackEl.innerHTML = `Correct! ${currentPrimeCompositeNumber} is composite. Its prime factors are <strong>${getPrimeFactors(currentPrimeCompositeNumber)}</strong>.`;
+                    }
+                    createConfetti();
+                    primeCompositeStreak++;
+                    if (primeCompositeStreak >= 3 && !primeCompositeChallengeMode) {
+                        challengePrimeCompositeDiv.classList.add('visible');
+                        return; // Stop here and wait for user to click challenge button
+                    }
+                } else {
+                    primeCompositeFeedbackEl.classList.add('feedback-incorrect');
+                    primeCompositeFeedbackEl.textContent = `Incorrect! ${currentPrimeCompositeNumber} is ${isActuallyPrime ? 'prime' : 'composite'}. A prime number has only two factors (1 and itself).`;
+                    primeCompositeStreak = 0;
+                }
+                primeCompositeTimeoutId = setTimeout(generatePrimeCompositeProblem, 2000);
+            }
+
+            primeBtn.addEventListener('click', () => checkPrimeComposite(true));
+            compositeBtn.addEventListener('click', () => checkPrimeComposite(false));
+            challengePrimeCompositeBtn.addEventListener('click', () => {
+                primeCompositeChallengeMode = true;
+                generatePrimeCompositeProblem();
+            });
+
+            // --- Activity 3: Integer Scenarios ---
+            const integerScenarioEl = document.getElementById('integer-scenario');
+            const integerInput = document.getElementById('integer-input');
+            const checkIntegerBtn = document.getElementById('check-integer-btn');
+            const newIntegerBtn = document.getElementById('new-integer-btn');
+            const integerFeedbackEl = document.getElementById('integer-feedback');
+            const challengeIntegerDiv = document.getElementById('challenge-integer-div');
+            const challengeIntegerBtn = document.getElementById('challenge-integer-btn');
+            let currentIntegerScenario;
+            let integerStreak = 0;
+            let integerChallengeMode = false;
+
+            const scenarios = [
+                { text: "A gain of 15 yards in football.", answer: 15 },
+                { text: "A temperature of 10 degrees below zero.", answer: -10 },
+                { text: "A deposit of $200 into a bank account.", answer: 200 },
+                { text: "A withdrawal of $50 from a bank account.", answer: -50 },
+                { text: "An elevator goes down 3 floors.", answer: -3 },
+                { text: "A mountain peak is 1,200 meters above sea level.", answer: 1200 },
+                { text: "A loss of 8 points in a game.", answer: -8 },
+                { text: "Earning $25 for chores.", answer: 25 },
+                { text: "A submarine dives 300 feet below sea level.", answer: -300 },
+                { text: "The year 500 B.C.", answer: -500 },
+                { text: "A profit of $1,500.", answer: 1500 },
+                { text: "A debt of $75.", answer: -75 },
+            ];
+
+            const challengeScenarios = [
+                { text: "You start with $50, then spend $20. What's your new balance?", answer: 30 },
+                { text: "The temperature was -5°C and it dropped by 7 degrees. What is the new temperature?", answer: -12 },
+                { text: "An elevator is on the 10th floor, goes down 12 floors, then up 5. What floor is it on?", answer: 3 },
+                { text: "A diver at -80 feet ascends 30 feet. What is her new depth?", answer: -50 },
+                { text: "You owe $100, but you pay back $60. What is your new account balance?", answer: -40 },
+            ];
+
+            function generateIntegerProblem() {
+                const scenarioSet = integerChallengeMode ? challengeScenarios : scenarios;
+                currentIntegerScenario = scenarioSet[Math.floor(Math.random() * scenarioSet.length)];
+                integerScenarioEl.textContent = currentIntegerScenario.text;
+                integerInput.value = '';
+                integerFeedbackEl.classList.remove('visible');
+                challengeIntegerDiv.classList.remove('visible');
+                integerInput.style.borderColor = '#cbd5e1';
+            }
+
+            checkIntegerBtn.addEventListener('click', () => {
+                const userAnswer = parseInt(integerInput.value, 10);
+                integerFeedbackEl.classList.remove('feedback-correct', 'feedback-incorrect');
+                integerFeedbackEl.classList.add('visible');
+                if (userAnswer === currentIntegerScenario.answer) {
+                    integerFeedbackEl.classList.add('feedback-correct');
+                    integerFeedbackEl.textContent = `Correct! The integer is indeed ${currentIntegerScenario.answer}. Well done!`;
+                    integerInput.style.borderColor = '#22c55e';
+                    createConfetti();
+                    integerStreak++;
+                    if (integerStreak >= 3 && !integerChallengeMode) {
+                        challengeIntegerDiv.classList.add('visible');
+                    }
+                } else {
+                    integerFeedbackEl.classList.add('feedback-incorrect');
+                    integerFeedbackEl.textContent = `Incorrect! The correct integer is ${currentIntegerScenario.answer}. Remember that losses, drops, or debts are represented by negative integers.`;
+                    integerInput.style.borderColor = '#ef4444';
+                    integerStreak = 0;
+                }
+            });
+            newIntegerBtn.addEventListener('click', generateIntegerProblem);
+            challengeIntegerBtn.addEventListener('click', () => {
+                integerChallengeMode = true;
+                generateIntegerProblem();
+            });
+
+            // --- Final Challenge ---
+            const checkQuizBtn = document.getElementById('checkQuizBtn');
+            const submitQuizBtn = document.getElementById('submitQuizBtn');
+            const quizInputs = document.querySelectorAll('#final-challenge .quiz-input[data-answer]');
+            const quizResult = document.getElementById('quizResult');
+            const finalScoreInput = document.getElementById('final-score');
+
+            checkQuizBtn.addEventListener('click', () => {
+                let correctCount = 0;
+                quizInputs.forEach(input => {
+                    const questionId = input.id;
+                    const feedbackEl = document.getElementById(`feedback-${questionId}`);
+                    const userAnswer = input.value.trim().toLowerCase();
+                    const correctAnswer = input.dataset.answer.toLowerCase();
+
+                    // Special case for question 10 to accept more answers
+                    let isCorrect = userAnswer === correctAnswer;
+                    if (questionId === 'q10' && (userAnswer === 'natural and whole' || userAnswer === 'whole and natural')) {
+                        isCorrect = true;
+                    }
+
+                    input.style.animation = 'none';
+                    void input.offsetWidth;
+
+                    if (isCorrect) {
+                        correctCount++;
+                        input.style.borderColor = '#22c55e';
+                        input.style.animation = 'flashGreen 0.5s ease-out';
+                        feedbackEl.textContent = 'Correct!';
+                        feedbackEl.style.color = '#166534';
+                    } else {
+                        input.style.borderColor = '#ef4444'; // red-500
+                        input.style.animation = 'shake 0.5s ease-out, flashRed 0.5s ease-out';
+                        feedbackEl.textContent = `Incorrect. The correct answer is ${correctAnswer}.`;
+                        feedbackEl.style.color = '#991b1b';
+                    }
+                });
+
+                const scoreText = `${correctCount}/${quizInputs.length}`;
+                finalScoreInput.value = scoreText; // Set score for form submission
+
+                quizResult.classList.remove('feedback-correct', 'feedback-incorrect');
+                quizResult.classList.add('visible');
+                if (correctCount === quizInputs.length) {
+                    quizResult.classList.add('feedback-correct');
+                    quizResult.textContent = `Excellent! You got ${scoreText} correct. You have mastered this lesson!`;
+                    createConfetti();
+                } else {
+                    quizResult.classList.add('feedback-incorrect');
+                    quizResult.textContent = `Good effort! You got ${scoreText} correct. Review your answers and then click submit.`;
+                }
+                submitQuizBtn.classList.remove('hidden'); // Show the submit button
+            });
+
+            // Initial load
+            generateEvenOddProblem();
+            generatePrimeCompositeProblem();
+            generateIntegerProblem();
+
+        });
+    </script>
+</body>
+</html>

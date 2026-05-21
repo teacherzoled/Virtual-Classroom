@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science – Summative Test (SC 4.21)</title>
+    <style>
+        /* 
+           CSS STYLING 
+           Designed for a clean, serious academic assessment look.
+           Mobile-friendly and printable.
+        */
+        :root {
+            --primary-color: #2c3e50;
+            --border-color: #ccc;
+            --bg-color: #f9f9f9;
+            --paper-color: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--paper-color);
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+
+        /* Header Section */
+        header {
+            border-bottom: 2px solid var(--primary-color);
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            font-weight: normal;
+            margin-top: 0;
+            color: #555;
+        }
+
+        .student-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], select {
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        /* Section Styling */
+        section {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .section-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .marks {
+            float: right;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .instructions {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        /* Question Styles */
+        .question-block {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #fff;
+        }
+
+        /* Section A Specifics */
+        .matching-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .descriptions-list {
+            font-size: 0.9rem;
+            background: #f8f9fa;
+            padding: 15px;
+            border: 1px solid #eee;
+        }
+
+        .match-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .match-row label {
+            width: 150px;
+            font-weight: bold;
+        }
+
+        /* Section C Specifics - Inline Inputs */
+        .sentence-frame {
+            line-height: 2.5;
+            font-size: 1.1rem;
+        }
+
+        .inline-input {
+            border: none;
+            border-bottom: 2px solid #333;
+            background: #f0f8ff;
+            width: 200px;
+            padding: 0 5px;
+            font-family: inherit;
+            font-size: 1rem;
+            color: #000;
+        }
+
+        .inline-input:focus {
+            outline: none;
+            border-bottom-color: var(--primary-color);
+            background: #e6f2ff;
+        }
+
+        /* Button */
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: #1a252f;
+        }
+
+        /* Results Section */
+        #results-area {
+            display: none; /* Hidden by default */
+            margin-top: 30px;
+            padding: 20px;
+            border: 2px solid var(--primary-color);
+            background-color: #eef;
+            border-radius: 5px;
+        }
+
+        .score-summary {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .band-display {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-top: 10px;
+            padding: 10px;
+            background: white;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+
+        /* Feature 2: Blur Answers */
+        .blurred {
+            filter: blur(6px);
+            -webkit-filter: blur(6px);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* Feature: Review Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 34px;
+            height: 20px;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 12px; width: 12px;
+            left: 4px; bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: #2196F3; }
+        input:checked + .slider:before { transform: translateX(14px); }
+
+        .review-toggle-wrapper { display: none; } /* Hidden by default */
+        .review-mode-active .review-toggle-wrapper { display: inline-block; }
+
+        /* Print adjustments */
+        @media print {
+            .btn-submit { display: none; }
+            body { background: white; }
+            .container { box-shadow: none; padding: 0; }
+            
+            /* Feature 3: Hide questions when printing */
+            section {
+                display: none;
+            }
+            #results-area { display: block !important; }
+        }
+        
+        @media (max-width: 600px) {
+            .matching-grid { grid-template-columns: 1fr; }
+            .student-info { grid-template-columns: 1fr; }
+            .inline-input { width: 100%; margin-bottom: 5px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Science – Summative Test (SC 4.21)</h1>
+        <h2>Energy Resources and Sustainable Decision-Making in Belize</h2>
+        
+        <div class="student-info">
+            <div class="input-group">
+                <label for="studentName">Name:</label>
+                <input type="text" id="studentName" placeholder="Enter your name">
+            </div>
+            <div class="input-group">
+                <label>Date:</label>
+                <input type="text" id="testDate" placeholder="DD/MM/YYYY">
+            </div>
+            <div class="input-group">
+                <label>Time Allowed:</label>
+                <span>20 minutes</span>
+            </div>
+            <div class="input-group">
+                <label>Total Marks:</label>
+                <span>20</span>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px; font-size: 0.9rem;">
+            <strong>Instructions:</strong> Answer all sections. Read each question carefully. Use scientific words when possible. Write clearly.
+        </div>
+    </header>
+
+    <form id="assessmentForm">
+        
+        <!-- SECTION A -->
+        <section>
+            <div class="section-header">
+                <span class="section-title">Section A – Matching</span>
+                <span class="marks">(8 marks)</span>
+            </div>
+            <p class="instructions">Match each energy source to the correct description. Select the letter next to the number.</p>
+            
+            <div class="matching-grid">
+                <div class="descriptions-list">
+                    <strong>Descriptions:</strong><br>
+                    A. Uses sunlight to produce electricity<br>
+                    B. Uses moving water from rivers or dams<br>
+                    C. Uses plant material such as sugarcane waste<br>
+                    D. Uses oil or diesel bought from other countries
+                </div>
+                
+                <div class="questions-list">
+                    <div class="match-row">
+                        <label>1. Solar energy</label>
+                        <select id="q_a_1">
+                            <option value="">Select...</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                        </select>
+                        <label class="switch review-toggle-wrapper">
+                            <input type="checkbox" onchange="handleReviewToggle(this)" data-target="q_a_1">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="match-row">
+                        <label>2. Hydropower</label>
+                        <select id="q_a_2">
+                            <option value="">Select...</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                        </select>
+                        <label class="switch review-toggle-wrapper">
+                            <input type="checkbox" onchange="handleReviewToggle(this)" data-target="q_a_2">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="match-row">
+                        <label>3. Imported fuel</label>
+                        <select id="q_a_3">
+                            <option value="">Select...</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                        </select>
+                        <label class="switch review-toggle-wrapper">
+                            <input type="checkbox" onchange="handleReviewToggle(this)" data-target="q_a_3">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="match-row">
+                        <label>4. Biomass</label>
+                        <select id="q_a_4">
+                            <option value="">Select...</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                        </select>
+                        <label class="switch review-toggle-wrapper">
+                            <input type="checkbox" onchange="handleReviewToggle(this)" data-target="q_a_4">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION B -->
+        <section>
+            <div class="section-header">
+                <span class="section-title">Section B – Multiple Choice</span>
+                <span class="marks">(6 marks)</span>
+            </div>
+            <p class="instructions">Select the correct answer.</p>
+
+            <div class="question-block">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <p><strong>1. Which energy source is most affected by droughts in Belize?</strong></p>
+                    <label class="switch review-toggle-wrapper">
+                        <input type="checkbox" onchange="handleReviewToggle(this)" data-target-name="q_b_1">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <label><input type="radio" name="q_b_1" value="A"> A. Solar energy</label><br>
+                <label><input type="radio" name="q_b_1" value="B"> B. Hydropower</label><br>
+                <label><input type="radio" name="q_b_1" value="C"> C. Imported fuel</label>
+            </div>
+
+            <div class="question-block">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <p><strong>2. Which energy source is non-renewable?</strong></p>
+                    <label class="switch review-toggle-wrapper">
+                        <input type="checkbox" onchange="handleReviewToggle(this)" data-target-name="q_b_2">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <label><input type="radio" name="q_b_2" value="A"> A. Solar energy</label><br>
+                <label><input type="radio" name="q_b_2" value="B"> B. Biomass</label><br>
+                <label><input type="radio" name="q_b_2" value="C"> C. Imported fuel</label>
+            </div>
+
+            <div class="question-block">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <p><strong>3. Why is an energy mix important for Belize?</strong></p>
+                    <label class="switch review-toggle-wrapper">
+                        <input type="checkbox" onchange="handleReviewToggle(this)" data-target-name="q_b_3">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <label><input type="radio" name="q_b_3" value="A"> A. It is cheaper to use only one energy source</label><br>
+                <label><input type="radio" name="q_b_3" value="B"> B. It reduces risk if one energy source fails</label><br>
+                <label><input type="radio" name="q_b_3" value="C"> C. It stops all environmental problems</label>
+            </div>
+        </section>
+
+        <!-- SECTION C -->
+        <section>
+            <div class="section-header">
+                <span class="section-title">Section C – Guided Justification</span>
+                <span class="marks">(6 marks)</span>
+            </div>
+            <p class="instructions">
+                Complete the sentences by selecting the most appropriate options.
+                (2 marks per correct idea)
+            </p>
+            <div style="text-align:right; margin-bottom:5px;">
+                <label class="switch review-toggle-wrapper" title="Review Section C">
+                    <input type="checkbox" onchange="handleReviewToggle(this)" data-target-section="c">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+            <div class="sentence-frame" id="section-c-container">
+                Belize should use more
+                <select id="c1_energy" class="inline-input">
+                    <option value="">-- select energy --</option>
+                    <option value="solar">Solar</option>
+                    <option value="hydropower">Hydropower</option>
+                    <option value="biomass">Biomass</option>
+                </select>
+                energy because it is
+                <select id="c1_reason" class="inline-input">
+                    <option value="">-- select reason --</option>
+                    <option value="renewable">Renewable</option>
+                    <option value="clean">Clean</option>
+                    <option value="weather">Suitable for Belize’s weather</option>
+                    <option value="local">Local resource</option>
+                </select>.
+                <br><br>
+
+                One limitation of this energy is
+                <select id="c2_limitation" class="inline-input">
+                    <option value="">-- select limitation --</option>
+                    <option value="drought">Drought</option>
+                    <option value="pollution">Pollution</option>
+                    <option value="weather">Weather dependence</option>
+                    <option value="cost">High cost</option>
+                    <option value="dependence">Dependence on other countries</option>
+                </select>.
+                <br><br>
+
+                This limitation can be mitigated by
+                <select id="c3_mitigation" class="inline-input">
+                    <option value="">-- select mitigation --</option>
+                    <option value="mix">Using an energy mix</option>
+                    <option value="solar">Adding solar energy</option>
+                    <option value="reduce">Reducing use during dry seasons</option>
+                    <option value="manage">Careful management</option>
+                </select>.
+            </div>
+        </section>
+
+        <button type="button" class="btn-submit" onclick="toggleReviewMode()" style="background-color: #f39c12; margin-bottom: 15px;">Review Answers</button>
+        <button type="button" class="btn-submit" onclick="gradeTest()">Submit Assessment</button>
+
+    </form>
+
+    <!-- RESULTS DISPLAY (Hidden until submitted) -->
+    <div id="results-area">
+        <h2>Assessment Results</h2>
+        <div class="score-summary" id="total-score-display">Total Score: 0 / 20</div>
+        <hr>
+        <p><strong>Section Breakdown:</strong></p>
+        <ul style="list-style: none; padding: 0;">
+            <li id="score-a">Section A: 0 / 8</li>
+            <li id="score-b">Section B: 0 / 6</li>
+            <li id="score-c">Section C: 0 / 6</li>
+        </ul>
+        <div class="band-display" id="band-display" style="display:none;">
+            Performance Band: -
+        </div>
+
+        <!-- Feature 3: Print Button -->
+        <button onclick="window.print()" style="margin-top:15px; padding:10px;">
+            Print Results
+        </button>
+
+        <button onclick="unlockBand()" style="margin-top:10px; padding:10px;">
+            Show Performance Band (Teacher Only)
+        </button>
+
+        <!-- Feature 1: Teacher Reset -->
+        <div style="margin-top:20px;">
+            <button onclick="requestReset()" style="padding:10px;">
+                Reset Test (Teacher Only)
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    /**
+     * TEACHER GRADING LOGIC
+     * This script handles the automatic scoring of the assessment.
+     * It is embedded in the client-side code.
+     */
+
+    function gradeTest() {
+        const nameField = document.getElementById("studentName");
+        if (!nameField.value.trim()) {
+            alert("Please enter your name before submitting.");
+            nameField.focus();
+            return;
+        }
+
+        let scoreA = 0;
+        let scoreB = 0;
+        let scoreC = 0;
+
+        // --- SECTION A: MATCHING (8 Marks) ---
+        // Logic: Exact match required. 2 marks each.
+        // 1 -> A (Solar)
+        // 2 -> B (Hydro)
+        // 3 -> D (Imported Fuel)
+        // 4 -> C (Biomass)
+        
+        const answersA = {
+            "q_a_1": "A",
+            "q_a_2": "B",
+            "q_a_3": "D",
+            "q_a_4": "C"
+        };
+
+        for (let id in answersA) {
+            const userSelect = document.getElementById(id);
+            if (userSelect && userSelect.value === answersA[id]) {
+                scoreA += 2;
+            }
+        }
+
+        // --- SECTION B: MULTIPLE CHOICE (6 Marks) ---
+        // Logic: Exact match required. 2 marks each.
+        // Q1 -> B (Hydropower)
+        // Q2 -> C (Imported fuel)
+        // Q3 -> B (Risk reduction)
+
+        const answersB = {
+            "q_b_1": "B",
+            "q_b_2": "C",
+            "q_b_3": "B"
+        };
+
+        for (let name in answersB) {
+            const selectedOption = document.querySelector(`input[name="${name}"]:checked`);
+            if (selectedOption && selectedOption.value === answersB[name]) {
+                scoreB += 2;
+            }
+        }
+
+        // --- SECTION C: GUIDED JUSTIFICATION (6 Marks) ---
+        // Logic: Keyword matching (case-insensitive). 2 marks per valid field.
+        
+        // Item 1: Combined check for Energy Source OR Reason
+        const c1_energy = document.getElementById("c1_energy").value;
+        const c1_reason = document.getElementById("c1_reason").value;
+        
+        // Valid values based on the provided HTML options
+        const validEnergy = ["solar", "hydropower", "biomass"];
+        const validReason = ["renewable", "clean", "weather", "local"];
+
+        if (validEnergy.includes(c1_energy) && validReason.includes(c1_reason)) {
+            scoreC += 2;
+        }
+
+        // Item 2: Limitation
+        const c2_limitation = document.getElementById("c2_limitation").value;
+        const validLimitation = ["drought", "pollution", "weather", "cost", "dependence"];
+        
+        if (validLimitation.includes(c2_limitation)) {
+            scoreC += 2;
+        }
+
+        // Item 3: Mitigation
+        const c3_mitigation = document.getElementById("c3_mitigation").value;
+        const validMitigation = ["mix", "solar", "reduce", "manage"];
+        
+        if (validMitigation.includes(c3_mitigation)) {
+            scoreC += 2;
+        }
+
+
+        // --- TOTAL CALCULATION ---
+        const totalScore = scoreA + scoreB + scoreC;
+        
+        // Feature 4: Percentage
+        const percentage = Math.round((totalScore / 20) * 100);
+
+        // --- PERFORMANCE BANDS ---
+        let band = "";
+        let bandColor = "";
+
+        if (totalScore >= 17) {
+            band = "Strong understanding";
+            bandColor = "#27ae60"; // Green
+        } else if (totalScore >= 13) {
+            band = "Satisfactory (Meets SC 4.21)";
+            bandColor = "#2980b9"; // Blue
+        } else if (totalScore >= 9) {
+            band = "Developing";
+            bandColor = "#f39c12"; // Orange
+        } else {
+            band = "Needs intervention";
+            bandColor = "#c0392b"; // Red
+        }
+
+        // --- DISPLAY RESULTS ---
+        document.getElementById("total-score-display").innerText = `Total Score: ${totalScore} / 20 (${percentage}%)`;
+        document.getElementById("score-a").innerText = `Section A: ${scoreA} / 8`;
+        document.getElementById("score-b").innerText = `Section B: ${scoreB} / 6`;
+        document.getElementById("score-c").innerText = `Section C: ${scoreC} / 6`;
+        
+        const bandEl = document.getElementById("band-display");
+        bandEl.innerText = band;
+        bandEl.style.borderColor = bandColor;
+        bandEl.style.color = bandColor;
+        bandEl.style.fontWeight = "bold";
+
+        document.getElementById("results-area").style.display = "block";
+
+        // Scroll to results
+        document.getElementById("results-area").scrollIntoView({behavior: "smooth"});
+
+        // Optional: Disable inputs after submission to prevent changing answers
+        const inputs = document.querySelectorAll("input, select, button.btn-submit");
+        inputs.forEach(el => el.disabled = true);
+
+        // Feature 2: Blur answers
+        const sections = document.querySelectorAll("section");
+        sections.forEach(section => {
+            section.classList.add("blurred");
+        });
+    }
+
+    // Feature 1: Teacher Reset
+    const TEACHER_PIN = "4210"; // CHANGE THIS PIN
+
+    function requestReset() {
+        const enteredPin = prompt("Enter teacher PIN to reset the test:");
+        if (enteredPin === TEACHER_PIN) {
+            location.reload();
+        } else {
+            alert("Incorrect PIN. Test not reset.");
+        }
+    }
+
+    // Feature: Immediate Blur on Answer
+    // Selects inputs only within the question sections, excluding the header (Name/Date)
+    const assessmentInputs = document.querySelectorAll("section input, section select");
+    assessmentInputs.forEach(input => {
+        input.addEventListener("change", function() {
+            if (this.type === "radio") {
+                // Blur the label containing the radio button so the text is also hidden
+                if (this.parentElement.tagName === 'LABEL') {
+                    this.parentElement.classList.add("blurred");
+                }
+            } else {
+                // Blur the input or select element directly
+                this.classList.add("blurred");
+            }
+        });
+    });
+
+    // Feature: Review Mode Logic
+    let isReviewMode = false;
+
+    function toggleReviewMode() {
+        isReviewMode = !isReviewMode;
+        const form = document.getElementById('assessmentForm');
+        if (isReviewMode) {
+            form.classList.add('review-mode-active');
+        } else {
+            form.classList.remove('review-mode-active');
+            // When turning off review mode, ensure all sliders are unchecked and blurs enforced
+            document.querySelectorAll('.review-toggle-wrapper input').forEach(cb => {
+                cb.checked = false;
+                handleReviewToggle(cb); // Re-enforce blur
+            });
+        }
+    }
+
+    function handleReviewToggle(checkbox) {
+        const isChecked = checkbox.checked;
+        let targets = [];
+
+        if (checkbox.dataset.target) {
+            // ID based (Section A)
+            const el = document.getElementById(checkbox.dataset.target);
+            if (el) targets.push(el);
+        } else if (checkbox.dataset.targetName) {
+            // Name based (Section B - Radios)
+            const radios = document.getElementsByName(checkbox.dataset.targetName);
+            radios.forEach(r => {
+                if (r.parentElement.tagName === 'LABEL') targets.push(r.parentElement);
+            });
+        } else if (checkbox.dataset.targetSection) {
+            // Section C
+            const inputs = document.querySelectorAll('#section-c-container .inline-input');
+            inputs.forEach(i => targets.push(i));
+        }
+
+        targets.forEach(t => {
+            if (isChecked) {
+                t.classList.remove('blurred');
+            } else {
+                // Re-enforce blur only if it has content/selection
+                let shouldBlur = false;
+                if (t.tagName === 'LABEL') {
+                    const radio = t.querySelector('input[type="radio"]');
+                    if (radio && radio.checked) shouldBlur = true;
+                } else if (t.value && t.value.trim() !== "") {
+                    shouldBlur = true;
+                }
+                
+                if (shouldBlur) t.classList.add('blurred');
+            }
+        });
+    }
+
+    // Auto-reset slider on interaction (modify or move away)
+    assessmentInputs.forEach(input => {
+        // When user leaves the field (focusout) or changes it
+        input.addEventListener('focusout', () => resetSliderForInput(input));
+        input.addEventListener('change', () => resetSliderForInput(input));
+    });
+
+    function resetSliderForInput(input) {
+        // Find the associated slider and uncheck it
+        let slider = null;
+        
+        // Try to find by ID
+        if (input.id) {
+            slider = document.querySelector(`.review-toggle-wrapper input[data-target="${input.id}"]`);
+        }
+        // Try to find by Name (Radios)
+        if (!slider && input.name) {
+            slider = document.querySelector(`.review-toggle-wrapper input[data-target-name="${input.name}"]`);
+        }
+        // Try to find by Section (Section C)
+        if (!slider && input.closest('#section-c-container')) {
+            slider = document.querySelector(`.review-toggle-wrapper input[data-target-section="c"]`);
+        }
+
+        if (slider && slider.checked) {
+            slider.checked = false;
+            handleReviewToggle(slider); // This will re-apply the blur
+        }
+    }
+
+    function unlockBand() {
+        const enteredPin = prompt("Enter teacher PIN to view performance band:");
+        if (enteredPin === TEACHER_PIN) {
+            const bandEl = document.getElementById("band-display");
+            bandEl.style.display = "block";
+        } else {
+            alert("Incorrect PIN.");
+        }
+    }
+</script>
+
+</body>
+</html>

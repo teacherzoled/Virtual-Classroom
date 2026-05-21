@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place Value Chart</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Place Value Chart</h1>
+        
+        <div class="input-section">
+            <label for="number-input">Enter a number (up to 9 digits with optional decimal places):</label>
+            <input type="text" id="number-input" maxlength="13" placeholder="Enter a number (e.g., 123.456)">
+            <button id="visualize-btn">Visualize</button>
+        </div>
+        
+        <div class="chart-container">
+            <div class="place-value-chart">
+                <!-- Header Row -->
+                <div class="place-value-row header">
+                    <!-- Hidden place values (initially) -->
+                    <div class="place-value-cell hidden" data-place="hundred-millions">Hundred Millions</div>
+                    <div class="place-value-cell hidden" data-place="ten-millions">Ten Millions</div>
+                    <div class="place-value-cell hidden" data-place="millions">Millions</div>
+                    <div class="place-value-cell hidden" data-place="hundred-thousands">Hundred Thousands</div>
+                    <div class="place-value-cell hidden" data-place="ten-thousands">Ten Thousands</div>
+                    <div class="place-value-cell hidden" data-place="thousands">Thousands</div>
+                    
+                    <!-- Default visible place values -->
+                    <div class="place-value-cell" data-place="hundreds">Hundreds</div>
+                    <div class="place-value-cell" data-place="tens">Tens</div>
+                    <div class="place-value-cell" data-place="ones">Ones</div>
+                    <div class="decimal-point" data-place="decimal-point">.</div>
+                    <div class="place-value-cell" data-place="tenths">Tenths</div>
+                    
+                    <!-- Hidden decimal place values (initially) -->
+                    <div class="place-value-cell hidden" data-place="hundredths">Hundredths</div>
+                    <div class="place-value-cell hidden" data-place="thousandths">Thousandths</div>
+                </div>
+                
+                <!-- Digits Row -->
+                <div class="place-value-row digits">
+                    <!-- Hidden place values (initially) -->
+                    <div class="place-value-cell hidden" data-place="hundred-millions"></div>
+                    <div class="place-value-cell hidden" data-place="ten-millions"></div>
+                    <div class="place-value-cell hidden" data-place="millions"></div>
+                    <div class="place-value-cell hidden" data-place="hundred-thousands"></div>
+                    <div class="place-value-cell hidden" data-place="ten-thousands"></div>
+                    <div class="place-value-cell hidden" data-place="thousands"></div>
+                    
+                    <!-- Default visible place values -->
+                    <div class="place-value-cell" data-place="hundreds"></div>
+                    <div class="place-value-cell" data-place="tens"></div>
+                    <div class="place-value-cell" data-place="ones"></div>
+                    <div class="decimal-point" data-place="decimal-point"></div>
+                    <div class="place-value-cell" data-place="tenths"></div>
+                    
+                    <!-- Hidden decimal place values (initially) -->
+                    <div class="place-value-cell hidden" data-place="hundredths"></div>
+                    <div class="place-value-cell hidden" data-place="thousandths"></div>
+                </div>
+                
+                <!-- Values Row -->
+                <div class="place-value-row values">
+                    <!-- Hidden place values (initially) -->
+                    <div class="place-value-cell hidden" data-place="hundred-millions"></div>
+                    <div class="place-value-cell hidden" data-place="ten-millions"></div>
+                    <div class="place-value-cell hidden" data-place="millions"></div>
+                    <div class="place-value-cell hidden" data-place="hundred-thousands"></div>
+                    <div class="place-value-cell hidden" data-place="ten-thousands"></div>
+                    <div class="place-value-cell hidden" data-place="thousands"></div>
+                    
+                    <!-- Default visible place values -->
+                    <div class="place-value-cell" data-place="hundreds"></div>
+                    <div class="place-value-cell" data-place="tens"></div>
+                    <div class="place-value-cell" data-place="ones"></div>
+                    <div class="decimal-point" data-place="decimal-point"></div>
+                    <div class="place-value-cell" data-place="tenths"></div>
+                    
+                    <!-- Hidden decimal place values (initially) -->
+                    <div class="place-value-cell hidden" data-place="hundredths"></div>
+                    <div class="place-value-cell hidden" data-place="thousandths"></div>
+                </div>
+            </div>
+            
+            <div class="chart-controls">
+                <button id="scroll-left" class="scroll-btn">&lt;</button>
+                <button id="scroll-right" class="scroll-btn">&gt;</button>
+            </div>
+        </div>
+        
+        <div class="expanded-form-section">
+            <h2>Expanded Form</h2>
+            <p id="expanded-form"></p>
+        </div>
+        
+        <div class="feedback-section">
+            <h2>Word Form</h2>
+            <p id="feedback-message"></p>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+
+    <!-- Practice Mode Section -->
+    <div class="container">
+        <section id="practice-mode">
+            <h2>Practice Mode</h2>
+            
+            <div id="pm_start-container" class="pm_controls">
+                <p>Test your knowledge! Drag the tiles to build the number.</p>
+                <button id="pm_start-btn">Start Practice</button>
+            </div>
+
+            <div id="pm_game-area" class="hidden">
+                <div class="pm_info">
+                    <p>Round: <strong id="pm_round">1</strong>/10</p>
+                    <p>Score: <strong id="pm_score">0</strong></p>
+                    <p>Best Score: <strong id="pm_best-score">0</strong></p>
+                </div>
+
+                <div class="pm_challenge">
+                    <p>Build this number using the tiles below:</p>
+                    <h3 id="pm_number-display"></h3>
+                </div>
+
+                <!-- Drop Zones for building the number -->
+                <div id="pm_drop-zones" class="pm_drop-container">
+                    <div class="pm_drop-zone" data-place="ones">
+                        <span class="pm_zone-label">Ones</span>
+                    </div>
+                    <div class="pm_drop-zone pm_decimal-zone" data-place="decimal">
+                        <span class="pm_zone-label">.</span>
+                    </div>
+                    <div class="pm_drop-zone" data-place="tenths">
+                        <span class="pm_zone-label">Tenths</span>
+                    </div>
+                    <div class="pm_drop-zone" data-place="hundredths">
+                        <span class="pm_zone-label">Hundredths</span>
+                    </div>
+                    <div class="pm_drop-zone" data-place="thousandths">
+                        <span class="pm_zone-label">Thousandths</span>
+                    </div>
+                </div>
+
+                <!-- Draggable tiles -->
+                <div class="pm_feedback-message" id="pm_feedback"></div>
+                <div id="pm_tile-rack" class="pm_tile-container">
+                    <!-- Draggable tiles will be generated by JS -->
+                </div>
+
+                <!-- Action buttons -->
+                <div class="pm_action-buttons">
+                    <button id="pm_next-btn" class="hidden">Next Round</button>
+                    <button id="pm_reset-btn">Reset</button>
+                    <button id="pm_quit-btn">Quit</button>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

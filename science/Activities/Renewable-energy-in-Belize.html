@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renewable Energy: What Fits Belize?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: #f0f9ff;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .bg-belize-blue { background-color: #00358e; }
+        .text-belize-red { color: #d9222a; }
+        .border-belize-red { border-color: #d9222a; }
+
+        /* Print Specific Styles */
+        @media print {
+            body {
+                background-color: white !important;
+                padding: 0 !important;
+            }
+            .no-print-shadow {
+                box-shadow: none !important;
+                border: 1px solid #eee;
+            }
+            .print-btn {
+                background-color: #f3f4f6 !important;
+                color: #374151 !important;
+                border: 1px solid #d1d5db !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 p-4 md:p-8 min-h-screen flex flex-col items-center">
+
+    <!-- Print Button Container -->
+    <div class="w-full max-w-4xl flex justify-end mb-4">
+        <button onclick="window.print()" class="print-btn flex items-center gap-2 bg-belize-blue text-white px-5 py-2 rounded-lg font-bold shadow-md hover:bg-blue-800 transition-colors">
+            <i class="fas fa-print"></i>
+            Save as PDF / Print
+        </button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="no-print-shadow max-w-4xl w-full bg-white shadow-2xl rounded-3xl overflow-hidden border-t-8 border-belize-red">
+        
+        <!-- Header Section -->
+        <header class="bg-belize-blue p-6 text-center text-white relative overflow-hidden">
+            <div class="relative z-10">
+                <h2 class="text-xl md:text-2xl opacity-90 font-light mb-1">Standard 6 Science</h2>
+                <h1 class="text-3xl md:text-5xl font-bold mb-3 uppercase tracking-wide">Renewable Energy</h1>
+                <div class="inline-block bg-white text-belize-blue px-6 py-2 rounded-full font-bold text-lg md:text-xl shadow-lg">
+                    WHAT FITS BELIZE? 🇧🇿
+                </div>
+                <p class="mt-4 text-blue-100 text-lg italic max-w-2xl mx-auto">
+                    "Energy from sources that nature replaces quickly."
+                </p>
+            </div>
+            <!-- Decorative circle -->
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-white opacity-10 rounded-full"></div>
+            <div class="absolute top-10 -left-10 w-20 h-20 bg-red-500 opacity-20 rounded-full"></div>
+        </header>
+
+        <!-- Main Grid Content -->
+        <div class="p-6 md:p-8">
+            
+            <!-- The 4 Sources -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                
+                <!-- Hydro -->
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl card-hover transition-all duration-300">
+                    <div class="flex items-start">
+                        <div class="bg-blue-500 text-white p-3 rounded-full mr-4 shrink-0">
+                            <i class="fas fa-water text-2xl w-8 h-8 flex items-center justify-center"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-900">Hydroelectric</h3>
+                            <p class="text-sm text-blue-700 mb-2 font-semibold">Moving water + Gravity</p>
+                            <div class="bg-white p-2 rounded border border-blue-100">
+                                <span class="text-xs font-bold uppercase text-blue-400 tracking-wider">In Belize:</span>
+                                <p class="font-bold text-slate-700">Rivers generate our power.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Biomass -->
+                <div class="bg-green-50 border-l-4 border-green-600 p-5 rounded-r-xl card-hover transition-all duration-300">
+                    <div class="flex items-start">
+                        <div class="bg-green-600 text-white p-3 rounded-full mr-4 shrink-0">
+                            <i class="fas fa-leaf text-2xl w-8 h-8 flex items-center justify-center"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-green-900">Biomass</h3>
+                            <p class="text-sm text-green-700 mb-2 font-semibold">Plant & Animal Material</p>
+                            <div class="bg-white p-2 rounded border border-green-100">
+                                <span class="text-xs font-bold uppercase text-green-400 tracking-wider">In Belize:</span>
+                                <p class="font-bold text-slate-700">Sugar factories burn bagasse.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solar -->
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-5 rounded-r-xl card-hover transition-all duration-300">
+                    <div class="flex items-start">
+                        <div class="bg-yellow-500 text-white p-3 rounded-full mr-4 shrink-0">
+                            <i class="fas fa-sun text-2xl w-8 h-8 flex items-center justify-center"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-yellow-900">Solar</h3>
+                            <p class="text-sm text-yellow-700 mb-2 font-semibold">Sunlight (Light, not Heat)</p>
+                            <div class="bg-white p-2 rounded border border-yellow-100">
+                                <span class="text-xs font-bold uppercase text-yellow-400 tracking-wider">In Belize:</span>
+                                <p class="font-bold text-slate-700">Strong sun, but depends on weather.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wind -->
+                <div class="bg-slate-100 border-l-4 border-slate-500 p-5 rounded-r-xl card-hover transition-all duration-300">
+                    <div class="flex items-start">
+                        <div class="bg-slate-500 text-white p-3 rounded-full mr-4 shrink-0">
+                            <i class="fas fa-wind text-2xl w-8 h-8 flex items-center justify-center"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-800">Wind</h3>
+                            <p class="text-sm text-slate-600 mb-2 font-semibold">Moving Air</p>
+                            <div class="bg-white p-2 rounded border border-slate-200 opacity-60">
+                                <span class="text-xs font-bold uppercase text-slate-400 tracking-wider">Note:</span>
+                                <p class="text-sm text-slate-600">Available wherever air moves fast.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Hard Truth (Trade-offs) -->
+            <div class="bg-red-50 rounded-2xl p-6 mb-8 border-2 border-red-100 relative">
+                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wide">
+                    The Reality Check
+                </div>
+                <div class="flex flex-col md:flex-row items-center justify-between text-center md:text-left gap-4">
+                    <div class="flex-1">
+                        <p class="text-lg text-slate-700">
+                            <i class="fas fa-check text-green-500 mr-2"></i> <strong>Cleaner</strong> than oil.
+                        </p>
+                        <p class="text-lg text-slate-700 mt-1">
+                            <i class="fas fa-times text-red-500 mr-2"></i> <strong>Not always available</strong> (Night? Rain? No wind?)
+                        </p>
+                    </div>
+                    <div class="flex-1 border-l-0 md:border-l-2 border-red-200 md:pl-6 text-center">
+                        <p class="text-xl font-bold text-red-800 italic">
+                            "Choosing energy is about <span class="underline decoration-red-400 decoration-4">trade-offs</span>, not perfection."
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Think Before Class Section -->
+            <div class="bg-slate-800 text-white rounded-2xl p-6 md:p-8 shadow-lg text-center relative overflow-hidden group">
+                <!-- Background Icon -->
+                <i class="fas fa-lightbulb absolute -right-6 -bottom-6 text-9xl text-slate-700 opacity-20 transform rotate-12 group-hover:scale-110 transition-transform duration-500"></i>
+                
+                <h3 class="text-2xl md:text-3xl font-bold mb-4 text-yellow-400">
+                    <i class="fas fa-brain mr-2"></i> Think Before Class
+                </h3>
+                <div class="bg-white/10 p-6 rounded-xl backdrop-blur-sm max-w-2xl mx-auto border border-white/20">
+                    <p class="text-xl md:text-2xl font-medium mb-2">
+                        Which source fits Belize <span class="text-yellow-300">BEST</span>?
+                    </p>
+                    <p class="text-slate-300 text-lg">Pick one and explain why.</p>
+                </div>
+                
+                <div class="mt-6 flex flex-col md:flex-row justify-center items-center gap-2 text-slate-400 text-sm">
+                    <span class="inline-block bg-slate-700 px-3 py-1 rounded-full">
+                        <i class="fas fa-user-graduate mr-1"></i> Student Reminder
+                    </span>
+                    <span>Bring your thinking, not perfect answers. We build understanding together.</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

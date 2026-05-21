@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Digital Citizen's Day</title>
+    <style>
+        /* General Body and Font Styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #3d5266;
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER STYLES --- */
+        header {
+            background-color: #fff3e0; /* Light orange from your site */
+            padding: 10px 40px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .logo {
+            height: 50px;
+            margin-right: 15px;
+        }
+        .header-title {
+            color: #f57c00; /* Darker orange from your site */
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        /* Main content area to grow and push footer down */
+        main {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2em 0;
+        }
+
+        /* Main Container for the Lab */
+        #lab-container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            width: 90%;
+            max-width: 650px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* --- PROGRESS BAR STYLES --- */
+        #progress-bar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; /* Allow stars to wrap on smaller screens */
+            gap: 10px;
+            padding: 1.2em;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .star {
+            width: 28px; /* Slightly smaller for 10 stars */
+            height: 28px;
+            fill: #dbe2e8;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .star.filled {
+            fill: #ffc107;
+            transform: scale(1.1);
+        }
+
+        /* Styling for each 'view' or 'screen' of the lab */
+        .view {
+            padding: 2.5em;
+            display: none;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        .view.active {
+            display: block;
+        }
+
+        /* Headers */
+        h2 {
+            color: #005a87;
+            margin-top: 0;
+            font-size: 1.8em;
+        }
+
+        /* Paragraph and Scenario Text */
+        p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        .scenario-text {
+            font-size: 1.25em;
+            font-weight: 500;
+            color: #1c3d5a;
+        }
+
+        /* Container for Multiple Choice Buttons */
+        #choices-container {
+            margin-top: 2em;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Styling for Buttons */
+        .btn {
+            padding: 16px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover {
+            background-color: #0069d9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .choice-btn {
+            background-color: white;
+            color: #007bff;
+            border: 2px solid #007bff;
+        }
+        .choice-btn:hover {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .try-again-btn {
+            background-color: #ffc107;
+            color: #333;
+            margin-top: 1em;
+        }
+        .try-again-btn:hover {
+            background-color: #e0a800;
+        }
+        
+        .feedback-box {
+            margin-top: 1.5em;
+            padding: 1.2em;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 1.1em;
+            line-height: 1.5;
+        }
+        .feedback-box.incorrect {
+            background-color: #fff3f3;
+            border-left: 5px solid #dc3545;
+            color: #58151c;
+        }
+
+        /* --- FOOTER STYLES --- */
+        footer {
+            background-color: #d84315; /* Dark orange from your site */
+            color: #ffffff;
+            text-align: center;
+            padding: 25px;
+            line-height: 1.8;
+        }
+        footer p {
+            margin: 0;
+            font-size: 1em;
+        }
+        footer .copyright {
+            font-size: 0.9em;
+            color: #f5f5f5;
+            margin-top: 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+    <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Teacher Ed Logo" class="logo">
+    <span class="header-title">Teacher Ed Classroom</span>
+</header>
+
+<main>
+    <div id="lab-container">
+        <!-- PROGRESS BAR (NOW A SCORE BAR) -->
+        <div id="progress-bar">
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+            <svg class="star" viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/></svg>
+        </div>
+
+        <!-- VIEW 1: START SCREEN -->
+        <div id="start-view" class="view active">
+            <h2>A Digital Citizen's Day</h2>
+            <p>Navigate a typical day as a student in Belize. Make responsible choices about technology to earn stars and master your digital citizenship skills.</p>
+            <img src="https://i.postimg.cc/BQY5khDx/Digital-Citizen.png" alt="A student using a laptop" style="width: 80%; max-width: 300px; margin: 1em 0; border-radius: 8px;">
+            <button id="start-btn" class="btn">BEGIN</button>
+        </div>
+
+        <!-- VIEW 2: QUESTION SCREEN -->
+        <div id="question-view" class="view">
+            <h2 id="question-title"></h2>
+            <p id="scenario" class="scenario-text"></p>
+            <div id="choices-container"></div>
+        </div>
+        
+        <!-- VIEW 3: CORRECTION/FEEDBACK SCREEN -->
+        <div id="correction-view" class="view">
+            <h2>Correction Needed</h2>
+            <div class="feedback-box incorrect">
+                <p id="feedback-text"></p>
+            </div>
+            <div id="correction-actions">
+                <button id="remediation-btn" class="btn try-again-btn">Let's Try a New Problem</button>
+            </div>
+        </div>
+
+        <!-- VIEW 4: COMPLETION SCREEN (NOW DYNAMIC) -->
+        <div id="completion-view" class="view">
+            <h2 id="completion-title"></h2>
+            <p id="completion-text" style="font-size: 1.2em;"></p>
+            <button id="restart-btn" class="btn try-again-btn" style="margin-top: 1.5em;"></button>
+        </div>
+    </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+    <p>Every challenge you overcome makes you stronger. Keep learning and growing!</p>
+    <p class="copyright">© 2025 Mr. Edwin's Virtual Classroom — All rights reserved.</p>
+</footer>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- DATA STORE ---
+    // This object holds all the questions, choices, and feedback for the lab.
+    const labData = {
+        // --- Morning (The Online Student) ---
+        q1: {
+            title: 'Morning: Homework Research',
+            scenario: 'For your social studies project, you find a personal blog that has the exact answer you need. What is the main BURDEN of using this source?',
+            choices: [
+                { text: 'The information might be biased or incorrect since it\'s not from an expert source.', isCorrect: true, nextId: 'q2' },
+                { text: 'The blog has too many distracting ads.', isCorrect: false, nextId: 'q1_remediation' }
+            ],
+            correctionText: 'While ads are a burden, the biggest risk of using non-expert sources is that the information could be wrong, leading to a poor grade.'
+        },
+        q1_remediation: {
+            title: 'Remediation: Source Check',
+            scenario: 'You find a well-designed website with lots of information. What is the best sign that it is a trustworthy source?',
+            choices: [
+                { text: 'It is from a government agency or a well-known educational institution.', isCorrect: true, nextId: 'q2' },
+                { text: 'It has a lot of colorful pictures and animations.', isCorrect: false, nextId: 'q1_remediation' }
+            ],
+            correctionText: 'Appearance can be deceiving. The reputation of the author or institution (like a university or government ministry) is the best indicator of trustworthy information.'
+        },
+        q2: {
+            title: 'Morning: Staying Focused',
+            scenario: 'You\'re trying to watch an educational video for class, but you keep getting notifications for new game videos. What is the greatest BENEFIT of turning off notifications?',
+            choices: [
+                { text: 'It helps you concentrate on your schoolwork, so you learn more and finish faster.', isCorrect: true, nextId: 'q3' },
+                { text: 'It saves a small amount of your device\'s battery life.', isCorrect: false, nextId: 'q2_remediation' }
+            ],
+            correctionText: 'The main benefit is improving your focus. Technology\'s biggest burden can be constant distraction, and managing it is a key skill.'
+        },
+        q2_remediation: {
+            title: 'Remediation: Focus Check',
+            scenario: 'Your friend keeps messaging you during online class. What is the best strategy?',
+            choices: [
+                { text: 'Politely tell them you\'ll message back after class so you can both focus.', isCorrect: true, nextId: 'q3' },
+                { text: 'Try to listen to the teacher and message your friend at the same time.', isCorrect: false, nextId: 'q2_remediation' }
+            ],
+            correctionText: 'Multitasking is a myth! Trying to do two things at once means you do both poorly. The best choice is to focus on one thing at a time.'
+        },
+        q3: {
+            title: 'Morning: Collaboration vs. Cheating',
+            scenario: 'Your friend asks for your completed math homework to "check their answers." What is the main BURDEN of sending them your file?',
+            choices: [
+                { text: 'Your friend won\'t learn how to solve the problems themselves, and you could both get in trouble.', isCorrect: true, nextId: 'q4' },
+                { text: 'It takes time to find the file and send it.', isCorrect: false, nextId: 'q3_remediation' }
+            ],
+            correctionText: 'The biggest burden is that it prevents learning. The purpose of homework is practice, and copying denies your friend that opportunity.'
+        },
+        q3_remediation: {
+            title: 'Remediation: Collaboration Check',
+            scenario: 'What is a BENEFIT of using technology to collaborate on a project?',
+            choices: [
+                { text: 'You can work together on a shared document from different houses.', isCorrect: true, nextId: 'q4' },
+                { text: 'You can use fun fonts and colors.', isCorrect: false, nextId: 'q3_remediation' }
+            ],
+            correctionText: 'The main benefit of collaboration tools like Google Docs is that they remove the barrier of distance, allowing you to work together anytime, anywhere.'
+        },
+        // --- Afternoon (The Social Media Star) ---
+        q4: {
+            title: 'Afternoon: The Trending Challenge',
+            scenario: 'Your friends want to film a new TikTok challenge that involves a risky stunt. What is the most serious BURDEN of this online trend?',
+            choices: [
+                { text: 'Someone could get seriously injured trying to copy the video.', isCorrect: true, nextId: 'q5' },
+                { text: 'You might not get a lot of likes.', isCorrect: false, nextId: 'q4_remediation' }
+            ],
+            correctionText: 'Likes and views are temporary, but an injury can be permanent. The biggest burden of risky online trends is the real-world physical danger.'
+        },
+        q4_remediation: {
+            title: 'Remediation: Trend Check',
+            scenario: 'What is a BENEFIT of a positive online trend, like the "Ice Bucket Challenge" that raised money for charity?',
+            choices: [
+                { text: 'Technology can be used to raise awareness and money for important causes.', isCorrect: true, nextId: 'q5' },
+                { text: 'Famous celebrities participated in it.', isCorrect: false, nextId: 'q4_remediation' }
+            ],
+            correctionText: 'The main benefit is the power of social media to spread a positive message globally and mobilize people to help others.'
+        },
+        q5: {
+            title: 'Afternoon: Negative Comments',
+            scenario: 'You post a picture of your new puppy, and a stranger leaves a mean comment. What is the best way to handle this BURDEN of social media?',
+            choices: [
+                { text: 'Block the user and report the comment. Don\'t engage with negativity.', isCorrect: true, nextId: 'q6' },
+                { text: 'Write a mean comment back to them.', isCorrect: false, nextId: 'q5_remediation' }
+            ],
+            correctionText: 'Arguing with online bullies is a burden that wastes your time and energy. The most powerful tools you have are Block and Report, which protect your mental health.'
+        },
+        q5_remediation: {
+            title: 'Remediation: Comment Check',
+            scenario: 'Your friend posts something you disagree with. What is a BENEFIT of technology in this situation?',
+            choices: [
+                { text: 'You can send them a private, respectful message to talk about it.', isCorrect: true, nextId: 'q6' },
+                { text: 'You can post a public comment calling them out.', isCorrect: false, nextId: 'q5_remediation' }
+            ],
+            correctionText: 'Publicly shaming someone is a burden. The benefit of technology is the ability to have a private, one-on-one conversation to understand their perspective without starting a public fight.'
+        },
+        q6: {
+            title: 'Afternoon: Privacy Settings',
+            scenario: 'A new app asks for permission to access your location, your contacts, and your photos. What is the BENEFIT of carefully checking and limiting these permissions?',
+            choices: [
+                { text: 'It protects your personal information and privacy from being used without your consent.', isCorrect: true, nextId: 'q7' },
+                { text: 'It makes the app load faster.', isCorrect: false, nextId: 'q6_remediation' }
+            ],
+            correctionText: 'The main benefit is protecting your privacy. Many apps collect more data than they need, and it\'s a burden you can avoid by being careful with permissions.'
+        },
+        q6_remediation: {
+            title: 'Remediation: Privacy Check',
+            scenario: 'What is a BURDEN of making your social media profile completely public?',
+            choices: [
+                { text: 'Anyone in the world can see your photos and information, which can be a safety risk.', isCorrect: true, nextId: 'q7' },
+                { text: 'You might get fewer friend requests.', isCorrect: false, nextId: 'q6_remediation' }
+            ],
+            correctionText: 'The biggest burden of public profiles is the loss of control over your personal information, which can create safety risks.'
+        },
+        // --- Evening (The Family Tech Advisor) ---
+        q7: {
+            title: 'Evening: The Family Tablet',
+            scenario: 'Your family wants to buy a tablet. What is the main BENEFIT of choosing a slightly more expensive, well-known brand?',
+            choices: [
+                { text: 'It will likely last longer and get more software updates, making it a better long-term value.', isCorrect: true, nextId: 'q8' },
+                { text: 'It has a cooler logo on the back.', isCorrect: false, nextId: 'q7_remediation' }
+            ],
+            correctionText: 'While the initial cost is a burden, the benefit of a quality product is its reliability and longevity, which often saves money in the long run.'
+        },
+        q7_remediation: {
+            title: 'Remediation: Value Check',
+            scenario: 'What is a BURDEN of buying the cheapest phone you can find?',
+            choices: [
+                { text: 'It might be slow, run out of storage, and need to be replaced much sooner.', isCorrect: true, nextId: 'q8' },
+                { text: 'It might not come in your favorite color.', isCorrect: false, nextId: 'q7_remediation' }
+            ],
+            correctionText: 'The burden of cheap electronics is often poor performance and a short lifespan, which can cost more over time.'
+        },
+        q8: {
+            title: 'Evening: Screen Time Rules',
+            scenario: 'Your parents want to set a "no phones at the dinner table" rule. What is a BENEFIT of this technology rule?',
+            choices: [
+                { text: 'It encourages more face-to-face conversation and strengthens family connections.', isCorrect: true, nextId: 'q9' },
+                { text: 'It gives your phone\'s battery a chance to charge.', isCorrect: false, nextId: 'q8_remediation' }
+            ],
+            correctionText: 'The main benefit is social and emotional. Technology can be a burden when it interferes with real-world relationships, and rules can help manage that.'
+        },
+        q8_remediation: {
+            title: 'Remediation: Rule Check',
+            scenario: 'What is a BURDEN of having no screen time rules at all?',
+            choices: [
+                { text: 'It can lead to poor sleep, less time for homework, and less family interaction.', isCorrect: true, nextId: 'q9' },
+                { text: 'You might have to charge your device more often.', isCorrect: false, nextId: 'q8_remediation' }
+            ],
+            correctionText: 'The burden of unlimited screen time is its negative impact on health, schoolwork, and relationships. Rules create a healthy balance.'
+        },
+        q9: {
+            title: 'Evening: Online Safety',
+            scenario: 'Your younger sibling is playing an online game and a stranger asks for their name and school. What is the most important advice you can give them?',
+            choices: [
+                { text: 'Never share personal information online, and tell a trusted adult immediately.', isCorrect: true, nextId: 'q10' },
+                { text: 'Make up a fake name to tell them.', isCorrect: false, nextId: 'q9_remediation' }
+            ],
+            correctionText: 'The number one rule of online safety is to protect your personal information. The key benefit of this rule is that it prevents the burden of dangerous situations.'
+        },
+        q9_remediation: {
+            title: 'Remediation: Safety Check',
+            scenario: 'What is a BENEFIT of playing online games with real-life friends instead of strangers?',
+            choices: [
+                { text: 'You are playing in a safer, more trusted environment.', isCorrect: true, nextId: 'q10' },
+                { text: 'You are more likely to win.', isCorrect: false, nextId: 'q9_remediation' }
+            ],
+            correctionText: 'The main benefit is safety. You know who you are interacting with, which reduces the risks that come with anonymity online.'
+        },
+        q10: {
+            title: 'Evening: The Online Ad',
+            scenario: 'An ad pops up saying you\'ve won a free, brand-new phone and just need to enter your parents\' email and password to claim it. What is this?',
+            choices: [
+                { text: 'A scam trying to steal personal information.', isCorrect: true, nextId: 'complete' },
+                { text: 'A special reward for being a loyal internet user.', isCorrect: false, nextId: 'q10_remediation' }
+            ],
+            correctionText: 'This is a classic online scam. The burden of technology is that you must be vigilant against phishing and scams. If something seems too good to be true, it usually is.'
+        },
+        q10_remediation: {
+            title: 'Remediation: Ad Check',
+            scenario: 'You see an ad for a game that looks fun, but it asks for permission to read your contacts and messages. What is the burden?',
+            choices: [
+                { text: 'The app is asking for far more data than it needs, which is a major privacy risk.', isCorrect: true, nextId: 'complete' },
+                { text: 'The game might have too many levels.', isCorrect: false, nextId: 'q10_remediation' }
+            ],
+            correctionText: 'The burden is the threat to your privacy. A game does not need to read your private messages, and such a request is a major red flag.'
+        }
+    };
+
+    // --- DOM ELEMENT REFERENCES ---
+    const views = document.querySelectorAll('.view');
+    const startBtn = document.getElementById('start-btn');
+    const questionTitleEl = document.getElementById('question-title');
+    const scenarioEl = document.getElementById('scenario');
+    const choicesContainer = document.getElementById('choices-container');
+    const feedbackTextEl = document.getElementById('feedback-text');
+    const remediationBtn = document.getElementById('remediation-btn');
+    const progressStars = document.querySelectorAll('#progress-bar .star');
+    const completionTitleEl = document.getElementById('completion-title');
+    const completionTextEl = document.getElementById('completion-text');
+    const restartBtn = document.getElementById('restart-btn');
+
+    // --- STATE VARIABLES ---
+    let currentQuestionId = 'q1';
+    let masteryScore = 0;
+
+    // --- CORE FUNCTIONS ---
+
+    /**
+     * Hides all views and shows the one with the specified ID.
+     * @param {string} viewId - The ID of the view to make active.
+     */
+    function showView(viewId) {
+        views.forEach(view => view.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+    }
+    
+    /**
+     * Updates the star bar at the top to reflect the current score.
+     * @param {number} score - The number of stars to fill.
+     */
+    function updateProgressBar(score) {
+        progressStars.forEach((star, index) => {
+            if (index < score) {
+                star.classList.add('filled');
+            } else {
+                star.classList.remove('filled');
+            }
+        });
+    }
+
+    /**
+     * Displays a question and its choices on the screen.
+     * @param {string} questionId - The ID of the question to display from labData.
+     */
+    function displayQuestion(questionId) {
+        currentQuestionId = questionId;
+        const question = labData[questionId];
+        if (!question) return;
+
+        questionTitleEl.textContent = question.title;
+        scenarioEl.textContent = question.scenario;
+        choicesContainer.innerHTML = '';
+
+        // Shuffle choices so they aren't always in the same order
+        const shuffledChoices = [...question.choices].sort(() => Math.random() - 0.5);
+
+        shuffledChoices.forEach(choice => {
+            const button = document.createElement('button');
+            button.textContent = choice.text;
+            button.classList.add('btn', 'choice-btn');
+            button.onclick = () => handleChoice(choice);
+            choicesContainer.appendChild(button);
+        });
+
+        showView('question-view');
+    }
+
+    /**
+     * Handles the user's choice, awards points, and navigates to the next step.
+     * @param {object} choice - The chosen answer object from labData.
+     */
+    function handleChoice(choice) {
+        if (choice.isCorrect) {
+            // Only award a star if it's a main question (not remediation)
+            if (!currentQuestionId.includes('_remediation')) {
+                masteryScore++;
+                updateProgressBar(masteryScore);
+            }
+            
+            if (choice.nextId === 'complete') {
+                showCompletionScreen();
+            } else {
+                displayQuestion(choice.nextId);
+            }
+        } else {
+            // Incorrect answer. Go to the correction view. No star awarded.
+            const question = labData[currentQuestionId];
+            feedbackTextEl.textContent = question.correctionText;
+            remediationBtn.onclick = () => displayQuestion(choice.nextId);
+            showView('correction-view');
+        }
+    }
+    
+    /**
+     * Displays the final completion screen with a dynamic message based on the score.
+     */
+    function showCompletionScreen() {
+        if (masteryScore === 10) {
+            completionTitleEl.textContent = '🏆 Mastery Achieved! 🏆';
+            completionTextEl.innerHTML = `Excellent work! You've earned a perfect score of <strong>${masteryScore}/10 stars</strong>. You are a responsible digital citizen!`;
+            restartBtn.textContent = 'Restart Lab';
+        } else if (masteryScore >= 7) {
+            completionTitleEl.textContent = '✅ Great Job! ✅';
+            completionTextEl.innerHTML = `You've earned <strong>${masteryScore}/10 stars</strong>. You have a strong understanding of digital citizenship. Try again for perfect mastery!`;
+            restartBtn.textContent = 'Try Again for Mastery';
+        } else {
+            completionTitleEl.textContent = '👍 Good Effort! 👍';
+            completionTextEl.innerHTML = `You've earned <strong>${masteryScore}/10 stars</strong>. Keep practicing! Restart the lab to improve your skills.`;
+            restartBtn.textContent = 'Restart Lab';
+        }
+        showView('completion-view');
+    }
+    
+    /**
+     * Resets the lab state to the beginning.
+     */
+    function restartLab() {
+        masteryScore = 0;
+        updateProgressBar(0);
+        showView('start-view');
+    }
+
+    // --- EVENT LISTENERS ---
+    startBtn.addEventListener('click', () => {
+        restartLab(); // Ensure a clean start
+        displayQuestion('q1');
+    });
+    
+    restartBtn.addEventListener('click', restartLab);
+});
+</script>
+</body>
+</html>

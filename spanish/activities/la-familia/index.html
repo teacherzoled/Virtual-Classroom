@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanish Family Tree Worksheet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Tree Connector Styles */
+        .tree ul {
+            padding-top: 20px; position: relative;
+            transition: all 0.5s;
+            display: flex; justify-content: center;
+        }
+        .tree li {
+            float: left; text-align: center;
+            list-style-type: none;
+            position: relative;
+            padding: 20px 5px 0 5px;
+            transition: all 0.5s;
+        }
+        .tree li::before, .tree li::after{
+            content: ''; position: absolute; top: 0; right: 50%;
+            border-top: 2px solid #cbd5e1;
+            width: 50%; height: 20px;
+        }
+        .tree li::after{ right: auto; left: 50%; border-left: 2px solid #cbd5e1; }
+        .tree li:only-child::after, .tree li:only-child::before { display: none; }
+        .tree li:only-child{ padding-top: 0;}
+        .tree li:first-child::before, .tree li:last-child::after{ border: 0 none; }
+        .tree li:last-child::before{ border-right: 2px solid #cbd5e1; border-radius: 0 5px 0 0; }
+        .tree li:first-child::after{ border-radius: 5px 0 0 0; }
+        .tree ul ul::before{
+            content: ''; position: absolute; top: 0; left: 50%;
+            border-left: 2px solid #cbd5e1; width: 0; height: 20px;
+        }
+
+        /* Card Styles */
+        .tree-member {
+            background: white; border: 2px solid #e2e8f0;
+            padding: 8px; border-radius: 8px;
+            display: inline-flex; flex-direction: column; align-items: center;
+            min-width: 90px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative; z-index: 10;
+        }
+        
+        /* Drop Zone Styles */
+        .drop-zone {
+            width: 100%; height: 32px;
+            background-color: #f1f5f9;
+            border: 2px dashed #94a3b8;
+            border-radius: 4px;
+            margin-top: 4px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem; font-weight: bold; color: #475569;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .drop-zone.filled {
+            background-color: #dbeafe; border-style: solid; border-color: #3b82f6; color: #1e40af;
+        }
+        .drop-zone:hover { background-color: #e2e8f0; }
+        .drop-zone.selected-target { border-color: #3b82f6; background-color: #eff6ff; }
+
+        /* Draggable Token Styles */
+        .draggable-token {
+            background-color: white; border: 1px solid #cbd5e1;
+            padding: 4px 12px; border-radius: 999px;
+            font-size: 0.9rem; font-weight: 600; color: #334155;
+            cursor: grab;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            user-select: none;
+            transition: all 0.2s;
+        }
+        .draggable-token:active { cursor: grabbing; }
+        .draggable-token.selected {
+            background-color: #3b82f6; color: white; border-color: #2563eb;
+            transform: scale(1.05); box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+        }
+        .draggable-token.used {
+            opacity: 0.5; cursor: not-allowed; background-color: #e2e8f0;
+        }
+
+        /* Word Scramble Styles */
+        .scramble-word {
+            background: #fff; border: 1px solid #cbd5e1;
+            padding: 4px 10px; margin: 4px; border-radius: 6px;
+            cursor: pointer; display: inline-block;
+            font-weight: 500;
+        }
+        .scramble-word:hover { background: #f8fafc; border-color: #94a3b8; }
+        .scramble-slot {
+            min-height: 40px; border-bottom: 2px solid #cbd5e1;
+            display: flex; flex-wrap: wrap; gap: 8px; padding: 4px;
+            background: #f8fafc; border-radius: 4px 4px 0 0;
+        }
+
+        /* Feedback Classes */
+        .correct { border-color: #22c55e !important; background-color: #f0fdf4 !important; }
+        .incorrect { border-color: #ef4444 !important; background-color: #fef2f2 !important; }
+        .text-correct { color: #16a34a; }
+        .text-incorrect { color: #dc2626; }
+
+        .confetti {
+            position: fixed; width: 10px; height: 10px;
+            background-color: #f00; animation: fall linear forwards;
+            z-index: 100;
+        }
+        @keyframes fall { to { transform: translateY(100vh) rotate(720deg); } }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 pb-20">
+
+    <!-- Header -->
+    <header class="bg-blue-600 text-white p-6 shadow-lg sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold">La Familia</h1>
+                <p class="text-blue-100">Interactive Worksheet & Vocabulary</p>
+            </div>
+            <div class="mt-4 md:mt-0 flex gap-4">
+                <button onclick="document.getElementById('vocab-modal').classList.remove('hidden')" class="bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-lg text-sm font-semibold transition">
+                    <i class="fas fa-book mr-2"></i>Vocabulary
+                </button>
+                <div class="bg-white text-blue-800 px-4 py-2 rounded-lg font-bold shadow-sm">
+                    Score: <span id="total-score">0</span>/34
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto p-4 md:p-8 space-y-12">
+
+        <!-- Exercise 1: Family Tree -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-blue-50 p-4 border-b border-blue-100">
+                <h2 class="text-xl font-bold text-blue-800">1. Árbol Genealógico (Family Tree)</h2>
+                <p class="text-sm text-slate-600">Click a word from the bank, then click the correct box on the tree.</p>
+            </div>
+            
+            <div class="p-6">
+                <!-- Word Bank -->
+                <div class="flex flex-wrap gap-2 justify-center mb-8 p-4 bg-slate-50 rounded-lg border border-slate-200" id="tree-word-bank">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Tree Visualization -->
+                <div class="overflow-x-auto pb-4">
+                    <div class="tree min-w-[600px] mx-auto">
+                        <ul>
+                            <li>
+                                <div class="flex gap-4">
+                                    <div class="tree-member">
+                                        <div class="text-2xl">👴🏻</div>
+                                        <div class="font-bold text-xs mb-1">Antonio</div>
+                                        <div class="drop-zone" data-correct="Abuelo">?</div>
+                                    </div>
+                                    <div class="tree-member">
+                                        <div class="text-2xl">👵🏻</div>
+                                        <div class="font-bold text-xs mb-1">Carmen</div>
+                                        <div class="drop-zone" data-correct="Abuela">?</div>
+                                    </div>
+                                </div>
+                                <ul>
+                                    <li>
+                                        <div class="tree-member">
+                                            <div class="text-2xl">👨🏻</div>
+                                            <div class="font-bold text-xs mb-1">Pedro</div>
+                                            <div class="drop-zone" data-correct="Papá">?</div>
+                                        </div>
+                                        <div class="tree-member ml-2">
+                                            <div class="text-2xl">👩🏻</div>
+                                            <div class="font-bold text-xs mb-1">Ana</div>
+                                            <div class="drop-zone" data-correct="Mamá">?</div>
+                                        </div>
+                                        <ul>
+                                            <li>
+                                                <div class="tree-member">
+                                                    <div class="text-2xl">👧🏻</div>
+                                                    <div class="font-bold text-xs mb-1">Maria</div>
+                                                    <div class="drop-zone" data-correct="Hermana">?</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="tree-member bg-yellow-50 border-yellow-200">
+                                                    <div class="text-2xl">👦🏻</div>
+                                                    <div class="font-bold text-xs mb-1">Roberto</div>
+                                                    <div class="text-xs font-bold text-yellow-600 py-1 px-2 rounded bg-yellow-100">(YO)</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="tree-member">
+                                                    <div class="text-2xl">👦🏻</div>
+                                                    <div class="font-bold text-xs mb-1">Juan</div>
+                                                    <div class="drop-zone" data-correct="Hermano">?</div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <div class="tree-member">
+                                            <div class="text-2xl">👨🏻‍🦱</div>
+                                            <div class="font-bold text-xs mb-1">Luis</div>
+                                            <div class="drop-zone" data-correct="Tío">?</div>
+                                        </div>
+                                        <div class="tree-member ml-2">
+                                            <div class="text-2xl">👩🏻‍🦱</div>
+                                            <div class="font-bold text-xs mb-1">Sofia</div>
+                                            <div class="drop-zone" data-correct="Tía">?</div>
+                                        </div>
+                                        <ul>
+                                            <li>
+                                                <div class="tree-member">
+                                                    <div class="text-2xl">👦🏽</div>
+                                                    <div class="font-bold text-xs mb-1">Diego</div>
+                                                    <div class="drop-zone" data-correct="Primo">?</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="tree-member">
+                                                    <div class="text-2xl">👧🏽</div>
+                                                    <div class="font-bold text-xs mb-1">Lucia</div>
+                                                    <div class="drop-zone" data-correct="Prima">?</div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Exercise 2: Unscramble -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-indigo-50 p-4 border-b border-indigo-100">
+                <h2 class="text-xl font-bold text-indigo-800">2. Ordenar las Oraciones (Unscramble)</h2>
+                <p class="text-sm text-slate-600">Click words in the correct order to form the sentence.</p>
+            </div>
+            <div class="p-6 space-y-8" id="scramble-container">
+                <!-- Sentences populated by JS -->
+            </div>
+        </section>
+
+        <!-- Exercise 3: Fill in the Blanks -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-emerald-50 p-4 border-b border-emerald-100">
+                <h2 class="text-xl font-bold text-emerald-800">3. Completar las Frases (Relationships)</h2>
+                <p class="text-sm text-slate-600">Choose the correct family member to complete the sentence.</p>
+            </div>
+            <div class="p-6 grid gap-4" id="cloze-container">
+                <!-- Sentences populated by JS -->
+            </div>
+        </section>
+
+        <!-- Exercise 4: Paragraph Completion -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-orange-50 p-4 border-b border-orange-100">
+                <h2 class="text-xl font-bold text-orange-800">4. Lectura (Reading)</h2>
+                <p class="text-sm text-slate-600">Read the paragraph and select the correct words to complete the description.</p>
+            </div>
+            <div class="p-6 leading-loose text-lg" id="paragraph-container">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+        <!-- Main Actions -->
+        <div class="sticky bottom-4 flex justify-center gap-4 z-40">
+            <button onclick="checkAll()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-10 rounded-full shadow-xl transform hover:-translate-y-1 transition duration-200 flex items-center border-2 border-white">
+                <i class="fas fa-check-circle mr-2"></i> Finish & Check
+            </button>
+            <button onclick="resetAll()" class="bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-6 rounded-full shadow-xl transform hover:-translate-y-1 transition duration-200 flex items-center border-2 border-white">
+                <i class="fas fa-redo"></i>
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Vocabulary Modal -->
+    <div id="vocab-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div class="p-4 border-b flex justify-between items-center sticky top-0 bg-white">
+                <h2 class="text-xl font-bold text-blue-800">Vocabulary Reference</h2>
+                <button onclick="document.getElementById('vocab-modal').classList.add('hidden')" class="text-slate-400 hover:text-slate-600">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                <div>
+                    <h3 class="font-bold text-blue-600 mb-2">Immediate Family</h3>
+                    <ul class="space-y-1">
+                        <li class="flex justify-between border-b border-slate-100 py-1"><span>Father/Dad</span> <span class="font-semibold">Padre / Papá</span></li>
+                        <li class="flex justify-between border-b border-slate-100 py-1"><span>Mother/Mom</span> <span class="font-semibold">Madre / Mamá</span></li>
+                        <li class="flex justify-between border-b border-slate-100 py-1"><span>Brother</span> <span class="font-semibold">Hermano</span></li>
+                        <li class="flex justify-between border-b border-slate-100 py-1"><span>Sister</span> <span class="font-semibold">Hermana</span></li>
+                        <li class="flex justify-between border-b border-slate-100 py-1"><span>Son/Daughter</span> <span class="font-semibold">Hijo / Hija</span></li>
+                        <li class="flex justify-between border-b border-slate-100 py-1"><span>Step-father</span> <span class="font-semibold">Padrastro</span></li>
+                        <li class="flex justify-between border-b border-slate-100 py-1"><span>Step-brother</span> <span class="font-semibold">Hermanastro</span></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-blue-600 mb-2">Extended & In-laws</h3>
+                    <ul class="space-y-1">
+                        <li class="flex justify-between border-b border-slate-100 py-1"><span>Grandpa/ma</span> <span class="font-semibold">Abuelo / Abuela</span></li>
+                        <li class="flex justify-between border-b border-slate-100 py-1"><span>Uncle/Aunt</span> <span class="font-semibold">Tío / Tía</span></li>
+                        <li class="flex justify-between border-b border-slate-100 py-1"><span>Cousin</span> <span class="font-semibold">Primo / Prima</span></li>
+                        <li class="flex justify-between border-b border-slate-100 py-1"><span>Nephew/Niece</span> <span class="font-semibold">Sobrino / Sobrina</span></li>
+                        <li class="flex justify-between border-b border-slate-100 py-1"><span>Brother-in-law</span> <span class="font-semibold">Cuñado</span></li>
+                        <li class="flex justify-between border-b border-slate-100 py-1"><span>Mother/Father-in-law</span> <span class="font-semibold">Suegro(a)</span></li>
+                        <li class="flex justify-between border-b border-slate-100 py-1"><span>Son/Daughter-in-law</span> <span class="font-semibold">Yerno / Nuera</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA ---
+        const treeData = [
+            "Abuelo", "Abuela", "Papá", "Mamá", "Tío", "Tía", 
+            "Hermano", "Hermana", "Primo", "Prima"
+        ];
+
+        const scrambledSentences = [
+            { id: 1, words: ["Mi", "papá", "es", "inteligente", "y", "trabajador"], correct: "Mi papá es inteligente y trabajador" }, // Adjusted for logic
+            { id: 2, words: ["Mis", "abuelos", "son", "cariñosos"], correct: "Mis abuelos son cariñosos" },
+            { id: 3, words: ["Mis", "primos", "son", "muy", "traviesos"], correct: "Mis primos son muy traviesos" },
+            { id: 4, words: ["La", "mamá", "de", "Pedro", "es", "muy", "estricta"], correct: "La mamá de Pedro es muy estricta" },
+            { id: 5, words: ["Nosotros", "somos", "una", "familia", "unida"], correct: "Nosotros somos una familia unida" },
+            { id: 6, words: ["Mis", "hermanos", "no", "son", "obedientes"], correct: "Mis hermanos no son obedientes" },
+            { id: 7, words: ["Mis", "nietos", "son", "responsables", "con", "sus", "tareas"], correct: "Mis nietos son responsables con sus tareas" }
+        ];
+
+        const clozeData = [
+            { text: "Mi hermano se casó el verano pasado con su ___ (Raquel).", answer: "esposa" },
+            { text: "Mi hermana está casada con Pedro. Él es mi único ___.", answer: "cuñado" },
+            { text: "Mi papá se lleva muy bien con mis abuelos. Ellos son buenos ___.", answer: "suegros" },
+            { text: "Mi hijo y su esposa tienen tres hijos. Ella es una excelente ___.", answer: "madre" },
+            { text: "Yo me crie con mi mamá y mi ___. Él es un papá para mí.", answer: "padrastro" },
+            { text: "La esposa de mi tío me consiente. Es la mejor ___ de todas.", answer: "tía política" },
+            { text: "Mi ___ dice que yo no soy buena suegra, pero está mintiendo.", answer: "nuera" },
+            { text: "Yo no tengo hijos propios, pero mi esposo tiene tres. Yo soy su ___.", answer: "madrastra" },
+            { text: "Mi ___ y mi hija vienen a casa cada Navidad. Él es un buen hombre.", answer: "yerno" },
+            { text: "Nuestros ___ son muy traviesos y ruidosos a veces.", answer: "nietos" }
+        ];
+
+        const clozeOptions = [
+            "esposa", "cuñado", "suegros", "madre", "padrastro", 
+            "tía política", "nuera", "madrastra", "yerno", "nietos"
+        ].sort();
+        
+        const paragraphConfig = {
+            parts: [
+                "Hola. Yo ", "tengo", " una familia interesante. ", "Mis", " padres ", "son", " divertidos. Mi madre ", "es", " doctora. Nosotros ", "estamos", " felices en casa. Tengo muchos ", "primos", " y una ", "tía", " favorita."
+            ],
+            options: ["tengo", "tiene", "Mis", "Mi", "son", "es", "estamos", "están", "primos", "primo", "tía", "tías"].sort()
+        };
+
+        // --- STATE ---
+        let selectedToken = null;
+
+        // --- INIT ---
+        function init() {
+            initTree();
+            initScramble();
+            initCloze();
+            initParagraph();
+        }
+
+        // --- TREE LOGIC ---
+        function initTree() {
+            const bank = document.getElementById('tree-word-bank');
+            // Shuffle tokens
+            const shuffled = [...treeData].sort(() => Math.random() - 0.5);
+            shuffled.forEach(word => {
+                const btn = document.createElement('div');
+                btn.className = 'draggable-token';
+                btn.textContent = word;
+                btn.onclick = () => selectToken(btn, word);
+                bank.appendChild(btn);
+            });
+
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                zone.onclick = () => placeToken(zone);
+            });
+        }
+
+        function selectToken(el, word) {
+            // Deselect previous
+            document.querySelectorAll('.draggable-token').forEach(t => t.classList.remove('selected'));
+            
+            if (el.classList.contains('used')) return;
+
+            selectedToken = { el, word };
+            el.classList.add('selected');
+        }
+
+        function placeToken(zone) {
+            if (!selectedToken) return;
+
+            // Update zone
+            zone.textContent = selectedToken.word;
+            zone.classList.add('filled');
+            zone.dataset.value = selectedToken.word;
+
+            // Mark token as used
+            selectedToken.el.classList.add('used');
+            selectedToken.el.classList.remove('selected');
+            
+            selectedToken = null;
+        }
+
+        // --- SCRAMBLE LOGIC ---
+        function initScramble() {
+            const container = document.getElementById('scramble-container');
+            scrambledSentences.forEach((item, index) => {
+                const wrapper = document.createElement('div');
+                
+                // Shuffle words for display
+                let words = [...item.words].sort(() => Math.random() - 0.5);
+                
+                let wordsHtml = words.map(w => 
+                    `<span class="scramble-word" onclick="moveWord(this, 'slot-${index}', 'pool-${index}')">${w}</span>`
+                ).join('');
+
+                wrapper.innerHTML = `
+                    <div>
+                        <div class="mb-2 font-medium text-slate-500">Sentence ${index + 1}</div>
+                        <div class="scramble-slot mb-2" id="slot-${index}" data-correct="${item.correct}"></div>
+                        <div class="bg-slate-100 p-2 rounded flex flex-wrap" id="pool-${index}">
+                            ${wordsHtml}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(wrapper);
+            });
+        }
+
+        // Global function for onclick inline
+        window.moveWord = function(el, slotId, poolId) {
+            const slot = document.getElementById(slotId);
+            const pool = document.getElementById(poolId);
+            
+            if (el.parentElement.id === poolId) {
+                slot.appendChild(el);
+            } else {
+                pool.appendChild(el);
+            }
+        };
+
+        // --- CLOZE LOGIC ---
+        function initCloze() {
+            const container = document.getElementById('cloze-container');
+            clozeData.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "flex flex-col md:flex-row items-start md:items-center gap-2 p-3 bg-slate-50 rounded border border-slate-200";
+                
+                // Create select options
+                let opts = `<option value="">Select...</option>` + 
+                           clozeOptions.map(o => `<option value="${o}">${o}</option>`).join('');
+
+                const parts = item.text.split('___');
+                
+                div.innerHTML = `
+                    <span class="font-bold text-slate-400 mr-2">${index + 1}.</span>
+                    <div class="flex-1 leading-8">
+                        ${parts[0]}
+                        <select class="cloze-select border-b-2 border-blue-300 bg-white px-2 py-1 rounded text-blue-700 font-bold focus:outline-none focus:border-blue-600" data-answer="${item.answer}">
+                            ${opts}
+                        </select>
+                        ${parts[1] || ''}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // --- PARAGRAPH LOGIC ---
+        function initParagraph() {
+            const container = document.getElementById('paragraph-container');
+            let html = '';
+            
+            for (let i = 0; i < paragraphConfig.parts.length; i++) {
+                const part = paragraphConfig.parts[i];
+                // Even indices are text, odd indices are answers
+                if (i % 2 === 0) {
+                    html += `<span>${part}</span>`;
+                } else {
+                    const opts = `<option value="">...</option>` + 
+                                 paragraphConfig.options.map(o => `<option value="${o}">${o}</option>`).join('');
+                    html += `<select class="paragraph-select inline-block mx-1 border-b-2 border-orange-300 bg-white px-2 py-1 rounded text-orange-700 font-bold focus:outline-none focus:border-orange-600" data-answer="${part}">${opts}</select>`;
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        // --- CHECKING LOGIC ---
+        function checkAll() {
+            let score = 0;
+            let maxScore = 0;
+
+            // 1. Check Tree (10 points)
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                maxScore++;
+                const val = zone.dataset.value;
+                const correct = zone.dataset.correct;
+                zone.classList.remove('correct', 'incorrect');
+                
+                if (val === correct) {
+                    score++;
+                    zone.classList.add('correct');
+                } else if(val) {
+                    zone.classList.add('incorrect');
+                }
+            });
+
+            // 2. Check Scramble (7 points)
+            scrambledSentences.forEach((item, index) => {
+                maxScore++;
+                const slot = document.getElementById(`slot-${index}`);
+                const currentSentence = Array.from(slot.children).map(span => span.textContent.trim()).join(' ');
+                
+                slot.classList.remove('correct', 'incorrect');
+                // Loose check (ignore case/punctuation just in case, though strict is usually better for scrambling)
+                // We will check strict string equality based on logic
+                if (currentSentence === item.correct) {
+                    score++;
+                    slot.classList.add('correct');
+                } else {
+                    slot.classList.add('incorrect');
+                }
+            });
+
+            // 3. Check Cloze (10 points)
+            document.querySelectorAll('.cloze-select').forEach(sel => {
+                maxScore++;
+                const val = sel.value;
+                const correct = sel.dataset.answer;
+                sel.classList.remove('correct', 'incorrect');
+
+                if (val === correct) {
+                    score++;
+                    sel.classList.add('correct');
+                } else {
+                    sel.classList.add('incorrect');
+                }
+            });
+
+            // 4. Check Paragraph (5 points)
+            const paragraphSelects = document.querySelectorAll('.paragraph-select');
+            paragraphSelects.forEach((sel, index) => {
+                maxScore++;
+                const val = sel.value;
+                const correct = sel.dataset.answer;
+                sel.classList.remove('correct', 'incorrect');
+
+                if (val === correct) {
+                    score++;
+                    sel.classList.add('correct');
+                } else {
+                    sel.classList.add('incorrect');
+                }
+            });
+
+            // Update Score
+            const scoreDisplay = document.getElementById('total-score');
+            scoreDisplay.textContent = score;
+            
+            // Animation
+            scoreDisplay.parentElement.classList.add('scale-110');
+            setTimeout(() => scoreDisplay.parentElement.classList.remove('scale-110'), 300);
+
+            if (score === maxScore) celebrate();
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetAll() {
+            if(confirm("Start over?")) {
+                location.reload();
+            }
+        }
+
+        function celebrate() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = -10 + 'px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = Math.random() * 2 + 1 + 's';
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        // Run
+        init();
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Aspiraciones: Construyendo Oraciones</title>
+    <link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Lilita+One&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles adapted from reference */
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: #eef2ff; /* Light indigo background */
+            color: #1a202c;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content-wrapper { flex-grow: 1; }
+        .container { max-width: 90%; margin: 0 auto; padding: 1.5rem 0; }
+
+        /* Header styles */
+        .header {
+            background-color: #fef3c7;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            min-height: 80px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .header-left { display: flex; align-items: center; gap: 1rem; }
+        .header-logo { height: 50px; width: auto; border-radius: 0.5rem; }
+        .header-title {
+            font-family: 'Lilita One', cursive;
+            color: #f97316;
+            font-size: 2.25rem;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        /* Footer styles */
+        .footer {
+            background-color: #ea580c;
+            color: white;
+            padding: 1.25rem 2rem;
+            text-align: center;
+            margin-top: auto;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Card (lesson-section) styles */
+        .lesson-section {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            border-left-width: 4px;
+            border-bottom-width: 4px;
+            border-color: transparent;
+        }
+        .lesson-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .section-header {
+            padding: 0.75rem 1.5rem;
+            font-size: 1.5rem;
+            font-family: 'Lilita One', cursive;
+            font-weight: 400;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .section-content { padding: 1.5rem; }
+
+        /* Card Header/Border Colors */
+        .header-main { background-color: #3b82f6; } /* Blue */
+        .border-main { border-color: #3b82f6; }
+        .header-activity { background-color: #8b5cf6; } /* Purple */
+        .border-activity { border-color: #8b5cf6; }
+        .header-video { background-color: #dc2626; } /* Red */
+        .border-video { border-color: #dc2626; }
+        .header-quiz { background-color: #f97316; } /* Orange */
+        .border-quiz { border-color: #f97316; }
+        .header-info { background-color: #f59e0b; } /* Amber/Yellow */
+        .border-info { border-color: #f59e0b; }
+
+        /* General text styles */
+        p { margin-bottom: 1rem; line-height: 1.6; font-size: 1.1rem; }
+        ul { margin-top: 1em; margin-bottom: 1em; padding-left: 1.5rem; list-style-type: disc; }
+        li { margin-top: 0.5em; margin-bottom: 0.5em; font-size: 1.1rem; }
+        strong { font-weight: 700; }
+        .sentence-frame { background-color: #f0f9ff; border: 1px dashed #93c5fd; padding: 0.75rem; border-radius: 0.5rem; font-family: monospace; font-size: 1.1rem; margin-bottom: 0.5rem; }
+
+        /* Button styles */
+        .btn {
+            padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; color: white;
+            cursor: pointer; transition: all 0.3s ease; border: none; margin-top: 1rem;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        .btn:active { transform: translateY(0); box-shadow: none; }
+        .btn-primary { background-color: #4f46e5; }
+        .btn-primary:hover { background-color: #4338ca; }
+        .btn-secondary { background-color: #6b7280; margin-left: 0.5rem; }
+        .btn-secondary:hover { background-color: #4b5563; }
+
+        /* Video styles */
+        .video-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 0.75rem; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+        /* Drag & Drop styles */
+        .draggable { background-color: #a78bfa; color: white; padding: 0.5rem 1rem; margin: 0.25rem; border-radius: 0.5rem; cursor: grab; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); transition: all 0.2s ease-in-out; }
+        .draggable:active { cursor: grabbing; transform: scale(1.05); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); z-index: 10; }
+        .dropzone { padding: 1rem; border: 2px dashed #a5b4fc; background-color: #f0f9ff; border-radius: 0.75rem; min-height: 60px; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 0.25rem; margin-bottom: 1rem; }
+        .dropzone.hover { background-color: #e0e7ff; border-color: #6366f1; }
+        .dropzone.correct { border-style: solid; border-color: #10b981; background-color: #d1fae5; animation: flashGreen 0.5s ease-out; }
+        .dropzone.incorrect { border-style: solid; border-color: #ef4444; background-color: #fee2e2; animation: shake 0.5s ease-out, flashRed 0.5s ease-out; }
+
+        /* Quiz & Feedback styles */
+        .quiz-option { background-color: #f0f9ff; border: 2px solid #93c5fd; padding: 0.75rem 1rem; margin-bottom: 0.5rem; border-radius: 0.5rem; cursor: pointer; transition: all 0.2s ease; }
+        .quiz-option:hover { background-color: #e0f2fe; transform: translateX(5px); }
+        .quiz-option.selected { background-color: #bfdbfe; border-color: #2563eb; }
+        .quiz-option.correct-answer { background-color: #d1fae5; border-color: #10b981; animation: flashGreen 0.5s ease-out; }
+        .quiz-option.incorrect-answer { background-color: #fee2e2; border-color: #ef4444; animation: shake 0.5s ease-out, flashRed 0.5s ease-out; }
+        .feedback { margin-top: 1rem; font-weight: 600; opacity: 0; transform: scale(0.95); transition: opacity 0.5s ease-out, transform 0.5s ease-out; }
+        .feedback.show { opacity: 1; transform: scale(1); }
+        .correct-feedback { color: #10b981; }
+        .incorrect-feedback { color: #ef4444; }
+        .answer-box { background-color: #ecfdf5; border: 1px solid #34d399; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; display: none; animation: flashGreen 0.5s ease-out; }
+
+        /* Animations */
+        @keyframes flashGreen { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 50% { box-shadow: 0 0 15px 5px rgba(16, 185, 129, 0.7); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+        @keyframes flashRed { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 50% { box-shadow: 0 0 15px 5px rgba(239, 68, 68, 0.7); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25%, 75% { transform: translateX(-5px); } 50% { transform: translateX(5px); } }
+
+        /* Confetti styles */
+        .confetti-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+        .confetti { position: absolute; width: 10px; height: 10px; opacity: 0; animation: confetti-fall 3s forwards; }
+        @keyframes confetti-fall { 0% { opacity: 1; transform: translateY(-100vh) rotate(0deg); } 100% { opacity: 0; transform: translateY(100vh) rotate(720deg); } }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Teacher Ed Logo" class="header-logo">
+            <div class="header-title">Teacher Ed Classroom</div>
+        </div>
+    </header>
+
+    <div class="main-content-wrapper">
+        <div class="container">
+
+            <!-- 1. Color System Explanation -->
+            <div class="lesson-section border-info">
+                <div class="section-header header-info">
+                    <span>🎨 Guía de Colores</span>
+                </div>
+                <div class="section-content">
+                    <p>¡Hola! Para ayudarte a aprender, usamos colores especiales en esta lección:</p>
+                    <ul>
+                        <li><strong class="text-blue-600">Azul:</strong> Para reglas de gramática importantes.</li>
+                        <li><strong class="text-purple-600">Morado:</strong> Para actividades interactivas divertidas.</li>
+                        <li><strong class="text-green-600">Verde:</strong> ¡Para respuestas correctas!</li>
+                        <li><strong class="text-red-600">Rojo:</strong> Para errores o cosas a las que prestar atención.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 2. Warm-Up: Scrambled Sentences -->
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">
+                    <span>Warm-Up: ¡Ordena las Oraciones! 🧠</span>
+                </div>
+                <div class="section-content text-center">
+                    <p>Arrastra las palabras para formar oraciones correctas. (Drag the words to form correct sentences.)</p>
+                    
+                    <!-- Sentence 1 -->
+                    <p class="font-bold mt-6">Oración 1:</p>
+                    <div id="dropzone1" class="dropzone" data-answer="Yo voy a jugar fútbol."></div>
+                    <div id="draggable-container1" class="flex flex-wrap justify-center my-4">
+                        <div class="draggable" draggable="true">jugar</div>
+                        <div class="draggable" draggable="true">Yo</div>
+                        <div class="draggable" draggable="true">fútbol.</div>
+                        <div class="draggable" draggable="true">voy</div>
+                        <div class="draggable" draggable="true">a</div>
+                    </div>
+
+                    <!-- Sentence 2 -->
+                    <p class="font-bold mt-6">Oración 2:</p>
+                    <div id="dropzone2" class="dropzone" data-answer="Nosotros vamos a comer rice and beans."></div>
+                    <div id="draggable-container2" class="flex flex-wrap justify-center my-4">
+                        <div class="draggable" draggable="true">rice and beans.</div>
+                        <div class="draggable" draggable="true">vamos</div>
+                        <div class="draggable" draggable="true">a</div>
+                        <div class="draggable" draggable="true">Nosotros</div>
+                        <div class="draggable" draggable="true">comer</div>
+                    </div>
+
+                    <!-- Sentence 3 -->
+                    <p class="font-bold mt-6">Oración 3:</p>
+                    <div id="dropzone3" class="dropzone" data-answer="Ella va a nadar en el río."></div>
+                    <div id="draggable-container3" class="flex flex-wrap justify-center my-4">
+                        <div class="draggable" draggable="true">en el río.</div>
+                        <div class="draggable" draggable="true">va</div>
+                        <div class="draggable" draggable="true">a</div>
+                        <div class="draggable" draggable="true">Ella</div>
+                        <div class="draggable" draggable="true">nadar</div>
+                    </div>
+
+                    <div>
+                        <button class="btn btn-primary" onclick="checkDragDrop()">Revisar mis respuestas</button>
+                        <button class="btn btn-secondary" onclick="resetDragDrop()">Empezar de nuevo</button>
+                    </div>
+                    <div id="drag-drop-feedback" class="feedback text-lg"></div>
+                </div>
+            </div>
+
+            <!-- 3. Main Focus: Sentence Construction -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">
+                    <span>Cómo Construir Oraciones Futuras 🏗️</span>
+                </div>
+                <div class="section-content">
+                    <p>¡Es fácil! Solo sigue esta fórmula mágica para hablar del futuro:</p>
+                    <div class="text-center bg-blue-100 p-4 rounded-lg my-4">
+                        <p class="text-2xl font-bold text-blue-800">
+                            <span class="border-2 border-blue-500 rounded px-2 py-1">Sujeto</span> + 
+                            <span class="border-2 border-blue-500 rounded px-2 py-1">ir (conjugado)</span> + 
+                            <span class="border-2 border-blue-500 rounded px-2 py-1">a</span> + 
+                            <span class="border-2 border-blue-500 rounded px-2 py-1">verbo infinitivo</span>
+                        </p>
+                    </div>
+                    <p><strong>Paso 1: Elige un sujeto.</strong> (Who are you talking about?)</p>
+                    <p><strong>Paso 2: Conjuga el verbo 'ir'.</strong> (Match 'ir' to your subject.)</p>
+                    <ul>
+                        <li>Yo <strong>voy</strong></li>
+                        <li>Tú <strong>vas</strong></li>
+                        <li>Él/Ella/Usted <strong>va</strong></li>
+                        <li>Nosotros <strong>vamos</strong></li>
+                        <li>Ellos/Ellas/Ustedes <strong>van</strong></li>
+                    </ul>
+                    <p><strong>Paso 3: Añade 'a' y un verbo en infinitivo.</strong> (Add 'a' and the action verb.)</p>
+                    <p>¡Mira estos ejemplos!</p>
+                    <div class="sentence-frame">Yo <strong class="text-blue-600">voy a</strong> <u class="text-purple-600">estudiar</u> para mi examen.</div>
+                    <div class="sentence-frame">Mi familia y yo <strong class="text-blue-600">vamos a</strong> <u class="text-purple-600">visitar</u> a mis abuelos en Orange Walk.</div>
+                    <div class="sentence-frame">¿Tú <strong class="text-blue-600">vas a</strong> <u class="text-purple-600">jugar</u> fútbol mañana?</div>
+                </div>
+            </div>
+
+            <!-- 4. Video: Verb 'ir' -->
+            <div class="lesson-section border-video">
+                <div class="section-header header-video">
+                    <span>Ver: El Verbo 'ir' 🎬</span>
+                </div>
+                <div class="section-content">
+                    <p>Este video te va a ayudar a comprender a cómo conjugar el verbo <strong>ir</strong>. ¡Es muy importante!</p>
+                    <p class="text-sm text-red-600 font-bold">💡 Nota: Solo necesitas ver hasta el minuto 3:00 de este video.</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/ql3eE0UoC8c?clip=UgkxckY2rOv3Zanz35AgCX66CmCB2F78Sbx8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Group Practice -->
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">
+                    <span>Asignación: ¡Vamos de Paseo! 🚌</span>
+                </div>
+                <div class="section-content text-center">
+                    <p class="text-2xl font-bold mb-4">¿A dónde vamos el fin de semana?</p>
+                    <p>Piensa en lugares divertidos en Belice. Escribe 3 oraciones usando <strong>"vamos a..."</strong> para describir los planes que harías con tu familia o amigos.</p>
+                    <p class="mt-4"><strong>Ejemplos:</strong></p>
+                    <ul class="text-left max-w-md mx-auto list-disc">
+                        <li>"Nosotros <strong>vamos a nadar</strong> en el Blue Hole."</li>
+                        <li>"Nosotros <strong>vamos a explorar</strong> las ruinas mayas de Xunantunich."</li>
+                        <li>"Nosotros <strong>vamos a comer</strong> fry jacks para el desayuno."</li>
+                    </ul>
+                    <p class="mt-6 font-bold">¡Ten tus oraciones listas para compartir en nuestra próxima clase!</p>
+                </div>
+            </div>
+
+            <!-- 6. Video: ir + a + infinitive -->
+            <div class="lesson-section border-video">
+                <div class="section-header header-video">
+                    <span>Ver: La Fórmula Completa 🍿</span>
+                </div>
+                <div class="section-content">
+                    <p>Ahora, mira este video para practicar la fórmula completa: <strong>ir + a + infinitivo</strong>.</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/ND7YFPDWm98" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. Multiple-Choice Quiz -->
+            <div class="lesson-section border-quiz">
+                <div class="section-header header-quiz">
+                    <span>Prueba Rápida 🧐</span>
+                </div>
+                <div class="section-content text-center">
+                    <p>¡Demuestra lo que aprendiste! Elige la mejor respuesta.</p>
+                    <div id="quiz-container" class="text-left max-w-2xl mx-auto mt-6">
+                        <!-- Quiz questions will be inserted here by JavaScript -->
+                    </div>
+                    <button class="btn btn-primary" onclick="submitQuiz()">Enviar Prueba</button>
+                    <div id="quiz-feedback" class="feedback text-lg"></div>
+                </div>
+            </div>
+
+            <!-- 8. Scenario Reflection -->
+            <div class="lesson-section border-quiz">
+                <div class="section-header header-quiz">
+                    <span>Reflexión: Un Sábado en Belice 🌴</span>
+                </div>
+                <div class="section-content text-center">
+                    <p>It’s Saturday in Belize. Your family has plans. Write 2 sentences with <strong>ir + a + infinitive</strong> about what you will do.</p>
+                    <textarea id="reflection-text" rows="4" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition" placeholder="Por ejemplo: Mi familia y yo vamos a visitar Caye Caulker. Yo voy a nadar con los tiburones."></textarea>
+                    <button class="btn btn-primary" onclick="submitReflection()">Enviar</button>
+                    <div id="reflection-feedback" class="feedback text-lg"></div>
+                </div>
+            </div>
+
+            <!-- 9. Final Quick Check -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">
+                    <span>¡Para Terminar! ✅</span>
+                </div>
+                <div class="section-content text-center">
+                    <p class="text-xl">Verdadero o Falso: La fórmula para hablar del futuro es <strong>ir + a + infinitivo</strong>.</p>
+                    <button class="btn btn-primary" onclick="toggleAnswer('qc-answer')">Mostrar respuesta</button>
+                    <div id="qc-answer" class="answer-box">
+                        <p class="text-lg font-bold">Verdadero 👍</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p class="font-semibold">Cada palabra nueva es un paso más cerca de tus sueños. ¡No te detengas!</p>
+        <p class="text-xs mt-1">© 2025 Teacher Ed Classroom — All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeDragDrop();
+            loadQuiz();
+        });
+
+        // --- Drag and Drop Activity ---
+        let draggedItem = null;
+        const initialStates = {};
+
+        function initializeDragDrop() {
+            // Store initial state for reset
+            for (let i = 1; i <= 3; i++) {
+                initialStates[`container${i}`] = document.getElementById(`draggable-container${i}`).innerHTML;
+                initialStates[`dropzone${i}`] = document.getElementById(`dropzone${i}`).innerHTML;
+            }
+            setupDraggables();
+        }
+
+        function setupDraggables() {
+            const draggables = document.querySelectorAll('.draggable');
+            const dropzones = document.querySelectorAll('.dropzone');
+
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', (e) => {
+                    draggedItem = e.target;
+                    setTimeout(() => e.target.style.opacity = '0.5', 0);
+                });
+                draggable.addEventListener('dragend', (e) => {
+                    setTimeout(() => e.target.style.opacity = '1', 0);
+                    draggedItem = null;
+                });
+            });
+
+            dropzones.forEach(zone => {
+                zone.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    zone.classList.add('hover');
+                });
+                zone.addEventListener('dragleave', () => zone.classList.remove('hover'));
+                zone.addEventListener('drop', e => {
+                    e.preventDefault();
+                    zone.classList.remove('hover');
+                    if (draggedItem) {
+                        // Allow dropping back into original container
+                        const originalContainer = Array.from(document.querySelectorAll('.flex')).find(c => c.contains(draggedItem));
+                        if (e.target.classList.contains('draggable')) {
+                             e.target.parentNode.insertBefore(draggedItem, e.target.nextSibling);
+                        } else {
+                             zone.appendChild(draggedItem);
+                        }
+                    }
+                });
+            });
+        }
+
+        function checkDragDrop() {
+            const feedbackDiv = document.getElementById('drag-drop-feedback');
+            let allCorrect = true;
+            let sentencesChecked = 0;
+
+            for (let i = 1; i <= 3; i++) {
+                const zone = document.getElementById(`dropzone${i}`);
+                const correctAnswer = zone.dataset.answer;
+                const itemsInZone = Array.from(zone.querySelectorAll('.draggable'));
+                const userAnswer = itemsInZone.map(item => item.textContent).join(' ');
+                
+                zone.classList.remove('correct', 'incorrect');
+                if (itemsInZone.length > 0) {
+                    sentencesChecked++;
+                    if (userAnswer === correctAnswer) {
+                        zone.classList.add('correct');
+                    } else {
+                        zone.classList.add('incorrect');
+                        allCorrect = false;
+                    }
+                } else {
+                    allCorrect = false; // If any dropzone is empty, it's not fully correct
+                }
+            }
+
+            if (allCorrect && sentencesChecked === 3) {
+                feedbackDiv.className = 'feedback text-lg correct-feedback show';
+                feedbackDiv.textContent = '¡Excelente! Todas las oraciones son correctas.';
+                createConfetti();
+            } else {
+                feedbackDiv.className = 'feedback text-lg incorrect-feedback show';
+                feedbackDiv.textContent = '¡Casi! Revisa las cajas en rojo. Inténtalo de nuevo.';
+            }
+        }
+
+        function resetDragDrop() {
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById(`draggable-container${i}`).innerHTML = initialStates[`container${i}`];
+                const dropzone = document.getElementById(`dropzone${i}`);
+                dropzone.innerHTML = initialStates[`dropzone${i}`];
+                dropzone.classList.remove('correct', 'incorrect', 'hover');
+            }
+            document.getElementById('drag-drop-feedback').classList.remove('show');
+            setupDraggables(); // Re-attach event listeners to new elements
+        }
+
+        // --- Multiple-Choice Quiz ---
+        const quizQuestions = [
+            {
+                question: "Completa la oración: 'Tú ___ a la playa.'",
+                options: ["voy", "vas", "va", "vamos"],
+                answer: "vas"
+            },
+            {
+                question: "Selecciona la frase correcta:",
+                options: ["Ellos van a comer", "Ellos va a comer", "Ellos voy a comer", "Ellos vamos a comer"],
+                answer: "Ellos van a comer"
+            },
+            {
+                question: "¿Qué significa ‘Yo voy a estudiar’?",
+                options: ["I study", "I am going to study", "I want to study", "I studied"],
+                answer: "I am going to study"
+            },
+            {
+                question: "Elige la opción que usa la fórmula 'ir + a + infinitivo':",
+                options: ["Nosotros nadamos", "Yo como mucho", "Ella va a leer", "Tú corres rápido"],
+                answer: "Ella va a leer"
+            }
+        ];
+        let currentQuizAnswers = {};
+
+        function loadQuiz() {
+            const quizContainer = document.getElementById('quiz-container');
+            quizContainer.innerHTML = '';
+            quizQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('mb-6');
+                questionDiv.innerHTML = `<p class="font-bold text-lg mb-3">${index + 1}. ${q.question}</p>`;
+                q.options.forEach(option => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.classList.add('quiz-option');
+                    optionDiv.textContent = option;
+                    optionDiv.dataset.questionIndex = index;
+                    optionDiv.dataset.option = option;
+                    optionDiv.onclick = () => selectOption(index, option, optionDiv);
+                    questionDiv.appendChild(optionDiv);
+                });
+                quizContainer.appendChild(questionDiv);
+            });
+        }
+
+        function selectOption(qIndex, option, clickedEl) {
+            const optionsForQuestion = document.querySelectorAll(`[data-question-index="${qIndex}"]`);
+            optionsForQuestion.forEach(el => el.classList.remove('selected'));
+            clickedEl.classList.add('selected');
+            currentQuizAnswers[qIndex] = option;
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            quizQuestions.forEach((q, index) => {
+                const options = document.querySelectorAll(`[data-question-index="${index}"]`);
+                options.forEach(opt => {
+                    opt.classList.remove('correct-answer', 'incorrect-answer');
+                    if (opt.dataset.option === q.answer) {
+                        opt.classList.add('correct-answer');
+                    }
+                    if (opt.classList.contains('selected') && opt.dataset.option !== q.answer) {
+                        opt.classList.add('incorrect-answer');
+                    }
+                });
+                if (currentQuizAnswers[index] === q.answer) {
+                    score++;
+                }
+            });
+
+            const feedbackDiv = document.getElementById('quiz-feedback');
+            feedbackDiv.textContent = `Tu resultado: ${score} de ${quizQuestions.length}.`;
+            if (score === quizQuestions.length) {
+                feedbackDiv.className = 'feedback text-lg correct-feedback show';
+                feedbackDiv.textContent += ' ¡Felicidades, lo hiciste perfecto! 🥳';
+                createConfetti();
+            } else {
+                feedbackDiv.className = 'feedback text-lg incorrect-feedback show';
+                feedbackDiv.textContent += ' ¡Revisa las respuestas incorrectas!';
+            }
+        }
+
+        // --- Reflection Textarea ---
+        function submitReflection() {
+            const textarea = document.getElementById('reflection-text');
+            const feedbackDiv = document.getElementById('reflection-feedback');
+            const text = textarea.value.trim();
+            const sentenceCount = (text.match(/\./g) || []).length;
+
+            // Simple check for 'voy a' or 'vamos a'
+            if (text.length < 20 || sentenceCount < 2 || (!text.toLowerCase().includes('voy a') && !text.toLowerCase().includes('vamos a'))) {
+                feedbackDiv.className = 'feedback text-lg incorrect-feedback show';
+                feedbackDiv.textContent = '¡Casi! Escribe al menos 2 oraciones completas usando "voy a" o "vamos a".';
+                textarea.style.animation = 'shake 0.5s ease-out';
+                setTimeout(() => textarea.style.animation = '', 500);
+            } else {
+                feedbackDiv.className = 'feedback text-lg correct-feedback show';
+                feedbackDiv.textContent = '¡Gracias por compartir! Esos planes suenan muy divertidos. 👍';
+                textarea.style.animation = 'flashGreen 0.5s ease-out';
+                setTimeout(() => textarea.style.animation = '', 500);
+            }
+        }
+
+        // --- Final Quick Check ---
+        function toggleAnswer(id) {
+            const answerBox = document.getElementById(id);
+            answerBox.style.display = answerBox.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // --- Confetti ---
+        function createConfetti() {
+            const confettiContainer = document.createElement('div');
+            confettiContainer.className = 'confetti-container';
+            document.body.appendChild(confettiContainer);
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                const colors = ['#3b82f6', '#f59e0b', '#8b5cf6', '#10b981', '#f97316'];
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confettiContainer.appendChild(confetti);
+            }
+            setTimeout(() => confettiContainer.remove(), 4000);
+        }
+    </script>
+</body>
+</html>

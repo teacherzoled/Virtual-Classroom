@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exponents and Powers (Base 2)</title>
+    <link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Lilita+One&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #eef2ff; /* Light indigo background */
+            color: #1a202c;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content-wrapper {
+            flex-grow: 1;
+        }
+        .container {
+            max-width: 90%;
+            margin: 0 auto;
+            padding: 1.5rem 0;
+        }
+        .lesson-section {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            border-left-width: 3px;
+            border-bottom-width: 3px;
+            border-color: transparent;
+        }
+        .lesson-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .section-header {
+            padding: 0.75rem 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .section-content {
+            padding: 1.5rem;
+        }
+        .header-main { background-color: #3b82f6; } /* Blue */
+        .header-objective { background-color: #1d4ed8; } /* Darker Blue */
+        .header-video { background-color: #dc2626; } /* Red */
+        .header-activity { background-color: #f97316; } /* Orange */
+        .header-vocab { background-color: #f59e0b; } /* Amber */
+        .header-quiz { background-color: #8b5cf6; } /* Violet */
+
+        .border-main { border-color: #3b82f6; }
+        .border-objective { border-color: #1d4ed8; }
+        .border-video { border-color: #dc2626; }
+        .border-activity { border-color: #f97316; }
+        .border-vocab { border-color: #f59e0b; }
+        .border-quiz { border-color: #8b5cf6; }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: none;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .btn-primary { background-color: #4f46e5; }
+        .btn-primary:hover { background-color: #4338ca; }
+        .btn-secondary { background-color: #f59e0b; }
+        .btn-secondary:hover { background-color: #d97706; }
+        .btn-challenge { background-color: #db2777; }
+        .btn-challenge:hover { background-color: #be185d; }
+        
+        input[type="text"], input[type="number"] {
+            border: 2px solid #cbd5e1;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input:focus {
+            outline: none;
+            border-color: #4f46e5;
+        }
+        .feedback, .challenge-div {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            pointer-events: none;
+        }
+        .feedback.visible, .challenge-div.visible {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+        .feedback-correct { background-color: #d1fae5; color: #047857; }
+        .feedback-incorrect { background-color: #fee2e2; color: #dc2626; }
+
+        .prose strong { color: #1e40af; }
+        .prose ul, .prose ol { margin-top: 1em; margin-bottom: 1em; padding-left: 1.5rem; }
+        .prose li { margin-top: 0.5em; margin-bottom: 0.5em; }
+        .prose h2 { color: #1e3a8a; font-size: 1.75rem; margin-top: 0; }
+        .prose h3 { color: #4338ca; font-size: 1.25rem; margin-top: 1.5rem; }
+        .header {
+            background-color: #fef3c7;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            min-height: 80px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .header-left { display: flex; align-items: center; gap: 1rem; }
+        .header-logo { height: 50px; width: auto; border-radius: 0.5rem; }
+        .header-title { color: #f97316; font-size: 1.5rem; font-weight: 700; text-align: center; }
+        @media (min-width: 640px) {
+            .header-title {
+                font-size: 2.25rem;
+            }
+        }
+
+       .footer {
+            background-color: #ea580c;
+            color: white;
+            padding: 1.25rem 2rem;
+            text-align: center;
+            margin-top: auto;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .footer p {
+            margin: 0;
+            line-height: 1.5;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        @keyframes flashGreen {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            50% { box-shadow: 0 0 15px 5px rgba(16, 185, 129, 0.7); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        @keyframes flashRed {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); border-color: rgba(239, 68, 68, 0.7); }
+            50% { box-shadow: 0 0 15px 5px rgba(239, 68, 68, 0.7); border-color: rgba(239, 68, 68, 0.7); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); border-color: rgba(239, 68, 68, 0); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25%, 75% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+        }
+        .confetti-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; overflow: hidden; z-index: 9999;
+        }
+        .confetti {
+            position: absolute; width: 10px; height: 10px; opacity: 0;
+            animation: confetti-fall 3s forwards;
+        }
+        @keyframes confetti-fall {
+            0% { opacity: 1; transform: translateY(-100vh) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Teacher Ed Logo" class="header-logo">
+            <div class="header-title">Teacher Ed Classroom</div>
+        </div>
+    </header>
+
+    <div class="main-content-wrapper">
+        <div class="container">
+            
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    <span>Introduction to Exponents and Powers</span>
+                </div>
+                <div class="section-content prose">
+                    <p>Welcome to a new week of mathematical exploration! This week, we'll dive into the powerful world of <strong>exponents</strong>. We will focus on <strong>base 2</strong>, a number that is fundamental to computers, games, and patterns all around us. Get ready to see how quickly numbers can grow!</p>
+                </div>
+            </div>
+
+            <div class="lesson-section border-objective">
+                <div class="section-header header-objective">Lesson Objectives</div>
+                <div class="section-content prose">
+                    <h3>What You Will Learn This Week:</h3>
+                    <ul>
+                        <li>Define the terms <strong>exponent</strong> and <strong>power</strong>.</li>
+                        <li>Identify the <strong>base (always 2)</strong> and exponent in expressions.</li>
+                        <li>Apply repeated multiplication to calculate powers of 2.</li>
+                        <li>Recognize and describe the doubling pattern in powers of 2.</li>
+                        <li>Solve real-world problems modeled with powers of 2.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="lesson-section border-vocab">
+                <div class="section-header header-vocab">Learn: The Building Blocks (Base, Exponent, Power)</div>
+                <div class="section-content prose">
+                    <h2>Understanding Exponents</h2>
+                    <p>Exponents are a shortcut for repeated multiplication. An expression like <strong>2⁴</strong> has two main parts:</p>
+                    <ul>
+                        <li>The <strong>Base</strong> is the number being multiplied. In our lesson, the base will always be <strong>2</strong>.</li>
+                        <li>The <strong>Exponent</strong> tells you how many times to multiply the base by itself. In <strong>2⁴</strong>, the exponent is <strong>4</strong>.</li>
+                        <li>The entire expression (e.g., <strong>2⁴</strong>) is called a <strong>power</strong>. It represents the final value.</li>
+                    </ul>
+                    <p>So, <strong>2⁴</strong> means <strong>2 × 2 × 2 × 2</strong>, which equals <strong>16</strong>.</p>
+                    <h3>Special Cases</h3>
+                    <ul>
+                        <li><strong>Anything to the power of 0 is 1.</strong> So, <strong>2⁰ = 1</strong>.</li>
+                        <li><strong>Anything to the power of 1 is itself.</strong> So, <strong>2¹ = 2</strong>.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="lesson-section border-video">
+                <div class="section-header header-video">Watch: Introduction to Exponents</div>
+                <div class="section-content prose">
+                    <p>This video will help you visualize how powers of 2 work and why they are so important.</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/-zUmvpkhvW8" title="YouTube video player: Powers of 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">Do: Power Calculator</div>
+                <div class="section-content activity-box-content">
+                    <p class="mb-4">Let's practice calculating powers of 2. What is the value of the power shown below?</p>
+                    <div class="bg-amber-100 p-4 rounded-lg text-center mb-4 break-words">
+                        <p id="power-calc-problem" class="text-3xl font-bold text-amber-800"></p>
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-4 items-center mt-4">
+                        <input type="number" id="power-calc-input" placeholder="Your Answer" class="flex-grow">
+                        <button id="check-power-calc-btn" class="btn btn-primary w-full">Check</button>
+                        <button id="new-power-calc-btn" class="btn btn-secondary w-full">New Problem</button>
+                    </div>
+                    <div id="power-calc-feedback" class="feedback mt-4"></div>
+                </div>
+            </div>
+
+            <div class="lesson-section border-vocab">
+                <div class="section-header header-vocab">Learn: Patterns in Powers of 2</div>
+                <div class="section-content prose">
+                    <h2>The Doubling Pattern</h2>
+                    <p>Powers of 2 have a very cool and predictable pattern. Each time you increase the exponent by 1, the result doubles!</p>
+                    <p>Look at this table:</p>
+                    <p><strong>2⁰ = 1</strong><br>
+                       <strong>2¹ = 2</strong> (1 × 2)<br>
+                       <strong>2² = 4</strong> (2 × 2)<br>
+                       <strong>2³ = 8</strong> (4 × 2)<br>
+                       <strong>2⁴ = 16</strong> (8 × 2)<br>
+                       <strong>2⁵ = 32</strong> (16 × 2)</p>
+                    <p>This doubling pattern is what makes powers of 2 grow so quickly and why they are so important in technology, like in computer memory (gigabytes, megabytes).</p>
+                </div>
+            </div>
+
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">Do: What Comes Next?</div>
+                <div class="section-content activity-box-content">
+                    <p class="mb-4">Using the doubling pattern, can you figure out the next number in the sequence?</p>
+                    <div class="bg-green-100 p-4 rounded-lg text-center mb-4 break-words">
+                        <p id="pattern-problem" class="text-3xl font-bold text-green-800"></p>
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-4 items-center mt-4">
+                        <input type="number" id="pattern-input" placeholder="Next number in sequence" class="flex-grow">
+                        <button id="check-pattern-btn" class="btn btn-primary w-full">Check</button>
+                        <button id="new-pattern-btn" class="btn btn-secondary w-full">New Sequence</button>
+                    </div>
+                    <div id="pattern-feedback" class="feedback mt-4"></div>
+                </div>
+            </div>
+
+            <div class="lesson-section border-vocab">
+                <div class="section-header header-vocab">Learn: Real-World Applications</div>
+                <div class="section-content prose">
+                    <h2>Where We See Powers of 2</h2>
+                    <p>Powers of 2 aren't just for math class! They are everywhere in the digital world.</p>
+                    <ul>
+                        <li><strong>Computer Memory:</strong> Data is stored in bits. Memory sizes are powers of 2: 8 bits in a byte, 1024 (2¹⁰) bytes in a kilobyte, 1024 kilobytes in a megabyte, and so on.</li>
+                        <li><strong>Tournament Brackets:</strong> In a single-elimination tournament, the number of teams is a power of 2 (like 64, 32, 16, 8, 4, 2, 1) to ensure every team has a match.</li>
+                        <li><strong>Folding Paper:</strong> If you fold a piece of paper in half, the number of layers you create is a power of 2. One fold gives 2¹=2 layers, two folds give 2²=4 layers, and so on.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">Do: Real-World Problems</div>
+                <div class="section-content activity-box-content">
+                    <p class="mb-4">Read the real-life scenario and solve the problem using powers of 2.</p>
+                    <div class="bg-indigo-100 p-4 rounded-lg text-center mb-4">
+                        <p id="scenario-problem" class="text-xl font-semibold text-indigo-800"></p>
+                    </div>
+                    <div class="flex flex-col gap-4 items-center mt-4">
+                        <input type="number" id="scenario-input" placeholder="Your Answer" class="flex-grow">
+                        <button id="check-scenario-btn" class="btn btn-primary w-full">Check</button>
+                        <button id="new-scenario-btn" class="btn btn-secondary w-full">New Scenario</button>
+                    </div>
+                    <div id="scenario-feedback" class="feedback"></div>
+                </div>
+            </div>
+
+            <style>
+                @media (min-width: 640px) { /* sm breakpoint */
+                    #power-calc-problem, #pattern-problem {
+                        font-size: 2.25rem; /* 4xl */
+                    }
+                    #check-power-calc-btn, #new-power-calc-btn, #check-pattern-btn, #new-pattern-btn, #check-scenario-btn, #new-scenario-btn {
+                        width: auto;
+                    }
+                }
+                @media (min-width: 768px) { /* md breakpoint */
+                    #power-calc-input, #pattern-input, #scenario-input {
+                        width: auto;
+                    }
+                    #power-calc-input + button, #power-calc-input ~ button,
+                    #pattern-input + button, #pattern-input ~ button,
+                    #scenario-input + button, #scenario-input ~ button {
+                        flex-direction: row;
+                    }
+                }
+            </style>
+
+            <div class="lesson-section border-quiz">
+                <div class="section-header header-quiz">Quiz: Final Number Challenge!</div>
+                <div class="section-content activity-box-content">
+                    <p>Test your knowledge on exponents and powers of 2!</p>
+                    <div id="final-challenge" class="space-y-6 mt-6 text-left">
+                        <div>
+                            <label for="q1" class="block font-semibold mb-2">1. What is the value of 2⁵?</label>
+                            <input type="number" id="q1" data-answer="32" placeholder="Enter the number" class="quiz-input">
+                            <div id="feedback-q1" class="text-sm mt-1"></div>
+                        </div>
+                        <div>
+                            <label for="q2" class="block font-semibold mb-2">2. In the expression 2⁸, what is the exponent?</label>
+                            <input type="number" id="q2" data-answer="8" placeholder="Enter the exponent" class="quiz-input">
+                            <div id="feedback-q2" class="text-sm mt-1"></div>
+                        </div>
+                        <div>
+                            <label for="q3" class="block font-semibold mb-2">3. A computer has 1 kilobyte of memory, which is 2¹⁰ bytes. How many bytes is that?</label>
+                            <input type="number" id="q3" data-answer="1024" placeholder="Enter the number of bytes" class="quiz-input">
+                            <div id="feedback-q3" class="text-sm mt-1"></div>
+                        </div>
+                        <div>
+                            <label for="q4" class="block font-semibold mb-2">4. What is the value of 2⁰?</label>
+                            <input type="number" id="q4" data-answer="1" placeholder="Enter the number" class="quiz-input">
+                            <div id="feedback-q4" class="text-sm mt-1"></div>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center">
+                        <button id="submitQuizBtn" class="btn btn-primary">Check My Report</button>
+                        <div id="quizResult" class="feedback"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p class="font-semibold">Fantastic work this week! You've learned about the power of exponents.</p>
+        <p class="text-xs mt-1">© 2025 Mr. Edwin's Virtual Classroom — All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function createConfetti() {
+                const confettiContainer = document.createElement('div');
+                confettiContainer.classList.add('confetti-container');
+                document.body.appendChild(confettiContainer);
+                for (let i = 0; i < 100; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    confettiContainer.appendChild(confetti);
+                }
+                setTimeout(() => { confettiContainer.remove(); }, 3000);
+            }
+
+            // --- Activity 1: Power Calculator ---
+            const powerCalcProblemEl = document.getElementById('power-calc-problem');
+            const powerCalcInput = document.getElementById('power-calc-input');
+            const checkPowerCalcBtn = document.getElementById('check-power-calc-btn');
+            const newPowerCalcBtn = document.getElementById('new-power-calc-btn');
+            const powerCalcFeedbackEl = document.getElementById('power-calc-feedback');
+            let currentPowerCalcExponent;
+
+            function generatePowerCalcProblem() {
+                currentPowerCalcExponent = Math.floor(Math.random() * 9) + 2; // Exponents from 2 to 10
+                powerCalcProblemEl.innerHTML = `2<sup>${currentPowerCalcExponent}</sup>`;
+                powerCalcInput.value = '';
+                powerCalcFeedbackEl.classList.remove('visible');
+                powerCalcInput.style.borderColor = '#cbd5e1';
+            }
+
+            checkPowerCalcBtn.addEventListener('click', () => {
+                const userAnswer = parseInt(powerCalcInput.value, 10);
+                const correctAnswer = Math.pow(2, currentPowerCalcExponent);
+                powerCalcFeedbackEl.classList.remove('feedback-correct', 'feedback-incorrect');
+                powerCalcFeedbackEl.classList.add('visible');
+                if (userAnswer === correctAnswer) {
+                    powerCalcFeedbackEl.classList.add('feedback-correct');
+                    powerCalcFeedbackEl.textContent = `Correct! 2 to the power of ${currentPowerCalcExponent} is ${correctAnswer}.`;
+                    powerCalcInput.style.borderColor = '#22c55e';
+                    createConfetti();
+                    setTimeout(generatePowerCalcProblem, 2000);
+                } else {
+                    powerCalcFeedbackEl.classList.add('feedback-incorrect');
+                    powerCalcFeedbackEl.textContent = `Not quite. The correct answer is ${correctAnswer}. Remember, 2^${currentPowerCalcExponent} is 2 multiplied by itself ${currentPowerCalcExponent} times.`;
+                    powerCalcInput.style.borderColor = '#ef4444';
+                }
+            });
+            newPowerCalcBtn.addEventListener('click', generatePowerCalcProblem);
+
+            // --- Activity 2: Pattern Recognition ---
+            const patternProblemEl = document.getElementById('pattern-problem');
+            const patternInput = document.getElementById('pattern-input');
+            const checkPatternBtn = document.getElementById('check-pattern-btn');
+            const newPatternBtn = document.getElementById('new-pattern-btn');
+            const patternFeedbackEl = document.getElementById('pattern-feedback');
+            let currentPatternAnswer;
+
+            function generatePatternProblem() {
+                const startExponent = Math.floor(Math.random() * 7); // Start from 2^0 to 2^6
+                const startValue = Math.pow(2, startExponent);
+                currentPatternAnswer = Math.pow(2, startExponent + 1);
+                patternProblemEl.textContent = `..., ${startValue}, ?`;
+                patternInput.value = '';
+                patternFeedbackEl.classList.remove('visible');
+                patternInput.style.borderColor = '#cbd5e1';
+            }
+
+            checkPatternBtn.addEventListener('click', () => {
+                const userAnswer = parseInt(patternInput.value, 10);
+                patternFeedbackEl.classList.remove('feedback-correct', 'feedback-incorrect');
+                patternFeedbackEl.classList.add('visible');
+                if (userAnswer === currentPatternAnswer) {
+                    patternFeedbackEl.classList.add('feedback-correct');
+                    patternFeedbackEl.textContent = `Exactly! The next number is ${currentPatternAnswer}. You've spotted the doubling pattern!`;
+                    patternInput.style.borderColor = '#22c55e';
+                    createConfetti();
+                    setTimeout(generatePatternProblem, 2000);
+                } else {
+                    patternFeedbackEl.classList.add('feedback-incorrect');
+                    patternFeedbackEl.textContent = `Incorrect. The correct answer is ${currentPatternAnswer}. Remember, each number in the sequence is double the one before it.`;
+                    patternInput.style.borderColor = '#ef4444';
+                }
+            });
+            newPatternBtn.addEventListener('click', generatePatternProblem);
+
+            // --- Activity 3: Real-World Scenarios ---
+            const scenarioProblemEl = document.getElementById('scenario-problem');
+            const scenarioInput = document.getElementById('scenario-input');
+            const checkScenarioBtn = document.getElementById('check-scenario-btn');
+            const newScenarioBtn = document.getElementById('new-scenario-btn');
+            const scenarioFeedbackEl = document.getElementById('scenario-feedback');
+            let currentScenario;
+
+            const scenarios = [
+                { text: "A piece of paper is folded 3 times. How many layers are there? (2³)", answer: 8 },
+                { text: "A basketball tournament starts with 64 teams. How many rounds will it take to get a winner? (2 to what power is 64?)", answer: 6 },
+                { text: "A computer file is 16 megabytes. If 1 megabyte is 2²⁰ bytes, how would you write 16 megabytes as a power of 2 in bytes? (Hint: 16 = 2⁴)", answer: 24 },
+                { text: "A cell splits in two every hour. After 5 hours, how many cells are there? (2⁵)", answer: 32 },
+                { text: "A video game has a map that doubles in size with every update. After 7 updates, how many times larger is the map? (2⁷)", answer: 128 },
+            ];
+
+            function generateScenarioProblem() {
+                currentScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+                scenarioProblemEl.textContent = currentScenario.text;
+                scenarioInput.value = '';
+                scenarioFeedbackEl.classList.remove('visible');
+                scenarioInput.style.borderColor = '#cbd5e1';
+            }
+
+            checkScenarioBtn.addEventListener('click', () => {
+                const userAnswer = parseInt(scenarioInput.value, 10);
+                scenarioFeedbackEl.classList.remove('feedback-correct', 'feedback-incorrect');
+                scenarioFeedbackEl.classList.add('visible');
+                if (userAnswer === currentScenario.answer) {
+                    scenarioFeedbackEl.classList.add('feedback-correct');
+                    scenarioFeedbackEl.textContent = `Correct! The answer is ${currentScenario.answer}. Great application of powers!`;
+                    scenarioInput.style.borderColor = '#22c55e';
+                    createConfetti();
+                    setTimeout(generateScenarioProblem, 2000);
+                } else {
+                    scenarioFeedbackEl.classList.add('feedback-incorrect');
+                    scenarioFeedbackEl.textContent = `Not quite. The correct answer is ${currentScenario.answer}. Think about how the quantity doubles with each step.`;
+                    scenarioInput.style.borderColor = '#ef4444';
+                }
+            });
+            newScenarioBtn.addEventListener('click', generateScenarioProblem);
+
+            // --- Final Challenge ---
+            const submitQuizBtn = document.getElementById('submitQuizBtn');
+            const quizInputs = document.querySelectorAll('.quiz-input');
+            const quizResult = document.getElementById('quizResult');
+            submitQuizBtn.addEventListener('click', () => {
+                let correctCount = 0;
+                quizInputs.forEach(input => {
+                    const questionId = input.id;
+                    const feedbackEl = document.getElementById(`feedback-${questionId}`);
+                    const userAnswer = input.value.trim().toLowerCase();
+                    const correctAnswer = input.dataset.answer.toLowerCase();
+                    input.style.animation = 'none';
+                    void input.offsetWidth;
+
+                    if (userAnswer === correctAnswer) {
+                        correctCount++;
+                        input.style.borderColor = '#22c55e';
+                        input.style.animation = 'flashGreen 0.5s ease-out';
+                        feedbackEl.textContent = 'Correct!';
+                        feedbackEl.style.color = '#166534';
+                    } else {
+                        input.style.borderColor = '#ef4444';
+                        input.style.animation = 'shake 0.5s ease-out, flashRed 0.5s ease-out';
+                        feedbackEl.textContent = `Incorrect. The correct answer is ${correctAnswer}.`;
+                        feedbackEl.style.color = '#991b1b';
+                    }
+                });
+                quizResult.classList.remove('feedback-correct', 'feedback-incorrect');
+                quizResult.classList.add('visible');
+                if (correctCount === quizInputs.length) {
+                    quizResult.classList.add('feedback-correct');
+                    quizResult.textContent = `Excellent! You got ${correctCount}/${quizInputs.length} correct. You have mastered this lesson!`;
+                    createConfetti();
+                } else {
+                    quizResult.classList.add('feedback-incorrect');
+                    quizResult.textContent = `Good effort! You got ${correctCount}/${quizInputs.length} correct. Please correct the highlighted answers to complete the lesson.`;
+                }
+            });
+
+            // Initial load
+            generatePowerCalcProblem();
+            generatePatternProblem();
+            generateScenarioProblem();
+
+        });
+    </script>
+</body>
+</html>

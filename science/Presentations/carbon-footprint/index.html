@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson Slides: Introduction to Carbon Footprint</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            /* overflow: hidden; is removed to allow scrolling on slides */
+        }
+        .slide {
+            min-height: 100vh;
+            width: 100vw;
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            justify-content: flex-start; /* Align content to the top */
+            align-items: center;
+            padding: 4rem 2rem; /* Increased padding for better spacing */
+            position: absolute;
+            overflow-y: auto; /* Allow vertical scrolling per slide */
+            top: 0;
+            left: 0;
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0;
+        }
+        .slide.active {
+            display: flex; /* Shown when active */
+            opacity: 1;
+            z-index: 10;
+        }
+        .card-interactive {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card-interactive:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 50;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        #mind-map-canvas {
+            position: relative;
+            width: 100%;
+            height: 60vh;
+            border: 3px dashed #9ca3af;
+            border-radius: 1rem;
+            overflow: hidden;
+            background-image: linear-gradient(45deg, #f9fafb 25%, transparent 25%), linear-gradient(-45deg, #f9fafb 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f9fafb 75%), linear-gradient(-45deg, transparent 75%, #f9fafb 75%);
+            background-size: 30px 30px;
+            background-position: 0 0, 0 15px, 15px -15px, -15px 0px;
+        }
+        .mind-map-node {
+            position: absolute;
+            cursor: grab;
+            user-select: none;
+            width: 200px;
+        }
+        .pledge-note {
+            transform: rotate(-2deg);
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .pledge-note:nth-child(2n) { transform: rotate(2deg); }
+        .pledge-note:nth-child(3n) { transform: rotate(1deg); }
+        .pledge-note:nth-child(4n) { transform: rotate(-1.5deg); }
+        .pledge-note:hover { transform: scale(1.05) rotate(0deg) !important; z-index: 10; }
+        
+        /* Navigation Buttons */
+        .nav-button {
+            position: fixed;
+            bottom: 1rem;
+            z-index: 40;
+            padding: 1rem 2rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(0,0,0,0.25);
+            transition: transform 0.2s;
+        }
+        .nav-button:hover {
+            transform: scale(1.05);
+        }
+        #prevBtn {
+            left: 1rem;
+            background-color: #6b7280; /* Gray */
+        }
+        #nextBtn {
+            right: 1rem;
+            background-color: #10b981; /* Green */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Slide 1: Title -->
+    <div id="slide-0" class="slide active bg-green-500 text-white">
+        <div class="text-center">
+            <img src="https://i.postimg.cc/jjDpfcJs/Carbon-Footprint-1.jpg" alt="Carbon Footprint" class="w-48 h-48 md:w-64 md:h-64 mx-auto mb-8 rounded-full shadow-2xl object-cover border-4 border-white/80 cursor-pointer transition-transform hover:scale-105" onclick="showModal('modal-title-image')">
+            <h1 class="text-4xl md:text-7xl font-bold mb-4">Introduction to Carbon Footprint</h1>
+            <p class="text-xl md:text-3xl">Session 2</p>
+        </div>
+    </div>
+
+    <!-- Slide 2: Warm-Up -->
+    <div id="slide-1" class="slide">
+        <div class="text-center w-full max-w-6xl">
+            <span class="text-lg md:text-xl font-semibold uppercase text-green-600">Warm-Up (5 min)</span>
+            <h2 class="text-4xl md:text-6xl font-bold mt-4 mb-6">Technology at Home</h2>
+            <p class="text-xl md:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto">“Yesterday you observed technology use in your homes. Let’s share. Who can tell us one way technology was used?”</p>
+            
+            <div class="grid md:grid-cols-3 gap-6 md:gap-10 text-center">
+                <div class="card-interactive bg-white p-6 md:p-8 rounded-2xl shadow-xl cursor-pointer flex flex-col" onclick="showModal('modal-fan')">
+                    <img src="https://i.postimg.cc/9XkcN4Cg/fan.webp" alt="Electric fan" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="font-bold text-2xl md:text-3xl mt-4">Using a Fan</h3>
+                    <p class="text-lg md:text-xl text-gray-500 mt-2">"It was hot."</p>
+                </div>
+                <div class="card-interactive bg-white p-6 md:p-8 rounded-2xl shadow-xl cursor-pointer flex flex-col" onclick="showModal('modal-car')">
+                    <img src="https://i.postimg.cc/mDXT4kMD/driving-a-car.webp" alt="Car driving on a road" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="font-bold text-2xl md:text-3xl mt-4">Driving a Car</h3>
+                    <p class="text-lg md:text-xl text-gray-500 mt-2">"Mom drove to the shop."</p>
+                </div>
+                <div class="card-interactive bg-white p-6 md:p-8 rounded-2xl shadow-xl cursor-pointer flex flex-col" onclick="showModal('modal-machine')">
+                    <img src="https://i.postimg.cc/rFtq68pV/washing-machine.avif" alt="Washing machine" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="font-bold text-2xl md:text-3xl mt-4">Washing Machine</h3>
+                    <p class="text-lg md:text-xl text-gray-500 mt-2">"We did laundry."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Warm-Up Follow-up -->
+     <div id="slide-2" class="slide bg-blue-500 text-white">
+        <div class="text-center w-full max-w-5xl">
+            <h2 class="text-4xl md:text-6xl font-bold mb-8">Connecting the Dots</h2>
+            <p class="text-2xl md:text-3xl leading-relaxed">“Great. Now think—how might these everyday uses of technology connect to environmental problems? For example, cars burn fuel. What do you think happens when we burn fuel?”</p>
+        </div>
+    </div>
+
+    <!-- Slide 4: Mini-Lesson Definition -->
+    <div id="slide-3" class="slide bg-white">
+        <div class="text-center w-full max-w-6xl">
+            <span class="text-lg md:text-xl font-semibold uppercase text-green-600">Mini-Lesson (15 min)</span>
+            <h2 class="text-4xl md:text-7xl font-bold mt-4 mb-8">What is a Carbon Footprint?</h2>
+            <div class="bg-gray-100 p-6 md:p-10 rounded-2xl">
+                <p class="text-2xl md:text-3xl text-gray-700 leading-normal">A <b class="text-green-600">carbon footprint</b> is the total amount of greenhouse gases—like carbon dioxide—that we release into the air from our activities.
+                <br><br>
+                Think of it as the invisible ‘mark’ we leave on the Earth.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: How it Happens in Belize -->
+    <div id="slide-4" class="slide bg-gray-50">
+        <div class="text-center w-full max-w-7xl">
+            <h2 class="text-4xl md:text-6xl font-bold mb-8">In Belize, this can happen in many ways:</h2>
+            <div class="grid md:grid-cols-2 gap-x-12 gap-y-6 text-left">
+                <!-- Item 1: Transport -->
+                <div class="flex items-center gap-6 bg-white p-6 rounded-xl shadow-lg">
+                    <div class="flex-shrink-0 bg-red-100 p-3 rounded-full"><svg class="w-12 h-12 md:w-16 md:h-16 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h6m-6 4h6m-6 4h6"></path></svg></div>
+                    <p class="text-xl md:text-2xl text-gray-700">When we drive cars, buses, and water taxis that use fuel.</p>
+                </div>
+                <!-- Item 2: Electricity -->
+                <div class="flex items-center gap-6 bg-white p-6 rounded-xl shadow-lg">
+                    <div class="flex-shrink-0 bg-yellow-100 p-3 rounded-full"><svg class="w-12 h-12 md:w-16 md:h-16 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
+                    <p class="text-xl md:text-2xl text-gray-700">When we use electricity made from burning diesel, especially for backup power.</p>
+                </div>
+                <!-- Item 3: Farming -->
+                <div class="flex items-center gap-6 bg-white p-6 rounded-xl shadow-lg">
+                    <div class="flex-shrink-0 bg-green-100 p-3 rounded-full"><svg class="w-12 h-12 md:w-16 md:h-16 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></div>
+                    <p class="text-xl md:text-2xl text-gray-700">When farms clear land, burn fields, or use machinery for crops like sugar cane.</p>
+                </div>
+                <!-- Item 4: Waste -->
+                <div class="flex items-center gap-6 bg-white p-6 rounded-xl shadow-lg">
+                    <div class="flex-shrink-0 bg-purple-100 p-3 rounded-full"><svg class="w-12 h-12 md:w-16 md:h-16 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></div>
+                    <p class="text-xl md:text-2xl text-gray-700">Even when we throw away too much garbage that rots in the landfill.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Mini-Lesson Visual -->
+    <div id="slide-5" class="slide bg-white">
+        <div class="text-center w-full max-w-6xl">
+            <h2 class="text-3xl md:text-5xl font-bold mb-4">Our Footprint in Belize</h2>
+            <div class="relative w-full max-w-xl mx-auto h-[70vh]">
+                <svg class="w-full h-full" viewBox="0 0 200 300">
+                    <path d="M158.5,290.5 C158.5,290.5 197,260 197,207.5 C197,155 158.5,123.5 125,123.5 C91.5,123.5 48.5,142.5 48.5,207.5 C48.5,272.5 106.5,290.5 106.5,290.5 L158.5,290.5 Z M85.5,108 C96.02,108 104.5,96.39 104.5,82.5 C104.5,68.61 96.02,57 85.5,57 C74.98,57 66.5,68.61 66.5,82.5 C66.5,96.39 74.98,108 85.5,108 Z M49,94 C57.28,94 64,85.28 64,75 C64,64.72 57.28,56 49,56 C40.72,56 34,64.72 34,75 C34,85.28 40.72,94 49,94 Z M22,126 C29.18,126 35,118.38 35,110 C35,101.62 29.18,94 22,94 C14.82,94 9,101.62 9,110 C9,118.38 14.82,126 22,126 Z M116,91 C126.49,91 135,80.25 135,67.5 C135,54.75 126.49,44 116,44 C105.51,44 97,54.75 97,67.5 C97,80.25 105.51,91 116,91 Z M150,110 C161.05,110 170,98.81 170,85.5 C170,72.19 161.05,61 150,61 C138.95,61 130,72.19 130,85.5 C130,98.81 138.95,110 150,110 Z" fill="#4ade80" opacity="0.4"></path>
+                </svg>
+                <div class="absolute top-0 left-0 w-full h-full">
+                    <div class="absolute top-[45%] left-[25%] transform -translate-x-1/2 -translate-y-1/2 card-interactive" onclick="showModal('modal-transport')" style="width: 120px;">
+                        <div class="bg-white p-4 rounded-full shadow-xl"><svg class="w-16 h-16 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h6m-6 4h6m-6 4h6"></path></svg></div>
+                        <span class="font-bold text-xl text-center block mt-2">Transport</span>
+                    </div>
+                    <div class="absolute top-[20%] left-[60%] transform -translate-x-1/2 -translate-y-1/2 card-interactive" onclick="showModal('modal-energy')" style="width: 120px;">
+                       <div class="bg-white p-4 rounded-full shadow-xl"><svg class="w-16 h-16 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
+                        <span class="font-bold text-xl text-center block mt-2">Electricity</span>
+                    </div>
+                    <div class="absolute top-[70%] left-[65%] transform -translate-x-1/2 -translate-y-1/2 card-interactive" onclick="showModal('modal-farm')" style="width: 120px;">
+                        <div class="bg-white p-4 rounded-full shadow-xl"><svg class="w-16 h-16 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></div>
+                        <span class="font-bold text-xl text-center block mt-2">Farming</span>
+                    </div>
+                    <div class="absolute top-[80%] left-[30%] transform -translate-x-1/2 -translate-y-1/2 card-interactive" onclick="showModal('modal-waste')" style="width: 120px;">
+                        <div class="bg-white p-4 rounded-full shadow-xl"><svg class="w-16 h-16 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></div>
+                        <span class="font-bold text-xl text-center block mt-2">Waste</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 7: Check for Understanding -->
+    <div id="slide-6" class="slide bg-yellow-400">
+        <div class="text-center w-full max-w-5xl">
+            <h2 class="text-4xl md:text-6xl font-bold text-yellow-900 mb-6">Check for Understanding!</h2>
+            <p class="text-2xl md:text-3xl mb-8 text-yellow-800">“If I leave my TV on all night, what happens to my carbon footprint?”</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button class="text-2xl md:text-3xl bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 md:py-6 md:px-12 rounded-xl" onclick="showFeedback('correct')">It gets BIGGER</button>
+                <button class="text-2xl md:text-3xl bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-8 md:py-6 md:px-12 rounded-xl" onclick="showFeedback('incorrect')">It gets smaller</button>
+            </div>
+            <p id="feedback-correct" class="hidden mt-6 text-2xl md:text-3xl text-green-800 font-semibold">✅ Correct! It gets bigger because you used more electricity, which means more pollution.</p>
+            <p id="feedback-incorrect" class="hidden mt-6 text-2xl md:text-3xl text-red-800 font-semibold">❌ Not quite. Wasting electricity adds to your footprint. Let's try to reduce it!</p>
+        </div>
+    </div>
+
+    <!-- Slide 8: Quick Quiz -->
+    <div id="slide-7" class="slide bg-blue-100">
+        <div class="text-center w-full max-w-5xl">
+            <h2 class="text-4xl md:text-5xl font-bold text-blue-800 mb-8">Pop Quiz!</h2>
+            <p id="quiz-question" class="text-2xl md:text-3xl mb-8 text-blue-700">Which of these is a major source of Belize's carbon footprint?</p>
+            <div id="quiz-options" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <button class="quiz-option text-xl md:text-2xl bg-white p-4 md:p-6 rounded-lg shadow-md hover:bg-yellow-200" onclick="checkAnswer(this)">Riding a bicycle</button>
+                <button class="quiz-option text-xl md:text-2xl bg-white p-4 md:p-6 rounded-lg shadow-md hover:bg-yellow-200" onclick="checkAnswer(this, true)">Burning fuel for electricity</button>
+                <button class="quiz-option text-xl md:text-2xl bg-white p-4 md:p-6 rounded-lg shadow-md hover:bg-yellow-200" onclick="checkAnswer(this)">Planting trees</button>
+                <button class="quiz-option text-xl md:text-2xl bg-white p-4 md:p-6 rounded-lg shadow-md hover:bg-yellow-200" onclick="checkAnswer(this)">Using solar panels</button>
+            </div>
+            <p id="quiz-feedback" class="mt-6 text-2xl md:text-3xl font-semibold"></p>
+        </div>
+    </div>
+
+    <!-- Slide 9: Mind Map Activity -->
+    <div id="slide-8" class="slide">
+        <div class="text-center w-full max-w-7xl">
+            <span class="text-lg md:text-xl font-semibold uppercase text-green-600">Group Activity (20 min)</span>
+            <h2 class="text-4xl md:text-6xl font-bold mt-2 mb-4">Create a Mind Map</h2>
+            <p class="text-xl md:text-2xl font-semibold text-blue-700 bg-blue-100 p-3 md:p-4 rounded-lg inline-block mb-4">‘How does technology increase our carbon footprint in Belize?’</p>
+            
+            <div class="flex flex-col md:flex-row gap-4 md:gap-8 mt-4 items-center">
+                <div class="w-full md:w-1/4 bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="font-bold text-xl md:text-2xl mb-4">Add Ideas</h3>
+                    <p class="text-base md:text-lg text-gray-500 mb-4">Click a category to add an idea. Then, type and drag it on the map!</p>
+                    <div class="grid grid-cols-2 gap-4">
+                       <button onclick="addNode('transport')" class="bg-red-200 text-red-800 p-3 rounded-lg text-lg font-semibold">Transport</button>
+                       <button onclick="addNode('energy')" class="bg-yellow-200 text-yellow-800 p-3 rounded-lg text-lg font-semibold">Energy</button>
+                       <button onclick="addNode('waste')" class="bg-purple-200 text-purple-800 p-3 rounded-lg text-lg font-semibold">Waste</button>
+                       <button onclick="addNode('farming')" class="bg-green-200 text-green-800 p-3 rounded-lg text-lg font-semibold">Farming</button>
+                    </div>
+                    <button onclick="clearMap()" class="w-full mt-4 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg text-lg">Clear Map</button>
+                </div>
+                <div id="mind-map-canvas" class="w-full md:w-3/4 bg-white shadow-inner">
+                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white p-6 rounded-lg text-center shadow-2xl">
+                        <p class="font-bold text-xl">Main Question</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Wrap Up -->
+    <div id="slide-9" class="slide bg-white">
+        <div class="text-center w-full max-w-5xl">
+            <span class="text-lg md:text-xl font-semibold uppercase text-green-600">Wrap-Up (10 min)</span>
+            <h2 class="text-4xl md:text-6xl font-bold mt-2 mb-8">Make it Personal</h2>
+            <p class="text-2xl md:text-3xl text-gray-600 mb-10 leading-relaxed">You've shown that technology connects to our carbon footprint in many ways. Now, what is ONE thing you can do to reduce your footprint?</p>
+            
+            <div class="w-full max-w-3xl mx-auto bg-gray-100 p-6 md:p-8 rounded-2xl shadow-lg">
+                <h3 class="font-bold text-3xl md:text-4xl mb-6">Create a Green Pledge!</h3>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <input id="pledge-input" type="text" placeholder="e.g., 'Turn off the fan'" class="text-xl md:text-2xl flex-grow p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
+                    <button onclick="addPledge()" class="text-xl md:text-2xl bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 md:px-8 rounded-lg">Add My Pledge</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 11: Pledge Wall -->
+    <div id="slide-10" class="slide">
+        <div class="text-center w-full">
+            <h2 class="text-4xl md:text-6xl font-bold mb-8">Our Green Pledge Wall</h2>
+             <div id="pledge-wall" class="w-full max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 p-4 md:p-6 bg-yellow-100 rounded-lg min-h-[60vh]" style="background-image: url('https://www.transparenttextures.com/patterns/cork-wallet.png');">
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Closing -->
+    <div id="slide-11" class="slide bg-green-500 text-white">
+        <div class="text-center w-full max-w-5xl">
+            <h2 class="text-4xl md:text-6xl font-bold mb-8">Excellent Ideas!</h2>
+            <p class="text-2xl md:text-3xl leading-relaxed">“Next week, we will take this further. We’ll calculate our own carbon footprints, plan strategies to reduce them, and continue adding to our Green Pledge Wall.”</p>
+        </div>
+    </div>
+
+
+    <!-- Navigation -->
+    <button id="prevBtn" class="nav-button sm:p-4 sm:px-8" onclick="changeSlide(-1)">&#9664; Previous</button>
+    <button id="nextBtn" class="nav-button sm:p-4 sm:px-8" onclick="changeSlide(1)">Next &#9654;</button>
+
+    <!-- Modals (re-styled for larger text) -->
+    <div id="modal-fan" class="modal" onclick="closeAllModals()"><div class="modal-content bg-white p-6 md:p-10 rounded-lg shadow-2xl max-w-2xl w-full m-4"><h3 class="text-3xl md:text-4xl font-bold mb-4">Fans and Electricity</h3><p class="text-xl md:text-2xl leading-relaxed">While Belize uses hydroelectric dams, our electricity system also relies on burning diesel fuel, especially for backup power or in remote areas. This process releases carbon dioxide, contributing to climate change.</p></div></div>
+    <div id="modal-car" class="modal" onclick="closeAllModals()"><div class="modal-content bg-white p-6 md:p-10 rounded-lg shadow-2xl max-w-2xl w-full m-4"><h3 class="text-3xl md:text-4xl font-bold mb-4">Cars, Buses, and Fuel</h3><p class="text-xl md:text-2xl leading-relaxed">Cars, buses, and water taxis burn fuel like gasoline or diesel, creating exhaust smoke with greenhouse gases. That all adds up!</p></div></div>
+    <div id="modal-machine" class="modal" onclick="closeAllModals()"><div class="modal-content bg-white p-6 md:p-10 rounded-lg shadow-2xl max-w-2xl w-full m-4"><h3 class="text-3xl md:text-4xl font-bold mb-4">Appliances and Power</h3><p class="text-xl md:text-2xl leading-relaxed">Washing machines, refrigerators, and TVs all use a lot of electricity. The more power we need, the more fuel is often burned in power plants (either in Belize or Mexico), increasing our carbon footprint.</p></div></div>
+    <div id="modal-transport" class="modal" onclick="closeAllModals()"><div class="modal-content bg-white p-6 md:p-10 rounded-lg shadow-2xl max-w-2xl w-full m-4"><h3 class="text-3xl md:text-4xl font-bold text-red-600 mb-4">Transport in Belize</h3><p class="text-xl md:text-2xl leading-relaxed">When we drive cars, buses, or take water taxis, they burn fuel. This releases carbon dioxide (CO2). More vehicles mean more pollution.</p></div></div>
+    <div id="modal-energy" class="modal" onclick="closeAllModals()"><div class="modal-content bg-white p-6 md:p-10 rounded-lg shadow-2xl max-w-2xl w-full m-4"><h3 class="text-3xl md:text-4xl font-bold text-yellow-600 mb-4">Electricity Sources</h3><p class="text-xl md:text-2xl leading-relaxed">Belize gets significant power from hydro dams and imports electricity from Mexico. However, diesel generators are still very important for providing backup power, especially during the dry season, and for powering off-grid communities. Burning this fuel contributes to our carbon footprint.</p></div></div>
+    <div id="modal-farm" class="modal" onclick="closeAllModals()"><div class="modal-content bg-white p-6 md:p-10 rounded-lg shadow-2xl max-w-2xl w-full m-4"><h3 class="text-3xl md:text-4xl font-bold text-green-800 mb-4">Farming and Industry</h3><p class="text-xl md:text-2xl leading-relaxed">Big industries like sugar, bananas, and poultry use energy for machinery. Burning sugarcane fields releases a lot of smoke and carbon.</p></div></div>
+    <div id="modal-waste" class="modal" onclick="closeAllModals()"><div class="modal-content bg-white p-6 md:p-10 rounded-lg shadow-2xl max-w-2xl w-full m-4"><h3 class="text-3xl md:text-4xl font-bold text-purple-600 mb-4">Throwing Things Away</h3><p class="text-xl md:text-2xl leading-relaxed">When garbage rots in a landfill, it releases methane, a powerful greenhouse gas. E-waste from old phones is also a problem.</p></div></div>
+
+    <!-- Title Image Modal -->
+    <div id="modal-title-image" class="modal" onclick="closeAllModals()">
+        <div class="modal-content bg-white p-4 rounded-lg shadow-2xl max-w-4xl w-full m-4">
+            <img src="https://i.postimg.cc/jjDpfcJs/Carbon-Footprint-1.jpg" alt="Carbon Footprint Infographic" class="w-full h-auto rounded-md">
+        </div>
+    </div>
+
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            if (i === index) {
+                slide.classList.add('active');
+            } else {
+                slide.classList.remove('active');
+            }
+        });
+        
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        // Update nav buttons visibility and text
+        prevBtn.style.visibility = index === 0 ? 'hidden' : 'visible';
+        nextBtn.style.visibility = 'visible'; // Always visible
+
+        if (index === totalSlides - 1) {
+            nextBtn.innerHTML = 'Return to Start &#8634;'; // Change text for the last slide
+        } else {
+            nextBtn.innerHTML = 'Next &#9654;';
+        }
+    }
+
+    function changeSlide(direction) {
+        currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
+        showSlide(currentSlide);
+    }
+    
+    // Initialize first slide
+    showSlide(currentSlide);
+
+    // Modal Logic
+    function showModal(modalId) { document.getElementById(modalId).style.display = 'flex'; }
+    function closeAllModals() {
+        document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
+    }
+    document.querySelectorAll('.modal-content').forEach(el => {
+        el.addEventListener('click', (e) => e.stopPropagation());
+    });
+
+    // Check for Understanding Logic
+    function showFeedback(result) {
+        document.getElementById('feedback-correct').classList.add('hidden');
+        document.getElementById('feedback-incorrect').classList.add('hidden');
+        if (result === 'correct') {
+            document.getElementById('feedback-correct').classList.remove('hidden');
+        } else {
+            document.getElementById('feedback-incorrect').classList.remove('hidden');
+        }
+    }
+    
+    // Quiz Logic
+    let quizAnswered = false;
+    function checkAnswer(button, isCorrect = false) {
+        if (quizAnswered) return;
+        quizAnswered = true;
+        
+        const feedbackEl = document.getElementById('quiz-feedback');
+        document.querySelectorAll('.quiz-option').forEach(btn => {
+            btn.disabled = true;
+        });
+
+        if (isCorrect) {
+            button.classList.remove('bg-white', 'hover:bg-yellow-200');
+            button.classList.add('bg-green-500', 'text-white');
+            feedbackEl.textContent = '✅ Correct! Burning fuel for power is a major source.';
+            feedbackEl.className = 'mt-8 text-3xl font-semibold text-green-700';
+        } else {
+            button.classList.remove('bg-white', 'hover:bg-yellow-200');
+            button.classList.add('bg-red-500', 'text-white');
+            feedbackEl.textContent = '❌ Not quite. That activity actually reduces our footprint or has no effect.';
+             feedbackEl.className = 'mt-8 text-3xl font-semibold text-red-700';
+        }
+    }
+
+
+    // Mind Map Logic
+    const canvas = document.getElementById('mind-map-canvas');
+    let activeNode = null;
+    let offsetX, offsetY;
+
+    const colors = {
+        transport: 'bg-red-200 text-red-800 border-red-400',
+        energy: 'bg-yellow-200 text-yellow-800 border-yellow-400',
+        waste: 'bg-purple-200 text-purple-800 border-purple-400',
+        farming: 'bg-green-200 text-green-800 border-green-400',
+    };
+
+    function addNode(type) {
+        const node = document.createElement('div');
+        node.className = `mind-map-node p-4 rounded-lg shadow-md border-2 ${colors[type]}`;
+        const input = document.createElement('textarea');
+        input.className = "bg-transparent w-full h-24 resize-none focus:outline-none text-xl";
+        input.placeholder = `Add ${type} idea...`;
+        node.appendChild(input);
+
+        const canvasRect = canvas.getBoundingClientRect();
+        const nodeWidth = 200;
+        const nodeHeight = 144; // p-4 (1rem*2) + h-24 (6rem) = 8rem = 128px. Let's use 144px for safety.
+
+        // Calculate a position in a circle around the center
+        const centerX = canvasRect.width / 2;
+        const centerY = canvasRect.height / 2;
+        const radius = Math.min(centerX, centerY) * 0.5 + (Math.random() * 50); // Base radius + some randomness
+        const angle = Math.random() * 2 * Math.PI; // Random angle
+
+        let x = centerX + radius * Math.cos(angle) - (nodeWidth / 2);
+        let y = centerY + radius * Math.sin(angle) - (nodeHeight / 2);
+
+        node.style.left = `${Math.max(0, Math.min(x, canvasRect.width - nodeWidth))}px`;
+        node.style.top = `${Math.max(0, Math.min(y, canvasRect.height - nodeHeight))}px`;
+
+        canvas.appendChild(node);
+        input.focus();
+        node.addEventListener('mousedown', startDrag);
+    }
+    
+    function startDrag(e) {
+        if (e.target.tagName === 'TEXTAREA') return;
+        activeNode = e.currentTarget;
+        activeNode.style.cursor = 'grabbing';
+        activeNode.style.zIndex = '20';
+        const nodeRect = activeNode.getBoundingClientRect();
+        const canvasRect = canvas.getBoundingClientRect();
+        offsetX = e.clientX - nodeRect.left;
+        offsetY = e.clientY - nodeRect.top;
+        document.addEventListener('mousemove', dragNode);
+        document.addEventListener('mouseup', stopDrag);
+    }
+
+    function dragNode(e) {
+        if (!activeNode) return;
+        const canvasRect = canvas.getBoundingClientRect();
+        let newX = e.clientX - canvasRect.left - offsetX;
+        let newY = e.clientY - canvasRect.top - offsetY;
+        newX = Math.max(0, Math.min(newX, canvasRect.width - activeNode.offsetWidth));
+        newY = Math.max(0, Math.min(newY, canvasRect.height - activeNode.offsetHeight));
+        activeNode.style.left = `${newX}px`;
+        activeNode.style.top = `${newY}px`;
+    }
+
+    function stopDrag() {
+        if (activeNode) {
+            activeNode.style.cursor = 'grab';
+            activeNode.style.zIndex = '10';
+        }
+        activeNode = null;
+        document.removeEventListener('mousemove', dragNode);
+        document.removeEventListener('mouseup', stopDrag);
+    }
+    
+    function clearMap() {
+        canvas.querySelectorAll('.mind-map-node').forEach(node => node.remove());
+    }
+
+    // Pledge Wall Logic
+    function addPledge() {
+        const input = document.getElementById('pledge-input');
+        const pledgeText = input.value.trim();
+        if (pledgeText === '') return;
+
+        const pledgeWall = document.getElementById('pledge-wall');
+        const note = document.createElement('div');
+        const noteColors = ['bg-yellow-200', 'bg-lime-200', 'bg-sky-200', 'bg-pink-200', 'bg-orange-200'];
+        const randomColor = noteColors[Math.floor(Math.random() * noteColors.length)];
+        
+        note.className = `pledge-note p-4 ${randomColor} rounded-md text-xl md:text-2xl`;
+        note.textContent = pledgeText;
+        
+        pledgeWall.appendChild(note);
+        input.value = '';
+        input.focus();
+    }
+</script>
+
+</body>
+</html>

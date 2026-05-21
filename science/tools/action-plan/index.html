@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Action Plan Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0fdf4; /* A very light green background */
+        }
+        .card {
+            background-color: white;
+            border-radius: 1.5rem; /* More rounded corners */
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease-in-out;
+            border-left: 8px solid;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-green { border-color: #34d399; }
+        .card-blue { border-color: #60a5fa; }
+        .card-yellow { border-color: #facc15; }
+        .card-purple { border-color: #a78bfa; }
+        .card-red { border-color: #f87171; }
+
+        .emoji-title {
+            font-size: 3rem;
+            margin-right: 1rem;
+        }
+        .analogy-box {
+            background-color: #ffedd5;
+            border: 2px dashed #fb923c;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Main Container -->
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-emerald-600 mb-2">Let's Make a Plan!</h1>
+            <p class="text-lg text-gray-600">Your Guide to Taking Action</p>
+        </header>
+
+        <!-- What is an Action Plan? -->
+        <section class="mb-12">
+            <div class="bg-white rounded-2xl p-8 shadow-lg flex flex-col md:flex-row items-center">
+                <div class="text-6xl mr-0 md:mr-8 mb-4 md:mb-0">🌱</div>
+                <div>
+                    <h2 class="text-3xl font-bold text-emerald-700 mb-3">What is an Action Plan?</h2>
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        An Action Plan is just a simple plan that shows <span class="font-semibold text-emerald-600">what</span> we are going to do, <span class="font-semibold text-emerald-600">how</span> we will do it, and <span class="font-semibold text-emerald-600">who</span> will do it. It helps us stay organized so we can actually make a difference instead of just talking about it.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- What an Action Plan Includes -->
+        <section>
+            <h2 class="text-3xl font-bold text-center mb-8 text-emerald-700">What's Inside an Action Plan?</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                <!-- The Goal -->
+                <div class="card card-green">
+                    <div class="flex items-start">
+                        <div class="emoji-title">🎯</div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-2">The Goal</h3>
+                            <p class="text-gray-600 mb-3">What are we trying to achieve?</p>
+                            <p class="bg-green-100 text-green-800 rounded-lg p-3 font-semibold">Example: “Reduce our class carbon footprint.”</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- The Actions -->
+                <div class="card card-blue">
+                    <div class="flex items-start">
+                        <div class="emoji-title">💡</div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-2">The Actions</h3>
+                            <p class="text-gray-600 mb-3">The steps we will take.</p>
+                            <p class="bg-blue-100 text-blue-800 rounded-lg p-3 font-semibold">Example: “Make posters to remind others to turn off lights.”</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- The People -->
+                <div class="card card-yellow">
+                    <div class="flex items-start">
+                        <div class="emoji-title">👥</div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-2">The People</h3>
+                            <p class="text-gray-600 mb-3">Who is responsible for each action.</p>
+                            <p class="bg-yellow-100 text-yellow-800 rounded-lg p-3 font-semibold">Example: “Energy Monitors check the fans and lights.”</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- The Timeline -->
+                <div class="card card-purple">
+                    <div class="flex items-start">
+                        <div class="emoji-title">⏰</div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-2">The Timeline</h3>
+                            <p class="text-gray-600 mb-3">When it will happen.</p>
+                            <p class="bg-purple-100 text-purple-800 rounded-lg p-3 font-semibold">Example: “Walk to School Day will be the first Friday of every month.”</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- The Commitments (Full Width) -->
+            <div class="card card-red mt-8">
+                <div class="flex items-start">
+                    <div class="emoji-title">✍️</div>
+                    <div>
+                        <h3 class="text-2xl font-bold mb-2">The Commitments</h3>
+                        <p class="text-gray-600 mb-3">What each person promises to do.</p>
+                        <p class="bg-red-100 text-red-800 rounded-lg p-3 font-semibold">Example: “I will bring one recyclable bottle each week.”</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Birthday Party Analogy -->
+        <section class="analogy-box text-center">
+            <div class="text-5xl mb-4">🥳</div>
+            <h2 class="text-2xl md:text-3xl font-bold text-orange-700 mb-4">It's Like Planning a Party!</h2>
+            <p class="text-lg text-orange-800 leading-relaxed max-w-2xl mx-auto">
+                Think of it like planning a birthday party. First, you decide the <span class="font-bold">goal</span> (to celebrate!). Then you make <span class="font-bold">actions</span> (buy a cake, decorate, send invitations). You assign <span class="font-bold">people</span> to jobs (you buy balloons, I bring snacks). You set a <span class="font-bold">time</span> (party starts at 3 p.m.). And everyone makes a <span class="font-bold">commitment</span> to do their part. That’s an action plan!
+            </p>
+        </section>
+
+        <!-- Sample Action Plan Section -->
+        <section class="mt-12">
+            <h2 class="text-3xl font-bold text-center mb-8 text-emerald-700">Let's See a Real Example!</h2>
+
+            <div class="bg-blue-50 border-4 border-dashed border-blue-200 rounded-2xl p-6 md:p-8 shadow-lg">
+                <h3 class="text-2xl md:text-3xl font-bold text-blue-800 mb-6 text-center">Sample Plan: A Tidier Classroom</h3>
+
+                <!-- Goal -->
+                <div class="flex items-start bg-white p-4 rounded-xl shadow mb-4">
+                    <span class="text-3xl md:text-4xl mr-4">🎯</span>
+                    <div>
+                        <h4 class="font-bold text-lg md:text-xl text-blue-700">Our Goal</h4>
+                        <p class="text-gray-700">To have the cleanest classroom in Standard Six!</p>
+                    </div>
+                </div>
+
+                <!-- Actions & People -->
+                <div class="bg-white p-4 rounded-xl shadow mb-4">
+                     <div class="flex items-start mb-3">
+                        <span class="text-3xl md:text-4xl mr-4">💡</span>
+                        <div>
+                            <h4 class="font-bold text-lg md:text-xl text-blue-700">Actions & Who's In Charge</h4>
+                        </div>
+                    </div>
+                    <ul class="space-y-3 list-disc list-inside text-gray-700 pl-4">
+                        <li><span class="font-semibold">Tidy Up Station:</span> "Paper Passers" will collect loose paper every afternoon.</li>
+                        <li><span class="font-semibold">Bookshelf Bosses:</span> "Librarians of the Week" will straighten the bookshelf every Wednesday.</li>
+                        <li><span class="font-semibold">Whiteboard Wizards:</span> "Wipe-Down Crew" will clean the whiteboard at the end of each day.</li>
+                    </ul>
+                </div>
+                
+                <!-- Timeline -->
+                <div class="flex items-start bg-white p-4 rounded-xl shadow mb-4">
+                    <span class="text-3xl md:text-4xl mr-4">⏰</span>
+                    <div>
+                        <h4 class="font-bold text-lg md:text-xl text-blue-700">Timeline</h4>
+                        <p class="text-gray-700">This plan is for the month of October. We will check our progress every Friday afternoon.</p>
+                    </div>
+                </div>
+
+                <!-- Commitments -->
+                <div class="flex items-start bg-white p-4 rounded-xl shadow">
+                    <span class="text-3xl md:text-4xl mr-4">✍️</span>
+                    <div>
+                        <h4 class="font-bold text-lg md:text-xl text-blue-700">Our Commitments</h4>
+                        <p class="text-gray-700">"I promise to put my own rubbish in the bin and keep my desk tidy every day."</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>
+

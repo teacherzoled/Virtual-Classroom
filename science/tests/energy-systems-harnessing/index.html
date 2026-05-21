@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Std 6 Science: Energy Resources Mid-Unit Check</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6;
+        }
+        .correct-answer {
+            background-color: #d1fae5; /* green-100 */
+            border-left: 4px solid #10b981; /* green-500 */
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+        }
+        .incorrect-answer {
+            background-color: #fee2e2; /* red-100 */
+            border-left: 4px solid #ef4444; /* red-500 */
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+        }
+        .feedback-text {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+        .hidden-feedback {
+            display: none;
+        }
+        @media print {
+            button, .no-print {
+                display: none !important;
+            }
+            .quiz-section-header {
+                display: block !important;
+            }
+            .question-block, .matching-block {
+                display: block !important;
+            }
+        }
+        /* Quiz Card Styles */
+        .quiz-card {
+            display: none;
+        }
+        .quiz-card.active-card {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- SETUP SCREEN -->
+    <div id="setupScreen" class="max-w-xl mx-auto mt-20 p-8 bg-white rounded-lg shadow-xl">
+        <h1 class="text-3xl font-bold text-blue-800 mb-2">Energy Resources Check</h1>
+        <p class="text-gray-600 mb-8">Mid-Unit Assessment</p>
+        
+        <div class="mb-6">
+            <label class="block text-gray-700 font-bold mb-2" for="startStudentName">Student Name:</label>
+            <input type="text" id="startStudentName" class="w-full border-2 border-gray-300 p-3 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Enter your full name">
+        </div>
+
+        <button onclick="startQuiz()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg shadow-lg transform transition hover:scale-105">
+            Start Quiz
+        </button>
+    </div>
+
+    <!-- QUIZ INTERFACE (Initially Hidden) -->
+    <div id="quizInterface" class="hidden max-w-3xl mx-auto min-h-screen p-4 pb-12">
+        
+        <!-- Header -->
+        <header class="bg-blue-700 text-white p-6 rounded-t-lg shadow-md mb-6">
+            <!-- Result Banner (Initially Hidden) -->
+            <div id="resultBanner" class="hidden bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded shadow-lg animate-fade-in-down">
+                <div class="flex flex-col items-center">
+                    <p class="font-bold text-lg">Test Completed & Locked!</p>
+                    <p class="text-3xl font-extrabold my-1">
+                        Score: <span id="displayScore"></span> / 30 (<span id="displayPercent"></span>)
+                    </p>
+                    <p class="text-sm">This test has been submitted and cannot be changed.</p>
+                </div>
+            </div>
+
+            <h1 class="text-2xl font-bold uppercase tracking-wide">Standard 6 Science & Technology</h1>
+            <h2 class="text-xl font-medium mt-1">Mid-Unit Check: Energy Resources</h2>
+            <div class="flex flex-col sm:flex-row justify-between mt-4 text-sm opacity-90">
+                <span>Time: 30–40 mins</span>
+                <span>Total Marks: 30</span>
+            </div>
+        </header>
+
+        <!-- Progress Bar (Quiz Mode Only) -->
+        <div id="quizProgress" class="mb-6 bg-gray-200 rounded-full h-2.5 dark:bg-gray-300 hidden">
+            <div id="progressBar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+            <p class="text-right text-xs text-gray-500 mt-1" id="progressText">Question 1 of 18</p>
+        </div>
+
+        <!-- Student Info -->
+        <div class="bg-white p-6 rounded-lg shadow-sm mb-6 hidden" id="studentInfoBlock">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="studentName">
+                Student Name:
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" id="studentName" type="text" placeholder="Enter your name here">
+        </div>
+
+        <form id="quizForm">
+
+            <!-- SECTION A -->
+            <div class="bg-white p-6 rounded-lg shadow-sm mb-6 section-container">
+                <div class="border-b pb-2 mb-4">
+                    <h3 class="text-lg font-bold text-blue-800 quiz-section-header">SECTION A: MULTIPLE CHOICE</h3>
+                    <p class="text-sm text-blue-600 font-bold mb-2 card-instruction hidden">Section A: Multiple Choice</p>
+                    <p class="text-sm text-gray-500">Select the best answer. (10 marks - 1 mark each)</p>
+                </div>
+
+                <!-- Q1 -->
+                <div class="mb-6 question-block quiz-card" id="q1-block" data-type="A">
+                    <p class="font-medium mb-2">1. Which energy resource is renewable?</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q1" value="A" class="form-radio text-blue-600"><span>Diesel</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q1" value="B" class="form-radio text-blue-600"><span>Butane</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q1" value="C" class="form-radio text-blue-600"><span>Wind</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q1" value="D" class="form-radio text-blue-600"><span>Crude oil</span></label>
+                    </div>
+                    <div class="hidden-feedback" id="q1-feedback"></div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="mb-6 question-block quiz-card" id="q2-block" data-type="A">
+                    <p class="font-medium mb-2">2. Which energy resource is found at Spanish Lookout?</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q2" value="A" class="form-radio text-blue-600"><span>Hydro</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q2" value="B" class="form-radio text-blue-600"><span>Solar</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q2" value="C" class="form-radio text-blue-600"><span>Oil</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q2" value="D" class="form-radio text-blue-600"><span>Wind</span></label>
+                    </div>
+                    <div class="hidden-feedback" id="q2-feedback"></div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="mb-6 question-block quiz-card" id="q3-block" data-type="A">
+                    <p class="font-medium mb-2">3. Fossil fuels are non-renewable because they:</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q3" value="A" class="form-radio text-blue-600"><span>Pollute</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q3" value="B" class="form-radio text-blue-600"><span>Cost more</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q3" value="C" class="form-radio text-blue-600"><span>Take millions of years to form</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q3" value="D" class="form-radio text-blue-600"><span>Are imported</span></label>
+                    </div>
+                    <div class="hidden-feedback" id="q3-feedback"></div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="mb-6 question-block quiz-card" id="q4-block" data-type="A">
+                    <p class="font-medium mb-2">4. Hydropower dams in Belize are built mainly where there is:</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q4" value="A" class="form-radio text-blue-600"><span>Flat land</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q4" value="B" class="form-radio text-blue-600"><span>High elevation and rivers</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q4" value="C" class="form-radio text-blue-600"><span>Strong wind</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q4" value="D" class="form-radio text-blue-600"><span>High population</span></label>
+                    </div>
+                    <div class="hidden-feedback" id="q4-feedback"></div>
+                </div>
+
+                <!-- Q5 -->
+                <div class="mb-6 question-block quiz-card" id="q5-block" data-type="A">
+                    <p class="font-medium mb-2">5. Solar panels produce electricity mainly from:</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q5" value="A" class="form-radio text-blue-600"><span>Heat</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q5" value="B" class="form-radio text-blue-600"><span>Light</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q5" value="C" class="form-radio text-blue-600"><span>Water</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q5" value="D" class="form-radio text-blue-600"><span>Wind</span></label>
+                    </div>
+                    <div class="hidden-feedback" id="q5-feedback"></div>
+                </div>
+
+                <!-- Q6 -->
+                <div class="mb-6 question-block quiz-card" id="q6-block" data-type="A">
+                    <p class="font-medium mb-2">6. Bagasse is:</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q6" value="A" class="form-radio text-blue-600"><span>Oil</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q6" value="B" class="form-radio text-blue-600"><span>A battery</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q6" value="C" class="form-radio text-blue-600"><span>Sugarcane waste used for energy</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q6" value="D" class="form-radio text-blue-600"><span>A chemical</span></label>
+                    </div>
+                    <div class="hidden-feedback" id="q6-feedback"></div>
+                </div>
+
+                <!-- Q7 -->
+                <div class="mb-6 question-block quiz-card" id="q7-block" data-type="A">
+                    <p class="font-medium mb-2">7. Wind turbines generate electricity by:</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q7" value="A" class="form-radio text-blue-600"><span>Burning fuel</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q7" value="B" class="form-radio text-blue-600"><span>Spinning a generator</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q7" value="C" class="form-radio text-blue-600"><span>Storing energy</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q7" value="D" class="form-radio text-blue-600"><span>Heating water</span></label>
+                    </div>
+                    <div class="hidden-feedback" id="q7-feedback"></div>
+                </div>
+
+                <!-- Q8 -->
+                <div class="mb-6 question-block quiz-card" id="q8-block" data-type="A">
+                    <p class="font-medium mb-2">8. Which energy source has no moving parts?</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q8" value="A" class="form-radio text-blue-600"><span>Wind</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q8" value="B" class="form-radio text-blue-600"><span>Hydro</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q8" value="C" class="form-radio text-blue-600"><span>Biomass</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q8" value="D" class="form-radio text-blue-600"><span>Solar</span></label>
+                    </div>
+                    <div class="hidden-feedback" id="q8-feedback"></div>
+                </div>
+
+                <!-- Q9 -->
+                <div class="mb-6 question-block quiz-card" id="q9-block" data-type="A">
+                    <p class="font-medium mb-2">9. Belize exports crude oil mainly because it:</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q9" value="A" class="form-radio text-blue-600"><span>Has too much oil</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q9" value="B" class="form-radio text-blue-600"><span>Lacks refineries</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q9" value="C" class="form-radio text-blue-600"><span>Is renewable</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q9" value="D" class="form-radio text-blue-600"><span>Is cheap</span></label>
+                    </div>
+                    <div class="hidden-feedback" id="q9-feedback"></div>
+                </div>
+
+                <!-- Q10 -->
+                <div class="mb-6 question-block quiz-card" id="q10-block" data-type="A">
+                    <p class="font-medium mb-2">10. Which energy source can affect river ecosystems?</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q10" value="A" class="form-radio text-blue-600"><span>Solar</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q10" value="B" class="form-radio text-blue-600"><span>Wind</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q10" value="C" class="form-radio text-blue-600"><span>Hydro</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="q10" value="D" class="form-radio text-blue-600"><span>Geothermal</span></label>
+                    </div>
+                    <div class="hidden-feedback" id="q10-feedback"></div>
+                </div>
+            </div>
+
+            <!-- SECTION B -->
+            <div class="bg-white p-6 rounded-lg shadow-sm mb-6 section-container">
+                <div class="border-b pb-2 mb-4">
+                    <h3 class="text-lg font-bold text-blue-800 quiz-section-header">SECTION B: MATCHING</h3>
+                    <p class="text-sm text-blue-600 font-bold mb-2 card-instruction hidden">Section B: Matching</p>
+                    <p class="text-sm text-gray-500">Match the resource to its description. (5 marks)</p>
+                </div>
+
+                <div class="grid gap-4">
+                    <!-- Matching Items -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between bg-gray-50 p-3 rounded quiz-card matching-block" id="match1-block" data-type="B">
+                        <span class="font-medium flex-1">1. Falling water spins turbines</span>
+                        <select name="match1" class="mt-2 sm:mt-0 form-select border rounded p-2 text-sm w-full sm:w-1/3">
+                            <option value="">-- Select Resource --</option>
+                            <option value="Hydropower">Hydropower</option>
+                            <option value="Biomass">Biomass</option>
+                            <option value="Solar">Solar</option>
+                            <option value="Wind">Wind</option>
+                            <option value="Fossil fuel">Fossil fuel</option>
+                        </select>
+                        <div class="hidden-feedback w-full mt-2" id="match1-feedback"></div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between bg-gray-50 p-3 rounded quiz-card matching-block" id="match2-block" data-type="B">
+                        <span class="font-medium flex-1">2. Plant or animal material</span>
+                        <select name="match2" class="mt-2 sm:mt-0 form-select border rounded p-2 text-sm w-full sm:w-1/3">
+                            <option value="">-- Select Resource --</option>
+                            <option value="Hydropower">Hydropower</option>
+                            <option value="Biomass">Biomass</option>
+                            <option value="Solar">Solar</option>
+                            <option value="Wind">Wind</option>
+                            <option value="Fossil fuel">Fossil fuel</option>
+                        </select>
+                        <div class="hidden-feedback w-full mt-2" id="match2-feedback"></div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between bg-gray-50 p-3 rounded quiz-card matching-block" id="match3-block" data-type="B">
+                        <span class="font-medium flex-1">3. Sunlight produces electricity</span>
+                        <select name="match3" class="mt-2 sm:mt-0 form-select border rounded p-2 text-sm w-full sm:w-1/3">
+                            <option value="">-- Select Resource --</option>
+                            <option value="Hydropower">Hydropower</option>
+                            <option value="Biomass">Biomass</option>
+                            <option value="Solar">Solar</option>
+                            <option value="Wind">Wind</option>
+                            <option value="Fossil fuel">Fossil fuel</option>
+                        </select>
+                        <div class="hidden-feedback w-full mt-2" id="match3-feedback"></div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between bg-gray-50 p-3 rounded quiz-card matching-block" id="match4-block" data-type="B">
+                        <span class="font-medium flex-1">4. Moving air</span>
+                        <select name="match4" class="mt-2 sm:mt-0 form-select border rounded p-2 text-sm w-full sm:w-1/3">
+                            <option value="">-- Select Resource --</option>
+                            <option value="Hydropower">Hydropower</option>
+                            <option value="Biomass">Biomass</option>
+                            <option value="Solar">Solar</option>
+                            <option value="Wind">Wind</option>
+                            <option value="Fossil fuel">Fossil fuel</option>
+                        </select>
+                        <div class="hidden-feedback w-full mt-2" id="match4-feedback"></div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between bg-gray-50 p-3 rounded quiz-card matching-block" id="match5-block" data-type="B">
+                        <span class="font-medium flex-1">5. Formed over millions of years</span>
+                        <select name="match5" class="mt-2 sm:mt-0 form-select border rounded p-2 text-sm w-full sm:w-1/3">
+                            <option value="">-- Select Resource --</option>
+                            <option value="Hydropower">Hydropower</option>
+                            <option value="Biomass">Biomass</option>
+                            <option value="Solar">Solar</option>
+                            <option value="Wind">Wind</option>
+                            <option value="Fossil fuel">Fossil fuel</option>
+                        </select>
+                        <div class="hidden-feedback w-full mt-2" id="match5-feedback"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION C -->
+            <div class="bg-white p-6 rounded-lg shadow-sm mb-6 section-container">
+                <div class="border-b pb-2 mb-4">
+                    <h3 class="text-lg font-bold text-blue-800 quiz-section-header">SECTION C: REQUIREMENTS FOR ENERGY SYSTEMS</h3>
+                    <p class="text-sm text-blue-600 font-bold mb-2 card-instruction hidden">Section C: Check-box Short Answer</p>
+                    <p class="text-sm text-gray-500">Tick (✔) the correct answers only. 1 mark per correct decision. (10 marks)</p>
+                </div>
+
+                <!-- Q11 Wind -->
+                <div class="mb-6 question-block quiz-card" id="q11-block" data-type="C">
+                    <p class="font-medium mb-2">11. Wind Energy System requires: (5 marks)</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <label class="flex items-center space-x-2"><input type="checkbox" id="c11_1" class="form-checkbox text-blue-600 h-5 w-5"> <span>Moving air</span></label>
+                        <label class="flex items-center space-x-2"><input type="checkbox" id="c11_2" class="form-checkbox text-blue-600 h-5 w-5"> <span>Turbine blades</span></label>
+                        <label class="flex items-center space-x-2"><input type="checkbox" id="c11_3" class="form-checkbox text-blue-600 h-5 w-5"> <span>Generator</span></label>
+                        <label class="flex items-center space-x-2"><input type="checkbox" id="c11_4" class="form-checkbox text-blue-600 h-5 w-5"> <span>Heat</span></label>
+                        <label class="flex items-center space-x-2"><input type="checkbox" id="c11_5" class="form-checkbox text-blue-600 h-5 w-5"> <span>Electricity output</span></label>
+                    </div>
+                    <div class="hidden-feedback" id="q11-feedback"></div>
+                </div>
+
+                <!-- Q12 Solar -->
+                <div class="mb-6 question-block quiz-card" id="q12-block" data-type="C">
+                    <p class="font-medium mb-2">12. Solar Energy System requires: (5 marks)</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <label class="flex items-center space-x-2"><input type="checkbox" id="c12_1" class="form-checkbox text-blue-600 h-5 w-5"> <span>Sunlight</span></label>
+                        <label class="flex items-center space-x-2"><input type="checkbox" id="c12_2" class="form-checkbox text-blue-600 h-5 w-5"> <span>Solar panels</span></label>
+                        <label class="flex items-center space-x-2"><input type="checkbox" id="c12_3" class="form-checkbox text-blue-600 h-5 w-5"> <span>Water movement</span></label>
+                        <label class="flex items-center space-x-2"><input type="checkbox" id="c12_4" class="form-checkbox text-blue-600 h-5 w-5"> <span>Wires</span></label>
+                        <label class="flex items-center space-x-2"><input type="checkbox" id="c12_5" class="form-checkbox text-blue-600 h-5 w-5"> <span>Electricity output</span></label>
+                    </div>
+                    <div class="hidden-feedback" id="q12-feedback"></div>
+                </div>
+            </div>
+
+            <!-- SECTION D -->
+            <div class="bg-white p-6 rounded-lg shadow-sm mb-8 section-container quiz-card" id="sectionD-block" data-type="D">
+                <div class="border-b pb-2 mb-4">
+                    <h3 class="text-lg font-bold text-blue-800 quiz-section-header">SECTION D: MODEL-READINESS SNAPSHOT</h3>
+                    <p class="text-sm text-blue-600 font-bold mb-2 card-instruction hidden">Section D: Model-Readiness Snapshot</p>
+                    <p class="text-sm text-gray-500">Readiness for Model Construction. (5 marks)</p>
+                </div>
+
+                <div class="mb-4">
+                    <p class="font-medium mb-2">Select the energy system your group will build (1 mark):</p>
+                    <div class="flex space-x-4">
+                        <label class="flex items-center space-x-2"><input type="radio" name="modelSystem" value="Solar" class="form-radio text-blue-600"> <span>Solar</span></label>
+                        <label class="flex items-center space-x-2"><input type="radio" name="modelSystem" value="Wind" class="form-radio text-blue-600"> <span>Wind</span></label>
+                        <label class="flex items-center space-x-2"><input type="radio" name="modelSystem" value="Hydropower" class="form-radio text-blue-600"> <span>Hydropower</span></label>
+                    </div>
+                </div>
+
+                <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg" id="wordBank">
+                    <p class="font-bold text-blue-800 mb-2 text-sm uppercase">Word Bank (Select from these or use your own):</p>
+                    <div class="flex flex-wrap gap-2 text-sm text-gray-700">
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Sun</span>
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Wind</span>
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Water</span>
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Coal</span>
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Solar Panel</span>
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Turbine</span>
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Generator</span>
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Battery</span>
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Light Energy</span>
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Kinetic Energy</span>
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Potential Energy</span>
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Sound Energy</span>
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Electricity</span>
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Motion</span>
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Combustion</span>
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Photovoltaic Cell</span>
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Blades</span>
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Dam</span>
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Friction</span>
+                        <span class="bg-white px-2 py-1 rounded border border-gray-300 shadow-sm">Gasoline</span>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <p class="font-medium">Write ONE WORD OR PHRASE for each (4 marks):</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm text-gray-600">a) Energy source:</label>
+                            <input type="text" id="modelA" class="border rounded w-full py-2 px-3 focus:outline-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600">b) Main technology:</label>
+                            <input type="text" id="modelB" class="border rounded w-full py-2 px-3 focus:outline-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600">c) Energy entering system:</label>
+                            <input type="text" id="modelC" class="border rounded w-full py-2 px-3 focus:outline-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600">d) Energy leaving system:</label>
+                            <input type="text" id="modelD" class="border rounded w-full py-2 px-3 focus:outline-blue-500">
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden-feedback" id="sectionD-feedback"></div>
+            </div>
+
+            <!-- Quiz Navigation (Card Mode) -->
+            <div id="quizNav" class="flex justify-between items-center mt-6 hidden">
+                <button type="button" onclick="prevCard()" id="prevBtn" class="invisible bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-6 rounded-full shadow">
+                    <i class="fas fa-arrow-left mr-2"></i> Previous
+                </button>
+                <button type="button" onclick="nextCard()" id="nextBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full shadow">
+                    Next <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8 mt-8" id="actionButtons">
+                <button type="button" onclick="activateReviewNav()" id="reviewBtn" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition hover:scale-105">
+                    Review Answers
+                </button>
+                <button type="button" onclick="activateReviewNav()" id="editBtn" class="hidden bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition hover:scale-105">
+                    Edit Answers
+                </button>
+                <button type="button" onclick="calculateScore(true)" id="submitBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition hover:scale-105">
+                    Submit & Grade
+                </button>
+                <button type="button" onclick="window.print()" id="printBtn" class="hidden bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition hover:scale-105">
+                    Print Result
+                </button>
+                <!-- Reset Button Removed for Locking -->
+            </div>
+            
+            <!-- Teacher Reset (Footer) -->
+            <div class="text-center mt-12 pt-8 border-t border-gray-300 no-print">
+                <button type="button" onclick="resetTestState()" class="text-gray-400 text-xs hover:text-gray-600 underline">
+                    Teacher Admin: Reset for New Student
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        // Unique Storage Key
+        const STORAGE_KEY = 'std6_science_midunit_check';
+
+        // Answer Key
+        const keySectionA = {
+            q1: 'C', q2: 'C', q3: 'C', q4: 'B', q5: 'B', q6: 'C', q7: 'B', q8: 'D', q9: 'B', q10: 'C'
+        };
+
+        const keySectionB = {
+            match1: 'Hydropower', match2: 'Biomass', match3: 'Solar', match4: 'Wind', match5: 'Fossil fuel'
+        };
+
+        const keySectionC = {
+            q11: [true, true, true, false, true], 
+            q12: [true, true, false, true, true]
+        };
+
+        const keySectionD = {
+            Solar: {
+                modelA: ["sun", "ray", "beam", "daylight"],
+                modelB: ["panel", "cell", "photovoltaic", "pv", "module"],
+                modelC: ["light", "solar", "radiant", "luminous"],
+                modelD: ["electric", "current", "power", "volt", "watt", "amp", "output"]
+            },
+            Wind: {
+                modelA: ["wind", "air", "breeze", "gale", "gust", "nature"],
+                modelB: ["turbine", "mill", "blade", "propeller", "fan", "rotor"],
+                modelC: ["kinetic", "motion", "move", "mechanical", "blowing"],
+                modelD: ["electric", "current", "power", "volt", "watt", "amp", "output"]
+            },
+            Hydropower: {
+                modelA: ["water", "river", "dam", "stream", "lake", "reservoir", "flow", "rain", "creek", "fall"],
+                modelB: ["turbine", "dam", "generator", "wheel", "mill", "sluice"],
+                modelC: ["kinetic", "potential", "gravit", "motion", "fall", "move", "flowing", "hydr"],
+                modelD: ["electric", "current", "power", "volt", "watt", "amp", "output"]
+            }
+        };
+
+        // --- QUIZ STATE ---
+        let quizOrder = [];
+        let currentCardIndex = 0;
+        let isQuizMode = false;
+        let reviewNavActive = false;
+
+        // --- LOAD STATE ON STARTUP ---
+        window.onload = function() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (savedData) {
+                // If session exists, skip setup and go to review/result
+                document.getElementById('setupScreen').classList.add('hidden');
+                document.getElementById('quizInterface').classList.remove('hidden');
+                document.getElementById('studentInfoBlock').classList.remove('hidden');
+                const session = JSON.parse(savedData);
+                restoreSession(session);
+            } else {
+                // Show setup screen
+                document.getElementById('setupScreen').classList.remove('hidden');
+                document.getElementById('quizInterface').classList.add('hidden');
+            }
+        };
+
+        function startQuiz() {
+            const nameInput = document.getElementById('startStudentName').value.trim();
+            if (!nameInput) {
+                alert("Please enter your name to start.");
+                return;
+            }
+            document.getElementById('studentName').value = nameInput;
+            
+            reviewNavActive = false;
+            const shuffle = true;
+            
+            // Collect all card IDs
+            quizOrder = [];
+            // Section A
+            for(let i=1; i<=10; i++) quizOrder.push(`q${i}-block`);
+            // Section B
+            for(let i=1; i<=5; i++) quizOrder.push(`match${i}-block`);
+            // Section C
+            quizOrder.push('q11-block');
+            quizOrder.push('q12-block');
+            // Section D
+            quizOrder.push('sectionD-block');
+
+            if (shuffle) {
+                quizOrder.sort(() => Math.random() - 0.5);
+            }
+
+            // UI Transition
+            document.getElementById('setupScreen').classList.add('hidden');
+            document.getElementById('quizInterface').classList.remove('hidden');
+            document.getElementById('quizNav').classList.remove('hidden');
+            document.getElementById('quizProgress').classList.remove('hidden');
+            
+            // Hide standard section headers, show card instructions
+            document.querySelectorAll('.quiz-section-header').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.card-instruction').forEach(el => el.classList.remove('hidden'));
+            
+            // Hide all cards initially
+            document.querySelectorAll('.quiz-card').forEach(el => el.classList.remove('active-card'));
+
+            // Add listeners for validation
+            const form = document.getElementById('quizForm');
+            form.addEventListener('change', updateNavState);
+            form.addEventListener('input', updateNavState);
+
+            isQuizMode = true;
+            currentCardIndex = 0;
+            showCard(0);
+        }
+
+        function showCard(index) {
+            // Hide all
+            document.querySelectorAll('.quiz-card').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.quiz-card').forEach(el => el.classList.remove('active-card'));
+
+            // Show current
+            const cardId = quizOrder[index];
+            const card = document.getElementById(cardId);
+            if(card) {
+                card.style.display = 'block';
+                card.classList.add('active-card');
+                
+                // Ensure parent section is visible if it was hidden (though we are hiding headers, not containers)
+                // We need to make sure the instruction text matches the card type
+                // The instruction text is inside the section container. 
+                // We need to show the specific instruction for this card's section.
+                // Simple approach: Hide all instructions, show the one belonging to this card's parent.
+                document.querySelectorAll('.section-container .border-b').forEach(el => el.style.display = 'none');
+                const parentHeader = card.closest('.section-container').querySelector('.border-b');
+                if(parentHeader) parentHeader.style.display = 'block';
+            }
+
+            // Update Progress
+            const pct = Math.round(((index + 1) / quizOrder.length) * 100);
+            document.getElementById('progressBar').style.width = `${pct}%`;
+            document.getElementById('progressText').innerText = `Question ${index + 1} of ${quizOrder.length}`;
+
+            // Buttons
+            const prevBtn = document.getElementById('prevBtn');
+            if (prevBtn) {
+                prevBtn.classList.toggle('invisible', index === 0);
+            }
+
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (index === quizOrder.length - 1) {
+                nextBtn.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+                // Move submit button to nav area for consistency? 
+                // Actually, let's just show the main action buttons at the bottom when on last card
+                document.getElementById('actionButtons').classList.remove('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+                // Hide submit button until end
+                document.getElementById('actionButtons').classList.add('hidden');
+            }
+
+            // Update validation state for the new card
+            updateNavState();
+        }
+
+        function nextCard() {
+            if (currentCardIndex < quizOrder.length - 1) {
+                currentCardIndex++;
+                showCard(currentCardIndex);
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function prevCard() {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+                showCard(currentCardIndex);
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function activateReviewNav() {
+            reviewNavActive = true;
+            document.getElementById('reviewBtn').classList.add('hidden');
+            showCard(currentCardIndex);
+        }
+
+        function isCardAnswered(index) {
+            const cardId = quizOrder[index];
+            const card = document.getElementById(cardId);
+            if (!card) return false;
+
+            // Section A (Radios) - IDs: q1-block ... q10-block
+            if (cardId.match(/^q([1-9]|10)-block$/)) {
+                return card.querySelector('input:checked') !== null;
+            }
+
+            // Section B (Selects) - IDs: match1-block ... match5-block
+            if (cardId.startsWith('match')) {
+                const sel = card.querySelector('select');
+                return sel && sel.value !== "";
+            }
+
+            // Section C (Checkboxes) - IDs: q11-block, q12-block
+            if (cardId === 'q11-block' || cardId === 'q12-block') {
+                return card.querySelectorAll('input:checked').length > 0;
+            }
+
+            // Section D - ID: sectionD-block
+            if (cardId === 'sectionD-block') {
+                const radio = card.querySelector('input[name="modelSystem"]:checked');
+                const textInputs = card.querySelectorAll('input[type="text"]');
+                let allTextFilled = true;
+                textInputs.forEach(input => {
+                    if (input.value.trim() === "") allTextFilled = false;
+                });
+                return radio !== null && allTextFilled;
+            }
+
+            return true;
+        }
+
+        function updateNavState() {
+            if (!isQuizMode) return;
+            
+            const answered = isCardAnswered(currentCardIndex);
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            const disableClasses = ['opacity-50', 'cursor-not-allowed'];
+
+            nextBtn.disabled = !answered;
+            if (!answered) nextBtn.classList.add(...disableClasses);
+            else nextBtn.classList.remove(...disableClasses);
+
+            if (currentCardIndex === quizOrder.length - 1) {
+                submitBtn.disabled = !answered;
+                if (!answered) submitBtn.classList.add(...disableClasses);
+                else submitBtn.classList.remove(...disableClasses);
+            }
+        }
+
+        // --- CORE GRADING FUNCTION ---
+        // saveToStorage: boolean, true if we should write to localStorage (i.e., a new submission)
+        function calculateScore(saveToStorage) {
+            let score = 0;
+            let formState = {
+                studentName: document.getElementById('studentName').value,
+                answers: {}
+            };
+
+            // --- SECTION A ---
+            for (let i = 1; i <= 10; i++) {
+                const qName = 'q' + i;
+                const options = document.getElementsByName(qName);
+                let selected = null;
+                for (const opt of options) {
+                    if (opt.checked) {
+                        selected = opt.value;
+                        formState.answers[qName] = selected;
+                    }
+                    opt.disabled = true;
+                }
+
+                const feedbackDiv = document.getElementById(qName + '-feedback');
+                feedbackDiv.classList.remove('hidden-feedback');
+
+                if (selected === keySectionA[qName]) {
+                    score += 1;
+                    feedbackDiv.innerHTML = `<span class="text-green-600"><i class="fas fa-check"></i> Correct</span>`;
+                    document.getElementById(qName + '-block').classList.add('correct-answer');
+                } else {
+                    let correctAnswerText = "";
+                    const correctInput = document.querySelector(`input[name="${qName}"][value="${keySectionA[qName]}"]`);
+                    if(correctInput) correctAnswerText = correctInput.nextElementSibling.innerText;
+                    
+                    feedbackDiv.innerHTML = `<span class="text-red-600"><i class="fas fa-times"></i> Incorrect. Correct answer: ${correctAnswerText}</span>`;
+                    document.getElementById(qName + '-block').classList.add('incorrect-answer');
+                }
+            }
+
+            // --- SECTION B ---
+            for (let i = 1; i <= 5; i++) {
+                const qName = 'match' + i;
+                const selectElement = document.querySelector(`select[name="${qName}"]`);
+                const selected = selectElement.value;
+                formState.answers[qName] = selected;
+                selectElement.disabled = true;
+
+                const feedbackDiv = document.getElementById(qName + '-feedback');
+                feedbackDiv.classList.remove('hidden-feedback');
+
+                if (selected === keySectionB[qName]) {
+                    score += 1;
+                    feedbackDiv.innerHTML = `<span class="text-green-600 text-sm"><i class="fas fa-check"></i> Correct</span>`;
+                    document.getElementById(qName + '-block').style.borderLeft = "4px solid #10b981";
+                } else {
+                    feedbackDiv.innerHTML = `<span class="text-red-600 text-sm"><i class="fas fa-times"></i> Correct: ${keySectionB[qName]}</span>`;
+                    document.getElementById(qName + '-block').style.borderLeft = "4px solid #ef4444";
+                }
+            }
+
+            // --- SECTION C ---
+            // Q11 Wind
+            let q11Score = 0;
+            formState.answers.q11 = [];
+            for(let i=1; i<=5; i++) {
+                const cb = document.getElementById(`c11_${i}`);
+                if(cb.checked) formState.answers.q11.push(i);
+                cb.disabled = true;
+                if (cb.checked === keySectionC.q11[i-1]) q11Score++;
+            }
+            score += q11Score;
+
+            updateCheckboxFeedback('q11', q11Score, 'Heat is incorrect.');
+
+            // Q12 Solar
+            let q12Score = 0;
+            formState.answers.q12 = [];
+            for(let i=1; i<=5; i++) {
+                const cb = document.getElementById(`c12_${i}`);
+                if(cb.checked) formState.answers.q12.push(i);
+                cb.disabled = true;
+                if (cb.checked === keySectionC.q12[i-1]) q12Score++;
+            }
+            score += q12Score;
+
+            updateCheckboxFeedback('q12', q12Score, 'Water movement is incorrect.');
+
+
+            // --- SECTION D ---
+            let sectionDScore = 0;
+            let feedbackHTML = "";
+            const modelSystemEl = document.querySelector('input[name="modelSystem"]:checked');
+            const radios = document.getElementsByName('modelSystem');
+            let selectedSystem = null;
+
+            if (modelSystemEl) {
+                sectionDScore++;
+                selectedSystem = modelSystemEl.value;
+                formState.answers.modelSystem = selectedSystem;
+            } else {
+                feedbackHTML += "<div class='text-red-600 mb-2'>• No system selected.</div>";
+            }
+            radios.forEach(r => r.disabled = true);
+
+            const dFields = ['modelA', 'modelB', 'modelC', 'modelD'];
+            dFields.forEach(id => {
+                const input = document.getElementById(id);
+                formState.answers[id] = input.value;
+                const val = input.value.trim().toLowerCase();
+                input.disabled = true;
+
+                if (selectedSystem) {
+                    const validKeywords = keySectionD[selectedSystem][id];
+                    const isCorrect = validKeywords.some(keyword => val.includes(keyword));
+
+                    if (isCorrect) {
+                        sectionDScore++;
+                        input.style.borderColor = "#10b981";
+                        input.style.backgroundColor = "#ecfdf5";
+                    } else {
+                        input.style.borderColor = "#ef4444";
+                        input.style.backgroundColor = "#fef2f2";
+                        // Get label text
+                        const label = input.previousElementSibling.innerText;
+                        feedbackHTML += `<div class='text-red-600 text-sm'>• <strong>${label}</strong> "${input.value}" is incorrect. Expected: ${validKeywords.join(", ")}</div>`;
+                    }
+                } else if(val !== "") {
+                     input.style.borderColor = "#ef4444";
+                     feedbackHTML += `<div class='text-red-600 text-sm'>• Answer provided without System selection.</div>`;
+                }
+            });
+
+            score += sectionDScore;
+            
+            const fbD = document.getElementById('sectionD-feedback');
+            fbD.classList.remove('hidden-feedback');
+            if (sectionDScore === 5) {
+                fbD.innerHTML = `<div class="mt-2 text-green-600 font-bold">Score: ${sectionDScore}/5. Excellent!</div>`;
+                fbD.parentElement.classList.add('correct-answer');
+            } else {
+                fbD.innerHTML = `<div class="mt-2 text-blue-800 font-bold">Score: ${sectionDScore}/5.</div><div class="mt-1">${feedbackHTML}</div>`;
+                fbD.parentElement.classList.add('incorrect-answer');
+            }
+
+            // --- FINALIZE ---
+            document.getElementById('displayScore').innerText = score;
+            document.getElementById('displayPercent').innerText = `${Math.round((score/30)*100)}%`;
+            document.getElementById('resultBanner').classList.remove('hidden');
+            document.getElementById('submitBtn').classList.add('hidden');
+            document.getElementById('reviewBtn').classList.add('hidden');
+            document.getElementById('editBtn').classList.add('hidden');
+            document.getElementById('printBtn').classList.remove('hidden');
+            
+            // EXIT QUIZ MODE (Show Full Review)
+            isQuizMode = false;
+            document.getElementById('quizNav').classList.add('hidden');
+            document.getElementById('quizProgress').classList.add('hidden');
+            document.getElementById('actionButtons').classList.remove('hidden');
+            document.getElementById('studentInfoBlock').classList.remove('hidden');
+            
+            // Show all cards and headers
+            document.querySelectorAll('.quiz-card').forEach(el => el.style.display = 'block');
+            document.querySelectorAll('.quiz-section-header').forEach(el => el.classList.remove('hidden'));
+            document.querySelectorAll('.card-instruction').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.section-container .border-b').forEach(el => el.style.display = 'block');
+
+            // Only scroll if we are submitting now (not restoring)
+            if(saveToStorage) window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // --- SAVE TO LOCALSTORAGE ---
+            if (saveToStorage) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(formState));
+            }
+        }
+
+        // --- HELPER FUNCTIONS ---
+
+        function toggleReviewMode(enable) {
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach(input => input.disabled = enable);
+            
+            if (enable) {
+                document.getElementById('reviewBtn').classList.add('hidden');
+                document.getElementById('editBtn').classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                document.getElementById('reviewBtn').classList.remove('hidden');
+                document.getElementById('editBtn').classList.add('hidden');
+            }
+        }
+
+        function updateCheckboxFeedback(qId, localScore, hint) {
+            const fb = document.getElementById(qId + '-feedback');
+            fb.classList.remove('hidden-feedback');
+            fb.innerHTML = `<div class="mt-2 text-sm font-bold">Score: ${localScore}/5. <span class="text-gray-500 font-normal">${hint}</span></div>`;
+            if(localScore === 5) document.getElementById(qId + '-block').classList.add('correct-answer');
+            else document.getElementById(qId + '-block').classList.add('incorrect-answer');
+        }
+
+        function restoreSession(session) {
+            if (!session) return;
+
+            // Restore Name
+            if (session.studentName) document.getElementById('studentName').value = session.studentName;
+
+            const ans = session.answers;
+            if (!ans) return;
+
+            // Restore Section A (Radios)
+            for (let i = 1; i <= 10; i++) {
+                const val = ans['q' + i];
+                if (val) {
+                    const el = document.querySelector(`input[name="q${i}"][value="${val}"]`);
+                    if (el) el.checked = true;
+                    if (el) el.dispatchEvent(new Event('change'));
+                }
+            }
+
+            // Restore Section B (Selects)
+            for (let i = 1; i <= 5; i++) {
+                const val = ans['match' + i];
+                if (val) document.querySelector(`select[name="match${i}"]`).value = val;
+                if (val) document.querySelector(`select[name="match${i}"]`).dispatchEvent(new Event('change'));
+            }
+
+            // Restore Section C (Checkboxes)
+            ['q11', 'q12'].forEach((qKey, idx) => {
+                const indices = ans[qKey];
+                if (indices) {
+                    indices.forEach(i => {
+                        document.getElementById(`c${idx===0?11:12}_${i}`).checked = true;
+                        document.getElementById(`c${idx===0?11:12}_${i}`).dispatchEvent(new Event('change'));
+                    });
+                }
+            });
+
+            // Restore Section D
+            if (ans.modelSystem) {
+                const el = document.querySelector(`input[name="modelSystem"][value="${ans.modelSystem}"]`);
+                if (el) el.checked = true;
+                if (el) el.dispatchEvent(new Event('change'));
+            }
+            ['modelA', 'modelB', 'modelC', 'modelD'].forEach(id => {
+                if (ans[id]) {
+                    const el = document.getElementById(id);
+                    el.value = ans[id];
+                    el.dispatchEvent(new Event('change'));
+                }
+            });
+
+            // Run grading (without saving again) to lock UI
+            calculateScore(false);
+        }
+
+        function resetTestState() {
+            const code = prompt("Enter Teacher Admin Code to reset:");
+            if (code === "1937") {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            } else if (code !== null) {
+                alert("Incorrect Admin Code.");
+            }
+        }
+    </script>
+</body>
+</html>

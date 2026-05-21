@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Names of God</title>
+    <link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Lilita+One&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfbf6; /* A very light, warm off-white */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content-wrapper {
+            flex-grow: 1;
+        }
+        .container {
+            max-width: 90%;
+            margin: 0 auto;
+            padding: 1.5rem 0;
+        }
+        .lesson-section {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            border-left-width: 4px;
+            border-bottom-width: 4px;
+            border-color: transparent;
+        }
+        .lesson-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        .section-header {
+            padding: 0.75rem 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .section-content {
+            padding: 1.5rem;
+        }
+        /* Color Psychology Headers */
+        .header-main { background-color: #3b82f6; } /* Blue for main ideas */
+        .header-comfort { background-color: #16a34a; } /* Green for comfort/care */
+        .header-warning { background-color: #dc2626; } /* Red for warning/need */
+        .header-activity { background-color: #8b5cf6; } /* Purple for activities */
+        .header-video { background-color: #f97316; } /* Orange for media */
+
+        /* Color Psychology Borders */
+        .border-main { border-color: #3b82f6; }
+        .border-comfort { border-color: #16a34a; }
+        .border-warning { border-color: #dc2626; }
+        .border-activity { border-color: #8b5cf6; }
+        .border-video { border-color: #f97316; }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: none;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary { background-color: #8b5cf6; } /* Purple */
+        .btn-primary:hover { background-color: #7c3aed; }
+        .btn-secondary { background-color: #f59e0b; }
+        .btn-secondary:hover { background-color: #d97706; }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            pointer-events: none;
+        }
+        .feedback.visible {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+        .feedback-correct { background-color: #d1fae5; color: #047857; }
+        .feedback-incorrect { background-color: #fee2e2; color: #dc2626; }
+
+        /* Drag & Drop Styles */
+        .drop-zone { border: 2px dashed #cbd5e1; padding: 1rem; min-height: 60px; transition: all 0.3s; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; }
+        .drop-zone.over { background-color: #e0f2fe; border-style: solid; }
+        .drop-zone.correct { background-color: #d1fae5; border-color: #047857; }
+        .drop-zone.incorrect { background-color: #fee2e2; border-color: #dc2626; }
+        .draggable { cursor: grab; background-color: #f1f5f9; padding: 0.5rem 1rem; border-radius: 0.5rem; border: 1px solid #94a3b8; user-select: none; touch-action: none; }
+        .draggable:active { cursor: grabbing; }
+        .dragging { opacity: 0.5; }
+
+        .prose strong { color: #1e40af; }
+        .prose ul, .prose ol { margin-top: 1em; margin-bottom: 1em; padding-left: 1.5rem; }
+        .prose li { margin-top: 0.5em; margin-bottom: 0.5em; }
+        
+        .header {
+            background-color: #fef3c7;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            min-height: 80px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .header-left { display: flex; align-items: center; gap: 1rem; }
+        .header-logo { height: 50px; width: auto; border-radius: 0.5rem; }
+        .header-title { color: #f97316; font-size: 2.25rem; font-weight: 700; text-align: center; }
+        
+        .footer {
+            background-color: #ea580c;
+            color: white;
+            padding: 1.25rem 2rem;
+            text-align: center;
+            margin-top: auto;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .footer p { margin: 0.25rem 0; line-height: 1.5; }
+
+        .video-container {
+            position: relative; width: 100%; padding-bottom: 56.25%; height: 0;
+            overflow: hidden; border-radius: 0.75rem; margin-top: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25%, 75% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+        }
+        .confetti-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; overflow: hidden; z-index: 9999;
+        }
+        .confetti {
+            position: absolute; width: 10px; height: 10px; opacity: 0;
+            animation: confetti-fall 3s forwards;
+        }
+        @keyframes confetti-fall {
+            0% { opacity: 1; transform: translateY(-100vh) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+        }
+
+        /* Custom styles for this lesson */
+        .name-box {
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left-width: 4px;
+        }
+        .name-box-green { background-color: #f0fdf4; border-color: #16a34a; }
+        .name-box-blue { background-color: #eff6ff; border-color: #3b82f6; }
+        .name-box-red { background-color: #fef2f2; border-color: #dc2626; }
+        .name-title { font-size: 1.5rem; font-weight: 700; }
+        .name-meaning { font-style: italic; color: #555; }
+        .name-prayer { margin-top: 0.75rem; font-weight: 500; background-color: rgba(255,255,255,0.6); padding: 0.5rem; border-radius: 0.25rem; }
+
+        .reflection-box textarea {
+            width: 100%;
+            min-height: 100px;
+            border: 2px solid #cbd5e1;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            transition: border-color 0.3s;
+        }
+        .reflection-box textarea:focus {
+            outline: none;
+            border-color: #8b5cf6;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Teacher Ed Logo" class="header-logo">
+            <div class="header-title">Teacher Ed Classroom</div>
+        </div>
+    </header>
+
+    <div class="main-content-wrapper">
+        <div class="container">
+            
+            <!-- 1. Welcome & Hook -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">
+                    <span>Welcome! What's in a Name?</span>
+                </div>
+                <div class="section-content prose">
+                    <p>Hello, everyone! Did you know that just like you have a special name, God has many names too? These names aren't just labels; they are like secret keys that unlock who He is and how much He loves us!</p>
+                    <p>Think about your own name. Maybe it means "strong," "brave," or "gift from God." Our names tell a story about us. In the same way, God's names tell us His amazing story.</p>
+                </div>
+            </div>
+
+            <!-- Color Key -->
+            <div class="lesson-section">
+                <div class="section-content prose">
+                    <h3 class="text-xl font-bold text-center mb-4">Your Color Guide for Today's Lesson!</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+                        <div class="p-4 rounded-lg bg-blue-100 border-2 border-blue-500">
+                            <div class="font-bold text-blue-800">BLUE</div>
+                            <p class="text-sm">Is for main ideas and important Bible verses.</p>
+                        </div>
+                        <div class="p-4 rounded-lg bg-green-100 border-2 border-green-500">
+                            <div class="font-bold text-green-800">GREEN</div>
+                            <p class="text-sm">Shows God's comfort and care for us.</p>
+                        </div>
+                        <div class="p-4 rounded-lg bg-red-100 border-2 border-red-500">
+                            <div class="font-bold text-red-800">RED</div>
+                            <p class="text-sm">Reminds us why we need God, especially in tough times.</p>
+                        </div>
+                        <div class="p-4 rounded-lg bg-purple-100 border-2 border-purple-500">
+                            <div class="font-bold text-purple-800">PURPLE</div>
+                            <p class="text-sm">Means it's time for a fun activity or game!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Exploring God's Names -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">
+                    <span>Let's Learn God's Special Names</span>
+                </div>
+                <div class="section-content prose">
+                    <p>Let's explore some of God's names. As we learn each one, think about how you can call on Him using that name in your life here in beautiful Belize!</p>
+
+                    <!-- Elohim -->
+                    <div class="name-box name-box-blue">
+                        <h4 class="name-title text-blue-800">Elohim</h4>
+                        <p class="name-meaning">The Strong Creator God</p>
+                        <p>This is the first name for God we see in the Bible! It means He is the all-powerful God who created everything—from the huge barrier reef to the tiny hummingbird. When you see a beautiful sunset over the sea, you're seeing the work of Elohim.</p>
+                        <p class="font-semibold">"In the beginning, God (Elohim) created the heavens and the earth." (Genesis 1:1)</p>
+                        <p class="name-prayer">🙏 Prayer Starter: "Thank You, Elohim, for creating me and our beautiful country of Belize."</p>
+                    </div>
+
+                    <!-- Abba -->
+                    <div class="name-box name-box-green">
+                        <h4 class="name-title text-green-800">Abba</h4>
+                        <p class="name-meaning">Father</p>
+                        <p>This is a very special and personal name for God. "Abba" is like calling Him "Daddy." It shows how close and loving He is. Just like the father in the story of the lost son, God is always waiting with open arms to welcome us home. He loves you unconditionally!</p>
+                        <p class="font-semibold text-blue-700">"But while he was still a long way off, his father saw him and was filled with compassion for him; he ran to his son, threw his arms around him and kissed him." (Luke 15:20)</p>
+                        <p class="name-prayer">🙏 Prayer Starter: "Thank You, Abba, for being my Father who loves me no matter what."</p>
+                    </div>
+
+                    <!-- Jehovah Jireh -->
+                    <div class="name-box name-box-green">
+                        <h4 class="name-title text-green-800">Jehovah Jireh</h4>
+                        <p class="name-meaning">The Lord Will Provide</p>
+                        <p>Are you ever worried about a test at school or if your family will have enough? Jehovah Jireh means God sees what we need and provides for us. He is our provider, just like a loving parent who makes sure we have food, like rice and beans, and a safe home.</p>
+                        <p class="font-semibold text-blue-700">"Abraham looked up and there in a thicket he saw a ram caught by its horns. He went over and took the ram and sacrificed it as a burnt offering instead of his son. So Abraham called that place The Lord Will Provide (Jehovah Jireh)." (Genesis 22:13-14)</p>
+                        <p class="name-prayer">🙏 Prayer Starter: "Jehovah Jireh, please provide for my family and help me not to worry."</p>
+                    </div>
+
+                    <!-- Yahweh Roi -->
+                    <div class="name-box name-box-green">
+                        <h4 class="name-title text-green-800">Yahweh Roi</h4>
+                        <p class="name-meaning">The Lord is My Shepherd</p>
+                        <p>🐑 A shepherd takes care of his sheep, leading them to good food and protecting them from danger. When you feel lost, scared, or alone, remember that Yahweh Roi is your Shepherd. He guides you and protects you, whether you're at home, school, or playing with friends.</p>
+                        <p class="font-semibold text-blue-700">"The Lord (Yahweh) is my shepherd (Roi), I lack nothing. He makes me lie down in green pastures, he leads me beside quiet waters, he refreshes my soul." (Psalm 23:1-3)</p>
+                        <p class="name-prayer">🙏 Prayer Starter: "Yahweh Roi, thank You for being my Shepherd and always watching over me."</p>
+                    </div>
+
+                    <!-- Jehovah Rophe -->
+                    <div class="name-box name-box-green">
+                        <h4 class="name-title text-green-800">Jehovah Rophe</h4>
+                        <p class="name-meaning">The God Who Heals</p>
+                        <p>When you get a cut, your body heals. When you are sad, a hug can help heal your heart. Jehovah Rophe is the God who heals us, both inside and out. He can mend our bodies when we are sick and comfort our hearts when we are hurting.</p>
+                        <p class="font-semibold text-blue-700">"There the Lord made a decree and a law for them, and there he tested them. He said, 'If you listen carefully to the Lord your God... I will not bring on you any of the diseases I brought on the Egyptians, for I am the Lord, who heals you (Jehovah Rophe).'" (Exodus 15:25-26)</p>
+                        <p class="name-prayer">🙏 Prayer Starter: "Jehovah Rophe, please bring healing to me and those I know who are sick or sad."</p>
+                    </div>
+
+                    <!-- El Roi -->
+                    <div class="name-box name-box-red">
+                        <h4 class="name-title text-red-800">El Roi</h4>
+                        <p class="name-meaning">The God Who Sees Me</p>
+                        <p>Have you ever felt like no one understands what you're going through? Maybe you were treated unfairly or felt invisible. El Roi is the name for God that reminds us He sees everything. He sees your secret tears and your hidden worries. You are never alone.</p>
+                        <p class="font-semibold text-blue-700">"She gave this name to the Lord who spoke to her: 'You are the God who sees me (El Roi),' for she said, 'I have now seen the One who sees me.'" (Genesis 16:13)</p>
+                        <p class="name-prayer">🙏 Prayer Starter: "El Roi, thank You for seeing me when I feel lonely or sad."</p>
+                    </div>
+
+                    <!-- Adonai -->
+                    <div class="name-box name-box-blue">
+                        <h4 class="name-title text-blue-800">Adonai</h4>
+                        <p class="name-meaning">Lord, Master</p>
+                        <p>Calling God "Adonai" is like saying He is the boss or the captain of our lives. It shows we respect Him and want to follow His good and perfect plans for us. When we obey our parents and teachers, we are also practicing what it means to have Adonai as our Lord.</p>
+                        <p class="font-semibold text-blue-700">"You are my Lord (Adonai); apart from you I have no good thing." (Psalm 16:2)</p>
+                        <p class="name-prayer">🙏 Prayer Starter: "Adonai, help me to obey you and trust that you are in charge of my life."</p>
+                    </div>
+
+                    <!-- Yahweh Tsuri -->
+                    <div class="name-box name-box-blue">
+                        <h4 class="name-title text-blue-800">Yahweh Tsuri</h4>
+                        <p class="name-meaning">The Lord My Rock</p>
+                        <p>🧗 In Belize, we have strong Maya mountains and solid rocks. A rock is strong, steady, and a safe place to stand. Yahweh Tsuri means God is our Rock. He is our strength and our defense. When things feel shaky, we can depend on Him because He never changes.</p>
+                        <p class="font-semibold text-blue-700">"Praise be to the Lord my Rock (Yahweh Tsuri), who trains my hands for war, my fingers for battle." (Psalm 144:1)</p>
+                        <p class="name-prayer">🙏 Prayer Starter: "Yahweh Tsuri, thank you for being my Rock when I feel afraid."</p>
+                    </div>
+
+                    <!-- Yahweh Nissi -->
+                    <div class="name-box name-box-blue">
+                        <h4 class="name-title text-blue-800">Yahweh Nissi</h4>
+                        <p class="name-meaning">The Lord My Banner</p>
+                        <p>Think of the Belizean flag flying high! A banner or flag shows who you belong to and represents victory. Yahweh Nissi means God is our banner of victory. With Him on our side, we can have victory over sin and fear. He is the one we look to and follow.</p>
+                        <p class="font-semibold text-blue-700">"Moses built an altar and called it The Lord is my Banner (Yahweh Nissi)." (Exodus 17:15)</p>
+                        <p class="name-prayer">🙏 Prayer Starter: "Yahweh Nissi, thank you for giving me victory over my challenges."</p>
+                    </div>
+
+                    <!-- Jehovah-M'Kaddesh -->
+                    <div class="name-box name-box-red">
+                        <h4 class="name-title text-red-800">Jehovah-M'Kaddesh</h4>
+                        <p class="name-meaning">The God Who Sanctifies</p>
+                        <p>To "sanctify" means to make something holy or special for God's purpose. We all make mistakes (sin), but God is so loving that He cleanses us and sets us apart to be His children. Jehovah-M'Kaddesh makes us special and helps us live in a way that pleases Him.</p>
+                        <p class="font-semibold text-blue-700">"Consecrate yourselves and be holy, because I am the Lord your God. Keep my decrees and follow them. I am the Lord, who makes you holy (Jehovah-M’Kaddesh)." (Leviticus 20:7-8)</p>
+                        <p class="name-prayer">🙏 Prayer Starter: "Jehovah-M'Kaddesh, please make my heart clean and help me to be more like you."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Checkpoint 1 -->
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">
+                    <span>Quick Check!</span>
+                </div>
+                <div class="section-content prose text-center">
+                    <p class="font-semibold">True or False: The name <strong>Jehovah Rophe</strong> means "The God Who Heals."</p>
+                    <div class="flex gap-4 justify-center mt-4">
+                        <button class="btn btn-primary" onclick="checkAnswer(this, false)">True</button>
+                        <button class="btn btn-primary" onclick="checkAnswer(this, true)">False</button>
+                    </div>
+                    <div class="feedback mt-4"></div>
+                </div>
+            </div>
+
+            <!-- Video 1 -->
+            <div class="lesson-section border-video">
+                <div class="section-header header-video">
+                    <span>Watch: God's Wonderful Names</span>
+                </div>
+                <div class="section-content prose">
+                    <p>Let's watch a video that tells us more about God's amazing names and what they mean for us every day!</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/GZU2XziKLnI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Interactive Activities -->
+            <!-- Activity 1: Matching Game -->
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">
+                    <span>Activity: Name Match-Up!</span>
+                </div>
+                <div class="section-content">
+                    <p class="mb-4 text-center">Drag each Name of God from the left and drop it onto its correct meaning on the right.</p>
+                    <div id="dnd-game" class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                        <div id="dnd-name-source" class="flex flex-col gap-4 p-4 bg-slate-100 rounded-lg min-h-[200px]">
+                            <!-- Draggable names will be generated here -->
+                        </div>
+                        <div id="dnd-meaning-targets" class="flex flex-col gap-4">
+                            <!-- Drop zone meanings will be generated here -->
+                        </div>
+                    </div>
+                    <div class="text-center mt-6">
+                        <button id="dnd-check-btn" class="btn btn-primary">Check My Matches</button>
+                        <button id="dnd-reset-btn" class="btn btn-secondary">Try Again</button>
+                    </div>
+                    <div id="dnd-feedback" class="feedback mt-4"></div>
+                </div>
+            </div>
+
+            <!-- Activity 2: Scenario Reflection -->
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">
+                    <span>Activity: Belize Life Scenarios</span>
+                </div>
+                <div class="section-content">
+                    <p class="mb-4">Read the scenario below. Which name of God would you call on for help? Type your answer and why!</p>
+                    <div id="scenario-container" class="bg-purple-100 p-6 rounded-lg mb-4 prose">
+                        <h4 class="font-bold text-xl text-purple-900">Hurricane Season</h4>
+                        <p>A big storm is coming towards Belize. The wind is howling, and the rain is pouring down. You and your family are safe inside, but you feel a little scared. You need to remember that God is in control and watching over you.</p>
+                        <p class="font-semibold mt-4">Which name of God helps you remember He is your protector and guide in the storm?</p>
+                        <input type="text" id="scenario-answer" placeholder="Type a name of God here..." class="mt-2 w-full p-2 border-2 border-purple-300 rounded-md focus:outline-none focus:border-purple-500">
+                    </div>
+                    <div class="flex gap-4 items-center mt-6">
+                        <button id="scenario-check-btn" class="btn btn-primary">Check My Idea</button>
+                    </div>
+                    <div id="scenario-feedback" class="feedback mt-4"></div>
+                </div>
+            </div>
+
+            <!-- Video 2 -->
+            <div class="lesson-section border-video">
+                <div class="section-header header-video">
+                    <span>Watch & Worship</span>
+                </div>
+                <div class="section-content prose">
+                    <p>Now let's sing along to a song that celebrates the wonderful names of our God. Let the music fill your heart with joy!</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/T5-6gwssX0Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Final Quiz -->
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">
+                    <span>Quiz: Final Checkpoint!</span>
+                </div>
+                <div class="section-content">
+                    <p class="text-center">Let's see what you've learned! Answer these questions to finish the lesson.</p>
+                    <div id="final-quiz" class="space-y-6 mt-6 text-left">
+                        <!-- Question 1 -->
+                        <div>
+                            <label class="block font-semibold mb-2">1. Which name means "The Strong Creator God"?</label>
+                            <div class="space-y-2 quiz-options" data-answer="Elohim">
+                                <button class="quiz-option-btn">Adonai</button>
+                                <button class="quiz-option-btn">Elohim</button>
+                                <button class="quiz-option-btn">El Roi</button>
+                            </div>
+                        </div>
+                        <!-- Question 2 -->
+                        <div>
+                            <label class="block font-semibold mb-2">2. If you are feeling lonely, which name reminds you that "The God Who Sees Me" is with you?</label>
+                            <div class="space-y-2 quiz-options" data-answer="El Roi">
+                                <button class="quiz-option-btn">Jehovah Jireh</button>
+                                <button class="quiz-option-btn">Yahweh Roi</button>
+                                <button class="quiz-option-btn">El Roi</button>
+                            </div>
+                        </div>
+                        <!-- Question 3 -->
+                        <div>
+                            <label class="block font-semibold mb-2">3. Psalm 23 says "The Lord is my Shepherd." What is the Hebrew name for this?</label>
+                            <div class="space-y-2 quiz-options" data-answer="Yahweh Roi">
+                                <button class="quiz-option-btn">Yahweh Roi</button>
+                                <button class="quiz-option-btn">Adonai</button>
+                                <button class="quiz-option-btn">Elohim</button>
+                            </div>
+                        </div>
+                         <!-- Question 4 -->
+                        <div>
+                            <label class="block font-semibold mb-2">4. When we pray for God to provide for our family's needs, we can call Him...</label>
+                            <div class="space-y-2 quiz-options" data-answer="Jehovah Jireh">
+                                <button class="quiz-option-btn">El Roi</button>
+                                <button class="quiz-option-btn">Jehovah Jireh</button>
+                                <button class="quiz-option-btn">Adonai</button>
+                            </div>
+                        </div>
+                        <!-- Question 5 -->
+                        <div>
+                            <label class="block font-semibold mb-2">5. Which name means "The God Who Heals"?</label>
+                            <div class="space-y-2 quiz-options" data-answer="Jehovah Rophe">
+                                <button class="quiz-option-btn">Yahweh Tsuri</button>
+                                <button class="quiz-option-btn">Jehovah Rophe</button>
+                                <button class="quiz-option-btn">Abba</button>
+                            </div>
+                        </div>
+                        <!-- Question 6 -->
+                        <div>
+                            <label class="block font-semibold mb-2">6. When you need strength and a solid foundation, you can call on "The Lord My Rock," which is...</label>
+                            <div class="space-y-2 quiz-options" data-answer="Yahweh Tsuri">
+                                <button class="quiz-option-btn">Yahweh Nissi</button>
+                                <button class="quiz-option-btn">Jehovah-M'Kaddesh</button>
+                                <button class="quiz-option-btn">Yahweh Tsuri</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center">
+                        <button id="submitQuizBtn" class="btn btn-primary">Check My Report</button>
+                        <div id="quizResult" class="feedback"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Wrap-Up -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">
+                    <span>He Knows Your Name, Too!</span>
+                </div>
+                <div class="section-content prose">
+                    <p class="text-xl font-bold text-center">Great job today!</p>
+                    <p>We've learned that all these amazing names—Elohim, Abba, Jehovah Jireh, Yahweh Roi, Jehovah Rophe, El Roi, Adonai, Yahweh Tsuri, Yahweh Nissi, and Jehovah-M'Kaddesh—all belong to the <strong>one true God</strong>. They help us understand His power, His love, and His care for us.</p>
+                    <p>This week, try praying to God using one of His names. If you're thankful for creation, thank Elohim. If you need help, ask Jehovah Jireh.</p>
+                    <p class="text-2xl font-bold text-center text-orange-600 mt-6">And always remember... just as you are learning His name, God knows your name, too!</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p class="font-semibold">“God is one, and His many names show us His love, power, and care. Every name reminds us we belong to Him.”</p>
+        <p class="text-xs mt-1">© 2025 Mr. Edwin's Virtual Classroom — All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // --- Utility Functions ---
+            function createConfetti() {
+                const confettiContainer = document.createElement('div');
+                confettiContainer.classList.add('confetti-container');
+                document.body.appendChild(confettiContainer);
+                for (let i = 0; i < 100; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    confettiContainer.appendChild(confetti);
+                }
+                setTimeout(() => { confettiContainer.remove(); }, 4000);
+            }
+
+            function shuffle(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            // --- Quick Checkpoint 1 ---
+            window.checkAnswer = function(button, isCorrect) {
+                const parent = button.closest('.section-content');
+                const feedbackEl = parent.querySelector('.feedback');
+                feedbackEl.classList.remove('feedback-correct', 'feedback-incorrect');
+                feedbackEl.classList.add('visible');
+                if (isCorrect) {
+                    feedbackEl.classList.add('feedback-incorrect');
+                    feedbackEl.textContent = 'Not quite. That\'s the meaning for a different name. Try again!';
+                } else {
+                    feedbackEl.classList.add('feedback-correct');
+                    feedbackEl.textContent = 'Correct! Jehovah Rophe is "The God Who Heals." Jehovah Jireh is "The God Who Provides."';
+                }
+            }
+
+            // --- Activity 1: Drag and Drop Name Match-Up ---
+            const dndNameSource = document.getElementById('dnd-name-source');
+            const dndMeaningTargets = document.getElementById('dnd-meaning-targets');
+            const dndCheckBtn = document.getElementById('dnd-check-btn');
+            const dndResetBtn = document.getElementById('dnd-reset-btn');
+            const dndFeedback = document.getElementById('dnd-feedback');
+            
+            const namePairs = [
+                { id: 1, name: 'Elohim', meaning: 'The Strong Creator God' },
+                { id: 2, name: 'Jehovah Jireh', meaning: 'The Lord Will Provide' },
+                { id: 3, name: 'Yahweh Roi', meaning: 'The Lord is My Shepherd 🐑' },
+                { id: 4, name: 'El Roi', meaning: 'The God Who Sees Me' },
+                { id: 5, name: 'Adonai', meaning: 'Lord, Master' },
+                { id: 6, name: 'Abba', meaning: 'Father' },
+                { id: 7, name: 'Jehovah Rophe', meaning: 'The God Who Heals' },
+                { id: 8, name: 'Yahweh Tsuri', meaning: 'The Lord My Rock 🧗' },
+                { id: 9, name: 'Yahweh Nissi', meaning: 'The Lord My Banner' },
+                { id: 10, name: 'Jehovah-M’Kaddesh', meaning: 'The God Who Sanctifies' }
+            ];
+
+            function setupDndGame() {
+                dndNameSource.innerHTML = '';
+                dndMeaningTargets.innerHTML = '';
+                dndFeedback.classList.remove('visible');
+
+                const shuffledNames = shuffle([...namePairs]);
+                const shuffledMeanings = shuffle([...namePairs]);
+
+                shuffledNames.forEach(pair => {
+                    dndNameSource.innerHTML += `<div class="draggable p-3 text-center bg-white rounded-lg shadow" draggable="true" data-id="${pair.id}">${pair.name}</div>`;
+                });
+
+                shuffledMeanings.forEach(pair => {
+                    dndMeaningTargets.innerHTML += `<div class="drop-zone" data-id="${pair.id}"><span class="text-gray-500">${pair.meaning}</span></div>`;
+                });
+
+                addDnDHandlers();
+            }
+
+            function addDnDHandlers() {
+                const draggables = document.querySelectorAll('.draggable');
+                const dropZones = document.querySelectorAll('.drop-zone');
+                let draggedItem = null;
+
+                draggables.forEach(draggable => {
+                    draggable.addEventListener('dragstart', (e) => {
+                        draggedItem = e.target;
+                        setTimeout(() => e.target.classList.add('dragging'), 0);
+                    });
+                    draggable.addEventListener('dragend', () => {
+                        draggedItem.classList.remove('dragging');
+                        draggedItem = null;
+                    });
+                });
+
+                dropZones.forEach(zone => {
+                    zone.addEventListener('dragover', e => {
+                        e.preventDefault();
+                        zone.classList.add('over');
+                    });
+                    zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+                    zone.addEventListener('drop', e => {
+                        e.preventDefault();
+                        zone.classList.remove('over');
+                        // If zone already has a draggable, move it back to source
+                        if (zone.children.length > 1) {
+                            dndNameSource.appendChild(zone.querySelector('.draggable'));
+                        }
+                        zone.appendChild(draggedItem);
+                    });
+                });
+            }
+
+            dndCheckBtn.addEventListener('click', () => {
+                let allCorrect = true;
+                const dropZones = document.querySelectorAll('.drop-zone');
+                dropZones.forEach(zone => {
+                    zone.classList.remove('correct', 'incorrect');
+                    const placedItem = zone.querySelector('.draggable');
+                    if (placedItem && placedItem.dataset.id === zone.dataset.id) {
+                        zone.classList.add('correct');
+                    } else {
+                        zone.classList.add('incorrect');
+                        allCorrect = false;
+                    }
+                });
+
+                dndFeedback.classList.remove('feedback-correct', 'feedback-incorrect');
+                dndFeedback.classList.add('visible');
+                if (allCorrect) {
+                    dndFeedback.classList.add('feedback-correct');
+                    dndFeedback.textContent = 'Amazing! You matched them all correctly!';
+                    createConfetti();
+                } else {
+                    dndFeedback.classList.add('feedback-incorrect');
+                    dndFeedback.textContent = 'Some are not quite right. Check the red boxes and try again!';
+                }
+            });
+
+            dndResetBtn.addEventListener('click', setupDndGame);
+
+            // --- Activity 2: Scenario Reflection ---
+            const scenarioCheckBtn = document.getElementById('scenario-check-btn');
+            const scenarioFeedbackEl = document.getElementById('scenario-feedback');
+            const scenarioAnswerInput = document.getElementById('scenario-answer');
+
+            scenarioCheckBtn.addEventListener('click', () => {
+                const userAnswer = scenarioAnswerInput.value.trim().toLowerCase();
+                scenarioFeedbackEl.classList.remove('feedback-correct', 'feedback-incorrect');
+                scenarioFeedbackEl.classList.add('visible');
+
+                if (userAnswer.includes('yahweh roi') || userAnswer.includes('shepherd') || userAnswer.includes('adonai') || userAnswer.includes('lord')) {
+                    scenarioFeedbackEl.classList.add('feedback-correct');
+                    scenarioFeedbackEl.innerHTML = 'Great answer! <strong>Yahweh Roi</strong> (The Lord is my Shepherd) or <strong>Adonai</strong> (Lord, Master) are perfect names to call on. They remind us He guides and is in control.';
+                } else if (userAnswer.includes('el roi') || userAnswer.includes('sees me')) {
+                     scenarioFeedbackEl.classList.add('feedback-correct');
+                    scenarioFeedbackEl.innerHTML = 'That\'s a wonderful thought! <strong>El Roi</strong> (The God Who Sees Me) is a great answer too, because He sees your fear and is with you.';
+                } else {
+                    scenarioFeedbackEl.classList.add('feedback-incorrect');
+                    scenarioFeedbackEl.textContent = 'That\'s a good try! Think about a name that means protector, guide, or master. Names like Yahweh Roi or Adonai fit well here.';
+                }
+            });
+
+            // --- Final Quiz ---
+            const quizOptionBtns = document.querySelectorAll('.quiz-option-btn');
+            const submitQuizBtn = document.getElementById('submitQuizBtn');
+            const quizResultEl = document.getElementById('quizResult');
+
+            // Style for quiz option buttons
+            const optionBaseStyle = "w-full text-left p-3 border-2 border-gray-300 rounded-lg transition-colors duration-200";
+            const optionHoverStyle = "hover:border-purple-500 hover:bg-purple-50";
+            const optionSelectedStyle = "bg-purple-200 border-purple-600 font-semibold";
+            const optionCorrectStyle = "bg-green-200 border-green-600";
+            const optionIncorrectStyle = "bg-red-200 border-red-600";
+
+            quizOptionBtns.forEach(btn => {
+                btn.className = `${optionBaseStyle} ${optionHoverStyle}`;
+                btn.addEventListener('click', () => {
+                    const parentOptions = btn.closest('.quiz-options');
+                    // Deselect other buttons in the same question
+                    parentOptions.querySelectorAll('.quiz-option-btn').forEach(otherBtn => {
+                        otherBtn.className = `${optionBaseStyle} ${optionHoverStyle}`;
+                        otherBtn.dataset.selected = 'false';
+                    });
+                    // Select the clicked button
+                    btn.className = `${optionBaseStyle} ${optionSelectedStyle}`;
+                    btn.dataset.selected = 'true';
+                });
+            });
+
+            submitQuizBtn.addEventListener('click', () => {
+                let correctCount = 0;
+                const allQuestions = document.querySelectorAll('.quiz-options');
+
+                allQuestions.forEach(question => {
+                    const correctAnswer = question.dataset.answer;
+                    const selectedBtn = question.querySelector('.quiz-option-btn[data-selected="true"]');
+                    
+                    // Reset styles
+                    question.querySelectorAll('.quiz-option-btn').forEach(btn => {
+                        btn.className = `${optionBaseStyle}`; // Remove hover styles
+                    });
+
+                    if (selectedBtn) {
+                        if (selectedBtn.textContent === correctAnswer) {
+                            correctCount++;
+                            selectedBtn.className = `${optionBaseStyle} ${optionCorrectStyle}`;
+                        } else {
+                            selectedBtn.className = `${optionBaseStyle} ${optionIncorrectStyle}`;
+                            // Also highlight the correct answer
+                            question.querySelectorAll('.quiz-option-btn').forEach(btn => {
+                                if (btn.textContent === correctAnswer) {
+                                    btn.className = `${optionBaseStyle} ${optionCorrectStyle}`;
+                                }
+                            });
+                        }
+                    } else {
+                        // No answer selected, highlight the correct one
+                         question.querySelectorAll('.quiz-option-btn').forEach(btn => {
+                            if (btn.textContent === correctAnswer) {
+                                btn.className = `${optionBaseStyle} ${optionCorrectStyle}`;
+                            }
+                        });
+                    }
+                });
+
+                quizResultEl.classList.remove('feedback-correct', 'feedback-incorrect');
+                quizResultEl.classList.add('visible');
+                if (correctCount === allQuestions.length) {
+                    quizResultEl.classList.add('feedback-correct');
+                    quizResultEl.textContent = `Excellent! You got ${correctCount}/${allQuestions.length} correct. You have mastered this lesson!`;
+                    createConfetti();
+                } else {
+                    quizResultEl.classList.add('feedback-incorrect');
+                    quizResultEl.textContent = `Good effort! You got ${correctCount}/${allQuestions.length} correct. Review the answers to learn even more!`;
+                }
+            });
+
+            // Initial setup
+            setupDndGame();
+        });
+    </script>
+</body>
+</html>

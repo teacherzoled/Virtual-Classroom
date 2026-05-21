@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Attributes of God</title>
+    <link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Lilita+One&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfbf6; /* A very light, warm off-white */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content-wrapper {
+            flex-grow: 1;
+        }
+        .container {
+            max-width: 90%;
+            margin: 0 auto;
+            padding: 1.5rem 0;
+        }
+        .lesson-section {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            border-left-width: 4px;
+            border-bottom-width: 4px;
+            border-color: transparent;
+        }
+        .lesson-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        .section-header {
+            padding: 0.75rem 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .section-content {
+            padding: 1.5rem;
+        }
+        /* Color Psychology Headers */
+        .header-main { background-color: #3b82f6; } /* Blue for main ideas */
+        .header-comfort { background-color: #16a34a; } /* Green for comfort/care */
+        .header-warning { background-color: #dc2626; } /* Red for warning/need */
+        .header-activity { background-color: #8b5cf6; } /* Purple for activities */
+        .header-video { background-color: #f97316; } /* Orange for media */
+
+        /* Color Psychology Borders */
+        .border-main { border-color: #3b82f6; }
+        .border-comfort { border-color: #16a34a; }
+        .border-warning { border-color: #dc2626; }
+        .border-activity { border-color: #8b5cf6; }
+        .border-video { border-color: #f97316; }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: none;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary { background-color: #8b5cf6; } /* Purple */
+        .btn-primary:hover { background-color: #7c3aed; }
+        .btn-secondary { background-color: #f59e0b; }
+        .btn-secondary:hover { background-color: #d97706; }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            pointer-events: none;
+        }
+        .feedback.visible {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+        .feedback-correct { background-color: #d1fae5; color: #047857; }
+        .feedback-incorrect { background-color: #fee2e2; color: #dc2626; }
+
+        /* Drag & Drop Styles */
+        .drop-zone { border: 2px dashed #cbd5e1; padding: 1rem; min-height: 60px; transition: all 0.3s; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; }
+        .drop-zone.over { background-color: #e0f2fe; border-style: solid; }
+        .drop-zone.correct { background-color: #d1fae5; border-color: #047857; }
+        .drop-zone.incorrect { background-color: #fee2e2; border-color: #dc2626; }
+        .draggable { cursor: grab; background-color: #f1f5f9; padding: 0.5rem 1rem; border-radius: 0.5rem; border: 1px solid #94a3b8; user-select: none; touch-action: none; }
+        .draggable:active { cursor: grabbing; }
+        .dragging { opacity: 0.5; }
+
+        .prose strong { color: #1e40af; }
+        .prose ul, .prose ol { margin-top: 1em; margin-bottom: 1em; padding-left: 1.5rem; }
+        .prose li { margin-top: 0.5em; margin-bottom: 0.5em; }
+        
+        .header {
+            background-color: #fef3c7;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            min-height: 80px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .header-left { display: flex; align-items: center; gap: 1rem; }
+        .header-logo { height: 50px; width: auto; border-radius: 0.5rem; }
+        .header-title { color: #f97316; font-size: 2.25rem; font-weight: 700; text-align: center; }
+        
+        .footer {
+            background-color: #ea580c;
+            color: white;
+            padding: 1.25rem 2rem;
+            text-align: center;
+            margin-top: auto;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .footer p { margin: 0.25rem 0; line-height: 1.5; }
+
+        .video-container {
+            position: relative; width: 100%; padding-bottom: 56.25%; height: 0;
+            overflow: hidden; border-radius: 0.75rem; margin-top: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25%, 75% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+        }
+        .confetti-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; overflow: hidden; z-index: 9999;
+        }
+        .confetti {
+            position: absolute; width: 10px; height: 10px; opacity: 0;
+            animation: confetti-fall 3s forwards;
+        }
+        @keyframes confetti-fall {
+            0% { opacity: 1; transform: translateY(-100vh) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+        }
+
+        /* Custom styles for this lesson */
+        .name-box {
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left-width: 4px;
+        }
+        .name-box-green { background-color: #f0fdf4; border-color: #16a34a; }
+        .name-box-blue { background-color: #eff6ff; border-color: #3b82f6; }
+        .name-box-red { background-color: #fef2f2; border-color: #dc2626; }
+        .name-title { font-size: 1.5rem; font-weight: 700; }
+        .name-meaning { font-style: italic; color: #555; }
+        .name-prayer { margin-top: 0.75rem; font-weight: 500; background-color: rgba(255,255,255,0.6); padding: 0.5rem; border-radius: 0.25rem; }
+
+        .reflection-box textarea {
+            width: 100%;
+            min-height: 100px;
+            border: 2px solid #cbd5e1;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            transition: border-color 0.3s;
+        }
+        .reflection-box textarea:focus {
+            outline: none;
+            border-color: #8b5cf6;
+        }
+
+        /* Quiz Input Styles */
+        .quiz-input { border: 2px solid #cbd5e1; border-radius: 0.5rem; padding: 0.5rem 0.75rem; width: 100%; transition: border-color 0.3s; }
+        .input-correct { border-color: #16a34a; background-color: #f0fdf4; }
+        .input-incorrect { border-color: #dc2626; background-color: #fef2f2; }
+    </style>
+    <style>
+        /* Riddle Activity Styles */
+        .riddle-box { background-color: #faf5ff; border-left: 4px solid #a855f7; padding: 1rem; border-radius: 0.5rem; }
+        .riddle-feedback { font-weight: 600; margin-left: 0.5rem; min-width: 150px; }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Teacher Ed Logo" class="header-logo">
+            <div class="header-title">Teacher Ed Classroom</div>
+        </div>
+    </header>
+
+    <div class="main-content-wrapper">
+        <div class="container">
+            
+            <!-- 1. Welcome & Hook -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">
+                    <span>Welcome! Who is God?</span>
+                </div>
+                <div class="section-content prose">
+                    <p>Hello, everyone! Today, we're going on an exciting journey to understand God better. We're going to learn about His <strong>attributes</strong>. That's a big word, but it just means we're looking at His character—who God is and what He is like.</p>
+                    <p>These attributes are like superpowers that belong only to God. They show us how powerful, loving, and perfect He is. Learning about them will help us appreciate Him even more!</p>
+                </div>
+            </div>
+
+            <!-- Color Key -->
+            <div class="lesson-section">
+                <div class="section-content prose">
+                    <h3 class="text-xl font-bold text-center mb-4">Your Color Guide for Today's Lesson!</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+                        <div class="p-4 rounded-lg bg-blue-100 border-2 border-blue-500">
+                            <div class="font-bold text-blue-800">BLUE</div>
+                            <p class="text-sm">Is for main ideas and important Bible verses.</p>
+                        </div>
+                        <div class="p-4 rounded-lg bg-green-100 border-2 border-green-500">
+                            <div class="font-bold text-green-800">GREEN</div>
+                            <p class="text-sm">Shows God's comfort and care for us.</p>
+                        </div>
+                        <div class="p-4 rounded-lg bg-red-100 border-2 border-red-500">
+                            <div class="font-bold text-red-800">RED</div>
+                            <p class="text-sm">Reminds us why we need God, especially in tough times.</p>
+                        </div>
+                        <div class="p-4 rounded-lg bg-purple-100 border-2 border-purple-500">
+                            <div class="font-bold text-purple-800">PURPLE</div>
+                            <p class="text-sm">Means it's time for a fun activity or game!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Exploring God's Names -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">
+                    <span>Let's Learn God's Amazing Attributes</span>
+                </div>
+                <div class="section-content prose">
+                    <p>Let's explore ten of God's attributes. As we learn each one, think about how amazing our God truly is!</p>
+
+                    <!-- Omniscient -->
+                    <div class="name-box name-box-blue">
+                        <h4 class="name-title text-blue-800">Omniscient</h4>
+                        <p class="name-meaning">All-Knowing</p>
+                        <p>God knows everything, and His knowledge is complete. He knows the past, the present, and the future. He even knows our thoughts and the number of hairs on our head!</p>
+                        <p class="font-semibold">"Great is our Lord and mighty in power; his understanding has no limit." (Psalm 147:5)</p>
+                        <p class="name-prayer">🙏 Reflection: God knows everything about me and still loves me perfectly.</p>
+                    </div>
+
+                    <!-- Omnipotent -->
+                    <div class="name-box name-box-green">
+                        <h4 class="name-title text-green-800">Omnipotent</h4>
+                        <p class="name-meaning">All-Powerful</p>
+                        <p>God is able to do everything that He chooses. Nothing is too hard for Him! He created the entire universe with just His words. He has unlimited power.</p>
+                        <p class="font-semibold text-blue-700">"I know that you can do all things; no purpose of yours can be thwarted." (Job 42:2)</p>
+                        <p class="name-prayer">🙏 Reflection: The all-powerful God is on my side and can help me with any problem.</p>
+                    </div>
+
+                    <!-- Omnipresent -->
+                    <div class="name-box name-box-green">
+                        <h4 class="name-title text-green-800">Omnipresent</h4>
+                        <p class="name-meaning">Present Everywhere</p>
+                        <p>God is present in all places at all times. You can't go anywhere where God is not. He is with you at home, at school, and wherever you go. You are never alone!</p>
+                        <p class="font-semibold text-blue-700">"Where can I go from your Spirit? Where can I flee from your presence? If I go up to the heavens, you are there; if I make my bed in the depths, you are there." (Psalm 139:7-8)</p>
+                        <p class="name-prayer">🙏 Reflection: I can talk to God anytime, anywhere, because He is always with me.</p>
+                    </div>
+
+                    <!-- Immutable -->
+                    <div class="name-box name-box-green">
+                        <h4 class="name-title text-green-800">Immutable</h4>
+                        <p class="name-meaning">Unchanging</p>
+                        <p>God is absolutely unchanging. His love, His promises, and His character are the same yesterday, today, and forever. We can always depend on Him because He never changes.</p>
+                        <p class="font-semibold text-blue-700">"I the Lord do not change. So you, the descendants of Jacob, are not destroyed." (Malachi 3:6)</p>
+                        <p class="name-prayer">🙏 Reflection: In a world that is always changing, I can trust in my unchanging God.</p>
+                    </div>
+
+                    <!-- Holy -->
+                    <div class="name-box name-box-green">
+                        <h4 class="name-title text-green-800">Holy</h4>
+                        <p class="name-meaning">Perfect and Pure</p>
+                        <p>God is perfectly pure, without any sin or evil. His holiness is so bright and powerful that He cannot even look at sin. He is set apart from everything else.</p>
+                        <p class="font-semibold text-blue-700">"Holy, holy, holy is the Lord Almighty; the whole earth is full of his glory." (Isaiah 6:3)</p>
+                        <p class="name-prayer">🙏 Reflection: Because God is holy, I want to live a life that pleases Him.</p>
+                    </div>
+
+                    <!-- Righteous -->
+                    <div class="name-box name-box-red">
+                        <h4 class="name-title text-red-800">Righteous</h4>
+                        <p class="name-meaning">Always Right and Just</p>
+                        <p>Because God is holy, everything He does is right and fair. He is the perfect judge. His holiness is expressed through His righteousness when He deals with people.</p>
+                        <p class="font-semibold text-blue-700">"The Lord is righteous in all his ways and faithful in all he does." (Psalm 145:17)</p>
+                        <p class="name-prayer">🙏 Reflection: I can trust God to be fair and just in every situation.</p>
+                    </div>
+
+                    <!-- Sovereign -->
+                    <div class="name-box name-box-blue">
+                        <h4 class="name-title text-blue-800">Sovereign</h4>
+                        <p class="name-meaning">The Supreme Ruler</p>
+                        <p>God is the king of the universe, and He rules over His creation. He is in complete control and is free to do what He knows is best for us. Even when things seem confusing, God has a plan.</p>
+                        <p class="font-semibold text-blue-700">"In the beginning God created the heavens and the earth." (Genesis 1:1)</p>
+                        <p class="name-prayer">🙏 Reflection: I can have peace knowing that God is in control of my life and the world.</p>
+                    </div>
+
+                    <!-- Love -->
+                    <div class="name-box name-box-blue">
+                        <h4 class="name-title text-blue-800">Love</h4>
+                        <p class="name-meaning">He IS Love</p>
+                        <p>This is one of the most wonderful attributes! God doesn't just *have* love; He *is* love. His love is shown through His mercy and grace. He wants to have a personal relationship with each of us.</p>
+                        <p class="font-semibold text-blue-700">"Whoever does not love does not know God, because God is love." (1 John 4:8)</p>
+                        <p class="name-prayer">🙏 Reflection: God loves me unconditionally, no matter what I do.</p>
+                    </div>
+
+                    <!-- Merciful -->
+                    <div class="name-box name-box-blue">
+                        <h4 class="name-title text-blue-800">Merciful</h4>
+                        <p class="name-meaning">Full of Mercy</p>
+                        <p>Mercy means God doesn't give us the punishment we deserve for our sins. Instead of punishment, He offers us forgiveness and salvation through Jesus. The story of the Prodigal Son in Luke 15 is a beautiful picture of God's mercy.</p>
+                        <p class="font-semibold text-blue-700">"But because of his great love for us, God, who is rich in mercy, made us alive with Christ even when we were dead in transgressions—it is by grace you have been saved." (Ephesians 2:4-5)</p>
+                        <p class="name-prayer">🙏 Reflection: I am so thankful for God's mercy that forgives my mistakes.</p>
+                    </div>
+
+                    <!-- Trinity -->
+                    <div class="name-box name-box-red">
+                        <h4 class="name-title text-red-800">Trinity</h4>
+                        <p class="name-meaning">Three-in-One</p>
+                        <p>This can be tricky, but it's so important! God is one, but He exists as three distinct persons: God the Father, God the Son (Jesus), and God the Holy Spirit. We see all three at Jesus' baptism in Matthew 3!</p>
+                        <p class="font-semibold text-blue-700">"Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit." (Matthew 28:19)</p>
+                        <p class="name-prayer">🙏 Reflection: The Father, Son, and Holy Spirit all work together and love me.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Checkpoint 1 -->
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">
+                    <span>Quick Check! The Three "Omnis"</span>
+                </div>
+                <div class="section-content prose text-center">
+                    <p class="font-semibold">True or False: <strong>Omnipresent</strong> means God is all-powerful.</p>
+                    <div class="flex gap-4 justify-center mt-4">
+                        <button class="btn btn-primary" onclick="checkAnswer(this, true)">True</button>
+                        <button class="btn btn-primary" onclick="checkAnswer(this, false)">False</button>
+                    </div>
+                    <div class="feedback mt-4"></div>
+                </div>
+            </div>
+
+            <!-- Video 1 -->
+            <div class="lesson-section border-video">
+                <div class="section-header header-video">
+                    <span>Watch: The Attributes of God</span>
+                </div>
+                <div class="section-content prose">
+                    <p>Let's watch a video that helps explain some of these amazing attributes of God in a fun way!</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/BJWn_c0n-3M" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Interactive Activities -->
+            <!-- Activity 1: Matching Game -->
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">
+                    <span>Activity: Riddle Me This!</span>
+                </div>
+                <div class="section-content">
+                    <p class="mb-6 text-center">Read each riddle below and type the correct attribute of God in the box. Can you solve them all?</p>
+                    <div id="riddle-activity" class="space-y-4">
+                        <!-- Riddles will be generated by JavaScript -->
+                    </div>
+                    <div class="text-center mt-6 flex justify-center gap-4">
+                        <button id="riddle-check-btn" class="btn btn-primary">Check My Riddles</button>
+                        <button id="riddle-reset-btn" class="btn btn-secondary">Try Again</button>
+                    </div>
+                    <div id="riddle-final-feedback" class="feedback mt-4">
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-2 text-xs" id="riddle-word-bank">
+                            <!-- Word bank is no longer needed for this activity format -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity 2: Scenario Reflection -->
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">
+                    <span>Activity: Real-Life Scenario</span>
+                </div>
+                <div class="section-content">
+                    <p class="mb-4">Read the scenario below. Which attribute of God would you remember in this situation? Type your answer and why!</p>
+                    <div id="scenario-container" class="bg-purple-100 p-6 rounded-lg mb-4 prose">
+                        <h4 class="font-bold text-xl text-purple-900">A Tough Test</h4>
+                        <p>You have a big test at school tomorrow that you're worried about. You've studied hard, but you're afraid you might forget everything. You need to trust that God can do anything, even help you with your test.</p>
+                        <p class="font-semibold mt-4">Which attribute reminds you that God is All-Powerful and can help you in any situation?</p>
+                        <input type="text" id="scenario-answer" placeholder="Type an attribute of God here..." class="mt-2 w-full p-2 border-2 border-purple-300 rounded-md focus:outline-none focus:border-purple-500">
+                    </div>
+                    <div class="flex gap-4 items-center mt-6">
+                        <button id="scenario-check-btn" class="btn btn-primary">Check My Idea</button>
+                    </div>
+                    <div id="scenario-feedback" class="feedback mt-4"></div>
+                </div>
+            </div>
+
+            <!-- Video 2 -->
+            <div class="lesson-section border-video">
+                <div class="section-header header-video">
+                    <span>Watch & Worship</span>
+                </div>
+                <div class="section-content prose">
+                    <p>Now let's sing along to a song that celebrates the wonderful names of our God. Let the music fill your heart with joy!</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/lGa65aIOXkQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Final Quiz -->
+            <div class="lesson-section border-activity">
+                <div class="section-header header-activity">
+                    <span>Quiz: Final Checkpoint!</span>
+                </div>
+                <div class="section-content">
+                    <p class="text-center">Let's see what you've learned! Answer these questions to finish the lesson.</p>
+                    <div id="final-quiz" class="space-y-6 mt-6 text-left">
+                        
+                        <!-- Question 1 -->
+                        <div class="quiz-question" data-answer="Omniscient">
+                            <label for="q1" class="block font-semibold mb-2">1. The attribute that means "All-Knowing" is <span class="font-bold text-purple-700">__________</span>.</label>
+                            <input type="text" id="q1" class="quiz-input" placeholder="Type your answer...">
+                            <span class="correct-answer-display text-sm text-green-700 font-semibold mt-1 block"></span>
+                        </div>
+
+                        <!-- Question 2 -->
+                        <div class="quiz-question" data-answer="Omnipresent">
+                            <label for="q2" class="block font-semibold mb-2">2. The attribute that means God is "Present Everywhere" is <span class="font-bold text-purple-700">__________</span>.</label>
+                            <input type="text" id="q2" class="quiz-input" placeholder="Type your answer...">
+                            <span class="correct-answer-display text-sm text-green-700 font-semibold mt-1 block"></span>
+                        </div>
+
+                        <!-- Question 3 -->
+                        <div class="quiz-question" data-answer="Immutable">
+                            <label for="q3" class="block font-semibold mb-2">3. Because God is unchanging, we say He is <span class="font-bold text-purple-700">__________</span>.</label>
+                            <input type="text" id="q3" class="quiz-input" placeholder="Type your answer...">
+                            <span class="correct-answer-display text-sm text-green-700 font-semibold mt-1 block"></span>
+                        </div>
+
+                         <!-- Question 4 -->
+                        <div class="quiz-question" data-answer="Sovereignty">
+                            <label for="q4" class="block font-semibold mb-2">4. God's attribute as the supreme ruler in complete control is called His <span class="font-bold text-purple-700">__________</span>.</label>
+                            <input type="text" id="q4" class="quiz-input" placeholder="Type your answer...">
+                            <span class="correct-answer-display text-sm text-green-700 font-semibold mt-1 block"></span>
+                        </div>
+
+                        <!-- Question 5 -->
+                        <div class="quiz-question" data-answer="Omnipotent">
+                            <label for="q5" class="block font-semibold mb-2">5. The attribute that means God is "All-Powerful" is <span class="font-bold text-purple-700">__________</span>.</label>
+                            <input type="text" id="q5" class="quiz-input" placeholder="Type your answer...">
+                            <span class="correct-answer-display text-sm text-green-700 font-semibold mt-1 block"></span>
+                        </div>
+
+                        <!-- Question 6 -->
+                        <div class="quiz-question" data-answer="Trinity">
+                            <label for="q6" class="block font-semibold mb-2">6. The idea that God is one God in three persons (Father, Son, Holy Spirit) is called the <span class="font-bold text-purple-700">__________</span>.</label>
+                            <input type="text" id="q6" class="quiz-input" placeholder="Type your answer...">
+                            <span class="correct-answer-display text-sm text-green-700 font-semibold mt-1 block"></span>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center flex justify-center gap-4">
+                        <button id="submitQuizBtn" class="btn btn-primary">Check My Answers</button>
+                        <button id="resetQuizBtn" class="btn btn-secondary">Reset Quiz</button>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <div id="quizResult" class="feedback"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Wrap-Up -->
+            <div class="lesson-section border-main">
+                <div class="section-header header-main">
+                    <span>You are Loved by an Awesome God!</span>
+                </div>
+                <div class="section-content prose">
+                    <p class="text-xl font-bold text-center">Great job today!</p>
+                    <p>We've learned about some of God's amazing attributes: He is Omniscient (all-knowing), Omnipotent (all-powerful), Omnipresent (everywhere), Immutable (unchanging), Holy, Righteous, Sovereign, Love, Merciful, and a Trinity.</p>
+                    <p>These aren't just facts to memorize; they show us the character of the <strong>one true God</strong>. They help us understand His power, His love, and His care for us.</p>
+                    <p class="text-2xl font-bold text-center text-orange-600 mt-6">This week, remember one of these attributes when you pray. If you're scared, remember He is Omnipotent. If you feel alone, remember He is Omnipresent. He is an awesome God!</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p class="font-semibold">"God is holy in nature, attributes, and purpose; He, as God, is Triune in essential being, revealed as Father, Son, and Holy Spirit."</p>
+        <p class="text-xs mt-1">© 2025 Mr. Edwin's Virtual Classroom — All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // --- Utility Functions ---
+            function createConfetti() {
+                const confettiContainer = document.createElement('div');
+                confettiContainer.classList.add('confetti-container');
+                document.body.appendChild(confettiContainer);
+                for (let i = 0; i < 100; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    confettiContainer.appendChild(confetti);
+                }
+                setTimeout(() => { confettiContainer.remove(); }, 4000);
+            }
+
+            function shuffle(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            // --- Quick Checkpoint 1 ---
+            window.checkAnswer = function(button, isCorrect) {
+                const parent = button.closest('.section-content');
+                const feedbackEl = parent.querySelector('.feedback');
+                feedbackEl.classList.remove('feedback-correct', 'feedback-incorrect');
+                feedbackEl.classList.add('visible');
+                if (isCorrect) {
+                    feedbackEl.classList.add('feedback-incorrect');
+                    feedbackEl.textContent = 'Not quite. Omnipresent means "present everywhere." Omnipotent means "all-powerful."';
+                } else {
+                    feedbackEl.classList.add('feedback-correct');
+                    feedbackEl.textContent = 'Correct! Omnipresent means "present everywhere." You got it!';
+                }
+            }
+
+            // --- Activity 1: Riddle Me This! ---
+            const riddleActivityContainer = document.getElementById('riddle-activity');
+            const riddleCheckBtn = document.getElementById('riddle-check-btn');
+            const riddleResetBtn = document.getElementById('riddle-reset-btn');
+            const riddleFinalFeedback = document.getElementById('riddle-final-feedback');
+            const riddleWordBank = document.getElementById('riddle-word-bank');
+
+            const riddles = [
+                { riddle: "I mean God is all-powerful and can do anything.", answer: "Omnipotent" },
+                { riddle: "I mean God is present everywhere at the same time.", answer: "Omnipresent" },
+                { riddle: "I mean God is unchanging in His character and promises.", answer: "Immutable" },
+                { riddle: "I mean God is the supreme ruler over everything.", answer: "Sovereign" },
+                { riddle: "I mean God is three persons in one: Father, Son, and Holy Spirit.", answer: "Trinity" }
+            ];
+
+            function setupRiddleGame() {
+                riddleActivityContainer.innerHTML = '';
+                riddleFinalFeedback.classList.remove('visible', 'feedback-correct', 'feedback-incorrect');
+                
+                const shuffledRiddles = shuffle([...riddles]);
+                shuffledRiddles.forEach((item, index) => {
+                    const riddleEl = document.createElement('div');
+                    riddleEl.className = 'riddle-box';
+                    riddleEl.dataset.answer = item.answer;
+                    riddleEl.dataset.attempts = '0'; // Add attempts counter
+
+                    // Create options for the dropdown
+                    const correctAnswer = item.answer;
+                    const allAnswers = riddles.map(r => r.answer);
+                    const distractors = shuffle(allAnswers.filter(ans => ans !== correctAnswer)).slice(0, 2);
+                    const options = shuffle([correctAnswer, ...distractors]);
+
+                    let optionsHTML = '<option value="" disabled selected>Choose an answer...</option>';
+                    options.forEach(opt => {
+                        optionsHTML += `<option value="${opt}">${opt}</option>`;
+                    });
+
+                    riddleEl.innerHTML = `
+                        <p class="mb-2">${index + 1}. ${item.riddle}</p>
+                        <div class="flex items-center">
+                            <select class="quiz-input w-full md:w-1/2">${optionsHTML}</select>
+                            <span class="riddle-feedback ml-2"></span>
+                        </div>
+                    `;
+                    riddleActivityContainer.appendChild(riddleEl);
+                });
+
+            }
+
+            riddleCheckBtn.addEventListener('click', () => {
+                let correctCount = 0;
+                const allRiddles = document.querySelectorAll('.riddle-box');
+
+                allRiddles.forEach(riddleEl => {
+                    const select = riddleEl.querySelector('select');
+                    const feedback = riddleEl.querySelector('.riddle-feedback');
+                    const userAnswer = select.value;
+                    const correctAnswer = riddleEl.dataset.answer;
+
+                    select.classList.remove('input-correct', 'input-incorrect');
+
+                    if (userAnswer === correctAnswer) {
+                        select.classList.add('input-correct');
+                        feedback.textContent = '✅';
+                        feedback.style.color = '#16a34a';
+                        select.disabled = true; // Disable on correct answer
+                        correctCount++;
+                    } else {
+                        let attempts = parseInt(riddleEl.dataset.attempts, 10) + 1;
+                        riddleEl.dataset.attempts = attempts;
+                        
+                        select.classList.add('input-incorrect');
+                        if (attempts >= 2) {
+                            feedback.textContent = `❌ Answer: ${correctAnswer}`;
+                            feedback.style.color = '#dc2626';
+                            select.disabled = true; // Disable after 2 wrong attempts
+                        } else {
+                            feedback.textContent = '❌ Try again!';
+                            feedback.style.color = '#dc2626';
+                        }
+                    }
+                });
+
+                riddleFinalFeedback.classList.add('visible');
+                if (correctCount === allRiddles.length) {
+                    riddleFinalFeedback.classList.add('feedback-correct');
+                    riddleFinalFeedback.innerHTML = 'You solved all the riddles! Fantastic job!';
+                    createConfetti();
+                } else {
+                    riddleFinalFeedback.classList.add('feedback-incorrect');
+                    riddleFinalFeedback.innerHTML = 'Not quite! Check the riddles marked with ❌ and try again, or see the revealed answers.';
+                }
+            });
+
+            riddleResetBtn.addEventListener('click', () => {
+                const allRiddles = document.querySelectorAll('.riddle-box');
+                allRiddles.forEach(riddleEl => {
+                    const select = riddleEl.querySelector('select');
+                    const feedback = riddleEl.querySelector('.riddle-feedback');
+                    
+                    select.value = ''; // Reset dropdown
+                    select.disabled = false; // Re-enable it
+                    select.classList.remove('input-correct', 'input-incorrect');
+                    feedback.textContent = '';
+                    riddleEl.dataset.attempts = '0'; // Reset attempts
+                });
+                riddleFinalFeedback.classList.remove('visible', 'feedback-correct', 'feedback-incorrect');
+                riddleFinalFeedback.innerHTML = ''; // Clear final feedback text
+            });
+
+            // --- Activity 2: Scenario Reflection ---
+            const scenarioCheckBtn = document.getElementById('scenario-check-btn');
+            const scenarioFeedbackEl = document.getElementById('scenario-feedback');
+            const scenarioAnswerInput = document.getElementById('scenario-answer');
+
+            scenarioCheckBtn.addEventListener('click', () => {
+                const userAnswer = scenarioAnswerInput.value.trim().toLowerCase();
+                scenarioFeedbackEl.classList.remove('feedback-correct', 'feedback-incorrect');
+                scenarioFeedbackEl.classList.add('visible');
+
+                if (userAnswer.includes('omnipotent')) {
+                    scenarioFeedbackEl.classList.add('feedback-correct');
+                    scenarioFeedbackEl.innerHTML = 'Excellent! <strong>Omnipotent</strong> is the perfect attribute to remember. God is all-powerful and can help you with anything, even a test!';
+                } else if (userAnswer.includes('omniscient')) {
+                     scenarioFeedbackEl.classList.add('feedback-correct');
+                    scenarioFeedbackEl.innerHTML = 'That\'s a great thought, too! <strong>Omniscient</strong> (All-Knowing) is a wonderful answer because He knows what\'s on the test and knows you studied hard.';
+                } else {
+                    scenarioFeedbackEl.classList.add('feedback-incorrect');
+                    scenarioFeedbackEl.textContent = 'Good try! The best answer is "Omnipotent" because it means God is all-powerful. "Omniscient" (all-knowing) is also a great answer!';
+                }
+            });
+
+            // --- Final Quiz ---
+            const submitQuizBtn = document.getElementById('submitQuizBtn');
+            const quizResultEl = document.getElementById('quizResult');
+            const resetQuizBtn = document.getElementById('resetQuizBtn');
+
+            submitQuizBtn.addEventListener('click', () => {
+                let correctCount = 0;
+                const allQuestions = document.querySelectorAll('.quiz-question');
+
+                allQuestions.forEach(question => {
+                    const correctAnswer = question.dataset.answer;
+                    const inputEl = question.querySelector('.quiz-input');
+                    const userAnswer = inputEl.value.trim().toLowerCase();
+                    const correctAnswerDisplay = question.querySelector('.correct-answer-display');
+
+                    // Reset styles and display
+                    inputEl.classList.remove('input-correct', 'input-incorrect');
+                    correctAnswerDisplay.className = 'correct-answer-display text-sm text-green-700 font-semibold mt-1 block';
+                    correctAnswerDisplay.textContent = '';
+
+                    // Check answer (case-insensitive)
+                    if (userAnswer === correctAnswer.toLowerCase()) {
+                        correctCount++;
+                        inputEl.classList.add('input-correct');
+                    } else {
+                        inputEl.classList.add('input-incorrect');
+                        correctAnswerDisplay.textContent = `Hint: Try again!`;
+                        correctAnswerDisplay.className = 'correct-answer-display text-sm text-red-700 font-semibold mt-1 block';
+                    }
+                });
+
+                quizResultEl.classList.remove('feedback-correct', 'feedback-incorrect');
+                quizResultEl.classList.add('visible');
+
+                if (correctCount === allQuestions.length) {
+                    quizResultEl.classList.add('feedback-correct');
+                    quizResultEl.textContent = `Excellent! You got ${correctCount}/${allQuestions.length} correct. You have mastered this lesson!`;
+                    createConfetti();
+                } else if (correctCount > 0) {
+                    quizResultEl.classList.add('feedback-correct'); // Use correct style for partial credit
+                    quizResultEl.textContent = `Good effort! You got ${correctCount}/${allQuestions.length} correct. Review the answers to learn even more!`;
+                } else {
+                    quizResultEl.classList.add('feedback-incorrect');
+                    quizResultEl.textContent = `You got ${correctCount}/${allQuestions.length}. Review the correct answers above and feel free to try again!`;
+                }
+            });
+
+            resetQuizBtn.addEventListener('click', () => {
+                const allQuestions = document.querySelectorAll('.quiz-question');
+                allQuestions.forEach(question => {
+                    const inputEl = question.querySelector('.quiz-input');
+                    const correctAnswerDisplay = question.querySelector('.correct-answer-display');
+
+                    // Clear input value and styles
+                    inputEl.value = '';
+                    inputEl.classList.remove('input-correct', 'input-incorrect');
+                    correctAnswerDisplay.textContent = '';
+                });
+
+                // Hide the final result feedback
+                quizResultEl.classList.remove('visible', 'feedback-correct', 'feedback-incorrect');
+            });
+
+            // Initial setup
+            setupRiddleGame();
+        });
+    </script>
+</body>
+</html>
