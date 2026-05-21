@@ -10,11 +10,11 @@
 
 | Page | URL |
 |---|---|
-| Main Classroom Hub | https://teacherzoled.github.io/Virtual-Classroom/ |
-| Spanish Subject | https://teacherzoled.github.io/spanish/ |
-| Science Subject | https://teacherzoled.github.io/science/ |
-| Mis Aspiraciones Lesson | https://teacherzoled.github.io/spanish/mis-aspiraciones-intro/ |
-| Student Portfolios | https://teacherzoled.github.io/portfolios/ |
+| Main Classroom Hub | https://edlovirtualclassroom.com/Virtual-Classroom/ |
+| Spanish Subject | https://edlovirtualclassroom.com/spanish/ |
+| Science Subject | https://edlovirtualclassroom.com/science/ |
+| Mis Aspiraciones Lesson | https://edlovirtualclassroom.com/spanish/mis-aspiraciones-intro/ |
+| Student Portfolios | https://edlovirtualclassroom.com/portfolios/ |
 
 ---
 
@@ -74,7 +74,7 @@ Python Projects/
 
 ### How it works
 - Students enter a class code once on their first AI feedback request
-- Code is saved to `localStorage` key: `vc-passkey` — persists across ALL lessons and ALL subjects on `teacherzoled.github.io`
+- Code is saved to `localStorage` key: `vc-passkey` — persists across ALL lessons and ALL subjects on `edlovirtualclassroom.com`
 - The passkey is validated server-side inside the Cloudflare Worker — never exposed in browser code
 - Wrong code → Worker returns 403, key is cleared, modal reappears
 - New school year → change `VALID_KEY` in the Worker once → applies everywhere instantly
