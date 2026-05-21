@@ -1964,15 +1964,30 @@ function downloadPDF() {
 let devOpen = false;
 
 document.addEventListener('keydown', e => {
-  if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+  // Dev tool — Ctrl+Shift+D (works regardless of caps lock)
+  if (e.ctrlKey && e.shiftKey && (e.key === 'D' || e.key === 'd')) {
     e.preventDefault();
+    e.stopPropagation();
     const fab = document.getElementById('dev-fab');
     fab.classList.toggle('show');
     if (!fab.classList.contains('show')) {
       document.getElementById('dev-panel').classList.remove('open');
       devOpen = false;
     }
+    return;
   }
+  // Calculator keyboard support
+  if (!calcOpen) return;
+  const key = e.key;
+  if ('0123456789.'.includes(key))        { calcInsert(key); e.preventDefault(); }
+  else if (key === '+')                    { calcOp('+');     e.preventDefault(); }
+  else if (key === '-')                    { calcOp('-');     e.preventDefault(); }
+  else if (key === '*')                    { calcOp('*');     e.preventDefault(); }
+  else if (key === '/')                    { calcOp('/');     e.preventDefault(); }
+  else if (key === '(' || key === ')')     { calcInsert(key); e.preventDefault(); }
+  else if (key === 'Enter' || key === '=') { calcEquals();    e.preventDefault(); }
+  else if (key === 'Backspace')            { calcBackspace(); e.preventDefault(); }
+  else if (key === 'Escape')               { toggleCalc();    e.preventDefault(); }
 });
 
 function toggleDev() {
@@ -2213,19 +2228,6 @@ document.addEventListener('click', e => {
   }
 });
 
-// Keyboard support for calculator
-document.addEventListener('keydown', e => {
-  if (!calcOpen) return;
-  const key = e.key;
-  if ('0123456789.'.includes(key))       { calcInsert(key); e.preventDefault(); }
-  else if (key === '+')                   { calcOp('+');     e.preventDefault(); }
-  else if (key === '-')                   { calcOp('-');     e.preventDefault(); }
-  else if (key === '*')                   { calcOp('*');     e.preventDefault(); }
-  else if (key === '/')                   { calcOp('/');     e.preventDefault(); }
-  else if (key === '(' || key === ')')    { calcInsert(key); e.preventDefault(); }
-  else if (key === 'Enter' || key === '='){ calcEquals();    e.preventDefault(); }
-  else if (key === 'Backspace')           { calcBackspace(); e.preventDefault(); }
-  else if (key === 'Escape')              { toggleCalc();    e.preventDefault(); }
 });
 </script>
 </body>
