@@ -625,6 +625,45 @@ h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.9rem,5vw,3.1rem); line
 .test-locked .opt { cursor:default; }
 
 /* ═══════════════════════════════════════════
+   DEV TOOL PANEL
+═══════════════════════════════════════════ */
+#dev-fab {
+  position:fixed; bottom:5rem; left:1.5rem; z-index:99;
+  background:#ff6b6b; color:#fff;
+  border:none; border-radius:14px;
+  width:52px; height:52px; font-size:1.2rem;
+  cursor:pointer; box-shadow:0 4px 18px rgba(255,100,100,.40);
+  transition:all .2s; display:none; align-items:center; justify-content:center;
+  font-family:'Fredoka One',cursive;
+}
+#dev-fab:hover { transform:translateY(-3px) scale(1.07); }
+#dev-fab.show  { display:flex; }
+#dev-panel {
+  position:fixed; bottom:9rem; left:1.5rem; z-index:100;
+  background:#1a1a2e; border:2px solid #ff6b6b;
+  border-radius:20px; padding:1.2rem; width:320px;
+  box-shadow:0 12px 40px rgba(0,0,0,.60);
+  display:none; flex-direction:column; gap:.7rem;
+  animation:popIn .25s cubic-bezier(.36,1.5,.6,1) both;
+  color:#fff; font-family:'Nunito',sans-serif;
+}
+#dev-panel.open { display:flex; }
+.dev-title { font-family:'Fredoka One',cursive; font-size:1rem; color:#ff6b6b; display:flex; align-items:center; gap:6px; border-bottom:1px solid rgba(255,100,100,.25); padding-bottom:.5rem; }
+.dev-subtitle { font-size:.65rem; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:rgba(255,255,255,.35); margin-bottom:.2rem; }
+.dev-row { display:flex; gap:.5rem; flex-wrap:wrap; }
+.dev-btn { font-family:'Nunito',sans-serif; font-size:.78rem; font-weight:700; padding:6px 12px; border-radius:8px; border:1.5px solid rgba(255,255,255,.15); background:rgba(255,255,255,.07); color:#fff; cursor:pointer; transition:all .14s; flex:1; }
+.dev-btn:hover { background:rgba(255,255,255,.15); }
+.dev-btn.red   { background:rgba(255,100,100,.15); border-color:#ff6b6b; color:#ff6b6b; }
+.dev-btn.red:hover   { background:#ff6b6b; color:#fff; }
+.dev-btn.green { background:rgba(100,220,130,.12); border-color:#69DB7C; color:#69DB7C; }
+.dev-btn.green:hover { background:#69DB7C; color:#1a1a2e; }
+.dev-btn.blue  { background:rgba(77,171,247,.12); border-color:#4DABF7; color:#4DABF7; }
+.dev-btn.blue:hover  { background:#4DABF7; color:#1a1a2e; }
+.dev-input { width:100%; background:rgba(255,255,255,.07); border:1.5px solid rgba(255,255,255,.15); border-radius:8px; padding:7px 10px; font-family:'Nunito',sans-serif; font-size:.85rem; font-weight:700; color:#fff; outline:none; }
+.dev-input:focus { border-color:#ff6b6b; }
+.dev-info { font-size:.7rem; color:rgba(255,255,255,.35); line-height:1.5; border-top:1px solid rgba(255,255,255,.07); padding-top:.5rem; }
+
+/* ═══════════════════════════════════════════
    QUESTION DIAGRAMS
 ═══════════════════════════════════════════ */
 .q-diagram {
@@ -1071,6 +1110,51 @@ h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.9rem,5vw,3.1rem); line
 
 <!-- FLOATING CALCULATOR -->
 <button id="calc-fab" title="Open Calculator" onclick="toggleCalc()">🧮</button>
+
+<!-- DEV TOOL — activated by Ctrl+Shift+D -->
+<button id="dev-fab" title="Dev Tool" onclick="toggleDev()">🛠</button>
+
+<div id="dev-panel">
+  <div class="dev-title">🛠 Teacher Dev Tool</div>
+
+  <div>
+    <div class="dev-subtitle">Student Name</div>
+    <input class="dev-input" id="dev-name" placeholder="Enter test name..." value="Test Student">
+  </div>
+
+  <div>
+    <div class="dev-subtitle">Fill Answers</div>
+    <div class="dev-row">
+      <button class="dev-btn green" onclick="devFillCorrect()">✅ Fill All Correct</button>
+      <button class="dev-btn red"   onclick="devFillWrong()">❌ Fill All Wrong</button>
+    </div>
+    <div class="dev-row" style="margin-top:.4rem;">
+      <button class="dev-btn blue"  onclick="devFillPartial()">⚡ Fill Partial</button>
+      <button class="dev-btn"       onclick="devClearAll()">🗑 Clear All</button>
+    </div>
+  </div>
+
+  <div>
+    <div class="dev-subtitle">Class Code (Passkey)</div>
+    <input class="dev-input" id="dev-passkey" placeholder="Enter your class code...">
+  </div>
+
+  <div class="dev-row">
+    <button class="dev-btn green" style="flex:2;" onclick="devSubmit()">🚀 Fill &amp; Submit Test</button>
+  </div>
+
+  <div>
+    <div class="dev-subtitle">Reset</div>
+    <div class="dev-row">
+      <button class="dev-btn red" onclick="devReset()">🔄 Clear localStorage &amp; Reload</button>
+    </div>
+  </div>
+
+  <div class="dev-info">
+    Activate: <strong>Ctrl + Shift + D</strong> anywhere on the page.<br>
+    This panel is invisible to students. For teacher testing only.
+  </div>
+</div>
 
 <div id="calc-panel">
   <div class="calc-label">📐 Calculator — π = 3.14 built in</div>
@@ -1861,11 +1945,129 @@ function downloadPDF() {
     doc.setFillColor(77,171,247);
     doc.rect(0, 290, 210, 7, 'F');
     doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(255,255,255);
-    doc.text('edlovirtualclassroom.com  ·  Standard 6 Mathematics · SA & Volume  ·  Page ' + p + ' of ' + pageCount, pageW/2, 294.5, {align:'center'});
+    doc.text('edlovirtualclassroom.com/math/tests/surface-area-volume  ·  Standard 6 Mathematics  ·  Page ' + p + ' of ' + pageCount, pageW/2, 294.5, {align:'center'});
   }
 
   const safeName = name.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
   doc.save('SurfaceArea_Volume_' + safeName + '.pdf');
+}
+
+/* ═══════════════════════════════════════════
+   DEV TOOL — Ctrl+Shift+D to activate
+═══════════════════════════════════════════ */
+let devOpen = false;
+
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+    e.preventDefault();
+    const fab = document.getElementById('dev-fab');
+    fab.classList.toggle('show');
+    if (!fab.classList.contains('show')) {
+      document.getElementById('dev-panel').classList.remove('open');
+      devOpen = false;
+    }
+  }
+});
+
+function toggleDev() {
+  devOpen = !devOpen;
+  document.getElementById('dev-panel').classList.toggle('open', devOpen);
+}
+
+const DEV_CORRECT = {
+  'a1w':'SA = 2 x 3.14 x 5^2 + 2 x 3.14 x 5 x 12 = 157 + 376.8 = 533.8',
+  'a1a':'SA = 533.8 cm^2',
+  'a2w':'Base area = 8 x 8 = 64 cm^2. One triangle = (1/2) x 8 x 10 = 40 cm^2. Four triangles = 4 x 40 = 160 cm^2. Total SA = 64 + 160 = 224 cm^2',
+  'a2a':'SA = 224 cm^2',
+  'a3w':'r = 14 / 2 = 7 m. SA = 2 x 3.14 x 49 + 2 x 3.14 x 7 x 6 = 307.72 + 263.76 = 571.48',
+  'a3a':'SA = 571.48 m^2',
+  'b1w':'r = 10 / 2 = 5 cm. V = 3.14 x 5^2 x 8 = 3.14 x 25 x 8 = 628',
+  'b1a':'V = 628 cm^3',
+  'b2w':'Base area = 9 x 6 = 54 cm^2. V = (1/3) x 54 x 10 = 180',
+  'b2a':'V = 180 cm^3',
+  'b3w':'V = (1/3) x 3.14 x 7^2 x 15 = (1/3) x 2307.9 = 769.3',
+  'b3a':'V = 769.3 cm^3',
+  'c1a':'Surface area is the total area of the outside surface of a 3D shape. Volume is the amount of space inside a 3D shape. For example, a cylinder has surface area on its two circular ends and its curved side, while its volume is the space inside it.',
+  'c2cone':'V = (1/3) x pi x r^2 x h',
+  'c2pyr':'V = (1/3) x base area x h',
+  'c2cyl':'V = pi x r^2 x h',
+  'c2a':'The 1/3 appears because a cone fits exactly 3 times into a cylinder with the same base and height, and a pyramid fits exactly 3 times into a prism with the same base and height.',
+  'c3w':'V = (1/3) x 3.14 x 3^2 x 4 = (1/3) x 113.04 = 37.68',
+  'c3a':'The silo can hold approximately 37.68 m^3 of grain.',
+  'c4err':'The student used 2 x pi x r x h instead of pi x r^2 x h — they did not square the radius.',
+  'c4form':'V = pi x r^2 x h',
+  'c4a':'V = 3.14 x 4^2 x 10 = 3.14 x 16 x 10 = 502.4 cm^3',
+};
+
+const DEV_WRONG = {
+  'a1w':'SA = 2 x 3.14 x 5 x 12 = 376.8','a1a':'SA = 376.8 cm^2',
+  'a2w':'Base = 8 x 8 = 64. Triangle = 8 x 10 = 80. Total = 64 + 80 = 144','a2a':'SA = 144 cm^2',
+  'a3w':'r = 14 m. SA = 2 x 3.14 x 196 + 2 x 3.14 x 14 x 6 = 1230.88','a3a':'SA = 1230.88 m^2',
+  'b1w':'V = 3.14 x 10^2 x 8 = 2512','b1a':'V = 2512 cm^3',
+  'b2w':'Base area = 54. V = 54 x 10 = 540','b2a':'V = 540 cm^3',
+  'b3w':'V = 3.14 x 7^2 x 15 = 2307.9','b3a':'V = 2307.9 cm^3',
+  'c1a':'Surface area is the volume of the shape and volume is the surface.',
+  'c2cone':'V = pi x r^2 x h','c2pyr':'V = base x h','c2cyl':'V = (1/3) x pi x r^2 x h',
+  'c2a':'Because it is a fraction.',
+  'c3w':'V = 3.14 x 3^2 x 4 = 113.04','c3a':'The volume is 113.04.',
+  'c4err':'The student made an arithmetic error.','c4form':'V = 2 x pi x r x h',
+  'c4a':'V = 2 x 3.14 x 4 x 10 = 251.2 cm^3',
+};
+
+const DEV_PARTIAL = {
+  'a1w':'SA = 2 x 3.14 x 25 + 2 x 3.14 x 5 x 12 = 533.8','a1a':'SA = 533.8 cm^2',
+  'a2w':'Base = 64. Triangle = (1/2) x 8 x 10 = 40. Total SA = 64 + 40 = 104','a2a':'SA = 104 cm^2',
+  'a3w':'r = 7 m. SA = 2 x 3.14 x 49 + 2 x 3.14 x 7 x 6 = 571.48','a3a':'SA = 571.48 m^2',
+  'b1w':'r = 5 cm. V = 3.14 x 25 x 8 = 628','b1a':'V = 628 cm^3',
+  'b2w':'Base area = 54. V = 54 x 10 = 540','b2a':'V = 540 cm^3',
+  'b3w':'V = (1/3) x 3.14 x 49 x 15 = 769.3','b3a':'V = 769.3 cm^3',
+  'c1a':'Surface area is the outside of a shape. Volume is how much space is inside. A cylinder has both.',
+  'c2cone':'V = (1/3) x pi x r^2 x h','c2pyr':'V = base x h','c2cyl':'V = pi x r^2 x h',
+  'c2a':'The 1/3 is because a cone fits inside a cylinder.',
+  'c3w':'V = (1/3) x 3.14 x 9 x 4 = 37.68','c3a':'The silo can hold 37.68 m^3.',
+  'c4err':'The student did not square the radius.','c4form':'V = pi x r^2 x h',
+  'c4a':'V = 3.14 x 16 x 10 = 502.4 cm^3',
+};
+
+function devFillFields(data) {
+  const name = document.getElementById('dev-name').value || 'Test Student';
+  document.getElementById('studentName').value = name;
+  Object.keys(data).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.value = data[id]; el.dispatchEvent(new Event('input')); }
+  });
+  updateQuestionProgress();
+}
+
+function devFillCorrect() { devFillFields(DEV_CORRECT); }
+function devFillWrong()   { devFillFields(DEV_WRONG);   }
+function devFillPartial() { devFillFields(DEV_PARTIAL); }
+
+function devClearAll() {
+  document.querySelectorAll('.working-area, .answer-input, .scaffold-input').forEach(el => {
+    el.value = ''; el.dispatchEvent(new Event('input'));
+  });
+  document.getElementById('studentName').value = '';
+  updateQuestionProgress();
+}
+
+async function devSubmit() {
+  const pk = document.getElementById('dev-passkey').value.trim();
+  if (!pk) { alert('Enter your class code in the Dev Tool first.'); return; }
+  document.getElementById('studentName').value = document.getElementById('dev-name').value || 'Test Student';
+  if (!document.getElementById('a1w').value.trim()) devFillCorrect();
+  savePasskey(pk.toUpperCase());
+  toggleDev();
+  document.getElementById('dev-fab').classList.remove('show');
+  await handleSubmit();
+}
+
+function devReset() {
+  if (confirm('Clear all saved test data and reload?')) {
+    localStorage.removeItem(QUIZ_KEY);
+    localStorage.removeItem(PK_KEY);
+    location.reload();
+  }
 }
 
 /* ═══════════════════════════════════════════
