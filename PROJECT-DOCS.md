@@ -58,6 +58,7 @@ All subject pages now live inside one repo:
 Virtual-Classroom/
 ├── index.html                          ← Home page (hub)
 ├── CNAME                               ← Custom domain file (auto-created by GitHub)
+├── edlo-utils.js                       ← Shared LMS utility functions (built June 2026)
 ├── spanish/
 │   ├── index.html                      ← Spanish subject hub
 │   ├── mis-aspiraciones-intro/
@@ -73,8 +74,14 @@ Virtual-Classroom/
 ├── scriptures/                         ← Hub page not built yet
 ├── computersc/                         ← Hub page not built yet
 ├── pe/                                 ← Hub page not built yet
-└── portfolios/
-    └── index.html                      ← Student portfolios (LIVE)
+├── portfolios/
+│   └── index.html                      ← Student portfolios (LIVE)
+├── login/
+│   └── index.html                      ← Student login page (built June 2026)
+├── dashboard/
+│   └── index.html                      ← Student dashboard (built July 2026)
+└── teacher/
+    └── index.html                      ← Teacher dashboard (built August 2026)
 ```
 
 ---
@@ -104,6 +111,13 @@ C:\Users\zoloe\OneDrive\Shared with me\Code Projects\Python Projects\
 | localStorage key | `vc-passkey` |
 | Validation location | Cloudflare Worker (server-side, secure) |
 | Scope | Site-wide — works across all subjects automatically |
+
+### Teacher reset code
+| Item | Value |
+|---|---|
+| Reset code | `RESET-QUIZ` |
+| How to use | On the "Test Already Submitted" lock screen, click **🔑 Reset Quiz for Testing** → enter `RESET-QUIZ` → page reloads fresh |
+| Effect | Clears only the current browser/device — does not affect any student's lock |
 
 ### Changing the passkey (new school year)
 1. Go to `dash.cloudflare.com` → Workers → `edlo-gemini`
@@ -177,10 +191,31 @@ Theme preference saves to `localStorage` key: `vc-theme` — persists across all
 - URL: https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png
 
 ### Layout Rules
-- Wrapper: `max-width: 1400px`, padding `0 max(1rem, 4vw)`
-- Cards: `flex: 0 1 260px`, centered with flexbox
-- Mobile: at `max-width: 700px`, cards set to `flex: 0 1 100%`
+- Wrapper: `max-width: 1400px`, padding `0 max(1rem, 4vw)` — NEVER use `1in`
+- Same `max(1rem, 4vw)` padding applies to `.site-footer`
+- Cards: `flex: 0 1 260px`, centered with flexbox, incomplete rows center automatically
+- Wide cards (activities/assessments): `flex: 0 1 340px`
+- Lab cards: `flex: 0 1 420px`
 - Each subject has its own accent color
+
+### Mobile Rules (apply to every subject hub page)
+- At `max-width: 640px`: `.wide-card` and `.lab-card` → `flex: 0 1 100%`
+- At `max-width: 480px`: `.grid .card` → `flex: 0 1 100%`
+- `html`, `body`, and `.wrapper` must all have `overflow-x: hidden`
+- h1 font size must use `clamp(1.8rem, 8vw, 3.8rem)` — never a fixed size
+- `.welcome-text` must have `min-width: 0` and `word-break: break-word`
+
+### Cycle Divider Mobile Rules
+- `.cycle-divider-label`: always `white-space: normal` and `text-align: center`
+- At `max-width: 640px`: `.cycle-divider` → `flex-wrap: wrap; justify-content: center`
+- At `max-width: 640px`: `.cycle-divider-label` → `width: 100%; text-align: center`
+- At `max-width: 640px`: `.cycle-divider-line` → `display: none`
+
+### Copyright Footer
+Every page footer must read exactly:
+```
+© 2026 Mr. EdLo's Virtual Classroom — Standard 6 · Belize · All rights reserved.
+```
 
 ### Subject Accent Colors
 | Subject | Color | Hex |
@@ -209,7 +244,7 @@ Theme preference saves to `localStorage` key: `vc-theme` — persists across all
 
 ## 🔧 VS Code Workflow
 
-### Opening a repo
+### Opening the repo
 `File → Open Folder` → select the Virtual-Classroom folder
 
 ### Saving files
@@ -222,13 +257,13 @@ git commit -m "Your message here"
 git push
 ```
 
-### Find and replace across all files
-`Ctrl + Shift + H` — use to update things like domain names, copyright year, or school name across all files at once
-
 ### Switching to Virtual-Classroom in terminal
 ```bash
 cd "C:\Users\zoloe\OneDrive\Shared with me\Code Projects\Python Projects\Virtual-Classroom"
 ```
+
+### Find and replace across all files
+`Ctrl + Shift + H` — use to update things like domain names, copyright year, or school name across all files at once
 
 ---
 
@@ -244,6 +279,9 @@ cd "C:\Users\zoloe\OneDrive\Shared with me\Code Projects\Python Projects\Virtual
 | Scriptures Hub | edlovirtualclassroom.com/scriptures/ | ❌ Not built yet |
 | Computer Science Hub | edlovirtualclassroom.com/computersc/ | ❌ Not built yet |
 | PE Hub | edlovirtualclassroom.com/pe/ | ❌ Not built yet |
+| Login Page | edlovirtualclassroom.com/login/ | ❌ Not built yet (June) |
+| Student Dashboard | edlovirtualclassroom.com/dashboard/ | ❌ Not built yet (July) |
+| Teacher Dashboard | edlovirtualclassroom.com/teacher/ | ❌ Not built yet (August) |
 
 ---
 
@@ -254,18 +292,189 @@ cd "C:\Users\zoloe\OneDrive\Shared with me\Code Projects\Python Projects\Virtual
 |---|---|---|---|---|
 | Mis Aspiraciones: Voy a + infinitivo | mis-aspiraciones-intro | ✅ Live | ✅ Full interactive | ✅ Active (OpenAI) |
 
+### Science
+| Lesson | Folder | Status | Activities | AI Feedback |
+|---|---|---|---|---|
+| SC 6.19 Plant Adaptations (Test) | science/ | ✅ Live | ✅ Full test | ✅ Active (OpenAI) |
+| SC 6.20 Plant Diversity (Test) | science/ | ✅ Live | ✅ Full test | ✅ Active (OpenAI) |
+
 ---
 
-## 🗺️ Future Plans (in order of priority)
+## 🗺️ Current Priorities (May 2026 — before summer)
 
 1. **Build remaining subject hubs** — Math, Scriptures, Computer Science, PE
 2. **More Spanish lessons** — build out remaining lessons using the established template
 3. **Science lessons** — build lesson content under science hub
 4. **Rubric system** — add rubric table to PDF output for official grading
 5. **AI-powered chatbot** — lesson-aware assistant students can ask questions
-6. **Student progress tracking** — Google Sheets integration for scores (Level 2)
-7. **Full dashboard** — student login + progress dashboard (Level 3, long term)
-8. **Teacher voice audio** — replace TTS with recorded MP3 clips per section
+6. **Teacher voice audio** — replace TTS with recorded MP3 clips per section
+
+---
+
+## 🏗️ LMS Vision — Summer 2026 Build Plan
+
+A lightweight Learning Management System built entirely on free infrastructure already in place. No new services needed.
+
+### What it adds
+- One username/password per student stored in Google Sheets
+- Student logs in once — session persists across all pages and subjects
+- Every activity (test, quiz, lesson, exit slip) automatically logs a result row to Google Sheets
+- Student dashboard showing personal progress per subject and per LO
+- Teacher dashboard showing full class performance, weak LOs, and submission tracking
+
+### Architecture Overview
+```
+Student Browser
+     |
+     ├── edlo-utils.js  (shared JS linked on every page)
+     |        ├── vcLogin()         → Worker /login
+     |        ├── vcSaveProgress()  → Worker /save-result
+     |        └── vcGetProgress()   → Worker /progress
+     |
+     └── Cloudflare Worker (edlo-gemini) — 3 new endpoints added
+              ├── /ai-feedback    (existing — unchanged)
+              ├── /login          (new)
+              ├── /save-result    (new)
+              └── /progress       (new)
+                       |
+                       └── Google Sheets (via Service Account)
+                                ├── Tab 1: Students
+                                ├── Tab 2: All Results
+                                ├── Tab 3: Per Student Progress (formula-driven)
+                                └── Tab 4: Class Summary (formula-driven)
+```
+
+### Google Sheet Structure
+
+**Tab 1 — Students**
+| Column | Field | Example |
+|---|---|---|
+| A | username | `john.smith` |
+| B | password | (hashed) |
+| C | full_name | `John Smith` |
+| D | first_name | `John` |
+| E | class_id | `Std6-2026` |
+| F | active | `YES` / `NO` |
+
+**Tab 2 — All Results** (one row per submission, auto-appended)
+| Column | Field | Example |
+|---|---|---|
+| A | timestamp | `2026-09-15 08:42` |
+| B | username | `john.smith` |
+| C | student_name | `John Smith` |
+| D | subject | `Science` |
+| E | lo_code | `SC6.19` |
+| F | activity_type | `test` / `quiz` / `lesson` / `exit-slip` |
+| G | activity_name | `Plant Adaptations` |
+| H | score | `24` |
+| I | max_score | `30` |
+| J | percent | `80` |
+| K | ai_feedback | (AI feedback text if any) |
+
+**Tabs 3 and 4** — Formula-driven only. No code writes to them. Auto-calculate averages, weak LOs (below 70%), and class summaries from Tab 2.
+
+### Worker — New Endpoints
+
+| Endpoint | What it does |
+|---|---|
+| `/login` | Validates username + password against Tab 1, checks active=YES, returns session token |
+| `/save-result` | Validates session token, appends one row to Tab 2 |
+| `/progress` | Validates session token, returns all Tab 2 rows for that student |
+
+### edlo-utils.js — Shared JS File
+Hosted at: `edlovirtualclassroom.com/edlo-utils.js`
+Linked on every page with: `<script src="/edlo-utils.js"></script>`
+
+Functions:
+- `vcLogin(username, password)` — authenticates student
+- `vcGetSession()` — returns stored session or null
+- `vcRequireLogin()` — redirects to /login/ if no session found
+- `vcSaveProgress(payload)` — sends result row to Worker
+- `vcGetProgress()` — fetches all results for current student
+
+Adding LMS to any existing page requires only 2 lines:
+```html
+<script src="/edlo-utils.js"></script>
+<script> vcRequireLogin(); </script>
+```
+
+Adding result logging to any submit button:
+```javascript
+vcSaveProgress({
+  subject: 'Science',
+  lo_code: 'SC6.19',
+  activity_type: 'test',
+  activity_name: 'Plant Adaptations',
+  score: 24,
+  max_score: 30,
+  ai_feedback: feedbackText
+});
+```
+
+### New Pages to Build
+
+| Page | Path | Description |
+|---|---|---|
+| Login | `/login/index.html` | Student login page, styled to match site |
+| Student Dashboard | `/dashboard/index.html` | Personal progress — subject cards, LO bars, activity history, badges |
+| Teacher Dashboard | `/teacher/index.html` | Password-protected — class overview, LO breakdown, per-student drill-down, submission tracker |
+
+### Student Dashboard Features
+- Subject cards showing current average per subject
+- Progress bar per LO — green (strong), yellow (needs review)
+- Activity history timeline with scores and AI feedback
+- Achievement badges — First Test, Perfect Score, 10 Activities, etc.
+
+### Teacher Dashboard Features
+- Password-protected (teacher credentials only)
+- Full class overview — one row per student, colour-coded by performance
+- Per LO breakdown — which LOs the whole class struggled with
+- Per student drill-down — click name, see full activity history
+- Submission tracker — who submitted today's activity, who has not
+- Weekly summary report
+
+### Scalability — Tutor Academy Ready
+The system is architected to scale beyond one school class with zero rework:
+- `class_id` field in Tab 1 separates school students from tutor students automatically
+- Worker URL (`smartstandardsix.workers.dev`) has no school-specific naming
+- `edlo-utils.js` has no hardcoded class references — all context comes from session
+- Adding a tutor academy = new rows in Tab 1 with a different `class_id` + a new branded landing page
+- No existing school pages, tests, or lessons are ever touched
+
+### Summer Build Order
+
+| Month | Stage | What gets built |
+|---|---|---|
+| June | Foundation | Google Sheet structure + service account + Worker `/login` + `/save-result` + `edlo-utils.js` + login page |
+| June | Retrofit | Add `vcSaveProgress()` to existing Science tests (2 lines each) |
+| July | Student Dashboard | `/dashboard/index.html` — personal progress view |
+| August | Teacher Dashboard | `/teacher/index.html` — full class management view |
+| September | Go Live | Enroll all students, brief them on login, every activity feeds dashboards from day one |
+
+### AI Features — Later Phase
+- Hint mode — student clicks for a guiding question before submitting
+- Re-attempt feedback — AI compares first and second attempt
+- Vocabulary check — flags missing required scientific terms
+- Lesson activity grading — drag/drop, labelling, sorting activities
+
+### Storage Capacity
+Google Sheets limit is 10 million cells. At ~40 students with ~1,400 submissions per year, the site uses roughly 15,400 cells annually — well under any practical limit. Archive previous year's Tab 2 at the start of each school year to keep formulas fast.
+
+---
+
+## 💰 Cost Summary
+
+| Service | Cost | Notes |
+|---|---|---|
+| GitHub Pages | Free | Hosting for all pages |
+| Namecheap Domain | ~$10–15/year | edlovirtualclassroom.com |
+| Cloudflare Worker | Free | 100,000 requests/day free tier |
+| OpenAI (gpt-4o-mini) | ~$23/month | 40 students, all lessons active |
+| Google Fonts | Free | Fredoka One + Nunito |
+| Google Classroom | Free | Assignment submission + grading |
+| Google Sheets API | Free | LMS backend — service account |
+
+**Total monthly cost when fully built:** ~$23/month + ~$1/month domain
 
 ---
 
@@ -324,21 +533,6 @@ PDF includes:
 - 1 attempt = too rigid, no chance to improve
 - 2 attempts = forces deliberate revision after reading feedback
 - 3+ attempts = encourages guessing, reduces thinking
-
----
-
-## 💰 Cost Summary
-
-| Service | Cost | Notes |
-|---|---|---|
-| GitHub Pages | Free | Hosting for all pages |
-| Namecheap Domain | ~$10–15/year | edlovirtualclassroom.com |
-| Cloudflare Worker | Free | 100,000 requests/day free tier |
-| OpenAI (gpt-4o-mini) | ~$23/month | 40 students, all lessons active |
-| Google Fonts | Free | Fredoka One + Nunito |
-| Google Classroom | Free | Assignment submission + grading |
-
-**Total monthly cost when fully built:** ~$23/month + ~$1/month domain
 
 ---
 
