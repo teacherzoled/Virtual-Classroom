@@ -1660,7 +1660,7 @@ Return ONLY the JSON object.`;
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         passkey,
-        model: 'gpt-4o-mini',
+        model: 'gpt-4o',
         max_tokens: 2000,
         messages: [
           { role: 'system', content: systemPrompt },
