@@ -412,7 +412,104 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
 .vr-def{font-size:.99rem;font-weight:600;color:var(--body-color);line-height:1.6;margin-bottom:.45rem;}
 .vr-ex{font-size:.94rem;font-style:italic;color:var(--card-desc);border-left:3px solid var(--top-badge-bg);padding-left:.55rem;line-height:1.5;}
 
-@media(max-width:600px){.plan-tab{font-size:.9rem;padding:.7rem .3rem;}.pdf-row,.score-grid{flex-direction:column;align-items:center;}.vocab-grid-lesson,.vocab-ref-grid{grid-template-columns:1fr;}}
+/* ═══ MOBILE — 640px ═══ */
+@media(max-width:640px){
+  html{font-size:100%;}
+  .wrapper{padding:0 .9rem 2rem;}
+
+  /* Site header */
+  .site-header{flex-direction:column;align-items:flex-start;gap:.4rem;}
+  .site-header-logo img{height:40px;}
+  .site-header-logo span{font-size:1rem;}
+  .header-badge{font-size:.7rem;padding:4px 10px;}
+
+  /* Page header */
+  header{padding:1.3rem .5rem 1rem;}
+  h1{font-size:clamp(1.5rem,8vw,2.2rem);}
+  .subtitle{font-size:.9rem;}
+  .badge{font-size:.78rem;}
+
+  /* Progress bar */
+  .q-progress-label{font-size:.62rem;}
+
+  /* Plan section */
+  .plan-toggle{padding:.85rem 1rem;}
+  .plan-toggle-title{font-size:1rem;}
+  .plan-tab{font-size:.8rem;padding:.65rem .25rem;min-width:0;}
+  .plan-panel{padding:1rem .9rem;}
+
+  /* Info grid */
+  .info-grid{grid-template-columns:1fr 1fr;}
+
+  /* Pasos */
+  .paso-header{flex-wrap:wrap;gap:.35rem;padding:.7rem .9rem;}
+  .paso-title{font-size:.98rem;}
+  .paso-time{margin-left:0;width:100%;font-size:.72rem;}
+  .paso-body{padding:.9rem 1rem;}
+
+  /* Discuss cards */
+  .discuss-think{flex-direction:column;}
+  .reveal-btn{width:100%;text-align:center;}
+
+  /* Complete paso wrap */
+  .complete-paso-wrap{text-align:center;}
+  .complete-paso-btn{width:100%;font-size:.92rem;padding:11px 16px;}
+
+  /* Story tooltip — keep on-screen */
+  .sw-pop{left:0;transform:none;width:190px;}
+
+  /* Oral / practice */
+  .see-model-btn{width:100%;text-align:center;}
+
+  /* Vocab grid */
+  .vocab-grid-lesson,.vocab-ref-grid{grid-template-columns:1fr;}
+
+  /* Assessment section cards */
+  .sec-card{padding:1.1rem 1rem;}
+  .sec-head{flex-direction:column;align-items:flex-start;gap:.3rem;}
+  .sec-title{font-size:1.1rem;}
+
+  /* Student card */
+  .student-card{flex-direction:column;align-items:flex-start;padding:1rem;}
+  .sc-fields{flex-direction:column;}
+  .sc-group{min-width:100%;}
+
+  /* Score grid */
+  .score-grid{flex-direction:column;align-items:center;}
+  .score-box{min-width:0;width:100%;max-width:none;}
+
+  /* Results */
+  .results-section{padding:1.2rem 1rem;}
+  .res-title{font-size:1.25rem;}
+  .perf-badge{font-size:1rem;padding:.7rem .5rem;}
+
+  /* Buttons */
+  .btn-primary{font-size:1rem;padding:12px 20px;width:100%;}
+  .btn-gc{font-size:.95rem;padding:10px 18px;width:100%;}
+  .pdf-row{flex-direction:column;align-items:stretch;}
+
+  /* Assessment lock panel */
+  #assessLockCard{padding:1.5rem 1rem;}
+  #al-title{font-size:1.2rem;}
+  #al-progress{flex-direction:column;align-items:center;}
+  .al-session{width:100%;justify-content:center;}
+
+  /* Footer */
+  .site-footer{padding:1.5rem 1rem;text-align:center;}
+  .footer-tagline,.footer-copy{font-size:.8rem;}
+}
+
+/* ═══ MOBILE — 380px (very small phones) ═══ */
+@media(max-width:380px){
+  .wrapper{padding:0 .7rem 2rem;}
+  h1{font-size:1.4rem;}
+  .plan-tab{font-size:.72rem;padding:.6rem .2rem;}
+  .theme-btn{font-size:.78rem;padding:4px 10px;}
+  .info-grid{grid-template-columns:1fr;}
+  .plan-panel{padding:.85rem .7rem;}
+  .paso-body{padding:.8rem .85rem;}
+  .sec-card{padding:.9rem .85rem;}
+}
 
 /* ═══ ASSESSMENT LOCK PANEL ═══ */
 #assessLock{margin-bottom:1.5rem;animation:riseUp .5s ease .2s both;}
