@@ -2039,6 +2039,116 @@ function downloadCSV(){
   const csv='data:text/csv;charset=utf-8,'+headers.join(',')+'\n'+row.join(',');
   const link=document.createElement('a');link.setAttribute('href',encodeURI(csv));link.setAttribute('download','SP320_GC_'+(name.replace(/\s+/g,'_'))+'.csv');document.body.appendChild(link);link.click();document.body.removeChild(link);
 }
+
+// ═══ PROGRESS PERSISTENCE ═══════════════════════════════════════════════════
+(function(){
+  const KEY='vc-prog:'+window.location.pathname;
+  const PASO_IDS=['s1p2','s1p3','s1p4','s1p5','s2p1','s2p2','s2p3','s2p4'];
+  const VOCAB_IDS=['vc-matriculacion','vc-inscripcion','vc-asistencia','vc-promocion','vc-aprobar','vc-reprobar'];
+
+  function save(){
+    try{
+      const st={
+        pasos:PASO_IDS.filter(id=>{const el=document.getElementById(id);return el&&!el.classList.contains('paso-locked');}),
+        sessions:{s1:_sessionsDone.s1,s2:_sessionsDone.s2},
+        vocab:VOCAB_IDS.filter(id=>document.getElementById(id)?.classList.contains('learned')),
+        inputs:{},radios:{},
+        thinkBoxes:Array.from(document.querySelectorAll('#s1p1 .think-box')).map(el=>el.value),
+        storyAnswers:{},reviewAnswers:{},
+        doneMsgs:['s1-done','s2-done'].filter(id=>document.getElementById(id)?.classList.contains('show')),
+      };
+      document.querySelectorAll('textarea[id],input[id],select[id]').forEach(el=>{
+        if(el.id==='testDate'||el.type==='radio'||el.type==='checkbox')return;
+        if(el.value.trim())st.inputs[el.id]=el.value;
+      });
+      document.querySelectorAll('input[type="radio"]:checked').forEach(el=>{if(el.name)st.radios[el.name]=el.value;});
+      ['s1c1','s1c2','s1c3'].forEach(qId=>{
+        const opts=document.querySelector(`[onclick*="'${qId}'"]`)?.closest('.story-opts');if(!opts)return;
+        if(opts.querySelector('.s-wrong'))st.storyAnswers[qId]='wrong';
+        else if(opts.querySelector('.s-correct'))st.storyAnswers[qId]='correct';
+      });
+      ['rv1','rv2','rv3','rv4'].forEach(qId=>{
+        const opts=document.querySelector(`[onclick*="'${qId}'"]`)?.closest('.review-opts');if(!opts)return;
+        if(opts.querySelector('.r-wrong'))st.reviewAnswers[qId]='wrong';
+        else if(opts.querySelector('.r-correct'))st.reviewAnswers[qId]='correct';
+      });
+      localStorage.setItem(KEY,JSON.stringify(st));
+    }catch(e){}
+  }
+
+  function restore(){
+    let st;try{st=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){return;}if(!st)return;
+    // Text inputs / textareas / selects
+    Object.entries(st.inputs||{}).forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.value=val;});
+    // Think-boxes (no IDs, positional)
+    (st.thinkBoxes||[]).forEach((val,i)=>{const b=document.querySelectorAll('#s1p1 .think-box')[i];if(b)b.value=val;});
+    // Radio buttons
+    Object.entries(st.radios||{}).forEach(([name,val])=>{
+      const el=document.querySelector(`input[type="radio"][name="${name}"][value="${val}"]`);
+      if(el){el.checked=true;el.closest('.opt')?.classList.add('selected');}
+    });
+    // Vocab learned
+    learnedCount=0;
+    (st.vocab||[]).forEach(id=>{const el=document.getElementById(id);if(el){el.classList.add('learned');learnedCount++;}});
+    const vp=document.getElementById('vocabProgress');
+    if(vp)vp.textContent='Palabras aprendidas / Words learned: '+learnedCount+' / 6';
+    // Story MCQ: restore feedback + lock options + highlight correct/wrong
+    Object.entries(st.storyAnswers||{}).forEach(([qId,result])=>{
+      const fb=document.getElementById(qId+'-fb');
+      if(fb){fb.textContent=(storyFb[qId]||{})[result]||'';fb.classList.add('show');}
+      const opts=document.querySelector(`[onclick*="'${qId}'"]`)?.closest('.story-opts');if(!opts)return;
+      opts.querySelectorAll('.story-opt').forEach(o=>o.classList.add('s-locked'));
+      const ok=opts.querySelector(`[onclick*="'correct'"]`);if(ok)ok.classList.add('s-correct');
+      if(result==='wrong'){const bad=opts.querySelector(`[onclick*="'wrong'"]`);if(bad)bad.classList.add('s-wrong');}
+    });
+    // Review MCQ
+    Object.entries(st.reviewAnswers||{}).forEach(([qId,result])=>{
+      const fb=document.getElementById(qId+'-fb');
+      if(fb){fb.textContent=(reviewFb[qId]||{})[result]||'';fb.className='review-fb show '+(result==='correct'?'good':'bad');}
+      const opts=document.querySelector(`[onclick*="'${qId}'"]`)?.closest('.review-opts');if(!opts)return;
+      opts.querySelectorAll('.review-opt').forEach(o=>o.classList.add('r-locked'));
+      const ok=opts.querySelector(`[onclick*="'correct'"]`);if(ok)ok.classList.add('r-correct');
+      if(result==='wrong'){const bad=opts.querySelector(`[onclick*="'wrong'"]`);if(bad)bad.classList.add('r-wrong');}
+    });
+    // Session 1 done: unlock S2 tab
+    if(st.sessions?.s1){
+      _sessionsDone.s1=true;
+      const s2tab=document.getElementById('tab-s2');if(s2tab){s2tab.classList.remove('tab-locked');s2tab.style.opacity='1';}
+      const s2lock=document.getElementById('s2-lock-banner');if(s2lock)s2lock.style.display='none';
+    }
+    if(st.sessions?.s2)_sessionsDone.s2=true;
+    // Done messages
+    (st.doneMsgs||[]).forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('show');});
+    // Unlock pasos silently (no scroll, no flash)
+    (st.pasos||[]).forEach(id=>{
+      const el=document.getElementById(id);if(!el)return;
+      el.classList.remove('paso-locked');el.classList.add('active-paso');
+      const body=el.querySelector('.paso-body');if(body)body.classList.add('open');
+      const overlay=el.querySelector('.paso-lock-overlay');if(overlay)overlay.style.display='none';
+    });
+    // Assessment: unlock silently if both sessions done
+    if(st.sessions?.s1&&st.sessions?.s2){
+      const lockEl=document.getElementById('assessLock'),tc=document.getElementById('testContainer');
+      const lockCard=document.getElementById('assessLockCard'),iconEl=document.getElementById('al-icon');
+      const titleEl=document.getElementById('al-title'),subEl=document.getElementById('al-sub'),hintEl=document.getElementById('al-hint');
+      const chk1=document.getElementById('al-s1-check'),chk2=document.getElementById('al-s2-check');
+      if(lockCard)lockCard.classList.add('unlocking');
+      if(iconEl)iconEl.textContent='🔓';
+      if(titleEl)titleEl.textContent='¡Lección completada! — Evaluación desbloqueada';
+      if(subEl)subEl.innerHTML='¡Excelente trabajo! Ya puedes completar la evaluación final.<br><em>Great work! You can now complete the final assessment.</em>';
+      if(hintEl)hintEl.innerHTML='👇 Desplázate hacia abajo para comenzar. / Scroll down to begin.';
+      if(chk1)chk1.textContent='✅';if(chk2)chk2.textContent='✅';
+      if(lockEl)lockEl.classList.add('hidden');
+      if(tc)tc.style.display='block';
+      setTimeout(updateProgress,50);
+    }
+  }
+
+  document.addEventListener('input',save);
+  document.addEventListener('change',save);
+  document.addEventListener('click',()=>setTimeout(save,80));
+  restore();
+})();
 </script>
 </body>
 </html>
