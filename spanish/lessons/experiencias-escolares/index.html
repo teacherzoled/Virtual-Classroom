@@ -1285,9 +1285,14 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
     </div>
 
     <!-- Dev bar -->
-    <div id="devBar" style="display:none;text-align:center;margin-bottom:.8rem;gap:.5rem;flex-wrap:wrap;justify-content:center;">
-      <button class="btn-secondary" style="font-size:.75rem;padding:6px 16px;opacity:.7;" onclick="autoFillCorrect()">🛠️ Respuestas correctas</button>
-      <button class="btn-secondary" style="font-size:.75rem;padding:6px 16px;opacity:.7;" onclick="autoFillWrong()">❌ Respuestas incorrectas</button>
+    <div id="devBar" style="display:none;background:rgba(255,100,100,.07);border:1.5px dashed rgba(255,100,100,.35);border-radius:12px;padding:.6rem 1rem;margin-bottom:1rem;gap:.45rem;flex-wrap:wrap;justify-content:center;align-items:center;">
+      <span style="font-size:.68rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#FF6B6B;width:100%;text-align:center;margin-bottom:.2rem;">🛠 Dev Tools — ?dev=1</span>
+      <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="devRunAll('correct')">🚀 Full Run — Correct</button>
+      <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="devRunAll('wrong')">💥 Full Run — Wrong</button>
+      <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="devUnlockAll()">🔓 Unlock All Pasos</button>
+      <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="autoFillCorrect()">✅ Fill Assessment (Correct)</button>
+      <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="autoFillWrong()">❌ Fill Assessment (Wrong)</button>
+      <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;color:#FF6B6B;" onclick="devReset()">🗑️ Clear &amp; Reload</button>
     </div>
 
     <!-- SECTION A — Matching -->
@@ -2038,6 +2043,102 @@ function downloadCSV(){
   const row=[`"${last}"`,`"${first}"`,`""`,d.sTotal||0,d.sA||0,d.sB||0,d.sC||0,(d.sPct||0)+'%',`"${(d.perf||'').replace(/[^\x00-\x7F]/g,'').trim()}"`,`"${d.date||''}"`,`"${fb}"`];
   const csv='data:text/csv;charset=utf-8,'+headers.join(',')+'\n'+row.join(',');
   const link=document.createElement('a');link.setAttribute('href',encodeURI(csv));link.setAttribute('download','SP320_GC_'+(name.replace(/\s+/g,'_'))+'.csv');document.body.appendChild(link);link.click();document.body.removeChild(link);
+}
+
+// ═══ DEV TOOLS ══════════════════════════════════════════════════════════════
+function devReset(){
+  localStorage.removeItem('vc-prog:'+window.location.pathname);
+  location.reload();
+}
+
+function devUnlockAll(){
+  ['s1p2','s1p3','s1p4','s1p5','s2p1','s2p2','s2p3','s2p4'].forEach(id=>unlockPaso(id));
+  _sessionsDone.s1=true; _sessionsDone.s2=true;
+  const s2tab=document.getElementById('tab-s2');
+  if(s2tab){s2tab.classList.remove('tab-locked');s2tab.style.opacity='1';}
+  const s2lock=document.getElementById('s2-lock-banner');if(s2lock)s2lock.style.display='none';
+  _updateAssessLock();
+}
+
+async function devRunAll(mode){
+  const correct=mode==='correct';
+  const wait=ms=>new Promise(r=>setTimeout(r,ms));
+  const shortWrong='No lo sé.';
+  const longWrong='No sé la respuesta.';
+
+  showFlash('🛠 Dev: iniciando…','#888');
+
+  // S1P1 — think-boxes
+  document.querySelectorAll('#s1p1 .think-box').forEach(el=>{
+    el.value=correct?'El primer día de clases busco mi salón y conozco a mis nuevos compañeros de clase.':shortWrong;
+  });
+  validateS1P1(); await wait(400);
+
+  // S1P2 — mark all vocab learned
+  learnedCount=0;
+  ['vc-matriculacion','vc-inscripcion','vc-asistencia','vc-promocion','vc-aprobar','vc-reprobar'].forEach(id=>{
+    const c=document.getElementById(id);if(c){c.classList.add('learned');learnedCount++;}
+  });
+  const vp=document.getElementById('vocabProgress');
+  if(vp)vp.textContent='Palabras aprendidas / Words learned: 6 / 6';
+  validateS1P2(); await wait(400);
+
+  // S1P3 — story MCQs
+  ['s1c1','s1c2','s1c3'].forEach(qId=>{
+    const res=correct?'correct':'wrong';
+    const opts=document.querySelector(`[onclick*="'${qId}'"]`)?.closest('.story-opts');
+    const target=opts?.querySelector(`[onclick*="'${res}'"]`);
+    if(target)target.click();
+  });
+  await wait(150); validateS1P3(); await wait(400);
+
+  // S1P4 — oral practice inputs
+  document.querySelectorAll('#s1p4 .practice-input').forEach(el=>{
+    el.value=correct?'La asistencia es muy importante para aprender y para poder aprobar el año escolar.':longWrong;
+  });
+  validateS1P4(); await wait(400);
+
+  // S1P5 — cierre
+  const cierre=document.getElementById('s1-cierre');
+  if(cierre)cierre.value=correct?'La asistencia diaria es fundamental para aprobar el año escolar y recibir la promoción.':'No sé cómo cerrar la sesión.';
+  validateS1P5(); await wait(700);
+
+  // S2P1 — review MCQs
+  ['rv1','rv2','rv3','rv4'].forEach(qId=>{
+    const res=correct?'correct':'wrong';
+    const opts=document.querySelector(`[onclick*="'${qId}'"]`)?.closest('.review-opts');
+    const target=opts?.querySelector(`[onclick*="'${res}'"]`);
+    if(target)target.click();
+  });
+  await wait(150); validateS2P1(); await wait(400);
+
+  // S2P2 — write definitions
+  const defVals=correct?{
+    def1:'La matriculación es el proceso oficial de registrar a un/a estudiante en la escuela para un año escolar.',
+    def2:'La inscripción es el acto de anotar el nombre del/de la estudiante en la lista oficial de la escuela.',
+    def3:'La asistencia significa ir a la escuela regularmente todos los días para aprender y no perder clases.',
+    def4:'La promoción es cuando un/a estudiante cumple todos los requisitos del año y pasa al siguiente grado.'
+  }:{def1:'No sé qué significa.',def2:'No sé qué significa.',def3:'No sé qué significa.',def4:'No sé qué significa.'};
+  Object.entries(defVals).forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.value=val;});
+  validateS2P2(); await wait(400);
+
+  // S2P3 — sentence completion
+  document.querySelectorAll('#s2p3 .practice-input').forEach(el=>{
+    el.value=correct?'La matriculación es importante porque registra oficialmente a cada estudiante en la escuela.':longWrong;
+  });
+  validateS2P3(); await wait(400);
+
+  // S2P4 — reflection
+  const ref=document.querySelector('#s2p4 .practice-input');
+  if(ref)ref.value=correct?'Esta semana usaré la palabra asistencia porque es fundamental para tener éxito en la escuela.':'No voy a usar ninguna palabra nueva esta semana.';
+  validateS2P4(); await wait(1500); // wait for assessment unlock animation
+
+  // ASSESSMENT — fill and submit
+  if(correct)autoFillCorrect();else autoFillWrong();
+  await wait(400);
+  showFlash('🛠 Dev: enviando evaluación…','#20C997');
+  await wait(400);
+  handleSubmit();
 }
 
 // ═══ PROGRESS PERSISTENCE ═══════════════════════════════════════════════════
