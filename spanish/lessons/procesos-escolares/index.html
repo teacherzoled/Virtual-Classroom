@@ -2049,6 +2049,7 @@ function downloadCSV(){
 
 // ═══ DEV TOOLS ══════════════════════════════════════════════════════════════
 function devReset(){
+  window._devResetting=true;
   localStorage.removeItem('vc-prog:'+window.location.pathname);
   location.reload();
 }
@@ -2150,6 +2151,7 @@ async function devRunAll(mode){
   const VOCAB_IDS=['vc-matriculacion','vc-inscripcion','vc-asistencia','vc-promocion','vc-aprobar','vc-reprobar'];
 
   function save(){
+    if(window._devResetting)return;
     try{
       const st={
         pasos:PASO_IDS.filter(id=>{const el=document.getElementById(id);return el&&!el.classList.contains('paso-locked');}),
