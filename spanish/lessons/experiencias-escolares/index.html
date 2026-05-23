@@ -1514,7 +1514,10 @@ window.addEventListener('scroll',()=>{topBtn.style.display=window.scrollY>300?'f
 topBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 
 // ═══ DEV BAR ═══
-if(new URLSearchParams(window.location.search).get('dev')==='1')document.getElementById('devBar').style.display='flex';
+function _showDevBar(){document.getElementById('devBar').style.display='flex';}
+if(new URLSearchParams(window.location.search).get('dev')==='1')_showDevBar();
+// Keyboard shortcut: Ctrl+Shift+D
+document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.shiftKey&&e.key==='D'){e.preventDefault();_showDevBar();}});
 
 // ═══ PLAN TOGGLE & TABS ═══
 function togglePlan(){const b=document.getElementById('planBody'),c=document.getElementById('planChev'),o=b.classList.toggle('open');c.classList.toggle('open',o);}
