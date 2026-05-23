@@ -1,0 +1,1905 @@
+<div class="complete-paso-wrap"><div class="paso-error" id="err-s2p4"></div><button class="complete-paso-btn" style="background:var(--opt-correct-b)" onclick="validateS2P4()">🎉 ¡Terminé la Sesión 2!</button></div><!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Español — Experiencias Escolares · SP 3.20 · Mr. EdLo</title>
+<link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+/* ═══════════════════════════ THEME VARIABLES (exact match) ═══════════════════════════ */
+:root, body.theme-night {
+  --bg:#1a1a2e; --body-color:#ffffff;
+  --card-bg:rgba(255,255,255,0.07); --card-border:rgba(255,255,255,0.10);
+  --card-border-h:rgba(255,255,255,0.28); --card-shadow:rgba(0,0,0,0.40);
+  --card-desc:rgba(255,255,255,0.50); --section-lbl:rgba(255,255,255,0.35);
+  --subtitle-c:rgba(255,255,255,0.55); --info-bg:linear-gradient(135deg,#162d20,#163028);
+  --info-border:rgba(32,201,151,0.18); --header-name:rgba(255,255,255,0.55);
+  --badge-bg:rgba(255,255,255,0.08); --badge-border:rgba(255,255,255,0.12);
+  --badge-color:rgba(255,255,255,0.45); --top-badge-bg:#20C997; --top-badge-c:#1a1a2e;
+  --h1-grad:linear-gradient(135deg,#fff 0%,#20C997 50%,#4DABF7 100%);
+  --footer-bg:linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.45) 100%);
+  --footer-border:rgba(255,255,255,0.07); --footer-name:rgba(255,255,255,0.40);
+  --footer-tag:rgba(255,255,255,0.45); --footer-copy:rgba(255,255,255,0.20);
+  --back-color:rgba(255,255,255,0.40); --back-hover:rgba(255,255,255,0.80);
+  --radial1:#1e3a5f55; --radial2:#0d4d3955; --star-show:1;
+  --input-bg:rgba(255,255,255,0.05); --input-border:rgba(255,255,255,0.15);
+  --input-focus:#20C997; --input-text:#ffffff;
+  --opt-bg:rgba(255,255,255,0.05); --opt-border:rgba(255,255,255,0.12);
+  --opt-hover:rgba(32,201,151,0.12); --opt-sel-bg:rgba(32,201,151,0.15); --opt-sel-b:#20C997;
+  --opt-correct:rgba(105,219,124,0.18); --opt-correct-b:#69DB7C;
+  --opt-wrong:rgba(255,107,107,0.18); --opt-wrong-b:#FF6B6B;
+  --score-bg:rgba(32,201,151,0.08); --score-border:rgba(32,201,151,0.25);
+  --progress-bg:rgba(255,255,255,0.10); --modal-bg:rgba(0,0,0,0.75);
+  --modal-card:#1e2d3a; --modal-border:rgba(32,201,151,0.30);
+  --fb-bg:rgba(32,201,151,0.06); --fb-border:rgba(32,201,151,0.22);
+  --grad-bar:linear-gradient(90deg,#20C997,#4DABF7,#9775FA,#F783AC);
+  --scenario-bg:rgba(32,201,151,0.06); --scenario-border:rgba(32,201,151,0.22);
+}
+body.theme-sunny {
+  --bg:#fffbea; --body-color:#2d2000;
+  --card-bg:rgba(255,255,255,0.75); --card-border:rgba(0,150,100,0.18);
+  --card-border-h:rgba(0,130,80,0.40); --card-shadow:rgba(0,100,70,0.15);
+  --card-desc:rgba(0,80,50,0.55); --section-lbl:rgba(0,100,70,0.50);
+  --subtitle-c:rgba(0,80,50,0.65); --info-bg:linear-gradient(135deg,#d8f5ee,#c0ede0);
+  --info-border:rgba(0,150,100,0.22); --header-name:#006644;
+  --badge-bg:rgba(0,180,120,0.12); --badge-border:rgba(0,150,100,0.22);
+  --badge-color:#005a40; --top-badge-bg:#20C997; --top-badge-c:#fff;
+  --h1-grad:linear-gradient(135deg,#00523a 0%,#009970 50%,#20C997 100%);
+  --footer-bg:linear-gradient(180deg,transparent 0%,rgba(0,180,120,0.10) 100%);
+  --footer-border:rgba(0,150,100,0.18); --footer-name:rgba(0,80,50,0.50);
+  --footer-tag:rgba(0,80,50,0.55); --footer-copy:rgba(0,80,50,0.30);
+  --back-color:rgba(0,80,50,0.50); --back-hover:#005a40;
+  --radial1:rgba(0,210,150,0.15); --radial2:rgba(0,160,100,0.12); --star-show:0;
+  --input-bg:rgba(0,150,100,0.06); --input-border:rgba(0,130,80,0.22);
+  --input-focus:#20C997; --input-text:#2d2000;
+  --opt-bg:rgba(0,150,100,0.05); --opt-border:rgba(0,130,80,0.18);
+  --opt-hover:rgba(0,180,120,0.10); --opt-sel-bg:rgba(0,180,120,0.14); --opt-sel-b:#20C997;
+  --opt-correct:rgba(0,160,80,0.12); --opt-correct-b:#2e7d32;
+  --opt-wrong:rgba(200,0,0,0.08); --opt-wrong-b:#c62828;
+  --score-bg:rgba(0,180,120,0.07); --score-border:rgba(0,150,100,0.22);
+  --progress-bg:rgba(0,150,100,0.12); --modal-bg:rgba(0,0,0,0.50);
+  --modal-card:#f0fbf5; --modal-border:rgba(0,150,100,0.30);
+  --fb-bg:rgba(0,160,100,0.06); --fb-border:rgba(0,140,80,0.20);
+  --grad-bar:linear-gradient(90deg,#20C997,#0077cc,#7a3abf,#c2185b);
+  --scenario-bg:rgba(0,150,100,0.05); --scenario-border:rgba(0,150,100,0.22);
+}
+body.theme-cloudy {
+  --bg:#e8edf2; --body-color:#1c2533;
+  --card-bg:rgba(255,255,255,0.72); --card-border:rgba(0,130,110,0.18);
+  --card-border-h:rgba(0,110,90,0.38); --card-shadow:rgba(0,90,70,0.15);
+  --card-desc:rgba(0,70,55,0.55); --section-lbl:rgba(0,90,70,0.50);
+  --subtitle-c:rgba(0,70,55,0.65); --info-bg:linear-gradient(135deg,#c8e8e0,#b5ddd6);
+  --info-border:rgba(0,140,110,0.22); --header-name:#004d40;
+  --badge-bg:rgba(0,170,130,0.12); --badge-border:rgba(0,150,110,0.22);
+  --badge-color:#004d40; --top-badge-bg:#0d9488; --top-badge-c:#fff;
+  --h1-grad:linear-gradient(135deg,#00332b 0%,#0d9488 50%,#20C997 100%);
+  --footer-bg:linear-gradient(180deg,transparent 0%,rgba(0,150,120,0.12) 100%);
+  --footer-border:rgba(0,140,110,0.18); --footer-name:rgba(0,60,50,0.50);
+  --footer-tag:rgba(0,60,50,0.55); --footer-copy:rgba(0,60,50,0.30);
+  --back-color:rgba(0,80,65,0.50); --back-hover:#004d40;
+  --radial1:rgba(0,190,150,0.18); --radial2:rgba(0,150,120,0.15); --star-show:0;
+  --input-bg:rgba(0,140,110,0.06); --input-border:rgba(0,120,95,0.22);
+  --input-focus:#0d9488; --input-text:#1c2533;
+  --opt-bg:rgba(0,140,110,0.05); --opt-border:rgba(0,120,95,0.18);
+  --opt-hover:rgba(0,160,120,0.10); --opt-sel-bg:rgba(0,160,120,0.14); --opt-sel-b:#0d9488;
+  --opt-correct:rgba(0,140,90,0.12); --opt-correct-b:#0d9488;
+  --opt-wrong:rgba(180,0,0,0.08); --opt-wrong-b:#dc2626;
+  --score-bg:rgba(0,160,130,0.07); --score-border:rgba(0,140,110,0.22);
+  --progress-bg:rgba(0,140,110,0.12); --modal-bg:rgba(0,0,0,0.45);
+  --modal-card:#ecf4f2; --modal-border:rgba(0,140,110,0.30);
+  --fb-bg:rgba(0,150,120,0.06); --fb-border:rgba(0,130,100,0.20);
+  --grad-bar:linear-gradient(90deg,#0d9488,#2563eb,#7c3aed,#db2777);
+  --scenario-bg:rgba(0,140,110,0.05); --scenario-border:rgba(0,140,110,0.22);
+}
+body.theme-nature {
+  --bg:#f0f7ee; --body-color:#1a2e10;
+  --card-bg:rgba(255,255,255,0.72); --card-border:rgba(60,120,40,0.18);
+  --card-border-h:rgba(40,100,20,0.38); --card-shadow:rgba(20,80,10,0.15);
+  --card-desc:rgba(30,70,15,0.55); --section-lbl:rgba(40,90,20,0.50);
+  --subtitle-c:rgba(30,75,15,0.65); --info-bg:linear-gradient(135deg,#c8e8c0,#b8ddb0);
+  --info-border:rgba(50,120,20,0.22); --header-name:#276221;
+  --badge-bg:rgba(60,140,30,0.12); --badge-border:rgba(50,120,20,0.22);
+  --badge-color:#1b4d0f; --top-badge-bg:#4CAF50; --top-badge-c:#fff;
+  --h1-grad:linear-gradient(135deg,#1b4d0f 0%,#2e7d1a 50%,#4CAF50 100%);
+  --footer-bg:linear-gradient(180deg,transparent 0%,rgba(60,140,30,0.12) 100%);
+  --footer-border:rgba(50,120,20,0.18); --footer-name:rgba(20,70,10,0.50);
+  --footer-tag:rgba(20,70,10,0.55); --footer-copy:rgba(20,70,10,0.30);
+  --back-color:rgba(39,98,33,0.55); --back-hover:#276221;
+  --radial1:rgba(100,200,60,0.22); --radial2:rgba(30,180,130,0.15); --star-show:0;
+  --input-bg:rgba(60,140,30,0.06); --input-border:rgba(50,120,20,0.20);
+  --input-focus:#4CAF50; --input-text:#1a2e10;
+  --opt-bg:rgba(60,140,30,0.05); --opt-border:rgba(50,120,20,0.18);
+  --opt-hover:rgba(76,175,80,0.10); --opt-sel-bg:rgba(76,175,80,0.15); --opt-sel-b:#4CAF50;
+  --opt-correct:rgba(46,125,50,0.12); --opt-correct-b:#2e7d32;
+  --opt-wrong:rgba(180,0,0,0.08); --opt-wrong-b:#b71c1c;
+  --score-bg:rgba(60,140,30,0.07); --score-border:rgba(50,120,20,0.22);
+  --progress-bg:rgba(60,140,30,0.12); --modal-bg:rgba(0,0,0,0.45);
+  --modal-card:#eef6ec; --modal-border:rgba(60,140,30,0.28);
+  --fb-bg:rgba(46,125,50,0.06); --fb-border:rgba(40,110,20,0.20);
+  --grad-bar:linear-gradient(90deg,#4CAF50,#20C997,#1565c0,#7c3aed);
+  --scenario-bg:rgba(46,125,50,0.05); --scenario-border:rgba(40,110,20,0.22);
+}
+
+/* ═══ BASE ═══ */
+html{font-size:106%;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--body-color);min-height:100vh;overflow-x:hidden;display:flex;flex-direction:column;transition:background .5s,color .5s;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 15% 20%,var(--radial1) 0%,transparent 60%),radial-gradient(ellipse at 85% 80%,var(--radial2) 0%,transparent 60%);pointer-events:none;z-index:0;}
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:var(--star-show,1);transition:opacity .5s;}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d,3s) ease-in-out infinite var(--delay,0s);opacity:0;}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(1)}50%{opacity:var(--op,.6);transform:scale(1.3)}}
+.theme-bar{position:relative;z-index:10;display:flex;justify-content:center;gap:.5rem;padding:.55rem 1rem;background:rgba(0,0,0,.18);border-bottom:1px solid rgba(0,0,0,.10);flex-wrap:wrap;}
+body.theme-sunny .theme-bar,body.theme-cloudy .theme-bar,body.theme-nature .theme-bar{background:rgba(0,0,0,.06);}
+.theme-btn{font-family:'Fredoka One',cursive;font-size:1rem;padding:5px 18px;border-radius:999px;border:2px solid transparent;background:rgba(128,128,128,.12);color:var(--body-color);cursor:pointer;opacity:.6;transition:all .22s;}
+.theme-btn:hover{opacity:.9;transform:translateY(-1px);}
+.theme-btn.active{opacity:1;background:var(--top-badge-bg);color:var(--top-badge-c);box-shadow:0 3px 12px rgba(0,0,0,.20);}
+.wrapper{position:relative;z-index:1;max-width:1600px;margin:0 auto;padding:0 max(1.2rem,2.5vw) 2rem;flex:1;}
+.site-header{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 0 0;animation:fadeDown .6s ease both;}
+.site-header-logo{display:flex;align-items:center;gap:.75rem;text-decoration:none;}
+.site-header-logo img{height:48px;width:auto;border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.25);}
+.site-header-logo span{font-family:'Fredoka One',cursive;font-size:1.26rem;color:var(--header-name);letter-spacing:.02em;transition:color .4s;}
+.header-badge{display:inline-block;background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--badge-color);font-size:.9rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:999px;}
+.back-link{display:inline-flex;align-items:center;gap:6px;margin-top:1.4rem;font-size:.97rem;font-weight:700;color:var(--back-color);text-decoration:none;transition:color .2s;letter-spacing:.04em;}
+.back-link:hover{color:var(--back-hover);}
+header{text-align:center;padding:2rem 1rem 1.5rem;animation:fadeDown .7s ease both;}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-22px)}to{opacity:1;transform:translateY(0)}}
+.badge{display:inline-block;background:var(--top-badge-bg);color:var(--top-badge-c);font-size:.92rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 14px;border-radius:999px;margin-bottom:1rem;animation:pop .5s cubic-bezier(.36,1.5,.6,1) .3s both;}
+@keyframes pop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-height:1.1;margin-bottom:.4rem;background:var(--h1-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.subtitle{font-size:1.1rem;font-weight:600;color:var(--subtitle-c);}
+
+/* ═══ SECTION / ASSESSMENT CARDS ═══ */
+.sec-card{background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:18px;padding:1.6rem 2rem;margin-bottom:1.1rem;position:relative;overflow:hidden;animation:riseUp .5s ease both;transition:background .4s,border-color .4s;}
+.sec-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:18px 18px 0 0;background:var(--sec-accent,var(--top-badge-bg));}
+@keyframes riseUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.sec-card:nth-child(2){animation-delay:.06s}.sec-card:nth-child(3){animation-delay:.12s}.sec-card:nth-child(4){animation-delay:.18s}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;flex-wrap:wrap;gap:.5rem;}
+.sec-title{font-family:'Fredoka One',cursive;font-size:1.32rem;color:var(--body-color);}
+.sec-pts{font-size:.86rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--badge-color);padding:3px 11px;border-radius:999px;}
+.question{border-radius:12px;padding:4px 6px;margin-left:-6px;margin-right:-6px;margin-bottom:1.3rem;transition:opacity .5s,filter .5s;}
+.question:last-child{margin-bottom:0;}
+.question.answered-fade{opacity:.18;filter:blur(2px);}
+.question.answered-fade:hover{opacity:1;filter:blur(0);transition:opacity .2s,filter .2s;}
+.test-locked .question.answered-fade,.test-locked .question.answered-fade:hover{opacity:1!important;filter:blur(0)!important;}
+.q-label{font-size:1.05rem;font-weight:800;color:var(--body-color);margin-bottom:.6rem;display:flex;align-items:flex-start;gap:.55rem;}
+.q-num{font-family:'Fredoka One',cursive;color:var(--top-badge-bg);font-size:1.12rem;flex-shrink:0;min-width:26px;}
+.q-pts{font-size:.82rem;font-weight:800;letter-spacing:.05em;color:var(--section-lbl);margin-left:auto;flex-shrink:0;}
+.options{display:flex;flex-direction:column;gap:7px;}
+.opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;background:var(--opt-bg);border:1.5px solid var(--opt-border);cursor:pointer;transition:all .18s;font-size:1.03rem;font-weight:700;color:var(--body-color);user-select:none;}
+.opt:hover:not(.locked-opt){background:var(--opt-hover);border-color:var(--opt-sel-b);}
+.opt.selected{background:var(--opt-sel-bg);border-color:var(--opt-sel-b);}
+.opt.correct{background:var(--opt-correct);border-color:var(--opt-correct-b);}
+.opt.wrong{background:var(--opt-wrong);border-color:var(--opt-wrong-b);}
+.opt input[type="radio"]{accent-color:var(--top-badge-bg);width:16px;height:16px;flex-shrink:0;pointer-events:none;}
+.opt-tick{margin-left:auto;font-size:1.05rem;opacity:0;}
+.opt.correct .opt-tick,.opt.wrong .opt-tick{opacity:1;}
+.match-sel{width:100%;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:10px;padding:9px 12px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;color:var(--input-text);outline:none;cursor:pointer;transition:border-color .2s,background .4s;margin-top:.3rem;}
+.match-sel:focus{border-color:var(--input-focus);}
+.match-sel.correct{border-color:var(--opt-correct-b);background:var(--opt-correct);}
+.match-sel.wrong{border-color:var(--opt-wrong-b);background:var(--opt-wrong);}
+.answer-input{width:100%;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:12px;padding:10px 14px;font-family:'Nunito',sans-serif;font-size:1.03rem;font-weight:600;color:var(--input-text);outline:none;resize:vertical;transition:border-color .2s,background .4s;}
+.answer-input:focus{border-color:var(--input-focus);}
+.fb-box{margin-top:8px;padding:10px 14px;background:var(--fb-bg);border:1.5px solid var(--fb-border);border-radius:10px;font-size:.98rem;font-weight:600;color:var(--body-color);line-height:1.55;display:none;animation:riseUp .3s ease both;}
+.fb-box.show{display:block;}
+.fb-score{font-family:'Fredoka One',cursive;font-size:1.12rem;margin-bottom:3px;color:var(--top-badge-bg);}
+
+/* ═══ PROGRESS BAR ═══ */
+.q-progress-wrap{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--card-border);padding:.7rem 0 .6rem;margin-bottom:1.2rem;transition:background .5s;}
+.q-progress-inner{max-width:1600px;margin:0 auto;padding:0 max(1.2rem,2.5vw);}
+.q-progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;}
+.q-progress-label{font-size:.7rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase;color:var(--section-lbl);}
+.q-progress-count{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--body-color);}
+.q-progress-bg{height:7px;background:var(--progress-bg);border-radius:999px;overflow:hidden;}
+.q-progress-fill{height:100%;border-radius:999px;background:var(--top-badge-bg);transition:width .4s cubic-bezier(.22,.68,0,1.2);}
+.q-progress-fill.done{background:#69DB7C;}
+
+/* ═══ STUDENT CARD ═══ */
+.student-card{background:var(--info-bg);border:1.5px solid var(--info-border);border-radius:18px;padding:1.3rem 1.5rem;display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem;transition:background .4s,border-color .4s;}
+.student-card .sc-icon{font-size:2.1rem;flex-shrink:0;}
+.sc-fields{flex:1;display:flex;gap:.9rem;flex-wrap:wrap;}
+.sc-group{display:flex;flex-direction:column;gap:4px;flex:1;min-width:150px;}
+.sc-group label{font-size:.84rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase;color:var(--section-lbl);}
+.sc-group input{background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:10px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;color:var(--input-text);outline:none;transition:border-color .2s,background .4s;}
+.sc-group input:focus{border-color:var(--input-focus);}
+
+/* ═══ SUBMIT / RESULTS ═══ */
+.submit-area{text-align:center;margin:1.8rem 0 .5rem;}
+.btn-primary{font-family:'Fredoka One',cursive;font-size:1.22rem;padding:14px 44px;border-radius:999px;background:var(--top-badge-bg);color:var(--top-badge-c);border:none;cursor:pointer;box-shadow:0 6px 24px rgba(0,0,0,.20);transition:transform .2s,filter .2s,opacity .2s;letter-spacing:.02em;}
+.btn-primary:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.1);}
+.btn-primary:disabled{opacity:.55;cursor:not-allowed;}
+.btn-secondary{font-family:'Fredoka One',cursive;font-size:1.03rem;padding:8px 20px;border-radius:999px;background:var(--card-bg);color:var(--body-color);border:1.5px solid var(--card-border);cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;text-decoration:none;}
+.btn-secondary:hover{transform:translateY(-1px);}
+.btn-gc{font-family:'Fredoka One',cursive;font-size:1.1rem;padding:10px 26px;border-radius:999px;background:linear-gradient(135deg,#1a73e8,#4285f4);color:#fff;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(26,115,232,.30);transition:all .2s;}
+.btn-gc:hover{transform:translateY(-2px);filter:brightness(1.1);}
+.submit-hint{font-size:.9rem;font-weight:700;color:var(--section-lbl);margin-top:.5rem;}
+.submit-hint.ready{color:var(--top-badge-bg);}
+.spinner-wrap{display:none;justify-content:center;margin-top:1rem;}
+.spinner-wrap.show{display:flex;}
+.spinner{width:32px;height:32px;border-radius:50%;border:3px solid var(--card-border);border-top-color:var(--top-badge-bg);animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.results-section{background:var(--score-bg);border:1.5px solid var(--score-border);border-radius:18px;padding:1.8rem 2rem;margin-bottom:1.2rem;display:none;animation:riseUp .4s ease both;}
+.results-section.show{display:block;}
+.res-title{font-family:'Fredoka One',cursive;font-size:1.62rem;text-align:center;margin-bottom:1.3rem;color:var(--body-color);}
+.score-grid{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1.4rem;justify-content:center;}
+.score-box{flex:1;min-width:120px;max-width:180px;background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:14px;padding:1rem 1.1rem;text-align:center;}
+.score-box .sb-label{font-size:.82rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase;color:var(--section-lbl);margin-bottom:6px;}
+.score-box .sb-val{font-family:'Fredoka One',cursive;font-size:2.1rem;color:var(--body-color);line-height:1;}
+.score-box .sb-sub{font-size:.84rem;font-weight:700;color:var(--card-desc);margin-top:3px;}
+.score-box.hl{border-color:var(--top-badge-bg);}
+.score-box.hl .sb-val{color:var(--top-badge-bg);}
+.prog-wrap{margin-bottom:1.3rem;}
+.prog-row{display:flex;justify-content:space-between;margin-bottom:5px;}
+.prog-lbl{font-size:.86rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--section-lbl);}
+.prog-pct{font-family:'Fredoka One',cursive;font-size:1.22rem;color:var(--body-color);}
+.prog-bg{height:16px;background:var(--progress-bg);border-radius:999px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:999px;transition:width .8s cubic-bezier(.22,.68,0,1.2),background .5s;}
+.perf-badge{display:block;text-align:center;font-family:'Fredoka One',cursive;font-size:1.5rem;padding:.9rem;border-radius:14px;background:var(--card-bg);border:1.5px solid var(--card-border);margin-bottom:1rem;}
+.pdf-row{display:flex;justify-content:center;gap:.8rem;flex-wrap:wrap;}
+
+/* ═══ PASSKEY MODAL ═══ */
+.modal-overlay{position:fixed;inset:0;z-index:200;background:var(--modal-bg);display:flex;align-items:center;justify-content:center;animation:fadeIn .2s ease both;padding:1rem;}
+.modal-overlay.hidden{display:none;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-card{background:var(--modal-card);border:1.5px solid var(--modal-border);border-radius:22px;padding:2rem 2.2rem;max-width:400px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35);animation:popIn .3s cubic-bezier(.36,1.5,.6,1) both;}
+@keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+.modal-icon{font-size:2.6rem;margin-bottom:.8rem;}
+.modal-title{font-family:'Fredoka One',cursive;font-size:1.5rem;margin-bottom:.4rem;color:var(--body-color);}
+.modal-desc{font-size:.99rem;font-weight:600;color:var(--card-desc);margin-bottom:1.2rem;line-height:1.6;}
+.modal-input{width:100%;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:12px;padding:11px 16px;margin-bottom:.8rem;font-family:'Fredoka One',cursive;font-size:1.22rem;text-align:center;color:var(--input-text);letter-spacing:.12em;outline:none;transition:border-color .2s;}
+.modal-input:focus{border-color:var(--input-focus);}
+.modal-err{font-size:.94rem;font-weight:800;color:var(--opt-wrong-b);margin-top:.4rem;display:none;}
+.modal-err.show{display:block;}
+
+/* ═══ FOOTER ═══ */
+.site-footer{position:relative;z-index:1;background:var(--footer-bg);border-top:1px solid var(--footer-border);padding:2rem max(1rem,4vw);margin-top:3rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;}
+.site-footer::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad-bar);}
+.footer-logo{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;}
+.footer-logo img{height:36px;width:auto;border-radius:8px;opacity:.75;}
+.footer-logo span{font-family:'Fredoka One',cursive;font-size:1.12rem;color:var(--footer-name);}
+.footer-tagline{font-size:.98rem;font-weight:700;color:var(--footer-tag);letter-spacing:.03em;font-style:italic;}
+.footer-copy{font-size:.9rem;color:var(--footer-copy);font-weight:600;letter-spacing:.04em;margin-top:.2rem;}
+#back-to-top{display:none;position:fixed;bottom:1.5rem;right:1.5rem;z-index:99;background:var(--top-badge-bg);color:var(--top-badge-c);border:none;border-radius:12px;width:42px;height:42px;font-size:1.32rem;font-weight:900;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.25);transition:all .2s;align-items:center;justify-content:center;}
+#back-to-top:hover{transform:translateY(-3px);}
+.test-container{max-width:100%;margin:0;display:none;}
+.test-locked .opt,.test-locked .match-sel,.test-locked .answer-input{pointer-events:none;}
+.test-locked .opt{cursor:default;}
+
+/* ═══ PLAN SECTION (outer wrapper) ═══ */
+.plan-section{background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:20px;margin-bottom:2rem;overflow:hidden;animation:riseUp .45s ease .04s both;}
+.plan-toggle{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.5rem;cursor:pointer;user-select:none;transition:background .2s;}
+.plan-toggle:hover{background:rgba(32,201,151,0.06);}
+.plan-toggle-title{font-family:'Fredoka One',cursive;font-size:1.26rem;color:var(--body-color);display:flex;align-items:center;gap:.6rem;}
+.plan-chev{font-size:1.1rem;color:var(--top-badge-bg);transition:transform .3s;display:inline-block;}
+.plan-chev.open{transform:rotate(180deg);}
+.plan-body{display:none;}
+.plan-body.open{display:block;}
+.plan-tabs{display:flex;border-bottom:1.5px solid var(--card-border);overflow-x:auto;}
+.plan-tab{flex:1;min-width:120px;padding:.8rem .5rem;font-size:.98rem;font-weight:800;letter-spacing:.03em;text-align:center;cursor:pointer;color:var(--card-desc);border:none;background:transparent;transition:all .2s;position:relative;white-space:nowrap;}
+.plan-tab:hover{color:var(--body-color);background:rgba(32,201,151,0.05);}
+.plan-tab.active{color:var(--top-badge-bg);}
+.plan-tab.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--top-badge-bg);border-radius:2px 2px 0 0;}
+.plan-panel{display:none;padding:1.6rem 2rem;}
+.plan-panel.active{display:block;animation:fadeIn .22s ease both;}
+
+/* ═══ OVERVIEW TAB ═══ */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:.8rem;margin-bottom:1.2rem;}
+.info-pill{background:var(--info-bg);border:1.5px solid var(--info-border);border-radius:12px;padding:.85rem 1rem;}
+.info-pill-label{font-size:.82rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--section-lbl);margin-bottom:.3rem;}
+.info-pill-val{font-size:1.03rem;font-weight:800;color:var(--body-color);}
+.obj-list{list-style:none;display:flex;flex-direction:column;gap:.55rem;margin-top:.3rem;}
+.obj-list li{display:flex;align-items:flex-start;gap:.6rem;font-size:1rem;font-weight:700;color:var(--body-color);line-height:1.55;}
+.obj-num{width:22px;height:22px;border-radius:50%;background:var(--top-badge-bg);color:var(--top-badge-c);font-size:.9rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.1rem;}
+.section-lbl-text{font-size:.9rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--section-lbl);margin:1.1rem 0 .55rem;}
+
+/* ═══ INTERACTIVE LESSON — PASOS ═══ */
+.paso{border:1.5px solid var(--card-border);border-radius:16px;margin-bottom:1rem;overflow:hidden;transition:border-color .3s;}
+.paso.active-paso{border-color:var(--top-badge-bg);}
+.paso-header{display:flex;align-items:center;gap:.75rem;padding:.9rem 1.1rem;background:var(--scenario-bg);}
+.paso-badge{font-family:'Fredoka One',cursive;font-size:.92rem;background:var(--top-badge-bg);color:var(--top-badge-c);padding:3px 12px;border-radius:999px;white-space:nowrap;}
+.paso-title{font-family:'Fredoka One',cursive;font-size:1.12rem;color:var(--body-color);}
+.paso-time{font-size:.84rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--section-lbl);margin-left:auto;white-space:nowrap;}
+.paso-body{padding:1.1rem 1.3rem;display:none;}
+.paso-body.open{display:block;animation:fadeIn .25s ease both;}
+
+/* Spanish-primary label — English scaffold below */
+.es-label{font-size:1.1rem;font-weight:800;color:var(--body-color);line-height:1.5;}
+.en-scaffold{font-size:.9rem;font-weight:600;color:var(--section-lbl);font-style:italic;margin-top:.1rem;}
+.instr{font-size:1.03rem;font-weight:700;color:var(--body-color);line-height:1.65;margin-bottom:.9rem;}
+.instr-en{font-size:.9rem;font-weight:600;color:var(--section-lbl);font-style:italic;margin-top:-.5rem;margin-bottom:.9rem;}
+
+/* Discussion prompts */
+.discuss-card{background:var(--scenario-bg);border:1.5px solid var(--scenario-border);border-radius:12px;padding:.95rem 1.1rem;margin-bottom:.8rem;}
+.discuss-q{font-size:1.12rem;font-weight:800;color:var(--body-color);margin-bottom:.3rem;}
+.discuss-en{font-size:.9rem;font-weight:600;color:var(--section-lbl);font-style:italic;margin-bottom:.7rem;}
+.discuss-think{display:flex;gap:.6rem;align-items:flex-start;margin-bottom:.5rem;}
+.think-box{flex:1;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:10px;padding:8px 11px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:600;color:var(--input-text);outline:none;resize:none;transition:border-color .2s;}
+.think-box:focus{border-color:var(--input-focus);}
+.reveal-btn{font-family:'Fredoka One',cursive;font-size:.97rem;padding:7px 15px;border-radius:999px;background:var(--top-badge-bg);color:var(--top-badge-c);border:none;cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0;}
+.reveal-btn:hover{filter:brightness(1.1);}
+.model-reveal{background:var(--fb-bg);border:1.5px solid var(--fb-border);border-radius:10px;padding:.7rem .95rem;font-size:1rem;font-weight:700;color:var(--body-color);line-height:1.6;display:none;margin-top:.5rem;animation:riseUp .3s ease both;}
+.model-reveal.show{display:block;}
+.model-label{font-size:.82rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--top-badge-bg);margin-bottom:.3rem;}
+
+/* Vocab reveal cards */
+.vocab-grid-lesson{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.75rem;margin-bottom:1rem;}
+.vc-lesson{border-radius:14px;border:1.5px solid var(--card-border);cursor:pointer;transition:all .22s;overflow:hidden;}
+.vc-lesson:hover{border-color:var(--top-badge-bg);transform:translateY(-2px);box-shadow:0 6px 18px var(--card-shadow);}
+.vc-lesson.learned{border-color:var(--opt-correct-b);background:var(--opt-correct);}
+.vc-front{padding:1rem 1.1rem;background:var(--card-bg);transition:background .3s;}
+.vc-term-big{font-family:'Fredoka One',cursive;font-size:1.32rem;color:var(--body-color);margin-bottom:.15rem;}
+.vc-hint{font-size:.9rem;font-weight:700;color:var(--section-lbl);font-style:italic;}
+.vc-tap{font-size:.86rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--top-badge-bg);margin-top:.55rem;}
+.vc-back{padding:.9rem 1.1rem;background:var(--scenario-bg);border-top:1.5px solid var(--scenario-border);display:none;animation:fadeIn .2s ease both;}
+.vc-lesson.open .vc-back{display:block;}
+.vc-lesson.open .vc-tap{display:none;}
+.vc-def-es{font-size:1.03rem;font-weight:700;color:var(--body-color);line-height:1.6;margin-bottom:.4rem;}
+.vc-def-en{font-size:.9rem;font-weight:600;color:var(--section-lbl);font-style:italic;margin-bottom:.55rem;}
+.vc-example{font-size:.98rem;font-style:italic;color:var(--card-desc);border-left:3px solid var(--top-badge-bg);padding-left:.6rem;line-height:1.5;margin-bottom:.6rem;}
+.vc-learned-btn{font-family:'Fredoka One',cursive;font-size:.94rem;padding:5px 14px;border-radius:999px;border:1.5px solid var(--opt-correct-b);color:var(--opt-correct-b);background:transparent;cursor:pointer;transition:all .2s;}
+.vc-learned-btn:hover,.vc-lesson.learned .vc-learned-btn{background:var(--opt-correct-b);color:#fff;}
+.vocab-progress{font-size:.94rem;font-weight:800;color:var(--section-lbl);text-align:center;margin-top:.5rem;}
+
+/* Short story */
+.story-box{background:var(--scenario-bg);border:1.5px solid var(--scenario-border);border-radius:14px;padding:1.1rem 1.3rem;margin-bottom:1rem;line-height:1.9;font-size:1.05rem;font-weight:600;color:var(--body-color);}
+.sw{color:var(--top-badge-bg);font-weight:900;text-decoration:underline dotted;cursor:pointer;position:relative;transition:color .2s;}
+.sw:hover{filter:brightness(1.2);}
+.sw-pop{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--modal-card);border:1.5px solid var(--modal-border);border-radius:10px;padding:.55rem .8rem;width:220px;font-size:.94rem;font-weight:700;color:var(--body-color);line-height:1.5;z-index:100;box-shadow:0 6px 20px rgba(0,0,0,.30);pointer-events:none;}
+.sw-pop.show{display:block;animation:popIn .2s ease both;}
+.sw-pop-term{font-family:'Fredoka One',cursive;font-size:1.05rem;color:var(--top-badge-bg);margin-bottom:.2rem;}
+.sw-pop-en{font-size:.86rem;color:var(--section-lbl);font-style:italic;}
+
+/* Story comprehension MCQ */
+.story-q{margin-bottom:.85rem;}
+.story-q-label{font-size:1.03rem;font-weight:800;color:var(--body-color);margin-bottom:.5rem;display:flex;gap:.4rem;}
+.story-q-num{font-family:'Fredoka One',cursive;color:var(--top-badge-bg);}
+.story-opts{display:flex;flex-direction:column;gap:6px;}
+.story-opt{padding:8px 12px;border-radius:10px;background:var(--opt-bg);border:1.5px solid var(--opt-border);cursor:pointer;font-size:1rem;font-weight:700;color:var(--body-color);transition:all .18s;user-select:none;}
+.story-opt:hover:not(.s-locked){background:var(--opt-hover);border-color:var(--opt-sel-b);}
+.story-opt.s-correct{background:var(--opt-correct);border-color:var(--opt-correct-b);pointer-events:none;}
+.story-opt.s-wrong{background:var(--opt-wrong);border-color:var(--opt-wrong-b);pointer-events:none;}
+.story-opt.s-locked{pointer-events:none;opacity:.6;}
+.story-fb{font-size:.97rem;font-weight:700;color:var(--body-color);margin-top:.4rem;display:none;}
+.story-fb.show{display:block;}
+
+/* Oral practice */
+.practice-item{margin-bottom:1.1rem;}
+.starter-es{font-size:1.1rem;font-weight:800;color:var(--top-badge-bg);margin-bottom:.2rem;}
+.starter-en{font-size:.9rem;font-style:italic;color:var(--section-lbl);margin-bottom:.5rem;}
+.practice-input{width:100%;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:10px;padding:9px 12px;font-family:'Nunito',sans-serif;font-size:1.03rem;font-weight:600;color:var(--input-text);outline:none;resize:none;transition:border-color .2s;}
+.practice-input:focus{border-color:var(--input-focus);}
+.see-model-btn{font-family:'Fredoka One',cursive;font-size:.92rem;padding:5px 14px;border-radius:999px;background:transparent;color:var(--top-badge-bg);border:1.5px solid var(--top-badge-bg);cursor:pointer;margin-top:.45rem;transition:all .2s;}
+.see-model-btn:hover{background:var(--top-badge-bg);color:var(--top-badge-c);}
+
+/* Session 2 — quick review */
+.review-q{margin-bottom:1rem;}
+.review-label{font-size:1.05rem;font-weight:800;color:var(--body-color);margin-bottom:.5rem;}
+.review-en{font-size:.9rem;font-style:italic;color:var(--section-lbl);margin-bottom:.5rem;margin-top:.1rem;}
+.review-opts{display:flex;flex-direction:column;gap:6px;}
+.review-opt{padding:9px 13px;border-radius:10px;background:var(--opt-bg);border:1.5px solid var(--opt-border);cursor:pointer;font-size:1.01rem;font-weight:700;color:var(--body-color);transition:all .18s;user-select:none;}
+.review-opt:hover:not(.r-locked){background:var(--opt-hover);border-color:var(--opt-sel-b);}
+.review-opt.r-correct{background:var(--opt-correct);border-color:var(--opt-correct-b);}
+.review-opt.r-wrong{background:var(--opt-wrong);border-color:var(--opt-wrong-b);}
+.review-opt.r-locked{pointer-events:none;}
+.review-fb{font-size:.97rem;font-weight:700;color:var(--body-color);margin-top:.4rem;padding:.4rem .7rem;border-radius:8px;display:none;}
+.review-fb.show{display:block;}
+.review-fb.good{background:var(--opt-correct);border:1px solid var(--opt-correct-b);}
+.review-fb.bad{background:var(--opt-wrong);border:1px solid var(--opt-wrong-b);}
+
+/* Definition boxes */
+.def-box{margin-bottom:1.1rem;}
+.def-word{font-family:'Fredoka One',cursive;font-size:1.22rem;color:var(--top-badge-bg);margin-bottom:.15rem;}
+.def-en{font-size:.9rem;font-style:italic;color:var(--section-lbl);margin-bottom:.45rem;}
+.def-input{width:100%;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:10px;padding:9px 12px;font-family:'Nunito',sans-serif;font-size:1.03rem;font-weight:600;color:var(--input-text);outline:none;resize:vertical;min-height:70px;transition:border-color .2s;}
+.def-input:focus{border-color:var(--input-focus);}
+
+/* Next paso button */
+.next-paso-wrap{text-align:right;margin-top:.9rem;}
+.next-paso-btn{font-family:'Fredoka One',cursive;font-size:1.07rem;padding:9px 22px;border-radius:999px;background:var(--top-badge-bg);color:var(--top-badge-c);border:none;cursor:pointer;transition:all .2s;}
+.next-paso-btn:hover{filter:brightness(1.1);transform:translateY(-1px);}
+.done-msg{text-align:center;padding:1.1rem;background:var(--opt-correct);border:1.5px solid var(--opt-correct-b);border-radius:14px;font-family:'Fredoka One',cursive;font-size:1.22rem;color:var(--body-color);display:none;}
+.done-msg.show{display:block;animation:riseUp .4s ease both;}
+
+/* Vocab reference tab */
+.vocab-ref-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.8rem;}
+.vr-card{border-radius:14px;padding:1rem 1.1rem;border:1.5px solid;}
+.vr-info{background:rgba(21,101,192,0.10);border-color:rgba(21,101,192,0.30);}
+.vr-pass{background:rgba(46,125,50,0.10);border-color:rgba(46,125,50,0.30);}
+.vr-fail{background:rgba(183,28,28,0.08);border-color:rgba(183,28,28,0.25);}
+.vr-term{font-family:'Fredoka One',cursive;font-size:1.22rem;color:var(--body-color);}
+.vr-en{font-size:.86rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--section-lbl);margin:.12rem 0 .5rem;}
+.vr-def{font-size:.99rem;font-weight:600;color:var(--body-color);line-height:1.6;margin-bottom:.45rem;}
+.vr-ex{font-size:.94rem;font-style:italic;color:var(--card-desc);border-left:3px solid var(--top-badge-bg);padding-left:.55rem;line-height:1.5;}
+
+@media(max-width:600px){.plan-tab{font-size:.9rem;padding:.7rem .3rem;}.pdf-row,.score-grid{flex-direction:column;align-items:center;}.vocab-grid-lesson,.vocab-ref-grid{grid-template-columns:1fr;}}
+
+/* ═══ ASSESSMENT LOCK PANEL ═══ */
+#assessLock{margin-bottom:1.5rem;animation:riseUp .5s ease .2s both;}
+#assessLockCard{background:var(--card-bg);border:2px dashed var(--card-border);border-radius:20px;padding:2.2rem 2rem;text-align:center;transition:all .4s;}
+#assessLockCard.unlocking{border-color:var(--top-badge-bg);background:var(--scenario-bg);transform:scale(1.01);}
+#al-icon{font-size:3rem;margin-bottom:.7rem;transition:all .4s;}
+#assessLockCard.unlocking #al-icon{filter:drop-shadow(0 0 12px var(--top-badge-bg));}
+#al-title{font-family:'Fredoka One',cursive;font-size:1.55rem;color:var(--body-color);margin-bottom:.4rem;}
+#al-sub{font-size:.97rem;font-weight:600;color:var(--card-desc);line-height:1.7;margin-bottom:1.2rem;}
+#al-sub em{font-size:.82rem;color:var(--section-lbl);}
+#al-progress{display:flex;justify-content:center;gap:1rem;margin-bottom:1.1rem;flex-wrap:wrap;}
+.al-session{display:flex;align-items:center;gap:.6rem;background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:12px;padding:.7rem 1.3rem;font-size:1rem;font-weight:700;color:var(--card-desc);transition:all .35s;}
+.al-session.done{background:var(--opt-correct);border-color:var(--opt-correct-b);color:var(--body-color);}
+.al-check{font-size:1.2rem;font-weight:900;transition:all .3s;}
+.al-session.done .al-check{color:var(--opt-correct-b);}
+#al-hint{font-size:.9rem;font-weight:600;color:var(--section-lbl);line-height:1.6;}
+#al-hint em{font-size:.78rem;}
+#assessLock.hidden{display:none;}
+.test-container.revealed{animation:riseUp .6s ease both;}
+
+/* ── Paso lock overlay ─────────────────────────────── */
+.paso-locked{position:relative;}
+.paso-locked .paso-body{display:none!important;}
+.paso-lock-overlay{display:flex;align-items:center;justify-content:center;gap:.7rem;padding:.85rem 1.1rem;background:var(--card-bg);font-size:.97rem;font-weight:800;color:var(--section-lbl);cursor:default;border-top:1.5px dashed var(--card-border);}
+.paso-lock-overlay .pl-icon{font-size:1.1rem;}
+
+/* ── Complete paso button ──────────────────────────── */
+.complete-paso-btn{font-family:'Fredoka One',cursive;font-size:1rem;padding:10px 26px;border-radius:999px;background:var(--top-badge-bg);color:var(--top-badge-c);border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(0,0,0,.18);}
+.complete-paso-btn:hover{filter:brightness(1.1);transform:translateY(-1px);}
+.complete-paso-wrap{text-align:right;margin-top:1rem;}
+
+/* ── Completion animation ─────────────────────────── */
+.paso-complete-flash{position:fixed;inset:0;z-index:500;pointer-events:none;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .25s;}
+.paso-complete-flash.show{opacity:1;}
+.paso-complete-flash.hide{opacity:0;}
+.pcf-card{background:var(--top-badge-bg);color:var(--top-badge-c);font-family:'Fredoka One',cursive;font-size:1.6rem;padding:1rem 2.2rem;border-radius:20px;box-shadow:0 12px 40px rgba(0,0,0,.35);transform:scale(.8);transition:transform .3s cubic-bezier(.36,1.5,.6,1);}
+.paso-complete-flash.show .pcf-card{transform:scale(1);}
+
+/* ── Paso completion error ────────────────────────── */
+.paso-error{background:var(--opt-wrong);border:1.5px solid var(--opt-wrong-b);border-radius:10px;padding:.6rem .95rem;font-size:.9rem;font-weight:700;color:var(--body-color);margin-top:.7rem;display:none;animation:riseUp .2s ease both;}
+.paso-error.show{display:block;}
+
+/* ── Session 2 tab locked ──────────────────── */
+.plan-tab.tab-locked{opacity:.4;cursor:not-allowed;position:relative;}
+.plan-tab.tab-locked::after{content:' 🔒';font-size:.75rem;}
+#s2-lock-banner{background:var(--opt-wrong);border:1.5px solid var(--opt-wrong-b);border-radius:12px;padding:.85rem 1.1rem;margin-bottom:1rem;font-size:.97rem;font-weight:700;color:var(--body-color);display:flex;align-items:center;gap:.6rem;}
+</style>
+</head>
+<body class="theme-night">
+<div class="stars" id="stars"></div>
+<div class="paso-complete-flash" id="pcFlash">
+  <div class="pcf-card" id="pcFlashMsg">✅ ¡Paso completado!</div>
+</div>
+
+
+<!-- PASSKEY MODAL -->
+<div class="modal-overlay hidden" id="passkeyModal">
+  <div class="modal-card">
+    <div class="modal-icon">🤖</div>
+    <div class="modal-title">Obtener retroalimentación</div>
+    <div class="modal-desc">Escribe el código de clase que te dio Mr. EdLo para recibir retroalimentación instantánea de la IA.<br><em style="font-size:.75rem;color:var(--section-lbl);">Enter the class code Mr. EdLo gave you.</em></div>
+    <input class="modal-input" type="text" id="passkeyInput" placeholder="" autocomplete="off" spellcheck="false">
+    <button class="btn-primary" style="width:100%;margin-bottom:.5rem" onclick="validatePasskey()">Enviar →</button>
+    <div class="modal-err" id="passkeyErr">❌ Código incorrecto — pídele el código a Mr. EdLo.</div>
+  </div>
+</div>
+
+<!-- Progress bar -->
+<div class="q-progress-wrap" id="qProgressWrap">
+  <div class="q-progress-inner">
+    <div class="q-progress-row">
+      <span class="q-progress-label">Evaluación — Preguntas respondidas</span>
+      <span class="q-progress-count" id="qProgressCount">0 / 12</span>
+    </div>
+    <div class="q-progress-bg"><div class="q-progress-fill" id="qProgressFill" style="width:0%"></div></div>
+  </div>
+</div>
+
+<!-- Theme bar -->
+<div class="theme-bar">
+  <button class="theme-btn active" onclick="setTheme('night',this)">🌙 Night</button>
+  <button class="theme-btn" onclick="setTheme('sunny',this)">☀️ Sunny</button>
+  <button class="theme-btn" onclick="setTheme('cloudy',this)">☁️ Cloudy</button>
+  <button class="theme-btn" onclick="setTheme('nature',this)">🌿 Nature</button>
+</div>
+
+<div class="wrapper">
+  <div class="site-header">
+    <a class="site-header-logo" href="https://edlovirtualclassroom.com/">
+      <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+      <span>Mr. EdLo's Virtual Classroom</span>
+    </a>
+    <span class="header-badge">Standard 6 &nbsp;·&nbsp; Belize</span>
+  </div>
+  <a class="back-link" href="https://edlovirtualclassroom.com/spanish/">← Regresar a Español</a>
+
+  <header>
+    <div class="badge">Standard 6 · Español · SP 3.20</div>
+    <h1>🏫 Experiencias Escolares</h1>
+    <p class="subtitle">Matrícula e Inscripción — Lección semanal interactiva + Evaluación final · 30 puntos</p>
+  </header>
+
+  <!-- ══════════════════════════════════════════
+       PLAN SECTION
+  ══════════════════════════════════════════ -->
+  <div class="plan-section">
+    <div class="plan-toggle" onclick="togglePlan()">
+      <div class="plan-toggle-title">📚 Lección Semanal — Sesiones Interactivas</div>
+      <span class="plan-chev open" id="planChev">▼</span>
+    </div>
+    <div class="plan-body open" id="planBody">
+      <div class="plan-tabs">
+        <button class="plan-tab active" onclick="switchTab('overview',this)">📌 Resumen</button>
+        <button class="plan-tab" onclick="switchTab('s1',this)">🗣️ Sesión 1 — Oral</button>
+        <button class="plan-tab tab-locked" id="tab-s2" onclick="switchTab('s2',this)">✏️ Sesión 2 — Escrito</button>
+        <button class="plan-tab" onclick="switchTab('vocab',this)">📖 Vocabulario</button>
+      </div>
+
+      <!-- ══ TAB: OVERVIEW ══ -->
+      <div class="plan-panel active" id="panel-overview">
+        <div class="info-grid">
+          <div class="info-pill"><div class="info-pill-label">Materia</div><div class="info-pill-val">Español — SP 3.20</div></div>
+          <div class="info-pill"><div class="info-pill-label">Tema</div><div class="info-pill-val">Experiencias Escolares</div></div>
+          <div class="info-pill"><div class="info-pill-label">Subtema</div><div class="info-pill-val">Matrícula e Inscripción</div></div>
+          <div class="info-pill"><div class="info-pill-label">Sesiones</div><div class="info-pill-val">2 × 45 minutos</div></div>
+          <div class="info-pill"><div class="info-pill-label">Grado</div><div class="info-pill-val">Standard 6 · Belize</div></div>
+          <div class="info-pill"><div class="info-pill-label">Maestro</div><div class="info-pill-val">Mr. Edwin D. López</div></div>
+        </div>
+        <div class="section-lbl-text">Objetivo de Aprendizaje</div>
+        <div style="background:var(--scenario-bg);border:1.5px solid var(--scenario-border);border-radius:12px;padding:.85rem 1.1rem;font-size:.88rem;font-weight:700;color:var(--body-color);line-height:1.6;margin-bottom:.2rem;">
+          🎯 <strong>SP 3.20</strong> — Usar el español para describir experiencias y procesos escolares.
+          <div style="font-size:.72rem;font-style:italic;color:var(--section-lbl);margin-top:.3rem;">Use Spanish to describe school-related experiences and processes.</div>
+        </div>
+        <div class="section-lbl-text">Objetivos de la lección</div>
+        <ul class="obj-list">
+          <li><span class="obj-num">1</span>Identificar y pronunciar el vocabulario clave relacionado con los procesos escolares. <span style="font-size:.72rem;font-style:italic;color:var(--section-lbl);">Identify and pronounce key vocabulary.</span></li>
+          <li><span class="obj-num">2</span>Explicar conceptos escolares como la matrícula y la asistencia. <span style="font-size:.72rem;font-style:italic;color:var(--section-lbl);">Explain concepts like registration and attendance.</span></li>
+          <li><span class="obj-num">3</span>Construir oraciones simples que describan experiencias escolares. <span style="font-size:.72rem;font-style:italic;color:var(--section-lbl);">Build simple descriptive sentences.</span></li>
+          <li><span class="obj-num">4</span>Participar en discusiones cortas usando el vocabulario aprendido. <span style="font-size:.72rem;font-style:italic;color:var(--section-lbl);">Participate in discussions using new vocabulary.</span></li>
+        </ul>
+        <div style="margin-top:1.1rem;padding:.75rem 1rem;background:var(--scenario-bg);border:1.5px solid var(--scenario-border);border-radius:12px;font-size:.83rem;font-weight:700;color:var(--body-color);">
+          💡 Haz clic en las pestañas de arriba para comenzar la <strong>Sesión 1</strong> o la <strong>Sesión 2</strong>. Trabaja paso a paso.
+          <div style="font-size:.72rem;font-style:italic;color:var(--section-lbl);margin-top:.25rem;">Click the tabs above to start Session 1 or 2. Work through each step.</div>
+        </div>
+      </div>
+
+      <!-- ══ TAB: SESIÓN 1 — ORAL FIRST (INTERACTIVE) ══ -->
+      <div class="plan-panel" id="panel-s1">
+        <div style="background:var(--scenario-bg);border:1.5px solid var(--scenario-border);border-radius:10px;padding:.65rem 1rem;margin-bottom:1.1rem;font-size:.85rem;font-weight:700;color:var(--body-color);">
+          🗣️ <strong>Enfoque:</strong> Primero oral — escuchar, hablar y comprender antes de escribir.
+          <div style="font-size:.72rem;font-style:italic;color:var(--section-lbl);margin-top:.2rem;">Focus: Oral First — listen, speak, and understand before writing.</div>
+        </div>
+
+        <!-- PASO 1 — INICIO -->
+        <div class="paso active-paso" id="s1p1">
+          <div class="paso-header">
+            <span class="paso-badge">Paso 1</span>
+            <span class="paso-title">🚀 Inicio — Conversación</span>
+            <span class="paso-time">5 min</span>
+          </div>
+          <div class="paso-body open">
+            <p class="instr">Piensa en estas preguntas. Escribe tus ideas y luego mira la respuesta modelo.</p>
+            <p class="instr-en">Think about these questions. Write your ideas, then check the model response.</p>
+
+            <div class="discuss-card">
+              <div class="discuss-q">¿Qué haces el primer día de clases?</div>
+              <div class="discuss-en">What do you do on the first day of school?</div>
+              <div class="discuss-think">
+                <textarea class="think-box" rows="2" placeholder="Escribe tus ideas aquí… / Write your ideas here…"></textarea>
+                <button class="reveal-btn" onclick="revealModel('s1p1a')">Ver respuesta 👁</button>
+              </div>
+              <div class="model-reveal" id="s1p1a">
+                <div class="model-label">Respuesta modelo — Model Response</div>
+                El primer día de clases, busco mi salón, conozco a mis compañeros y escucho las instrucciones del maestro. También presento mi libreta y mis útiles escolares.
+              </div>
+            </div>
+
+            <div class="discuss-card">
+              <div class="discuss-q">¿Qué crees que significa la palabra "inscripción"?</div>
+              <div class="discuss-en">What do you think the word "inscripción" means?</div>
+              <div class="discuss-think">
+                <textarea class="think-box" rows="2" placeholder="Escribe tus ideas aquí… / Write your ideas here…"></textarea>
+                <button class="reveal-btn" onclick="revealModel('s1p1b')">Ver respuesta 👁</button>
+              </div>
+              <div class="model-reveal" id="s1p1b">
+                <div class="model-label">Respuesta modelo — Model Response</div>
+                Inscripción significa anotar el nombre de un estudiante en la lista oficial de la escuela al inicio del año.
+              </div>
+            </div>
+
+            <div class="complete-paso-wrap"><div class="paso-error" id="err-s1p1"></div><button class="complete-paso-btn" onclick="validateS1P1()">¡Listo! Continuar → Vocabulario</button></div>
+          </div>
+        </div>
+
+        <!-- PASO 2 — VOCABULARIO -->
+        <div class="paso paso-locked" id="s1p2">
+          <div class="paso-header">
+            <span class="paso-badge">Paso 2</span>
+            <span class="paso-title">📖 Vocabulario — Las 6 palabras clave</span>
+            <span class="paso-time">20 min</span>
+          </div>
+          <div class="paso-lock-overlay"><span class="pl-icon">🔒</span> Completa el paso anterior para desbloquear. <em style="font-size:.8rem;font-weight:600;color:var(--section-lbl);"> / Complete the previous step to unlock.</em></div>
+          <div class="paso-body" id="s1p2-body">
+            <p class="instr">Haz clic en cada tarjeta para descubrir el significado. Marca cada palabra cuando la aprendas.</p>
+            <p class="instr-en">Click each card to reveal its meaning. Mark each word when you have learned it.</p>
+
+            <div class="vocab-grid-lesson">
+              <div class="vc-lesson" id="vc-matriculacion" onclick="toggleVocab('vc-matriculacion')">
+                <div class="vc-front">
+                  <div class="vc-term-big">Matriculación</div>
+                  <div class="vc-hint">sustantivo femenino · noun</div>
+                  <div class="vc-tap">👆 Toca para descubrir</div>
+                </div>
+                <div class="vc-back">
+                  <div class="vc-def-es">El proceso <strong>oficial</strong> de registrar a un/a estudiante en la escuela para un año escolar.</div>
+                  <div class="vc-def-en">The official process of enrolling a student in school for a school year.</div>
+                  <div class="vc-example">"La <strong>matriculación</strong> de los estudiantes es en enero, antes de que empiecen las clases."</div>
+                  <button class="vc-learned-btn" onclick="markLearned('vc-matriculacion', event)">✓ ¡Aprendida!</button>
+                </div>
+              </div>
+
+              <div class="vc-lesson" id="vc-inscripcion" onclick="toggleVocab('vc-inscripcion')">
+                <div class="vc-front">
+                  <div class="vc-term-big">Inscripción</div>
+                  <div class="vc-hint">sustantivo femenino · noun</div>
+                  <div class="vc-tap">👆 Toca para descubrir</div>
+                </div>
+                <div class="vc-back">
+                  <div class="vc-def-es">El acto de <strong>anotar</strong> el nombre de un/a estudiante en la lista oficial de la escuela.</div>
+                  <div class="vc-def-en">The act of recording a student's name on the school's official list.</div>
+                  <div class="vc-example">"La <strong>inscripción</strong> abre el primer lunes de enero en la oficina de la escuela."</div>
+                  <button class="vc-learned-btn" onclick="markLearned('vc-inscripcion', event)">✓ ¡Aprendida!</button>
+                </div>
+              </div>
+
+              <div class="vc-lesson" id="vc-asistencia" onclick="toggleVocab('vc-asistencia')">
+                <div class="vc-front">
+                  <div class="vc-term-big">Asistencia</div>
+                  <div class="vc-hint">sustantivo femenino · noun</div>
+                  <div class="vc-tap">👆 Toca para descubrir</div>
+                </div>
+                <div class="vc-back">
+                  <div class="vc-def-es">Ir a la escuela <strong>regularmente</strong>. La asistencia puntual demuestra responsabilidad.</div>
+                  <div class="vc-def-en">Going to school regularly every day. Punctual attendance shows responsibility.</div>
+                  <div class="vc-example">"La <strong>asistencia</strong> diaria es muy importante para aprender y no perder clases."</div>
+                  <button class="vc-learned-btn" onclick="markLearned('vc-asistencia', event)">✓ ¡Aprendida!</button>
+                </div>
+              </div>
+
+              <div class="vc-lesson" id="vc-promocion" onclick="toggleVocab('vc-promocion')">
+                <div class="vc-front">
+                  <div class="vc-term-big">Promoción</div>
+                  <div class="vc-hint">sustantivo femenino · noun</div>
+                  <div class="vc-tap">👆 Toca para descubrir</div>
+                </div>
+                <div class="vc-back">
+                  <div class="vc-def-es">El acto de <strong>pasar</strong> de un grado escolar al siguiente después de cumplir los requisitos.</div>
+                  <div class="vc-def-en">The act of advancing from one grade to the next after meeting requirements.</div>
+                  <div class="vc-example">"Yo recibí mi <strong>promoción</strong> al Standard 6 porque cumplí con todas mis tareas y exámenes."</div>
+                  <button class="vc-learned-btn" onclick="markLearned('vc-promocion', event)">✓ ¡Aprendida!</button>
+                </div>
+              </div>
+
+              <div class="vc-lesson" id="vc-aprobar" onclick="toggleVocab('vc-aprobar')">
+                <div class="vc-front">
+                  <div class="vc-term-big">Aprobar</div>
+                  <div class="vc-hint">verbo · verb</div>
+                  <div class="vc-tap">👆 Toca para descubrir</div>
+                </div>
+                <div class="vc-back">
+                  <div class="vc-def-es">Obtener la nota <strong>mínima requerida</strong> para avanzar al próximo nivel académico.</div>
+                  <div class="vc-def-en">To get the minimum required grade to advance to the next academic level.</div>
+                  <div class="vc-example">"Yo <strong>apruebo</strong> el año cuando estudio todos los días y entrego mis tareas a tiempo."</div>
+                  <button class="vc-learned-btn" onclick="markLearned('vc-aprobar', event)">✓ ¡Aprendida!</button>
+                </div>
+              </div>
+
+              <div class="vc-lesson" id="vc-reprobar" onclick="toggleVocab('vc-reprobar')">
+                <div class="vc-front">
+                  <div class="vc-term-big">Reprobar</div>
+                  <div class="vc-hint">verbo · verb</div>
+                  <div class="vc-tap">👆 Toca para descubrir</div>
+                </div>
+                <div class="vc-back">
+                  <div class="vc-def-es">No alcanzar la nota mínima y tener que <strong>repetir</strong> el grado o nivel académico.</div>
+                  <div class="vc-def-en">To fail to reach the minimum grade and having to repeat the academic year.</div>
+                  <div class="vc-example">"Si no estudio ni asisto a clases, puedo <strong>reprobar</strong> el año escolar."</div>
+                  <button class="vc-learned-btn" onclick="markLearned('vc-reprobar', event)">✓ ¡Aprendida!</button>
+                </div>
+              </div>
+            </div>
+
+            <p class="vocab-progress" id="vocabProgress">Palabras aprendidas: 0 / 6</p>
+            <div style="margin-top:.7rem;background:var(--scenario-bg);border:1.5px solid var(--scenario-border);border-radius:10px;padding:.65rem .9rem;font-size:.82rem;font-weight:700;color:var(--body-color);">
+              🔁 <strong>Diferencia clave:</strong> Matriculación = el proceso completo · Inscripción = anotar el nombre
+              <div style="font-size:.7rem;font-style:italic;color:var(--section-lbl);margin-top:.2rem;">Key difference: Matriculación = the whole enrollment process · Inscripción = writing the name on the list</div>
+            </div>
+
+            <div class="complete-paso-wrap"><div class="paso-error" id="err-s1p2"></div><button class="complete-paso-btn" onclick="validateS1P2()">¡Listo! Continuar → Historia</button></div>
+          </div>
+        </div>
+
+        <!-- PASO 3 — HISTORIA -->
+        <div class="paso paso-locked" id="s1p3">
+          <div class="paso-header">
+            <span class="paso-badge">Paso 3</span>
+            <span class="paso-title">📖 Historia — El año escolar de Carlos</span>
+            <span class="paso-time">10 min</span>
+          </div>
+          <div class="paso-lock-overlay"><span class="pl-icon">🔒</span> Completa el paso anterior para desbloquear. <em style="font-size:.8rem;font-weight:600;color:var(--section-lbl);"> / Complete the previous step to unlock.</em></div>
+          <div class="paso-body" id="s1p3-body">
+            <p class="instr">Lee la historia. Haz clic en las palabras <span style="color:var(--top-badge-bg);font-weight:900;text-decoration:underline dotted;">subrayadas</span> para ver su definición.</p>
+            <p class="instr-en">Read the story. Click the <span style="color:var(--top-badge-bg);">underlined</span> words to see their definition.</p>
+
+            <div class="story-box">
+              Carlos tiene 11 años y estudia en el Standard 6. Al inicio del año escolar, su mamá lo lleva a la escuela para hacer la
+              <span class="sw" onclick="toggleSW(this)" data-def="El proceso oficial de registrar a un/a estudiante en la escuela para el año escolar." data-en="Official school enrollment process.">matriculación<span class="sw-pop"><div class="sw-pop-term">Matriculación</div><div>El proceso oficial de registrar a un/a estudiante en la escuela.</div><div class="sw-pop-en">Official school enrollment process.</div></span></span>.
+              En la oficina, una secretaria anota el nombre de Carlos en la lista oficial — eso es la
+              <span class="sw" onclick="toggleSW(this)" data-en="Recording the student's name on the official list.">inscripción<span class="sw-pop"><div class="sw-pop-term">Inscripción</div><div>El acto de anotar el nombre del/de la estudiante en la lista oficial.</div><div class="sw-pop-en">Recording the student's name on the official list.</div></span></span>.
+              <br><br>
+              Carlos empieza sus clases con mucho entusiasmo. Todos los días llega temprano — su
+              <span class="sw" onclick="toggleSW(this)">asistencia<span class="sw-pop"><div class="sw-pop-term">Asistencia</div><div>Ir a la escuela regularmente todos los días.</div><div class="sw-pop-en">Going to school every day.</div></span></span>
+              es perfecta. Estudia mucho, entrega sus tareas y participa en clase.
+              <br><br>
+              Al final del año, Carlos recibe sus notas. Él obtuvo las calificaciones necesarias — ¡va a
+              <span class="sw" onclick="toggleSW(this)">aprobar<span class="sw-pop"><div class="sw-pop-term">Aprobar</div><div>Obtener la nota mínima para avanzar al próximo nivel.</div><div class="sw-pop-en">To pass and advance to the next level.</div></span></span>
+              el año! Su maestra le dice: "¡Felicitaciones, Carlos! Tu
+              <span class="sw" onclick="toggleSW(this)">promoción<span class="sw-pop"><div class="sw-pop-term">Promoción</div><div>El acto de pasar de un grado al siguiente.</div><div class="sw-pop-en">Advancing from one grade to the next.</div></span></span>
+              al año siguiente está asegurada."
+              <br><br>
+              Su amiga María no tuvo la misma suerte. Ella faltó muchos días y no entregó sus tareas. Por eso, María va a
+              <span class="sw" onclick="toggleSW(this)">reprobar<span class="sw-pop"><div class="sw-pop-term">Reprobar</div><div>No alcanzar la nota mínima y repetir el grado.</div><div class="sw-pop-en">To fail and repeat the year.</div></span></span>
+              el año. Carlos aprendió una lección importante: la
+              <span class="sw" onclick="toggleSW(this)">asistencia<span class="sw-pop"><div class="sw-pop-term">Asistencia</div><div>Ir a la escuela regularmente todos los días.</div><div class="sw-pop-en">Going to school every day.</div></span></span>
+              y el esfuerzo son la clave para
+              <span class="sw" onclick="toggleSW(this)">aprobar<span class="sw-pop"><div class="sw-pop-term">Aprobar</div><div>Obtener la nota mínima para avanzar.</div><div class="sw-pop-en">To pass and move to the next level.</div></span></span>
+              y recibir tu
+              <span class="sw" onclick="toggleSW(this)">promoción<span class="sw-pop"><div class="sw-pop-term">Promoción</div><div>El acto de pasar de un grado al siguiente.</div><div class="sw-pop-en">Grade advancement.</div></span></span>.
+            </div>
+
+            <!-- Story comprehension -->
+            <p class="instr" style="margin-top:.2rem;">Responde las preguntas de comprensión:</p>
+            <p class="instr-en">Answer the comprehension questions:</p>
+
+            <div class="story-q">
+              <div class="story-q-label"><span class="story-q-num">C1.</span> ¿Por qué Carlos va a aprobar el año?</div>
+              <div class="story-opts">
+                <div class="story-opt" onclick="checkStory(this,'wrong','s1c1')">Porque pagó la matriculación a tiempo.</div>
+                <div class="story-opt" onclick="checkStory(this,'correct','s1c1')">Porque tiene buena asistencia, estudia y entrega sus tareas.</div>
+                <div class="story-opt" onclick="checkStory(this,'wrong','s1c1')">Porque su mamá habló con la maestra.</div>
+              </div>
+              <div class="story-fb" id="s1c1-fb"></div>
+            </div>
+
+            <div class="story-q">
+              <div class="story-q-label"><span class="story-q-num">C2.</span> ¿Por qué va a reprobar María?</div>
+              <div class="story-opts">
+                <div class="story-opt" onclick="checkStory(this,'wrong','s1c2')">Porque no hizo la inscripción.</div>
+                <div class="story-opt" onclick="checkStory(this,'wrong','s1c2')">Porque llegó tarde el primer día.</div>
+                <div class="story-opt" onclick="checkStory(this,'correct','s1c2')">Porque faltó muchos días y no entregó sus tareas.</div>
+              </div>
+              <div class="story-fb" id="s1c2-fb"></div>
+            </div>
+
+            <div class="story-q">
+              <div class="story-q-label"><span class="story-q-num">C3.</span> ¿Cuál es la diferencia entre la <em>matriculación</em> y la <em>inscripción</em> en la historia?</div>
+              <div class="story-opts">
+                <div class="story-opt" onclick="checkStory(this,'wrong','s1c3')">Son exactamente lo mismo — significan lo mismo.</div>
+                <div class="story-opt" onclick="checkStory(this,'correct','s1c3')">La matriculación es el proceso completo; la inscripción es anotar el nombre en la lista.</div>
+                <div class="story-opt" onclick="checkStory(this,'wrong','s1c3')">La inscripción es el proceso completo; la matriculación es solo para los maestros.</div>
+              </div>
+              <div class="story-fb" id="s1c3-fb"></div>
+            </div>
+
+            <div class="complete-paso-wrap"><div class="paso-error" id="err-s1p3"></div><button class="complete-paso-btn" onclick="validateS1P3()">¡Listo! Continuar → Práctica oral</button></div>
+          </div>
+        </div>
+
+        <!-- PASO 4 — PRÁCTICA ORAL -->
+        <div class="paso paso-locked" id="s1p4">
+          <div class="paso-header">
+            <span class="paso-badge">Paso 4</span>
+            <span class="paso-title">🎤 Práctica oral — Completa las oraciones</span>
+            <span class="paso-time">10 min</span>
+          </div>
+          <div class="paso-lock-overlay"><span class="pl-icon">🔒</span> Completa el paso anterior para desbloquear. <em style="font-size:.8rem;font-weight:600;color:var(--section-lbl);"> / Complete the previous step to unlock.</em></div>
+          <div class="paso-body" id="s1p4-body">
+            <p class="instr">Completa cada oración con tus propias palabras. Luego lee tu respuesta en voz alta. Haz clic en "Ver ejemplo" para comparar.</p>
+            <p class="instr-en">Complete each sentence in your own words. Then read it aloud. Click "See example" to compare.</p>
+
+            <div class="practice-item">
+              <div class="starter-es">Yo apruebo el año cuando…</div>
+              <div class="starter-en">I pass the school year when…</div>
+              <textarea class="practice-input" rows="2" placeholder="Escribe tu respuesta aquí…"></textarea>
+              <button class="see-model-btn" onclick="revealModel('s1m1')">Ver ejemplo 👁</button>
+              <div class="model-reveal" id="s1m1"><div class="model-label">Ejemplo — Example</div>…estudio todos los días, entrego mis tareas a tiempo y asisto a clases regularmente.</div>
+            </div>
+
+            <div class="practice-item">
+              <div class="starter-es">La asistencia es importante porque…</div>
+              <div class="starter-en">Attendance is important because…</div>
+              <textarea class="practice-input" rows="2" placeholder="Escribe tu respuesta aquí…"></textarea>
+              <button class="see-model-btn" onclick="revealModel('s1m2')">Ver ejemplo 👁</button>
+              <div class="model-reveal" id="s1m2"><div class="model-label">Ejemplo — Example</div>…si no vas a clases, pierdes el material importante y es muy difícil aprobar el año.</div>
+            </div>
+
+            <div class="practice-item">
+              <div class="starter-es">La matriculación es diferente a la inscripción porque…</div>
+              <div class="starter-en">Matriculación is different from inscripción because…</div>
+              <textarea class="practice-input" rows="2" placeholder="Escribe tu respuesta aquí…"></textarea>
+              <button class="see-model-btn" onclick="revealModel('s1m3')">Ver ejemplo 👁</button>
+              <div class="model-reveal" id="s1m3"><div class="model-label">Ejemplo — Example</div>…la matriculación es el proceso completo de registrar a un/a estudiante, y la inscripción es solo el acto de anotar el nombre en la lista oficial.</div>
+            </div>
+
+            <div class="complete-paso-wrap"><div class="paso-error" id="err-s1p4"></div><button class="complete-paso-btn" onclick="validateS1P4()">¡Listo! Continuar → Cierre</button></div>
+          </div>
+        </div>
+
+        <!-- PASO 5 — CIERRE -->
+        <div class="paso paso-locked" id="s1p5">
+          <div class="paso-header">
+            <span class="paso-badge">Paso 5</span>
+            <span class="paso-title">✅ Cierre — Tu oración final</span>
+            <span class="paso-time">5 min</span>
+          </div>
+          <div class="paso-lock-overlay"><span class="pl-icon">🔒</span> Completa el paso anterior para desbloquear. <em style="font-size:.8rem;font-weight:600;color:var(--section-lbl);"> / Complete the previous step to unlock.</em></div>
+          <div class="paso-body" id="s1p5-body">
+            <p class="instr">Escribe <strong>una oración completa</strong> usando cualquiera de las 6 palabras de vocabulario. Luego léela en voz alta a un/a compañero/a.</p>
+            <p class="instr-en">Write one complete sentence using any of the 6 vocabulary words. Then read it aloud to a partner.</p>
+            <textarea class="practice-input" rows="3" id="s1-cierre" placeholder="Ejemplo: La asistencia es importante para aprobar el año escolar…"></textarea>
+            <div style="margin-top:.8rem;background:var(--scenario-bg);border:1.5px solid var(--scenario-border);border-radius:10px;padding:.7rem .9rem;font-size:.82rem;font-weight:700;color:var(--body-color);">
+              💬 <strong>Dile a tu compañero/a:</strong> "¡Mi oración es: <em>[tu oración]</em>. ¿Qué piensas?"
+              <div style="font-size:.7rem;font-style:italic;color:var(--section-lbl);margin-top:.2rem;">Tell your partner: "My sentence is: [your sentence]. What do you think?"</div>
+            </div>
+            <div class="complete-paso-wrap">
+              <div class="paso-error" id="err-s1p5"></div>
+              <button class="complete-paso-btn" style="background:var(--opt-correct-b)" onclick="validateS1P5()">🎉 ¡Terminé la Sesión 1!</button>
+            </div>
+            <div class="done-msg" id="s1-done">🌟 ¡Excelente trabajo! Terminaste la Sesión 1. Ahora continúa con la Sesión 2.</div>
+          </div>
+        </div>
+      </div><!-- /panel-s1 -->
+
+      <!-- ══ TAB: SESIÓN 2 — WRITTEN SECOND (INTERACTIVE) ══ -->
+      <div class="plan-panel" id="panel-s2">
+        <div id="s2-lock-banner">🔒 Completa la Sesión 1 primero para desbloquear esta sesión. <em style="font-size:.82rem;font-weight:600;"> / Complete Session 1 first to unlock this session.</em></div>
+        
+        <div style="background:var(--scenario-bg);border:1.5px solid var(--scenario-border);border-radius:10px;padding:.65rem 1rem;margin-bottom:1.1rem;font-size:.85rem;font-weight:700;color:var(--body-color);">
+          ✏️ <strong>Enfoque:</strong> Primero escrito — aplicar el vocabulario en contexto escrito.
+          <div style="font-size:.72rem;font-style:italic;color:var(--section-lbl);margin-top:.2rem;">Focus: Written Second — apply vocabulary in written context.</div>
+        </div>
+
+        <!-- PASO 1 — REPASO RÁPIDO -->
+        <div class="paso active-paso" id="s2p1">
+          <div class="paso-header">
+            <span class="paso-badge">Paso 1</span>
+            <span class="paso-title">🔄 Repaso rápido</span>
+            <span class="paso-time">5 min</span>
+          </div>
+          <div class="paso-body open">
+            <p class="instr">Selecciona la respuesta correcta para cada pregunta. ¡Sin mirar las tarjetas!</p>
+            <p class="instr-en">Select the correct answer for each question. No peeking at the cards!</p>
+
+            <div class="review-q">
+              <div class="review-label">1. ¿Qué palabra describe el proceso <em>completo</em> de registrar a un/a estudiante en la escuela?</div>
+              <div class="review-en">What word describes the <em>complete</em> process of registering a student in school?</div>
+              <div class="review-opts">
+                <div class="review-opt" onclick="checkReview(this,'wrong','rv1')">Inscripción</div>
+                <div class="review-opt" onclick="checkReview(this,'correct','rv1')">Matriculación</div>
+                <div class="review-opt" onclick="checkReview(this,'wrong','rv1')">Asistencia</div>
+              </div>
+              <div class="review-fb" id="rv1-fb"></div>
+            </div>
+
+            <div class="review-q">
+              <div class="review-label">2. Carlos obtuvo muy buenas notas y ahora puede pasar al siguiente grado. ¿Qué recibió Carlos?</div>
+              <div class="review-en">Carlos got great grades and can now move to the next grade. What did Carlos receive?</div>
+              <div class="review-opts">
+                <div class="review-opt" onclick="checkReview(this,'wrong','rv2')">Reprobación</div>
+                <div class="review-opt" onclick="checkReview(this,'wrong','rv2')">Inscripción</div>
+                <div class="review-opt" onclick="checkReview(this,'correct','rv2')">Promoción</div>
+              </div>
+              <div class="review-fb" id="rv2-fb"></div>
+            </div>
+
+            <div class="review-q">
+              <div class="review-label">3. ¿Qué significa el verbo <em>reprobar</em>?</div>
+              <div class="review-en">What does the verb <em>reprobar</em> mean?</div>
+              <div class="review-opts">
+                <div class="review-opt" onclick="checkReview(this,'wrong','rv3')">Pasar al siguiente grado con buenas notas.</div>
+                <div class="review-opt" onclick="checkReview(this,'correct','rv3')">No alcanzar la nota mínima y tener que repetir el año.</div>
+                <div class="review-opt" onclick="checkReview(this,'wrong','rv3')">Anotar el nombre del estudiante en la lista.</div>
+              </div>
+              <div class="review-fb" id="rv3-fb"></div>
+            </div>
+
+            <div class="review-q">
+              <div class="review-label">4. ¿Cuál de estas oraciones usa la palabra <em>asistencia</em> correctamente?</div>
+              <div class="review-en">Which sentence uses the word <em>asistencia</em> correctly?</div>
+              <div class="review-opts">
+                <div class="review-opt" onclick="checkReview(this,'wrong','rv4')">La asistencia es cuando un estudiante pasa de grado.</div>
+                <div class="review-opt" onclick="checkReview(this,'correct','rv4')">La asistencia diaria es importante para aprender en clase.</div>
+                <div class="review-opt" onclick="checkReview(this,'wrong','rv4')">La asistencia es el proceso de inscribir a los alumnos.</div>
+              </div>
+              <div class="review-fb" id="rv4-fb"></div>
+            </div>
+
+            <div class="complete-paso-wrap"><div class="paso-error" id="err-s2p1"></div><button class="complete-paso-btn" onclick="validateS2P1()">¡Listo! Continuar → Definiciones</button></div>
+          </div>
+        </div>
+
+        <!-- PASO 2 — DEFINICIONES PROPIAS -->
+        <div class="paso paso-locked" id="s2p2">
+          <div class="paso-header">
+            <span class="paso-badge">Paso 2</span>
+            <span class="paso-title">📝 Escribe las definiciones con tus propias palabras</span>
+            <span class="paso-time">20 min</span>
+          </div>
+          <div class="paso-lock-overlay"><span class="pl-icon">🔒</span> Completa el paso anterior para desbloquear. <em style="font-size:.8rem;font-weight:600;color:var(--section-lbl);"> / Complete the previous step to unlock.</em></div>
+          <div class="paso-body" id="s2p2-body">
+            <p class="instr">Define cada palabra <strong>con tus propias palabras</strong> en español. No copies la definición exacta — ¡demuestra que la entiendes! Haz clic en "Ver definición modelo" cuando termines cada una.</p>
+            <p class="instr-en">Define each word in your own Spanish words. Don't copy — show you understand! Click "See model definition" when done with each.</p>
+
+            <div class="def-box">
+              <div class="def-word">1. Matriculación</div>
+              <div class="def-en">school enrollment</div>
+              <textarea class="def-input" id="def1" placeholder="Matriculación significa… / Matriculación es cuando…"></textarea>
+              <button class="see-model-btn" onclick="revealModel('def1-model')" style="margin-top:.5rem;">Ver definición modelo 👁</button>
+              <div class="model-reveal" id="def1-model"><div class="model-label">Definición modelo — Model Definition</div>La matriculación es el proceso oficial que se hace al inicio del año escolar para registrar a un/a estudiante en la escuela.</div>
+            </div>
+
+            <div class="def-box">
+              <div class="def-word">2. Inscripción</div>
+              <div class="def-en">registration / name recording</div>
+              <textarea class="def-input" id="def2" placeholder="Inscripción significa… / Inscripción es cuando…"></textarea>
+              <button class="see-model-btn" onclick="revealModel('def2-model')" style="margin-top:.5rem;">Ver definición modelo 👁</button>
+              <div class="model-reveal" id="def2-model"><div class="model-label">Definición modelo — Model Definition</div>La inscripción es el acto de anotar el nombre de un/a estudiante en la lista oficial de la escuela, generalmente en la oficina al inicio del año.</div>
+            </div>
+
+            <div class="def-box">
+              <div class="def-word">3. Asistencia</div>
+              <div class="def-en">attendance</div>
+              <textarea class="def-input" id="def3" placeholder="Asistencia significa… / Asistencia es cuando…"></textarea>
+              <button class="see-model-btn" onclick="revealModel('def3-model')" style="margin-top:.5rem;">Ver definición modelo 👁</button>
+              <div class="model-reveal" id="def3-model"><div class="model-label">Definición modelo — Model Definition</div>La asistencia significa ir a la escuela regularmente todos los días. Un/a estudiante con buena asistencia no falta a sus clases.</div>
+            </div>
+
+            <div class="def-box">
+              <div class="def-word">4. Promoción</div>
+              <div class="def-en">grade advancement</div>
+              <textarea class="def-input" id="def4" placeholder="Promoción significa… / Promoción es cuando…"></textarea>
+              <button class="see-model-btn" onclick="revealModel('def4-model')" style="margin-top:.5rem;">Ver definición modelo 👁</button>
+              <div class="model-reveal" id="def4-model"><div class="model-label">Definición modelo — Model Definition</div>La promoción es cuando un/a estudiante cumple con todos los requisitos del año y puede pasar al siguiente grado escolar.</div>
+            </div>
+
+            <div class="complete-paso-wrap"><div class="paso-error" id="err-s2p2"></div><button class="complete-paso-btn" onclick="validateS2P2()">¡Listo! Continuar → Oraciones</button></div>
+          </div>
+        </div>
+
+        <!-- PASO 3 — COMPLETA LAS ORACIONES -->
+        <div class="paso paso-locked" id="s2p3">
+          <div class="paso-header">
+            <span class="paso-badge">Paso 3</span>
+            <span class="paso-title">🖊️ Completa las oraciones</span>
+            <span class="paso-time">10 min</span>
+          </div>
+          <div class="paso-lock-overlay"><span class="pl-icon">🔒</span> Completa el paso anterior para desbloquear. <em style="font-size:.8rem;font-weight:600;color:var(--section-lbl);"> / Complete the previous step to unlock.</em></div>
+          <div class="paso-body" id="s2p3-body">
+            <p class="instr">Completa cada oración con una idea completa y lógica. Usa las palabras de vocabulario correctamente.</p>
+            <p class="instr-en">Complete each sentence with a full, logical idea. Use the vocabulary words correctly.</p>
+
+            <div class="practice-item">
+              <div class="starter-es">El proceso de matriculación es…</div>
+              <div class="starter-en">The enrollment process is…</div>
+              <textarea class="practice-input" rows="2" placeholder="…importante porque registra a cada estudiante oficialmente en la escuela."></textarea>
+              <button class="see-model-btn" onclick="revealModel('s2m1')">Ver ejemplo 👁</button>
+              <div class="model-reveal" id="s2m1"><div class="model-label">Ejemplo — Example</div>…importante porque es el proceso oficial para registrar a cada estudiante en la escuela antes de que comiencen las clases.</div>
+            </div>
+
+            <div class="practice-item">
+              <div class="starter-es">Es importante la asistencia porque…</div>
+              <div class="starter-en">Attendance is important because…</div>
+              <textarea class="practice-input" rows="2" placeholder="…ayuda al/a la estudiante a aprender todos los días."></textarea>
+              <button class="see-model-btn" onclick="revealModel('s2m2')">Ver ejemplo 👁</button>
+              <div class="model-reveal" id="s2m2"><div class="model-label">Ejemplo — Example</div>…si faltas a clases, pierdes explicaciones importantes y es más difícil aprobar el año.</div>
+            </div>
+
+            <div class="practice-item">
+              <div class="starter-es">Yo apruebo / repruebo el año cuando…</div>
+              <div class="starter-en">I pass / fail the year when…</div>
+              <textarea class="practice-input" rows="2" placeholder="…tengo buena asistencia y entrego todas mis tareas."></textarea>
+              <button class="see-model-btn" onclick="revealModel('s2m3')">Ver ejemplo 👁</button>
+              <div class="model-reveal" id="s2m3"><div class="model-label">Ejemplo — Example</div>Yo apruebo el año cuando tengo buena asistencia, estudio regularmente y entrego mis tareas y exámenes a tiempo.</div>
+            </div>
+
+            <div class="complete-paso-wrap"><div class="paso-error" id="err-s2p3"></div><button class="complete-paso-btn" onclick="validateS2P3()">¡Listo! Continuar → Reflexión</button></div>
+          </div>
+        </div>
+
+        <!-- PASO 4 — CIERRE / REFLEXIÓN -->
+        <div class="paso paso-locked" id="s2p4">
+          <div class="paso-header">
+            <span class="paso-badge">Paso 4</span>
+            <span class="paso-title">🤝 Cierre — Comparte y reflexiona</span>
+            <span class="paso-time">10 min</span>
+          </div>
+          <div class="paso-lock-overlay"><span class="pl-icon">🔒</span> Completa el paso anterior para desbloquear. <em style="font-size:.8rem;font-weight:600;color:var(--section-lbl);"> / Complete the previous step to unlock.</em></div>
+          <div class="paso-body" id="s2p4-body">
+            <p class="instr">Escoge tu mejor oración del Paso 3. Léela en voz alta a un/a compañero/a. Luego responde la pregunta de reflexión.</p>
+            <p class="instr-en">Choose your best sentence from Step 3. Read it aloud to a partner. Then answer the reflection question.</p>
+
+            <div style="background:var(--scenario-bg);border:1.5px solid var(--scenario-border);border-radius:12px;padding:.9rem 1.1rem;margin-bottom:1rem;">
+              <div style="font-size:.82rem;font-weight:800;color:var(--section-lbl);letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;">Dile a tu compañero/a — Tell your partner</div>
+              <div style="font-size:.95rem;font-weight:700;color:var(--body-color);line-height:1.7;">
+                "Mi mejor oración es: <em style="color:var(--top-badge-bg);">[tu oración]</em>."<br>
+                "¿Está correcta? ¿Qué mejorarías?"
+              </div>
+              <div style="font-size:.72rem;font-style:italic;color:var(--section-lbl);margin-top:.3rem;">"My best sentence is: [your sentence]. Is it correct? What would you improve?"</div>
+            </div>
+
+            <div class="practice-item">
+              <div class="starter-es">Reflexión: ¿Qué palabra nueva usarás más esta semana? ¿Por qué?</div>
+              <div class="starter-en">Reflection: Which new word will you use most this week? Why?</div>
+              <textarea class="practice-input" rows="3" placeholder="Esta semana usaré la palabra __________ porque…"></textarea>
+            </div>
+
+            <div class="complete-paso-wrap">
+              <div class="paso-error" id="err-s2p4"></div>
+              <button class="complete-paso-btn" style="background:var(--opt-correct-b)" onclick="validateS2P4()">🎉 ¡Terminé la Sesión 2!</button>
+            </div>
+            <div class="done-msg" id="s2-done">🌟 ¡Muy bien! Terminaste las dos sesiones. Ya estás listo/a para la Evaluación Final. ¡Buena suerte!</div>
+          </div>
+        </div>
+      </div><!-- /panel-s2 -->
+
+      <!-- ══ TAB: VOCABULARIO REFERENCIA ══ -->
+      <div class="plan-panel" id="panel-vocab">
+        <p style="font-size:.85rem;font-weight:700;color:var(--card-desc);margin-bottom:1rem;">
+          Usa esta página como referencia durante la lección. <em style="color:var(--section-lbl);font-size:.78rem;">Use this page as a reference during the lesson.</em>
+        </p>
+        <div class="vocab-ref-grid">
+          <div class="vr-card vr-info">
+            <div class="vr-term">Matriculación</div>
+            <div class="vr-en">School Enrollment</div>
+            <div class="vr-def">El proceso oficial de registrar a un/a estudiante en la escuela para un año escolar.</div>
+            <div class="vr-ex">✅ "La matriculación de los estudiantes es en enero."</div>
+          </div>
+          <div class="vr-card vr-info">
+            <div class="vr-term">Inscripción</div>
+            <div class="vr-en">Registration</div>
+            <div class="vr-def">El acto de anotar el nombre de un/a estudiante en la lista oficial de la escuela.</div>
+            <div class="vr-ex">✅ "La inscripción abre el primer lunes de enero."</div>
+          </div>
+          <div class="vr-card vr-info">
+            <div class="vr-term">Asistencia</div>
+            <div class="vr-en">Attendance</div>
+            <div class="vr-def">Ir a la escuela regularmente. La asistencia puntual demuestra responsabilidad.</div>
+            <div class="vr-ex">✅ "La asistencia diaria es muy importante para aprender."</div>
+          </div>
+          <div class="vr-card vr-info">
+            <div class="vr-term">Promoción</div>
+            <div class="vr-en">Grade Advancement</div>
+            <div class="vr-def">El acto de pasar de un grado escolar al siguiente después de cumplir los requisitos.</div>
+            <div class="vr-ex">✅ "Yo recibí mi promoción al Standard 6."</div>
+          </div>
+          <div class="vr-card vr-pass">
+            <div class="vr-term">Aprobar</div>
+            <div class="vr-en">To Pass</div>
+            <div class="vr-def">Obtener la nota mínima requerida para avanzar al próximo nivel académico.</div>
+            <div class="vr-ex">✅ "Yo apruebo el año con buenas notas y buena asistencia."</div>
+          </div>
+          <div class="vr-card vr-fail">
+            <div class="vr-term">Reprobar</div>
+            <div class="vr-en">To Fail / Repeat</div>
+            <div class="vr-def">No alcanzar la nota mínima y tener que repetir el grado académico.</div>
+            <div class="vr-ex">⚠️ "Si no estudio ni asisto, puedo reprobar el año."</div>
+          </div>
+        </div>
+        <div style="margin-top:.9rem;background:var(--scenario-bg);border:1.5px solid var(--scenario-border);border-radius:12px;padding:.8rem 1rem;font-size:.83rem;font-weight:700;color:var(--body-color);">
+          🔁 <strong>Diferencia clave:</strong> Matriculación = proceso completo &nbsp;|&nbsp; Inscripción = anotar el nombre en la lista
+          <div style="font-size:.7rem;font-style:italic;color:var(--section-lbl);margin-top:.2rem;">Key difference: Matriculación = full enrollment process · Inscripción = recording the name on the list</div>
+        </div>
+      </div>
+
+    </div><!-- /plan-body -->
+  </div><!-- /plan-section -->
+
+  <!-- ══════════════════════════════════════════
+       EVALUACIÓN FINAL
+  ══════════════════════════════════════════ -->
+    <!-- ═══ ASSESSMENT LOCK PANEL ═══ -->
+  <div id="assessLock">
+    <div id="assessLockCard">
+      <div id="al-icon">🔒</div>
+      <div id="al-title">Evaluación Final</div>
+      <div id="al-sub">Completa las dos sesiones para desbloquear la evaluación.<br>
+        <em>Complete both sessions to unlock the final assessment.</em></div>
+      <div id="al-progress">
+        <div class="al-session" id="al-s1">
+          <span class="al-check" id="al-s1-check">○</span>
+          <span class="al-session-name">🗣️ Sesión 1 — Oral</span>
+        </div>
+        <div class="al-session" id="al-s2">
+          <span class="al-check" id="al-s2-check">○</span>
+          <span class="al-session-name">✏️ Sesión 2 — Escrito</span>
+        </div>
+      </div>
+      <div id="al-hint">Ve a las pestañas de arriba y termina cada sesión.<br>
+        <em>Go to the tabs above and finish each session.</em></div>
+    </div>
+  </div>
+
+<div class="test-container" id="testContainer">
+    <div class="sec-card" style="--sec-accent:#20C997;margin-bottom:.7rem;">
+      <div class="sec-head" style="margin-bottom:.3rem;">
+        <div class="sec-title">📋 Evaluación Final — SP 3.20</div>
+        <div class="sec-pts">30 puntos · 45 minutos</div>
+      </div>
+      <p style="font-size:.82rem;font-weight:700;color:var(--card-desc);">Completa la evaluación cuando hayas terminado las dos sesiones. La Sección C será calificada por IA con retroalimentación personalizada. <em style="font-size:.72rem;">Complete the assessment after both sessions. Section C is AI-graded with personalized feedback.</em></p>
+    </div>
+
+    <!-- Student info -->
+    <div class="student-card">
+      <div class="sc-icon">🎓</div>
+      <div class="sc-fields">
+        <div class="sc-group"><label>Nombre completo — Full Name</label><input type="text" id="studentName" placeholder="Escribe tu nombre completo…" autocomplete="off"></div>
+        <div class="sc-group"><label>Fecha — Date</label><input type="text" id="testDate" readonly></div>
+        <div class="sc-group"><label>Maestro — Teacher</label><input type="text" value="Mr. Edwin D. López" readonly></div>
+        <div class="sc-group"><label>Materia — Subject</label><input type="text" value="Español — SP 3.20" readonly></div>
+      </div>
+    </div>
+
+    <!-- Dev bar -->
+    <div id="devBar" style="display:none;text-align:center;margin-bottom:.8rem;gap:.5rem;flex-wrap:wrap;justify-content:center;">
+      <button class="btn-secondary" style="font-size:.75rem;padding:6px 16px;opacity:.7;" onclick="autoFillCorrect()">🛠️ Respuestas correctas</button>
+      <button class="btn-secondary" style="font-size:.75rem;padding:6px 16px;opacity:.7;" onclick="autoFillWrong()">❌ Respuestas incorrectas</button>
+    </div>
+
+    <!-- SECTION A — Matching -->
+    <div class="sec-card" style="--sec-accent:#20C997;">
+      <div class="sec-head">
+        <div class="sec-title">📘 Sección A — Empareja el vocabulario</div>
+        <div class="sec-pts">12 puntos · 2 pts c/u</div>
+      </div>
+      <p style="font-size:.82rem;font-weight:700;color:var(--card-desc);margin-bottom:1rem;">Empareja cada palabra con su definición correcta. <em style="font-size:.72rem;color:var(--section-lbl);">Match each word to its correct definition.</em></p>
+
+      <div class="question" data-q="q1">
+        <div class="q-label"><span class="q-num">1.</span><span>Matriculación</span><span class="q-pts">2 pts</span></div>
+        <select class="match-sel" id="q1-sel" onchange="updateProgress()">
+          <option value="">— Selecciona la definición correcta — Select the correct definition —</option>
+          <option value="a">Obtener la nota mínima para avanzar al próximo nivel. / To pass and advance to the next level.</option>
+          <option value="b">Ir a la escuela todos los días. / Going to school every day.</option>
+          <option value="c">El proceso oficial de registrar a un/a estudiante en la escuela. / The official school enrollment process.</option>
+          <option value="d">No alcanzar la nota mínima y repetir el año. / To fail and repeat the year.</option>
+          <option value="e">Pasar de un grado al siguiente después de cumplir los requisitos. / Moving from one grade to the next.</option>
+          <option value="f">Anotar el nombre del/de la estudiante en la lista oficial. / Recording the student's name on the official list.</option>
+        </select>
+        <div class="fb-box" id="q1-fb"></div>
+      </div>
+
+      <div class="question" data-q="q2">
+        <div class="q-label"><span class="q-num">2.</span><span>Inscripción</span><span class="q-pts">2 pts</span></div>
+        <select class="match-sel" id="q2-sel" onchange="updateProgress()">
+          <option value="">— Selecciona la definición correcta — Select the correct definition —</option>
+          <option value="a">Obtener la nota mínima para avanzar al próximo nivel. / To pass and advance to the next level.</option>
+          <option value="b">Ir a la escuela todos los días. / Going to school every day.</option>
+          <option value="c">El proceso oficial de registrar a un/a estudiante en la escuela. / The official school enrollment process.</option>
+          <option value="d">No alcanzar la nota mínima y repetir el año. / To fail and repeat the year.</option>
+          <option value="e">Pasar de un grado al siguiente después de cumplir los requisitos. / Moving from one grade to the next.</option>
+          <option value="f">Anotar el nombre del/de la estudiante en la lista oficial. / Recording the student's name on the official list.</option>
+        </select>
+        <div class="fb-box" id="q2-fb"></div>
+      </div>
+
+      <div class="question" data-q="q3">
+        <div class="q-label"><span class="q-num">3.</span><span>Asistencia</span><span class="q-pts">2 pts</span></div>
+        <select class="match-sel" id="q3-sel" onchange="updateProgress()">
+          <option value="">— Selecciona la definición correcta — Select the correct definition —</option>
+          <option value="a">Obtener la nota mínima para avanzar al próximo nivel. / To pass and advance to the next level.</option>
+          <option value="b">Ir a la escuela todos los días. / Going to school every day.</option>
+          <option value="c">El proceso oficial de registrar a un/a estudiante en la escuela. / The official school enrollment process.</option>
+          <option value="d">No alcanzar la nota mínima y repetir el año. / To fail and repeat the year.</option>
+          <option value="e">Pasar de un grado al siguiente después de cumplir los requisitos. / Moving from one grade to the next.</option>
+          <option value="f">Anotar el nombre del/de la estudiante en la lista oficial. / Recording the student's name on the official list.</option>
+        </select>
+        <div class="fb-box" id="q3-fb"></div>
+      </div>
+
+      <div class="question" data-q="q4">
+        <div class="q-label"><span class="q-num">4.</span><span>Promoción</span><span class="q-pts">2 pts</span></div>
+        <select class="match-sel" id="q4-sel" onchange="updateProgress()">
+          <option value="">— Selecciona la definición correcta — Select the correct definition —</option>
+          <option value="a">Obtener la nota mínima para avanzar al próximo nivel. / To pass and advance to the next level.</option>
+          <option value="b">Ir a la escuela todos los días. / Going to school every day.</option>
+          <option value="c">El proceso oficial de registrar a un/a estudiante en la escuela. / The official school enrollment process.</option>
+          <option value="d">No alcanzar la nota mínima y repetir el año. / To fail and repeat the year.</option>
+          <option value="e">Pasar de un grado al siguiente después de cumplir los requisitos. / Moving from one grade to the next.</option>
+          <option value="f">Anotar el nombre del/de la estudiante en la lista oficial. / Recording the student's name on the official list.</option>
+        </select>
+        <div class="fb-box" id="q4-fb"></div>
+      </div>
+
+      <div class="question" data-q="q5">
+        <div class="q-label"><span class="q-num">5.</span><span>Aprobar</span><span class="q-pts">2 pts</span></div>
+        <select class="match-sel" id="q5-sel" onchange="updateProgress()">
+          <option value="">— Selecciona la definición correcta — Select the correct definition —</option>
+          <option value="a">Obtener la nota mínima para avanzar al próximo nivel. / To pass and advance to the next level.</option>
+          <option value="b">Ir a la escuela todos los días. / Going to school every day.</option>
+          <option value="c">El proceso oficial de registrar a un/a estudiante en la escuela. / The official school enrollment process.</option>
+          <option value="d">No alcanzar la nota mínima y repetir el año. / To fail and repeat the year.</option>
+          <option value="e">Pasar de un grado al siguiente después de cumplir los requisitos. / Moving from one grade to the next.</option>
+          <option value="f">Anotar el nombre del/de la estudiante en la lista oficial. / Recording the student's name on the official list.</option>
+        </select>
+        <div class="fb-box" id="q5-fb"></div>
+      </div>
+
+      <div class="question" data-q="q6">
+        <div class="q-label"><span class="q-num">6.</span><span>Reprobar</span><span class="q-pts">2 pts</span></div>
+        <select class="match-sel" id="q6-sel" onchange="updateProgress()">
+          <option value="">— Selecciona la definición correcta — Select the correct definition —</option>
+          <option value="a">Obtener la nota mínima para avanzar al próximo nivel. / To pass and advance to the next level.</option>
+          <option value="b">Ir a la escuela todos los días. / Going to school every day.</option>
+          <option value="c">El proceso oficial de registrar a un/a estudiante en la escuela. / The official school enrollment process.</option>
+          <option value="d">No alcanzar la nota mínima y repetir el año. / To fail and repeat the year.</option>
+          <option value="e">Pasar de un grado al siguiente después de cumplir los requisitos. / Moving from one grade to the next.</option>
+          <option value="f">Anotar el nombre del/de la estudiante en la lista oficial. / Recording the student's name on the official list.</option>
+        </select>
+        <div class="fb-box" id="q6-fb"></div>
+      </div>
+    </div>
+
+    <!-- SECTION B — MCQ -->
+    <div class="sec-card" style="--sec-accent:#4DABF7;">
+      <div class="sec-head">
+        <div class="sec-title">📗 Sección B — Opción múltiple</div>
+        <div class="sec-pts">9 puntos · 3 pts c/u</div>
+      </div>
+      <p style="font-size:.82rem;font-weight:700;color:var(--card-desc);margin-bottom:1rem;">Selecciona la mejor respuesta. <em style="font-size:.72rem;color:var(--section-lbl);">Choose the best answer.</em></p>
+
+      <div class="question" data-q="q7">
+        <div class="q-label"><span class="q-num">7.</span><span>¿Cuál oración usa la palabra <em>asistencia</em> correctamente? <span style="font-size:.78rem;font-style:italic;color:var(--section-lbl);">Which sentence uses <em>asistencia</em> correctly?</span></span><span class="q-pts">3 pts</span></div>
+        <div class="options" id="q7-opts">
+          <label class="opt" data-val="a"><input type="radio" name="q7" value="a"> "La asistencia de los estudiantes es importante para aprender en clase."<span class="opt-tick">✅</span></label>
+          <label class="opt" data-val="b"><input type="radio" name="q7" value="b"> "La asistencia significa pasar de un grado a otro."<span class="opt-tick">❌</span></label>
+          <label class="opt" data-val="c"><input type="radio" name="q7" value="c"> "La asistencia es cuando un/a estudiante reprueba el año."<span class="opt-tick">❌</span></label>
+          <label class="opt" data-val="d"><input type="radio" name="q7" value="d"> "La asistencia es el proceso oficial de inscribir a los alumnos."<span class="opt-tick">❌</span></label>
+        </div>
+        <div class="fb-box" id="q7-fb"></div>
+      </div>
+
+      <div class="question" data-q="q8">
+        <div class="q-label"><span class="q-num">8.</span><span>Carlos estudió mucho, entregó todas sus tareas y obtuvo excelentes notas. Ahora va a pasar a la escuela secundaria. ¿Qué palabra describe lo que le pasó a Carlos? <span style="font-size:.78rem;font-style:italic;color:var(--section-lbl);">Carlos studied hard, completed all work, and got great marks. He moves to secondary school. Which word describes what happened to Carlos?</span></span><span class="q-pts">3 pts</span></div>
+        <div class="options" id="q8-opts">
+          <label class="opt" data-val="a"><input type="radio" name="q8" value="a"> Inscripción<span class="opt-tick">❌</span></label>
+          <label class="opt" data-val="b"><input type="radio" name="q8" value="b"> Reprobar<span class="opt-tick">❌</span></label>
+          <label class="opt" data-val="c"><input type="radio" name="q8" value="c"> Promoción<span class="opt-tick">✅</span></label>
+          <label class="opt" data-val="d"><input type="radio" name="q8" value="d"> Matriculación<span class="opt-tick">❌</span></label>
+        </div>
+        <div class="fb-box" id="q8-fb"></div>
+      </div>
+
+      <div class="question" data-q="q9">
+        <div class="q-label"><span class="q-num">9.</span><span>María no alcanzó la nota mínima y tiene que repetir el Standard 6. Faltó muchos días y no entregó sus tareas. ¿Cuál oración describe su situación? <span style="font-size:.78rem;font-style:italic;color:var(--section-lbl);">María did not reach the minimum grade and must repeat Standard 6. Which sentence describes her situation?</span></span><span class="q-pts">3 pts</span></div>
+        <div class="options" id="q9-opts">
+          <label class="opt" data-val="a"><input type="radio" name="q9" value="a"> "María aprobó el año escolar."<span class="opt-tick">❌</span></label>
+          <label class="opt" data-val="b"><input type="radio" name="q9" value="b"> "María recibió su promoción este año."<span class="opt-tick">❌</span></label>
+          <label class="opt" data-val="c"><input type="radio" name="q9" value="c"> "María reprobó el año por su asistencia y sus notas."<span class="opt-tick">✅</span></label>
+          <label class="opt" data-val="d"><input type="radio" name="q9" value="d"> "La matriculación de María fue perfecta."<span class="opt-tick">❌</span></label>
+        </div>
+        <div class="fb-box" id="q9-fb"></div>
+      </div>
+    </div>
+
+    <!-- SECTION C — Writing, AI graded -->
+    <div class="sec-card" style="--sec-accent:#9775FA;">
+      <div class="sec-head">
+        <div class="sec-title">📙 Sección C — Escritura corta</div>
+        <div class="sec-pts">9 puntos · 3 pts c/u · Calificado por IA</div>
+      </div>
+      <p style="font-size:.82rem;font-weight:700;color:var(--card-desc);margin-bottom:.7rem;">Escribe oraciones completas. Puedes responder en español o en inglés. Recibirás retroalimentación inmediata de la IA. <em style="font-size:.72rem;color:var(--section-lbl);">Write complete sentences. You may respond in Spanish or English. You will receive instant AI feedback.</em></p>
+
+      <div class="question" data-q="q10">
+        <div class="q-label"><span class="q-num">10.</span><span>Explica con tus propias palabras qué significa <strong>matriculación</strong> y qué significa <strong>inscripción</strong>. ¿En qué se parecen? ¿En qué se diferencian? <span style="font-size:.78rem;font-style:italic;color:var(--section-lbl);">Explain in your own words: what is matriculación, what is inscripción? How are they similar? How are they different?</span></span><span class="q-pts">3 pts</span></div>
+        <textarea class="answer-input" id="q10" rows="4" placeholder="Matriculación es… Inscripción es… Se parecen en… Se diferencian en…" oninput="updateProgress()"></textarea>
+        <div class="fb-box" id="q10-fb"></div>
+      </div>
+
+      <div class="question" data-q="q11">
+        <div class="q-label"><span class="q-num">11.</span><span>Escribe DOS oraciones completas — una usando la palabra <strong>asistencia</strong> y otra usando la palabra <strong>promoción</strong>. Cada oración debe demostrar que entiendes el significado de la palabra. <span style="font-size:.78rem;font-style:italic;color:var(--section-lbl);">Write TWO complete sentences — one using <em>asistencia</em> and one using <em>promoción</em>. Each must show you understand the word.</span></span><span class="q-pts">3 pts</span></div>
+        <textarea class="answer-input" id="q11" rows="4" placeholder="1. La asistencia es… / Asistencia means...&#10;2. La promoción es… / Promoción means..." oninput="updateProgress()"></textarea>
+        <div class="fb-box" id="q11-fb"></div>
+      </div>
+
+      <div class="question" data-q="q12">
+        <div class="q-label"><span class="q-num">12.</span><span>Imagina que le explicas a un/a amigo/a cómo <strong>aprobar el año</strong>. Escribe 2 o 3 oraciones describiendo lo que debe hacer un/a estudiante. Usa la palabra <em>aprobar</em> en al menos una oración. <span style="font-size:.78rem;font-style:italic;color:var(--section-lbl);">Imagine explaining to a friend how to pass the school year. Write 2–3 sentences. Use <em>aprobar</em> in at least one sentence.</span></span><span class="q-pts">3 pts</span></div>
+        <textarea class="answer-input" id="q12" rows="4" placeholder="Para aprobar el año, un/a estudiante debe… / To pass the year, a student must…" oninput="updateProgress()"></textarea>
+        <div class="fb-box" id="q12-fb"></div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-area">
+      <button class="btn-primary" id="submitBtn" onclick="handleSubmit()" disabled>✅ Enviar evaluación</button>
+      <p class="submit-hint" id="submitHint">Responde todas las 12 preguntas para enviar — Answer all 12 questions to submit</p>
+      <div class="spinner-wrap" id="spinnerWrap"><div class="spinner"></div></div>
+    </div>
+
+    <!-- Results -->
+    <div class="results-section" id="resultsSection">
+      <div class="res-title">🏆 Resultados — SP 3.20</div>
+      <div class="score-grid">
+        <div class="score-box"><div class="sb-label">Sección A</div><div class="sb-val" id="s-a">—</div><div class="sb-sub">de 12</div></div>
+        <div class="score-box"><div class="sb-label">Sección B</div><div class="sb-val" id="s-b">—</div><div class="sb-sub">de 9</div></div>
+        <div class="score-box"><div class="sb-label">Sección C</div><div class="sb-val" id="s-c">—</div><div class="sb-sub">de 9</div></div>
+        <div class="score-box hl"><div class="sb-label">Total</div><div class="sb-val" id="s-total">—</div><div class="sb-sub">de 30</div></div>
+        <div class="score-box"><div class="sb-label">Porcentaje</div><div class="sb-val" id="s-pct">—</div><div class="sb-sub">&nbsp;</div></div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-row"><span class="prog-lbl">Desempeño</span><span class="prog-pct" id="prog-pct-lbl">—%</span></div>
+        <div class="prog-bg"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+      </div>
+      <div class="perf-badge" id="perfBadge">¡Envía tu evaluación para ver tus resultados!</div>
+      <div class="pdf-row">
+        <button class="btn-primary" onclick="downloadPDF()">📄 Descargar reporte PDF</button>
+        <button class="btn-gc" onclick="downloadCSV()">📊 Exportar para Google Classroom</button>
+      </div>
+    </div>
+
+  </div><!-- /testContainer -->
+</div><!-- /wrapper -->
+
+<footer class="site-footer">
+  <div class="footer-logo">
+    <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+    <span>Mr. EdLo's Virtual Classroom</span>
+  </div>
+  <p class="footer-tagline">Explore, discover, and learn something new every day!</p>
+  <p class="footer-copy">© 2026 Mr. EdLo's Virtual Classroom — Standard 6 · Belize · SP 3.20 · All rights reserved.</p>
+</footer>
+<button id="back-to-top" title="Subir">↑</button>
+
+<script>
+// ═══ THEMES ═══
+const THEMES=['night','sunny','cloudy','nature'];
+function setTheme(t,btn){THEMES.forEach(x=>document.body.classList.remove('theme-'+x));document.body.classList.add('theme-'+t);document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');localStorage.setItem('vc-theme',t);}
+(function(){const s=localStorage.getItem('vc-theme');if(s&&THEMES.includes(s)){THEMES.forEach(x=>document.body.classList.remove('theme-'+x));document.body.classList.add('theme-'+s);document.querySelectorAll('.theme-btn').forEach(b=>{b.classList.toggle('active',b.textContent.toLowerCase().includes(s));});}})();
+
+// ═══ STARS ═══
+(function(){const sc=document.getElementById('stars');for(let i=0;i<80;i++){const s=document.createElement('div');s.className='star';const z=Math.random()*2.5+1;s.style.cssText=`width:${z}px;height:${z}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*4+2).toFixed(1)}s;--delay:-${(Math.random()*6).toFixed(1)}s;--op:${(Math.random()*0.5+0.2).toFixed(2)};`;sc.appendChild(s);}})();
+
+// ═══ DATE / BACK-TO-TOP ═══
+document.getElementById('testDate').value=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+const topBtn=document.getElementById('back-to-top');
+window.addEventListener('scroll',()=>{topBtn.style.display=window.scrollY>300?'flex':'none';});
+topBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+// ═══ DEV BAR ═══
+if(new URLSearchParams(window.location.search).get('dev')==='1')document.getElementById('devBar').style.display='flex';
+
+// ═══ PLAN TOGGLE & TABS ═══
+function togglePlan(){const b=document.getElementById('planBody'),c=document.getElementById('planChev'),o=b.classList.toggle('open');c.classList.toggle('open',o);}
+function switchTab(id,btn){
+  if(id==='s2'&&!_sessionsDone.s1){
+    showFlash('🔒 Completa la Sesión 1 primero.','#FF6B6B');
+    return;
+  }
+  document.querySelectorAll('.plan-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.plan-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ═══ INTERACTIVE LESSON FUNCTIONS ═══
+
+// Reveal model answers
+function revealModel(id){const el=document.getElementById(id);if(el)el.classList.toggle('show');}
+
+// Vocab card toggle
+function toggleVocab(id){document.getElementById(id).classList.toggle('open');}
+
+// Mark vocab as learned
+let learnedCount=0;
+function markLearned(id,e){
+  e.stopPropagation();
+  const card=document.getElementById(id);
+  if(card.classList.toggle('learned')){learnedCount++;}else{learnedCount=Math.max(0,learnedCount-1);}
+  document.getElementById('vocabProgress').textContent='Palabras aprendidas / Words learned: '+learnedCount+' / 6';
+}
+
+// Story word tooltip toggle
+let openSW=null;
+function toggleSW(el){
+  const pop=el.querySelector('.sw-pop');
+  if(!pop)return;
+  if(openSW&&openSW!==pop){openSW.classList.remove('show');}
+  pop.classList.toggle('show');
+  openSW=pop.classList.contains('show')?pop:null;
+}
+document.addEventListener('click',e=>{if(openSW&&!e.target.closest('.sw')){openSW.classList.remove('show');openSW=null;}});
+
+// Story comprehension check
+const storyFb={
+  s1c1:{correct:'✅ ¡Correcto! Carlos aprueba porque estudia, asiste a clases y entrega sus tareas. Su esfuerzo y asistencia son la clave.',wrong:'❌ Revisa la historia. La razón principal es su asistencia perfecta y su trabajo en clase. / Check the story — his attendance and classwork are the key.'},
+  s1c2:{correct:'✅ ¡Correcto! María faltó muchos días y no entregó sus tareas — esas son las razones por las que reprueba.',wrong:'❌ Lee la historia nuevamente. La causa es que faltó muchos días y no entregó sus tareas. / Read again — she missed many days and did not turn in her work.'},
+  s1c3:{correct:'✅ ¡Correcto! La matriculación es el proceso completo de registrar al estudiante; la inscripción es solo anotar el nombre en la lista.',wrong:'❌ Recuerda: matriculación = proceso completo. Inscripción = anotar el nombre. Son relacionadas pero no son lo mismo. / Remember: matriculación = full process. Inscripción = writing the name on the list.'}
+};
+function checkStory(el,result,qId){
+  const opts=el.closest('.story-opts');
+  opts.querySelectorAll('.story-opt').forEach(o=>o.classList.add('s-locked'));
+  el.classList.add(result==='correct'?'s-correct':'s-wrong');
+  if(result==='correct'){opts.querySelectorAll('.story-opt').forEach(o=>{if(o!==el)o.style.opacity='.45';});}
+  else{opts.querySelectorAll('.story-opt').forEach(o=>{if(o.onclick?.toString().includes("'correct'")||o.getAttribute('onclick')?.includes("'correct'"))o.classList.add('s-correct');});}
+  const fb=document.getElementById(qId+'-fb');
+  if(fb){fb.textContent=(storyFb[qId]||{})[result]||'';fb.classList.add('show');}
+}
+
+// Session 2 quick review
+const reviewFb={
+  rv1:{correct:'✅ ¡Correcto! Matriculación es el proceso completo de registrar al estudiante. / Correct! Matriculación is the full enrollment process.',wrong:'❌ La respuesta es Matriculación — el proceso oficial completo de registrar a un estudiante en la escuela.'},
+  rv2:{correct:'✅ ¡Correcto! Carlos recibió su Promoción porque cumplió con todos los requisitos. / Correct! Carlos received his Promoción.',wrong:'❌ La respuesta correcta es Promoción — cuando un estudiante cumple los requisitos y pasa al siguiente grado.'},
+  rv3:{correct:'✅ ¡Correcto! Reprobar significa no alcanzar la nota mínima y tener que repetir el año. / Correct!',wrong:'❌ Reprobar significa no alcanzar la nota mínima y repetir el grado. No es lo mismo que aprobar.'},
+  rv4:{correct:'✅ ¡Correcto! Asistencia significa ir a la escuela regularmente — no tiene que ver con pasar o inscribirse.',wrong:'❌ La oración correcta es la segunda: asistencia = ir a la escuela todos los días para aprender.'}
+};
+function checkReview(el,result,qId){
+  const opts=el.closest('.review-opts');
+  opts.querySelectorAll('.review-opt').forEach(o=>o.classList.add('r-locked'));
+  el.classList.add(result==='correct'?'r-correct':'r-wrong');
+  if(result!=='correct')opts.querySelectorAll('.review-opt').forEach(o=>{if(o.getAttribute('onclick')?.includes("'correct'"))o.classList.add('r-correct');});
+  const fb=document.getElementById(qId+'-fb');
+  if(fb){fb.textContent=(reviewFb[qId]||{})[result]||'';fb.className='review-fb show '+(result==='correct'?'good':'bad');}
+}
+
+
+// ═══ PASO FLASH ANIMATION ═══════════════════════════════════════════════════
+function showFlash(msg, color){
+  const f=document.getElementById('pcFlash');
+  const c=document.getElementById('pcFlashMsg');
+  if(!f||!c)return;
+  c.textContent=msg;
+  c.style.background=color||'var(--top-badge-bg)';
+  f.classList.add('show');
+  setTimeout(()=>{f.classList.remove('show');},1600);
+}
+
+// ═══ UNLOCK A PASO ══════════════════════════════════════════════════════════
+function unlockPaso(id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.classList.remove('paso-locked');
+  el.classList.add('active-paso');
+  const body=el.querySelector('.paso-body');
+  if(body)body.classList.add('open');
+  const overlay=el.querySelector('.paso-lock-overlay');
+  if(overlay)overlay.style.display='none';
+  setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),120);
+}
+
+// ═══ SHOW PASO ERROR ════════════════════════════════════════════════════════
+function showPasoError(id,msg){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.textContent=msg;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),3500);
+}
+
+// ═══ SESSION 1 VALIDATORS ═══════════════════════════════════════════════════
+
+function validateS1P1(){
+  // Requires: both think-boxes in s1p1 to have text
+  const boxes=document.querySelectorAll('#s1p1 .think-box');
+  const filled=Array.from(boxes).filter(b=>b.value.trim().length>2);
+  if(filled.length<2){
+    showPasoError('err-s1p1','✏️ Escribe tu respuesta en las dos preguntas antes de continuar. / Write in both boxes before continuing.');
+    return;
+  }
+  showFlash('✅ ¡Paso 1 completado!');
+  unlockPaso('s1p2');
+}
+
+function validateS1P2(){
+  // Requires: all 6 vocab cards marked learned
+  if(learnedCount<6){
+    showPasoError('err-s1p2','📖 Marca todas las 6 palabras como "¡Aprendida!" antes de continuar. / Mark all 6 words as learned before continuing.');
+    return;
+  }
+  showFlash('✅ ¡Vocabulario aprendido!');
+  unlockPaso('s1p3');
+}
+
+function validateS1P3(){
+  // Requires: all 3 comprehension questions answered
+  const answered=['s1c1','s1c2','s1c3'].filter(id=>{
+    const fb=document.getElementById(id+'-fb');
+    return fb&&fb.classList.contains('show');
+  });
+  if(answered.length<3){
+    showPasoError('err-s1p3','🔍 Responde las 3 preguntas de comprensión antes de continuar. / Answer all 3 comprehension questions first.');
+    return;
+  }
+  showFlash('✅ ¡Historia comprendida!');
+  unlockPaso('s1p4');
+}
+
+function validateS1P4(){
+  // Requires: all 3 practice inputs have text
+  const inputs=document.querySelectorAll('#s1p4 .practice-input');
+  const filled=Array.from(inputs).filter(i=>i.value.trim().length>2);
+  if(filled.length<3){
+    showPasoError('err-s1p4','✏️ Completa las 3 oraciones antes de continuar. / Complete all 3 sentences first.');
+    return;
+  }
+  showFlash('✅ ¡Práctica oral completada!');
+  unlockPaso('s1p5');
+}
+
+function validateS1P5(){
+  // Requires: cierre textarea has text
+  const cierre=document.getElementById('s1-cierre');
+  if(!cierre||cierre.value.trim().length<5){
+    showPasoError('err-s1p5','✏️ Escribe tu oración final antes de terminar. / Write your final sentence first.');
+    return;
+  }
+  showFlash('🌟 ¡Sesión 1 completada!','#69DB7C');
+  const doneMsg=document.getElementById('s1-done');
+  if(doneMsg)doneMsg.classList.add('show');
+  _sessionsDone.s1=true;
+  _updateAssessLock();
+    // Unlock the Session 2 tab
+  const s2tab=document.getElementById('tab-s2');
+  if(s2tab){s2tab.classList.remove('tab-locked');s2tab.style.opacity='1';}
+  const s2lockBanner=document.getElementById('s2-lock-banner');
+  if(s2lockBanner)s2lockBanner.style.display='none';
+}
+
+// ═══ SESSION 2 VALIDATORS ═══════════════════════════════════════════════════
+
+function validateS2P1(){
+  // Requires: all 4 review MCQs answered
+  const answered=['rv1','rv2','rv3','rv4'].filter(id=>{
+    const fb=document.getElementById(id+'-fb');
+    return fb&&fb.classList.contains('show');
+  });
+  if(answered.length<4){
+    showPasoError('err-s2p1','🔍 Responde las 4 preguntas del repaso antes de continuar. / Answer all 4 review questions first.');
+    return;
+  }
+  showFlash('✅ ¡Repaso completado!');
+  unlockPaso('s2p2');
+}
+
+function validateS2P2(){
+  // Requires: all 4 def-inputs have text
+  const defs=['def1','def2','def3','def4'].map(id=>document.getElementById(id));
+  const filled=defs.filter(d=>d&&d.value.trim().length>4);
+  if(filled.length<4){
+    showPasoError('err-s2p2','✏️ Escribe las 4 definiciones antes de continuar. / Write all 4 definitions first.');
+    return;
+  }
+  showFlash('✅ ¡Definiciones escritas!');
+  unlockPaso('s2p3');
+}
+
+function validateS2P3(){
+  // Requires: all 3 practice-inputs in s2p3 have text
+  const inputs=document.querySelectorAll('#s2p3 .practice-input');
+  const filled=Array.from(inputs).filter(i=>i.value.trim().length>2);
+  if(filled.length<3){
+    showPasoError('err-s2p3','✏️ Completa las 3 oraciones antes de continuar. / Complete all 3 sentences first.');
+    return;
+  }
+  showFlash('✅ ¡Oraciones completadas!');
+  unlockPaso('s2p4');
+}
+
+function validateS2P4(){
+  // Requires: reflection textarea has text
+  const ref=document.querySelector('#s2p4 .practice-input');
+  if(!ref||ref.value.trim().length<5){
+    showPasoError('err-s2p4','✏️ Escribe tu reflexión antes de terminar. / Write your reflection first.');
+    return;
+  }
+  showFlash('🌟 ¡Sesión 2 completada!','#69DB7C');
+  const doneMsg=document.getElementById('s2-done');
+  if(doneMsg)doneMsg.classList.add('show');
+  _sessionsDone.s2=true;
+  _updateAssessLock();
+}
+
+// Step-by-step progression
+function openPaso(nextId,currentId){
+  const next=document.getElementById(nextId);
+  if(!next)return;
+  const bodyId=nextId+'-body'||nextId;
+  next.classList.add('active-paso');
+  const body=next.querySelector('.paso-body');
+  if(body){body.classList.add('open');}
+  setTimeout(()=>next.scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+
+const _sessionsDone={s1:false,s2:false};
+function finishSession(doneId){
+  const msg=document.getElementById(doneId);
+  if(msg)msg.classList.add('show');
+  if(doneId==='s1-done')_sessionsDone.s1=true;
+  if(doneId==='s2-done')_sessionsDone.s2=true;
+  _updateAssessLock();
+}
+function _updateAssessLock(){
+  const s1=_sessionsDone.s1, s2=_sessionsDone.s2;
+  const el1=document.getElementById('al-s1');
+  const el2=document.getElementById('al-s2');
+  const chk1=document.getElementById('al-s1-check');
+  const chk2=document.getElementById('al-s2-check');
+  if(el1){el1.classList.toggle('done',s1);}
+  if(el2){el2.classList.toggle('done',s2);}
+  if(chk1)chk1.textContent=s1?'✅':'○';
+  if(chk2)chk2.textContent=s2?'✅':'○';
+  if(s1&&s2){
+    const lockCard=document.getElementById('assessLockCard');
+    const lockEl=document.getElementById('assessLock');
+    const iconEl=document.getElementById('al-icon');
+    const titleEl=document.getElementById('al-title');
+    const subEl=document.getElementById('al-sub');
+    const hintEl=document.getElementById('al-hint');
+    if(lockCard)lockCard.classList.add('unlocking');
+    if(iconEl)iconEl.textContent='🔓';
+    if(titleEl)titleEl.textContent='¡Lección completada! — Evaluación desbloqueada';
+    if(subEl)subEl.innerHTML='¡Excelente trabajo! Ya puedes completar la evaluación final.<br><em>Great work! You can now complete the final assessment.</em>';
+    if(hintEl)hintEl.innerHTML='👇 Desplázate hacia abajo para comenzar. / Scroll down to begin.';
+    setTimeout(()=>{
+      if(lockEl)lockEl.classList.add('hidden');
+      const tc=document.getElementById('testContainer');
+      if(tc){tc.style.display='block';tc.classList.add('revealed');setTimeout(()=>tc.scrollIntoView({behavior:'smooth',block:'start'}),100);}
+    },1200);
+  }
+}
+
+// ═══ ASSESSMENT OPTION CLICKS ═══
+document.querySelectorAll('.options').forEach(container=>{
+  container.querySelectorAll('.opt').forEach(opt=>{
+    opt.addEventListener('click',function(){
+      if(this.classList.contains('locked-opt'))return;
+      container.querySelectorAll('.opt').forEach(o=>{o.classList.remove('selected');o.querySelector('input').checked=false;});
+      this.querySelector('input').checked=true;this.classList.add('selected');
+      updateProgress();
+    });
+  });
+});
+
+// ═══ ASSESSMENT PROGRESS ═══
+const ALL_IDS=['q1','q2','q3','q4','q5','q6','q7','q8','q9','q10','q11','q12'];
+function isAnswered(id){
+  if(['q1','q2','q3','q4','q5','q6'].includes(id)){const s=document.getElementById(id+'-sel');return s&&s.value!=='';}
+  if(['q7','q8','q9'].includes(id))return!!document.querySelector(`input[name="${id}"]:checked`);
+  return document.getElementById(id)?.value.trim().length>2;
+}
+function updateProgress(){
+  const n=ALL_IDS.filter(isAnswered).length;
+  const pct=Math.round((n/12)*100);
+  document.getElementById('qProgressCount').textContent=n+' / 12';
+  const f=document.getElementById('qProgressFill');
+  f.style.width=pct+'%';f.classList.toggle('done',n===12);
+  const ready=n===12;
+  document.getElementById('submitBtn').disabled=!ready;
+  const hint=document.getElementById('submitHint');
+  hint.textContent=ready?'✅ ¡Listo! Todas las preguntas respondidas — Ready to submit!':`Responde todas las 12 preguntas — ${12-n} falta(n)`;
+  hint.classList.toggle('ready',ready);
+  ALL_IDS.forEach(id=>{const el=document.querySelector(`.question[data-q="${id}"]`);if(!el)return;if(isAnswered(id))setTimeout(()=>el.classList.add('answered-fade'),800);else el.classList.remove('answered-fade');});
+}
+
+// ═══ CORRECT ANSWERS ═══
+const MATCH_ANS={q1:'c',q2:'f',q3:'b',q4:'e',q5:'a',q6:'d'};
+const MATCH_TERM={q1:'Matriculación',q2:'Inscripción',q3:'Asistencia',q4:'Promoción',q5:'Aprobar',q6:'Reprobar'};
+const MATCH_DEF_ES={
+  q1:'El proceso oficial de registrar a un/a estudiante en la escuela.',
+  q2:'Anotar el nombre del/de la estudiante en la lista oficial.',
+  q3:'Ir a la escuela todos los días.',
+  q4:'Pasar de un grado al siguiente después de cumplir los requisitos.',
+  q5:'Obtener la nota mínima para avanzar al próximo nivel.',
+  q6:'No alcanzar la nota mínima y repetir el año.'
+};
+
+function showFb(id,score,max,msg){const el=document.getElementById(id+'-fb');if(!el)return;el.innerHTML=`<div class="fb-score">${score}/${max}</div>${msg}`;el.classList.add('show');}
+
+let scoreA=0,scoreB=0;
+function runAutoGrade(){
+  scoreA=0;scoreB=0;
+  ['q1','q2','q3','q4','q5','q6'].forEach(id=>{
+    const sel=document.getElementById(id+'-sel');
+    const ok=sel&&sel.value===MATCH_ANS[id];
+    if(ok)scoreA+=2;
+    if(sel){sel.classList.add(ok?'correct':'wrong');sel.disabled=true;}
+    showFb(id,ok?2:0,2,ok?`✅ ¡Correcto! <strong>${MATCH_TERM[id]}</strong> = ${MATCH_DEF_ES[id]}`:`❌ La definición correcta de <strong>${MATCH_TERM[id]}</strong> es: <em>${MATCH_DEF_ES[id]}</em>`);
+  });
+  const mcq=[
+    {id:'q7',ans:'a',yes:'✅ ¡Correcto! "La asistencia de los estudiantes es importante para aprender en clase" usa <em>asistencia</em> correctamente — significa ir a la escuela todos los días.',no:'❌ La oración correcta es A. <em>Asistencia</em> significa ir a la escuela regularmente, no pasar de grado ni inscribirse.'},
+    {id:'q8',ans:'c',yes:'✅ ¡Correcto! Carlos recibió su <em>Promoción</em> — cumplió todos los requisitos y pasa al siguiente nivel.',no:'❌ La respuesta es C — <em>Promoción</em>. Cuando un estudiante cumple los requisitos y avanza de grado, eso se llama Promoción.'},
+    {id:'q9',ans:'c',yes:'✅ ¡Correcto! "María reprobó el año por su asistencia y sus notas" usa <em>reprobar</em> correctamente y explica las razones.',no:'❌ La respuesta correcta es C. María no aprobó — ella <em>reprobó</em> por su falta de asistencia y sus notas bajas.'},
+  ];
+  mcq.forEach(q=>{
+    const a=document.querySelector(`input[name="${q.id}"]:checked`)?.value;
+    const ok=a===q.ans;if(ok)scoreB+=3;
+    document.querySelectorAll(`#${q.id}-opts .opt`).forEach(o=>{const v=o.dataset.val;if(v===q.ans)o.classList.add('correct');else if(a===v)o.classList.add('wrong');o.classList.add('locked-opt');});
+    showFb(q.id,ok?3:0,3,ok?q.yes:q.no);
+  });
+}
+
+// ═══ SUBMIT ═══
+function handleSubmit(){
+  const name=document.getElementById('studentName').value.trim();
+  if(!name){alert('Por favor escribe tu nombre antes de enviar. / Please enter your name before submitting.');document.getElementById('studentName').focus();return;}
+  document.getElementById('testContainer').classList.add('test-locked');
+  runAutoGrade();
+  document.getElementById('resultsSection').classList.add('show');
+  document.getElementById('submitBtn').textContent='✅ Enviado';
+  setTimeout(()=>document.getElementById('resultsSection').scrollIntoView({behavior:'smooth',block:'start'}),400);
+  document.getElementById('spinnerWrap').classList.add('show');
+  document.getElementById('passkeyModal').classList.remove('hidden');
+  setTimeout(()=>document.getElementById('passkeyInput').focus(),300);
+}
+
+// ═══ PASSKEY → AI GRADING ═══
+function validatePasskey(){
+  const input=document.getElementById('passkeyInput').value.trim().toUpperCase();
+  if(!input)return;
+  document.getElementById('passkeyModal').classList.add('hidden');
+  document.getElementById('passkeyErr').classList.remove('show');
+  callAIGrading(input);
+}
+document.getElementById('passkeyInput').addEventListener('keydown',e=>{if(e.key==='Enter')validatePasskey();});
+
+const WORKER_URL='https://edlo-gemini.smartstandardsix.workers.dev/';
+
+async function callAIGrading(passkey){
+  document.getElementById('spinnerWrap').classList.add('show');
+  const q10=document.getElementById('q10').value.trim()||'(en blanco)';
+  const q11=document.getElementById('q11').value.trim()||'(en blanco)';
+  const q12=document.getElementById('q12').value.trim()||'(en blanco)';
+
+  const systemPrompt=`You are a warm, encouraging Spanish teacher grading a Standard 6 interactive lesson assessment on School Experiences vocabulary (SP 3.20) for Howard Smith Nazarene School in Belize. Students are around 11–12 years old and are Spanish heritage speakers learning formal written Spanish. The lesson covered: Matriculación (official school enrollment process for the year), Inscripción (recording the student's name on the official school list), Asistencia (attendance — going to school every day), Promoción (advancing from one grade to the next), Aprobar (to pass — meeting the minimum grade requirement), Reprobar (to fail — not meeting the minimum grade, repeating the year).
+
+Students may respond in Spanish or English. Accept both and grade on content understanding.
+
+Grade Q10, Q11, Q12:
+
+Q10 — Explain matriculación and inscripción: similarity and difference (3 marks)
+3/3 → Explains both words correctly AND states a similarity (both are enrollment/registration processes at the start of the year) AND a meaningful difference (matriculación = full official process; inscripción = the specific act of writing the name on the list).
+2/3 → Explains both correctly but misses the similarity or difference. OR explains one well and the other only partially.
+1/3 → Vague understanding of only one word, or confuses them slightly.
+0/3 → Blank or completely incorrect.
+
+Q11 — Two sentences using asistencia and promoción (3 marks)
+3/3 → Two complete sentences (Spanish or English), each using the target word correctly in context showing clear understanding.
+2/3 → One sentence is fully correct; the other is slightly off or incomplete.
+1/3 → Only one correct sentence, or both are extremely brief (just a few words).
+0/3 → Blank, no sentences, or both words misused.
+
+Q12 — How to aprobar el año: 2–3 sentences (3 marks)
+3/3 → 2–3 logical sentences explaining conditions for passing (studying, attendance, completing homework/exams, getting good grades). Correctly uses 'aprobar' or a conjugation in at least one sentence.
+2/3 → Mentions 1–2 conditions but minimal development; or uses 'aprobar' incorrectly.
+1/3 → Very brief (1 phrase only).
+0/3 → Blank or completely unrelated.
+
+FEEDBACK (2–3 warm sentences per question): Full marks → specific praise naming what was done well. Partial → praise the correct part, name what was missing, brief hint. Zero → kind explanation with correct answer, encouragement. Simple, warm language for 11–12 year olds. Never mention AI.
+
+Reply ONLY with valid JSON, no markdown:
+{"q10":{"score":3,"feedback":"..."},"q11":{"score":3,"feedback":"..."},"q12":{"score":3,"feedback":"..."},"totalAI":9}`;
+
+  const userMessage=`Q10 (3 marks) — Explain matriculación vs inscripción:\n"${q10}"\n\nQ11 (3 marks) — Two sentences with asistencia and promoción:\n"${q11}"\n\nQ12 (3 marks) — How to aprobar el año:\n"${q12}"\n\nReturn ONLY the JSON.`;
+
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({passkey,model:'gpt-4o-mini',max_tokens:700,messages:[{role:'system',content:systemPrompt},{role:'user',content:userMessage}]})});
+    if(res.status===403){document.getElementById('passkeyErr').classList.add('show');document.getElementById('passkeyModal').classList.remove('hidden');document.getElementById('spinnerWrap').classList.remove('show');return;}
+    const data=await res.json();
+    let text='';
+    if(data.choices?.[0])text=data.choices[0].message?.content||'';
+    else if(data.content)text=data.content.map(b=>b.text||'').join('');
+    const match=text.match(/\{[\s\S]*\}/);
+    if(!match)throw new Error('no JSON');
+    displayResults(JSON.parse(match[0]));
+  }catch(e){console.error(e);displayResults(null);}
+  finally{document.getElementById('spinnerWrap').classList.remove('show');}
+}
+
+// ═══ DISPLAY RESULTS ═══
+function displayResults(ai){
+  const aiScore=ai?((ai.q10?.score||0)+(ai.q11?.score||0)+(ai.q12?.score||0)):0;
+  const total=scoreA+scoreB+aiScore;
+  const pct=Math.round((total/30)*100);
+  document.getElementById('s-a').textContent=scoreA+'/12';
+  document.getElementById('s-b').textContent=scoreB+'/9';
+  document.getElementById('s-c').textContent=aiScore+'/9';
+  document.getElementById('s-total').textContent=total+'/30';
+  document.getElementById('s-pct').textContent=pct+'%';
+  document.getElementById('prog-pct-lbl').textContent=pct+'%';
+  const fill=document.getElementById('progFill');
+  fill.style.width=pct+'%';
+  fill.style.background=pct>=80?'#69DB7C':pct>=50?'#FFD43B':'#FF6B6B';
+  const sName=(document.getElementById('studentName').value||'Estudiante').split(' ')[0];
+  let label='';
+  if(pct>=80)label='🌟 Excelente — ¡Muy bien, '+sName+'! Outstanding work!';
+  else if(pct>=70)label='👍 Bueno — ¡Bien hecho, '+sName+'! Keep it up!';
+  else if(pct>=50)label='📚 Satisfactorio — Sigue estudiando, '+sName+'! You are making progress!';
+  else label='💪 Necesita mejorar — No te rindas, '+sName+'! Review the vocabulary with Mr. EdLo.';
+  document.getElementById('perfBadge').textContent=label;
+  if(ai){['q10','q11','q12'].forEach(q=>{if(!ai[q])return;const fb=document.getElementById(q+'-fb');fb.innerHTML=`<div class="fb-score">${ai[q].score}/3</div>${ai[q].feedback}`;fb.classList.add('show');});}
+  else{['q10','q11','q12'].forEach(q=>{const fb=document.getElementById(q+'-fb');fb.innerHTML=`<div class="fb-score">?/3</div>Mr. EdLo revisará esta respuesta. / Mr. EdLo will review this answer.`;fb.classList.add('show');});}
+  window._savedData={name:document.getElementById('studentName').value,date:document.getElementById('testDate').value,sA:scoreA,sB:scoreB,sC:aiScore,sTotal:total,sPct:pct,perf:document.getElementById('perfBadge').textContent,ai,
+    answers:{q1:document.getElementById('q1-sel')?.options[document.getElementById('q1-sel').selectedIndex]?.text||'',q2:document.getElementById('q2-sel')?.options[document.getElementById('q2-sel').selectedIndex]?.text||'',q3:document.getElementById('q3-sel')?.options[document.getElementById('q3-sel').selectedIndex]?.text||'',q4:document.getElementById('q4-sel')?.options[document.getElementById('q4-sel').selectedIndex]?.text||'',q5:document.getElementById('q5-sel')?.options[document.getElementById('q5-sel').selectedIndex]?.text||'',q6:document.getElementById('q6-sel')?.options[document.getElementById('q6-sel').selectedIndex]?.text||'',
+    q7:document.querySelector('input[name="q7"]:checked')?.closest('.opt')?.textContent?.trim()||'',q8:document.querySelector('input[name="q8"]:checked')?.closest('.opt')?.textContent?.trim()||'',q9:document.querySelector('input[name="q9"]:checked')?.closest('.opt')?.textContent?.trim()||'',
+    q10:document.getElementById('q10').value,q11:document.getElementById('q11').value,q12:document.getElementById('q12').value}};
+}
+
+// ═══ DEV AUTOFILL ═══
+function autoFillCorrect(){
+  document.getElementById('studentName').value='Estudiante Prueba';
+  const c={q1:'c',q2:'f',q3:'b',q4:'e',q5:'a',q6:'d'};
+  Object.entries(c).forEach(([id,v])=>{const s=document.getElementById(id+'-sel');if(s)s.value=v;});
+  [['q7','a'],['q8','c'],['q9','c']].forEach(([n,v])=>{document.querySelectorAll(`#${n}-opts .opt`).forEach(o=>o.classList.remove('selected'));const inp=document.querySelector(`input[name="${n}"][value="${v}"]`);if(inp){inp.checked=true;inp.closest('.opt').classList.add('selected');}});
+  document.getElementById('q10').value='La matriculación y la inscripción son parecidas porque las dos ocurren cuando un estudiante empieza en la escuela. La diferencia es que la matriculación es el proceso completo y oficial de registrar al estudiante, mientras que la inscripción es solo el acto de anotar su nombre en la lista oficial.';
+  document.getElementById('q11').value='1. La asistencia diaria es muy importante porque ayuda al estudiante a aprender todo el material de las clases.\n2. Yo recibí mi promoción al Standard 6 porque cumplí con todos los requisitos del año escolar.';
+  document.getElementById('q12').value='Para aprobar el año escolar, un/a estudiante debe estudiar todos los días y entregar sus tareas a tiempo. También es importante tener buena asistencia porque si faltas mucho, pierdes clases importantes. Si te esfuerzas y te preparas para los exámenes, puedes aprobar el año.';
+  updateProgress();
+}
+function autoFillWrong(){
+  document.getElementById('studentName').value='Estudiante Incorrecto';
+  const w={q1:'a',q2:'b',q3:'a',q4:'a',q5:'d',q6:'c'};
+  Object.entries(w).forEach(([id,v])=>{const s=document.getElementById(id+'-sel');if(s)s.value=v;});
+  [['q7','b'],['q8','a'],['q9','a']].forEach(([n,v])=>{document.querySelectorAll(`#${n}-opts .opt`).forEach(o=>o.classList.remove('selected'));const inp=document.querySelector(`input[name="${n}"][value="${v}"]`);if(inp){inp.checked=true;inp.closest('.opt').classList.add('selected');}});
+  document.getElementById('q10').value='Matriculacion es ir a la escuela. Inscripcion tambien.';
+  document.getElementById('q11').value='Asistencia is good. Promocion is nice.';
+  document.getElementById('q12').value='Estudiar.';
+  updateProgress();
+}
+
+// ═══ PDF EXPORT ═══
+function downloadPDF(){
+  const{jsPDF}=window.jspdf;const doc=new jsPDF({orientation:'p',unit:'mm',format:'a4'});
+  const d=window._savedData||{};const name=d.name||document.getElementById('studentName').value||'No indicado';
+  const date=d.date||document.getElementById('testDate').value;const ai=d.ai||null;const ans=d.answers||{};
+  const margin=20,pageW=210,colW=pageW-margin*2;let y=0;
+  doc.setFillColor(32,201,151);doc.rect(0,0,210,8,'F');y=18;
+  doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(110,110,110);
+  doc.text('Howard Smith Nazarene School  |  Standard 6  |  Belize  |  SP 3.20',pageW/2,y,{align:'center'});y+=7;
+  doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor(20,20,40);
+  doc.text('Experiencias Escolares — Matricula e Inscripcion',pageW/2,y,{align:'center'});y+=5;
+  doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(80,80,100);
+  doc.text("SP 3.20 Evaluacion Final  |  Mr. EdLo's Virtual Classroom",pageW/2,y,{align:'center'});y+=9;
+  doc.setDrawColor(32,201,151);doc.setLineWidth(0.5);doc.line(margin,y,pageW-margin,y);y+=8;
+  doc.setFillColor(240,255,250);doc.setDrawColor(32,201,151);doc.setLineWidth(0.4);
+  doc.roundedRect(margin,y,colW,22,3,3,'FD');
+  doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(40,40,60);
+  doc.text('NOMBRE:',margin+5,y+8);doc.setFont('helvetica','normal');doc.text(name,margin+25,y+8);
+  doc.setFont('helvetica','bold');doc.text('FECHA:',margin+5,y+16);doc.setFont('helvetica','normal');doc.text(date,margin+20,y+16);
+  doc.setFont('helvetica','bold');doc.text('MAESTRO:',pageW/2,y+8);doc.setFont('helvetica','normal');doc.text('Mr. Edwin D. Lopez',pageW/2+24,y+8);
+  doc.setFont('helvetica','bold');doc.text('ESCUELA:',pageW/2,y+16);doc.setFont('helvetica','normal');doc.text('Howard Smith Nazarene School',pageW/2+21,y+16);
+  y+=28;
+  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(32,201,151);doc.text('RESULTADOS',margin,y);y+=5;
+  const boxes=[{l:'SEC A',v:(d.sA||0)+'/12'},{l:'SEC B',v:(d.sB||0)+'/9'},{l:'SEC C',v:(d.sC||0)+'/9'},{l:'TOTAL',v:(d.sTotal||0)+'/30',hl:true},{l:'PORCENT.',v:(d.sPct||0)+'%'}];
+  const bw=colW/5-2;
+  boxes.forEach((b,i)=>{const bx=margin+i*(bw+2.5);doc.setFillColor(b.hl?32:235,b.hl?201:252,b.hl?151:248);doc.setDrawColor(b.hl?20:180,b.hl?180:230,b.hl?100:220);doc.roundedRect(bx,y,bw,18,2,2,'FD');doc.setFont('helvetica','bold');doc.setFontSize(6);doc.setTextColor(b.hl?255:80,b.hl?255:80,b.hl?255:80);doc.text(b.l,bx+bw/2,y+5,{align:'center'});doc.setFontSize(b.hl?12:11);doc.setTextColor(b.hl?255:40,b.hl?255:40,b.hl?255:60);doc.text(b.v,bx+bw/2,y+14,{align:'center'});});y+=24;
+  const perf=(d.perf||'').replace(/[^\x00-\x7F]/g,'').trim();
+  doc.setFillColor(242,255,250);doc.setDrawColor(180,230,210);doc.roundedRect(margin,y,colW,12,3,3,'FD');
+  doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(20,100,70);doc.text('DESEMPENO: '+perf,margin+5,y+8);y+=18;
+  doc.setDrawColor(200,230,215);doc.setLineWidth(0.3);doc.line(margin,y,pageW-margin,y);y+=7;
+  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(32,201,151);doc.text('RESPUESTAS DEL/DE LA ESTUDIANTE',margin,y);y+=5;
+  const qRows=[{n:'A1',q:'Matriculacion:',a:ans.q1||'—'},{n:'A2',q:'Inscripcion:',a:ans.q2||'—'},{n:'A3',q:'Asistencia:',a:ans.q3||'—'},{n:'A4',q:'Promocion:',a:ans.q4||'—'},{n:'A5',q:'Aprobar:',a:ans.q5||'—'},{n:'A6',q:'Reprobar:',a:ans.q6||'—'},{n:'B7',q:'Uso correcto de asistencia:',a:ans.q7||'—'},{n:'B8',q:'Palabra para Carlos:',a:ans.q8||'—'},{n:'B9',q:'Situacion de Maria:',a:ans.q9||'—'},{n:'C10',q:'Matriculacion vs Inscripcion:',a:ans.q10||'—'},{n:'C11',q:'Oraciones con asistencia y promocion:',a:ans.q11||'—'},{n:'C12',q:'Como aprobar el ano:',a:ans.q12||'—'}];
+  const lh=4.2;doc.setFontSize(8);
+  qRows.forEach(r=>{if(y>258){doc.addPage();y=20;}doc.setFont('helvetica','bold');doc.setTextColor(50,50,80);doc.text(r.n+' — '+r.q,margin,y);y+=lh;doc.setFont('helvetica','normal');doc.setTextColor(80,80,80);doc.splitTextToSize('  '+r.a,colW-4).forEach(l=>{if(y>268){doc.addPage();y=20;}doc.text(l,margin,y);y+=lh;});y+=1.5;});
+  if(ai){if(y>235){doc.addPage();y=20;}doc.setDrawColor(200,225,215);doc.setLineWidth(0.3);doc.line(margin,y,pageW-margin,y);y+=6;doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(100,50,160);doc.text('RETROALIMENTACION IA — SECCION C',margin,y);y+=5;[['q10',10],['q11',11],['q12',12]].forEach(([q,n])=>{if(!ai[q])return;if(y>262){doc.addPage();y=20;}doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(50,50,80);doc.text('C'+n+' — Puntaje: '+ai[q].score+'/3',margin,y);y+=4;doc.setFont('helvetica','normal');doc.setTextColor(80,80,100);doc.splitTextToSize('  '+ai[q].feedback,colW-4).forEach(l=>{if(y>268){doc.addPage();y=20;}doc.text(l,margin,y);y+=4;});y+=2;});}
+  const pc=doc.getNumberOfPages();for(let p=1;p<=pc;p++){doc.setPage(p);doc.setFillColor(32,201,151);doc.rect(0,290,210,7,'F');doc.setFont('helvetica','normal');doc.setFontSize(6.5);doc.setTextColor(255,255,255);doc.text('edlovirtualclassroom.com  ·  SP 3.20 Experiencias Escolares  ·  Pagina '+p+' de '+pc,pageW/2,294.5,{align:'center'});}
+  doc.save('SP320_'+(name.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,''))+'.pdf');
+}
+
+// ═══ GOOGLE CLASSROOM CSV ═══
+function downloadCSV(){
+  const d=window._savedData||{};const name=d.name||document.getElementById('studentName').value||'Desconocido';
+  const parts=name.trim().split(' ');const first=parts.slice(0,-1).join(' ')||name;const last=parts[parts.length-1]||'';
+  const ai=d.ai||null;let fb='';
+  if(ai){['q10','q11','q12'].forEach((q,i)=>{if(ai[q])fb+=`C${i+10}:${ai[q].score}/3 - ${(ai[q].feedback||'').replace(/"/g,"'").substring(0,100)}... | `;});}
+  else{fb='Seccion C pendiente de revision manual';}
+  const headers=['Apellido','Nombre','Correo','SP 3.20 Experiencias Escolares (/30)','Seccion A Vocabulario (/12)','Seccion B Opcion Multiple (/9)','Seccion C Escritura (/9)','Porcentaje','Desempeno','Fecha','Retroalimentacion IA'];
+  const row=[`"${last}"`,`"${first}"`,`""`,d.sTotal||0,d.sA||0,d.sB||0,d.sC||0,(d.sPct||0)+'%',`"${(d.perf||'').replace(/[^\x00-\x7F]/g,'').trim()}"`,`"${d.date||''}"`,`"${fb}"`];
+  const csv='data:text/csv;charset=utf-8,'+headers.join(',')+'\n'+row.join(',');
+  const link=document.createElement('a');link.setAttribute('href',encodeURI(csv));link.setAttribute('download','SP320_GC_'+(name.replace(/\s+/g,'_'))+'.csv');document.body.appendChild(link);link.click();document.body.removeChild(link);
+}
+</script>
+</body>
+</html>
