@@ -648,6 +648,17 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
     <p class="subtitle">Matrícula e Inscripción — Lección semanal interactiva + Evaluación final · 30 puntos</p>
   </header>
 
+  <!-- Dev bar (hidden; show via ?dev=1 or type "dev") -->
+  <div id="devBar" style="display:none;background:rgba(255,100,100,.07);border:1.5px dashed rgba(255,100,100,.35);border-radius:12px;padding:.6rem 1rem;margin-bottom:1rem;gap:.45rem;flex-wrap:wrap;justify-content:center;align-items:center;">
+    <span style="font-size:.68rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#FF6B6B;width:100%;text-align:center;margin-bottom:.2rem;">🛠 Dev Tools — type "dev" or ?dev=1</span>
+    <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="devRunAll('correct')">🚀 Full Run — Correct</button>
+    <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="devRunAll('wrong')">💥 Full Run — Wrong</button>
+    <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="devUnlockAll()">🔓 Unlock All Pasos</button>
+    <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="autoFillCorrect()">✅ Fill Assessment (Correct)</button>
+    <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="autoFillWrong()">❌ Fill Assessment (Wrong)</button>
+    <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;color:#FF6B6B;" onclick="devReset()">🗑️ Clear &amp; Reload</button>
+  </div>
+
   <!-- ══════════════════════════════════════════
        PLAN SECTION
   ══════════════════════════════════════════ -->
@@ -1282,17 +1293,6 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
         <div class="sc-group"><label>Maestro — Teacher</label><input type="text" value="Mr. Edwin D. López" readonly></div>
         <div class="sc-group"><label>Materia — Subject</label><input type="text" value="Español — SP 3.20" readonly></div>
       </div>
-    </div>
-
-    <!-- Dev bar -->
-    <div id="devBar" style="display:none;background:rgba(255,100,100,.07);border:1.5px dashed rgba(255,100,100,.35);border-radius:12px;padding:.6rem 1rem;margin-bottom:1rem;gap:.45rem;flex-wrap:wrap;justify-content:center;align-items:center;">
-      <span style="font-size:.68rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#FF6B6B;width:100%;text-align:center;margin-bottom:.2rem;">🛠 Dev Tools — ?dev=1</span>
-      <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="devRunAll('correct')">🚀 Full Run — Correct</button>
-      <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="devRunAll('wrong')">💥 Full Run — Wrong</button>
-      <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="devUnlockAll()">🔓 Unlock All Pasos</button>
-      <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="autoFillCorrect()">✅ Fill Assessment (Correct)</button>
-      <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="autoFillWrong()">❌ Fill Assessment (Wrong)</button>
-      <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;color:#FF6B6B;" onclick="devReset()">🗑️ Clear &amp; Reload</button>
     </div>
 
     <!-- SECTION A — Matching -->
