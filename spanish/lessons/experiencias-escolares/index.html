@@ -425,9 +425,9 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
 
   /* Page header */
   header{padding:1.3rem .5rem 1rem;}
-  h1{font-size:clamp(1.5rem,8vw,2.2rem);}
-  .subtitle{font-size:.9rem;}
-  .badge{font-size:.78rem;}
+  h1{font-size:clamp(1.3rem,5.5vw,1.9rem);word-break:break-word;overflow-wrap:break-word;}
+  .subtitle{font-size:.85rem;padding:0 .25rem;}
+  .badge{font-size:.72rem;letter-spacing:.06em;white-space:normal;word-break:break-word;max-width:100%;}
 
   /* Progress bar */
   .q-progress-label{font-size:.62rem;}
@@ -438,8 +438,8 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
   .plan-tab{font-size:.8rem;padding:.65rem .25rem;min-width:0;}
   .plan-panel{padding:1rem .9rem;}
 
-  /* Info grid */
-  .info-grid{grid-template-columns:1fr 1fr;}
+  /* Info grid — single column on mobile */
+  .info-grid{grid-template-columns:1fr;}
 
   /* Pasos */
   .paso-header{flex-wrap:wrap;gap:.35rem;padding:.7rem .9rem;}
