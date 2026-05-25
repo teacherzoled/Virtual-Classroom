@@ -2094,14 +2094,12 @@ async function devRunAll(mode){
   await wait(700);
 
   // ── ASSESSMENT ────────────────────────────────────────────
-  await wait(500); // wait for assessment unlock animation
+  await wait(1000); // wait for assessment unlock animation (900ms timeout)
   devFillAssessment(mode);
   await wait(400);
   showFlash('🛠 Dev: submitting assessment…','#D4AF37');
   await wait(400);
-  // Grade MCQ then call AI directly with dev passkey (bypasses modal)
-  _gradeMCQ();
-  _callAIGrading('DEV');
+  handleSubmit();
 }
 </script>
 <!-- Passkey modal — outside all containers so fixed positioning works correctly -->
