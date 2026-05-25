@@ -328,8 +328,6 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
 .btn-primary{font-family:'Fredoka One',cursive;font-size:1.22rem;padding:14px 44px;border-radius:999px;background:var(--top-badge-bg);color:var(--top-badge-c);border:none;cursor:pointer;box-shadow:0 6px 24px rgba(0,0,0,.20);transition:transform .2s,filter .2s,opacity .2s;letter-spacing:.02em;}
 .btn-primary:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.1);}
 .btn-primary:disabled{opacity:.55;cursor:not-allowed;}
-.btn-secondary{font-family:'Fredoka One',cursive;font-size:.88rem;padding:7px 16px;border-radius:999px;background:var(--badge-bg);color:var(--badge-color);border:1.5px solid var(--badge-border);cursor:pointer;transition:all .2s;}
-.btn-secondary:hover{background:var(--opt-hover);filter:brightness(1.1);}
 .submit-hint{font-size:.9rem;font-weight:700;color:var(--section-lbl);margin-top:.5rem;}
 .submit-hint.ready{color:var(--top-badge-bg);}
 .spinner-wrap{display:none;justify-content:center;margin-top:1rem;}
@@ -370,6 +368,9 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
 /* ═══ PASSKEY MODAL ═══ */
 .modal-overlay{position:fixed;inset:0;z-index:200;background:var(--modal-bg);display:flex;align-items:center;justify-content:center;animation:fadeIn .2s ease both;padding:1rem;}
 .modal-overlay.hidden{display:none;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-card{background:var(--modal-card);border:1.5px solid var(--modal-border);border-radius:22px;padding:2rem 2.2rem;max-width:400px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35);animation:popIn .3s cubic-bezier(.36,1.5,.6,1) both;}
+@keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
 .modal-card{background:var(--modal-card);border:1.5px solid var(--modal-border);border-radius:22px;padding:2rem 2.2rem;max-width:400px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.40);animation:popIn .3s cubic-bezier(.36,1.5,.6,1) both;}
@@ -564,7 +565,7 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
 
   <!-- ═══ SESSION TABS ═══ -->
   <div class="plan-section">
-    <div class="plan-toggle" id="lessonToggle" style="cursor:default;pointer-events:none;">
+    <div class="plan-toggle" id="lessonToggle" onclick="toggleLesson()" style="cursor:default;pointer-events:none;">
       <span class="plan-toggle-icon">✝️</span>
       <span class="plan-toggle-title">Interactive Lessons</span>
     </div>
@@ -763,6 +764,7 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
 
       <!-- ═══ DAY 3 ═══ -->
       <div class="plan-panel" id="panel-d3">
+        <div id="d3-lock-banner" style="display:none;">🔒 Complete Mission 1 first to unlock Mission 2.</div>
         <div class="pasos-wrap">
           <p class="pasos-title">Mission 2 — God Draws the Heart</p>
 
@@ -1206,7 +1208,7 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
       <p class="submit-hint" id="submitHint">Answer all 12 questions to submit.</p>
     </div>
     <div class="spinner-wrap" id="spinnerWrap"><div class="spinner"></div></div>
-    <p style="text-align:center;font-size:.85rem;font-weight:700;color:var(--section-lbl);margin-top:.5rem;display:none;" id="feedbackNote"></p>
+    <p style="text-align:center;font-size:.85rem;font-weight:700;color:var(--section-lbl);margin-top:.5rem;" id="feedbackNote" style="display:none;"></p>
 
     <!-- RESULTS -->
     <div class="results-section" id="resultsSection">
@@ -1398,15 +1400,16 @@ function quizSelect(el, qid, val) {
 /* ═══════════════════════════ VALIDATE RECAP ═══════════════════ */
 function validateRecap(stepId, correctPairs, nextStepId, xpAmt) {
   const errEl = document.getElementById('err-'+stepId);
+  let allCorrect = true;
   correctPairs.forEach(pair=>{
     const [qid,correct] = pair.split(':');
     const opts = document.querySelector(`input[name="${qid}"]`)?.closest('.quiz-opts');
-    if(!opts) return;
+    if(!opts) { allCorrect=false; return; }
     const sel = opts.querySelector('.quiz-opt.selected');
     const fb = document.getElementById(qid+'-fb');
     if(!sel) {
       if(fb){fb.className='quiz-fb show neutral';fb.textContent='⚠️ Please select an answer.';}
-      return;
+      allCorrect=false; return;
     }
     const val = sel.querySelector('input').value;
     const fbTexts = quizFbText[qid] || {};
@@ -1420,6 +1423,7 @@ function validateRecap(stepId, correctPairs, nextStepId, xpAmt) {
       if(corrEl) corrEl.classList.add('correct');
       opts.querySelectorAll('.quiz-opt').forEach(o=>o.classList.add('locked'));
       if(fb){fb.className='quiz-fb show bad';fb.textContent=fbTexts[val]||'❌ Not quite. Review the answer shown in green.';}
+      allCorrect=false;
     }
   });
   if(errEl) errEl.classList.remove('show');
@@ -1587,6 +1591,8 @@ function updateAssessLock() {
 
 /* ═══════════════════════════ ASSESSMENT MCQ ═══════════════════ */
 function selectOpt(el, qid, val) {
+  // Ignore clicks if already graded/locked
+  if(el.classList.contains('locked-opt') || el.classList.contains('correct') || el.classList.contains('wrong')) return;
   const wrap = document.getElementById(qid+'wrap');
   if(wrap?.classList.contains('answered')) return;
   const opts = el.closest('.options');
@@ -1598,10 +1604,9 @@ function selectOpt(el, qid, val) {
   checkSubmitReady();
 }
 function updateAssessProgress() {
-  const total = TOTAL_Q;
   const realDone = Object.keys(answered).length + ['q10','q11','q12'].filter(id=>(document.getElementById(id)?.value||'').trim().length>10).length;
-  document.getElementById('qProgCount').textContent = realDone + ' / ' + total + ' answered';
-  const pct = Math.round((realDone/total)*100);
+  document.getElementById('qProgCount').textContent = realDone + ' / ' + TOTAL_Q + ' answered';
+  const pct = Math.round((realDone/TOTAL_Q)*100);
   const fill = document.getElementById('qProgFill');
   if(fill){fill.style.width=pct+'%';if(pct>=100)fill.classList.add('done');}
 }
@@ -1613,9 +1618,12 @@ function checkSubmitReady(){
   const writtenDone = ['q10','q11','q12'].every(id=>(document.getElementById(id)?.value||'').trim().length>10);
   const btn = document.getElementById('submitBtn');
   const hint = document.getElementById('submitHint');
-  if(mcqDone&&writtenDone){
-    btn.disabled=false;
-    if(hint){hint.textContent='All answered! Ready to submit.';hint.className='submit-hint ready';}
+  if(!btn) return;
+  const ready = mcqDone && writtenDone;
+  btn.disabled = !ready;
+  if(hint){
+    hint.textContent = ready ? 'All answered! Ready to submit.' : 'Answer all 12 questions to submit.';
+    hint.className = ready ? 'submit-hint ready' : 'submit-hint';
   }
 }
 
@@ -1625,15 +1633,13 @@ const WORKER_URL = 'https://edlo-gemini.smartstandardsix.workers.dev/';
 function handleSubmit(){
   const name = document.getElementById('stuName').value.trim();
   if(!name){alert('Please enter your name before submitting.');document.getElementById('stuName').focus();return;}
-  // Lock MCQ options and grade them
   _gradeMCQ();
-  // Change button text
-  document.getElementById('submitBtn').textContent = '✅ Submitted';
-  // Show spinner
+  document.getElementById('submitBtn').textContent='✅ Submitted';
+  document.getElementById('submitBtn').disabled=true;
   document.getElementById('spinnerWrap').classList.add('show');
-  // Show passkey modal — exactly as Spanish page does it
   document.getElementById('passkeyModal').classList.remove('hidden');
-  setTimeout(()=>document.getElementById('passkeyInput').focus(), 300);
+  document.getElementById('passkeyInput').value='';
+  document.getElementById('passkeyInput').focus();
 }
 
 function validatePasskey(){
@@ -1751,9 +1757,7 @@ Reply ONLY with valid JSON, no markdown:
       document.getElementById('passkeyErr').classList.add('show');
       document.getElementById('passkeyModal').classList.remove('hidden');
       document.getElementById('passkeyInput').focus();
-      const sb = document.getElementById('submitBtn');
-      sb.disabled = false;
-      sb.textContent = 'Submit for Teacher Feedback';
+      document.getElementById('submitBtn').disabled = false;
       return;
     }
     const data = await res.json();
