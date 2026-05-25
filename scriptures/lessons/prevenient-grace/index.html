@@ -1,0 +1,2108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scripture — Prevenient Grace · Standard VI · Mr. EdLo</title>
+<link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════ THEME VARIABLES ═══════════════════════════ */
+:root, body.theme-night {
+  --bg:#0f1117; --body-color:#f0eee8;
+  --card-bg:rgba(255,255,255,0.06); --card-border:rgba(255,255,255,0.09);
+  --card-border-h:rgba(212,175,55,0.40); --card-shadow:rgba(0,0,0,0.50);
+  --card-desc:rgba(240,238,232,0.50); --section-lbl:rgba(240,238,232,0.38);
+  --subtitle-c:rgba(240,238,232,0.55); --info-bg:linear-gradient(135deg,#1a0f06,#1a1206);
+  --info-border:rgba(212,175,55,0.20); --header-name:rgba(212,175,55,0.70);
+  --badge-bg:rgba(212,175,55,0.10); --badge-border:rgba(212,175,55,0.18);
+  --badge-color:rgba(212,175,55,0.75); --top-badge-bg:#D4AF37; --top-badge-c:#0f1117;
+  --h1-grad:linear-gradient(135deg,#f0eee8 0%,#D4AF37 45%,#c0392b 100%);
+  --footer-bg:linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.50) 100%);
+  --footer-border:rgba(255,255,255,0.07); --footer-name:rgba(212,175,55,0.45);
+  --footer-tag:rgba(240,238,232,0.45); --footer-copy:rgba(240,238,232,0.20);
+  --back-color:rgba(212,175,55,0.50); --back-hover:rgba(212,175,55,0.90);
+  --radial1:rgba(90,30,10,0.45); --radial2:rgba(30,20,5,0.45); --star-show:1;
+  --input-bg:rgba(255,255,255,0.05); --input-border:rgba(255,255,255,0.14);
+  --input-focus:#D4AF37; --input-text:#f0eee8;
+  --opt-bg:rgba(255,255,255,0.04); --opt-border:rgba(255,255,255,0.11);
+  --opt-hover:rgba(212,175,55,0.10); --opt-sel-bg:rgba(212,175,55,0.14); --opt-sel-b:#D4AF37;
+  --opt-correct:rgba(105,219,124,0.18); --opt-correct-b:#69DB7C;
+  --opt-wrong:rgba(192,57,43,0.22); --opt-wrong-b:#c0392b;
+  --score-bg:rgba(212,175,55,0.07); --score-border:rgba(212,175,55,0.22);
+  --progress-bg:rgba(255,255,255,0.10); --modal-bg:rgba(0,0,0,0.80);
+  --modal-card:#1a1510; --modal-border:rgba(212,175,55,0.35);
+  --fb-bg:rgba(212,175,55,0.06); --fb-border:rgba(212,175,55,0.22);
+  --grad-bar:linear-gradient(90deg,#D4AF37,#c0392b,#8e44ad,#e67e22);
+  --scenario-bg:rgba(212,175,55,0.05); --scenario-border:rgba(212,175,55,0.20);
+  --xp-color:#FFD700; --sin-color:#c0392b; --grace-color:#D4AF37; --sep-color:#7f8c8d;
+}
+body.theme-parchment {
+  --bg:#f5f0e8; --body-color:#2c1810;
+  --card-bg:rgba(255,255,255,0.75); --card-border:rgba(139,90,43,0.18);
+  --card-border-h:rgba(139,90,43,0.40); --card-shadow:rgba(100,60,20,0.15);
+  --card-desc:rgba(60,30,10,0.55); --section-lbl:rgba(80,40,15,0.50);
+  --subtitle-c:rgba(60,30,10,0.65); --info-bg:linear-gradient(135deg,#ede0cc,#e5d4b8);
+  --info-border:rgba(139,90,43,0.22); --header-name:#7B5E3A;
+  --badge-bg:rgba(180,130,60,0.12); --badge-border:rgba(160,110,40,0.22);
+  --badge-color:#6b4c2a; --top-badge-bg:#B8860B; --top-badge-c:#fff;
+  --h1-grad:linear-gradient(135deg,#3b1f0a 0%,#8B6914 50%,#B8860B 100%);
+  --footer-bg:linear-gradient(180deg,transparent 0%,rgba(180,130,60,0.10) 100%);
+  --footer-border:rgba(139,90,43,0.18); --footer-name:rgba(80,40,15,0.50);
+  --footer-tag:rgba(80,40,15,0.55); --footer-copy:rgba(80,40,15,0.30);
+  --back-color:rgba(100,60,20,0.55); --back-hover:#5a3515;
+  --radial1:rgba(220,180,80,0.20); --radial2:rgba(180,130,40,0.15); --star-show:0;
+  --input-bg:rgba(139,90,43,0.07); --input-border:rgba(120,75,30,0.22);
+  --input-focus:#B8860B; --input-text:#2c1810;
+  --opt-bg:rgba(139,90,43,0.06); --opt-border:rgba(120,75,30,0.18);
+  --opt-hover:rgba(180,140,60,0.10); --opt-sel-bg:rgba(180,140,60,0.14); --opt-sel-b:#B8860B;
+  --opt-correct:rgba(46,125,50,0.12); --opt-correct-b:#2e7d32;
+  --opt-wrong:rgba(180,30,20,0.10); --opt-wrong-b:#b71c1c;
+  --score-bg:rgba(180,140,60,0.07); --score-border:rgba(160,110,40,0.22);
+  --progress-bg:rgba(139,90,43,0.12); --modal-bg:rgba(0,0,0,0.50);
+  --modal-card:#f5edd8; --modal-border:rgba(139,90,43,0.30);
+  --fb-bg:rgba(180,140,60,0.07); --fb-border:rgba(160,110,40,0.22);
+  --grad-bar:linear-gradient(90deg,#B8860B,#c0392b,#6c3483,#e67e22);
+  --scenario-bg:rgba(139,90,43,0.06); --scenario-border:rgba(120,75,30,0.22);
+  --xp-color:#B8860B; --sin-color:#c0392b; --grace-color:#B8860B; --sep-color:#7f8c8d;
+}
+body.theme-dawn {
+  --bg:#faf5ef; --body-color:#1a0f06;
+  --card-bg:rgba(255,255,255,0.78); --card-border:rgba(200,120,40,0.18);
+  --card-border-h:rgba(200,100,20,0.40); --card-shadow:rgba(160,80,20,0.12);
+  --card-desc:rgba(80,40,10,0.55); --section-lbl:rgba(100,55,15,0.50);
+  --subtitle-c:rgba(70,35,10,0.65); --info-bg:linear-gradient(135deg,#fde8c8,#fdddb0);
+  --info-border:rgba(210,130,40,0.22); --header-name:#8b4513;
+  --badge-bg:rgba(220,140,50,0.12); --badge-border:rgba(200,120,35,0.22);
+  --badge-color:#7a3b0e; --top-badge-bg:#E07B20; --top-badge-c:#fff;
+  --h1-grad:linear-gradient(135deg,#5a2006 0%,#c0570f 40%,#E07B20 80%,#D4AF37 100%);
+  --footer-bg:linear-gradient(180deg,transparent 0%,rgba(220,130,30,0.10) 100%);
+  --footer-border:rgba(200,120,40,0.18); --footer-name:rgba(90,45,10,0.50);
+  --footer-tag:rgba(90,45,10,0.55); --footer-copy:rgba(90,45,10,0.30);
+  --back-color:rgba(130,60,20,0.55); --back-hover:#6b3010;
+  --radial1:rgba(250,200,80,0.25); --radial2:rgba(220,150,40,0.18); --star-show:0;
+  --input-bg:rgba(200,120,40,0.06); --input-border:rgba(180,100,25,0.22);
+  --input-focus:#E07B20; --input-text:#1a0f06;
+  --opt-bg:rgba(200,120,40,0.05); --opt-border:rgba(180,100,25,0.18);
+  --opt-hover:rgba(224,123,32,0.10); --opt-sel-bg:rgba(224,123,32,0.14); --opt-sel-b:#E07B20;
+  --opt-correct:rgba(40,130,60,0.12); --opt-correct-b:#27ae60;
+  --opt-wrong:rgba(192,57,43,0.10); --opt-wrong-b:#c0392b;
+  --score-bg:rgba(220,140,50,0.07); --score-border:rgba(200,120,35,0.22);
+  --progress-bg:rgba(200,120,40,0.12); --modal-bg:rgba(0,0,0,0.48);
+  --modal-card:#fef6e8; --modal-border:rgba(200,120,40,0.30);
+  --fb-bg:rgba(224,123,32,0.06); --fb-border:rgba(200,100,20,0.22);
+  --grad-bar:linear-gradient(90deg,#E07B20,#D4AF37,#c0392b,#8e44ad);
+  --scenario-bg:rgba(200,120,40,0.05); --scenario-border:rgba(180,100,25,0.22);
+  --xp-color:#E07B20; --sin-color:#c0392b; --grace-color:#D4AF37; --sep-color:#7f8c8d;
+}
+
+/* ═══ BASE ═══ */
+html{font-size:106%;overflow-x:hidden;max-width:100%;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+img,video,input,textarea,select{max-width:100%;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--body-color);min-height:100vh;overflow-x:hidden;max-width:100vw;display:flex;flex-direction:column;transition:background .5s,color .5s;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 15% 20%,var(--radial1) 0%,transparent 60%),radial-gradient(ellipse at 85% 80%,var(--radial2) 0%,transparent 60%);pointer-events:none;z-index:0;}
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:var(--star-show,1);transition:opacity .5s;}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d,3s) ease-in-out infinite var(--delay,0s);opacity:0;}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(1)}50%{opacity:var(--op,.6);transform:scale(1.3)}}
+
+/* ═══ THEME BAR ═══ */
+.theme-bar{position:relative;z-index:10;display:flex;justify-content:center;gap:.5rem;padding:.55rem 1rem;background:rgba(0,0,0,.18);border-bottom:1px solid rgba(0,0,0,.10);flex-wrap:wrap;}
+body.theme-parchment .theme-bar,body.theme-dawn .theme-bar{background:rgba(0,0,0,.06);}
+.theme-btn{font-family:'Fredoka One',cursive;font-size:1rem;padding:5px 18px;border-radius:999px;border:2px solid transparent;background:rgba(128,128,128,.12);color:var(--body-color);cursor:pointer;opacity:.6;transition:all .22s;}
+.theme-btn:hover{opacity:.9;transform:translateY(-1px);}
+.theme-btn.active{opacity:1;background:var(--top-badge-bg);color:var(--top-badge-c);box-shadow:0 3px 12px rgba(0,0,0,.20);}
+
+/* ═══ XP / GAMIFICATION BAR ═══ */
+.xp-bar-wrap{position:sticky;top:0;z-index:60;background:var(--bg);border-bottom:2px solid var(--card-border);padding:.5rem 0;transition:background .5s;}
+.xp-bar-inner{max-width:1600px;margin:0 auto;padding:0 max(1.2rem,2.5vw);display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+.xp-display{display:flex;align-items:center;gap:.45rem;font-family:'Fredoka One',cursive;font-size:1.15rem;color:var(--xp-color);}
+.xp-display .xp-icon{font-size:1.2rem;}
+.xp-level{font-size:.82rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:var(--badge-bg);border:1.5px solid var(--badge-border);color:var(--badge-color);padding:3px 11px;border-radius:999px;}
+.xp-track{flex:1;min-width:120px;height:8px;background:var(--progress-bg);border-radius:999px;overflow:hidden;}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--grace-color),var(--xp-color));border-radius:999px;transition:width .6s cubic-bezier(.22,.68,0,1.2);}
+.streak-badge{display:flex;align-items:center;gap:.3rem;font-family:'Fredoka One',cursive;font-size:.95rem;color:var(--body-color);background:rgba(255,120,0,.12);border:1.5px solid rgba(255,120,0,.25);padding:3px 10px;border-radius:999px;}
+.badges-row{display:flex;gap:.4rem;flex-wrap:wrap;}
+.badge-earned{font-size:1.3rem;animation:pop .4s cubic-bezier(.36,1.5,.6,1) both;cursor:help;transition:transform .2s;}
+.badge-earned:hover{transform:scale(1.25);}
+.badge-locked{font-size:1.3rem;opacity:.18;filter:grayscale(1);}
+
+/* ═══ LAYOUT ═══ */
+.wrapper{position:relative;z-index:1;max-width:1600px;margin:0 auto;padding:0 max(1.2rem,2.5vw) 2rem;flex:1;}
+.site-header{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 0 0;animation:fadeDown .6s ease both;}
+.site-header-logo{display:flex;align-items:center;gap:.75rem;text-decoration:none;}
+.site-header-logo img{height:48px;width:auto;border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.25);}
+.site-header-logo span{font-family:'Fredoka One',cursive;font-size:1.26rem;color:var(--header-name);letter-spacing:.02em;transition:color .4s;}
+.header-badge{display:inline-block;background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--badge-color);font-size:.9rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:999px;}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+@keyframes riseUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+header{text-align:center;padding:2rem 1rem 1.5rem;animation:fadeDown .7s ease both;}
+.badge{display:inline-block;background:var(--top-badge-bg);color:var(--top-badge-c);font-size:.92rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 14px;border-radius:999px;margin-bottom:1rem;animation:pop .5s cubic-bezier(.36,1.5,.6,1) .3s both;}
+h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-height:1.1;margin-bottom:.4rem;background:var(--h1-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.subtitle{font-size:1.1rem;font-weight:600;color:var(--subtitle-c);}
+.instr{font-size:1rem;font-weight:600;color:var(--body-color);margin-bottom:.4rem;line-height:1.65;}
+.instr-sub{font-size:.88rem;font-weight:600;color:var(--card-desc);margin-bottom:.9rem;line-height:1.55;}
+
+/* ═══ INFO GRID ═══ */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;margin-bottom:1.4rem;}
+.info-pill{background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:14px;padding:.85rem 1.1rem;transition:background .4s,border-color .4s;}
+.info-pill-lbl{font-size:.78rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase;color:var(--section-lbl);margin-bottom:.22rem;}
+.info-pill-val{font-size:1.04rem;font-weight:800;color:var(--body-color);}
+
+/* ═══ PLAN SECTION ═══ */
+.plan-section{background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:18px;margin-bottom:1.4rem;overflow:hidden;animation:riseUp .5s ease .1s both;transition:background .4s,border-color .4s;}
+.plan-toggle{display:flex;align-items:center;gap:.8rem;padding:1.1rem 1.5rem;cursor:pointer;user-select:none;}
+.plan-toggle-icon{font-size:1.3rem;flex-shrink:0;}
+.plan-toggle-title{font-family:'Fredoka One',cursive;font-size:1.18rem;color:var(--body-color);}
+.plan-toggle-arrow{margin-left:auto;font-size:1rem;color:var(--section-lbl);transition:transform .3s;}
+.plan-toggle.open .plan-toggle-arrow{transform:rotate(180deg);}
+.plan-content{display:none;}
+.plan-content.open{display:block;}
+.plan-tabs{display:flex;border-bottom:1.5px solid var(--card-border);}
+.plan-tab{flex:1;padding:.8rem 1rem;text-align:center;font-family:'Fredoka One',cursive;font-size:.92rem;color:var(--section-lbl);cursor:pointer;transition:all .2s;border-bottom:3px solid transparent;margin-bottom:-1.5px;}
+.plan-tab.active{color:var(--top-badge-bg);border-bottom-color:var(--top-badge-bg);}
+.plan-tab:hover:not(.active):not(.tab-locked){color:var(--body-color);}
+.plan-panel{padding:1.1rem 1.5rem;display:none;}
+.plan-panel.active{display:block;}
+.plan-row{display:flex;gap:.6rem;align-items:flex-start;padding:.55rem 0;border-bottom:1px solid var(--card-border);}
+.plan-row:last-child{border-bottom:none;}
+.plan-row-lbl{font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--section-lbl);min-width:90px;padding-top:.1rem;}
+.plan-row-val{font-size:.98rem;font-weight:700;color:var(--body-color);line-height:1.6;flex:1;}
+.plan-row-val ul{padding-left:1.1rem;margin:.2rem 0;}
+.plan-row-val ul li{margin-bottom:.2rem;}
+.plan-row-val .verse-ref{display:inline-block;background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--badge-color);padding:2px 9px;border-radius:999px;font-size:.84rem;font-weight:800;margin:.15rem .15rem 0 0;}
+
+/* ═══ PASOS (Lesson Steps) ═══ */
+.pasos-wrap{margin-bottom:.5rem;}
+.pasos-title{font-family:'Fredoka One',cursive;font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;color:var(--section-lbl);margin-bottom:.7rem;}
+.paso{background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:16px;margin-bottom:.75rem;overflow:hidden;animation:riseUp .45s ease both;transition:background .4s,border-color .4s;}
+.paso.active-paso{border-color:var(--card-border-h);}
+.paso-header{display:flex;align-items:center;gap:.65rem;padding:.85rem 1.2rem;cursor:pointer;}
+.paso-badge{font-family:'Fredoka One',cursive;font-size:.86rem;background:var(--top-badge-bg);color:var(--top-badge-c);padding:3px 12px;border-radius:999px;flex-shrink:0;}
+.paso-title{font-family:'Fredoka One',cursive;font-size:1.05rem;color:var(--body-color);flex:1;}
+.paso-xp{font-size:.78rem;font-weight:800;color:var(--xp-color);background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.18);padding:2px 9px;border-radius:999px;flex-shrink:0;}
+.paso-time{font-size:.78rem;font-weight:700;color:var(--section-lbl);margin-left:.3rem;}
+.paso-body{padding:1rem 1.3rem 1.2rem;}
+.paso-locked .paso-body{display:none!important;}
+.paso-lock-overlay{display:flex;align-items:center;gap:.7rem;padding:.8rem 1.2rem;background:var(--card-bg);font-size:.95rem;font-weight:800;color:var(--section-lbl);border-top:1.5px dashed var(--card-border);}
+
+/* ═══ SCRIPTURE VERSE CARDS ═══ */
+.verse-card{background:var(--info-bg);border:1.5px solid var(--info-border);border-radius:14px;padding:1.1rem 1.3rem;margin-bottom:1rem;transition:background .4s,border-color .4s;}
+.verse-card .vc-ref{font-family:'Fredoka One',cursive;font-size:1.05rem;color:var(--grace-color);margin-bottom:.4rem;}
+.verse-card .vc-text{font-size:1rem;font-weight:600;line-height:1.75;color:var(--body-color);font-style:italic;}
+.verse-card .vc-insight{margin-top:.6rem;font-size:.9rem;font-weight:700;color:var(--card-desc);background:var(--scenario-bg);border-left:3px solid var(--grace-color);padding:.45rem .7rem;border-radius:0 8px 8px 0;}
+
+/* ═══ DOCTRINE FLIP CARDS ═══ */
+.dc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.85rem;margin-bottom:1rem;}
+.dc-card{border-radius:14px;border:1.5px solid var(--card-border);background:var(--card-bg);cursor:pointer;position:relative;transition:border-color .2s,box-shadow .2s;overflow:hidden;}
+.dc-card:hover{border-color:var(--card-border-h);box-shadow:0 4px 18px var(--card-shadow);}
+/* The inner wrapper just holds both sides stacked; only one is visible at a time */
+.dc-inner{position:relative;}
+.dc-front,.dc-back{padding:1.1rem 1.2rem;display:flex;flex-direction:column;justify-content:flex-start;transition:opacity .3s ease, transform .3s ease;}
+/* Front: visible by default */
+.dc-front{opacity:1;transform:translateX(0);pointer-events:auto;}
+/* Back: hidden by default, slides in from right */
+.dc-back{display:none;opacity:0;transform:translateX(20px);background:var(--scenario-bg);border-top:1.5px solid var(--scenario-border);pointer-events:none;}
+/* Flipped state */
+.dc-card.flipped .dc-front{display:none;}
+.dc-card.flipped .dc-back{display:flex;opacity:1;transform:translateX(0);pointer-events:auto;animation:slideInCard .28s ease both;}
+@keyframes slideInCard{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:translateX(0)}}
+.dc-flip-hint{font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--section-lbl);text-align:right;padding:.3rem .8rem .5rem;border-top:1px solid var(--card-border);}
+.dc-card.flipped .dc-flip-hint{display:none;}
+.dc-icon{font-size:1.8rem;margin-bottom:.4rem;}
+.dc-term{font-family:'Fredoka One',cursive;font-size:1.15rem;color:var(--body-color);margin-bottom:.2rem;}
+.dc-hint{font-size:.8rem;font-weight:700;color:var(--section-lbl);}
+.dc-def{font-size:.95rem;font-weight:700;color:var(--body-color);line-height:1.6;margin-bottom:.5rem;}
+.dc-verse{font-size:.82rem;font-style:italic;color:var(--card-desc);border-left:3px solid var(--top-badge-bg);padding-left:.55rem;line-height:1.5;margin-bottom:.55rem;}
+.dc-learned-btn{font-family:'Fredoka One',cursive;font-size:.9rem;padding:6px 16px;border-radius:999px;background:var(--top-badge-bg);color:var(--top-badge-c);border:none;cursor:pointer;margin-top:.3rem;align-self:flex-start;transition:all .2s;}
+.dc-learned-btn:hover{filter:brightness(1.1);transform:scale(1.04);}
+.dc-learned-btn.done{background:var(--opt-correct);color:#1a4a2a;cursor:default;}
+.dc-progress{font-size:.86rem;font-weight:700;color:var(--section-lbl);margin-bottom:.6rem;}
+.dc-card.learned{border-color:var(--opt-correct-b)!important;}
+
+/* ═══ FLOW CHART ═══ */
+.flow-wrap{display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap;padding:1.2rem 0;margin-bottom:.5rem;}
+.flow-box{background:var(--card-bg);border:2px solid var(--card-border);border-radius:14px;padding:.8rem 1.2rem;text-align:center;font-family:'Fredoka One',cursive;font-size:1.05rem;color:var(--body-color);min-width:110px;transition:all .3s;cursor:default;}
+.flow-box.grace{border-color:var(--grace-color);color:var(--grace-color);}
+.flow-box.conviction{border-color:#8e44ad;color:#c39bd3;}
+.flow-box.repentance{border-color:#2980b9;color:#7fb3d3;}
+.flow-box.faith{border-color:var(--opt-correct-b);color:var(--opt-correct-b);}
+.flow-arrow{font-size:1.4rem;color:var(--section-lbl);}
+.flow-desc{font-size:.8rem;font-weight:600;color:var(--card-desc);margin-top:.3rem;}
+
+/* ═══ QUIZ BUBBLES (MCQ inline) ═══ */
+.quiz-q{background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:14px;padding:1rem 1.2rem;margin-bottom:.85rem;transition:background .4s;}
+.quiz-stem{font-size:1rem;font-weight:800;color:var(--body-color);margin-bottom:.65rem;line-height:1.55;}
+.quiz-opts{display:flex;flex-direction:column;gap:7px;}
+.quiz-opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;background:var(--opt-bg);border:1.5px solid var(--opt-border);cursor:pointer;transition:all .18s;font-size:.98rem;font-weight:700;color:var(--body-color);user-select:none;}
+.quiz-opt:hover:not(.locked){background:var(--opt-hover);border-color:var(--opt-sel-b);}
+.quiz-opt.selected{background:var(--opt-sel-bg);border-color:var(--opt-sel-b);}
+.quiz-opt.correct{background:var(--opt-correct);border-color:var(--opt-correct-b);}
+.quiz-opt.wrong{background:var(--opt-wrong);border-color:var(--opt-wrong-b);}
+.quiz-fb{margin-top:.5rem;padding:.7rem 1rem;border-radius:10px;font-size:.92rem;font-weight:700;line-height:1.55;display:none;}
+.quiz-fb.show{display:block;animation:riseUp .25s ease both;}
+.quiz-fb.good{background:var(--opt-correct);border:1px solid var(--opt-correct-b);}
+.quiz-fb.bad{background:var(--opt-wrong);border:1px solid var(--opt-wrong-b);}
+.quiz-fb.neutral{background:var(--fb-bg);border:1px solid var(--fb-border);}
+
+/* ═══ OPEN ANSWER ═══ */
+.open-q{background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:14px;padding:1rem 1.2rem;margin-bottom:.85rem;}
+.open-stem{font-size:1rem;font-weight:800;color:var(--body-color);margin-bottom:.5rem;line-height:1.55;}
+.open-input{width:100%;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:12px;padding:10px 14px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:600;color:var(--input-text);outline:none;resize:vertical;transition:border-color .2s,background .4s;min-height:80px;}
+.open-input:focus{border-color:var(--input-focus);}
+.model-ans{margin-top:.5rem;padding:.7rem 1rem;background:var(--fb-bg);border:1.5px solid var(--fb-border);border-radius:10px;font-size:.92rem;font-weight:700;color:var(--body-color);display:none;animation:riseUp .25s ease both;}
+.model-ans.show{display:block;}
+.model-ans .ma-lbl{font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--grace-color);margin-bottom:.3rem;}
+.reveal-btn{font-family:'Fredoka One',cursive;font-size:.88rem;padding:6px 18px;border-radius:999px;background:var(--badge-bg);border:1.5px solid var(--badge-border);color:var(--badge-color);cursor:pointer;margin-top:.5rem;transition:all .2s;}
+.reveal-btn:hover{background:var(--opt-hover);}
+
+/* ═══ COMPLETE PASO ═══ */
+.complete-paso-wrap{text-align:right;margin-top:1rem;}
+.complete-paso-btn{font-family:'Fredoka One',cursive;font-size:1rem;padding:10px 26px;border-radius:999px;background:var(--top-badge-bg);color:var(--top-badge-c);border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(0,0,0,.18);}
+.complete-paso-btn:hover{filter:brightness(1.1);transform:translateY(-1px);}
+.paso-error{background:var(--opt-wrong);border:1.5px solid var(--opt-wrong-b);border-radius:10px;padding:.6rem .95rem;font-size:.9rem;font-weight:700;color:var(--body-color);margin-top:.7rem;display:none;animation:riseUp .2s ease both;}
+.paso-error.show{display:block;}
+.done-msg{text-align:center;padding:1.1rem;background:var(--opt-correct);border:1.5px solid var(--opt-correct-b);border-radius:14px;font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--body-color);display:none;}
+.done-msg.show{display:block;animation:riseUp .4s ease both;}
+
+/* ═══ COMPLETION FLASH ═══ */
+.paso-complete-flash{position:fixed;inset:0;z-index:500;pointer-events:none;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .25s;}
+.paso-complete-flash.show{opacity:1;}
+.paso-complete-flash.hide{opacity:0;}
+.pcf-card{background:var(--top-badge-bg);color:var(--top-badge-c);font-family:'Fredoka One',cursive;font-size:1.5rem;padding:1rem 2.2rem;border-radius:20px;box-shadow:0 12px 40px rgba(0,0,0,.35);transform:scale(.8);transition:transform .3s cubic-bezier(.36,1.5,.6,1);}
+.paso-complete-flash.show .pcf-card{transform:scale(1);}
+
+/* ═══ ASSESSMENT SECTION ═══ */
+#assessLock{margin-bottom:1.5rem;animation:riseUp .5s ease .2s both;}
+#assessLockCard{background:var(--card-bg);border:2px dashed var(--card-border);border-radius:20px;padding:2.2rem 2rem;text-align:center;transition:all .4s;}
+#assessLockCard.unlocking{border-color:var(--top-badge-bg);background:var(--scenario-bg);transform:scale(1.01);}
+#al-icon{font-size:3rem;margin-bottom:.7rem;transition:all .4s;}
+#assessLockCard.unlocking #al-icon{filter:drop-shadow(0 0 12px var(--top-badge-bg));}
+#al-title{font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--body-color);margin-bottom:.4rem;}
+#al-sub{font-size:.95rem;font-weight:600;color:var(--card-desc);line-height:1.7;margin-bottom:1.2rem;}
+#al-progress{display:flex;justify-content:center;gap:1rem;margin-bottom:1.1rem;flex-wrap:wrap;}
+.al-session{display:flex;align-items:center;gap:.6rem;background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:12px;padding:.7rem 1.3rem;font-size:1rem;font-weight:700;color:var(--card-desc);transition:all .35s;}
+.al-session.done{background:var(--opt-correct);border-color:var(--opt-correct-b);color:var(--body-color);}
+.al-check{font-size:1.2rem;}
+#al-hint{font-size:.9rem;font-weight:600;color:var(--section-lbl);line-height:1.6;}
+#assessLock.hidden{display:none;}
+
+/* ═══ ASSESSMENT CARDS ═══ */
+.sec-card{background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:18px;padding:1.6rem 2rem;margin-bottom:1.1rem;position:relative;overflow:hidden;animation:riseUp .5s ease both;transition:background .4s,border-color .4s;}
+.sec-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:18px 18px 0 0;background:var(--sec-accent,var(--top-badge-bg));}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;flex-wrap:wrap;gap:.5rem;}
+.sec-title{font-family:'Fredoka One',cursive;font-size:1.32rem;color:var(--body-color);}
+.sec-pts{font-size:.86rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--badge-color);padding:3px 11px;border-radius:999px;}
+.question{border-radius:12px;padding:4px 6px;margin-left:-6px;margin-right:-6px;margin-bottom:1.3rem;transition:opacity .5s,filter .5s;}
+.question:last-child{margin-bottom:0;}
+.q-label{font-size:1.05rem;font-weight:800;color:var(--body-color);margin-bottom:.6rem;display:flex;align-items:flex-start;gap:.55rem;}
+.q-num{font-family:'Fredoka One',cursive;color:var(--top-badge-bg);font-size:1.12rem;flex-shrink:0;min-width:26px;}
+.q-pts{font-size:.82rem;font-weight:800;letter-spacing:.05em;color:var(--section-lbl);margin-left:auto;flex-shrink:0;}
+.options{display:flex;flex-direction:column;gap:7px;}
+.opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;background:var(--opt-bg);border:1.5px solid var(--opt-border);cursor:pointer;transition:all .18s;font-size:1.03rem;font-weight:700;color:var(--body-color);user-select:none;}
+.opt:hover:not(.locked-opt){background:var(--opt-hover);border-color:var(--opt-sel-b);}
+.opt.selected{background:var(--opt-sel-bg);border-color:var(--opt-sel-b);}
+.opt.correct{background:var(--opt-correct);border-color:var(--opt-correct-b);}
+.opt.wrong{background:var(--opt-wrong);border-color:var(--opt-wrong-b);}
+.opt input[type="radio"]{accent-color:var(--top-badge-bg);width:16px;height:16px;flex-shrink:0;pointer-events:none;}
+.opt-tick{margin-left:auto;font-size:1.05rem;opacity:0;}
+.opt.correct .opt-tick,.opt.wrong .opt-tick{opacity:1;}
+.answer-input{width:100%;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:12px;padding:10px 14px;font-family:'Nunito',sans-serif;font-size:1.03rem;font-weight:600;color:var(--input-text);outline:none;resize:vertical;transition:border-color .2s,background .4s;min-height:90px;}
+.answer-input:focus{border-color:var(--input-focus);}
+.fb-box{margin-top:8px;padding:10px 14px;background:var(--fb-bg);border:1.5px solid var(--fb-border);border-radius:10px;font-size:.98rem;font-weight:600;color:var(--body-color);line-height:1.55;display:none;animation:riseUp .3s ease both;}
+.fb-box.show{display:block;}
+.fb-score{font-family:'Fredoka One',cursive;font-size:1.12rem;margin-bottom:3px;color:var(--top-badge-bg);}
+
+/* ═══ STUDENT CARD ═══ */
+.student-card{background:var(--info-bg);border:1.5px solid var(--info-border);border-radius:18px;padding:1.3rem 1.5rem;display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem;transition:background .4s,border-color .4s;}
+.sc-icon{font-size:2.1rem;flex-shrink:0;}
+.sc-fields{flex:1;display:flex;gap:.9rem;flex-wrap:wrap;}
+.sc-group{display:flex;flex-direction:column;gap:4px;flex:1;min-width:150px;}
+.sc-group label{font-size:.84rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase;color:var(--section-lbl);}
+.sc-group input{background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:10px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;color:var(--input-text);outline:none;transition:border-color .2s,background .4s;}
+.sc-group input:focus{border-color:var(--input-focus);}
+
+/* ═══ SUBMIT / RESULTS ═══ */
+.submit-area{text-align:center;margin:1.8rem 0 .5rem;}
+.btn-primary{font-family:'Fredoka One',cursive;font-size:1.22rem;padding:14px 44px;border-radius:999px;background:var(--top-badge-bg);color:var(--top-badge-c);border:none;cursor:pointer;box-shadow:0 6px 24px rgba(0,0,0,.20);transition:transform .2s,filter .2s,opacity .2s;letter-spacing:.02em;}
+.btn-primary:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.1);}
+.btn-primary:disabled{opacity:.55;cursor:not-allowed;}
+.submit-hint{font-size:.9rem;font-weight:700;color:var(--section-lbl);margin-top:.5rem;}
+.submit-hint.ready{color:var(--top-badge-bg);}
+.spinner-wrap{display:none;justify-content:center;margin-top:1rem;}
+.spinner-wrap.show{display:flex;}
+.spinner{width:32px;height:32px;border-radius:50%;border:3px solid var(--card-border);border-top-color:var(--top-badge-bg);animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.results-section{background:var(--score-bg);border:1.5px solid var(--score-border);border-radius:18px;padding:1.8rem 2rem;margin-bottom:1.2rem;display:none;animation:riseUp .4s ease both;}
+.results-section.show{display:block;}
+.res-title{font-family:'Fredoka One',cursive;font-size:1.62rem;text-align:center;margin-bottom:1.3rem;color:var(--body-color);}
+.score-grid{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1.4rem;justify-content:center;}
+.score-box{background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:16px;padding:1.1rem 1.4rem;text-align:center;flex:1;min-width:130px;max-width:175px;}
+.sb-lbl{font-size:.76rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase;color:var(--section-lbl);margin-bottom:.3rem;}
+.sb-val{font-family:'Fredoka One',cursive;font-size:2.2rem;color:var(--body-color);}
+.sb-val.gold{color:#FFD700;}
+.sb-val.pass{color:#69DB7C;}
+.sb-val.fail{color:#FF6B6B;}
+.perf-badge{display:flex;align-items:center;justify-content:center;gap:.7rem;padding:1rem 1.4rem;border-radius:16px;font-family:'Fredoka One',cursive;font-size:1.1rem;margin-bottom:1.2rem;text-align:center;}
+
+/* ═══ FLASH TOAST ═══ */
+.flash-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--top-badge-bg);color:var(--top-badge-c);font-family:'Fredoka One',cursive;font-size:1.05rem;padding:.7rem 1.6rem;border-radius:999px;box-shadow:0 6px 24px rgba(0,0,0,.30);z-index:700;opacity:0;pointer-events:none;transition:all .3s;white-space:nowrap;}
+.flash-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ═══ XP POPUP ═══ */
+.xp-popup{position:fixed;bottom:4rem;right:1.5rem;background:var(--modal-card);border:2px solid var(--top-badge-bg);border-radius:18px;padding:.9rem 1.4rem;z-index:800;opacity:0;transform:translateY(20px) scale(.9);pointer-events:none;transition:all .4s cubic-bezier(.36,1.5,.6,1);text-align:center;}
+.xp-popup.show{opacity:1;transform:translateY(0) scale(1);}
+.xp-popup .xp-pop-title{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--top-badge-bg);margin-bottom:.2rem;}
+.xp-popup .xp-pop-amount{font-family:'Fredoka One',cursive;font-size:1.6rem;color:var(--xp-color);}
+.xp-popup .xp-pop-badge{font-size:.9rem;font-weight:700;color:var(--card-desc);}
+
+/* ═══ FOOTER ═══ */
+.site-footer{position:relative;z-index:1;background:var(--footer-bg);border-top:1px solid var(--footer-border);padding:1.6rem max(1.2rem,2.5vw);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;transition:background .5s,border-color .5s;}
+.footer-logo{display:flex;align-items:center;gap:.6rem;text-decoration:none;}
+.footer-logo img{height:34px;width:auto;border-radius:8px;opacity:.75;}
+.footer-logo span{font-family:'Fredoka One',cursive;font-size:1.05rem;color:var(--footer-name);}
+.footer-tagline{font-size:.85rem;font-weight:700;color:var(--footer-tag);}
+.footer-copy{font-size:.8rem;font-weight:600;color:var(--footer-copy);}
+
+/* ═══ PASSKEY MODAL ═══ */
+.modal-overlay{position:fixed;inset:0;z-index:300;background:var(--modal-bg);display:flex;align-items:center;justify-content:center;padding:1rem;animation:fadeIn .2s ease both;}
+.modal-overlay.hidden{display:none;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+.modal-card{background:var(--modal-card);border:1.5px solid var(--modal-border);border-radius:22px;padding:2rem 2.2rem;max-width:400px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.40);animation:popIn .3s cubic-bezier(.36,1.5,.6,1) both;}
+.modal-icon{font-size:2.6rem;margin-bottom:.8rem;}
+.modal-title{font-family:'Fredoka One',cursive;font-size:1.5rem;margin-bottom:.4rem;color:var(--body-color);}
+.modal-desc{font-size:.97rem;font-weight:600;color:var(--card-desc);margin-bottom:1.2rem;line-height:1.6;}
+.modal-input{width:100%;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:12px;padding:11px 16px;margin-bottom:.8rem;font-family:'Fredoka One',cursive;font-size:1.22rem;text-align:center;color:var(--input-text);letter-spacing:.12em;outline:none;transition:border-color .2s;}
+.modal-input:focus{border-color:var(--input-focus);}
+.modal-err{font-size:.94rem;font-weight:800;color:var(--opt-wrong-b);margin-top:.4rem;display:none;}
+.modal-err.show{display:block;}
+
+/* ═══ MOBILE ═══ */
+@media(max-width:640px){
+  html{font-size:93%;}
+  .wrapper{padding:0 .85rem 2rem;}
+  .site-header{flex-direction:column;align-items:flex-start;gap:.35rem;}
+  .site-header-logo img{height:38px;}
+  h1{font-size:clamp(1.25rem,5vw,1.8rem)!important;}
+  .subtitle{font-size:.82rem;}
+  .badge{font-size:.68rem!important;padding:4px 10px!important;}
+  header{padding:1.1rem .25rem .9rem;}
+  .xp-bar-inner{gap:.6rem;}
+  .xp-display{font-size:.95rem;}
+  .xp-track{min-width:60px;}
+  .badges-row{gap:.3rem;}
+  .plan-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .plan-tab{font-size:.76rem;padding:.6rem .2rem;min-width:0;flex-shrink:1;white-space:nowrap;}
+  .plan-panel{padding:.9rem .8rem;}
+  .dc-grid{grid-template-columns:1fr!important;}
+  .flow-wrap{gap:.3rem;}
+  .flow-box{min-width:80px;padding:.6rem .8rem;font-size:.9rem;}
+  .sec-card{padding:.95rem .85rem;border-radius:14px;}
+  .sec-title{font-size:1rem;}
+  .opt{font-size:.92rem;padding:9px 11px;}
+  .student-card{flex-direction:column;align-items:flex-start;padding:.85rem;}
+  .sc-fields{flex-direction:column;gap:.55rem;}
+  .sc-group{min-width:0!important;width:100%;}
+  .score-grid{flex-direction:column;align-items:stretch;}
+  .score-box{min-width:0!important;max-width:none!important;width:100%;}
+  .btn-primary{font-size:.95rem;padding:12px 16px;width:100%;display:block;}
+  .results-section{padding:1.1rem .85rem;}
+  .res-title{font-size:1.15rem;}
+  #assessLockCard{padding:1.3rem .85rem;}
+  #al-title{font-size:1.1rem;}
+  #al-progress{flex-direction:column;align-items:stretch;gap:.5rem;}
+  .al-session{width:100%;justify-content:center;}
+  .site-footer{flex-direction:column;text-align:center;align-items:center;}
+  .xp-popup{right:.5rem;bottom:3.5rem;padding:.7rem 1rem;}
+  .flash-toast{font-size:.88rem;padding:.6rem 1.2rem;white-space:normal;text-align:center;max-width:90vw;}
+}
+@media(max-width:380px){
+  html{font-size:88%;}
+  .wrapper{padding:0 .6rem 2rem;}
+  h1{font-size:1.15rem!important;}
+  .sec-card{padding:.8rem .7rem;}
+}
+/* Plan tab locked */
+.plan-tab.tab-locked{opacity:.4;cursor:not-allowed;}
+.plan-tab.tab-locked::after{content:' 🔒';font-size:.75rem;}
+#d3-lock-banner{background:var(--opt-wrong);border:1.5px solid var(--opt-wrong-b);border-radius:12px;padding:.85rem 1.1rem;margin-bottom:1rem;font-size:.97rem;font-weight:700;color:var(--body-color);display:flex;align-items:center;gap:.6rem;}
+.q-progress-wrap{position:sticky;top:52px;z-index:50;background:var(--bg);border-bottom:1px solid var(--card-border);padding:.7rem 0 .6rem;margin-bottom:1.2rem;transition:background .5s;}
+.q-progress-inner{max-width:1600px;margin:0 auto;padding:0 max(1.2rem,2.5vw);}
+.q-progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;}
+.q-progress-label{font-size:.7rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase;color:var(--section-lbl);}
+.q-progress-count{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--body-color);}
+.q-progress-bg{height:7px;background:var(--progress-bg);border-radius:999px;overflow:hidden;}
+.q-progress-fill{height:100%;border-radius:999px;background:var(--top-badge-bg);transition:width .4s cubic-bezier(.22,.68,0,1.2);}
+.q-progress-fill.done{background:#69DB7C;}
+</style>
+</head>
+<body class="theme-night">
+<div class="stars" id="stars"></div>
+<div class="paso-complete-flash" id="pcFlash"><div class="pcf-card" id="pcFlashMsg">✅ Step complete! +XP</div></div>
+<div class="flash-toast" id="flashToast"></div>
+<div class="xp-popup" id="xpPopup">
+  <div class="xp-pop-title">⚡ XP Earned!</div>
+  <div class="xp-pop-amount" id="xpPopAmount">+20 XP</div>
+  <div class="xp-pop-badge" id="xpPopBadge"></div>
+</div>
+
+<!-- THEME BAR -->
+<div class="theme-bar">
+  <button class="theme-btn active" id="btn-night" onclick="setTheme('night')">🌙 Night</button>
+  <button class="theme-btn" id="btn-parchment" onclick="setTheme('parchment')">📜 Parchment</button>
+  <button class="theme-btn" id="btn-dawn" onclick="setTheme('dawn')">🌄 Dawn</button>
+</div>
+
+<!-- XP / GAMIFICATION BAR -->
+<div class="xp-bar-wrap">
+  <div class="xp-bar-inner">
+    <div class="xp-display"><span class="xp-icon">⚡</span><span id="xpTotal">0</span> XP</div>
+    <div class="xp-level" id="xpLevel">Seeker</div>
+    <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+    <div class="streak-badge" id="streakBadge">🔥 <span id="streakCount">0</span> streak</div>
+    <div class="badges-row" id="badgesRow">
+      <span class="badge-locked" title="Unlock: Complete Mission 1">📖</span>
+      <span class="badge-locked" title="Unlock: Learn all terms">🕊️</span>
+      <span class="badge-locked" title="Unlock: Complete Mission 2">⛓️</span>
+      <span class="badge-locked" title="Unlock: Complete flow chart">🌊</span>
+      <span class="badge-locked" title="Unlock: Finish all lessons">🏆</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrapper">
+  <!-- SITE HEADER -->
+  <div class="site-header">
+    <a class="site-header-logo" href="#">
+      <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+      <span>Mr. EdLo — Standard VI</span>
+    </a>
+    <span class="header-badge">Scripture · May 2026</span>
+  </div>
+
+  <!-- PAGE HEADER -->
+  <header>
+    <div class="badge">Unit: The Problem of Sin and God's Solution</div>
+    <h1>Prevenient Grace</h1>
+    <p class="subtitle">How does God's grace work before a person chooses to repent?</p>
+  </header>
+
+  <!-- OVERVIEW INFO -->
+  <div class="info-grid">
+    <div class="info-pill"><div class="info-pill-lbl">Subject</div><div class="info-pill-val">Scripture</div></div>
+    <div class="info-pill"><div class="info-pill-lbl">Topic</div><div class="info-pill-val">Grace</div></div>
+    <div class="info-pill"><div class="info-pill-lbl">Subtopic</div><div class="info-pill-val">Prevenient (Preparing) Grace</div></div>
+    <div class="info-pill"><div class="info-pill-lbl">Duration</div><div class="info-pill-val">5 Days · 20 min/day</div></div>
+    <div class="info-pill"><div class="info-pill-lbl">Key Scriptures</div><div class="info-pill-val">John 6:44 · Romans 5:8 · Titus 2:11 · Acts 16:14</div></div>
+    <div class="info-pill"><div class="info-pill-lbl">Reference</div><div class="info-pill-val">Manual of the Church of the Nazarene — Article VII</div></div>
+  </div>
+
+  <!-- LESSON PLAN ACCORDION -->
+  <div class="plan-section">
+    <div class="plan-toggle" id="planToggle" onclick="togglePlan()">
+      <span class="plan-toggle-icon">📋</span>
+      <span class="plan-toggle-title">Weekly Lesson Plan</span>
+      <span class="plan-toggle-arrow" id="planArrow">▼</span>
+    </div>
+    <div class="plan-content" id="planContent">
+      <div class="plan-tabs">
+        <div class="plan-tab active" id="ptab-obj" onclick="switchPlanTab('obj')">Objectives</div>
+        <div class="plan-tab" id="ptab-day1" onclick="switchPlanTab('day1')">Mission 1</div>
+        <div class="plan-tab" id="ptab-day2" onclick="switchPlanTab('day2')">Day 2</div>
+        <div class="plan-tab" id="ptab-day3" onclick="switchPlanTab('day3')">Mission 2</div>
+        <div class="plan-tab" id="ptab-day4" onclick="switchPlanTab('day4')">Mission 3</div>
+        <div class="plan-tab" id="ptab-day5" onclick="switchPlanTab('day5')">Day 5</div>
+      </div>
+      <div class="plan-panel active" id="ppanel-obj">
+        <div class="plan-row"><div class="plan-row-lbl">Essential Q.</div><div class="plan-row-val">How does God's grace work <em>before</em> a person chooses to repent?</div></div>
+        <div class="plan-row"><div class="plan-row-lbl">Outcome</div><div class="plan-row-val">Students will understand what grace and prevenient grace mean and explain in simple biblical terms how God works in people's hearts before they choose to respond.</div></div>
+        <div class="plan-row"><div class="plan-row-lbl">Skills</div><div class="plan-row-val"><ul><li>Identify cause-and-effect in Scripture</li><li>Compare God's action vs. human response</li><li>Interpret flow charts connected to salvation</li><li>Support answers with correct Scripture references</li></ul></div></div>
+        <div class="plan-row"><div class="plan-row-lbl">Scriptures</div><div class="plan-row-val"><span class="verse-ref">John 6:44</span><span class="verse-ref">Romans 5:8</span><span class="verse-ref">Titus 2:11</span><span class="verse-ref">Acts 16:14</span></div></div>
+      </div>
+      <div class="plan-panel" id="ppanel-day1">
+        <div class="plan-row"><div class="plan-row-lbl">Focus</div><div class="plan-row-val">Defining Grace</div></div>
+        <div class="plan-row"><div class="plan-row-lbl">Scripture</div><div class="plan-row-val">Romans 5:8</div></div>
+        <div class="plan-row"><div class="plan-row-lbl">Key Truth</div><div class="plan-row-val">Grace is God's undeserved favor and active help toward sinners. God loved humanity <em>before</em> people deserved it.</div></div>
+        <div class="plan-row"><div class="plan-row-lbl">Discussion</div><div class="plan-row-val">Why salvation begins with God and not with people · How grace shows God's love</div></div>
+      </div>
+      <div class="plan-panel" id="ppanel-day2">
+        <div class="plan-row"><div class="plan-row-lbl">Note</div><div class="plan-row-val">Assembly Day — No Scripture lesson. Doctrinal Recap resumes on Mission 2.</div></div>
+      </div>
+      <div class="plan-panel" id="ppanel-day3">
+        <div class="plan-row"><div class="plan-row-lbl">Focus</div><div class="plan-row-val">God Draws the Heart</div></div>
+        <div class="plan-row"><div class="plan-row-lbl">Scriptures</div><div class="plan-row-val"><span class="verse-ref">John 6:44</span><span class="verse-ref">Acts 16:14</span></div></div>
+        <div class="plan-row"><div class="plan-row-lbl">Key Truth</div><div class="plan-row-val">Prevenient grace is God's work in the heart <em>before</em> a person repents or believes. The Father draws people. God opened Lydia's heart.</div></div>
+      </div>
+      <div class="plan-panel" id="ppanel-day4">
+        <div class="plan-row"><div class="plan-row-lbl">Focus</div><div class="plan-row-val">Grace Before Response</div></div>
+        <div class="plan-row"><div class="plan-row-lbl">Scripture</div><div class="plan-row-val"><span class="verse-ref">Titus 2:11</span></div></div>
+        <div class="plan-row"><div class="plan-row-lbl">Flow Chart</div><div class="plan-row-val">Grace → Conviction → Repentance → Faith</div></div>
+      </div>
+      <div class="plan-panel" id="ppanel-day5">
+        <div class="plan-row"><div class="plan-row-lbl">Focus</div><div class="plan-row-val">Quiz and Reflection</div></div>
+        <div class="plan-row"><div class="plan-row-lbl">Quiz Items</div><div class="plan-row-val">Define: atonement, substitution, grace, prevenient grace. Identify one Scripture showing God drawing people.</div></div>
+        <div class="plan-row"><div class="plan-row-lbl">Reflection</div><div class="plan-row-val">"Could conviction be God drawing me closer to Him?" — Quiet personal reflection, optional silent prayer.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Passkey modal -->
+  <div class="modal-overlay hidden" id="passkeyModal">
+    <div class="modal-card">
+      <div class="modal-icon">✝️</div>
+      <div class="modal-title">Get Teacher Feedback</div>
+      <div class="modal-desc">Enter the class code Mr. EdLo gave you to receive instant feedback on your written answers.</div>
+      <input class="modal-input" type="text" id="passkeyInput" placeholder="CLASS CODE" autocomplete="off" spellcheck="false">
+      <button class="btn-primary" style="width:100%;margin-bottom:.5rem" onclick="validatePasskey()">Submit →</button>
+      <div class="modal-err" id="passkeyErr">❌ Incorrect code — ask Mr. EdLo for the class code.</div>
+    </div>
+  </div>
+
+  <!-- Dev bar (hidden; show via ?dev=1 or type "dev") -->
+  <div id="devBar" style="display:none;background:rgba(255,100,100,.07);border:1.5px dashed rgba(255,100,100,.35);border-radius:12px;padding:.6rem 1rem;margin-bottom:1rem;gap:.45rem;flex-wrap:wrap;justify-content:center;align-items:center;">
+    <span style="font-size:.68rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#FF6B6B;width:100%;text-align:center;margin-bottom:.2rem;">🛠 Dev Tools — type "dev" or ?dev=1</span>
+    <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="devRunAll('correct')">🚀 Full Run — Correct</button>
+    <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="devRunAll('wrong')">💥 Full Run — Wrong</button>
+    <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="devUnlockAll()">🔓 Unlock All Steps</button>
+    <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="devFillAssessment('correct')">✅ Fill Assessment (Correct)</button>
+    <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;" onclick="devFillAssessment('wrong')">❌ Fill Assessment (Wrong)</button>
+    <button class="btn-secondary" style="font-size:.74rem;padding:5px 13px;color:#FF6B6B;" onclick="devReset()">🗑️ Clear &amp; Reload</button>
+  </div>
+
+  <!-- ═══ SESSION TABS ═══ -->
+  <div class="plan-section">
+    <div class="plan-toggle" id="lessonToggle" onclick="toggleLesson()" style="cursor:default;pointer-events:none;">
+      <span class="plan-toggle-icon">✝️</span>
+      <span class="plan-toggle-title">Interactive Lessons</span>
+    </div>
+    <div class="plan-content open" id="lessonContent">
+      <div class="plan-tabs">
+        <div class="plan-tab active" id="tab-d1" onclick="switchTab('d1')">Mission 1 — Grace</div>
+        <div class="plan-tab tab-locked" id="tab-d3" onclick="switchTab('d3')">Mission 2 — Draws</div>
+        <div class="plan-tab tab-locked" id="tab-d4" onclick="switchTab('d4')">Mission 3 — Flow</div>
+      </div>
+
+      <!-- ═══ DAY 1 ═══ -->
+      <div class="plan-panel active" id="panel-d1">
+        <div class="pasos-wrap">
+          <p class="pasos-title">Mission 1 — Defining Grace</p>
+
+          <!-- STEP 1 — Doctrinal Recap -->
+          <div class="paso active-paso" id="d1s1">
+            <div class="paso-header">
+              <span class="paso-badge">Step 1</span>
+              <span class="paso-title">🗂️ Doctrinal Recap Review</span>
+              <span class="paso-xp">+15 XP</span>
+              <span class="paso-time">2 min</span>
+            </div>
+            <div class="paso-body">
+              <p class="instr">Answer these recap questions before moving on.</p>
+              <div class="quiz-q">
+                <div class="quiz-stem">1. What is grace?</div>
+                <div class="quiz-opts">
+                  <div class="quiz-opt" onclick="quizSelect(this,'d1s1q1','a')"><input type="radio" name="d1s1q1" value="a"> God's punishment for sin against His people</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d1s1q1','b')"><input type="radio" name="d1s1q1" value="b"> God's undeserved favor and active help toward sinners</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d1s1q1','c')"><input type="radio" name="d1s1q1" value="c"> A reward earned through good behavior</div>
+                </div>
+                <div class="quiz-fb" id="d1s1q1-fb"></div>
+              </div>
+              <div class="quiz-q">
+                <div class="quiz-stem">2. Who begins the work of salvation?</div>
+                <div class="quiz-opts">
+                  <div class="quiz-opt" onclick="quizSelect(this,'d1s1q2','a')"><input type="radio" name="d1s1q2" value="a"> The person who decides to repent first</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d1s1q2','b')"><input type="radio" name="d1s1q2" value="b"> The church through preaching</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d1s1q2','c')"><input type="radio" name="d1s1q2" value="c"> God begins the work of salvation through His grace</div>
+                </div>
+                <div class="quiz-fb" id="d1s1q2-fb"></div>
+              </div>
+              <div class="complete-paso-wrap">
+                <div class="paso-error" id="err-d1s1"></div>
+                <button class="complete-paso-btn" onclick="validateRecap('d1s1',['d1s1q1:b','d1s1q2:c'],'d1s2',15)">Check Answers → Continue</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2 — Scripture Study -->
+          <div class="paso paso-locked" id="d1s2">
+            <div class="paso-header">
+              <span class="paso-badge">Step 2</span>
+              <span class="paso-title">📖 Scripture Study — Romans 5:8</span>
+              <span class="paso-xp">+20 XP</span>
+              <span class="paso-time">10 min</span>
+            </div>
+            <div class="paso-lock-overlay"><span>🔒</span> Complete Step 1 to unlock.</div>
+            <div class="paso-body">
+              <div class="verse-card">
+                <div class="vc-ref">Romans 5:8 (KJV)</div>
+                <div class="vc-text">"But God commendeth his love toward us, in that, while we were yet sinners, Christ died for us."</div>
+                <div class="vc-insight">📌 Key: God acted <strong>first</strong> — before anyone repented, believed, or deserved it.</div>
+              </div>
+              <p class="instr">Study the verse carefully, then answer:</p>
+              <div class="open-q">
+                <div class="open-stem">In your own words, what does Romans 5:8 tell us about <em>when</em> God showed His love?</div>
+                <textarea class="open-input" id="d1s2-q1" placeholder="Write your answer here…"></textarea>
+                <button class="reveal-btn" onclick="revealModel('d1s2-m1')">👁 See Model Answer</button>
+                <div class="model-ans" id="d1s2-m1">
+                  <div class="ma-lbl">Model Answer</div>
+                  Romans 5:8 tells us that God showed His love <strong>while we were still sinners</strong> — not after we changed or deserved it. He did not wait for people to be good. Christ died for sinners first, which shows that God takes the initiative in salvation.
+                </div>
+              </div>
+              <div class="open-q">
+                <div class="open-stem">Why is it important that God loved us <em>before</em> we deserved it?</div>
+                <textarea class="open-input" id="d1s2-q2" placeholder="Write your answer here…"></textarea>
+                <button class="reveal-btn" onclick="revealModel('d1s2-m2')">👁 See Model Answer</button>
+                <div class="model-ans" id="d1s2-m2">
+                  <div class="ma-lbl">Model Answer</div>
+                  It shows that salvation is not based on human effort or worthiness. No one could earn God's love, so it is completely a gift — <strong>grace</strong>. This means everyone has the opportunity to receive it, not only people who seem "good enough."
+                </div>
+              </div>
+              <div class="complete-paso-wrap">
+                <div class="paso-error" id="err-d1s2"></div>
+                <button class="complete-paso-btn" onclick="validateOpen(['d1s2-q1','d1s2-q2'],'err-d1s2','d1s3',20)">Continue → Discussion</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 3 — Doctrine Cards -->
+          <div class="paso paso-locked" id="d1s3">
+            <div class="paso-header">
+              <span class="paso-badge">Step 3</span>
+              <span class="paso-title">🃏 Doctrine Flip Cards — Key Terms</span>
+              <span class="paso-xp">+25 XP</span>
+              <span class="paso-time">5 min</span>
+            </div>
+            <div class="paso-lock-overlay"><span>🔒</span> Complete Step 2 to unlock.</div>
+            <div class="paso-body">
+              <p class="instr">Tap each card to flip it and discover the definition. Mark it learned when you understand it.</p>
+              <p class="dc-progress" id="dcProgress">Terms learned: 0 / 4</p>
+              <div class="dc-grid">
+                <div class="dc-card" id="dc-grace" onclick="flipCard('dc-grace')">
+                  <div class="dc-inner">
+                    <div class="dc-front"><div class="dc-icon">✨</div><div class="dc-term">Grace</div></div>
+                    <div class="dc-back">
+                      <div class="dc-def">God's <strong>undeserved favor</strong> and active help toward sinners. It is freely given — not earned.</div>
+                      <div class="dc-verse">Ephesians 2:8 — "For by grace are ye saved through faith; and that not of yourselves: it is the gift of God."</div>
+                      <button class="dc-learned-btn" id="dcl-grace" onclick="markDcLearned('dc-grace',event)">✓ Learned!</button>
+                    </div>
+                  </div>
+                  <div class="dc-flip-hint">👆 Tap to reveal definition</div>
+                </div>
+                <div class="dc-card" id="dc-prev" onclick="flipCard('dc-prev')">
+                  <div class="dc-inner">
+                    <div class="dc-front"><div class="dc-icon">🕊️</div><div class="dc-term">Prevenient Grace</div></div>
+                    <div class="dc-back">
+                      <div class="dc-def">God's work in the heart <strong>before</strong> a person repents or believes. "Prevenient" means <em>going before</em>.</div>
+                      <div class="dc-verse">John 6:44 — "No man can come to me, except the Father which hath sent me draw him."</div>
+                      <button class="dc-learned-btn" id="dcl-prev" onclick="markDcLearned('dc-prev',event)">✓ Learned!</button>
+                    </div>
+                  </div>
+                  <div class="dc-flip-hint">👆 Tap to reveal definition</div>
+                </div>
+                <div class="dc-card" id="dc-conv" onclick="flipCard('dc-conv')">
+                  <div class="dc-inner">
+                    <div class="dc-front"><div class="dc-icon">💡</div><div class="dc-term">Conviction</div></div>
+                    <div class="dc-back">
+                      <div class="dc-def">The Holy Spirit's work of making a person <strong>aware of sin</strong> and their need for God. It is a sign of God's grace already working.</div>
+                      <div class="dc-verse">John 16:8 — "And when he is come, he will reprove the world of sin, and of righteousness, and of judgment."</div>
+                      <button class="dc-learned-btn" id="dcl-conv" onclick="markDcLearned('dc-conv',event)">✓ Learned!</button>
+                    </div>
+                  </div>
+                  <div class="dc-flip-hint">👆 Tap to reveal definition</div>
+                </div>
+                <div class="dc-card" id="dc-init" onclick="flipCard('dc-init')">
+                  <div class="dc-inner">
+                    <div class="dc-front"><div class="dc-icon">🔑</div><div class="dc-term">Divine Initiative</div></div>
+                    <div class="dc-back">
+                      <div class="dc-def">The truth that <strong>God acts first</strong> in salvation. Human response (repentance, faith) follows God's prior action, never precedes it.</div>
+                      <div class="dc-verse">Romans 5:8 — "While we were yet sinners, Christ died for us."</div>
+                      <button class="dc-learned-btn" id="dcl-init" onclick="markDcLearned('dc-init',event)">✓ Learned!</button>
+                    </div>
+                  </div>
+                  <div class="dc-flip-hint">👆 Tap to reveal definition</div>
+                </div>
+              </div>
+              <div class="complete-paso-wrap">
+                <div class="paso-error" id="err-d1s3"></div>
+                <button class="complete-paso-btn" onclick="validateCards('err-d1s3','d1s4',25)">Continue → Discussion</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 4 — Discussion -->
+          <div class="paso paso-locked" id="d1s4">
+            <div class="paso-header">
+              <span class="paso-badge">Step 4</span>
+              <span class="paso-title">💬 Guided Discussion</span>
+              <span class="paso-xp">+20 XP</span>
+              <span class="paso-time">8 min</span>
+            </div>
+            <div class="paso-lock-overlay"><span>🔒</span> Complete Step 3 to unlock.</div>
+            <div class="paso-body">
+              <p class="instr">Write a complete-sentence answer for each question.</p>
+              <div class="open-q">
+                <div class="open-stem">Why does salvation begin with God and not with people? Use Romans 5:8 to support your answer.</div>
+                <textarea class="open-input" id="d1s4-q1" placeholder="Write your answer here… (at least one sentence)"></textarea>
+                <button class="reveal-btn" onclick="revealModel('d1s4-m1')">👁 See Model Answer</button>
+                <div class="model-ans" id="d1s4-m1">
+                  <div class="ma-lbl">Model Answer</div>
+                  Salvation begins with God because He loved us and sent Christ to die for us <em>while we were still sinners</em> (Romans 5:8). No one chose God first — God chose to act first. People cannot save themselves; it is God's grace that makes salvation possible.
+                </div>
+              </div>
+              <div class="open-q">
+                <div class="open-stem">How does grace show God's love? Give a specific example.</div>
+                <textarea class="open-input" id="d1s4-q2" placeholder="Write your answer here…"></textarea>
+                <button class="reveal-btn" onclick="revealModel('d1s4-m2')">👁 See Model Answer</button>
+                <div class="model-ans" id="d1s4-m2">
+                  <div class="ma-lbl">Model Answer</div>
+                  Grace shows God's love because it is given freely to people who do not deserve it. A specific example is that God sent His Son to die for sinners (Romans 5:8), not waiting for them to become worthy. This gift — which no one can earn — is the clearest proof of how much God loves people.
+                </div>
+              </div>
+              <div class="complete-paso-wrap">
+                <div class="paso-error" id="err-d1s4"></div>
+                <button class="complete-paso-btn" onclick="completeDay1('d1s4',20)">✅ Complete Mission 1</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="done-msg" id="d1-done">🎉 Mission 1 complete! You earned the 📖 Scholar badge. Continue to Mission 2!</div>
+        </div>
+      </div>
+
+      <!-- ═══ DAY 3 ═══ -->
+      <div class="plan-panel" id="panel-d3">
+        <div id="d3-lock-banner" style="display:none;">🔒 Complete Mission 1 first to unlock Mission 2.</div>
+        <div class="pasos-wrap">
+          <p class="pasos-title">Mission 2 — God Draws the Heart</p>
+
+          <!-- STEP 1 — Recap -->
+          <div class="paso active-paso" id="d3s1">
+            <div class="paso-header">
+              <span class="paso-badge">Step 1</span>
+              <span class="paso-title">🗂️ Doctrinal Recap</span>
+              <span class="paso-xp">+15 XP</span>
+              <span class="paso-time">2 min</span>
+            </div>
+            <div class="paso-body">
+              <div class="quiz-q">
+                <div class="quiz-stem">What is prevenient grace?</div>
+                <div class="quiz-opts">
+                  <div class="quiz-opt" onclick="quizSelect(this,'d3s1q1','a')"><input type="radio" name="d3s1q1" value="a"> Grace given after a person repents</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d3s1q1','b')"><input type="radio" name="d3s1q1" value="b"> God's work in the heart before a person repents or believes</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d3s1q1','c')"><input type="radio" name="d3s1q1" value="c"> A reward for regular church attendance</div>
+                </div>
+                <div class="quiz-fb" id="d3s1q1-fb"></div>
+              </div>
+              <div class="quiz-q">
+                <div class="quiz-stem">Which verse teaches that no one can come unless the Father draws them?</div>
+                <div class="quiz-opts">
+                  <div class="quiz-opt" onclick="quizSelect(this,'d3s1q2','a')"><input type="radio" name="d3s1q2" value="a"> Romans 5:8</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d3s1q2','b')"><input type="radio" name="d3s1q2" value="b"> Titus 2:11</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d3s1q2','c')"><input type="radio" name="d3s1q2" value="c"> John 6:44</div>
+                </div>
+                <div class="quiz-fb" id="d3s1q2-fb"></div>
+              </div>
+              <div class="complete-paso-wrap">
+                <div class="paso-error" id="err-d3s1"></div>
+                <button class="complete-paso-btn" onclick="validateRecap('d3s1',['d3s1q1:b','d3s1q2:c'],'d3s2',15)">Check → Continue</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2 — John 6:44 + Acts 16:14 -->
+          <div class="paso paso-locked" id="d3s2">
+            <div class="paso-header">
+              <span class="paso-badge">Step 2</span>
+              <span class="paso-title">📖 John 6:44 & Acts 16:14 — The Father Draws</span>
+              <span class="paso-xp">+25 XP</span>
+              <span class="paso-time">10 min</span>
+            </div>
+            <div class="paso-lock-overlay"><span>🔒</span> Complete Step 1 to unlock.</div>
+            <div class="paso-body">
+              <div class="verse-card">
+                <div class="vc-ref">John 6:44 (KJV)</div>
+                <div class="vc-text">"No man can come to me, except the Father which hath sent me draw him: and I will raise him up at the last day."</div>
+                <div class="vc-insight">📌 The word <strong>"draw"</strong> means the Father actively pulls people toward Jesus. This is prevenient grace — God acts first.</div>
+              </div>
+              <div class="verse-card">
+                <div class="vc-ref">Acts 16:14 (KJV)</div>
+                <div class="vc-text">"And a certain woman named Lydia… heard us: whose heart the Lord opened, that she attended unto the things which were spoken of Paul."</div>
+                <div class="vc-insight">📌 Lydia's heart was opened <strong>by the Lord</strong> — she did not open it herself. God's grace worked in her before she responded.</div>
+              </div>
+              <div class="open-q">
+                <div class="open-stem">In John 6:44, what does it mean that the Father "draws" people? Explain in your own words.</div>
+                <textarea class="open-input" id="d3s2-q1" placeholder="Write your answer here…"></textarea>
+                <button class="reveal-btn" onclick="revealModel('d3s2-m1')">👁 See Model Answer</button>
+                <div class="model-ans" id="d3s2-m1">
+                  <div class="ma-lbl">Model Answer</div>
+                  When the Father "draws" people, it means He actively works in their hearts and brings them toward Jesus. It is not something the person does alone — God creates the desire, the awareness, and the pull toward Jesus before the person even makes a decision.
+                </div>
+              </div>
+              <div class="open-q">
+                <div class="open-stem">How does the story of Lydia (Acts 16:14) show prevenient grace? Who acted first — Lydia or God?</div>
+                <textarea class="open-input" id="d3s2-q2" placeholder="Write your answer here…"></textarea>
+                <button class="reveal-btn" onclick="revealModel('d3s2-m2')">👁 See Model Answer</button>
+                <div class="model-ans" id="d3s2-m2">
+                  <div class="ma-lbl">Model Answer</div>
+                  The story of Lydia shows prevenient grace because God acted first — <em>the Lord opened her heart</em> before she responded. Lydia did not open her own heart. God prepared her heart to receive the message, and then she listened and believed. This shows that God's grace comes before human response.
+                </div>
+              </div>
+              <div class="complete-paso-wrap">
+                <div class="paso-error" id="err-d3s2"></div>
+                <button class="complete-paso-btn" onclick="validateOpen(['d3s2-q1','d3s2-q2'],'err-d3s2','d3s3',25)">Continue →</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 3 — Application Quiz -->
+          <div class="paso paso-locked" id="d3s3">
+            <div class="paso-header">
+              <span class="paso-badge">Step 3</span>
+              <span class="paso-title">🎯 Application Challenge</span>
+              <span class="paso-xp">+30 XP</span>
+              <span class="paso-time">8 min</span>
+            </div>
+            <div class="paso-lock-overlay"><span>🔒</span> Complete Step 2 to unlock.</div>
+            <div class="paso-body">
+              <p class="instr">Identify the correct answer. Think carefully before choosing.</p>
+              <div class="quiz-q">
+                <div class="quiz-stem">According to John 6:44, what must happen before a person can come to Jesus?</div>
+                <div class="quiz-opts">
+                  <div class="quiz-opt" onclick="quizSelect(this,'d3s3q1','a')"><input type="radio" name="d3s3q1" value="a"> The person must pray every day for 40 days</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d3s3q1','b')"><input type="radio" name="d3s3q1" value="b"> The Father must draw them</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d3s3q1','c')"><input type="radio" name="d3s3q1" value="c"> The person must decide completely on their own</div>
+                </div>
+                <div class="quiz-fb" id="d3s3q1-fb"></div>
+              </div>
+              <div class="quiz-q">
+                <div class="quiz-stem">In Acts 16:14, who opened Lydia's heart?</div>
+                <div class="quiz-opts">
+                  <div class="quiz-opt" onclick="quizSelect(this,'d3s3q2','a')"><input type="radio" name="d3s3q2" value="a"> Lydia opened her own heart through willpower</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d3s3q2','b')"><input type="radio" name="d3s3q2" value="b"> Paul opened her heart through his preaching</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d3s3q2','c')"><input type="radio" name="d3s3q2" value="c"> The Lord opened her heart</div>
+                </div>
+                <div class="quiz-fb" id="d3s3q2-fb"></div>
+              </div>
+              <div class="quiz-q">
+                <div class="quiz-stem">Which statement BEST describes prevenient grace?</div>
+                <div class="quiz-opts">
+                  <div class="quiz-opt" onclick="quizSelect(this,'d3s3q3','a')"><input type="radio" name="d3s3q3" value="a"> God rewards people who try hard to be righteous</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d3s3q3','b')"><input type="radio" name="d3s3q3" value="b"> God works in people's hearts before they repent or believe</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d3s3q3','c')"><input type="radio" name="d3s3q3" value="c"> Grace is given only to people who deserve it</div>
+                </div>
+                <div class="quiz-fb" id="d3s3q3-fb"></div>
+              </div>
+              <div class="complete-paso-wrap">
+                <div class="paso-error" id="err-d3s3"></div>
+                <button class="complete-paso-btn" onclick="validateRecap('d3s3',['d3s3q1:b','d3s3q2:c','d3s3q3:b'],'d3done',30)">✅ Complete Mission 2</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="done-msg" id="d3-done">🎉 Mission 2 complete! You earned the 🕊️ Dove badge. Continue to Mission 3!</div>
+        </div>
+      </div>
+
+      <!-- ═══ DAY 4 ═══ -->
+      <div class="plan-panel" id="panel-d4">
+        <div class="pasos-wrap">
+          <p class="pasos-title">Mission 3 — Grace Before Response</p>
+
+          <!-- STEP 1 — Recap -->
+          <div class="paso active-paso" id="d4s1">
+            <div class="paso-header">
+              <span class="paso-badge">Step 1</span>
+              <span class="paso-title">🗂️ Doctrinal Recap</span>
+              <span class="paso-xp">+15 XP</span>
+              <span class="paso-time">2 min</span>
+            </div>
+            <div class="paso-body">
+              <div class="quiz-q">
+                <div class="quiz-stem">What is grace?</div>
+                <div class="quiz-opts">
+                  <div class="quiz-opt" onclick="quizSelect(this,'d4s1q1','a')"><input type="radio" name="d4s1q1" value="a"> God's undeserved favor and active help toward sinners</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d4s1q1','b')"><input type="radio" name="d4s1q1" value="b"> The blessing God gives to church members only</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d4s1q1','c')"><input type="radio" name="d4s1q1" value="c"> A rule that people must follow to be saved</div>
+                </div>
+                <div class="quiz-fb" id="d4s1q1-fb"></div>
+              </div>
+              <div class="quiz-q">
+                <div class="quiz-stem">What is the proper human response to grace?</div>
+                <div class="quiz-opts">
+                  <div class="quiz-opt" onclick="quizSelect(this,'d4s1q2','a')"><input type="radio" name="d4s1q2" value="a"> Doing enough good works to prove worthiness</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d4s1q2','b')"><input type="radio" name="d4s1q2" value="b"> Repentance and faith</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d4s1q2','c')"><input type="radio" name="d4s1q2" value="c"> Going to church every Sunday without fail</div>
+                </div>
+                <div class="quiz-fb" id="d4s1q2-fb"></div>
+              </div>
+              <div class="complete-paso-wrap">
+                <div class="paso-error" id="err-d4s1"></div>
+                <button class="complete-paso-btn" onclick="validateRecap('d4s1',['d4s1q1:a','d4s1q2:b'],'d4s2',15)">Check → Continue</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2 — Titus 2:11 -->
+          <div class="paso paso-locked" id="d4s2">
+            <div class="paso-header">
+              <span class="paso-badge">Step 2</span>
+              <span class="paso-title">📖 Titus 2:11 — Grace Appears and Teaches</span>
+              <span class="paso-xp">+20 XP</span>
+              <span class="paso-time">8 min</span>
+            </div>
+            <div class="paso-lock-overlay"><span>🔒</span> Complete Step 1 to unlock.</div>
+            <div class="paso-body">
+              <div class="verse-card">
+                <div class="vc-ref">Titus 2:11 (KJV)</div>
+                <div class="vc-text">"For the grace of God that bringeth salvation hath appeared to all men, teaching us that, denying ungodliness and worldly lusts, we should live soberly, righteously, and godly, in this present world."</div>
+                <div class="vc-insight">📌 Grace does two things: it <strong>brings</strong> salvation (God's initiative) and <strong>teaches</strong> us how to respond (our response).</div>
+              </div>
+              <div class="open-q">
+                <div class="open-stem">According to Titus 2:11, what does grace "teach" people to do?</div>
+                <textarea class="open-input" id="d4s2-q1" placeholder="Write your answer here…"></textarea>
+                <button class="reveal-btn" onclick="revealModel('d4s2-m1')">👁 See Model Answer</button>
+                <div class="model-ans" id="d4s2-m1">
+                  <div class="ma-lbl">Model Answer</div>
+                  According to Titus 2:11, grace teaches people to say no to ungodliness and worldly desires, and to live soberly, righteously, and godly in this world. Grace is not only a gift — it actively shapes how people live and respond to God.
+                </div>
+              </div>
+              <div class="complete-paso-wrap">
+                <div class="paso-error" id="err-d4s2"></div>
+                <button class="complete-paso-btn" onclick="validateOpen(['d4s2-q1'],'err-d4s2','d4s3',20)">Continue → Flow Chart</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 3 — Flow Chart Activity -->
+          <div class="paso paso-locked" id="d4s3">
+            <div class="paso-header">
+              <span class="paso-badge">Step 3</span>
+              <span class="paso-title">🌊 Salvation Flow Chart</span>
+              <span class="paso-xp">+30 XP</span>
+              <span class="paso-time">10 min</span>
+            </div>
+            <div class="paso-lock-overlay"><span>🔒</span> Complete Step 2 to unlock.</div>
+            <div class="paso-body">
+              <p class="instr">Study the salvation flow chart. This is the sequence God uses in drawing people to Himself.</p>
+              <div class="flow-wrap">
+                <div class="flow-box grace">🕊️ Grace<div class="flow-desc">God initiates</div></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box conviction">💡 Conviction<div class="flow-desc">Awareness of sin</div></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box repentance">🙏 Repentance<div class="flow-desc">Turning from sin</div></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box faith">✝️ Faith<div class="flow-desc">Trusting God</div></div>
+              </div>
+              <p class="instr" style="margin-top:.5rem;">Now answer these questions about the flow chart:</p>
+              <div class="quiz-q">
+                <div class="quiz-stem">Which step in the flow chart comes FIRST?</div>
+                <div class="quiz-opts">
+                  <div class="quiz-opt" onclick="quizSelect(this,'d4s3q1','a')"><input type="radio" name="d4s3q1" value="a"> Repentance</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d4s3q1','b')"><input type="radio" name="d4s3q1" value="b"> Grace</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d4s3q1','c')"><input type="radio" name="d4s3q1" value="c"> Conviction</div>
+                </div>
+                <div class="quiz-fb" id="d4s3q1-fb"></div>
+              </div>
+              <div class="quiz-q">
+                <div class="quiz-stem">What comes between Conviction and Faith in the flow chart?</div>
+                <div class="quiz-opts">
+                  <div class="quiz-opt" onclick="quizSelect(this,'d4s3q2','a')"><input type="radio" name="d4s3q2" value="a"> Prayer</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d4s3q2','b')"><input type="radio" name="d4s3q2" value="b"> Repentance</div>
+                  <div class="quiz-opt" onclick="quizSelect(this,'d4s3q2','c')"><input type="radio" name="d4s3q2" value="c"> Baptism</div>
+                </div>
+                <div class="quiz-fb" id="d4s3q2-fb"></div>
+              </div>
+              <div class="open-q" style="margin-top:.7rem;">
+                <div class="open-stem">In the flow chart, who is responsible for Grace? Who is responsible for Repentance and Faith? Explain the difference.</div>
+                <textarea class="open-input" id="d4s3-q3" placeholder="Write your answer here…"></textarea>
+                <button class="reveal-btn" onclick="revealModel('d4s3-m3')">👁 See Model Answer</button>
+                <div class="model-ans" id="d4s3-m3">
+                  <div class="ma-lbl">Model Answer</div>
+                  <strong>Grace</strong> is God's responsibility — He initiates it freely toward all people. <strong>Repentance and Faith</strong> are the human response — after God has drawn the person through grace and conviction, the person then chooses to turn from sin and trust God. God acts first; the person responds.
+                </div>
+              </div>
+              <div class="complete-paso-wrap">
+                <div class="paso-error" id="err-d4s3"></div>
+                <button class="complete-paso-btn" onclick="completeDay4('err-d4s3',30)">✅ Complete Mission 3</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="done-msg" id="d4-done">🎉 Mission 3 complete! You earned the ⛓️ Freed and 🌊 Flow badges. Ready for the Final Assessment!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FINAL ASSESSMENT ═══ -->
+  <div id="assessLock">
+    <div id="assessLockCard">
+      <div id="al-icon">🔒</div>
+      <div id="al-title">Final Assessment — Locked</div>
+      <div id="al-sub">Complete all three lesson days to unlock the final assessment.</div>
+      <div id="al-progress">
+        <div class="al-session" id="al-d1-check"><span class="al-check" id="chk-d1">⏳</span> Mission 1 — Grace</div>
+        <div class="al-session" id="al-d3-check"><span class="al-check" id="chk-d3">⏳</span> Mission 2 — Draws</div>
+        <div class="al-session" id="al-d4-check"><span class="al-check" id="chk-d4">⏳</span> Mission 3 — Flow</div>
+      </div>
+      <div id="al-hint">Finish all three days above, then the assessment will unlock automatically.</div>
+    </div>
+  </div>
+
+  <div id="testContainer" style="display:none;">
+    <!-- Assessment sticky progress -->
+    <div class="q-progress-wrap">
+      <div class="q-progress-inner">
+        <div class="q-progress-row">
+          <span class="q-progress-label">Assessment Progress</span>
+          <span class="q-progress-count" id="qProgCount">0 / 12 answered</span>
+        </div>
+        <div class="q-progress-bg"><div class="q-progress-fill" id="qProgFill" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <!-- Student Info -->
+    <div class="student-card">
+      <div class="sc-icon">✝️</div>
+      <div class="sc-fields">
+        <div class="sc-group"><label>Student Name</label><input type="text" id="stuName" placeholder="Full name"></div>
+        <div class="sc-group"><label>Date</label><input type="date" id="stuDate"></div>
+        <div class="sc-group"><label>Standard</label><input type="text" id="stuGrade" placeholder="Standard VI" value="Standard VI"></div>
+      </div>
+    </div>
+
+    <!-- SECTION A — Definitions (MCQ) -->
+    <div class="sec-card" style="--sec-accent:var(--grace-color)">
+      <div class="sec-head">
+        <span class="sec-title">Section A — Doctrinal Definitions</span>
+        <span class="sec-pts">20 points</span>
+      </div>
+      <!-- Q1 -->
+      <div class="question" id="q1wrap">
+        <div class="q-label"><span class="q-num">1.</span><span>What is the best definition of <strong>grace</strong>?</span><span class="q-pts">4 pts</span></div>
+        <div class="options">
+          <div class="opt" onclick="selectOpt(this,'q1','a')"><input type="radio" name="q1" value="a"> God's punishment for sinners who do not follow the law</div>
+          <div class="opt" onclick="selectOpt(this,'q1','b')"><input type="radio" name="q1" value="b"> God's undeserved favor and active help freely given toward sinners</div>
+          <div class="opt" onclick="selectOpt(this,'q1','c')"><input type="radio" name="q1" value="c"> A prayer said at the beginning of a meal</div>
+          <div class="opt" onclick="selectOpt(this,'q1','d')"><input type="radio" name="q1" value="d"> A blessing earned through good behavior and church attendance</div>
+        </div>
+        <div class="fb-box" id="q1-fb"></div>
+      </div>
+      <!-- Q2 -->
+      <div class="question" id="q2wrap">
+        <div class="q-label"><span class="q-num">2.</span><span>What does <strong>prevenient grace</strong> mean?</span><span class="q-pts">4 pts</span></div>
+        <div class="options">
+          <div class="opt" onclick="selectOpt(this,'q2','a')"><input type="radio" name="q2" value="a"> Grace that God gives after a person fully repents and is baptized</div>
+          <div class="opt" onclick="selectOpt(this,'q2','b')"><input type="radio" name="q2" value="b"> Grace that prevents people from sinning</div>
+          <div class="opt" onclick="selectOpt(this,'q2','c')"><input type="radio" name="q2" value="c"> God's work in the heart before a person repents or believes</div>
+          <div class="opt" onclick="selectOpt(this,'q2','d')"><input type="radio" name="q2" value="d"> Grace given only to those who are born into Christian families</div>
+        </div>
+        <div class="fb-box" id="q2-fb"></div>
+      </div>
+      <!-- Q3 -->
+      <div class="question" id="q3wrap">
+        <div class="q-label"><span class="q-num">3.</span><span>What is <strong>atonement</strong>?</span><span class="q-pts">4 pts</span></div>
+        <div class="options">
+          <div class="opt" onclick="selectOpt(this,'q3','a')"><input type="radio" name="q3" value="a"> God's act of making sinners right with Himself through Christ's sacrifice</div>
+          <div class="opt" onclick="selectOpt(this,'q3','b')"><input type="radio" name="q3" value="b"> A person's decision to be baptized in water</div>
+          <div class="opt" onclick="selectOpt(this,'q3','c')"><input type="radio" name="q3" value="c"> The annual church offering for missions</div>
+          <div class="opt" onclick="selectOpt(this,'q3','d')"><input type="radio" name="q3" value="d"> The act of confessing sins to a priest</div>
+        </div>
+        <div class="fb-box" id="q3-fb"></div>
+      </div>
+      <!-- Q4 -->
+      <div class="question" id="q4wrap">
+        <div class="q-label"><span class="q-num">4.</span><span>What does <strong>substitution</strong> mean in the context of salvation?</span><span class="q-pts">4 pts</span></div>
+        <div class="options">
+          <div class="opt" onclick="selectOpt(this,'q4','a')"><input type="radio" name="q4" value="a"> People taking turns to lead worship services</div>
+          <div class="opt" onclick="selectOpt(this,'q4','b')"><input type="radio" name="q4" value="b"> Christ dying in the place of sinners, taking their punishment</div>
+          <div class="opt" onclick="selectOpt(this,'q4','c')"><input type="radio" name="q4" value="c"> Replacing old church rules with new ones</div>
+          <div class="opt" onclick="selectOpt(this,'q4','d')"><input type="radio" name="q4" value="d"> God allowing people to substitute prayer for Bible reading</div>
+        </div>
+        <div class="fb-box" id="q4-fb"></div>
+      </div>
+      <!-- Q5 -->
+      <div class="question" id="q5wrap">
+        <div class="q-label"><span class="q-num">5.</span><span>Which Scripture shows that God acts <strong>before</strong> people deserve it?</span><span class="q-pts">4 pts</span></div>
+        <div class="options">
+          <div class="opt" onclick="selectOpt(this,'q5','a')"><input type="radio" name="q5" value="a"> Psalm 23:1</div>
+          <div class="opt" onclick="selectOpt(this,'q5','b')"><input type="radio" name="q5" value="b"> Romans 5:8 — "While we were yet sinners, Christ died for us"</div>
+          <div class="opt" onclick="selectOpt(this,'q5','c')"><input type="radio" name="q5" value="c"> Genesis 1:1</div>
+          <div class="opt" onclick="selectOpt(this,'q5','d')"><input type="radio" name="q5" value="d"> Revelation 22:20</div>
+        </div>
+        <div class="fb-box" id="q5-fb"></div>
+      </div>
+    </div>
+
+    <!-- SECTION B — Scripture Identification -->
+    <div class="sec-card" style="--sec-accent:#8e44ad">
+      <div class="sec-head">
+        <span class="sec-title">Section B — Scripture Identification</span>
+        <span class="sec-pts">20 points</span>
+      </div>
+      <!-- Q6 -->
+      <div class="question" id="q6wrap">
+        <div class="q-label"><span class="q-num">6.</span><span>"No man can come to me, except the Father which hath sent me draw him." — Which verse is this?</span><span class="q-pts">5 pts</span></div>
+        <div class="options">
+          <div class="opt" onclick="selectOpt(this,'q6','a')"><input type="radio" name="q6" value="a"> Romans 5:8</div>
+          <div class="opt" onclick="selectOpt(this,'q6','b')"><input type="radio" name="q6" value="b"> Titus 2:11</div>
+          <div class="opt" onclick="selectOpt(this,'q6','c')"><input type="radio" name="q6" value="c"> John 6:44</div>
+          <div class="opt" onclick="selectOpt(this,'q6','d')"><input type="radio" name="q6" value="d"> Acts 16:14</div>
+        </div>
+        <div class="fb-box" id="q6-fb"></div>
+      </div>
+      <!-- Q7 -->
+      <div class="question" id="q7wrap">
+        <div class="q-label"><span class="q-num">7.</span><span>In Acts 16:14, whose heart did the Lord open so she could hear Paul's message?</span><span class="q-pts">5 pts</span></div>
+        <div class="options">
+          <div class="opt" onclick="selectOpt(this,'q7','a')"><input type="radio" name="q7" value="a"> Mary</div>
+          <div class="opt" onclick="selectOpt(this,'q7','b')"><input type="radio" name="q7" value="b"> Priscilla</div>
+          <div class="opt" onclick="selectOpt(this,'q7','c')"><input type="radio" name="q7" value="c"> Lydia</div>
+          <div class="opt" onclick="selectOpt(this,'q7','d')"><input type="radio" name="q7" value="d"> Phoebe</div>
+        </div>
+        <div class="fb-box" id="q7-fb"></div>
+      </div>
+      <!-- Q8 -->
+      <div class="question" id="q8wrap">
+        <div class="q-label"><span class="q-num">8.</span><span>"The grace of God that bringeth salvation hath appeared to all men, teaching us…" — Which verse is this?</span><span class="q-pts">5 pts</span></div>
+        <div class="options">
+          <div class="opt" onclick="selectOpt(this,'q8','a')"><input type="radio" name="q8" value="a"> John 6:44</div>
+          <div class="opt" onclick="selectOpt(this,'q8','b')"><input type="radio" name="q8" value="b"> Titus 2:11</div>
+          <div class="opt" onclick="selectOpt(this,'q8','c')"><input type="radio" name="q8" value="c"> Romans 5:8</div>
+          <div class="opt" onclick="selectOpt(this,'q8','d')"><input type="radio" name="q8" value="d"> Acts 16:14</div>
+        </div>
+        <div class="fb-box" id="q8-fb"></div>
+      </div>
+      <!-- Q9 -->
+      <div class="question" id="q9wrap">
+        <div class="q-label"><span class="q-num">9.</span><span>What is the correct order of the Salvation Flow Chart?</span><span class="q-pts">5 pts</span></div>
+        <div class="options">
+          <div class="opt" onclick="selectOpt(this,'q9','a')"><input type="radio" name="q9" value="a"> Faith → Repentance → Conviction → Grace</div>
+          <div class="opt" onclick="selectOpt(this,'q9','b')"><input type="radio" name="q9" value="b"> Repentance → Grace → Faith → Conviction</div>
+          <div class="opt" onclick="selectOpt(this,'q9','c')"><input type="radio" name="q9" value="c"> Grace → Conviction → Repentance → Faith</div>
+          <div class="opt" onclick="selectOpt(this,'q9','d')"><input type="radio" name="q9" value="d"> Conviction → Grace → Faith → Repentance</div>
+        </div>
+        <div class="fb-box" id="q9-fb"></div>
+      </div>
+    </div>
+
+    <!-- SECTION C — Written Response -->
+    <div class="sec-card" style="--sec-accent:var(--sin-color)">
+      <div class="sec-head">
+        <span class="sec-title">Section C — Written Response</span>
+        <span class="sec-pts">30 points</span>
+      </div>
+      <div class="question" id="q10wrap">
+        <div class="q-label"><span class="q-num">10.</span><span>Explain in your own words: why does salvation begin with God and not with people? Use at least one Scripture reference in your answer.</span><span class="q-pts">10 pts</span></div>
+        <textarea class="answer-input" id="q10" placeholder="Write your complete-sentence answer here… (at least 2–3 sentences)"></textarea>
+        <div class="fb-box" id="q10-fb"></div>
+      </div>
+      <div class="question" id="q11wrap">
+        <div class="q-label"><span class="q-num">11.</span><span>Using Acts 16:14 as your example, explain how the story of Lydia shows prevenient grace.</span><span class="q-pts">10 pts</span></div>
+        <textarea class="answer-input" id="q11" placeholder="Write your complete-sentence answer here… (at least 2–3 sentences)"></textarea>
+        <div class="fb-box" id="q11-fb"></div>
+      </div>
+      <div class="question" id="q12wrap">
+        <div class="q-label"><span class="q-num">12.</span><span>Describe the difference between what God does in the flow chart (Grace → Conviction) and what the person does (Repentance → Faith). Use a complete explanation.</span><span class="q-pts">10 pts</span></div>
+        <textarea class="answer-input" id="q12" placeholder="Write your complete-sentence answer here… (at least 2–3 sentences)"></textarea>
+        <div class="fb-box" id="q12-fb"></div>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-area">
+      <button class="btn-primary" id="submitBtn" onclick="handleSubmit()" disabled>Submit for Teacher Feedback</button>
+      <p class="submit-hint" id="submitHint">Answer all 12 questions to submit.</p>
+    </div>
+    <div class="spinner-wrap" id="spinnerWrap"><div class="spinner"></div></div>
+    <p style="text-align:center;font-size:.85rem;font-weight:700;color:var(--section-lbl);margin-top:.5rem;" id="feedbackNote" style="display:none;"></p>
+
+    <!-- RESULTS -->
+    <div class="results-section" id="resultsSection">
+      <div class="res-title">📋 Assessment Results</div>
+      <div class="score-grid">
+        <div class="score-box"><div class="sb-lbl">Section A</div><div class="sb-val" id="resA">—</div></div>
+        <div class="score-box"><div class="sb-lbl">Section B</div><div class="sb-val" id="resB">—</div></div>
+        <div class="score-box"><div class="sb-lbl">Section C</div><div class="sb-val" id="resC">—</div></div>
+        <div class="score-box"><div class="sb-lbl">Total</div><div class="sb-val gold" id="resTotal">—</div></div>
+      </div>
+      <div class="perf-badge" id="perfBadge"></div>
+
+      <div style="margin-bottom:1.2rem;">
+        <div style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--body-color);margin-bottom:.6rem;">📝 Teacher Feedback</div>
+        <div id="aiOverallFb" class="fb-box show" style="min-height:80px;"></div>
+      </div>
+
+      <div style="margin-bottom:1rem;">
+        <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:var(--body-color);margin-bottom:.5rem;">Section C — Detailed Feedback</div>
+        <div style="font-size:.88rem;font-weight:800;color:var(--section-lbl);margin-bottom:.3rem;">Q10 — Salvation begins with God</div>
+        <div id="fb-q10" class="fb-box show"></div>
+        <div style="font-size:.88rem;font-weight:800;color:var(--section-lbl);margin:.6rem 0 .3rem;">Q11 — Lydia and Prevenient Grace</div>
+        <div id="fb-q11" class="fb-box show"></div>
+        <div style="font-size:.88rem;font-weight:800;color:var(--section-lbl);margin:.6rem 0 .3rem;">Q12 — God's Role vs. Human Response</div>
+        <div id="fb-q12" class="fb-box show"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <a class="footer-logo" href="#">
+    <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="">
+    <span>Mr. EdLo</span>
+  </a>
+  <span class="footer-tagline">Scripture · Standard VI · Prevenient Grace</span>
+  <span class="footer-copy">© 2026 Edwin D. López</span>
+</footer>
+
+<script>
+/* ═══════════════════════════ STATE ═══════════════════════════ */
+let xp = 0;
+let streak = 0;
+const LEVELS = [
+  {name:'Seeker',min:0},
+  {name:'Learner',min:50},
+  {name:'Disciple',min:120},
+  {name:'Scholar',min:220},
+  {name:'Illuminated',min:350}
+];
+const BADGE_DEF = [
+  {id:'b0',icon:'📖',name:'Scripture Scholar',condition:'Complete Mission 1'},
+  {id:'b1',icon:'🕊️',name:'Dove — Spirit Led',condition:'Learn all 4 terms'},
+  {id:'b2',icon:'⛓️',name:'Freed — God Draws',condition:'Complete Mission 2'},
+  {id:'b3',icon:'🌊',name:'Flow Chart Master',condition:'Complete Mission 3'},
+  {id:'b4',icon:'🏆',name:'Grace Champion',condition:'Complete all lessons'}
+];
+const earnedBadges = new Set();
+const doneSteps = {d1:false, d3:false, d4:false};
+let dcLearned = new Set();
+const TOTAL_Q = 12;
+const correctAnswers = {q1:'b',q2:'c',q3:'a',q4:'b',q5:'b',q6:'c',q7:'c',q8:'b',q9:'c'};
+let answered = {};
+
+/* ═══════════════════════════ STARS ═══════════════════════════ */
+(function(){
+  const s = document.getElementById('stars');
+  for(let i=0;i<55;i++){
+    const st=document.createElement('div');
+    st.className='star';
+    st.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${Math.random()*2.5+1}px;height:${Math.random()*2.5+1}px;--d:${Math.random()*4+2}s;--delay:${Math.random()*5}s;--op:${Math.random()*.5+.2}`;
+    s.appendChild(st);
+  }
+})();
+
+/* ═══════════════════════════ THEME ═══════════════════════════ */
+function setTheme(t){
+  document.body.className='theme-'+t;
+  document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('btn-'+t)?.classList.add('active');
+  try{localStorage.setItem('sc-theme',t);}catch(e){}
+}
+(function(){try{const t=localStorage.getItem('sc-theme');if(t)setTheme(t);}catch(e){}}());
+
+/* ═══════════════════════════ XP SYSTEM ═══════════════════════ */
+function addXP(amount, label='') {
+  xp += amount;
+  streak++;
+  document.getElementById('xpTotal').textContent = xp;
+  document.getElementById('streakCount').textContent = streak;
+  const level = LEVELS.slice().reverse().find(l => xp >= l.min) || LEVELS[0];
+  document.getElementById('xpLevel').textContent = level.name;
+  const nextLevel = LEVELS.find(l => l.min > xp);
+  const prevMin = level.min;
+  const pct = nextLevel ? Math.round(((xp - prevMin) / (nextLevel.min - prevMin)) * 100) : 100;
+  document.getElementById('xpFill').style.width = pct + '%';
+  showXpPopup(amount, label);
+}
+
+function showXpPopup(amount, label) {
+  const pop = document.getElementById('xpPopup');
+  document.getElementById('xpPopAmount').textContent = '+' + amount + ' XP';
+  document.getElementById('xpPopBadge').textContent = label;
+  pop.classList.add('show');
+  setTimeout(() => pop.classList.remove('show'), 2200);
+}
+
+function earnBadge(idx) {
+  if(earnedBadges.has(idx)) return;
+  earnedBadges.add(idx);
+  const row = document.getElementById('badgesRow');
+  const spans = row.querySelectorAll('span');
+  if(spans[idx]) {
+    spans[idx].className = 'badge-earned';
+    spans[idx].textContent = BADGE_DEF[idx].icon;
+    spans[idx].title = BADGE_DEF[idx].name;
+    spans[idx].style.animationDelay = '0s';
+  }
+  showFlash('🏅 Badge earned: ' + BADGE_DEF[idx].name + ' ' + BADGE_DEF[idx].icon);
+}
+
+function showFlash(msg, bg) {
+  const t = document.getElementById('flashToast');
+  t.textContent = msg;
+  if(bg) t.style.background = bg;
+  else t.style.background = '';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ═══════════════════════════ PLAN ACCORDION ═══════════════════ */
+function togglePlan() {
+  const c = document.getElementById('planContent');
+  const a = document.getElementById('planToggle');
+  const arrow = document.getElementById('planArrow');
+  c.classList.toggle('open');
+  a.classList.toggle('open');
+  arrow.style.transform = c.classList.contains('open') ? 'rotate(180deg)' : '';
+}
+function switchPlanTab(tab) {
+  document.querySelectorAll('[id^="ptab-"]').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('[id^="ppanel-"]').forEach(p=>p.classList.remove('active'));
+  document.getElementById('ptab-'+tab)?.classList.add('active');
+  document.getElementById('ppanel-'+tab)?.classList.add('active');
+}
+
+/* ═══════════════════════════ LESSON TABS ═══════════════════════ */
+function switchTab(day) {
+  const tab = document.getElementById('tab-'+day);
+  if(tab?.classList.contains('tab-locked')) { showFlash('🔒 Complete previous days first!'); return; }
+  document.querySelectorAll('[id^="tab-"]').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('[id^="panel-"]').forEach(p=>p.classList.remove('active'));
+  tab?.classList.add('active');
+  document.getElementById('panel-'+day)?.classList.add('active');
+}
+
+/* ═══════════════════════════ INLINE QUIZ ═══════════════════════ */
+const quizCorrect = {
+  d1s1q1:'b', d1s1q2:'c',
+  d3s1q1:'b', d3s1q2:'c',
+  d3s3q1:'b', d3s3q2:'c', d3s3q3:'b',
+  d4s1q1:'a', d4s1q2:'b',
+  d4s3q1:'b', d4s3q2:'b'
+};
+const quizFbText = {
+  d1s1q1:{b:'✅ Correct! Grace is God\'s undeserved favor and active help toward sinners.',a:'❌ Not quite. Grace is favor, not punishment. Try again!',c:'❌ Not quite. Grace cannot be earned. Try again!'},
+  d1s1q2:{c:'✅ Correct! God is the One who initiates and begins the work of salvation.',a:'❌ Almost — but remember, God acts first, before the person repents.',b:'❌ The church preaches, but it is God who begins salvation through grace.'},
+  d3s1q1:{b:'✅ Correct! Prevenient means "going before" — God works before the person responds.',a:'❌ That is the reverse. Prevenient grace comes before repentance.',c:'❌ Church attendance is not how prevenient grace is defined.'},
+  d3s1q2:{c:'✅ Correct! John 6:44 teaches that no one can come unless the Father draws them.',a:'❌ Romans 5:8 is about Christ dying for sinners, not about drawing.',b:'❌ Titus 2:11 is about grace appearing and teaching — not about drawing.'},
+  d3s3q1:{b:'✅ Correct! John 6:44 says no one can come unless the Father draws them.',a:'❌ The Bible does not teach that. The answer is in John 6:44.',c:'❌ The verse specifically says no one can come on their own — the Father must draw them.'},
+  d3s3q2:{c:'✅ Correct! Acts 16:14 says "the Lord opened her heart."',a:'❌ The Scripture says it was the Lord, not Lydia herself.',b:'❌ Paul preached, but the verse gives the credit for opening her heart to the Lord.'},
+  d3s3q3:{b:'✅ Correct! Prevenient grace is God working in the heart before the person repents or believes.',a:'❌ Grace is a gift, not a reward for righteousness.',c:'❌ Grace is specifically undeserved — that is its defining characteristic.'},
+  d4s1q1:{a:'✅ Correct! Grace is God\'s undeserved favor and active help toward sinners.',b:'❌ Grace is available to all, not only church members.',c:'❌ Grace cannot be earned — it is freely given.'},
+  d4s1q2:{b:'✅ Correct! Repentance and faith are the proper human responses to grace.',a:'❌ Good works cannot earn salvation — it begins with grace.',c:'❌ Church attendance is a discipline, not the human response to grace.'},
+  d4s3q1:{b:'✅ Correct! Grace comes first in the flow chart — God initiates.',a:'❌ Repentance is third — it comes after conviction.',c:'❌ Conviction is second — grace always comes first.'},
+  d4s3q2:{b:'✅ Correct! Repentance comes between Conviction and Faith.',a:'❌ Prayer is not a labeled step in this flow chart.',c:'❌ Baptism is not the step between conviction and faith here.'},
+};
+
+function quizSelect(el, qid, val) {
+  const opts = el.closest('.quiz-opts');
+  if(opts.querySelector('.locked')) return;
+  opts.querySelectorAll('.quiz-opt').forEach(o=>{o.classList.remove('selected');o.querySelector('input').checked=false;});
+  el.classList.add('selected');
+  el.querySelector('input').checked = true;
+  el.dataset.val = val;
+}
+
+/* ═══════════════════════════ VALIDATE RECAP ═══════════════════ */
+function validateRecap(stepId, correctPairs, nextStepId, xpAmt) {
+  const errEl = document.getElementById('err-'+stepId);
+  let allCorrect = true;
+  correctPairs.forEach(pair=>{
+    const [qid,correct] = pair.split(':');
+    const opts = document.querySelector(`input[name="${qid}"]`)?.closest('.quiz-opts');
+    if(!opts) { allCorrect=false; return; }
+    const sel = opts.querySelector('.quiz-opt.selected');
+    const fb = document.getElementById(qid+'-fb');
+    if(!sel) {
+      if(fb){fb.className='quiz-fb show neutral';fb.textContent='⚠️ Please select an answer.';}
+      allCorrect=false; return;
+    }
+    const val = sel.querySelector('input').value;
+    const fbTexts = quizFbText[qid] || {};
+    if(val===correct) {
+      sel.classList.remove('selected'); sel.classList.add('correct');
+      opts.querySelectorAll('.quiz-opt').forEach(o=>o.classList.add('locked'));
+      if(fb){fb.className='quiz-fb show good';fb.textContent=fbTexts[val]||'✅ Correct!';}
+    } else {
+      sel.classList.remove('selected'); sel.classList.add('wrong');
+      const corrEl = opts.querySelector(`input[value="${correct}"]`)?.closest('.quiz-opt');
+      if(corrEl) corrEl.classList.add('correct');
+      opts.querySelectorAll('.quiz-opt').forEach(o=>o.classList.add('locked'));
+      if(fb){fb.className='quiz-fb show bad';fb.textContent=fbTexts[val]||'❌ Not quite. Review the answer shown in green.';}
+      allCorrect=false;
+    }
+  });
+  if(errEl) errEl.classList.remove('show');
+
+  if(nextStepId === 'd3done') { completeD3(xpAmt); return; }
+  if(nextStepId === 'd1s2'||nextStepId === 'd1s3'||nextStepId === 'd1s4'||
+     nextStepId === 'd3s2'||nextStepId === 'd3s3'||
+     nextStepId === 'd4s2'||nextStepId === 'd4s3') {
+    unlockStep(nextStepId, xpAmt, stepId);
+  }
+}
+
+function completeD3(xpAmt) {
+  addXP(xpAmt, 'Mission 2 Complete!');
+  doneSteps.d3 = true;
+  earnBadge(2);
+  document.getElementById('d3-done')?.classList.add('show');
+  updateAssessLock();
+  showFlash('🎉 Mission 2 complete! +'+xpAmt+' XP');
+}
+
+function unlockStep(nextId, xpAmt, currentId) {
+  const next = document.getElementById(nextId);
+  if(!next) return;
+  addXP(xpAmt, 'Step complete!');
+  const flash = document.getElementById('pcFlash');
+  const msg = document.getElementById('pcFlashMsg');
+  msg.textContent = '✅ Step done! +'+xpAmt+' XP';
+  flash.classList.add('show');
+  setTimeout(()=>{flash.classList.remove('show');flash.classList.add('hide');setTimeout(()=>flash.classList.remove('hide'),400);},1400);
+  next.classList.remove('paso-locked');
+  next.classList.add('active-paso');
+  const body = next.querySelector('.paso-body');
+  if(body) body.classList.remove('hidden');
+  const overlay = next.querySelector('.paso-lock-overlay');
+  if(overlay) overlay.style.display='none';
+  setTimeout(()=>next.scrollIntoView({behavior:'smooth',block:'start'}),200);
+}
+
+/* ═══════════════════════════ VALIDATE OPEN ═══════════════════ */
+function validateOpen(ids, errId, nextId, xpAmt) {
+  const errEl = document.getElementById(errId);
+  const empty = ids.some(id=>(document.getElementById(id)?.value||'').trim().length < 15);
+  if(empty) {
+    if(errEl){errEl.textContent='✏️ Please write a complete answer (at least a full sentence) before continuing.';errEl.classList.add('show');}
+    return;
+  }
+  if(errEl) errEl.classList.remove('show');
+  unlockStep(nextId, xpAmt, errId.replace('err-',''));
+}
+
+/* ═══════════════════════════ FLIP CARDS ═══════════════════════ */
+function flipCard(id) {
+  document.getElementById(id)?.classList.toggle('flipped');
+}
+function markDcLearned(id, e) {
+  e.stopPropagation();
+  dcLearned.add(id);
+  const btn = document.getElementById('dcl-'+id.replace('dc-',''));
+  if(btn){btn.textContent='✅ Learned!';btn.className='dc-learned-btn done';}
+  document.getElementById(id)?.classList.add('learned');
+  document.getElementById('dcProgress').textContent='Terms learned: '+dcLearned.size+' / 4';
+  if(dcLearned.size>=4) earnBadge(1);
+}
+function validateCards(errId, nextId, xpAmt) {
+  const errEl = document.getElementById(errId);
+  if(dcLearned.size < 4) {
+    if(errEl){errEl.textContent='📚 Flip and mark all 4 terms as learned before continuing.';errEl.classList.add('show');}
+    return;
+  }
+  if(errEl) errEl.classList.remove('show');
+  unlockStep(nextId, xpAmt, 'd1s3');
+}
+
+/* ═══════════════════════════ REVEAL MODEL ═══════════════════ */
+function revealModel(id) {
+  const el = document.getElementById(id);
+  if(el) el.classList.toggle('show');
+}
+
+/* ═══════════════════════════ DAY 1 COMPLETE ═══════════════════ */
+function completeDay1(errId, xpAmt) {
+  const errEl = document.getElementById(errId);
+  const q1 = (document.getElementById('d1s4-q1')?.value||'').trim();
+  const q2 = (document.getElementById('d1s4-q2')?.value||'').trim();
+  if(q1.length < 15 || q2.length < 15) {
+    if(errEl){errEl.textContent='✏️ Please write a complete answer for both questions.';errEl.classList.add('show');}
+    return;
+  }
+  if(errEl) errEl.classList.remove('show');
+  addXP(xpAmt, 'Mission 1 Complete!');
+  doneSteps.d1 = true;
+  earnBadge(0);
+  document.getElementById('d1-done')?.classList.add('show');
+  // Unlock Mission 2
+  const t3 = document.getElementById('tab-d3');
+  if(t3){t3.classList.remove('tab-locked');}
+  updateAssessLock();
+  showFlash('🎉 Mission 1 complete! 📖 Badge earned!');
+  setTimeout(()=>document.getElementById('tab-d3')?.scrollIntoView({behavior:'smooth',block:'center'}),600);
+}
+
+/* ═══════════════════════════ DAY 4 COMPLETE ═══════════════════ */
+function completeDay4(errId, xpAmt) {
+  const errEl = document.getElementById(errId);
+  const q1 = (document.getElementById('d4s3-q3')?.value||'').trim();
+  // check flow chart MCQs answered
+  const r1 = document.querySelector('input[name="d4s3q1"]:checked');
+  const r2 = document.querySelector('input[name="d4s3q2"]:checked');
+  if(!r1 || !r2) {
+    if(errEl){errEl.textContent='⚠️ Please answer the flow chart questions.';errEl.classList.add('show');}
+    return;
+  }
+  // validate them
+  validateRecap('d4s3', ['d4s3q1:b','d4s3q2:b'], '__none__', 0);
+  if(q1.length < 15) {
+    if(errEl){errEl.textContent='✏️ Please write a complete answer for the last question.';errEl.classList.add('show');}
+    return;
+  }
+  if(errEl) errEl.classList.remove('show');
+  addXP(xpAmt, 'Mission 3 Complete!');
+  doneSteps.d4 = true;
+  earnBadge(2); earnBadge(3); earnBadge(4);
+  document.getElementById('d4-done')?.classList.add('show');
+  updateAssessLock();
+  showFlash('🎉 Mission 3 complete! 🏆 All badges earned!');
+}
+
+/* ═══════════════════════════ ASSESSMENT LOCK ═══════════════════ */
+function updateAssessLock() {
+  const checks = {d1:'chk-d1',d3:'chk-d3',d4:'chk-d4'};
+  const sessions = {d1:'al-d1-check',d3:'al-d3-check',d4:'al-d4-check'};
+  ['d1','d3','d4'].forEach(d=>{
+    if(doneSteps[d]){
+      document.getElementById(checks[d]).textContent='✅';
+      document.getElementById(sessions[d])?.classList.add('done');
+      // Unlock tab for d3
+      if(d==='d1'){const t=document.getElementById('tab-d3');if(t)t.classList.remove('tab-locked');}
+      if(d==='d3'){const t=document.getElementById('tab-d4');if(t)t.classList.remove('tab-locked');}
+    }
+  });
+  if(doneSteps.d1 && doneSteps.d3 && doneSteps.d4) {
+    const card = document.getElementById('assessLockCard');
+    const icon = document.getElementById('al-icon');
+    const title = document.getElementById('al-title');
+    const sub = document.getElementById('al-sub');
+    const hint = document.getElementById('al-hint');
+    card?.classList.add('unlocking');
+    if(icon) icon.textContent='🔓';
+    if(title) title.textContent='All Lessons Complete — Assessment Unlocked!';
+    if(sub) sub.textContent='Excellent work! You have completed all three lesson days. You may now take the final assessment.';
+    if(hint) hint.textContent='👇 Scroll down to begin the assessment.';
+    setTimeout(()=>{
+      document.getElementById('assessLock')?.classList.add('hidden');
+      const tc = document.getElementById('testContainer');
+      if(tc){tc.style.display='block';tc.classList.add('revealed');}
+      // Set today date
+      const d=new Date();
+      const iso=d.toISOString().split('T')[0];
+      const dateEl=document.getElementById('stuDate');
+      if(dateEl&&!dateEl.value)dateEl.value=iso;
+    }, 900);
+  }
+}
+
+/* ═══════════════════════════ ASSESSMENT MCQ ═══════════════════ */
+function selectOpt(el, qid, val) {
+  const wrap = document.getElementById(qid+'wrap');
+  if(wrap?.classList.contains('answered')) return;
+  const opts = el.closest('.options');
+  opts.querySelectorAll('.opt').forEach(o=>{o.classList.remove('selected');o.querySelector('input').checked=false;});
+  el.classList.add('selected');
+  el.querySelector('input').checked = true;
+  answered[qid] = val;
+  updateAssessProgress();
+  checkSubmitReady();
+}
+function updateAssessProgress() {
+  const total = TOTAL_Q;
+  const done = Object.keys(answered).length +
+    (['q10','q11','q12'].filter(id=>(document.getElementById(id)?.value||'').trim().length>10)).length;
+  const realDone = Object.keys(answered).length + ['q10','q11','q12'].filter(id=>(document.getElementById(id)?.value||'').trim().length>10).length;
+  document.getElementById('qProgCount').textContent = realDone + ' / ' + total + ' answered';
+  const pct = Math.round((realDone/total)*100);
+  const fill = document.getElementById('qProgFill');
+  if(fill){fill.style.width=pct+'%';if(pct>=100)fill.classList.add('done');}
+}
+document.addEventListener('input',function(e){
+  if(['q10','q11','q12'].includes(e.target?.id)){updateAssessProgress();checkSubmitReady();}
+});
+function checkSubmitReady(){
+  const mcqDone = ['q1','q2','q3','q4','q5','q6','q7','q8','q9'].every(q=>answered[q]);
+  const writtenDone = ['q10','q11','q12'].every(id=>(document.getElementById(id)?.value||'').trim().length>10);
+  const btn = document.getElementById('submitBtn');
+  const hint = document.getElementById('submitHint');
+  if(mcqDone&&writtenDone){
+    btn.disabled=false;
+    if(hint){hint.textContent='All answered! Ready to submit.';hint.className='submit-hint ready';}
+  }
+}
+
+/* ═══════════════════════════ SUBMIT — SHOWS PASSKEY MODAL ═══ */
+const WORKER_URL = 'https://edlo-gemini.smartstandardsix.workers.dev/';
+
+function handleSubmit(){
+  // Grade MCQ immediately (no network needed)
+  _gradeMCQ();
+  // Show passkey modal to gate the AI written feedback
+  document.getElementById('passkeyModal').classList.remove('hidden');
+  setTimeout(()=>document.getElementById('passkeyInput').focus(), 300);
+}
+
+function validatePasskey(){
+  const input = document.getElementById('passkeyInput').value.trim().toUpperCase();
+  if(!input) return;
+  document.getElementById('passkeyModal').classList.add('hidden');
+  document.getElementById('passkeyErr').classList.remove('show');
+  _callAIGrading(input);
+}
+document.getElementById('passkeyInput').addEventListener('keydown', e=>{if(e.key==='Enter') validatePasskey();});
+
+/* grade MCQ sections and lock options — called before modal */
+function _gradeMCQ(){
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  window._secA = 0; window._secB = 0;
+  const mcqA = ['q1','q2','q3','q4','q5'];
+  const mcqB = ['q6','q7','q8','q9'];
+  mcqA.forEach(q=>{
+    const correct = correctAnswers[q];
+    const opts = document.querySelector(`input[name="${q}"]`)?.closest('.options');
+    if(!opts) return;
+    opts.querySelectorAll('.opt').forEach(o=>{o.classList.remove('selected');o.classList.add('locked-opt');});
+    const selVal = answered[q];
+    opts.querySelectorAll('.opt').forEach(o=>{
+      if(o.querySelector('input').value===correct){o.classList.add('correct');o.querySelector('.opt-tick').textContent='✅';}
+    });
+    if(selVal){
+      const selEl = opts.querySelector(`input[value="${selVal}"]`)?.closest('.opt');
+      if(selEl && selVal!==correct){selEl.classList.add('wrong');selEl.querySelector('.opt-tick').textContent='❌';}
+    }
+    if(selVal===correct) window._secA += 4;
+  });
+  mcqB.forEach(q=>{
+    const correct = correctAnswers[q];
+    const opts = document.querySelector(`input[name="${q}"]`)?.closest('.options');
+    if(!opts) return;
+    opts.querySelectorAll('.opt').forEach(o=>{o.classList.add('locked-opt');});
+    const selVal = answered[q];
+    opts.querySelectorAll('.opt').forEach(o=>{
+      if(o.querySelector('input').value===correct){o.classList.add('correct');o.querySelector('.opt-tick').textContent='✅';}
+    });
+    if(selVal){
+      const selEl = opts.querySelector(`input[value="${selVal}"]`)?.closest('.opt');
+      if(selEl && selVal!==correct){selEl.classList.add('wrong');selEl.querySelector('.opt-tick').textContent='❌';}
+    }
+    if(selVal===correct) window._secB += 5;
+  });
+}
+
+async function _callAIGrading(passkey){
+  const spin = document.getElementById('spinnerWrap');
+  if(spin) spin.classList.add('show');
+
+  const q10 = document.getElementById('q10')?.value.trim() || '(blank)';
+  const q11 = document.getElementById('q11')?.value.trim() || '(blank)';
+  const q12 = document.getElementById('q12')?.value.trim() || '(blank)';
+
+  const systemPrompt = `You are a strict but encouraging Scripture teacher grading a Standard 6 student assessment on Prevenient Grace (Church of the Nazarene doctrine, Article of Faith VII). Students are around 11–12 years old.
+
+Key doctrinal facts:
+- Grace = God's undeserved favor and active help toward sinners (not earned)
+- Prevenient grace = God's work in the heart BEFORE a person repents or believes ("prevenient" = going before)
+- Romans 5:8: God loved us while we were STILL sinners — He acts first
+- John 6:44: No one can come unless the Father draws them
+- Acts 16:14: The LORD opened Lydia's heart — she did not open it herself
+- Titus 2:11: Grace appears to ALL men and TEACHES them to deny ungodliness
+- Flow chart: Grace → Conviction → Repentance → Faith (God initiates; human responds)
+- Salvation begins with GOD, not with people
+
+Grade Q10, Q11, Q12 each out of 10 points. Be doctrinally precise but warm. Correct errors firmly and clearly. Simple language for 11–12 year olds. Never mention AI.
+
+Q10 (10pts) — Why does salvation begin with God and not people? Must reference at least one Scripture.
+10/10 → Clearly states God acts first, cites a verse (Romans 5:8 or John 6:44 or Acts 16:14), explains why human merit cannot initiate salvation.
+7–9 → Correct idea, Scripture cited but explanation thin; or good explanation with no verse.
+4–6 → Partial understanding; vague or missing verse.
+1–3 → Minimal; mostly incorrect.
+0 → Blank or completely wrong.
+
+Q11 (10pts) — Using Acts 16:14, explain how Lydia shows prevenient grace.
+10/10 → Names Lydia, states the LORD opened her heart (not she herself), explains this happened before her response, connects to prevenient grace definition.
+7–9 → Most elements present but one point missing.
+4–6 → Mentions Lydia and the verse but misses the "before response" element.
+1–3 → Very brief; misses the key point.
+0 → Blank.
+
+Q12 (10pts) — Explain God's role (Grace→Conviction) vs. human response (Repentance→Faith).
+10/10 → Clearly distinguishes: God initiates grace and conviction freely; human responds with repentance and faith. States God acts first, human follows.
+7–9 → Both sides identified but one side under-explained.
+4–6 → Mentions both sides but does not distinguish clearly.
+1–3 → Only one side mentioned.
+0 → Blank.
+
+FEEDBACK (2–3 warm sentences per question): Full marks → specific praise. Partial → praise correct part, name what was missing, brief hint. Zero → kind explanation with correct answer, encouragement.
+
+Reply ONLY with valid JSON, no markdown:
+{"q10_score":<0-10>,"q10_feedback":"...","q11_score":<0-10>,"q11_feedback":"...","q12_score":<0-10>,"q12_feedback":"...","overall_feedback":"..."}`;
+
+  const userMessage = `Q10 (10pts) — Why does salvation begin with God and not people?\n"${q10}"\n\nQ11 (10pts) — How does Lydia (Acts 16:14) show prevenient grace?\n"${q11}"\n\nQ12 (10pts) — God's role vs. human response in the flow chart:\n"${q12}"\n\nReturn ONLY the JSON.`;
+
+  let secC = 0, feedQ10 = '', feedQ11 = '', feedQ12 = '', overallFb = '';
+
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({passkey, model:'gpt-4o-mini', max_tokens:900,
+        messages:[{role:'system',content:systemPrompt},{role:'user',content:userMessage}]})
+    });
+    if(res.status === 403){
+      // Wrong passkey — re-show modal with error
+      if(spin) spin.classList.remove('show');
+      document.getElementById('passkeyErr').classList.add('show');
+      document.getElementById('passkeyModal').classList.remove('hidden');
+      document.getElementById('passkeyInput').focus();
+      document.getElementById('submitBtn').disabled = false;
+      return;
+    }
+    const data = await res.json();
+    let text = '';
+    if(data.choices?.[0]) text = data.choices[0].message?.content || '';
+    else if(data.content) text = data.content.map(b=>b.text||'').join('');
+    const match = text.match(/\{[\s\S]*\}/);
+    if(!match) throw new Error('no JSON');
+    const parsed = JSON.parse(match[0]);
+    secC = (parsed.q10_score||0)+(parsed.q11_score||0)+(parsed.q12_score||0);
+    feedQ10 = `<strong>Score: ${parsed.q10_score}/10</strong><br>${parsed.q10_feedback}`;
+    feedQ11 = `<strong>Score: ${parsed.q11_score}/10</strong><br>${parsed.q11_feedback}`;
+    feedQ12 = `<strong>Score: ${parsed.q12_score}/10</strong><br>${parsed.q12_feedback}`;
+    overallFb = parsed.overall_feedback;
+  } catch(err) {
+    console.error(err);
+    // Fallback keyword grading
+    const q10v = q10.toLowerCase(), q11v = q11.toLowerCase(), q12v = q12.toLowerCase();
+    const hasVerse10  = /romans|john|acts|titus/i.test(q10v);
+    const hasGod10    = /god|christ|grace|sinners/i.test(q10v);
+    const q10pts = Math.min(10,(q10.length>60?5:3)+(hasVerse10?3:0)+(hasGod10?2:0));
+    const hasLydia    = /lydia/i.test(q11v);
+    const hasOpened   = /opened|lord|before|first|god acted/i.test(q11v);
+    const q11pts = Math.min(10,(q11.length>60?4:2)+(hasLydia?3:0)+(hasOpened?3:0));
+    const hasBoth12   = /god|grace/i.test(q12v) && /repent|faith/i.test(q12v);
+    const q12pts = Math.min(10,(q12.length>60?4:2)+(hasBoth12?6:0));
+    secC = q10pts+q11pts+q12pts;
+    feedQ10 = `<strong>Score: ${q10pts}/10</strong><br>Make sure you explain that God acted first — Romans 5:8 says "while we were yet sinners, Christ died for us." ${hasVerse10?'Good — you used a Scripture reference!':'Remember to include a specific verse.'}`;
+    feedQ11 = `<strong>Score: ${q11pts}/10</strong><br>The key is that <em>the LORD</em> opened Lydia's heart — she did not do it herself. This is prevenient grace: God works before the human response. ${hasLydia?'Good — you mentioned Lydia.':'Always name Lydia and cite Acts 16:14.'}`;
+    feedQ12 = `<strong>Score: ${q12pts}/10</strong><br>God's side = Grace and Conviction (He initiates freely). Human side = Repentance and Faith (the response to what God began). ${hasBoth12?'Good — you identified both sides!':'Make sure to clearly separate God\'s actions from the human response.'}`;
+    overallFb = 'Your assessment shows effort on the topic of prevenient grace. Remember: God always acts first — that is the heart of this doctrine. Continue reviewing the flow chart: Grace → Conviction → Repentance → Faith, and the key verses from John, Romans, Acts, and Titus.';
+  }
+
+  if(spin) spin.classList.remove('show');
+  _displayResults(window._secA||0, window._secB||0, secC, feedQ10, feedQ11, feedQ12, overallFb);
+}
+
+function _displayResults(secA, secB, secC, feedQ10, feedQ11, feedQ12, overallFb){
+  const total = secA + secB + secC;
+  document.getElementById('resA').textContent = secA+'/20';
+  document.getElementById('resB').textContent = secB+'/20';
+  document.getElementById('resC').textContent = secC+'/30';
+  document.getElementById('resTotal').textContent = total+'/70';
+  const pct = Math.round((total/70)*100);
+  const perfEl = document.getElementById('perfBadge');
+  let perfColor, perfText;
+  if(pct>=90){perfColor='var(--opt-correct)';     perfText='🏆 Outstanding — Excellent doctrinal understanding!';}
+  else if(pct>=75){perfColor='rgba(100,180,255,.15)';perfText='⭐ Proficient — Strong grasp of prevenient grace!';}
+  else if(pct>=60){perfColor='rgba(255,200,50,.12)';perfText='📖 Developing — Review the key concepts and Scripture verses.';}
+  else           {perfColor='var(--opt-wrong)';    perfText='🔄 Needs Review — Revisit the lesson days and try again.';}
+  perfEl.style.background = perfColor;
+  perfEl.style.border = '1.5px solid var(--card-border)';
+  perfEl.style.borderRadius = '14px';
+  perfEl.textContent = perfText;
+  document.getElementById('aiOverallFb').innerHTML = overallFb;
+  document.getElementById('fb-q10').innerHTML = feedQ10;
+  document.getElementById('fb-q11').innerHTML = feedQ11;
+  document.getElementById('fb-q12').innerHTML = feedQ12;
+  document.getElementById('resultsSection').classList.add('show');
+  addXP(pct>=75?50:pct>=60?30:15,'Assessment done!');
+  setTimeout(()=>document.getElementById('resultsSection').scrollIntoView({behavior:'smooth',block:'start'}),300);
+}
+
+/* ═══════════════════════════ PERSIST ═══════════════════════════ */
+(function(){
+  const KEY='sc-pg-v1';
+  function save(){
+    if(window._devResetting)return;
+    try{
+      const st={
+        xp,streak,
+        doneSteps,
+        dcLearned:Array.from(dcLearned),
+        earnedBadges:Array.from(earnedBadges),
+        answered,
+        inputs:{},
+        tabLocks:{d3:!document.getElementById('tab-d3')?.classList.contains('tab-locked'),d4:!document.getElementById('tab-d4')?.classList.contains('tab-locked')},
+        unlockedSteps:['d1s1','d1s2','d1s3','d1s4','d3s1','d3s2','d3s3','d4s1','d4s2','d4s3'].filter(id=>!document.getElementById(id)?.classList.contains('paso-locked')),
+        doneMsgs:['d1-done','d3-done','d4-done'].filter(id=>document.getElementById(id)?.classList.contains('show')),
+      };
+      document.querySelectorAll('textarea,input[type="text"],input[type="date"]').forEach(el=>{if(el.id&&el.value.trim())st.inputs[el.id]=el.value;});
+      localStorage.setItem(KEY,JSON.stringify(st));
+    }catch(e){}
+  }
+  function restore(){
+    let st;try{st=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){return;}if(!st)return;
+    xp=st.xp||0; streak=st.streak||0;
+    document.getElementById('xpTotal').textContent=xp;
+    document.getElementById('streakCount').textContent=streak;
+    const level=LEVELS.slice().reverse().find(l=>xp>=l.min)||LEVELS[0];
+    document.getElementById('xpLevel').textContent=level.name;
+    const nextL=LEVELS.find(l=>l.min>xp);
+    const prevMin=level.min;
+    const pct=nextL?Math.round(((xp-prevMin)/(nextL.min-prevMin))*100):100;
+    document.getElementById('xpFill').style.width=pct+'%';
+    // doneSteps
+    if(st.doneSteps){Object.assign(doneSteps,st.doneSteps);}
+    // dcLearned
+    (st.dcLearned||[]).forEach(id=>{
+      dcLearned.add(id);
+      const btn=document.getElementById('dcl-'+id.replace('dc-',''));
+      if(btn){btn.textContent='✅ Learned!';btn.className='dc-learned-btn done';}
+      document.getElementById(id)?.classList.add('learned');
+    });
+    if(dcLearned.size>0)document.getElementById('dcProgress').textContent='Terms learned: '+dcLearned.size+' / 4';
+    // badges
+    (st.earnedBadges||[]).forEach(i=>{
+      earnedBadges.add(i);
+      const row=document.getElementById('badgesRow');
+      const spans=row?.querySelectorAll('span');
+      if(spans&&spans[i]){spans[i].className='badge-earned';spans[i].textContent=BADGE_DEF[i].icon;spans[i].title=BADGE_DEF[i].name;}
+    });
+    // answered
+    if(st.answered)Object.assign(answered,st.answered);
+    // inputs
+    Object.entries(st.inputs||{}).forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.value=val;});
+    // tab locks
+    if(st.tabLocks?.d3){const t=document.getElementById('tab-d3');if(t)t.classList.remove('tab-locked');}
+    if(st.tabLocks?.d4){const t=document.getElementById('tab-d4');if(t)t.classList.remove('tab-locked');}
+    // unlock steps silently
+    (st.unlockedSteps||[]).forEach(id=>{
+      const el=document.getElementById(id);if(!el)return;
+      el.classList.remove('paso-locked');el.classList.add('active-paso');
+      const overlay=el.querySelector('.paso-lock-overlay');if(overlay)overlay.style.display='none';
+    });
+    // done messages
+    (st.doneMsgs||[]).forEach(id=>{document.getElementById(id)?.classList.add('show');});
+    // restore assessment lock state
+    updateAssessLock();
+  }
+  document.addEventListener('input',save);
+  document.addEventListener('change',save);
+  document.addEventListener('click',()=>setTimeout(save,80));
+  restore();
+})();
+
+/* ═══════════════════════════ DEV BAR ═══════════════════════════ */
+function _showDevBar(){document.getElementById('devBar').style.display='flex';}
+if(new URLSearchParams(window.location.search).get('dev')==='1')_showDevBar();
+// Type "dev" anywhere outside a text field to open dev bar
+(function(){let _s='';document.addEventListener('keyup',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT')return;_s=(_s+e.key).slice(-3);if(_s==='dev')_showDevBar();});})();
+
+/* ═══ DEV RESET ═══ */
+function devReset(){
+  window._devResetting=true;
+  try{localStorage.removeItem('sc-pg-v1');}catch(e){}
+  location.reload();
+}
+
+/* ═══ DEV UNLOCK ALL ═══ */
+function devUnlockAll(){
+  // Unlock all paso steps across all days
+  ['d1s1','d1s2','d1s3','d1s4','d3s1','d3s2','d3s3','d4s1','d4s2','d4s3'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    el.classList.remove('paso-locked');
+    el.classList.add('active-paso');
+    const overlay=el.querySelector('.paso-lock-overlay');
+    if(overlay)overlay.style.display='none';
+  });
+  // Unlock all mission tabs
+  ['tab-d3','tab-d4'].forEach(id=>{
+    document.getElementById(id)?.classList.remove('tab-locked');
+  });
+  // Mark all doctrine cards learned
+  ['dc-grace','dc-prev','dc-conv','dc-init'].forEach(id=>{
+    dcLearned.add(id);
+    const btn=document.getElementById('dcl-'+id.replace('dc-',''));
+    if(btn){btn.textContent='✅ Learned!';btn.className='dc-learned-btn done';}
+    document.getElementById(id)?.classList.add('learned');
+  });
+  document.getElementById('dcProgress').textContent='Terms learned: 4 / 4';
+  earnBadge(1);
+  // Mark all days done
+  doneSteps.d1=true; doneSteps.d3=true; doneSteps.d4=true;
+  ['d1-done','d3-done','d4-done'].forEach(id=>document.getElementById(id)?.classList.add('show'));
+  updateAssessLock();
+  showFlash('🔓 All steps unlocked!','#D4AF37');
+}
+
+/* ═══ DEV FILL ASSESSMENT ═══ */
+function devFillAssessment(mode){
+  const correct = mode==='correct';
+  // Student info
+  document.getElementById('stuName').value = correct ? 'Test Student' : 'Wrong Student';
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('stuDate').value = today;
+
+  // MCQ answers — correct keys: q1:b, q2:c, q3:a, q4:b, q5:b, q6:c, q7:c, q8:b, q9:c
+  const mcqCorrect = {q1:'b',q2:'c',q3:'a',q4:'b',q5:'b',q6:'c',q7:'c',q8:'b',q9:'c'};
+  const mcqWrong   = {q1:'a',q2:'a',q3:'c',q4:'a',q5:'c',q6:'a',q7:'a',q8:'a',q9:'a'};
+  const picks = correct ? mcqCorrect : mcqWrong;
+  Object.entries(picks).forEach(([qid,val])=>{
+    // clear any existing selection
+    document.querySelectorAll(`input[name="${qid}"]`).forEach(inp=>{
+      inp.checked=false;
+      inp.closest('.opt')?.classList.remove('selected');
+    });
+    const inp=document.querySelector(`input[name="${qid}"][value="${val}"]`);
+    if(inp){inp.checked=true;inp.closest('.opt')?.classList.add('selected');answered[qid]=val;}
+  });
+
+  // Written responses
+  if(correct){
+    document.getElementById('q10').value='Salvation begins with God and not with people because God acted first while we were still sinners. Romans 5:8 teaches that Christ died for us while we were yet sinners — before anyone repented or deserved it. No person chooses God first; it is God\'s grace that initiates and makes salvation possible.';
+    document.getElementById('q11').value='The story of Lydia in Acts 16:14 shows prevenient grace because the Lord opened her heart before she responded. Lydia did not open her own heart — God acted first. Only after the Lord prepared her heart was she able to attend to Paul\'s message and believe. This is exactly what prevenient grace means: God working in the heart before the human response.';
+    document.getElementById('q12').value='In the flow chart, God is responsible for Grace and Conviction — He initiates both freely toward all people. Conviction is the Holy Spirit making a person aware of sin, which is still God\'s work. Repentance and Faith are the human response — after God has drawn the person, the person then chooses to turn from sin and trust God. The key difference is that God always acts first; the human responds to what God has already begun.';
+  } else {
+    document.getElementById('q10').value='Salvation begins with God because He is powerful.';
+    document.getElementById('q11').value='Lydia is in Acts. She listened to Paul.';
+    document.getElementById('q12').value='Grace is good. Faith is also good.';
+  }
+  updateAssessProgress();
+  checkSubmitReady();
+  showFlash('✅ Assessment filled ('+(correct?'correct':'wrong')+')','#D4AF37');
+}
+
+/* ═══ DEV FULL RUN ═══ */
+async function devRunAll(mode){
+  const correct = mode==='correct';
+  const wait = ms => new Promise(r=>setTimeout(r,ms));
+  showFlash('🛠 Dev: starting full run…','#888');
+
+  // ── DAY 1 ─────────────────────────────────────────────────
+  // Step 1 — recap MCQs
+  ['d1s1q1:b','d1s1q2:c'].forEach(pair=>{
+    const [qid,val] = pair.split(':');
+    const pick = correct ? val : (val==='b'?'a':'a');
+    const inp = document.querySelector(`input[name="${qid}"][value="${pick}"]`);
+    if(inp){inp.checked=true;inp.closest('.quiz-opt')?.classList.add('selected');}
+  });
+  validateRecap('d1s1',['d1s1q1:b','d1s1q2:c'],'d1s2',15);
+  await wait(350);
+
+  // Step 2 — scripture study open answers
+  document.getElementById('d1s2-q1').value = correct
+    ? 'Romans 5:8 tells us that God showed His love while we were still sinners — not after we changed or became worthy. God did not wait for people to be good first.'
+    : 'God showed love.';
+  document.getElementById('d1s2-q2').value = correct
+    ? 'It is important because it shows that salvation is entirely God\'s gift — no one can earn it. Grace is available to everyone because it depends on God\'s love, not human worthiness.'
+    : 'Because God loves us.';
+  validateOpen(['d1s2-q1','d1s2-q2'],'err-d1s2','d1s3',20);
+  await wait(350);
+
+  // Step 3 — mark all cards learned
+  ['dc-grace','dc-prev','dc-conv','dc-init'].forEach(id=>{
+    document.getElementById(id)?.classList.add('flipped');
+    dcLearned.add(id);
+    const btn=document.getElementById('dcl-'+id.replace('dc-',''));
+    if(btn){btn.textContent='✅ Learned!';btn.className='dc-learned-btn done';}
+    document.getElementById(id)?.classList.add('learned');
+  });
+  document.getElementById('dcProgress').textContent='Terms learned: 4 / 4';
+  earnBadge(1);
+  validateCards('err-d1s3','d1s4',25);
+  await wait(350);
+
+  // Step 4 — discussion open answers
+  document.getElementById('d1s4-q1').value = correct
+    ? 'Salvation begins with God because He loved us and sent Christ to die for us while we were still sinners, as Romans 5:8 teaches. No one chose God first — God chose to act first through grace.'
+    : 'God is good.';
+  document.getElementById('d1s4-q2').value = correct
+    ? 'Grace shows God\'s love by being given freely to people who do not deserve it. For example, God sent His Son to die for sinners before they repented, which is the clearest proof of His love.'
+    : 'God loves us.';
+  completeDay1('err-d1s4',20);
+  await wait(700);
+
+  // ── DAY 3 ─────────────────────────────────────────────────
+  switchTab('d3');
+  await wait(300);
+
+  // Step 1 — recap MCQs
+  ['d3s1q1:b','d3s1q2:c'].forEach(pair=>{
+    const [qid,val] = pair.split(':');
+    const pick = correct ? val : 'a';
+    const inp = document.querySelector(`input[name="${qid}"][value="${pick}"]`);
+    if(inp){inp.checked=true;inp.closest('.quiz-opt')?.classList.add('selected');}
+  });
+  validateRecap('d3s1',['d3s1q1:b','d3s1q2:c'],'d3s2',15);
+  await wait(350);
+
+  // Step 2 — open answers
+  document.getElementById('d3s2-q1').value = correct
+    ? 'When the Father "draws" people it means He actively works in their hearts and creates the desire to come to Jesus. The person does not do it alone — God prepares and pulls them before any decision is made.'
+    : 'The Father draws means He talks to them.';
+  document.getElementById('d3s2-q2').value = correct
+    ? 'The story of Lydia shows prevenient grace because the Lord opened her heart before she responded. God acted first — Lydia did not open her own heart. This is prevenient grace: God\'s work before the human response.'
+    : 'Lydia heard Paul and believed.';
+  validateOpen(['d3s2-q1','d3s2-q2'],'err-d3s2','d3s3',25);
+  await wait(350);
+
+  // Step 3 — application MCQs → completes Mission 2
+  ['d3s3q1:b','d3s3q2:c','d3s3q3:b'].forEach(pair=>{
+    const [qid,val] = pair.split(':');
+    const pick = correct ? val : 'a';
+    const inp = document.querySelector(`input[name="${qid}"][value="${pick}"]`);
+    if(inp){inp.checked=true;inp.closest('.quiz-opt')?.classList.add('selected');}
+  });
+  validateRecap('d3s3',['d3s3q1:b','d3s3q2:c','d3s3q3:b'],'d3done',30);
+  await wait(700);
+
+  // ── DAY 4 ─────────────────────────────────────────────────
+  switchTab('d4');
+  await wait(300);
+
+  // Step 1 — recap MCQs
+  ['d4s1q1:a','d4s1q2:b'].forEach(pair=>{
+    const [qid,val] = pair.split(':');
+    const pick = correct ? val : 'c';
+    const inp = document.querySelector(`input[name="${qid}"][value="${pick}"]`);
+    if(inp){inp.checked=true;inp.closest('.quiz-opt')?.classList.add('selected');}
+  });
+  validateRecap('d4s1',['d4s1q1:a','d4s1q2:b'],'d4s2',15);
+  await wait(350);
+
+  // Step 2 — Titus open answer
+  document.getElementById('d4s2-q1').value = correct
+    ? 'According to Titus 2:11, grace teaches people to say no to ungodliness and worldly desires, and to live soberly, righteously, and godly. Grace is not only a gift — it actively shapes how people respond.'
+    : 'Grace teaches us things.';
+  validateOpen(['d4s2-q1'],'err-d4s2','d4s3',20);
+  await wait(350);
+
+  // Step 3 — flow chart MCQs + open answer
+  ['d4s3q1:b','d4s3q2:b'].forEach(pair=>{
+    const [qid,val] = pair.split(':');
+    const pick = correct ? val : 'a';
+    const inp = document.querySelector(`input[name="${qid}"][value="${pick}"]`);
+    if(inp){inp.checked=true;inp.closest('.quiz-opt')?.classList.add('selected');}
+  });
+  document.getElementById('d4s3-q3').value = correct
+    ? 'Grace is God\'s responsibility — He initiates it freely. Repentance and Faith are the human response — after God draws the person through grace and conviction, the person chooses to turn from sin and trust God. God acts first; the person responds.'
+    : 'Grace and faith are both good things.';
+  completeDay4('err-d4s3',30);
+  await wait(700);
+
+  // ── ASSESSMENT ────────────────────────────────────────────
+  await wait(500); // wait for assessment unlock animation
+  devFillAssessment(mode);
+  await wait(400);
+  showFlash('🛠 Dev: submitting assessment…','#D4AF37');
+  await wait(400);
+  // Grade MCQ then call AI directly with dev passkey (bypasses modal)
+  _gradeMCQ();
+  _callAIGrading('DEV');
+}
+</script>
+</body>
+</html>
