@@ -366,8 +366,9 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
 .footer-copy{font-size:.8rem;font-weight:600;color:var(--footer-copy);}
 
 /* ═══ PASSKEY MODAL ═══ */
-.modal-overlay{position:fixed;inset:0;z-index:300;background:var(--modal-bg);display:flex;align-items:center;justify-content:center;padding:1rem;animation:fadeIn .2s ease both;}
-.modal-overlay.hidden{display:none;}
+.modal-overlay{position:fixed;inset:0;z-index:1000;background:var(--modal-bg);display:flex;align-items:center;justify-content:center;padding:1rem;}
+.modal-overlay.hidden{display:none!important;}
+.modal-overlay:not(.hidden){animation:fadeIn .2s ease both;}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
 .modal-card{background:var(--modal-card);border:1.5px solid var(--modal-border);border-radius:22px;padding:2rem 2.2rem;max-width:400px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.40);animation:popIn .3s cubic-bezier(.36,1.5,.6,1) both;}
