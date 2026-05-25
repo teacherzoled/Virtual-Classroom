@@ -551,17 +551,6 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
     </div>
   </div>
 
-  <!-- Passkey modal -->
-  <div class="modal-overlay hidden" id="passkeyModal">
-    <div class="modal-card">
-      <div class="modal-icon">✝️</div>
-      <div class="modal-title">Get Teacher Feedback</div>
-      <div class="modal-desc">Enter the class code Mr. EdLo gave you to receive instant feedback on your written answers.</div>
-      <input class="modal-input" type="text" id="passkeyInput" placeholder="CLASS CODE" autocomplete="off" spellcheck="false">
-      <button class="btn-primary" style="width:100%;margin-bottom:.5rem" onclick="validatePasskey()">Submit →</button>
-      <div class="modal-err" id="passkeyErr">❌ Incorrect code — ask Mr. EdLo for the class code.</div>
-    </div>
-  </div>
 
   <!-- Dev bar (hidden; show via ?dev=1 or type "dev") -->
   <div id="devBar" style="display:none;background:rgba(255,100,100,.07);border:1.5px dashed rgba(255,100,100,.35);border-radius:12px;padding:.6rem 1rem;margin-bottom:1rem;gap:.45rem;flex-wrap:wrap;justify-content:center;align-items:center;">
@@ -1660,7 +1649,9 @@ function validatePasskey(){
   document.getElementById('passkeyErr').classList.remove('show');
   _callAIGrading(input);
 }
-document.getElementById('passkeyInput').addEventListener('keydown', e=>{if(e.key==='Enter') validatePasskey();});
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('passkeyInput').addEventListener('keydown', e=>{if(e.key==='Enter') validatePasskey();});
+});
 
 /* grade MCQ sections and lock options — called before modal */
 function _gradeMCQ(){
@@ -2113,5 +2104,17 @@ async function devRunAll(mode){
   _callAIGrading('DEV');
 }
 </script>
+<!-- Passkey modal — outside all containers so fixed positioning works correctly -->
+<div class="modal-overlay hidden" id="passkeyModal">
+  <div class="modal-card">
+    <div class="modal-icon">✝️</div>
+    <div class="modal-title">Get Teacher Feedback</div>
+    <div class="modal-desc">Enter the class code Mr. EdLo gave you to receive instant feedback on your written answers.</div>
+    <input class="modal-input" type="text" id="passkeyInput" placeholder="CLASS CODE" autocomplete="off" spellcheck="false">
+    <button class="btn-primary" style="width:100%;margin-bottom:.5rem" onclick="validatePasskey()">Submit →</button>
+    <div class="modal-err" id="passkeyErr">❌ Incorrect code — ask Mr. EdLo for the class code.</div>
+  </div>
+</div>
+
 </body>
 </html>
