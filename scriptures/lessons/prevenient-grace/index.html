@@ -439,6 +439,39 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
 .q-progress-bg{height:7px;background:var(--progress-bg);border-radius:999px;overflow:hidden;}
 .q-progress-fill{height:100%;border-radius:999px;background:var(--top-badge-bg);transition:width .4s cubic-bezier(.22,.68,0,1.2);}
 .q-progress-fill.done{background:#69DB7C;}
+
+@media print {
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  body{background:#fff!important;color:#111!important;}
+  .stars,.theme-bar,.xp-bar-wrap,.site-header,.wrapper>header,
+  .info-grid,.plan-section,.xp-popup,.flash-toast,.paso-complete-flash,
+  #assessLock,#testContainer .student-card,.q-progress-wrap,
+  .sec-card,.submit-area,#spinnerWrap,#feedbackNote,
+  .site-footer,.dev-bar,#devBar{display:none!important;}
+  .results-section{display:block!important;background:#fff!important;
+    border:none!important;padding:0!important;margin:0!important;animation:none!important;}
+  .res-title{font-size:1.4rem!important;color:#111!important;text-align:center;margin-bottom:1rem;}
+  .score-grid{display:flex!important;gap:.5rem!important;margin-bottom:1rem!important;}
+  .score-box{border:1.5px solid #ccc!important;background:#f9f9f9!important;
+    border-radius:10px!important;padding:.7rem 1rem!important;text-align:center!important;flex:1!important;}
+  .sb-lbl{color:#555!important;font-size:.7rem!important;}
+  .sb-val{color:#111!important;font-size:1.6rem!important;}
+  .sb-val.gold{color:#B8860B!important;}
+  .perf-badge{background:#f0f0f0!important;border:1.5px solid #ccc!important;
+    border-radius:10px!important;padding:.7rem!important;margin-bottom:1rem!important;text-align:center!important;color:#111!important;}
+  .fb-box{background:#f9f9f9!important;border:1.5px solid #ddd!important;
+    border-radius:8px!important;padding:.7rem 1rem!important;color:#111!important;
+    display:block!important;margin-bottom:.5rem!important;}
+  [style*="font-family:'Fredoka One'"]{color:#111!important;}
+  [style*="color:var(--section-lbl)"]{color:#555!important;}
+  button[onclick="saveToPDF()"]{display:none!important;}
+  /* Print header */
+  #resultsSection::before{
+    content:'Scripture · Standard VI · Prevenient Grace — Assessment Results';
+    display:block;font-size:.8rem;color:#777;text-align:center;
+    border-bottom:1px solid #ddd;padding-bottom:.5rem;margin-bottom:1rem;
+  }
+}
 </style>
 </head>
 <body class="theme-night">
@@ -1234,6 +1267,13 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
         <div id="fb-q11" class="fb-box show"></div>
         <div style="font-size:.88rem;font-weight:800;color:var(--section-lbl);margin:.6rem 0 .3rem;">Q12 — God's Role vs. Human Response</div>
         <div id="fb-q12" class="fb-box show"></div>
+      </div>
+
+      <div style="text-align:center;margin-top:1.4rem;">
+        <button onclick="saveToPDF()" style="font-family:'Fredoka One',cursive;font-size:1.05rem;padding:11px 32px;border-radius:999px;background:var(--top-badge-bg);color:var(--top-badge-c);border:none;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.18);transition:all .2s;" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter=''">
+          📄 Save Results as PDF
+        </button>
+        <div style="font-size:.78rem;font-weight:700;color:var(--section-lbl);margin-top:.45rem;">Downloads a formatted PDF report directly</div>
       </div>
     </div>
   </div>
@@ -2100,6 +2140,102 @@ async function devRunAll(mode){
   showFlash('🛠 Dev: submitting assessment…','#D4AF37');
   await wait(400);
   handleSubmit();
+}
+/* ═══ SAVE TO PDF ═══ */
+function saveToPDF(){
+  const name  = (document.getElementById('stuName')?.value||'Student').trim();
+  const date  = document.getElementById('stuDate')?.value || new Date().toISOString().split('T')[0];
+  const secA  = document.getElementById('resA')?.textContent||'--';
+  const secB  = document.getElementById('resB')?.textContent||'--';
+  const secC  = document.getElementById('resC')?.textContent||'--';
+  const total = document.getElementById('resTotal')?.textContent||'--';
+  const perf  = (document.getElementById('perfBadge')?.textContent||'').replace(/[^\x00-\x7F]/g,'').trim();
+  const q10ans= (document.getElementById('q10')?.value||'').replace(/\u2192/g,'->');
+  const q11ans= (document.getElementById('q11')?.value||'').replace(/\u2192/g,'->');
+  const q12ans= (document.getElementById('q12')?.value||'').replace(/\u2192/g,'->');
+  function getSelText(qname){
+    const inp=document.querySelector('input[name="'+qname+'"]:checked');
+    if(!inp) return '(not answered)';
+    return (inp.closest('.opt')?.textContent||'').replace(/[\u2705\u274C]/g,'').replace(/\s+/g,' ').trim();
+  }
+  const fbOverall=(document.getElementById('aiOverallFb')?.innerText||'').replace(/\u2192/g,'->');
+  const fb10=(document.getElementById('fb-q10')?.innerText||'').replace(/\u2192/g,'->');
+  const fb11=(document.getElementById('fb-q11')?.innerText||'').replace(/\u2192/g,'->');
+  const fb12=(document.getElementById('fb-q12')?.innerText||'').replace(/\u2192/g,'->');
+  function sanitize(s){ return (s||'').replace(/[\u2013\u2014]/g,'-').replace(/[\u2018\u2019]/g,"'").replace(/[\u201C\u201D]/g,'"').replace(/[^\x00-\x7F]/g,''); }
+  if(document.getElementById('jspdf-script')) { buildPDF(); return; }
+  const sc=document.createElement('script');
+  sc.id='jspdf-script';
+  sc.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  sc.onload=buildPDF;
+  sc.onerror=function(){ alert('Could not load PDF library. Check internet connection.'); };
+  document.head.appendChild(sc);
+  function buildPDF(){
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const W=210,ML=14,MR=14,cw=W-ML-MR;
+    let y=0;
+    const C={dark:[20,15,10],white:[255,255,255],gold:[180,140,30],grey:[100,100,100],lgrey:[210,210,210],green:[46,125,50],cream:[248,244,234],creamb:[215,205,180]};
+    function sf(style,size,color){ doc.setFont('helvetica',style); doc.setFontSize(size); doc.setTextColor(...(color||C.dark)); }
+    function wrap(txt,x,sy,mw,lh,color){
+      const s=sanitize(txt);
+      doc.setTextColor(...(color||C.dark));
+      const lines=doc.splitTextToSize(s,mw);
+      doc.text(lines,x,sy);
+      return sy+lines.length*lh;
+    }
+    function bar(label,yy){ doc.setFillColor(...C.gold); doc.rect(ML,yy,cw,7,'F'); sf('bold',9.5,C.white); doc.text(label,ML+3,yy+5); return yy+10; }
+    function chk(n){ if(y+n>276){ doc.addPage(); y=16; } }
+    /* PAGE 1 HEADER */
+    doc.setFillColor(...C.dark); doc.rect(0,0,W,20,'F');
+    sf('bold',8.5,C.white); doc.text('Howard Smith Nazarene School  |  Standard 6  |  Belize  |  Scripture',ML,8);
+    sf('bold',11,C.white); doc.text('Prevenient Grace - Scripture Assessment',ML,15);
+    sf('normal',8,[212,175,55]); doc.text("Mr. EdLo's Virtual Classroom  |  edlovirtualclassroom.com",W-MR,15,{align:'right'});
+    y=26;
+    /* STUDENT INFO */
+    doc.setFillColor(...C.cream); doc.setDrawColor(...C.creamb); doc.roundedRect(ML,y,cw,24,2,2,'FD');
+    const c2=ML+cw/2+2;
+    sf('bold',8,C.grey); doc.text('STUDENT',ML+4,y+6); doc.text('DATE',c2,y+6); doc.text('TEACHER',ML+4,y+17); doc.text('SCHOOL',c2,y+17);
+    sf('bold',11,C.dark); doc.text(sanitize(name),ML+4,y+12); doc.text(sanitize(date),c2,y+12);
+    sf('normal',9,C.dark); doc.text('Mr. Edwin D. Lopez',ML+4,y+22); doc.text('Howard Smith Nazarene School',c2,y+22);
+    y+=30;
+    /* SCORES */
+    sf('bold',10,C.dark); doc.text('RESULTS',ML,y+5); y+=8;
+    const boxes=[{l:'SEC A',v:secA},{l:'SEC B',v:secB},{l:'SEC C',v:secC},{l:'TOTAL',v:total}];
+    const bw=(cw-6)/4;
+    boxes.forEach((b,i)=>{ const bx=ML+i*(bw+2); doc.setFillColor(...C.cream); doc.setDrawColor(...C.creamb); doc.roundedRect(bx,y,bw,17,2,2,'FD'); sf('bold',7.5,C.grey); doc.text(b.l,bx+bw/2,y+6,{align:'center'}); sf('bold',12,i===3?C.gold:C.dark); doc.text(sanitize(b.v),bx+bw/2,y+13,{align:'center'}); });
+    y+=21;
+    /* PERFORMANCE */
+    doc.setFillColor(240,248,240); doc.setDrawColor(180,220,180); doc.roundedRect(ML,y,cw,8,2,2,'FD');
+    sf('bold',8.5,C.green); doc.text('PERFORMANCE: '+sanitize(perf),ML+4,y+5.5); y+=13;
+    /* SECTION A */
+    y=bar('SECTION A - Definitions (Multiple Choice)',y);
+    [['Q1','What is the best definition of grace?','q1'],['Q2','What does prevenient grace mean?','q2'],['Q3','What is atonement?','q3'],['Q4','What does substitution mean?','q4'],['Q5','Which Scripture shows God acts before people deserve it?','q5']].forEach(([qn,ql,qid])=>{ chk(14); sf('bold',8.5,C.dark); doc.text(qn+' - '+ql,ML,y); y+=4.5; sf('normal',8.5,C.grey); y=wrap(getSelText(qid),ML+3,y,cw-6,4.5,C.grey); y+=2.5; });
+    y+=2;
+    /* SECTION B */
+    chk(14); y=bar('SECTION B - Scripture Identification (Multiple Choice)',y);
+    [['Q6','"No man can come...except the Father draw him" - which verse?','q6'],['Q7','In Acts 16:14, whose heart did the Lord open?','q7'],['Q8','"Grace...hath appeared to all men, teaching us..." - which verse?','q8'],['Q9','What is the correct order of the Salvation Flow Chart?','q9']].forEach(([qn,ql,qid])=>{ chk(14); sf('bold',8.5,C.dark); doc.text(qn+' - '+ql,ML,y); y+=4.5; sf('normal',8.5,C.grey); y=wrap(getSelText(qid),ML+3,y,cw-6,4.5,C.grey); y+=2.5; });
+    y+=2;
+    /* SECTION C */
+    chk(14); y=bar('SECTION C - Written Responses',y);
+    [[q10ans,'Q10','Why does salvation begin with God and not with people?'],[q11ans,'Q11','How does Lydia (Acts 16:14) show prevenient grace?'],[q12ans,'Q12',"God's role vs. human response in the flow chart:"]].forEach(([ans,qn,ql])=>{ const safe=sanitize(ans||'(no answer)'); const lines=doc.splitTextToSize(safe,cw-6); const bh=7+lines.length*4.5+4; chk(bh+4); doc.setFillColor(...C.cream); doc.setDrawColor(...C.creamb); doc.roundedRect(ML,y,cw,bh,2,2,'FD'); sf('bold',8.5,C.dark); doc.text(qn+' - '+ql,ML+3,y+5); y+=8; sf('normal',8.5,C.grey); y=wrap(ans||'(no answer)',ML+3,y,cw-6,4.5,C.grey); y+=5; });
+    /* PAGE 2 - TEACHER FEEDBACK */
+    doc.addPage(); y=0;
+    doc.setFillColor(...C.dark); doc.rect(0,0,W,14,'F');
+    sf('bold',9.5,C.white); doc.text('TEACHER FEEDBACK - SECTION C',ML,9);
+    sf('normal',8,[212,175,55]); doc.text(sanitize(name)+' - '+sanitize(date),W-MR,9,{align:'right'});
+    y=20;
+    /* Overall */
+    doc.setFillColor(...C.cream); doc.setDrawColor(...C.creamb); doc.roundedRect(ML,y,cw,7,2,2,'FD');
+    sf('bold',9,C.dark); doc.text('Overall Teacher Feedback',ML+3,y+5); y+=10;
+    sf('normal',8.5,C.grey); y=wrap(fbOverall,ML,y,cw,4.5,C.grey); y+=6;
+    /* Per-question */
+    [['Q10 - Salvation begins with God',fb10],['Q11 - Lydia and Prevenient Grace',fb11],["Q12 - God's Role vs. Human Response",fb12]].forEach(([title,fb])=>{ const lines=doc.splitTextToSize(sanitize(fb),cw); chk(lines.length*4.5+16); y=bar(sanitize(title),y); sf('normal',8.5,C.grey); y=wrap(fb,ML,y,cw,4.5,C.grey); y+=6; });
+    /* FOOTER */
+    const pages=doc.getNumberOfPages();
+    for(let p=1;p<=pages;p++){ doc.setPage(p); doc.setDrawColor(...C.lgrey); doc.line(ML,287,W-MR,287); sf('normal',7.5,C.grey); doc.text('edlovirtualclassroom.com  -  Scripture: Prevenient Grace  -  Page '+p+' of '+pages,W/2,292,{align:'center'}); }
+    doc.save('Scripture_'+sanitize(name).replace(/\s+/g,'_')+'_'+sanitize(date)+'.pdf');
+  }
 }
 </script>
 <!-- Passkey modal — outside all containers so fixed positioning works correctly -->
