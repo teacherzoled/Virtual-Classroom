@@ -52,7 +52,7 @@ If the docs are not updated, the task is **not** finished.
 
 **To publish (Edwin's workflow):** open the `Virtual-Classroom` folder in VS Code →
 `git add -A` → `git commit` → `git push` (the Claude Code plugin can run this). Git identity is set to
-name `teacherzoled`, email `221897977+teacherzoled@users.noreply.github.com` (GitHub blocks pushes that
+name `edlo`, email `221897977+teacherzoled@users.noreply.github.com` (GitHub blocks pushes that
 expose a real email, so the noreply address is required). After pushing, hard-refresh (Ctrl+Shift+R) —
 previously-visited URLs may cache for up to ~10 min.
 
