@@ -1,0 +1,119 @@
+/**
+ * ═══════════════════════════════════════════════════════════════
+ *  edlo-utils.js — Shared LMS utilities
+ *  Mr. EdLo's Virtual Classroom · edlovirtualclassroom.com
+ *
+ *  Add to any page:
+ *    <script src="/edlo-utils.js"></script>
+ *    <script> vcRequireLogin(); </script>
+ *
+ *  Log a result from any submit button:
+ *    vcSaveProgress({ subject:'Science', lo_code:'SC6.19',
+ *      activity_type:'test', activity_name:'Plant Adaptations',
+ *      score:24, max_score:30, ai_feedback:feedbackText });
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+var VC_LMS_URL     = 'https://edlo-lms.smartstandardsix.workers.dev';
+var VC_SESSION_KEY = 'vc-session';
+var VC_LOGIN_PAGE  = '/login/';
+
+/** Log a student in. Returns a Promise of the session object, or throws Error. */
+function vcLogin(username, password) {
+  return fetch(VC_LMS_URL + '/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: username, password: password })
+  })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (!data.ok) throw new Error(data.error || 'Login failed');
+      var session = {
+        token:      data.token,
+        username:   data.username,
+        full_name:  data.full_name,
+        first_name: data.first_name,
+        class_id:   data.class_id,
+        expires:    data.expires
+      };
+      localStorage.setItem(VC_SESSION_KEY, JSON.stringify(session));
+      return session;
+    });
+}
+
+/** Returns the stored session object, or null if missing/expired. */
+function vcGetSession() {
+  try {
+    var raw = localStorage.getItem(VC_SESSION_KEY);
+    if (!raw) return null;
+    var session = JSON.parse(raw);
+    if (!session.token || Date.now() > Number(session.expires)) {
+      localStorage.removeItem(VC_SESSION_KEY);
+      return null;
+    }
+    return session;
+  } catch (e) {
+    return null;
+  }
+}
+
+/** Redirects to the login page if not logged in. Returns session (or null while redirecting). */
+function vcRequireLogin() {
+  var session = vcGetSession();
+  if (!session) {
+    var here = location.pathname + location.search;
+    location.href = VC_LOGIN_PAGE + '?next=' + encodeURIComponent(here);
+    return null;
+  }
+  return session;
+}
+
+/** Clears the session and returns to the login page. */
+function vcLogout() {
+  localStorage.removeItem(VC_SESSION_KEY);
+  location.href = VC_LOGIN_PAGE;
+}
+
+/**
+ * Sends one result row to the LMS.
+ * payload: { subject, lo_code, activity_type, activity_name, score, max_score, ai_feedback? }
+ * Resolves { ok:true, percent } — never throws on network failure (logs a warning instead),
+ * so a Sheets hiccup can never block a student mid-activity.
+ */
+function vcSaveProgress(payload) {
+  var session = vcGetSession();
+  if (!session) {
+    console.warn('vcSaveProgress: no session — result not saved');
+    return Promise.resolve({ ok: false, error: 'Not logged in' });
+  }
+  payload = payload || {};
+  payload.token = session.token;
+
+  return fetch(VC_LMS_URL + '/save-result', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+    .then(function (r) { return r.json(); })
+    .catch(function (err) {
+      console.warn('vcSaveProgress failed:', err);
+      return { ok: false, error: String(err) };
+    });
+}
+
+/** Fetches all result rows for the logged-in student. Returns Promise of an array. */
+function vcGetProgress() {
+  var session = vcGetSession();
+  if (!session) return Promise.reject(new Error('Not logged in'));
+
+  return fetch(VC_LMS_URL + '/progress', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token: session.token })
+  })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (!data.ok) throw new Error(data.error || 'Could not load progress');
+      return data.results;
+    });
+}
