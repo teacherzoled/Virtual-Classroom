@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LMS Test Page — DELETE AFTER TESTING</title>
+<style>
+  html { overflow-x: hidden; }
+  body {
+    overflow-x: hidden;
+    background: #1a1a2e; color: #fff;
+    font-family: Arial, sans-serif;
+    max-width: 700px; margin: 0 auto;
+    padding: 2rem max(1rem, 4vw);
+  }
+  h1 { font-size: 1.4rem; margin-bottom: .5rem; }
+  p  { color: rgba(255,255,255,.6); margin-bottom: 1.5rem; }
+  button {
+    display: block; width: 100%; min-height: 52px;
+    margin-bottom: 1rem; font-size: 1rem; font-weight: bold;
+    border: none; border-radius: 10px; cursor: pointer;
+  }
+  #btnSave { background: #20C997; color: #1a1a2e; }
+  #btnLoad { background: #4DABF7; color: #1a1a2e; }
+  pre {
+    background: rgba(255,255,255,.08); border-radius: 10px;
+    padding: 1rem; white-space: pre-wrap; word-break: break-word;
+    min-height: 4rem; font-size: .85rem;
+  }
+</style>
+</head>
+<body>
+  <h1>🧪 LMS Test Page</h1>
+  <p>Temporary page — delete <code>test-lms.html</code> from the repo when testing is done.</p>
+
+  <button id="btnSave">1️⃣ Save a fake test score (24/30 Science)</button>
+  <button id="btnLoad">2️⃣ Load my progress</button>
+
+  <pre id="output">Results will appear here…</pre>
+
+<script src="/edlo-utils.js"></script>
+<script>
+  var out = document.getElementById('output');
+  var session = vcGetSession();
+  out.textContent = session
+    ? 'Logged in as: ' + session.full_name + ' (' + session.username + ')\nReady — click a button.'
+    : '⚠️ Not logged in. Go to /login/ first, then come back to this page.';
+
+  document.getElementById('btnSave').addEventListener('click', function () {
+    out.textContent = 'Saving…';
+    vcSaveProgress({
+      subject: 'Science', lo_code: 'SC6.19',
+      activity_type: 'test', activity_name: 'Setup Test',
+      score: 24, max_score: 30
+    }).then(function (r) {
+      out.textContent = 'SAVE RESULT:\n' + JSON.stringify(r, null, 2) +
+        (r.ok ? '\n\n✅ Now check the All Results tab in your Google Sheet.' : '\n\n❌ Something went wrong.');
+    });
+  });
+
+  document.getElementById('btnLoad').addEventListener('click', function () {
+    out.textContent = 'Loading…';
+    vcGetProgress().then(function (rows) {
+      out.textContent = 'PROGRESS (' + rows.length + ' result(s)):\n' + JSON.stringify(rows, null, 2);
+    }).catch(function (err) {
+      out.textContent = '❌ ' + err.message;
+    });
+  });
+</script>
+</body>
+</html>
