@@ -51,6 +51,16 @@ If the docs are not updated, the task is **not** finished.
 2. **Push and verify live**, then click through all 16 assessment links, including at ~360px width.
 3. **After that:** next Standard 5 subject hub, or Standard 6's remaining hubs (Math, Scriptures, CS, PE).
 
+**Theme fix (July 15, 2026 — after first live test):** the Std6 science page tints ALL three light
+themes green (Sunny #f0fdf6 / Cloudy #eaf2ee / Nature #e8f5ec), so on the phone they looked nearly
+identical. The Std5 Science hub's Sunny/Cloudy/Nature palettes were repainted to the DISTINCT
+hub-style themes (Sunny = warm yellow, Cloudy = blue-grey, Nature = green — matching
+`standard5/index.html`), extended with the science page's extra variables (tabs, cycle dividers,
+mol-canvas, graded badges, grad-bar). Night unchanged. Also added darker per-theme accents for the
+live assessment cards (`.assess-*`) so titles stay readable on light backgrounds.
+**Optional later:** retrofit the same distinct palettes to `standard6/science/index.html` if Edwin wants
+the two grades to match.
+
 **Digital Labs decision (July 15, 2026):** the Std5 Science hub's Digital Labs tab stays a "Being Built"
 placeholder — labs are NOT in the sy2627 Assessment Plan and the gradebook slate is complete without
 them, so they are deferred to a future session. If/when built: start with **one ungraded pilot** — an
