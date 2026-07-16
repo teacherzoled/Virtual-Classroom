@@ -22,7 +22,7 @@ If the docs are not updated, the task is **not** finished.
 
 ## ▶️ Take-off Point — Next Session (as of July 15, 2026)
 
-**Where we are (July 15, 2026 — evening):** the **Standard 5 Science hub is BUILT and wired up** this session — not yet pushed/verified live.
+**Where we are (July 15, 2026 — evening):** the **Standard 5 Science hub is LIVE and phone-verified** at edlovirtualclassroom.com/standard5/science/ — themes confirmed working after the palette fix below. Only the hero banner is still pending.
 - Grade picker at `/` (Standard 5 / Standard 6); `/standard6/` unchanged (stubs + `404.html` redirects still in place).
 - `standard5/science/index.html` — full Science hub cloned from the Std6 design (4 themes, stars,
   molecule canvas, zoom button, teal accent). Four tabs:
@@ -44,11 +44,23 @@ If the docs are not updated, the task is **not** finished.
 
 **➡️ NEXT TASKS:**
 
-1. **Hero banner:** Edwin generates the Std5 science banner with the AI prompt provided in chat
+1. **NEXT BUILD (decided July 15, 2026): minimal login gate + Worker-side open/closed switch.**
+   Scope (≈2–3 build sessions, on the documented LMS architecture — no dashboards yet):
+   - Google Sheet **Students** tab + service account (Edwin's account work).
+   - Worker `/login` endpoint (validates username/password against the Sheet, returns session token).
+   - **Per-test open/closed switch, enforced Worker-side:** each test's KV entry gets an `"open": true/false`
+     field; the page asks the Worker before revealing questions; Edwin flips the flag in the Cloudflare KV
+     dashboard on test morning (no git push, server clock decides — device-clock cheating impossible).
+   - Login page (`/login/`, root — serves both grades) + `vcRequireLogin()` in `edlo-utils.js`.
+   - Retrofit the redirect + open-check to the 16 Std5 student pages, then re-audit them.
+   - ⚠️ Shared-Worker caution: every change hits ALL live tests — test against one testId first.
+   - Dashboards + `vcSaveProgress()` result logging bolt on later with no rework.
+   **Interim decision:** tests/quizzes stay publicly viewable until the gate ships (Edwin's call, July 15) —
+   submit-lock + server-side grading still prevent any scoring abuse.
+2. **Hero banner:** Edwin generates the Std5 science banner with the AI prompt provided in chat
    (1600×900, compress to ≤500 KB via squoosh.app) and saves it as
    `standard5/science/images/hero/science-banner.png` — the page already points there; until then
    only the alt text shows.
-2. **Push and verify live**, then click through all 16 assessment links, including at ~360px width.
 3. **After that:** next Standard 5 subject hub, or Standard 6's remaining hubs (Math, Scriptures, CS, PE).
 
 **Theme fix (July 15, 2026 — after first live test):** the Std6 science page tints ALL three light
@@ -403,8 +415,8 @@ cd "C:\Users\zoloe\OneDrive\Shared with me\Code Projects\Python Projects\Virtual
 |---|---|---|
 | Grade Picker (home) | edlovirtualclassroom.com | ✅ Live |
 | Standard 5 Hub | edlovirtualclassroom.com/standard5/ | ✅ Live (Science card now links to its hub) |
-| Standard 5 Science Hub | edlovirtualclassroom.com/standard5/science/ | 🟡 Built July 15 — push to go live |
-| Std5 Science tests & quizzes (16) | edlovirtualclassroom.com/standard5/science/tests/… &amp; /quizzes/… | 🟡 Built July 15 — push to go live |
+| Standard 5 Science Hub | edlovirtualclassroom.com/standard5/science/ | ✅ Live (July 15 — phone-verified, themes fixed) |
+| Std5 Science tests & quizzes (16) | edlovirtualclassroom.com/standard5/science/tests/… &amp; /quizzes/… | ✅ Live (July 15) |
 | Standard 6 Hub | edlovirtualclassroom.com/standard6/ | ✅ Live |
 | Spanish Hub (Std6) | edlovirtualclassroom.com/standard6/spanish/ | ✅ Live |
 | Science Hub (Std6) | edlovirtualclassroom.com/standard6/science/ | ✅ Live |
