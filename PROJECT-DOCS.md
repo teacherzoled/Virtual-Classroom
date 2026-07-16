@@ -1,20 +1,26 @@
 # Mr. EdLo's Virtual Classroom — Project Documentation
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
-**Class:** Standard 6  
-**Last updated:** May 2026
+**Classes:** Standard 5 & Standard 6  
+**Last updated:** July 2026
 
 ---
 
 ## 🌐 Live URLs
 
+> **Structure note (July 2026):** the site now serves **two grades**. The home page is a
+> **grade picker**; each grade lives in its own folder. Standard 6 subject pages moved from the
+> site root into `/standard6/`. Old root links (e.g. `/science/`) still work — see **Grade Structure & Redirects** below.
+
 | Page | URL |
 |---|---|
-| Main Classroom Hub | https://edlovirtualclassroom.com |
-| Spanish Subject Hub | https://edlovirtualclassroom.com/spanish/ |
-| Science Subject Hub | https://edlovirtualclassroom.com/science/ |
-| Student Portfolios | https://edlovirtualclassroom.com/portfolios/ |
-| Mis Aspiraciones Lesson | https://edlovirtualclassroom.com/spanish/mis-aspiraciones-intro/ |
+| Grade Picker (home) | https://edlovirtualclassroom.com |
+| Standard 5 Hub | https://edlovirtualclassroom.com/standard5/ |
+| Standard 6 Hub | https://edlovirtualclassroom.com/standard6/ |
+| Spanish Subject Hub (Std6) | https://edlovirtualclassroom.com/standard6/spanish/ |
+| Science Subject Hub (Std6) | https://edlovirtualclassroom.com/standard6/science/ |
+| Student Portfolios (Std6) | https://edlovirtualclassroom.com/standard6/portfolios/ |
+| Mis Aspiraciones Lesson (Std6) | https://edlovirtualclassroom.com/standard6/spanish/lessons/mis-aspiraciones-intro/ |
 
 ---
 
@@ -52,37 +58,69 @@
 
 ## 📂 Repo Structure (Virtual-Classroom)
 
-All subject pages now live inside one repo:
+Everything lives inside one repo. The home page is a **grade picker**; grade content lives in
+`standard5/` and `standard6/`. Shared LMS pages (`login/`, `dashboard/`, `teacher/`, `edlo-utils.js`)
+stay at the **root** so they serve both grades.
 
 ```
 Virtual-Classroom/
-├── index.html                          ← Home page (hub)
-├── CNAME                               ← Custom domain file (auto-created by GitHub)
-├── edlo-utils.js                       ← Shared LMS utility functions (built June 2026)
-├── spanish/
-│   ├── index.html                      ← Spanish subject hub
-│   ├── mis-aspiraciones-intro/
-│   │   └── index.html                  ← Lesson: Voy a + infinitivo (LIVE)
-│   ├── activities/
-│   ├── future-plans-with-creer/
-│   ├── future-plans-with-esperar/
-│   ├── mis-aspiraciones-time-expressions/
-│   └── mis-aspiraciones-voy-a-+-ir-infinitivo-s2/
-├── science/
-│   └── index.html                      ← Science subject hub (LIVE)
-├── math/                               ← Hub page not built yet
-├── scriptures/                         ← Hub page not built yet
-├── computersc/                         ← Hub page not built yet
-├── pe/                                 ← Hub page not built yet
-├── portfolios/
-│   └── index.html                      ← Student portfolios (LIVE)
-├── login/
-│   └── index.html                      ← Student login page (built June 2026)
-├── dashboard/
-│   └── index.html                      ← Student dashboard (built July 2026)
-└── teacher/
-    └── index.html                      ← Teacher dashboard (built August 2026)
+├── index.html                          ← Grade picker (Standard 5 / Standard 6)
+├── 404.html                            ← Catch-all: forwards old root links to /standard6/
+├── CNAME                               ← Custom domain file
+├── edlo-utils.js                       ← Shared LMS utilities — ROOT (serves both grades)
+│
+├── standard5/
+│   └── index.html                      ← Standard 5 hub (subject cards; Science building now)
+│
+├── standard6/
+│   ├── index.html                      ← Standard 6 hub (subject cards)
+│   ├── spanish/
+│   │   ├── index.html                  ← Spanish subject hub (LIVE)
+│   │   ├── lessons/                     ← includes mis-aspiraciones-intro (LIVE)
+│   │   ├── activities/
+│   │   └── images/
+│   ├── science/
+│   │   └── index.html                  ← Science subject hub (LIVE, 30 wks)
+│   ├── math/                           ← Hub page not built yet
+│   ├── scriptures/                     ← Hub page not built yet
+│   ├── computersc/                     ← Hub page not built yet
+│   └── portfolios/
+│       └── index.html                  ← Student portfolios (LIVE)
+│
+├── science/index.html                  ← REDIRECT stub → /standard6/science/
+├── spanish/index.html                  ← REDIRECT stub → /standard6/spanish/
+├── portfolios/index.html               ← REDIRECT stub → /standard6/portfolios/
+│
+├── login/     (planned)                ← Student login page — ROOT
+├── dashboard/ (planned)                ← Student dashboard — ROOT
+└── teacher/   (planned)                ← Teacher dashboard — ROOT
 ```
+
+---
+
+## 🔀 Grade Structure & Redirects (added July 2026)
+
+The site serves two grades from one repo:
+
+| Path | What it is |
+|---|---|
+| `/` | Grade picker — choose Standard 5 or Standard 6 |
+| `/standard5/` | Standard 5 hub (subject cards; content being built, Science first) |
+| `/standard6/` | Standard 6 hub — all existing subject pages moved here |
+| `/standard6/<subject>/` | Each Standard 6 subject hub (spanish, science, portfolios live) |
+
+**Keeping old links alive.** Standard 6 subjects used to sit at the site root (`/science/`, `/spanish/`,
+`/portfolios/`). After the move, old links still work two ways:
+
+1. **Redirect stubs** — a tiny `index.html` at each old path (`/science/`, `/spanish/`, `/portfolios/`)
+   forwards to the new `/standard6/<subject>/` location.
+2. **`404.html` catch-all** — any *deeper* old link (e.g. `/spanish/lessons/…`) hits the site's 404 page,
+   whose script forwards old-subject paths to their `/standard6/` equivalent. Old subject prefixes it
+   watches: `science, spanish, scriptures, computersc, math, portfolios, pe`.
+
+**When adding a NEW Standard 6 page:** put it under `/standard6/…` and link to it with a `/standard6/…`
+path. When adding a **Standard 5** page, put it under `/standard5/…`. Do **not** recreate subject folders
+at the site root — those exist only as redirect stubs.
 
 ---
 
@@ -212,9 +250,11 @@ Theme preference saves to `localStorage` key: `vc-theme` — persists across all
 - At `max-width: 640px`: `.cycle-divider-line` → `display: none`
 
 ### Copyright Footer
-Every page footer must read exactly:
+Footer text is grade-specific (since the site now serves two grades):
 ```
-© 2026 Mr. EdLo's Virtual Classroom — Standard 6 · Belize · All rights reserved.
+Grade picker (home):  © 2026 Mr. EdLo's Virtual Classroom — Belize · All rights reserved.
+Standard 5 pages:      © 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize · All rights reserved.
+Standard 6 pages:      © 2026 Mr. EdLo's Virtual Classroom — Standard 6 · Belize · All rights reserved.
 ```
 
 ### Subject Accent Colors
@@ -271,14 +311,17 @@ cd "C:\Users\zoloe\OneDrive\Shared with me\Code Projects\Python Projects\Virtual
 
 | Page | URL | Status |
 |---|---|---|
-| Home Hub | edlovirtualclassroom.com | ✅ Live |
-| Spanish Hub | edlovirtualclassroom.com/spanish/ | ✅ Live |
-| Science Hub | edlovirtualclassroom.com/science/ | ✅ Live |
-| Portfolios | edlovirtualclassroom.com/portfolios/ | ✅ Live |
-| Math Hub | edlovirtualclassroom.com/math/ | ❌ Not built yet |
-| Scriptures Hub | edlovirtualclassroom.com/scriptures/ | ❌ Not built yet |
-| Computer Science Hub | edlovirtualclassroom.com/computersc/ | ❌ Not built yet |
-| PE Hub | edlovirtualclassroom.com/pe/ | ❌ Not built yet |
+| Grade Picker (home) | edlovirtualclassroom.com | ✅ Live |
+| Standard 5 Hub | edlovirtualclassroom.com/standard5/ | ✅ Live (shell — subjects being built) |
+| Standard 6 Hub | edlovirtualclassroom.com/standard6/ | ✅ Live |
+| Spanish Hub (Std6) | edlovirtualclassroom.com/standard6/spanish/ | ✅ Live |
+| Science Hub (Std6) | edlovirtualclassroom.com/standard6/science/ | ✅ Live |
+| Portfolios (Std6) | edlovirtualclassroom.com/standard6/portfolios/ | ✅ Live |
+| Math Hub (Std6) | edlovirtualclassroom.com/standard6/math/ | ❌ Not built yet |
+| Scriptures Hub (Std6) | edlovirtualclassroom.com/standard6/scriptures/ | ❌ Not built yet |
+| Computer Science Hub (Std6) | edlovirtualclassroom.com/standard6/computersc/ | ❌ Not built yet |
+| PE Hub (Std6) | edlovirtualclassroom.com/standard6/pe/ | ❌ Not built yet |
+| Standard 5 subject hubs | edlovirtualclassroom.com/standard5/&lt;subject&gt;/ | ❌ Not built yet (Science first) |
 | Login Page | edlovirtualclassroom.com/login/ | ❌ Not built yet (June) |
 | Student Dashboard | edlovirtualclassroom.com/dashboard/ | ❌ Not built yet (July) |
 | Teacher Dashboard | edlovirtualclassroom.com/teacher/ | ❌ Not built yet (August) |

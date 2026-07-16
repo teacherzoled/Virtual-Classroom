@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mr. EdLo's Virtual Classroom — Choose Your Class</title>
+<title>Standard 6 — Mr. EdLo's Virtual Classroom</title>
 <link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
 <style>
@@ -257,8 +257,12 @@
   .site-header-logo span { font-family: 'Fredoka One', cursive; font-size: 1.15rem; color: var(--header-name); letter-spacing: 0.02em; transition: color 0.4s; }
   .header-badge { display: inline-block; background: var(--badge-bg); border: 1px solid var(--badge-border); color: var(--badge-color); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 14px; border-radius: 999px; transition: all 0.4s; }
 
+  /* Back to home link */
+  .back-link { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 1.2rem; font-size: 0.82rem; font-weight: 800; letter-spacing: 0.03em; text-decoration: none; color: var(--header-name); background: var(--card-bg); border: 1.5px solid var(--card-border); padding: 7px 16px; border-radius: 999px; transition: all 0.2s; }
+  .back-link:hover { border-color: var(--card-border-h); transform: translateX(-3px); }
+
   /* Page header */
-  header { text-align: center; padding: 2.5rem 1rem 1.5rem; animation: fadeDown 0.7s ease both; }
+  header { text-align: center; padding: 2rem 1rem 2rem; animation: fadeDown 0.7s ease both; }
   @keyframes fadeDown { from { opacity:0; transform:translateY(-24px); } to { opacity:1; transform:translateY(0); } }
   .badge { display: inline-block; background: var(--top-badge-bg); color: var(--top-badge-c); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 14px; border-radius: 999px; margin-bottom: 1rem; animation: pop 0.5s cubic-bezier(.36,1.5,.6,1) 0.3s both; transition: background 0.4s, color 0.4s; }
   @keyframes pop { from { opacity:0; transform:scale(0.7); } to { opacity:1; transform:scale(1); } }
@@ -266,35 +270,57 @@
   .subtitle { font-size: 1.05rem; font-weight: 600; color: var(--subtitle-c); transition: color 0.4s; }
 
   /* Section label */
-  .section-label { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--section-lbl); margin: 2.5rem 0 1rem; text-align: center; transition: color 0.4s; }
+  .section-label { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--section-lbl); margin: 2.5rem 0 1rem; transition: color 0.4s; }
 
-  /* ── Grade picker cards ── */
-  .grade-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin-top: 1rem; }
-  .grade-card {
-    position: relative; flex: 0 1 340px; display: flex; flex-direction: column; align-items: center; text-align: center;
-    padding: 2.6rem 1.8rem 2.2rem; border-radius: 24px;
+  /* Welcome */
+  .welcome { background: var(--welcome-bg); border: 1.5px solid var(--welcome-border); border-radius: 18px; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; animation: fadeDown 0.7s ease 0.2s both; transition: background 0.4s, border-color 0.4s; }
+  .welcome-icon { font-size: 2rem; flex-shrink: 0; }
+  .welcome-text { font-size: 0.9rem; color: var(--welcome-text); line-height: 1.6; transition: color 0.4s; }
+  .welcome-text strong { color: var(--body-color); }
+
+  /* Cards */
+  .grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+  .grid .card { flex: 0 1 260px; }
+  .grid .card.portfolio { flex: 1 1 100%; }
+
+  .card {
+    position: relative; display: flex; flex-direction: column; align-items: flex-start;
+    padding: 1.4rem 1.3rem 1.2rem; border-radius: 18px;
     background: var(--card-bg); border: 1.5px solid var(--card-border);
     text-decoration: none; color: var(--body-color); overflow: hidden;
     transition: transform 0.22s cubic-bezier(.22,.68,0,1.2), border-color 0.2s, box-shadow 0.2s, background 0.4s;
     animation: riseUp 0.5s ease both; cursor: pointer;
   }
-  .grade-card:hover { transform: translateY(-8px) scale(1.02); border-color: var(--card-border-h); box-shadow: 0 16px 48px var(--card-shadow); }
-  .grade-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: var(--accent,#999); }
-  .grade-card:nth-child(1){animation-delay:.12s}.grade-card:nth-child(2){animation-delay:.22s}
-  .grade-num { font-family: 'Fredoka One', cursive; font-size: 4.5rem; line-height: 1; color: var(--accent, var(--body-color)); margin-bottom: 0.4rem; }
-  .grade-title { font-family: 'Fredoka One', cursive; font-size: 1.7rem; margin-bottom: 0.4rem; color: var(--accent, var(--body-color)); }
-  .grade-desc { font-size: 0.9rem; color: var(--card-desc); font-weight: 600; line-height: 1.5; margin-bottom: 1.1rem; transition: color 0.4s; }
-  .grade-chip { display: inline-block; background: var(--badge-bg); border: 1px solid var(--badge-border); color: var(--badge-color); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 14px; border-radius: 999px; }
-  .grade-enter { margin-top: 1.2rem; font-family: 'Fredoka One', cursive; font-size: 0.95rem; color: var(--accent, var(--body-color)); display: inline-flex; align-items: center; gap: 0.4rem; transition: gap 0.2s; }
-  .grade-card:hover .grade-enter { gap: 0.9rem; }
+  .card:hover { transform: translateY(-6px) scale(1.02); border-color: var(--card-border-h); box-shadow: 0 12px 40px var(--card-shadow); }
+  .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: 18px 18px 0 0; background: var(--accent,#999); }
+  .card-icon { font-size: 2.2rem; margin-bottom: 0.75rem; line-height: 1; }
+  .card-title { font-family: 'Fredoka One', cursive; font-size: 1.25rem; margin-bottom: 0.25rem; color: var(--accent, var(--body-color)); }
+  .card-desc { font-size: 0.8rem; color: var(--card-desc); font-weight: 600; line-height: 1.4; transition: color 0.4s; }
+  .card-arrow { position: absolute; bottom: 1rem; right: 1.1rem; font-size: 1rem; opacity: 0; transform: translateX(-6px); transition: opacity 0.2s, transform 0.2s; color: var(--accent, var(--body-color)); }
+  .card:hover .card-arrow { opacity: 1; transform: translateX(0); }
 
   @keyframes riseUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  .card:nth-child(1){animation-delay:.10s}.card:nth-child(2){animation-delay:.18s}.card:nth-child(3){animation-delay:.26s}
+  .card:nth-child(4){animation-delay:.34s}.card:nth-child(5){animation-delay:.42s}.card:nth-child(6){animation-delay:.50s}
+  .card:nth-child(7){animation-delay:.58s}.card:nth-child(8){animation-delay:.66s}
 
-  /* Welcome */
-  .welcome { max-width: 720px; margin: 0 auto; background: var(--welcome-bg); border: 1.5px solid var(--welcome-border); border-radius: 18px; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem; animation: fadeDown 0.7s ease 0.2s both; transition: background 0.4s, border-color 0.4s; }
-  .welcome-icon { font-size: 2rem; flex-shrink: 0; }
-  .welcome-text { font-size: 0.9rem; color: var(--welcome-text); line-height: 1.6; transition: color 0.4s; }
-  .welcome-text strong { color: var(--body-color); }
+  /* Portfolio card */
+  .card.portfolio { flex-direction: row; align-items: center; gap: 1.2rem; padding: 1.3rem 1.5rem; }
+  .card.portfolio .card-icon { margin-bottom: 0; font-size: 2.4rem; flex-shrink: 0; }
+  .card.portfolio .card-body { flex: 1; }
+  .card.portfolio .card-title { font-size: 1.35rem; }
+  .card.portfolio .card-desc { font-size: 0.82rem; }
+  .card.portfolio .card-arrow { position: static; opacity: 1; transform: none; font-size: 1.3rem; flex-shrink: 0; margin-left: auto; transition: transform 0.2s; }
+  .card.portfolio:hover .card-arrow { transform: translateX(5px); }
+
+  /* Feature cards */
+  .features-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+  .feature-card { flex: 0 1 260px; background: var(--card-bg); border: 1.5px solid var(--card-border); border-radius: 18px; padding: 1.3rem 1.2rem; display: flex; align-items: flex-start; gap: 1rem; animation: riseUp 0.5s ease both; transition: transform 0.22s cubic-bezier(.22,.68,0,1.2), border-color 0.2s, box-shadow 0.2s, background 0.4s; }
+  .feature-card:hover { transform: translateY(-5px) scale(1.015); border-color: var(--card-border-h); box-shadow: 0 10px 32px var(--card-shadow); }
+  .feature-card:nth-child(1){animation-delay:.12s}.feature-card:nth-child(2){animation-delay:.20s}.feature-card:nth-child(3){animation-delay:.28s}.feature-card:nth-child(4){animation-delay:.36s}
+  .feature-card-icon { font-size: 1.9rem; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+  .feature-card-text { font-size: 0.83rem; color: var(--card-desc); font-weight: 600; line-height: 1.5; }
+  .feature-card-text strong { display: block; font-family: 'Fredoka One', cursive; font-size: 1rem; color: var(--feat-strong); margin-bottom: 2px; transition: color 0.4s; }
 
   /* Footer */
   .site-footer { position: relative; z-index: 1; background: var(--footer-bg); border-top: 1px solid var(--footer-border); padding: 2rem max(1rem, 4vw); margin-top: 3rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; transition: background 0.4s, border-color 0.4s; }
@@ -305,12 +331,19 @@
   .footer-tagline { font-size: 0.82rem; font-weight: 700; color: var(--footer-tag); letter-spacing: 0.03em; font-style: italic; transition: color 0.4s; text-align: center; }
   .footer-copy { font-size: 0.72rem; color: var(--footer-copy); font-weight: 600; letter-spacing: 0.04em; margin-top: 0.2rem; transition: color 0.4s; text-align: center; }
 
+  /* Back to top */
+  #back-to-top { display: none; position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 99; background: var(--back-top-bg); color: var(--back-top-c); border: none; border-radius: 12px; width: 42px; height: 42px; font-size: 1.2rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.25); transition: background 0.2s, transform 0.2s, color 0.4s; align-items: center; justify-content: center; }
+  #back-to-top:hover { transform: translateY(-3px); filter: brightness(1.1); }
+
   @media (max-width:640px) {
     .site-header { flex-direction:column; align-items:flex-start; gap:.5rem; }
+    .card.portfolio { flex-direction:column; align-items:flex-start; gap:.75rem; }
+    .card.portfolio .card-arrow { margin-left:0; transform:none; }
     .site-footer { padding:1.5rem 1rem; }
   }
   @media (max-width:480px) {
-    .grade-grid .grade-card { flex:0 1 100%; }
+    .grid .card { flex:0 1 100%; }
+    .features-grid .feature-card { flex:0 1 100%; }
   }
 </style>
 </head>
@@ -335,44 +368,120 @@
       <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
       <span>Mr. EdLo's Virtual Classroom</span>
     </a>
-    <span class="header-badge">Belize</span>
+    <span class="header-badge">Standard 6 &nbsp;·&nbsp; Belize</span>
   </div>
 
+  <a class="back-link" href="/">← All Classes</a>
+
   <header>
-    <span class="badge">Choose Your Class</span>
     <h1>Welcome to Our Classroom!</h1>
-    <p class="subtitle">Tap your class to find all your subjects, lessons & activities.</p>
+    <p class="subtitle">Pick a subject and start learning, Standard 6!</p>
   </header>
 
   <!-- Welcome banner -->
   <div class="welcome">
     <div class="welcome-icon">👋</div>
     <div class="welcome-text">
-      <strong>Hello, students!</strong> This is your online home for all our subjects.
-      Choose your class below, then pick a subject to find lessons, activities, quizzes and graded work.
+      <strong>Hello, Standard 6!</strong> This is your online home for all our subjects.
+      Click any subject card below to find lessons, activities, and resources.
+      You can also check your student portfolio link in the Student Work section.
     </div>
   </div>
 
-  <!-- Grade picker -->
-  <p class="section-label">Pick Your Class</p>
-  <div class="grade-grid">
+  <!-- What You Can Do -->
+  <p class="section-label">What You Can Do Here</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-card-icon">📖</div>
+      <div class="feature-card-text"><strong>Review Lessons</strong>Explore subjects and go over lessons at your own pace, any time.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-card-icon">📋</div>
+      <div class="feature-card-text"><strong>Weekly Materials</strong>Access learning materials for all your subjects each week.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-card-icon">📝</div>
+      <div class="feature-card-text"><strong>Activities & Worksheets</strong>Download worksheets and complete interactive activities.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-card-icon">📤</div>
+      <div class="feature-card-text"><strong>Submit Work</strong>Turn in your assignments easily through Google Classroom.</div>
+    </div>
+  </div>
 
-    <a class="grade-card" href="/standard5/" style="--accent:var(--a-math);">
-      <div class="grade-num">5</div>
-      <div class="grade-title">Standard 5</div>
-      <div class="grade-desc">Lessons, activities & graded assessments for our Standard 5 class.</div>
-      <span class="grade-chip">Now Open</span>
-      <span class="grade-enter">Enter Standard 5 →</span>
+  <!-- Subjects -->
+  <p class="section-label">Our Subjects</p>
+  <div class="grid">
+
+    <a class="card" href="/standard6/spanish/" style="--accent:var(--a-spanish);">
+      <div class="card-icon">🌎</div>
+      <div class="card-title">Spanish</div>
+      <div class="card-desc">Mis aspiraciones, future plans & more</div>
+      <span class="card-arrow">→</span>
     </a>
 
-    <a class="grade-card" href="/standard6/" style="--accent:var(--a-science);">
-      <div class="grade-num">6</div>
-      <div class="grade-title">Standard 6</div>
-      <div class="grade-desc">All six subjects, 30 weeks of lessons, activities, quizzes, tests & labs.</div>
-      <span class="grade-chip">Now Open</span>
-      <span class="grade-enter">Enter Standard 6 →</span>
+    <a class="card" href="/standard6/science/" style="--accent:var(--a-science);">
+      <div class="card-icon">🔬</div>
+      <div class="card-title">Science</div>
+      <div class="card-desc">Experiments, concepts & discoveries</div>
+      <span class="card-arrow">→</span>
     </a>
 
+    <a class="card" href="/standard6/math/" style="--accent:var(--a-math);">
+      <div class="card-icon">➗</div>
+      <div class="card-title">Mathematics</div>
+      <div class="card-desc">Numbers, operations & problem solving</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a class="card" href="/standard6/scriptures/" style="--accent:var(--a-scripture);">
+      <div class="card-icon">✝️</div>
+      <div class="card-title">Scriptures</div>
+      <div class="card-desc">Bible stories, verses & devotions</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a class="card" href="/standard6/computersc/" style="--accent:var(--a-cs);">
+      <div class="card-icon">💻</div>
+      <div class="card-title">Computer Science</div>
+      <div class="card-desc">Technology, coding & digital skills</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a class="card" href="/standard6/pe/" style="--accent:var(--a-pe);">
+      <div class="card-icon">⚽</div>
+      <div class="card-title">Physical Education</div>
+      <div class="card-desc">Fitness, sports & healthy living</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a class="card" href="https://classroom.google.com" target="_blank" style="--accent:var(--a-gclass);">
+      <div class="card-icon"><img src="https://ssl.gstatic.com/classroom/favicon.png" alt="Google Classroom" style="width:2.2rem;height:2.2rem;object-fit:contain;border-radius:6px;"></div>
+      <div class="card-title">Google Classroom</div>
+      <div class="card-desc">Sign in to submit assignments & access class materials</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a class="card" href="#" style="--accent:var(--a-worksheet);">
+      <div class="card-icon">📄</div>
+      <div class="card-title">Worksheets</div>
+      <div class="card-desc">Download and print worksheets for all subjects</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+  </div>
+
+  <!-- Student Work -->
+  <p class="section-label">Student Work</p>
+  <div class="grid">
+    <a class="card portfolio" href="/standard6/portfolios/" style="--accent:var(--a-portfolio);">
+      <div class="card-icon">🗂️</div>
+      <div class="card-body">
+        <div class="card-title">Student Portfolios</div>
+        <div class="card-desc">Click here to access individual student portfolio links — Google Docs, projects & collected work</div>
+      </div>
+      <span class="card-arrow">→</span>
+    </a>
   </div>
 
 </div><!-- /wrapper -->
@@ -384,8 +493,10 @@
     <span>Mr. EdLo's Virtual Classroom</span>
   </div>
   <p class="footer-tagline">Explore, discover, and learn something new every day!</p>
-  <p class="footer-copy">© 2026 Mr. EdLo's Virtual Classroom — Belize · All rights reserved.</p>
+  <p class="footer-copy">© 2026 Mr. EdLo's Virtual Classroom — Standard 6 · Belize · All rights reserved.</p>
 </footer>
+
+<button id="back-to-top" title="Back to top" aria-label="Back to top">↑</button>
 
 <script>
   /* Stars */
@@ -419,6 +530,13 @@
       });
     }
   })();
+
+  /* Back to top */
+  const topBtn = document.getElementById('back-to-top');
+  window.addEventListener('scroll', () => {
+    topBtn.style.display = window.scrollY > 300 ? 'flex' : 'none';
+  });
+  topBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
 </script>
 </body>
 </html>
