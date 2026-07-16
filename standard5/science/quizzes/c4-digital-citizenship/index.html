@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Std 5 Science · Cycle 4 · Digital Citizenship Quiz · Mr. EdLo</title>
+<link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+/* ═══════════════════════════ THEME VARIABLES ═══════════════════════════ */
+:root, body.theme-night {
+  --bg:#1a1a2e; --body-color:#ffffff;
+  --card-bg:rgba(255,255,255,0.07); --card-border:rgba(255,255,255,0.10);
+  --card-border-h:rgba(255,255,255,0.28); --card-shadow:rgba(0,0,0,0.40);
+  --card-desc:rgba(255,255,255,0.50); --section-lbl:rgba(255,255,255,0.35);
+  --subtitle-c:rgba(255,255,255,0.55); --info-bg:linear-gradient(135deg,#162d20,#163028);
+  --info-border:rgba(32,201,151,0.18); --header-name:rgba(255,255,255,0.55);
+  --badge-bg:rgba(255,255,255,0.08); --badge-border:rgba(255,255,255,0.12);
+  --badge-color:rgba(255,255,255,0.45); --top-badge-bg:#20C997; --top-badge-c:#1a1a2e;
+  --h1-grad:linear-gradient(135deg,#fff 0%,#20C997 50%,#4DABF7 100%);
+  --footer-bg:linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.45) 100%);
+  --footer-border:rgba(255,255,255,0.07); --footer-name:rgba(255,255,255,0.40);
+  --footer-tag:rgba(255,255,255,0.45); --footer-copy:rgba(255,255,255,0.20);
+  --back-color:rgba(255,255,255,0.40); --back-hover:rgba(255,255,255,0.80);
+  --radial1:#1e3a5f55; --radial2:#0d4d3955; --star-show:1;
+  --input-bg:rgba(255,255,255,0.05); --input-border:rgba(255,255,255,0.15);
+  --input-focus:#20C997; --input-text:#ffffff;
+  --opt-bg:rgba(255,255,255,0.05); --opt-border:rgba(255,255,255,0.12);
+  --opt-hover:rgba(32,201,151,0.12); --opt-sel-bg:rgba(32,201,151,0.15); --opt-sel-b:#20C997;
+  --opt-correct:rgba(105,219,124,0.18); --opt-correct-b:#69DB7C;
+  --opt-wrong:rgba(255,107,107,0.18); --opt-wrong-b:#FF6B6B;
+  --score-bg:rgba(32,201,151,0.08); --score-border:rgba(32,201,151,0.25);
+  --progress-bg:rgba(255,255,255,0.10); --modal-bg:rgba(0,0,0,0.75);
+  --modal-card:#1e2d3a; --modal-border:rgba(32,201,151,0.30);
+  --lock-bg:linear-gradient(135deg,#162d20,#1a1a2e); --lock-border:rgba(32,201,151,0.22);
+  --fb-bg:rgba(32,201,151,0.06); --fb-border:rgba(32,201,151,0.22);
+  --grad-bar:linear-gradient(90deg,#20C997,#4DABF7,#9775FA,#F783AC);
+  --scenario-bg:rgba(32,201,151,0.06); --scenario-border:rgba(32,201,151,0.22);
+}
+body.theme-sunny {
+  --bg:#fffbea; --body-color:#2d2000;
+  --card-bg:rgba(255,255,255,0.75); --card-border:rgba(0,150,100,0.18);
+  --card-border-h:rgba(0,130,80,0.40); --card-shadow:rgba(0,100,70,0.15);
+  --card-desc:rgba(0,80,50,0.55); --section-lbl:rgba(0,100,70,0.50);
+  --subtitle-c:rgba(0,80,50,0.65); --info-bg:linear-gradient(135deg,#d8f5ee,#c0ede0);
+  --info-border:rgba(0,150,100,0.22); --header-name:#006644;
+  --badge-bg:rgba(0,180,120,0.12); --badge-border:rgba(0,150,100,0.22);
+  --badge-color:#005a40; --top-badge-bg:#20C997; --top-badge-c:#fff;
+  --h1-grad:linear-gradient(135deg,#00523a 0%,#009970 50%,#20C997 100%);
+  --footer-bg:linear-gradient(180deg,transparent 0%,rgba(0,180,120,0.10) 100%);
+  --footer-border:rgba(0,150,100,0.18); --footer-name:rgba(0,80,50,0.50);
+  --footer-tag:rgba(0,80,50,0.55); --footer-copy:rgba(0,80,50,0.30);
+  --back-color:rgba(0,80,50,0.50); --back-hover:#005a40;
+  --radial1:rgba(0,210,150,0.15); --radial2:rgba(0,160,100,0.12); --star-show:0;
+  --input-bg:rgba(0,150,100,0.06); --input-border:rgba(0,130,80,0.22);
+  --input-focus:#20C997; --input-text:#2d2000;
+  --opt-bg:rgba(0,150,100,0.05); --opt-border:rgba(0,130,80,0.18);
+  --opt-hover:rgba(0,180,120,0.10); --opt-sel-bg:rgba(0,180,120,0.14); --opt-sel-b:#20C997;
+  --opt-correct:rgba(0,160,80,0.12); --opt-correct-b:#2e7d32;
+  --opt-wrong:rgba(200,0,0,0.08); --opt-wrong-b:#c62828;
+  --score-bg:rgba(0,180,120,0.07); --score-border:rgba(0,150,100,0.22);
+  --progress-bg:rgba(0,150,100,0.12); --modal-bg:rgba(0,0,0,0.50);
+  --modal-card:#f0fbf5; --modal-border:rgba(0,150,100,0.30);
+  --lock-bg:linear-gradient(135deg,#d8f5ee,#f0fff8); --lock-border:rgba(0,150,100,0.22);
+  --fb-bg:rgba(0,160,100,0.06); --fb-border:rgba(0,140,80,0.20);
+  --grad-bar:linear-gradient(90deg,#20C997,#0077cc,#7a3abf,#c2185b);
+  --scenario-bg:rgba(0,150,100,0.05); --scenario-border:rgba(0,150,100,0.22);
+}
+body.theme-cloudy {
+  --bg:#e8edf2; --body-color:#1c2533;
+  --card-bg:rgba(255,255,255,0.72); --card-border:rgba(0,130,110,0.18);
+  --card-border-h:rgba(0,110,90,0.38); --card-shadow:rgba(0,90,70,0.15);
+  --card-desc:rgba(0,70,55,0.55); --section-lbl:rgba(0,90,70,0.50);
+  --subtitle-c:rgba(0,70,55,0.65); --info-bg:linear-gradient(135deg,#c8e8e0,#b5ddd6);
+  --info-border:rgba(0,140,110,0.22); --header-name:#004d40;
+  --badge-bg:rgba(0,170,130,0.12); --badge-border:rgba(0,150,110,0.22);
+  --badge-color:#004d40; --top-badge-bg:#0d9488; --top-badge-c:#fff;
+  --h1-grad:linear-gradient(135deg,#00332b 0%,#0d9488 50%,#20C997 100%);
+  --footer-bg:linear-gradient(180deg,transparent 0%,rgba(0,150,120,0.12) 100%);
+  --footer-border:rgba(0,140,110,0.18); --footer-name:rgba(0,60,50,0.50);
+  --footer-tag:rgba(0,60,50,0.55); --footer-copy:rgba(0,60,50,0.30);
+  --back-color:rgba(0,80,65,0.50); --back-hover:#004d40;
+  --radial1:rgba(0,190,150,0.18); --radial2:rgba(0,150,120,0.15); --star-show:0;
+  --input-bg:rgba(0,140,110,0.06); --input-border:rgba(0,120,95,0.22);
+  --input-focus:#0d9488; --input-text:#1c2533;
+  --opt-bg:rgba(0,140,110,0.05); --opt-border:rgba(0,120,95,0.18);
+  --opt-hover:rgba(0,160,120,0.10); --opt-sel-bg:rgba(0,160,120,0.14); --opt-sel-b:#0d9488;
+  --opt-correct:rgba(0,140,90,0.12); --opt-correct-b:#0d9488;
+  --opt-wrong:rgba(180,0,0,0.08); --opt-wrong-b:#dc2626;
+  --score-bg:rgba(0,160,130,0.07); --score-border:rgba(0,140,110,0.22);
+  --progress-bg:rgba(0,140,110,0.12); --modal-bg:rgba(0,0,0,0.45);
+  --modal-card:#ecf4f2; --modal-border:rgba(0,140,110,0.30);
+  --lock-bg:linear-gradient(135deg,#c8e8e0,#ecf4f2); --lock-border:rgba(0,140,110,0.22);
+  --fb-bg:rgba(0,150,120,0.06); --fb-border:rgba(0,130,100,0.20);
+  --grad-bar:linear-gradient(90deg,#0d9488,#2563eb,#7c3aed,#db2777);
+  --scenario-bg:rgba(0,140,110,0.05); --scenario-border:rgba(0,140,110,0.22);
+}
+body.theme-nature {
+  --bg:#f0f7ee; --body-color:#1a2e10;
+  --card-bg:rgba(255,255,255,0.72); --card-border:rgba(60,120,40,0.18);
+  --card-border-h:rgba(40,100,20,0.38); --card-shadow:rgba(20,80,10,0.15);
+  --card-desc:rgba(30,70,15,0.55); --section-lbl:rgba(40,90,20,0.50);
+  --subtitle-c:rgba(30,75,15,0.65); --info-bg:linear-gradient(135deg,#c8e8c0,#b8ddb0);
+  --info-border:rgba(50,120,20,0.22); --header-name:#276221;
+  --badge-bg:rgba(60,140,30,0.12); --badge-border:rgba(50,120,20,0.22);
+  --badge-color:#1b4d0f; --top-badge-bg:#4CAF50; --top-badge-c:#fff;
+  --h1-grad:linear-gradient(135deg,#1b4d0f 0%,#2e7d1a 50%,#4CAF50 100%);
+  --footer-bg:linear-gradient(180deg,transparent 0%,rgba(60,140,30,0.12) 100%);
+  --footer-border:rgba(50,120,20,0.18); --footer-name:rgba(20,70,10,0.50);
+  --footer-tag:rgba(20,70,10,0.55); --footer-copy:rgba(20,70,10,0.30);
+  --back-color:rgba(39,98,33,0.55); --back-hover:#276221;
+  --radial1:rgba(100,200,60,0.22); --radial2:rgba(30,180,130,0.15); --star-show:0;
+  --input-bg:rgba(60,140,30,0.06); --input-border:rgba(50,120,20,0.20);
+  --input-focus:#4CAF50; --input-text:#1a2e10;
+  --opt-bg:rgba(60,140,30,0.05); --opt-border:rgba(50,120,20,0.18);
+  --opt-hover:rgba(76,175,80,0.10); --opt-sel-bg:rgba(76,175,80,0.15); --opt-sel-b:#4CAF50;
+  --opt-correct:rgba(46,125,50,0.12); --opt-correct-b:#2e7d32;
+  --opt-wrong:rgba(180,0,0,0.08); --opt-wrong-b:#b71c1c;
+  --score-bg:rgba(60,140,30,0.07); --score-border:rgba(50,120,20,0.22);
+  --progress-bg:rgba(60,140,30,0.12); --modal-bg:rgba(0,0,0,0.45);
+  --modal-card:#eef6ec; --modal-border:rgba(60,140,30,0.28);
+  --lock-bg:linear-gradient(135deg,#c8e8c0,#eef6ec); --lock-border:rgba(60,140,30,0.22);
+  --fb-bg:rgba(46,125,50,0.06); --fb-border:rgba(40,110,20,0.20);
+  --grad-bar:linear-gradient(90deg,#4CAF50,#20C997,#1565c0,#7c3aed);
+  --scenario-bg:rgba(46,125,50,0.05); --scenario-border:rgba(40,110,20,0.22);
+}
+
+/* ═══════════════ BASE ═══════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:17.5px;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--body-color);min-height:100vh;overflow-x:hidden;display:flex;flex-direction:column;transition:background .5s,color .5s;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 15% 20%,var(--radial1) 0%,transparent 60%),radial-gradient(ellipse at 85% 80%,var(--radial2) 0%,transparent 60%);pointer-events:none;z-index:0;transition:background .5s;}
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:var(--star-show,1);transition:opacity .5s;}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d,3s) ease-in-out infinite var(--delay,0s);opacity:0;}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(1)}50%{opacity:var(--op,.6);transform:scale(1.3)}}
+.theme-bar{position:relative;z-index:10;display:flex;justify-content:center;gap:.5rem;padding:.55rem 1rem;background:rgba(0,0,0,.18);border-bottom:1px solid rgba(0,0,0,.10);flex-wrap:wrap;}
+body.theme-sunny .theme-bar,body.theme-cloudy .theme-bar,body.theme-nature .theme-bar{background:rgba(0,0,0,.06);}
+.theme-btn{font-family:'Fredoka One',cursive;font-size:.85rem;padding:5px 18px;border-radius:999px;border:2px solid transparent;background:rgba(128,128,128,.12);color:var(--body-color);cursor:pointer;opacity:.6;transition:all .22s;}
+.theme-btn:hover{opacity:.9;transform:translateY(-1px);}
+.theme-btn.active{opacity:1;background:var(--top-badge-bg);color:var(--top-badge-c);box-shadow:0 3px 12px rgba(0,0,0,.20);}
+.wrapper{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:0 max(1rem,2vw) 2rem;flex:1;}
+.site-header{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 0 0;animation:fadeDown .6s ease both;}
+.site-header-logo{display:flex;align-items:center;gap:.75rem;text-decoration:none;}
+.site-header-logo img{height:48px;width:auto;border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.25);}
+.site-header-logo span{font-family:'Fredoka One',cursive;font-size:1.15rem;color:var(--header-name);letter-spacing:.02em;transition:color .4s;}
+.header-badge{display:inline-block;background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--badge-color);font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:999px;}
+.back-link{display:inline-flex;align-items:center;gap:6px;margin-top:1.4rem;font-size:.8rem;font-weight:700;color:var(--back-color);text-decoration:none;transition:color .2s;letter-spacing:.04em;}
+.back-link:hover{color:var(--back-hover);}
+header{text-align:center;padding:2rem 1rem 1.5rem;animation:fadeDown .7s ease both;}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-22px)}to{opacity:1;transform:translateY(0)}}
+.badge{display:inline-block;background:var(--top-badge-bg);color:var(--top-badge-c);font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 14px;border-radius:999px;margin-bottom:1rem;animation:pop .5s cubic-bezier(.36,1.5,.6,1) .3s both;}
+@keyframes pop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-height:1.1;margin-bottom:.4rem;background:var(--h1-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.subtitle{font-size:.95rem;font-weight:600;color:var(--subtitle-c);transition:color .4s;}
+
+/* ═══ SCENARIO / WORD BANK BOX ═══ */
+.scenario-box{background:var(--scenario-bg);border:1.5px solid var(--scenario-border);border-radius:14px;padding:1rem 1.3rem;margin:.5rem 0 .9rem;font-size:.85rem;font-weight:700;line-height:1.6;color:var(--body-color);transition:background .4s,border-color .4s;}
+.scenario-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--section-lbl);margin-bottom:.4rem;}
+
+/* ═══ LOCK SCREEN ═══ */
+.lock-screen{max-width:600px;margin:2rem auto;background:var(--lock-bg);border:1.5px solid var(--lock-border);border-radius:24px;padding:3rem 2.5rem;text-align:center;animation:riseUp .5s ease both;display:none;}
+.lock-screen.show{display:block;}
+.lock-icon{font-size:4rem;margin-bottom:1rem;}
+.lock-title{font-family:'Fredoka One',cursive;font-size:1.8rem;margin-bottom:.6rem;color:var(--body-color);}
+.lock-msg{font-size:.9rem;font-weight:600;color:var(--card-desc);line-height:1.65;margin-bottom:1.5rem;}
+.lock-scores{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.lock-score-pill{background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:14px;padding:.9rem 1.4rem;text-align:center;min-width:100px;}
+.lock-score-pill .lsp-label{font-size:.62rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase;color:var(--section-lbl);margin-bottom:4px;}
+.lock-score-pill .lsp-val{font-family:'Fredoka One',cursive;font-size:1.7rem;color:var(--top-badge-bg);}
+
+/* ═══ TEST CONTAINER ═══ */
+.test-container{max-width:1180px;margin:0 auto;}
+.student-card{background:var(--info-bg);border:1.5px solid var(--info-border);border-radius:18px;padding:1.3rem 1.5rem;display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem;animation:fadeDown .6s ease .1s both;transition:background .4s,border-color .4s;}
+.student-card .sc-icon{font-size:2rem;flex-shrink:0;}
+.sc-fields{flex:1;display:flex;gap:.9rem;flex-wrap:wrap;}
+.sc-group{display:flex;flex-direction:column;gap:4px;flex:1;min-width:130px;}
+.sc-group label{font-size:.65rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase;color:var(--section-lbl);}
+.sc-group input{background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:10px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:700;color:var(--input-text);outline:none;transition:border-color .2s,background .4s;}
+.sc-group input:focus{border-color:var(--input-focus);}
+.sec-card{background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:18px;padding:1.5rem 1.7rem;margin-bottom:1.1rem;position:relative;overflow:hidden;animation:riseUp .5s ease both;transition:background .4s,border-color .4s;}
+.sec-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:18px 18px 0 0;background:var(--sec-accent,var(--top-badge-bg));}
+@keyframes riseUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;flex-wrap:wrap;gap:.5rem;}
+.sec-title{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--body-color);}
+.sec-pts{font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--badge-color);padding:3px 11px;border-radius:999px;}
+.sec-note{font-size:.82rem;font-weight:700;color:var(--card-desc);margin-bottom:1rem;}
+.question{border-radius:12px;padding:4px 6px;margin-left:-6px;margin-right:-6px;transition:opacity .5s ease,filter .5s ease;margin-bottom:1.3rem;}
+.question:last-child{margin-bottom:0;}
+.question.answered-fade{opacity:0.18;filter:blur(2.5px);transition:opacity .5s ease,filter .5s ease;}
+.question.answered-fade:hover{opacity:1;filter:blur(0px);transition:opacity .2s ease,filter .2s ease;}
+.test-locked .question.answered-fade,.test-locked .question.answered-fade:hover{opacity:1!important;filter:blur(0px)!important;}
+.q-label{font-size:.9rem;font-weight:800;color:var(--body-color);margin-bottom:.6rem;display:flex;align-items:flex-start;gap:.55rem;}
+.q-num{font-family:'Fredoka One',cursive;color:var(--top-badge-bg);font-size:1rem;flex-shrink:0;min-width:26px;transition:color .4s;}
+.q-stem{flex:1;}
+.q-pts{font-size:.62rem;font-weight:800;letter-spacing:.05em;color:var(--section-lbl);margin-left:auto;flex-shrink:0;white-space:nowrap;}
+.options{display:flex;flex-direction:column;gap:7px;}
+.opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;background:var(--opt-bg);border:1.5px solid var(--opt-border);cursor:pointer;transition:all .18s;font-size:.88rem;font-weight:700;color:var(--body-color);user-select:none;}
+.opt:hover:not(.locked-opt){background:var(--opt-hover);border-color:var(--opt-sel-b);}
+.opt.selected{background:var(--opt-sel-bg);border-color:var(--opt-sel-b);}
+.opt.correct{background:var(--opt-correct);border-color:var(--opt-correct-b);}
+.opt.wrong{background:var(--opt-wrong);border-color:var(--opt-wrong-b);}
+.opt input[type="radio"]{accent-color:var(--top-badge-bg);width:16px;height:16px;flex-shrink:0;pointer-events:none;}
+.opt-letter{font-family:'Fredoka One',cursive;font-size:.85rem;color:var(--section-lbl);min-width:16px;}
+.opt-tick{margin-left:auto;font-size:.9rem;opacity:0;}
+.opt.correct .opt-tick,.opt.wrong .opt-tick{opacity:1;}
+.answer-input{width:100%;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:12px;padding:10px 14px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:600;color:var(--input-text);outline:none;resize:vertical;transition:border-color .2s,background .4s;}
+.answer-input:focus{border-color:var(--input-focus);}
+.fib-wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px;}
+.fib-input{flex:0 1 260px;min-width:180px;background:var(--input-bg);border:none;border-bottom:2px solid var(--input-border);border-radius:4px 4px 0 0;padding:6px 10px;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;color:var(--input-text);outline:none;transition:border-color .2s,background .4s;}
+.fib-input:focus{border-bottom-color:var(--input-focus);}
+.fib-input.correct{border-bottom-color:var(--opt-correct-b);background:var(--opt-correct);}
+.fib-input.wrong{border-bottom-color:var(--opt-wrong-b);background:var(--opt-wrong);}
+.tf-row{display:flex;gap:10px;flex-wrap:wrap;}
+.tf-opt{flex:1;min-width:120px;}
+.match-grid{display:flex;flex-direction:column;gap:8px;}
+.match-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.match-item{font-size:.85rem;font-weight:800;flex:1;min-width:170px;color:var(--body-color);}
+.match-sel{flex:1;min-width:160px;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:10px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;color:var(--input-text);outline:none;cursor:pointer;transition:border-color .2s;}
+.match-sel:focus{border-color:var(--input-focus);}
+.match-sel.correct{border-color:var(--opt-correct-b);background:var(--opt-correct);}
+.match-sel.wrong{border-color:var(--opt-wrong-b);background:var(--opt-wrong);}
+.label-figure{margin:.4rem 0 .8rem;border:1.5px solid var(--card-border);border-radius:14px;padding:.8rem;background:var(--card-bg);}
+.label-figure svg{width:100%;max-width:480px;display:block;margin:0 auto;height:auto;}
+.fb-box{margin-top:8px;padding:10px 14px;background:var(--fb-bg);border:1.5px solid var(--fb-border);border-radius:10px;font-size:.82rem;font-weight:600;color:var(--body-color);line-height:1.55;display:none;animation:riseUp .3s ease both;}
+.fb-box.show{display:block;}
+.fb-score{font-family:'Fredoka One',cursive;font-size:1rem;margin-bottom:3px;color:var(--top-badge-bg);}
+.fb-correct{font-weight:800;color:var(--opt-correct-b);}
+.submit-area{text-align:center;margin:1.8rem 0 .5rem;}
+.btn-primary{font-family:'Fredoka One',cursive;font-size:1.1rem;padding:14px 44px;border-radius:999px;background:var(--top-badge-bg);color:var(--top-badge-c);border:none;cursor:pointer;box-shadow:0 6px 24px rgba(0,0,0,.20);transition:transform .2s,filter .2s,opacity .2s;letter-spacing:.02em;}
+.btn-primary:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.1);}
+.btn-primary:disabled{opacity:.55;cursor:not-allowed;}
+.btn-secondary{font-family:'Fredoka One',cursive;font-size:.95rem;padding:10px 26px;border-radius:999px;background:var(--card-bg);color:var(--body-color);border:1.5px solid var(--card-border);cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;}
+.btn-secondary:hover{transform:translateY(-2px);filter:brightness(1.1);}
+.spinner-wrap{display:none;justify-content:center;align-items:center;gap:.8rem;margin-top:1rem;font-size:.85rem;font-weight:700;color:var(--card-desc);}
+.spinner-wrap.show{display:flex;}
+.spinner{width:32px;height:32px;border-radius:50%;border:3px solid var(--card-border);border-top-color:var(--top-badge-bg);animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.results-section{background:var(--score-bg);border:1.5px solid var(--score-border);border-radius:18px;padding:1.8rem 2rem;margin-bottom:1.2rem;display:none;animation:riseUp .4s ease both;}
+.results-section.show{display:block;}
+.res-title{font-family:'Fredoka One',cursive;font-size:1.5rem;text-align:center;margin-bottom:1.3rem;color:var(--body-color);}
+.score-grid{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;justify-content:center;}
+.score-box{flex:1;min-width:120px;max-width:200px;background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:14px;padding:1rem 1.1rem;text-align:center;}
+.score-box .sb-label{font-size:.62rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase;color:var(--section-lbl);margin-bottom:6px;}
+.score-box .sb-val{font-family:'Fredoka One',cursive;font-size:2rem;color:var(--body-color);line-height:1;}
+.score-box .sb-sub{font-size:.65rem;font-weight:700;color:var(--card-desc);margin-top:3px;}
+.score-box.hl{border-color:var(--top-badge-bg);}
+.score-box.hl .sb-val{color:var(--top-badge-bg);}
+.section-strip{text-align:center;font-size:.72rem;font-weight:800;letter-spacing:.03em;color:var(--card-desc);margin-bottom:1.3rem;line-height:1.8;}
+.section-strip .ss-item{display:inline-block;margin:0 .35rem;white-space:nowrap;}
+.section-strip .ss-sep{opacity:.4;}
+.prog-wrap{margin-bottom:1.3rem;}
+.prog-row{display:flex;justify-content:space-between;margin-bottom:5px;}
+.prog-lbl{font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--section-lbl);}
+.prog-pct{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--body-color);}
+.prog-bg{height:16px;background:var(--progress-bg);border-radius:999px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:999px;transition:width .8s cubic-bezier(.22,.68,0,1.2),background .5s;background:var(--top-badge-bg);}
+.perf-badge{display:block;text-align:center;font-family:'Fredoka One',cursive;font-size:1.3rem;padding:.9rem;border-radius:14px;background:var(--card-bg);border:1.5px solid var(--card-border);margin-bottom:1rem;}
+.pending-note{font-size:.78rem;font-weight:700;color:var(--section-lbl);text-align:center;font-style:italic;margin-bottom:1rem;line-height:1.5;}
+.pdf-row{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;}
+.modal-overlay{position:fixed;inset:0;z-index:200;background:var(--modal-bg);display:flex;align-items:center;justify-content:center;animation:fadeIn .2s ease both;padding:1rem;}
+.modal-overlay.hidden{display:none;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-card{background:var(--modal-card);border:1.5px solid var(--modal-border);border-radius:22px;padding:2rem 2.2rem;max-width:400px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35);animation:popIn .3s cubic-bezier(.36,1.5,.6,1) both;}
+@keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+.modal-icon{font-size:2.5rem;margin-bottom:.8rem;}
+.modal-title{font-family:'Fredoka One',cursive;font-size:1.4rem;margin-bottom:.4rem;color:var(--body-color);}
+.modal-desc{font-size:.83rem;font-weight:600;color:var(--card-desc);margin-bottom:1.2rem;line-height:1.6;}
+.modal-input{width:100%;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:12px;padding:11px 16px;margin-bottom:.8rem;font-family:'Fredoka One',cursive;font-size:1.1rem;text-align:center;color:var(--input-text);letter-spacing:.12em;outline:none;transition:border-color .2s;}
+.modal-input:focus{border-color:var(--input-focus);}
+.modal-err{font-size:.78rem;font-weight:800;color:var(--opt-wrong-b);margin-top:.4rem;display:none;}
+.modal-err.show{display:block;}
+.site-footer{position:relative;z-index:1;background:var(--footer-bg);border-top:1px solid var(--footer-border);padding:2rem max(1rem,4vw);margin-top:3rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;transition:background .4s,border-color .4s;}
+.site-footer::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad-bar);}
+.footer-logo{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;}
+.footer-logo img{height:36px;width:auto;border-radius:8px;opacity:.75;}
+.footer-logo span{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--footer-name);transition:color .4s;}
+.footer-tagline{font-size:.82rem;font-weight:700;color:var(--footer-tag);letter-spacing:.03em;font-style:italic;}
+.footer-copy{font-size:.72rem;color:var(--footer-copy);font-weight:600;letter-spacing:.04em;margin-top:.2rem;}
+.test-locked .opt,.test-locked .match-sel,.test-locked .answer-input,.test-locked .fib-input{pointer-events:none;}
+.test-locked .opt{cursor:default;}
+.q-progress-wrap{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--card-border);padding:.7rem 0 .6rem;margin-bottom:1.2rem;transition:background .5s;}
+.q-progress-inner{max-width:1180px;margin:0 auto;padding:0 max(1rem,4vw);}
+.q-progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.45rem;gap:.5rem;}
+.q-progress-label{font-size:.7rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase;color:var(--section-lbl);}
+.q-progress-count{font-family:'Fredoka One',cursive;font-size:.95rem;color:var(--body-color);white-space:nowrap;}
+.q-progress-bg{height:8px;background:var(--progress-bg);border-radius:999px;overflow:hidden;}
+.q-progress-fill{height:100%;border-radius:999px;background:var(--top-badge-bg);transition:width .4s cubic-bezier(.22,.68,0,1.2),background .4s;}
+.q-progress-fill.done{background:#69DB7C;}
+.submit-hint{font-size:.72rem;font-weight:700;color:var(--section-lbl);margin-top:.5rem;text-align:center;transition:color .3s;}
+.submit-hint.ready{color:var(--top-badge-bg);}
+.blur-overlay{position:fixed;inset:0;z-index:150;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;flex-direction:column;gap:1rem;cursor:pointer;animation:fadeIn .25s ease both;}
+.blur-overlay.show{display:flex;}
+.blur-icon{font-size:3.5rem;}
+.blur-title{font-family:'Fredoka One',cursive;font-size:1.5rem;color:#fff;text-align:center;}
+.blur-sub{font-size:.85rem;font-weight:700;color:rgba(255,255,255,.65);text-align:center;}
+.warn-overlay{position:fixed;inset:0;z-index:160;background:rgba(0,0,0,.82);display:none;align-items:center;justify-content:center;padding:1.5rem;}
+.warn-overlay.show{display:flex;animation:fadeIn .2s ease both;}
+.warn-card{background:var(--modal-card);border:2px solid var(--opt-wrong-b);border-radius:22px;padding:2rem 2.2rem;max-width:420px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:popIn .3s cubic-bezier(.36,1.5,.6,1) both;}
+.warn-icon{font-size:2.8rem;margin-bottom:.7rem;}
+.warn-title{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--opt-wrong-b);margin-bottom:.5rem;}
+.warn-msg{font-size:.85rem;font-weight:600;color:var(--card-desc);line-height:1.6;margin-bottom:1.2rem;}
+.warn-count{font-size:.75rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--section-lbl);margin-bottom:1rem;}
+@media(max-width:600px){
+  .sec-card{padding:1.2rem 1.1rem;}
+  /* Stack matching + labelling rows so nothing gets squeezed on a phone:
+     the word sits on its own line, the answer box full-width beneath it. */
+  .match-row{flex-direction:column;align-items:stretch;gap:5px;}
+  .match-item{min-width:0;width:100%;}
+  .match-sel{min-width:0;width:100%;}
+  /* Fill-in-the-blank box never runs off the side of the screen */
+  .fib-input{flex:1 1 100%;min-width:0;width:100%;}
+  /* True/False buttons each take a full row for easy thumb tapping */
+  .tf-opt{min-width:0;}
+}
+</style>
+</head>
+<body class="theme-night">
+<div class="stars" id="stars"></div>
+
+<!-- PASSKEY MODAL -->
+<div class="modal-overlay hidden" id="passkeyModal">
+  <div class="modal-card">
+    <div class="modal-icon">🔑</div>
+    <div class="modal-title">Enter Class Code</div>
+    <div class="modal-desc">Ask Mr. EdLo for today's class code to submit your answers.</div>
+    <input class="modal-input" type="text" id="passkeyInput" placeholder="" autocomplete="off" spellcheck="false">
+    <button class="btn-primary" style="width:100%;margin-bottom:.5rem" onclick="validatePasskey()">Submit →</button>
+    <div class="modal-err" id="passkeyErr">❌ Wrong code — ask Mr. EdLo for the correct code.</div>
+  </div>
+</div>
+
+<!-- Progress bar -->
+<div class="q-progress-wrap" id="qProgressWrap">
+  <div class="q-progress-inner">
+    <div class="q-progress-row">
+      <span class="q-progress-label">Questions answered</span>
+      <span class="q-progress-count" id="qProgressCount">0 / 10</span><!-- 10 questions -->
+    </div>
+    <div class="q-progress-bg"><div class="q-progress-fill" id="qProgressFill" style="width:0%"></div></div>
+  </div>
+</div>
+
+<!-- Blur overlay -->
+<div class="blur-overlay" id="blurOverlay" onclick="dismissBlur()">
+  <div class="blur-icon">🙈</div>
+  <div class="blur-title">Screen Hidden</div>
+  <div class="blur-sub">Click anywhere to continue your test</div>
+</div>
+
+<!-- Tab-switch warning -->
+<div class="warn-overlay" id="warnOverlay">
+  <div class="warn-card">
+    <div class="warn-icon">⚠️</div>
+    <div class="warn-title">Focus Warning</div>
+    <div class="warn-msg">You left this test page. This has been noted.<br>Please stay on this page until you have submitted your test.</div>
+    <div class="warn-count" id="warnCount">Warning 1 of 3</div>
+    <button class="btn-primary" style="width:100%" onclick="dismissWarning()">I Understand — Return to Test</button>
+  </div>
+</div>
+
+<!-- Theme bar -->
+<div class="theme-bar">
+  <button class="theme-btn active" onclick="setTheme('night',this)">🌙 Night</button>
+  <button class="theme-btn" onclick="setTheme('sunny',this)">☀️ Sunny</button>
+  <button class="theme-btn" onclick="setTheme('cloudy',this)">☁️ Cloudy</button>
+  <button class="theme-btn" onclick="setTheme('nature',this)">🌿 Nature</button>
+</div>
+
+<div class="wrapper">
+  <div class="site-header">
+    <a class="site-header-logo" href="https://edlovirtualclassroom.com/">
+      <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+      <span>Mr. EdLo's Virtual Classroom</span>
+    </a>
+    <span class="header-badge">Standard 5 &nbsp;·&nbsp; Belize</span>
+  </div>
+  <a class="back-link" href="https://edlovirtualclassroom.com/science/">← Back to Science</a>
+
+  <header>
+    <div class="badge">Standard 5 &nbsp;·&nbsp; Science &nbsp;·&nbsp; Cycle 4 · Classwork Quiz</div>
+    <h1>💻 Digital Citizenship</h1>
+    <p class="subtitle">Safe, Responsible &amp; Ethical Online · 10 questions · 31 marks</p>
+  </header>
+
+  <!-- LOCK SCREEN -->
+  <div class="lock-screen" id="lockScreen">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">Quiz Already Submitted</div>
+    <div class="lock-msg">You have already completed this quiz. Your results are saved below. Download your PDF report or go back to Science.</div>
+    <div class="lock-scores" id="lockScores"></div>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <button class="btn-primary" onclick="downloadPDF()">📄 Download PDF Report</button>
+      <a class="btn-secondary" href="https://edlovirtualclassroom.com/science/">← Back to Science</a>
+    </div>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px dashed var(--card-border);">
+      <p style="font-size:.7rem;font-weight:700;color:var(--section-lbl);margin-bottom:.6rem;letter-spacing:.06em;text-transform:uppercase;">Teacher Access</p>
+      <button class="btn-secondary" style="font-size:.8rem;padding:7px 20px;" onclick="teacherReset()">🔑 Reset Quiz for Testing</button>
+    </div>
+  </div>
+
+  <!-- TEST CONTAINER -->
+  <div class="test-container" id="testContainer">
+    <!-- Student info -->
+    <div class="student-card">
+      <div class="sc-icon">🎓</div>
+      <div class="sc-fields">
+        <div class="sc-group"><label>Your Name</label><input type="text" id="studentName" placeholder="Enter your full name" autocomplete="off"></div>
+        <div class="sc-group"><label>Group</label><input type="text" id="studentGroup" placeholder="Group #" autocomplete="off"></div>
+        <div class="sc-group"><label>Date</label><input type="text" id="testDate" readonly></div>
+        <div class="sc-group"><label>Teacher</label><input type="text" value="Mr. Edwin Lopez" readonly></div>
+      </div>
+    </div>
+
+    <div class="scenario-box">
+      <div class="scenario-label">Instructions</div>
+      Answer every question. Choose the best answer for multiple-choice items, choose the correct match for each matching item, and choose True or False for each statement. This is a short classwork quiz — think about what a good digital citizen would do: someone who is <b>safe</b>, <b>responsible</b>, and <b>ethical</b> online.
+    </div>
+
+    <main id="testForm"><!-- sections + questions injected here --></main>
+
+    <!-- RESULTS -->
+    <div class="results-section" id="resultsSection">
+      <div class="res-title">📊 Your Results</div>
+      <div class="score-grid">
+        <div class="score-box"><div class="sb-label">Selected-Answer</div><div class="sb-val" id="s-auto">—</div><div class="sb-sub">multiple choice, matching &amp; true/false</div></div>
+        <div class="score-box"><div class="sb-label">Written</div><div class="sb-val" id="s-written">—</div><div class="sb-sub">not used in this quiz</div></div>
+        <div class="score-box hl"><div class="sb-label">Total Score</div><div class="sb-val" id="s-total">—</div><div class="sb-sub">out of 31 marks</div></div>
+        <div class="score-box hl"><div class="sb-label">Percentage</div><div class="sb-val" id="s-pct">—</div><div class="sb-sub" id="s-band">—</div></div>
+      </div>
+      <div class="section-strip" id="sectionStrip"></div>
+      <div class="prog-wrap">
+        <div class="prog-row"><span class="prog-lbl">Overall</span><span class="prog-pct" id="prog-pct-lbl">0%</span></div>
+        <div class="prog-bg"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+      </div>
+      <div class="perf-badge" id="perfBadge">—</div>
+      <div class="pending-note" id="pendingNote" style="display:none"></div>
+      <div class="pdf-row">
+        <button class="btn-primary" onclick="downloadPDF()">📄 Download PDF Report</button>
+        <a class="btn-secondary" href="https://edlovirtualclassroom.com/science/">← Back to Science</a>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-area" id="submitArea">
+      <button class="btn-primary" id="submitBtn" disabled onclick="startSubmit()">Submit Quiz</button>
+      <div class="spinner-wrap" id="spinnerWrap"><div class="spinner"></div><span>Grading your quiz… a few seconds.</span></div>
+      <div class="submit-hint" id="submitHint">Answer all 10 questions to submit</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-logo">
+    <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo">
+    <span>Mr. EdLo's Virtual Classroom</span>
+  </div>
+  <div class="footer-tagline">Standard 5 Science &amp; Technology · Cycle 4 · How We Sense &amp; Sort Life</div>
+  <div class="footer-copy">Howard Smith Nazarene School · Belize · edlovirtualclassroom.com</div>
+</footer>
+
+
+<script>
+/* ============================================================
+   STANDARD 5 SCIENCE — CYCLE 4 · DIGITAL CITIZENSHIP QUIZ
+   ------------------------------------------------------------
+   SECURE BUILD: this page contains NO answer keys and NO rubrics.
+   All grading happens on Edwin's Cloudflare Worker in ONE call:
+     mode:'grade' with testId sy2627-std5-c4-quiz-science →
+       • fixed items (mc/match/tf) scored against KV
+   Correct answers + explanations only arrive AFTER submit, in the
+   Worker's response, and are rendered from that response.
+   This quiz has no written (sa/open) items — every item is
+   auto-graded, so the "Written" score box will read 0/0.
+   ============================================================ */
+
+const WORKER_URL = 'https://edlo-gemini.smartstandardsix.workers.dev/';
+const TEST_ID    = 'sy2627-std5-c4-quiz-science';
+const QUIZ_KEY   = 'vc-quiz-std5-c4-quiz-science';
+const PK_KEY     = 'vc-passkey-std5';
+const MAX_MARKS  = 31;
+
+/* ---------------- ITEM DEFINITIONS (display data only) ----------------
+   NO answers. NO accept-lists. NO rubrics. Marks shown here are for
+   display and are the same values the mark scheme + KV key carry.
+   type: mc | tf | fib | match | label | sa | open
+   The qid MUST match the key used in the KV answer-key entry.
+*/
+const ITEMS = [
+  /* ---- SECTION A · Multiple Choice ---- */
+  { qid:"q1", sec:"A", type:"mc", pts:2,
+    stem:"What does <b>good digital citizenship</b> mean?",
+    options:["Using technology only for school work","Using technology safely, responsibly, and ethically","Using technology as fast as possible","Using technology without any rules"] },
+  { qid:"q2", sec:"A", type:"mc", pts:2,
+    stem:"Being <b>SAFE</b> online means…",
+    options:["Posting everything you do each day","Sharing your password with your best friend","Protecting yourself and your personal information","Using the internet only in the morning"] },
+  { qid:"q3", sec:"A", type:"mc", pts:3,
+    stem:"Ana receives a message from someone she does not know, asking for her password. What is the <b>SAFE</b> thing for her to do?",
+    options:["Send the password quickly so the person stops asking","Share the password only if the person seems friendly","Post the message online so everyone can see it","Keep her password private and tell a trusted adult"] },
+  { qid:"q4", sec:"A", type:"mc", pts:4,
+    stem:"Diego took a funny photo of his friend and wants to post it online. What should a <b>RESPONSIBLE</b> digital citizen do first?",
+    options:["Post it right away before he forgets","Think first and ask his friend for permission","Post it but leave out his friend's name","Send it to everyone except his friend"] },
+
+  /* ---- SECTION B · Matching ---- */
+  { qid:"q5", sec:"B", type:"match", pts:3,
+    stem:"Match each part of good digital citizenship to its meaning.",
+    terms:["Safe","Responsible","Ethical"],
+    choices:["Thinking before you post or share","Being honest and kind online","Protecting yourself and your personal information"] },
+  { qid:"q6", sec:"B", type:"match", pts:4,
+    stem:"Match each student's action to the part of digital citizenship it shows.",
+    terms:["Marisol logs out of the class Chromebook when her group's turn ends","Luis reads his comment twice and thinks before posting it","Sofia writes an encouraging comment on a classmate's project"],
+    choices:["Ethical","Safe","Responsible"] },
+  { qid:"q7", sec:"B", type:"match", pts:5,
+    stem:"Your class wrote four rules for being good digital citizens at school. Match each rule to the <b>BEST</b> reason it matters.",
+    terms:["Keep your password private","Think before you post","Be kind and honest online","Tell an adult if something online feels wrong"],
+    choices:["Because your words affect real people","Because a trusted adult can help keep you safe","Because it protects your information from strangers","Because once something is shared, it can spread and cannot always be taken back"] },
+
+  /* ---- SECTION C · True / False ---- */
+  { qid:"q8", sec:"C", type:"tf", pts:2,
+    stem:"Being a responsible digital citizen means thinking before you post or share." },
+  { qid:"q9", sec:"C", type:"tf", pts:3,
+    stem:"Good digital citizenship is only about not getting in trouble." },
+  { qid:"q10", sec:"C", type:"tf", pts:3,
+    stem:"It is okay to post an unkind comment about someone as long as it is true." },
+];
+
+const SECTIONS = {
+  A:{title:"📗 Section A — Multiple Choice", note:"Choose the best answer for each question.", accent:"#20C997"},
+  B:{title:"🔗 Section B — Matching", note:"Choose the correct match for each item.", accent:"#4DABF7"},
+  C:{title:"⚖️ Section C — True or False", note:"Choose True or False for each statement.", accent:"#9775FA"},
+};
+
+const AUTO_TYPES = ["mc","tf","fib","match","label"];
+const AI_TYPES   = ["sa","open"];
+const byId = qid => ITEMS.find(i=>i.qid===qid);
+const DISPLAY_NUM = {};
+ITEMS.forEach((it,i)=>DISPLAY_NUM[it.qid]=i+1);
+const TOTAL_Q = ITEMS.length;
+
+/* ---------------- RENDER ---------------- */
+function render(){
+  const main = document.getElementById("testForm");
+  let html=""; let curSec=null;
+  // section point totals
+  const secPts={}; ITEMS.forEach(it=>secPts[it.sec]=(secPts[it.sec]||0)+it.pts);
+  ITEMS.forEach(it=>{
+    if(it.sec!==curSec){
+      if(curSec!==null) html+="</div>";
+      curSec=it.sec; const s=SECTIONS[curSec];
+      html+=`<div class="sec-card" style="--sec-accent:${s.accent}">
+        <div class="sec-head"><div class="sec-title">${s.title}</div>
+        <div class="sec-pts">${secPts[curSec]} marks</div></div>
+        <p class="sec-note">${s.note}</p>`;
+    }
+    const n=DISPLAY_NUM[it.qid];
+    html+=`<div class="question" data-q="${it.qid}">
+      <div class="q-label"><span class="q-num">${n}.</span><span class="q-stem">${it.stem}</span>
+      <span class="q-pts">${it.pts} ${it.pts===1?'mark':'marks'}</span></div>
+      ${figHTML(it)}${fieldHTML(it)}
+      <div class="fb-box" id="${it.qid}-fb"></div></div>`;
+  });
+  html+="</div>";
+  main.innerHTML=html;
+  attachInteractions();
+}
+
+const LETTERS=["A","B","C","D","E","F"];
+function fieldHTML(it){
+  switch(it.type){
+    case "mc":
+      return `<div class="options" id="${it.qid}-opts">`+it.options.map((o,i)=>
+        `<label class="opt" data-val="${i}"><input type="radio" name="${it.qid}" value="${i}"><span class="opt-letter">${LETTERS[i]}</span> ${o}<span class="opt-tick"></span></label>`).join("")+`</div>`;
+    case "tf":
+      return `<div class="options tf-row" id="${it.qid}-opts">
+        <label class="opt tf-opt" data-val="true"><input type="radio" name="${it.qid}" value="true"> True<span class="opt-tick"></span></label>
+        <label class="opt tf-opt" data-val="false"><input type="radio" name="${it.qid}" value="false"> False<span class="opt-tick"></span></label></div>`;
+    case "fib":
+      return `<div class="fib-wrap"><input class="fib-input" type="text" name="${it.qid}" autocomplete="off" spellcheck="false" placeholder="answer"></div>`;
+    case "match":{
+      let r=`<div class="match-grid">`;
+      it.terms.forEach((t,i)=>{
+        r+=`<div class="match-row"><span class="match-item">${i+1}. ${t}</span>
+          <select class="match-sel" name="${it.qid}_${i}"><option value="">— choose —</option>`+
+          it.choices.map((c,ci)=>`<option value="${ci}">${LETTERS[ci]}. ${c}</option>`).join("")+
+          `</select></div>`;
+      });
+      return r+`</div>`;
+    }
+    case "label":{
+      let r=`<div class="match-grid" style="margin-top:.6rem">`;
+      it.zones.forEach((z,i)=>{
+        r+=`<div class="match-row"><span class="match-item">${z}</span>
+          <select class="match-sel" name="${it.qid}_${i}"><option value="">— label —</option>`+
+          it.choices.map((c,ci)=>`<option value="${ci}">${c}</option>`).join("")+
+          `</select></div>`;
+      });
+      return r+`</div>`;
+    }
+    case "sa":
+      return `<textarea class="answer-input" name="${it.qid}" rows="3" placeholder="Write your answer…"></textarea>`;
+    case "open":
+      return `<textarea class="answer-input" name="${it.qid}" rows="5" placeholder="Write 3–5 sentences…"></textarea>`;
+  }
+  return "";
+}
+
+/* ---------------- FIGURES (eco-print line art; theme-aware strokes) ----------------
+   Each figure serves the STEM (shows the situation) and never reveals the answer.
+   This quiz uses no figures — every item is about an online behaviour or choice,
+   which is abstract, so a picture would either add clutter or risk showing the
+   answer (§8 visual rule). The mechanism is kept in place so a figure could be
+   added later without rework. */
+function figHTML(it){
+  if(!it.fig || !FIGS[it.fig]) return "";
+  return `<div class="label-figure">${FIGS[it.fig]()}</div>`;
+}
+const FS = 'stroke="var(--body-color)" stroke-width="2" fill="none"';           // main outline
+const FA = 'fill="var(--top-badge-bg)"';                                        // accent (numbers/labels)
+const FIGS = {};
+
+/* ---------------- INTERACTION / PROGRESS ---------------- */
+function attachInteractions(){
+  document.querySelectorAll('.opt').forEach(opt=>{
+    opt.addEventListener('click',function(){
+      if(document.body.classList.contains('test-locked'))return;
+      const grp=this.closest('.options');
+      grp.querySelectorAll('.opt').forEach(o=>{o.classList.remove('selected');const inp=o.querySelector('input');if(inp)inp.checked=false;});
+      const inp=this.querySelector('input'); if(inp)inp.checked=true;
+      this.classList.add('selected');
+      updateQuestionProgress();
+    });
+  });
+  document.querySelectorAll('.fib-input,.answer-input').forEach(el=>el.addEventListener('input',updateQuestionProgress));
+  document.querySelectorAll('.match-sel').forEach(el=>el.addEventListener('change',updateQuestionProgress));
+}
+
+function isAnswered(it){
+  if(it.type==="mc"||it.type==="tf") return !!document.querySelector(`input[name="${it.qid}"]:checked`);
+  if(it.type==="fib"||it.type==="sa"||it.type==="open"){const el=document.querySelector(`[name="${it.qid}"]`);return el&&el.value.trim().length>0;}
+  if(it.type==="match"){return it.terms.every((t,i)=>{const el=document.querySelector(`[name="${it.qid}_${i}"]`);return el&&el.value!=="";});}
+  if(it.type==="label"){return it.zones.every((z,i)=>{const el=document.querySelector(`[name="${it.qid}_${i}"]`);return el&&el.value!=="";});}
+  return false;
+}
+
+function updateQuestionProgress(){
+  const answered=ITEMS.filter(isAnswered).length;
+  const pct=Math.round((answered/TOTAL_Q)*100);
+  document.getElementById('qProgressCount').textContent=answered+' / '+TOTAL_Q;
+  const fill=document.getElementById('qProgressFill');
+  fill.style.width=pct+'%'; fill.classList.toggle('done',answered===TOTAL_Q);
+  const ready=answered===TOTAL_Q;
+  const btn=document.getElementById('submitBtn'); btn.disabled=!ready;
+  const hint=document.getElementById('submitHint');
+  hint.textContent=ready?'✅ All questions answered — ready to submit!':`Answer all ${TOTAL_Q} questions to submit (${TOTAL_Q-answered} remaining)`;
+  hint.classList.toggle('ready',ready);
+  updateFade();
+}
+
+function updateFade(){
+  ITEMS.forEach(it=>{
+    const el=document.querySelector(`.question[data-q="${it.qid}"]`); if(!el)return;
+    if(isAnswered(it))setTimeout(()=>el.classList.add('answered-fade'),800);
+    else el.classList.remove('answered-fade');
+  });
+}
+
+/* ---------------- COLLECT ANSWERS ---------------- */
+function collectAnswers(){
+  const out={};
+  ITEMS.forEach(it=>{
+    if(it.type==="mc") out[it.qid]=getRadio(it.qid);
+    else if(it.type==="tf") out[it.qid]=getRadio(it.qid);        // "true"/"false"
+    else if(it.type==="fib") out[it.qid]=getVal(it.qid).trim();
+    else if(it.type==="sa"||it.type==="open") out[it.qid]=getVal(it.qid).trim();
+    else if(it.type==="match") out[it.qid]=it.terms.map((t,i)=>getVal(`${it.qid}_${i}`));
+    else if(it.type==="label") out[it.qid]=it.zones.map((z,i)=>getVal(`${it.qid}_${i}`));
+  });
+  return out;
+}
+function getVal(name){const el=document.querySelector(`[name="${name}"]`);return el?el.value:"";}
+function getRadio(name){const el=document.querySelector(`input[name="${name}"]:checked`);return el?el.value:null;}
+/* human-readable version of a student's answer, for the PDF/report */
+function readableAnswer(it){
+  if(it.type==="mc"){const v=getRadio(it.qid);return v==null?"(not answered)":`${LETTERS[+v]}. ${it.options[+v]}`;}
+  if(it.type==="tf"){const v=getRadio(it.qid);return v==null?"(not answered)":(v==="true"?"True":"False");}
+  if(it.type==="fib"){const v=getVal(it.qid).trim();return v||"(not answered)";}
+  if(it.type==="match")return it.terms.map((t,i)=>{const v=getVal(`${it.qid}_${i}`);return `${t} → ${v===""?"(none)":LETTERS[+v]+". "+it.choices[+v]}`;}).join("; ");
+  if(it.type==="label")return it.zones.map((z,i)=>{const v=getVal(`${it.qid}_${i}`);return `Part ${i+1} → ${v===""?"(none)":it.choices[+v]}`;}).join("; ");
+  if(it.type==="sa"||it.type==="open"){const v=getVal(it.qid).trim();return v||"(not answered)";}
+  return "";
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SUBMIT FLOW  ·  passkey gate → Worker grade → Worker AI → merge
+   ═══════════════════════════════════════════════════════════ */
+let GRADED=null; // final merged results, drives report + PDF
+
+function startSubmit(){
+  if(document.body.classList.contains('test-locked'))return;
+  // passkey gate (modal) — carried forward from the S6 design
+  const saved=getSavedPasskey();
+  if(saved){ runSubmit(saved); }
+  else{ openPasskey(); }
+}
+
+function openPasskey(){
+  document.getElementById('passkeyModal').classList.remove('hidden');
+  document.getElementById('passkeyInput').value='';
+  document.getElementById('passkeyErr').classList.remove('show');
+  setTimeout(()=>document.getElementById('passkeyInput').focus(),100);
+}
+function validatePasskey(){
+  const k=document.getElementById('passkeyInput').value.trim();
+  if(!k){document.getElementById('passkeyErr').classList.add('show');return;}
+  document.getElementById('passkeyModal').classList.add('hidden');
+  runSubmit(k);
+}
+
+async function runSubmit(passkey){
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true; btn.textContent='Grading…';
+  document.getElementById('spinnerWrap').classList.add('show');
+  document.getElementById('submitHint').style.display='none';
+
+  const answers=collectAnswers();
+
+  // ---- ONE call: Worker grades the WHOLE test (fixed + written) ----
+  // The upgraded Worker scores fixed items against KV and AI-grades the
+  // written items against the rubrics stored in KV, all server-side.
+  let grade=null;
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({passkey,mode:'grade',testId:TEST_ID,answers})});
+    if(res.status===403){ badPasskey(); return; }
+    grade=await res.json();
+    if(!grade.ok) throw new Error(grade.error||'grade failed');
+  }catch(e){
+    console.error('grade error',e);
+    grade={ok:false,results:{}};   // everything falls back to pending in mergeAndShow
+  }
+
+  savePasskey(passkey);
+  mergeAndShow(grade,answers);
+  document.getElementById('spinnerWrap').classList.remove('show');
+}
+
+function badPasskey(){
+  clearPasskey();
+  document.getElementById('spinnerWrap').classList.remove('show');
+  document.getElementById('passkeyErr').classList.add('show');
+  document.getElementById('passkeyModal').classList.remove('hidden');
+  const btn=document.getElementById('submitBtn'); btn.disabled=false; btn.textContent='Submit Test';
+  document.getElementById('submitHint').style.display='block';
+}
+
+/* ---------------- MERGE + RENDER RESULTS ---------------- */
+function mergeAndShow(grade,answers){
+  const gr=grade.results||{};
+  let autoEarned=0, autoTotal=0, writtenEarned=0, writtenTotal=0, anyPending=false;
+  const perItem={}; const secEarned={},secTotal={};
+
+  ITEMS.forEach(it=>{
+    secTotal[it.sec]=(secTotal[it.sec]||0)+it.pts;
+    const r=gr[it.qid];   // Worker returns BOTH fixed and written here
+    if(AUTO_TYPES.includes(it.type)){
+      const got=r?r.earned:0;
+      autoEarned+=got; autoTotal+=it.pts;
+      secEarned[it.sec]=(secEarned[it.sec]||0)+got;
+      perItem[it.qid]={kind:'auto',got,pts:it.pts,correct:r?r.correct:false,
+        correctAnswer:r?r.correctAnswer:'',explain:r?r.explain:'',pending:!r};
+      if(!r) anyPending=true;
+      paintFixed(it,r);
+    }else{
+      // written item — Worker AI-graded it against the KV rubric
+      writtenTotal+=it.pts;
+      const pending=!r||r.pending;
+      const got=pending?null:r.earned;
+      const feedback=r?(r.explain||''):'';
+      if(pending){anyPending=true;}
+      else{writtenEarned+=got; secEarned[it.sec]=(secEarned[it.sec]||0)+got;}
+      perItem[it.qid]={kind:'ai',got,pts:it.pts,feedback,pending};
+      paintWritten(it,{got,pts:it.pts,feedback,pending});
+    }
+  });
+
+  const total=autoEarned+writtenEarned;
+  const pct=Math.round((total/MAX_MARKS)*100);
+  const band=bandFor(pct);
+
+  // score boxes
+  document.getElementById('s-auto').textContent=autoEarned+'/'+autoTotal;
+  document.getElementById('s-written').textContent=writtenEarned+'/'+writtenTotal;
+  document.getElementById('s-total').textContent=total+'/'+MAX_MARKS;
+  document.getElementById('s-pct').textContent=pct+'%';
+  document.getElementById('s-band').textContent=band.label;
+  document.getElementById('s-band').style.color=band.color;
+
+  // section strip
+  const strip=Object.keys(SECTIONS).map(s=>
+    `<span class="ss-item">${s} ${secEarned[s]||0}/${secTotal[s]}</span>`).join('<span class="ss-sep">·</span>');
+  document.getElementById('sectionStrip').innerHTML=strip;
+
+  // progress + performance
+  document.getElementById('prog-pct-lbl').textContent=pct+'%';
+  const pf=document.getElementById('progFill'); pf.style.width=pct+'%';
+  pf.style.background=pct>=85?'#69DB7C':pct>=70?'#4DABF7':pct>=50?'#FFD43B':'#FF6B6B';
+  const first=(document.getElementById('studentName').value||'Student').split(' ')[0];
+  document.getElementById('perfBadge').textContent=perfLine(pct,first);
+  document.getElementById('perfBadge').style.color=band.color;
+
+  if(anyPending){
+    const pn=document.getElementById('pendingNote');
+    pn.style.display='block';
+    pn.textContent='Some answers could not reach the grading server and are marked pending for Mr. EdLo. The percentage shown counts only the answers graded so far.';
+  }
+
+  // save + lock + reveal
+  const saveData=buildSaveData({autoEarned,autoTotal,writtenEarned,writtenTotal,secEarned,secTotal,total,pct,band,perItem,answers});
+  saveResult(saveData); window._savedData=saveData; GRADED=saveData;
+
+  document.getElementById('submitArea').style.display='none';
+  const rs=document.getElementById('resultsSection'); rs.classList.add('show');
+  document.body.classList.add('test-locked');
+  testSubmitted=true;
+  document.getElementById('resultsSection').scrollIntoView({behavior:'smooth'});
+}
+
+function paintFixed(it,r){
+  const fb=document.getElementById(it.qid+'-fb'); if(!fb)return;
+  if(!r){fb.innerHTML=`<div class="fb-score">pending</div>Mr. EdLo will review this item.`;fb.classList.add('show');return;}
+  // colour the selected option / inputs
+  if(it.type==="mc"||it.type==="tf"){
+    const chosen=getRadio(it.qid);
+    document.querySelectorAll(`#${it.qid}-opts .opt`).forEach(o=>{
+      const v=o.dataset.val;
+      if(String(v)===String(r.correctAnswerIndex)) {}
+      o.classList.add('locked-opt');
+    });
+    // mark chosen right/wrong; mark the correct one green using correctAnswer text/letter
+    document.querySelectorAll(`#${it.qid}-opts .opt`).forEach(o=>{
+      const tick=o.querySelector('.opt-tick');
+      const isChosen=(String(o.dataset.val)===String(chosen));
+      const label=(it.type==="tf")?(o.dataset.val==="true"?"True":"False"):(LETTERS[+o.dataset.val]);
+      const isCorrect=matchCorrect(it,o,r);
+      if(isCorrect){o.classList.add('correct');if(tick)tick.textContent='✅';}
+      else if(isChosen){o.classList.add('wrong');if(tick)tick.textContent='❌';}
+    });
+  }else if(it.type==="fib"){
+    const el=document.querySelector(`[name="${it.qid}"]`); if(el)el.classList.add(r.correct?'correct':'wrong');
+  }else if(it.type==="match"||it.type==="label"){
+    const keys=(it.type==="match")?it.terms:it.zones;
+    keys.forEach((k,i)=>{const el=document.querySelector(`[name="${it.qid}_${i}"]`);if(el)el.classList.add('locked-opt');});
+  }
+  const line=r.correct
+    ? `Correct!${r.explain?' '+r.explain:''}`
+    : `<span class="fb-correct">Correct answer: ${r.correctAnswer||'—'}.</span>${r.explain?' '+r.explain:''}`;
+  fb.innerHTML=`<div class="fb-score">${r.earned}/${r.points}</div>${line}`;
+  fb.classList.add('show');
+}
+/* best-effort: highlight the correct MC/TF option using the Worker's correctAnswer */
+function matchCorrect(it,optEl,r){
+  const ca=String(r.correctAnswer||'').trim().toLowerCase();
+  if(it.type==="tf"){return (optEl.dataset.val==="true"?"true":"false")===ca || (optEl.dataset.val===ca);}
+  // mc: correctAnswer may be an index, a letter, or the option text
+  const idx=optEl.dataset.val, letter=LETTERS[+idx].toLowerCase(), text=(it.options[+idx]||'').toLowerCase();
+  return ca===idx || ca===letter || ca===text || ca.includes(text);
+}
+
+function paintWritten(it,r){
+  const fb=document.getElementById(it.qid+'-fb'); if(!fb)return;
+  if(r.pending){fb.innerHTML=`<div class="fb-score">pending</div>${r.feedback||'Mr. EdLo will review this answer.'}`;}
+  else{fb.innerHTML=`<div class="fb-score">${r.got}/${r.pts}</div>${r.feedback||''}`;}
+  fb.classList.add('show');
+}
+
+function bandFor(pct){
+  if(pct>=85) return {label:"Mastering", color:"#2E8B57"};
+  if(pct>=70) return {label:"Achieving", color:"#1F6FB2"};
+  if(pct>=50) return {label:"Developing", color:"#B8860B"};
+  return {label:"Emerging", color:"#C0392B"};
+}
+function perfLine(pct,name){
+  if(pct>=85) return `🌟 Excellent — amazing work, ${name}!`;
+  if(pct>=70) return `👍 Great job, ${name}! Keep it up!`;
+  if(pct>=50) return `📚 Good effort, ${name} — keep studying!`;
+  return `💪 Don't give up, ${name} — review with Mr. EdLo.`;
+}
+
+/* ---------------- SAVE / LOCK ---------------- */
+function buildSaveData(x){
+  const answers={};
+  ITEMS.forEach(it=>answers[it.qid]=readableAnswer(it));
+  return {
+    name:document.getElementById('studentName').value||'',
+    group:document.getElementById('studentGroup').value||'',
+    date:document.getElementById('testDate').value,
+    auto:x.autoEarned,autoTotal:x.autoTotal,
+    written:x.writtenEarned,writtenTotal:x.writtenTotal,
+    secEarned:x.secEarned,secTotal:x.secTotal,
+    total:x.total,pct:x.pct,band:x.band.label,
+    perf:document.getElementById('perfBadge').textContent,
+    perItem:x.perItem, answers
+  };
+}
+function getSavedResult(){try{return JSON.parse(localStorage.getItem(QUIZ_KEY));}catch(e){return null;}}
+function saveResult(d){localStorage.setItem(QUIZ_KEY,JSON.stringify(d));}
+function getSavedPasskey(){return localStorage.getItem(PK_KEY)||'';}
+function savePasskey(k){localStorage.setItem(PK_KEY,k);}
+function clearPasskey(){localStorage.removeItem(PK_KEY);}
+
+function showLockScreen(d){
+  document.getElementById('testContainer').style.display='none';
+  const ls=document.getElementById('lockScreen'); ls.classList.add('show');
+  const pills=[
+    {label:'Selected',val:d.auto+'/'+d.autoTotal},
+    {label:'Written',val:d.written+'/'+d.writtenTotal},
+    {label:'Total',val:d.total+'/'+MAX_MARKS},
+    {label:'Percentage',val:d.pct+'%'}];
+  const c=document.getElementById('lockScores'); c.innerHTML='';
+  pills.forEach(p=>{const el=document.createElement('div');el.className='lock-score-pill';el.innerHTML=`<div class="lsp-label">${p.label}</div><div class="lsp-val">${p.val}</div>`;c.appendChild(el);});
+  window._savedData=d; GRADED=d;
+}
+function teacherReset(){
+  const k=prompt('Teacher reset — enter reset code:');
+  if(k===null)return;
+  if(k.trim().toUpperCase()==='RESET-EDLO'){localStorage.removeItem(QUIZ_KEY);location.reload();}
+  else alert('Incorrect reset code.');
+}
+
+/* ---------------- THEME / STARS / INTEGRITY (carried from S6) ---------------- */
+function setTheme(name,btn){
+  document.body.className='theme-'+name+(document.body.classList.contains('test-locked')?' test-locked':'');
+  document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  localStorage.setItem('vc-theme',name);
+}
+function makeStars(){
+  const wrap=document.getElementById('stars'); if(!wrap)return;
+  for(let i=0;i<70;i++){const s=document.createElement('div');s.className='star';const sz=Math.random()*2+1;
+    s.style.width=s.style.height=sz+'px';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';
+    s.style.setProperty('--d',(Math.random()*3+2)+'s');s.style.setProperty('--delay',(Math.random()*3)+'s');
+    s.style.setProperty('--op',(Math.random()*.5+.3).toFixed(2));wrap.appendChild(s);}
+}
+
+// idle blur
+const IDLE_SECONDS=10; let idleTimer=null,blurActive=false,testSubmitted=false;
+function resetIdleTimer(){if(testSubmitted)return;clearTimeout(idleTimer);if(blurActive)return;idleTimer=setTimeout(showBlur,IDLE_SECONDS*1000);}
+function showBlur(){if(testSubmitted)return;blurActive=true;document.getElementById('blurOverlay').classList.add('show');}
+function dismissBlur(){blurActive=false;document.getElementById('blurOverlay').classList.remove('show');resetIdleTimer();}
+function attachIdleListeners(){['mousemove','mousedown','keydown','touchstart','scroll','click'].forEach(e=>document.addEventListener(e,resetIdleTimer,{passive:true}));resetIdleTimer();}
+// tab-switch warnings
+let tabWarnings=0; const MAX_WARNINGS=3;
+function handleVisibilityChange(){if(testSubmitted)return;if(document.hidden){tabWarnings++;document.getElementById('warnCount').textContent='Warning '+tabWarnings+' of '+MAX_WARNINGS;document.getElementById('warnOverlay').classList.add('show');showBlur();}}
+function dismissWarning(){document.getElementById('warnOverlay').classList.remove('show');dismissBlur();}
+document.addEventListener('visibilitychange',handleVisibilityChange);
+window.addEventListener('blur',()=>{if(!testSubmitted&&!document.hidden){setTimeout(()=>{if(!document.hasFocus()&&!testSubmitted){tabWarnings++;document.getElementById('warnCount').textContent='Warning '+tabWarnings+' of '+MAX_WARNINGS;document.getElementById('warnOverlay').classList.add('show');showBlur();}},300);}});
+
+/* ---------------- PDF REPORT (jsPDF) ---------------- */
+function downloadPDF(){
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'p',unit:'mm',format:'a4'});
+  const d=window._savedData||GRADED||{};
+  const name=d.name||document.getElementById('studentName')?.value||'Not entered';
+  const group=d.group||'';
+  const date=d.date||'';
+  const pageW=210,margin=18,colW=pageW-margin*2; let y=0;
+
+  /* Decode any HTML entities to plain text before writing to the PDF.
+     jsPDF cannot interpret entities (&amp;, &#x25EF;, &ldquo;, …) — left raw
+     they render as garbled symbols. Uses the browser's own parser via a
+     detached textarea, then normalises a few typographic chars that the
+     PDF core font (Helvetica/WinAnsi) cannot draw, and finally strips any
+     remaining glyph outside the WinAnsi-safe range (catch-all safety net —
+     one unhandled glyph otherwise corrupts the whole text run). Apply to
+     EVERY string that enters doc.text(). */
+  const _dec=document.createElement('textarea');
+  function pdfText(s){
+    if(s==null) return '';
+    _dec.innerHTML=String(s).replace(/<[^>]+>/g,'');   // strip any HTML tags first
+    let t=_dec.value;                                   // browser decodes all entities
+    t=t.replace(/[‘’]/g,"'")                  // curly single quotes → '
+         .replace(/[“”]/g,'"')               // curly double quotes → "
+         .replace(/[–—]/g,'-')               // en/em dash → -
+         .replace(/→/g,'->')                      // arrow → ->
+         .replace(/◯/g,'O')                        // large circle → O
+         .replace(/[①-⑨]/g,m=>String(m.charCodeAt(0)-0x245F)) // ①..⑨ → 1..9
+         .replace(/[^\x20-\x7E\xA0-\xFF]/g,'');        // catch-all: drop non-WinAnsi glyphs
+    return t;
+  }
+
+  // header
+  doc.setFillColor(32,201,151);doc.rect(0,0,210,8,'F');y=18;
+  doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(110,110,110);
+  doc.text('Howard Smith Nazarene School  |  Standard 5  |  Belize',pageW/2,y,{align:'center'});y+=7;
+  doc.setFontSize(16);doc.setTextColor(20,20,40);
+  doc.text('Cycle 4 · Digital Citizenship Quiz',pageW/2,y,{align:'center'});y+=5;
+  doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(80,80,100);
+  doc.text("Mr. EdLo's Virtual Classroom  ·  Safe, Responsible & Ethical Online",pageW/2,y,{align:'center'});y+=8;
+  doc.setDrawColor(32,201,151);doc.setLineWidth(0.5);doc.line(margin,y,pageW-margin,y);y+=7;
+
+  // student block
+  doc.setFillColor(243,255,252);doc.setDrawColor(32,201,151);doc.setLineWidth(0.4);
+  doc.roundedRect(margin,y,colW,22,3,3,'FD');
+  doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(40,40,60);
+  doc.text('STUDENT:',margin+5,y+8);doc.setFont('helvetica','normal');doc.text(pdfText(name),margin+27,y+8);
+  doc.setFont('helvetica','bold');doc.text('GROUP:',margin+5,y+16);doc.setFont('helvetica','normal');doc.text(pdfText(group||'—'),margin+27,y+16);
+  doc.setFont('helvetica','bold');doc.text('TEACHER:',pageW/2,y+8);doc.setFont('helvetica','normal');doc.text('Mr. Edwin Lopez',pageW/2+24,y+8);
+  doc.setFont('helvetica','bold');doc.text('DATE:',pageW/2,y+16);doc.setFont('helvetica','normal');doc.text(pdfText(date||'—'),pageW/2+24,y+16);
+  y+=28;
+
+  // RESULTS boxes (grouped-plus-strip)
+  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(32,201,151);doc.text('RESULTS',margin,y);y+=5;
+  const boxes=[
+    {label:'SELECTED-ANSWER',val:(d.auto??'—')+'/'+(d.autoTotal??'—')},
+    {label:'WRITTEN',val:(d.written??'—')+'/'+(d.writtenTotal??'—')},
+    {label:'TOTAL SCORE',val:(d.total??'—')+'/'+MAX_MARKS,hl:true},
+    {label:'PERCENTAGE',val:(d.pct??'—')+'%',hl:true}];
+  const bw=colW/4-2;
+  boxes.forEach((b,i)=>{const bx=margin+i*(bw+2.6);
+    doc.setFillColor(b.hl?32:240,b.hl?201:252,b.hl?151:248);
+    doc.setDrawColor(b.hl?20:200,b.hl?180:230,b.hl?100:230);
+    doc.roundedRect(bx,y,bw,18,2,2,'FD');
+    doc.setFont('helvetica','bold');doc.setFontSize(6.2);doc.setTextColor(b.hl?10:80,b.hl?70:80,b.hl?10:80);
+    doc.text(b.label,bx+bw/2,y+6,{align:'center'});
+    doc.setFontSize(b.hl?13:11);doc.setTextColor(b.hl?10:40,b.hl?70:40,b.hl?10:60);
+    doc.text(String(b.val),bx+bw/2,y+14,{align:'center'});});
+  y+=22;
+
+  // section strip
+  const se=d.secEarned||{},st=d.secTotal||{};
+  const stripTxt=Object.keys(SECTIONS).map(s=>`${s} ${se[s]||0}/${st[s]||0}`).join('   ·   ');
+  doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.setTextColor(90,90,110);
+  doc.text(stripTxt,pageW/2,y,{align:'center'});y+=8;
+
+  // performance line + band
+  doc.setFillColor(245,255,250);doc.setDrawColor(180,235,215);
+  doc.roundedRect(margin,y,colW,12,3,3,'FD');
+  doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(30,100,70);
+  const perf=String(d.perf||'').replace(/[^\x00-\x7F]/g,'').trim()+'  ('+(d.band||'')+')';
+  doc.text(perf,margin+5,y+7.5);y+=18;
+
+  // per-question detail — the "completed test paper"
+  doc.setDrawColor(200,225,215);doc.setLineWidth(0.3);doc.line(margin,y,pageW-margin,y);y+=6;
+  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(32,201,151);doc.text('QUESTION-BY-QUESTION',margin,y);y+=5;
+  const lh=4.4; doc.setFontSize(8);
+  ITEMS.forEach(it=>{
+    const n=DISPLAY_NUM[it.qid];
+    const pi=(d.perItem&&d.perItem[it.qid])||{};
+    const ans=(d.answers&&d.answers[it.qid])||'(not answered)';
+    const gotTxt=pi.pending?'pending':((pi.got==null?0:pi.got)+'/'+it.pts);
+    if(y>262){doc.addPage();y=20;}
+    // question line
+    doc.setFont('helvetica','bold');doc.setTextColor(50,50,80);
+    const stem=pdfText(it.stem);
+    doc.splitTextToSize(`Q${n}  (${gotTxt})  ${stem}`,colW).forEach(l=>{if(y>272){doc.addPage();y=20;}doc.text(l,margin,y);y+=lh;});
+    // student answer
+    doc.setFont('helvetica','normal');doc.setTextColor(70,70,90);
+    doc.splitTextToSize('Answer: '+pdfText(ans),colW-2).forEach(l=>{if(y>272){doc.addPage();y=20;}doc.text(l,margin+2,y);y+=lh;});
+    // correct answer (fixed items) or feedback (written)
+    if(pi.kind==='auto'&&!pi.correct&&pi.correctAnswer){
+      doc.setTextColor(30,120,70);
+      doc.splitTextToSize('Correct: '+pdfText(pi.correctAnswer),colW-2).forEach(l=>{if(y>272){doc.addPage();y=20;}doc.text(l,margin+2,y);y+=lh;});
+    }
+    if(pi.feedback||(pi.kind==='auto'&&pi.explain)){
+      const fbtxt=pi.feedback||pi.explain||'';
+      doc.setTextColor(110,80,150);
+      doc.splitTextToSize('Feedback: '+pdfText(fbtxt),colW-2).forEach(l=>{if(y>272){doc.addPage();y=20;}doc.text(l,margin+2,y);y+=lh;});
+    }
+    y+=2.5;
+  });
+
+  // footers
+  const pc=doc.getNumberOfPages();
+  for(let p=1;p<=pc;p++){doc.setPage(p);doc.setFillColor(32,201,151);doc.rect(0,290,210,7,'F');
+    doc.setFont('helvetica','normal');doc.setFontSize(6.5);doc.setTextColor(255,255,255);
+    doc.text('edlovirtualclassroom.com  ·  Std 5 · Cycle 4 · Digital Citizenship Quiz  ·  Page '+p+' of '+pc,pageW/2,294.5,{align:'center'});}
+  const safe=String(name).replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
+  doc.save('Std5_DigCitQuiz_'+(safe||'student')+'.pdf');
+}
+
+/* ---------------- INIT ---------------- */
+window.addEventListener('DOMContentLoaded',()=>{
+  makeStars();
+  const th=localStorage.getItem('vc-theme');
+  if(th){document.body.className='theme-'+th;document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));const map={night:0,sunny:1,cloudy:2,nature:3};const btns=document.querySelectorAll('.theme-btn');if(btns[map[th]])btns[map[th]].classList.add('active');}
+  const dt=new Date();document.getElementById('testDate').value=String(dt.getDate()).padStart(2,'0')+' / '+String(dt.getMonth()+1).padStart(2,'0')+' / '+dt.getFullYear();
+
+  const saved=getSavedResult();
+  if(saved){ showLockScreen(saved); const pw=document.getElementById('qProgressWrap'); if(pw)pw.style.display='none'; testSubmitted=true; }
+  else{ render(); updateQuestionProgress(); attachIdleListeners(); }
+
+});
+</script>
+</body>
+</html>

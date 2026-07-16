@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Std 5 Science · Unit Test 1 — Climate &amp; Weather · Mr. EdLo</title>
+<link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+/* ═══════════════════════════ THEME VARIABLES ═══════════════════════════ */
+:root, body.theme-night {
+  --bg:#1a1a2e; --body-color:#ffffff;
+  --card-bg:rgba(255,255,255,0.07); --card-border:rgba(255,255,255,0.10);
+  --card-border-h:rgba(255,255,255,0.28); --card-shadow:rgba(0,0,0,0.40);
+  --card-desc:rgba(255,255,255,0.50); --section-lbl:rgba(255,255,255,0.35);
+  --subtitle-c:rgba(255,255,255,0.55); --info-bg:linear-gradient(135deg,#162d20,#163028);
+  --info-border:rgba(32,201,151,0.18); --header-name:rgba(255,255,255,0.55);
+  --badge-bg:rgba(255,255,255,0.08); --badge-border:rgba(255,255,255,0.12);
+  --badge-color:rgba(255,255,255,0.45); --top-badge-bg:#20C997; --top-badge-c:#1a1a2e;
+  --h1-grad:linear-gradient(135deg,#fff 0%,#20C997 50%,#4DABF7 100%);
+  --footer-bg:linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.45) 100%);
+  --footer-border:rgba(255,255,255,0.07); --footer-name:rgba(255,255,255,0.40);
+  --footer-tag:rgba(255,255,255,0.45); --footer-copy:rgba(255,255,255,0.20);
+  --back-color:rgba(255,255,255,0.40); --back-hover:rgba(255,255,255,0.80);
+  --radial1:#1e3a5f55; --radial2:#0d4d3955; --star-show:1;
+  --input-bg:rgba(255,255,255,0.05); --input-border:rgba(255,255,255,0.15);
+  --input-focus:#20C997; --input-text:#ffffff;
+  --opt-bg:rgba(255,255,255,0.05); --opt-border:rgba(255,255,255,0.12);
+  --opt-hover:rgba(32,201,151,0.12); --opt-sel-bg:rgba(32,201,151,0.15); --opt-sel-b:#20C997;
+  --opt-correct:rgba(105,219,124,0.18); --opt-correct-b:#69DB7C;
+  --opt-wrong:rgba(255,107,107,0.18); --opt-wrong-b:#FF6B6B;
+  --score-bg:rgba(32,201,151,0.08); --score-border:rgba(32,201,151,0.25);
+  --progress-bg:rgba(255,255,255,0.10); --modal-bg:rgba(0,0,0,0.75);
+  --modal-card:#1e2d3a; --modal-border:rgba(32,201,151,0.30);
+  --lock-bg:linear-gradient(135deg,#162d20,#1a1a2e); --lock-border:rgba(32,201,151,0.22);
+  --fb-bg:rgba(32,201,151,0.06); --fb-border:rgba(32,201,151,0.22);
+  --grad-bar:linear-gradient(90deg,#20C997,#4DABF7,#9775FA,#F783AC);
+  --scenario-bg:rgba(32,201,151,0.06); --scenario-border:rgba(32,201,151,0.22);
+}
+body.theme-sunny {
+  --bg:#fffbea; --body-color:#2d2000;
+  --card-bg:rgba(255,255,255,0.75); --card-border:rgba(0,150,100,0.18);
+  --card-border-h:rgba(0,130,80,0.40); --card-shadow:rgba(0,100,70,0.15);
+  --card-desc:rgba(0,80,50,0.55); --section-lbl:rgba(0,100,70,0.50);
+  --subtitle-c:rgba(0,80,50,0.65); --info-bg:linear-gradient(135deg,#d8f5ee,#c0ede0);
+  --info-border:rgba(0,150,100,0.22); --header-name:#006644;
+  --badge-bg:rgba(0,180,120,0.12); --badge-border:rgba(0,150,100,0.22);
+  --badge-color:#005a40; --top-badge-bg:#20C997; --top-badge-c:#fff;
+  --h1-grad:linear-gradient(135deg,#00523a 0%,#009970 50%,#20C997 100%);
+  --footer-bg:linear-gradient(180deg,transparent 0%,rgba(0,180,120,0.10) 100%);
+  --footer-border:rgba(0,150,100,0.18); --footer-name:rgba(0,80,50,0.50);
+  --footer-tag:rgba(0,80,50,0.55); --footer-copy:rgba(0,80,50,0.30);
+  --back-color:rgba(0,80,50,0.50); --back-hover:#005a40;
+  --radial1:rgba(0,210,150,0.15); --radial2:rgba(0,160,100,0.12); --star-show:0;
+  --input-bg:rgba(0,150,100,0.06); --input-border:rgba(0,130,80,0.22);
+  --input-focus:#20C997; --input-text:#2d2000;
+  --opt-bg:rgba(0,150,100,0.05); --opt-border:rgba(0,130,80,0.18);
+  --opt-hover:rgba(0,180,120,0.10); --opt-sel-bg:rgba(0,180,120,0.14); --opt-sel-b:#20C997;
+  --opt-correct:rgba(0,160,80,0.12); --opt-correct-b:#2e7d32;
+  --opt-wrong:rgba(200,0,0,0.08); --opt-wrong-b:#c62828;
+  --score-bg:rgba(0,180,120,0.07); --score-border:rgba(0,150,100,0.22);
+  --progress-bg:rgba(0,150,100,0.12); --modal-bg:rgba(0,0,0,0.50);
+  --modal-card:#f0fbf5; --modal-border:rgba(0,150,100,0.30);
+  --lock-bg:linear-gradient(135deg,#d8f5ee,#f0fff8); --lock-border:rgba(0,150,100,0.22);
+  --fb-bg:rgba(0,160,100,0.06); --fb-border:rgba(0,140,80,0.20);
+  --grad-bar:linear-gradient(90deg,#20C997,#0077cc,#7a3abf,#c2185b);
+  --scenario-bg:rgba(0,150,100,0.05); --scenario-border:rgba(0,150,100,0.22);
+}
+body.theme-cloudy {
+  --bg:#e8edf2; --body-color:#1c2533;
+  --card-bg:rgba(255,255,255,0.72); --card-border:rgba(0,130,110,0.18);
+  --card-border-h:rgba(0,110,90,0.38); --card-shadow:rgba(0,90,70,0.15);
+  --card-desc:rgba(0,70,55,0.55); --section-lbl:rgba(0,90,70,0.50);
+  --subtitle-c:rgba(0,70,55,0.65); --info-bg:linear-gradient(135deg,#c8e8e0,#b5ddd6);
+  --info-border:rgba(0,140,110,0.22); --header-name:#004d40;
+  --badge-bg:rgba(0,170,130,0.12); --badge-border:rgba(0,150,110,0.22);
+  --badge-color:#004d40; --top-badge-bg:#0d9488; --top-badge-c:#fff;
+  --h1-grad:linear-gradient(135deg,#00332b 0%,#0d9488 50%,#20C997 100%);
+  --footer-bg:linear-gradient(180deg,transparent 0%,rgba(0,150,120,0.12) 100%);
+  --footer-border:rgba(0,140,110,0.18); --footer-name:rgba(0,60,50,0.50);
+  --footer-tag:rgba(0,60,50,0.55); --footer-copy:rgba(0,60,50,0.30);
+  --back-color:rgba(0,80,65,0.50); --back-hover:#004d40;
+  --radial1:rgba(0,190,150,0.18); --radial2:rgba(0,150,120,0.15); --star-show:0;
+  --input-bg:rgba(0,140,110,0.06); --input-border:rgba(0,120,95,0.22);
+  --input-focus:#0d9488; --input-text:#1c2533;
+  --opt-bg:rgba(0,140,110,0.05); --opt-border:rgba(0,120,95,0.18);
+  --opt-hover:rgba(0,160,120,0.10); --opt-sel-bg:rgba(0,160,120,0.14); --opt-sel-b:#0d9488;
+  --opt-correct:rgba(0,140,90,0.12); --opt-correct-b:#0d9488;
+  --opt-wrong:rgba(180,0,0,0.08); --opt-wrong-b:#dc2626;
+  --score-bg:rgba(0,160,130,0.07); --score-border:rgba(0,140,110,0.22);
+  --progress-bg:rgba(0,140,110,0.12); --modal-bg:rgba(0,0,0,0.45);
+  --modal-card:#ecf4f2; --modal-border:rgba(0,140,110,0.30);
+  --lock-bg:linear-gradient(135deg,#c8e8e0,#ecf4f2); --lock-border:rgba(0,140,110,0.22);
+  --fb-bg:rgba(0,150,120,0.06); --fb-border:rgba(0,130,100,0.20);
+  --grad-bar:linear-gradient(90deg,#0d9488,#2563eb,#7c3aed,#db2777);
+  --scenario-bg:rgba(0,140,110,0.05); --scenario-border:rgba(0,140,110,0.22);
+}
+body.theme-nature {
+  --bg:#f0f7ee; --body-color:#1a2e10;
+  --card-bg:rgba(255,255,255,0.72); --card-border:rgba(60,120,40,0.18);
+  --card-border-h:rgba(40,100,20,0.38); --card-shadow:rgba(20,80,10,0.15);
+  --card-desc:rgba(30,70,15,0.55); --section-lbl:rgba(40,90,20,0.50);
+  --subtitle-c:rgba(30,75,15,0.65); --info-bg:linear-gradient(135deg,#c8e8c0,#b8ddb0);
+  --info-border:rgba(50,120,20,0.22); --header-name:#276221;
+  --badge-bg:rgba(60,140,30,0.12); --badge-border:rgba(50,120,20,0.22);
+  --badge-color:#1b4d0f; --top-badge-bg:#4CAF50; --top-badge-c:#fff;
+  --h1-grad:linear-gradient(135deg,#1b4d0f 0%,#2e7d1a 50%,#4CAF50 100%);
+  --footer-bg:linear-gradient(180deg,transparent 0%,rgba(60,140,30,0.12) 100%);
+  --footer-border:rgba(50,120,20,0.18); --footer-name:rgba(20,70,10,0.50);
+  --footer-tag:rgba(20,70,10,0.55); --footer-copy:rgba(20,70,10,0.30);
+  --back-color:rgba(39,98,33,0.55); --back-hover:#276221;
+  --radial1:rgba(100,200,60,0.22); --radial2:rgba(30,180,130,0.15); --star-show:0;
+  --input-bg:rgba(60,140,30,0.06); --input-border:rgba(50,120,20,0.20);
+  --input-focus:#4CAF50; --input-text:#1a2e10;
+  --opt-bg:rgba(60,140,30,0.05); --opt-border:rgba(50,120,20,0.18);
+  --opt-hover:rgba(76,175,80,0.10); --opt-sel-bg:rgba(76,175,80,0.15); --opt-sel-b:#4CAF50;
+  --opt-correct:rgba(46,125,50,0.12); --opt-correct-b:#2e7d32;
+  --opt-wrong:rgba(180,0,0,0.08); --opt-wrong-b:#b71c1c;
+  --score-bg:rgba(60,140,30,0.07); --score-border:rgba(50,120,20,0.22);
+  --progress-bg:rgba(60,140,30,0.12); --modal-bg:rgba(0,0,0,0.45);
+  --modal-card:#eef6ec; --modal-border:rgba(60,140,30,0.28);
+  --lock-bg:linear-gradient(135deg,#c8e8c0,#eef6ec); --lock-border:rgba(60,140,30,0.22);
+  --fb-bg:rgba(46,125,50,0.06); --fb-border:rgba(40,110,20,0.20);
+  --grad-bar:linear-gradient(90deg,#4CAF50,#20C997,#1565c0,#7c3aed);
+  --scenario-bg:rgba(46,125,50,0.05); --scenario-border:rgba(40,110,20,0.22);
+}
+
+/* ═══════════════ BASE ═══════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--body-color);min-height:100vh;overflow-x:hidden;display:flex;flex-direction:column;transition:background .5s,color .5s;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 15% 20%,var(--radial1) 0%,transparent 60%),radial-gradient(ellipse at 85% 80%,var(--radial2) 0%,transparent 60%);pointer-events:none;z-index:0;transition:background .5s;}
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:var(--star-show,1);transition:opacity .5s;}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d,3s) ease-in-out infinite var(--delay,0s);opacity:0;}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(1)}50%{opacity:var(--op,.6);transform:scale(1.3)}}
+.theme-bar{position:relative;z-index:10;display:flex;justify-content:center;gap:.5rem;padding:.55rem 1rem;background:rgba(0,0,0,.18);border-bottom:1px solid rgba(0,0,0,.10);flex-wrap:wrap;}
+body.theme-sunny .theme-bar,body.theme-cloudy .theme-bar,body.theme-nature .theme-bar{background:rgba(0,0,0,.06);}
+.theme-btn{font-family:'Fredoka One',cursive;font-size:.85rem;padding:5px 18px;border-radius:999px;border:2px solid transparent;background:rgba(128,128,128,.12);color:var(--body-color);cursor:pointer;opacity:.6;transition:all .22s;}
+.theme-btn:hover{opacity:.9;transform:translateY(-1px);}
+.theme-btn.active{opacity:1;background:var(--top-badge-bg);color:var(--top-badge-c);box-shadow:0 3px 12px rgba(0,0,0,.20);}
+.wrapper{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:0 max(1rem,4vw) 2rem;flex:1;}
+.site-header{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 0 0;animation:fadeDown .6s ease both;}
+.site-header-logo{display:flex;align-items:center;gap:.75rem;text-decoration:none;}
+.site-header-logo img{height:48px;width:auto;border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.25);}
+.site-header-logo span{font-family:'Fredoka One',cursive;font-size:1.15rem;color:var(--header-name);letter-spacing:.02em;transition:color .4s;}
+.header-badge{display:inline-block;background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--badge-color);font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:999px;}
+.back-link{display:inline-flex;align-items:center;gap:6px;margin-top:1.4rem;font-size:.8rem;font-weight:700;color:var(--back-color);text-decoration:none;transition:color .2s;letter-spacing:.04em;}
+.back-link:hover{color:var(--back-hover);}
+header{text-align:center;padding:2rem 1rem 1.5rem;animation:fadeDown .7s ease both;}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-22px)}to{opacity:1;transform:translateY(0)}}
+.badge{display:inline-block;background:var(--top-badge-bg);color:var(--top-badge-c);font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 14px;border-radius:999px;margin-bottom:1rem;animation:pop .5s cubic-bezier(.36,1.5,.6,1) .3s both;}
+@keyframes pop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-height:1.1;margin-bottom:.4rem;background:var(--h1-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.subtitle{font-size:.95rem;font-weight:600;color:var(--subtitle-c);transition:color .4s;}
+
+/* ═══ SCENARIO / WORD BANK BOX ═══ */
+.scenario-box{background:var(--scenario-bg);border:1.5px solid var(--scenario-border);border-radius:14px;padding:1rem 1.3rem;margin:.5rem 0 .9rem;font-size:.85rem;font-weight:700;line-height:1.6;color:var(--body-color);transition:background .4s,border-color .4s;}
+.scenario-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--section-lbl);margin-bottom:.4rem;}
+
+/* ═══ LOCK SCREEN ═══ */
+.lock-screen{max-width:600px;margin:2rem auto;background:var(--lock-bg);border:1.5px solid var(--lock-border);border-radius:24px;padding:3rem 2.5rem;text-align:center;animation:riseUp .5s ease both;display:none;}
+.lock-screen.show{display:block;}
+.lock-icon{font-size:4rem;margin-bottom:1rem;}
+.lock-title{font-family:'Fredoka One',cursive;font-size:1.8rem;margin-bottom:.6rem;color:var(--body-color);}
+.lock-msg{font-size:.9rem;font-weight:600;color:var(--card-desc);line-height:1.65;margin-bottom:1.5rem;}
+.lock-scores{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.lock-score-pill{background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:14px;padding:.9rem 1.4rem;text-align:center;min-width:100px;}
+.lock-score-pill .lsp-label{font-size:.62rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase;color:var(--section-lbl);margin-bottom:4px;}
+.lock-score-pill .lsp-val{font-family:'Fredoka One',cursive;font-size:1.7rem;color:var(--top-badge-bg);}
+
+/* ═══ TEST CONTAINER ═══ */
+.test-container{max-width:900px;margin:0 auto;}
+.student-card{background:var(--info-bg);border:1.5px solid var(--info-border);border-radius:18px;padding:1.3rem 1.5rem;display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem;animation:fadeDown .6s ease .1s both;transition:background .4s,border-color .4s;}
+.student-card .sc-icon{font-size:2rem;flex-shrink:0;}
+.sc-fields{flex:1;display:flex;gap:.9rem;flex-wrap:wrap;}
+.sc-group{display:flex;flex-direction:column;gap:4px;flex:1;min-width:130px;}
+.sc-group label{font-size:.65rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase;color:var(--section-lbl);}
+.sc-group input{background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:10px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:700;color:var(--input-text);outline:none;transition:border-color .2s,background .4s;}
+.sc-group input:focus{border-color:var(--input-focus);}
+.sec-card{background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:18px;padding:1.5rem 1.7rem;margin-bottom:1.1rem;position:relative;overflow:hidden;animation:riseUp .5s ease both;transition:background .4s,border-color .4s;}
+.sec-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:18px 18px 0 0;background:var(--sec-accent,var(--top-badge-bg));}
+@keyframes riseUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;flex-wrap:wrap;gap:.5rem;}
+.sec-title{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--body-color);}
+.sec-pts{font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--badge-color);padding:3px 11px;border-radius:999px;}
+.sec-note{font-size:.82rem;font-weight:700;color:var(--card-desc);margin-bottom:1rem;}
+.question{border-radius:12px;padding:4px 6px;margin-left:-6px;margin-right:-6px;transition:opacity .5s ease,filter .5s ease;margin-bottom:1.3rem;}
+.question:last-child{margin-bottom:0;}
+.question.answered-fade{opacity:0.18;filter:blur(2.5px);transition:opacity .5s ease,filter .5s ease;}
+.question.answered-fade:hover{opacity:1;filter:blur(0px);transition:opacity .2s ease,filter .2s ease;}
+.test-locked .question.answered-fade,.test-locked .question.answered-fade:hover{opacity:1!important;filter:blur(0px)!important;}
+.q-label{font-size:.9rem;font-weight:800;color:var(--body-color);margin-bottom:.6rem;display:flex;align-items:flex-start;gap:.55rem;}
+.q-num{font-family:'Fredoka One',cursive;color:var(--top-badge-bg);font-size:1rem;flex-shrink:0;min-width:26px;transition:color .4s;}
+.q-stem{flex:1;}
+.q-pts{font-size:.62rem;font-weight:800;letter-spacing:.05em;color:var(--section-lbl);margin-left:auto;flex-shrink:0;white-space:nowrap;}
+.options{display:flex;flex-direction:column;gap:7px;}
+.opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;background:var(--opt-bg);border:1.5px solid var(--opt-border);cursor:pointer;transition:all .18s;font-size:.88rem;font-weight:700;color:var(--body-color);user-select:none;}
+.opt:hover:not(.locked-opt){background:var(--opt-hover);border-color:var(--opt-sel-b);}
+.opt.selected{background:var(--opt-sel-bg);border-color:var(--opt-sel-b);}
+.opt.correct{background:var(--opt-correct);border-color:var(--opt-correct-b);}
+.opt.wrong{background:var(--opt-wrong);border-color:var(--opt-wrong-b);}
+.opt input[type="radio"]{accent-color:var(--top-badge-bg);width:16px;height:16px;flex-shrink:0;pointer-events:none;}
+.opt-letter{font-family:'Fredoka One',cursive;font-size:.85rem;color:var(--section-lbl);min-width:16px;}
+.opt-tick{margin-left:auto;font-size:.9rem;opacity:0;}
+.opt.correct .opt-tick,.opt.wrong .opt-tick{opacity:1;}
+.answer-input{width:100%;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:12px;padding:10px 14px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:600;color:var(--input-text);outline:none;resize:vertical;transition:border-color .2s,background .4s;}
+.answer-input:focus{border-color:var(--input-focus);}
+.fib-wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px;}
+.fib-input{flex:0 1 260px;min-width:180px;background:var(--input-bg);border:none;border-bottom:2px solid var(--input-border);border-radius:4px 4px 0 0;padding:6px 10px;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;color:var(--input-text);outline:none;transition:border-color .2s,background .4s;}
+.fib-input:focus{border-bottom-color:var(--input-focus);}
+.fib-input.correct{border-bottom-color:var(--opt-correct-b);background:var(--opt-correct);}
+.fib-input.wrong{border-bottom-color:var(--opt-wrong-b);background:var(--opt-wrong);}
+.tf-row{display:flex;gap:10px;flex-wrap:wrap;}
+.tf-opt{flex:1;min-width:120px;}
+.match-grid{display:flex;flex-direction:column;gap:8px;}
+.match-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.match-item{font-size:.85rem;font-weight:800;flex:1;min-width:170px;color:var(--body-color);}
+.match-sel{flex:1;min-width:160px;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:10px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;color:var(--input-text);outline:none;cursor:pointer;transition:border-color .2s;}
+.match-sel:focus{border-color:var(--input-focus);}
+.match-sel.correct{border-color:var(--opt-correct-b);background:var(--opt-correct);}
+.match-sel.wrong{border-color:var(--opt-wrong-b);background:var(--opt-wrong);}
+.label-figure{margin:.4rem 0 .8rem;border:1.5px solid var(--card-border);border-radius:14px;padding:.8rem;background:var(--card-bg);}
+.q-figure{margin:.5rem 0 .9rem;border:1.5px solid var(--card-border);border-radius:14px;padding:.7rem;background:var(--card-bg);}
+.q-figure svg{width:100%;max-width:460px;display:block;margin:0 auto;height:auto;}
+.label-figure svg{width:100%;max-width:480px;display:block;margin:0 auto;height:auto;}
+.fb-box{margin-top:8px;padding:10px 14px;background:var(--fb-bg);border:1.5px solid var(--fb-border);border-radius:10px;font-size:.82rem;font-weight:600;color:var(--body-color);line-height:1.55;display:none;animation:riseUp .3s ease both;}
+.fb-box.show{display:block;}
+.fb-score{font-family:'Fredoka One',cursive;font-size:1rem;margin-bottom:3px;color:var(--top-badge-bg);}
+.fb-correct{font-weight:800;color:var(--opt-correct-b);}
+.submit-area{text-align:center;margin:1.8rem 0 .5rem;}
+.btn-primary{font-family:'Fredoka One',cursive;font-size:1.1rem;padding:14px 44px;border-radius:999px;background:var(--top-badge-bg);color:var(--top-badge-c);border:none;cursor:pointer;box-shadow:0 6px 24px rgba(0,0,0,.20);transition:transform .2s,filter .2s,opacity .2s;letter-spacing:.02em;}
+.btn-primary:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.1);}
+.btn-primary:disabled{opacity:.55;cursor:not-allowed;}
+.btn-secondary{font-family:'Fredoka One',cursive;font-size:.95rem;padding:10px 26px;border-radius:999px;background:var(--card-bg);color:var(--body-color);border:1.5px solid var(--card-border);cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;}
+.btn-secondary:hover{transform:translateY(-2px);filter:brightness(1.1);}
+.spinner-wrap{display:none;justify-content:center;align-items:center;gap:.8rem;margin-top:1rem;font-size:.85rem;font-weight:700;color:var(--card-desc);}
+.spinner-wrap.show{display:flex;}
+.spinner{width:32px;height:32px;border-radius:50%;border:3px solid var(--card-border);border-top-color:var(--top-badge-bg);animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.results-section{background:var(--score-bg);border:1.5px solid var(--score-border);border-radius:18px;padding:1.8rem 2rem;margin-bottom:1.2rem;display:none;animation:riseUp .4s ease both;}
+.results-section.show{display:block;}
+.res-title{font-family:'Fredoka One',cursive;font-size:1.5rem;text-align:center;margin-bottom:1.3rem;color:var(--body-color);}
+.score-grid{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;justify-content:center;}
+.score-box{flex:1;min-width:120px;max-width:200px;background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:14px;padding:1rem 1.1rem;text-align:center;}
+.score-box .sb-label{font-size:.62rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase;color:var(--section-lbl);margin-bottom:6px;}
+.score-box .sb-val{font-family:'Fredoka One',cursive;font-size:2rem;color:var(--body-color);line-height:1;}
+.score-box .sb-sub{font-size:.65rem;font-weight:700;color:var(--card-desc);margin-top:3px;}
+.score-box.hl{border-color:var(--top-badge-bg);}
+.score-box.hl .sb-val{color:var(--top-badge-bg);}
+.section-strip{text-align:center;font-size:.72rem;font-weight:800;letter-spacing:.03em;color:var(--card-desc);margin-bottom:1.3rem;line-height:1.8;}
+.section-strip .ss-item{display:inline-block;margin:0 .35rem;white-space:nowrap;}
+.section-strip .ss-sep{opacity:.4;}
+.prog-wrap{margin-bottom:1.3rem;}
+.prog-row{display:flex;justify-content:space-between;margin-bottom:5px;}
+.prog-lbl{font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--section-lbl);}
+.prog-pct{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--body-color);}
+.prog-bg{height:16px;background:var(--progress-bg);border-radius:999px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:999px;transition:width .8s cubic-bezier(.22,.68,0,1.2),background .5s;background:var(--top-badge-bg);}
+.perf-badge{display:block;text-align:center;font-family:'Fredoka One',cursive;font-size:1.3rem;padding:.9rem;border-radius:14px;background:var(--card-bg);border:1.5px solid var(--card-border);margin-bottom:1rem;}
+.pending-note{font-size:.78rem;font-weight:700;color:var(--section-lbl);text-align:center;font-style:italic;margin-bottom:1rem;line-height:1.5;}
+.pdf-row{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;}
+.modal-overlay{position:fixed;inset:0;z-index:200;background:var(--modal-bg);display:flex;align-items:center;justify-content:center;animation:fadeIn .2s ease both;padding:1rem;}
+.modal-overlay.hidden{display:none;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-card{background:var(--modal-card);border:1.5px solid var(--modal-border);border-radius:22px;padding:2rem 2.2rem;max-width:400px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35);animation:popIn .3s cubic-bezier(.36,1.5,.6,1) both;}
+@keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+.modal-icon{font-size:2.5rem;margin-bottom:.8rem;}
+.modal-title{font-family:'Fredoka One',cursive;font-size:1.4rem;margin-bottom:.4rem;color:var(--body-color);}
+.modal-desc{font-size:.83rem;font-weight:600;color:var(--card-desc);margin-bottom:1.2rem;line-height:1.6;}
+.modal-input{width:100%;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:12px;padding:11px 16px;margin-bottom:.8rem;font-family:'Fredoka One',cursive;font-size:1.1rem;text-align:center;color:var(--input-text);letter-spacing:.12em;outline:none;transition:border-color .2s;}
+.modal-input:focus{border-color:var(--input-focus);}
+.modal-err{font-size:.78rem;font-weight:800;color:var(--opt-wrong-b);margin-top:.4rem;display:none;}
+.modal-err.show{display:block;}
+.site-footer{position:relative;z-index:1;background:var(--footer-bg);border-top:1px solid var(--footer-border);padding:2rem max(1rem,4vw);margin-top:3rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;transition:background .4s,border-color .4s;}
+.site-footer::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad-bar);}
+.footer-logo{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;}
+.footer-logo img{height:36px;width:auto;border-radius:8px;opacity:.75;}
+.footer-logo span{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--footer-name);transition:color .4s;}
+.footer-tagline{font-size:.82rem;font-weight:700;color:var(--footer-tag);letter-spacing:.03em;font-style:italic;}
+.footer-copy{font-size:.72rem;color:var(--footer-copy);font-weight:600;letter-spacing:.04em;margin-top:.2rem;}
+.test-locked .opt,.test-locked .match-sel,.test-locked .answer-input,.test-locked .fib-input{pointer-events:none;}
+.test-locked .opt{cursor:default;}
+.q-progress-wrap{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--card-border);padding:.7rem 0 .6rem;margin-bottom:1.2rem;transition:background .5s;}
+.q-progress-inner{max-width:900px;margin:0 auto;padding:0 max(1rem,4vw);}
+.q-progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.45rem;gap:.5rem;}
+.q-progress-label{font-size:.7rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase;color:var(--section-lbl);}
+.q-progress-count{font-family:'Fredoka One',cursive;font-size:.95rem;color:var(--body-color);white-space:nowrap;}
+.q-progress-bg{height:8px;background:var(--progress-bg);border-radius:999px;overflow:hidden;}
+.q-progress-fill{height:100%;border-radius:999px;background:var(--top-badge-bg);transition:width .4s cubic-bezier(.22,.68,0,1.2),background .4s;}
+.q-progress-fill.done{background:#69DB7C;}
+.submit-hint{font-size:.72rem;font-weight:700;color:var(--section-lbl);margin-top:.5rem;text-align:center;transition:color .3s;}
+.submit-hint.ready{color:var(--top-badge-bg);}
+.blur-overlay{position:fixed;inset:0;z-index:150;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;flex-direction:column;gap:1rem;cursor:pointer;animation:fadeIn .25s ease both;}
+.blur-overlay.show{display:flex;}
+.blur-icon{font-size:3.5rem;}
+.blur-title{font-family:'Fredoka One',cursive;font-size:1.5rem;color:#fff;text-align:center;}
+.blur-sub{font-size:.85rem;font-weight:700;color:rgba(255,255,255,.65);text-align:center;}
+.warn-overlay{position:fixed;inset:0;z-index:160;background:rgba(0,0,0,.82);display:none;align-items:center;justify-content:center;padding:1.5rem;}
+.warn-overlay.show{display:flex;animation:fadeIn .2s ease both;}
+.warn-card{background:var(--modal-card);border:2px solid var(--opt-wrong-b);border-radius:22px;padding:2rem 2.2rem;max-width:420px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:popIn .3s cubic-bezier(.36,1.5,.6,1) both;}
+.warn-icon{font-size:2.8rem;margin-bottom:.7rem;}
+.warn-title{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--opt-wrong-b);margin-bottom:.5rem;}
+.warn-msg{font-size:.85rem;font-weight:600;color:var(--card-desc);line-height:1.6;margin-bottom:1.2rem;}
+.warn-count{font-size:.75rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--section-lbl);margin-bottom:1rem;}
+@media(max-width:600px){.sec-card{padding:1.2rem 1.1rem;}.match-item{min-width:130px;}}
+</style>
+</head>
+<body class="theme-night">
+<div class="stars" id="stars"></div>
+
+<!-- PASSKEY MODAL -->
+<div class="modal-overlay hidden" id="passkeyModal">
+  <div class="modal-card">
+    <div class="modal-icon">🔑</div>
+    <div class="modal-title">Enter Class Code</div>
+    <div class="modal-desc">Ask Mr. EdLo for today's class code to submit your answers.</div>
+    <input class="modal-input" type="text" id="passkeyInput" placeholder="" autocomplete="off" spellcheck="false">
+    <button class="btn-primary" style="width:100%;margin-bottom:.5rem" onclick="validatePasskey()">Submit →</button>
+    <div class="modal-err" id="passkeyErr">❌ Wrong code — ask Mr. EdLo for the correct code.</div>
+  </div>
+</div>
+
+<!-- Progress bar -->
+<div class="q-progress-wrap" id="qProgressWrap">
+  <div class="q-progress-inner">
+    <div class="q-progress-row">
+      <span class="q-progress-label">Questions answered</span>
+      <span class="q-progress-count" id="qProgressCount">0 / 15</span>
+    </div>
+    <div class="q-progress-bg"><div class="q-progress-fill" id="qProgressFill" style="width:0%"></div></div>
+  </div>
+</div>
+
+<!-- Blur overlay -->
+<div class="blur-overlay" id="blurOverlay" onclick="dismissBlur()">
+  <div class="blur-icon">🙈</div>
+  <div class="blur-title">Screen Hidden</div>
+  <div class="blur-sub">Click anywhere to continue your test</div>
+</div>
+
+<!-- Tab-switch warning -->
+<div class="warn-overlay" id="warnOverlay">
+  <div class="warn-card">
+    <div class="warn-icon">⚠️</div>
+    <div class="warn-title">Focus Warning</div>
+    <div class="warn-msg">You left this test page. This has been noted.<br>Please stay on this page until you have submitted your test.</div>
+    <div class="warn-count" id="warnCount">Warning 1 of 3</div>
+    <button class="btn-primary" style="width:100%" onclick="dismissWarning()">I Understand — Return to Test</button>
+  </div>
+</div>
+
+<!-- Theme bar -->
+<div class="theme-bar">
+  <button class="theme-btn active" onclick="setTheme('night',this)">🌙 Night</button>
+  <button class="theme-btn" onclick="setTheme('sunny',this)">☀️ Sunny</button>
+  <button class="theme-btn" onclick="setTheme('cloudy',this)">☁️ Cloudy</button>
+  <button class="theme-btn" onclick="setTheme('nature',this)">🌿 Nature</button>
+</div>
+
+<div class="wrapper">
+  <div class="site-header">
+    <a class="site-header-logo" href="https://edlovirtualclassroom.com/">
+      <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+      <span>Mr. EdLo's Virtual Classroom</span>
+    </a>
+    <span class="header-badge">Standard 5 &nbsp;·&nbsp; Belize</span>
+  </div>
+  <a class="back-link" href="https://edlovirtualclassroom.com/science/">← Back to Science</a>
+
+  <header>
+    <div class="badge">Standard 5 &nbsp;·&nbsp; Science &nbsp;·&nbsp; Cycle 1 &nbsp;·&nbsp; Unit Test 1</div>
+    <h1>🌦️ Unit Test 1 — Climate &amp; Weather</h1>
+    <p class="subtitle">Technology, Climate &amp; Belize&rsquo;s Seasons · One session (45 minutes) · 15 questions · 56 marks</p>
+  </header>
+
+  <!-- LOCK SCREEN -->
+  <div class="lock-screen" id="lockScreen">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">Test Already Submitted</div>
+    <div class="lock-msg">You have already completed this test. Your results are saved below. Download your PDF report or go back to Science.</div>
+    <div class="lock-scores" id="lockScores"></div>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <button class="btn-primary" onclick="downloadPDF()">📄 Download PDF Report</button>
+      <a class="btn-secondary" href="https://edlovirtualclassroom.com/science/">← Back to Science</a>
+    </div>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px dashed var(--card-border);">
+      <p style="font-size:.7rem;font-weight:700;color:var(--section-lbl);margin-bottom:.6rem;letter-spacing:.06em;text-transform:uppercase;">Teacher Access</p>
+      <button class="btn-secondary" style="font-size:.8rem;padding:7px 20px;" onclick="teacherReset()">🔑 Reset Quiz for Testing</button>
+    </div>
+  </div>
+
+  <!-- TEST CONTAINER -->
+  <div class="test-container" id="testContainer">
+    <!-- Student info -->
+    <div class="student-card">
+      <div class="sc-icon">🎓</div>
+      <div class="sc-fields">
+        <div class="sc-group"><label>Your Name</label><input type="text" id="studentName" placeholder="Enter your full name" autocomplete="off"></div>
+        <div class="sc-group"><label>Group</label><input type="text" id="studentGroup" placeholder="Group #" autocomplete="off"></div>
+        <div class="sc-group"><label>Date</label><input type="text" id="testDate" readonly></div>
+        <div class="sc-group"><label>Teacher</label><input type="text" value="Mr. Edwin Lopez" readonly></div>
+      </div>
+    </div>
+
+    <div class="scenario-box">
+      <div class="scenario-label">Instructions</div>
+      Answer every question. Choose the best answer for multiple-choice, true/false, matching, and labelling items. Write clearly for the short-answer and open questions. You have <b>45 minutes</b>. Do your best on every question, even if you are unsure.
+    </div>
+
+    <main id="testForm"><!-- sections + questions injected here --></main>
+
+    <!-- RESULTS -->
+    <div class="results-section" id="resultsSection">
+      <div class="res-title">📊 Your Results</div>
+      <div class="score-grid">
+        <div class="score-box"><div class="sb-label">Selected-Answer</div><div class="sb-val" id="s-auto">—</div><div class="sb-sub">multiple choice, T/F, blanks, matching &amp; labels</div></div>
+        <div class="score-box"><div class="sb-label">Written</div><div class="sb-val" id="s-written">—</div><div class="sb-sub">short answer &amp; open-ended</div></div>
+        <div class="score-box hl"><div class="sb-label">Total Score</div><div class="sb-val" id="s-total">—</div><div class="sb-sub">out of 56 marks</div></div>
+        <div class="score-box hl"><div class="sb-label">Percentage</div><div class="sb-val" id="s-pct">—</div><div class="sb-sub" id="s-band">—</div></div>
+      </div>
+      <div class="section-strip" id="sectionStrip"></div>
+      <div class="prog-wrap">
+        <div class="prog-row"><span class="prog-lbl">Overall</span><span class="prog-pct" id="prog-pct-lbl">0%</span></div>
+        <div class="prog-bg"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+      </div>
+      <div class="perf-badge" id="perfBadge">—</div>
+      <div class="pending-note" id="pendingNote" style="display:none"></div>
+      <div class="pdf-row">
+        <button class="btn-primary" onclick="downloadPDF()">📄 Download PDF Report</button>
+        <a class="btn-secondary" href="https://edlovirtualclassroom.com/science/">← Back to Science</a>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-area" id="submitArea">
+      <button class="btn-primary" id="submitBtn" disabled onclick="startSubmit()">Submit Test</button>
+      <div class="spinner-wrap" id="spinnerWrap"><div class="spinner"></div><span>Grading your test… a few seconds.</span></div>
+      <div class="submit-hint" id="submitHint">Answer all 15 questions to submit</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-logo">
+    <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo">
+    <span>Mr. EdLo's Virtual Classroom</span>
+  </div>
+  <div class="footer-tagline">Standard 5 Science &amp; Technology · Cycle 1 · Unit Test 1 — Climate &amp; Weather</div>
+  <div class="footer-copy">Howard Smith Nazarene School · Belize · edlovirtualclassroom.com</div>
+</footer>
+
+
+<script>
+/* ============================================================
+   STANDARD 5 SCIENCE — CYCLE 1 · UNIT TEST 1  ·  Climate & Weather
+   ------------------------------------------------------------
+   SECURE BUILD: this page contains NO answer keys and NO rubrics.
+   All grading happens on Edwin's Cloudflare Worker in ONE call:
+     mode:'grade' with testId sy2627-std5-c1-unit1-science →
+       • fixed items (mc/tf/fib/match/label) scored against KV
+       • written items (sa/open) AI-graded against rubrics in KV
+   Correct answers + explanations only arrive AFTER submit, in the
+   Worker's response, and are rendered from that response.
+   ============================================================ */
+
+const WORKER_URL = 'https://edlo-gemini.smartstandardsix.workers.dev/';
+const TEST_ID    = 'sy2627-std5-c1-unit1-science';
+const QUIZ_KEY   = 'vc-quiz-std5-c1-unit1-science';
+const PK_KEY     = 'vc-passkey-std5';
+const MAX_MARKS  = 56;
+
+/* ---------------- ITEM DEFINITIONS (display data only) ----------------
+   NO answers. NO accept-lists. NO rubrics. Marks shown here are for
+   display and are the same values the mark scheme + KV key carry.
+   type: mc | tf | fib | match | label | sa | open
+   The qid MUST match the key used in the KV answer-key entry.
+*/
+const ITEMS = [
+  /* ---- SECTION A · Multiple Choice (17) ---- */
+  { qid:"q1", sec:"A", type:"mc", pts:2,
+    stem:"Which of these is a technology that helps <b>reduce</b> climate change?",
+    options:["A diesel generator","A solar panel","A gas stove","A chainsaw"] },
+  { qid:"q2", sec:"A", type:"mc", pts:3,
+    stem:"Vehicles and factories can <b>add to</b> climate change. What do they release that warms the planet?",
+    options:["Greenhouse gases","Fresh water","Oxygen","Sunlight"] },
+  { qid:"q3", sec:"A", type:"mc", pts:4, fig:"reef",
+    stem:"The sea near Belize gets warmer and the coral reef bleaches. What happens <b>next</b> to tourism?",
+    options:["More snorkellers visit the reef","Fewer tourists come to see the reef, so tour guides earn less","Hotels build more rooms","Farmers plant more corn"] },
+  { qid:"q4", sec:"A", type:"mc", pts:3,
+    stem:"Which statement describes <b>climate</b>, not weather?",
+    options:["It is windy this morning","It rained in Belize City today","Belize has a wet season and a dry season","There is a thunderstorm right now"] },
+  { qid:"q5", sec:"A", type:"mc", pts:5, fig:"chain",
+    stem:"A strong hurricane season floods the citrus farms in Stann Creek. Which cause-and-effect chain is in the <b>correct order</b>?",
+    options:["Less income → smaller harvest → flooded trees","Flooded trees → smaller harvest → less income for the farming family","Smaller harvest → flooded trees → less income","Less income → flooded trees → smaller harvest"] },
+
+  /* ---- SECTION B · Matching (8) ---- */
+  { qid:"q6", sec:"B", type:"match", pts:8, fig:"vocab",
+    stem:"Match each science word to its meaning.",
+    terms:["Climate change","Greenhouse gas","Tropical","Precipitation"],
+    choices:["A long-term shift in average weather","A gas that traps heat in the atmosphere","Hot all year, with a wet and a dry season","Rain that falls in a place"] },
+
+  /* ---- SECTION C · True / False (9) ---- */
+  { qid:"q7", sec:"C", type:"tf", pts:3,
+    stem:"&ldquo;It is raining right now in Belize City.&rdquo; This statement describes <b>weather</b>, not climate." },
+  { qid:"q8", sec:"C", type:"tf", pts:2,
+    stem:"All technology is harmful to the climate." },
+  { qid:"q9", sec:"C", type:"tf", pts:4,
+    stem:"Hurricanes Eta and Iota (2020) flooded farms across Belize. This is an example of climate change affecting agriculture." },
+
+  /* ---- SECTION D · Fill in the Blank (7) ---- */
+  { qid:"q10", sec:"D", type:"fib", pts:2,
+    stem:"The main greenhouse gas that traps heat in the atmosphere is __________." },
+  { qid:"q11", sec:"D", type:"fib", pts:3,
+    stem:"Belize is hot and humid all year. The word for Belize&rsquo;s climate type is __________." },
+  { qid:"q12", sec:"D", type:"fib", pts:2,
+    stem:"Two measurements describe the climate of a place: temperature and __________." },
+
+  /* ---- SECTION E · Labelling (6) ---- */
+  { qid:"q13", sec:"E", type:"label", pts:6,
+    stem:"Label the Belize climate map. Pick the correct word from the word bank for each numbered part.",
+    zones:["1 — Belize&rsquo;s climate type (hot and humid all year)","2 — the season from June to November, when most rain falls","3 — the season from February to May, when little rain falls"],
+    choices:["Tropical","Wet season","Dry season"] },
+
+  /* ---- SECTION F · Short Answer (9) — AI graded ---- */
+  { qid:"q14", sec:"F", type:"sa", pts:4,
+    stem:"Belize&rsquo;s dry season sometimes lasts longer than usual. Write ONE way a longer dry season could affect a farming family. Write it as a <b>cause and effect</b>.<br><br><i>Sentence starter:</i> &ldquo;Less rain would cause ______, which means the family ______.&rdquo;<br><i>Word bank:</i> drought &nbsp;·&nbsp; harvest &nbsp;·&nbsp; corn &nbsp;·&nbsp; water &nbsp;·&nbsp; income &nbsp;·&nbsp; crops" },
+  { qid:"q15", sec:"F", type:"sa", pts:5,
+    stem:"Name ONE technology that <b>adds to</b> climate change and ONE technology that <b>helps reduce</b> it. Explain the climate effect of each.<br><br><i>Sentence starters:</i> &ldquo;The technology ______ adds to climate change because it ______.&rdquo; &nbsp;&ldquo;The technology ______ helps reduce climate change because it ______.&rdquo;<br><i>Word bank:</i> generator &nbsp;·&nbsp; solar panel &nbsp;·&nbsp; greenhouse gas &nbsp;·&nbsp; emission &nbsp;·&nbsp; renewable &nbsp;·&nbsp; fossil fuel" },
+];
+
+const SECTIONS = {
+  A:{title:"📗 Section A — Multiple Choice", note:"Choose the best answer for each question.", accent:"#20C997"},
+  B:{title:"🔗 Section B — Matching", note:"Choose the meaning that best matches each science word.", accent:"#4DABF7"},
+  C:{title:"⚖️ Section C — True or False", note:"Choose True or False for each statement.", accent:"#9775FA"},
+  D:{title:"✏️ Section D — Fill in the Blank", note:"Write the missing word.", accent:"#F783AC"},
+  E:{title:"🏷️ Section E — Labelling", note:"Pick the correct label for each numbered part.", accent:"#20C997"},
+  F:{title:"📝 Section F — Short Answer", note:"Answer in complete sentences. Use the sentence starter and word bank to help.", accent:"#4DABF7"},
+};
+
+const AUTO_TYPES = ["mc","tf","fib","match","label"];
+const AI_TYPES   = ["sa","open"];
+const byId = qid => ITEMS.find(i=>i.qid===qid);
+const DISPLAY_NUM = {};
+ITEMS.forEach((it,i)=>DISPLAY_NUM[it.qid]=i+1);
+const TOTAL_Q = ITEMS.length;
+
+/* ---------------- RENDER ---------------- */
+function render(){
+  const main = document.getElementById("testForm");
+  let html=""; let curSec=null;
+  // section point totals
+  const secPts={}; ITEMS.forEach(it=>secPts[it.sec]=(secPts[it.sec]||0)+it.pts);
+  ITEMS.forEach(it=>{
+    if(it.sec!==curSec){
+      if(curSec!==null) html+="</div>";
+      curSec=it.sec; const s=SECTIONS[curSec];
+      html+=`<div class="sec-card" style="--sec-accent:${s.accent}">
+        <div class="sec-head"><div class="sec-title">${s.title}</div>
+        <div class="sec-pts">${secPts[curSec]} marks</div></div>
+        <p class="sec-note">${s.note}</p>`;
+    }
+    const n=DISPLAY_NUM[it.qid];
+    html+=`<div class="question" data-q="${it.qid}">
+      <div class="q-label"><span class="q-num">${n}.</span><span class="q-stem">${it.stem}</span>
+      <span class="q-pts">${it.pts} ${it.pts===1?'mark':'marks'}</span></div>
+      ${it.fig?`<div class="q-figure">${FIGURES[it.fig]||''}</div>`:''}
+      ${fieldHTML(it)}
+      <div class="fb-box" id="${it.qid}-fb"></div></div>`;
+  });
+  html+="</div>";
+  main.innerHTML=html;
+  attachInteractions();
+}
+
+const LETTERS=["A","B","C","D","E","F"];
+function fieldHTML(it){
+  switch(it.type){
+    case "mc":
+      return `<div class="options" id="${it.qid}-opts">`+it.options.map((o,i)=>
+        `<label class="opt" data-val="${i}"><input type="radio" name="${it.qid}" value="${i}"><span class="opt-letter">${LETTERS[i]}</span> ${o}<span class="opt-tick"></span></label>`).join("")+`</div>`;
+    case "tf":
+      return `<div class="options tf-row" id="${it.qid}-opts">
+        <label class="opt tf-opt" data-val="true"><input type="radio" name="${it.qid}" value="true"> True<span class="opt-tick"></span></label>
+        <label class="opt tf-opt" data-val="false"><input type="radio" name="${it.qid}" value="false"> False<span class="opt-tick"></span></label></div>`;
+    case "fib":
+      return `<div class="fib-wrap"><input class="fib-input" type="text" name="${it.qid}" autocomplete="off" spellcheck="false" placeholder="answer"></div>`;
+    case "match":{
+      let r=`<div class="match-grid">`;
+      it.terms.forEach((t,i)=>{
+        r+=`<div class="match-row"><span class="match-item">${i+1}. ${t}</span>
+          <select class="match-sel" name="${it.qid}_${i}"><option value="">— choose —</option>`+
+          it.choices.map((c,ci)=>`<option value="${ci}">${LETTERS[ci]}. ${c}</option>`).join("")+
+          `</select></div>`;
+      });
+      return r+`</div>`;
+    }
+    case "label":{
+      let r=labelSVG();
+      r+=`<div class="match-grid" style="margin-top:.6rem">`;
+      it.zones.forEach((z,i)=>{
+        r+=`<div class="match-row"><span class="match-item">${z}</span>
+          <select class="match-sel" name="${it.qid}_${i}"><option value="">— label —</option>`+
+          it.choices.map((c,ci)=>`<option value="${ci}">${c}</option>`).join("")+
+          `</select></div>`;
+      });
+      return r+`</div>`;
+    }
+    case "sa":
+      return `<textarea class="answer-input" name="${it.qid}" rows="3" placeholder="Write your answer…"></textarea>`;
+    case "open":
+      return `<textarea class="answer-input" name="${it.qid}" rows="5" placeholder="Write 3–5 sentences…"></textarea>`;
+  }
+  return "";
+}
+
+const FIGURES = {
+  reef: `<svg viewBox="0 0 520 170" xmlns="http://www.w3.org/2000/svg" role="img"><title>A warm sea bleaches coral and tourists leave</title><desc>Left: a living reef with colourful corals, many fish, and a snorkeller watching. Right: a pale bleached reef with no fish and the snorkeller swimming away.</desc><defs><linearGradient id="seaH" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#BEeAF7"/><stop offset="100%" stop-color="#5FB8DE"/></linearGradient><linearGradient id="seaB" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#CFE7EE"/><stop offset="100%" stop-color="#7FA8B8"/></linearGradient></defs><rect x="6" y="6" width="240" height="158" rx="10" fill="url(#seaH)" stroke="#20C997" stroke-width="2.5"/><text x="16" y="24" font-size="12.5" fill="#0B7A5B" font-weight="bold">Healthy reef</text><g stroke="#FFF4C2" stroke-width="5" opacity="0.5" stroke-linecap="round"><line x1="60" y1="30" x2="40" y2="90"/><line x1="110" y1="30" x2="95" y2="95"/><line x1="170" y1="30" x2="160" y2="90"/></g><path d="M8 150 q60 -14 120 -4 q60 10 118 -2 v18 h-238 z" fill="#F2E2B8" stroke="#D9C48A" stroke-width="1.2"/><g stroke="#F08A3C" stroke-width="3.4" fill="none" stroke-linecap="round"><path d="M46 150 v-30 M46 130 l-13 -16 M46 126 l13 -18 M33 114 v-12 M59 108 v-14"/></g><path d="M78 150 a20 16 0 0 1 40 0 z" fill="#B57BD0" stroke="#8E52AC" stroke-width="1.6"/><path d="M84 142 q8 -8 14 0 M100 142 q6 -7 12 0 M90 134 q6 -6 12 0" fill="none" stroke="#8E52AC" stroke-width="1.2"/><g stroke="#EE7FA6" stroke-width="3" fill="none" stroke-linecap="round"><path d="M138 150 v-22 M138 136 l-9 -12 M138 132 l10 -13 M128 124 v-9"/></g><path d="M186 150 q-20 -34 0 -52 q20 18 0 52" fill="none" stroke="#9B6FD4" stroke-width="2.4"/><path d="M186 100 v50 M176 116 q10 6 20 0 M174 130 q12 7 24 0" fill="none" stroke="#9B6FD4" stroke-width="1"/><g><path d="M150 60 q13 -9 26 0 q-13 9 -26 0 z" fill="#FFD23F" stroke="#E0A81E" stroke-width="1"/><path d="M176 60 l9 -6 v12 z" fill="#FFD23F" stroke="#E0A81E" stroke-width="1"/><circle cx="156" cy="58" r="1.6" fill="#333"/></g><g><path d="M96 78 q11 -7 22 0 q-11 7 -22 0 z" fill="#4FA9E0" stroke="#2E7DB5" stroke-width="1"/><path d="M118 78 l8 -5 v10 z" fill="#4FA9E0" stroke="#2E7DB5" stroke-width="1"/><circle cx="101" cy="76" r="1.4" fill="#333"/></g><g><path d="M60 52 q10 -6 20 0 q-10 6 -20 0 z" fill="#F2874B" stroke="#C85F26" stroke-width="1"/><path d="M80 52 l7 -4 v8 z" fill="#F2874B" stroke="#C85F26" stroke-width="1"/><line x1="68" y1="49" x2="68" y2="55" stroke="#fff" stroke-width="1.2"/><line x1="74" y1="49" x2="74" y2="55" stroke="#fff" stroke-width="1.2"/></g><circle cx="205" cy="70" r="3" fill="none" stroke="#fff" stroke-width="1.2"/><circle cx="212" cy="58" r="2" fill="none" stroke="#fff" stroke-width="1"/><circle cx="200" cy="52" r="1.6" fill="none" stroke="#fff" stroke-width="1"/><g stroke="#2C3E50" stroke-width="2" fill="none" stroke-linecap="round"><circle cx="212" cy="40" r="8" fill="#FFE0BD"/><path d="M220 40 h7"/><path d="M206 46 q-16 9 -30 5"/><path d="M204 36 l-3 -6"/></g><rect x="280" y="6" width="234" height="158" rx="10" fill="url(#seaB)" stroke="#9775FA" stroke-width="2.5"/><text x="290" y="24" font-size="12.5" fill="#6A48B8" font-weight="bold">Bleached reef</text><g><rect x="486" y="34" width="7" height="34" rx="3.5" fill="#eee" stroke="#B00" stroke-width="1.2"/><circle cx="489.5" cy="70" r="6" fill="#D33" stroke="#B00" stroke-width="1.2"/><rect x="487.5" y="52" width="4" height="18" fill="#D33"/></g><path d="M282 150 q60 -12 118 -3 q58 9 114 -2 v18 h-232 z" fill="#E8E2D2" stroke="#CFC7B2" stroke-width="1.2"/><g stroke="#D9D2C4" stroke-width="3.2" fill="none" stroke-linecap="round"><path d="M322 150 v-30 M322 130 l-13 -16 M322 126 l13 -18 M309 114 v-12 M335 108 v-14"/></g><path d="M356 150 a20 16 0 0 1 40 0 z" fill="#EDE7DA" stroke="#CFC7B2" stroke-width="1.4"/><g stroke="#DDD6C8" stroke-width="2.8" fill="none" stroke-linecap="round"><path d="M416 150 v-22 M416 136 l-9 -12 M416 132 l10 -13"/></g><path d="M462 150 q-20 -34 0 -52 q20 18 0 52" fill="none" stroke="#D9D2C4" stroke-width="2.2"/><g opacity="0.7"><path d="M300 66 q9 -6 18 0 q-9 6 -18 0 z" fill="#B8C4CC" stroke="#8FA0AA" stroke-width="1"/><path d="M300 66 l-7 -4 v8 z" fill="#B8C4CC" stroke="#8FA0AA" stroke-width="1"/></g><g stroke="#2C3E50" stroke-width="2" fill="none" stroke-linecap="round"><circle cx="470" cy="46" r="8" fill="#FFE0BD"/><path d="M462 46 h-7"/><path d="M476 52 q16 9 30 5"/></g><path d="M420 92 h24 m-7 -6 l7 6 l-7 6" fill="none" stroke="#6A48B8" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+
+  chain: `<svg viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg" role="img"><title>A hurricane floods a citrus grove in Stann Creek</title><desc>A single scene: storm clouds, rain and wind over a row of citrus trees standing in rising floodwater, with hills behind.</desc><defs><linearGradient id="fsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7C8B9C"/><stop offset="100%" stop-color="#AEB9C4"/></linearGradient><linearGradient id="fwater" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8FC7E8"/><stop offset="100%" stop-color="#5FA3CC"/></linearGradient></defs><rect x="6" y="6" width="508" height="168" rx="10" fill="url(#fsky)" stroke="#4A5A6A" stroke-width="2.5"/><path d="M8 108 q70 -40 150 -8 q80 32 170 -4 q90 -30 178 6 v20 h-498 z" fill="#8FA98C" stroke="#6F8A6C" stroke-width="1"/><g fill="#5A6B7B" stroke="#3E4C5A" stroke-width="1.4"><path d="M40 46 a17 17 0 0 1 32 -8 a15 15 0 0 1 24 10 a13 13 0 0 1 -5 25 h-46 a15 15 0 0 1 -5 -27 z"/><path d="M150 40 a18 18 0 0 1 34 -8 a16 16 0 0 1 26 11 a14 14 0 0 1 -5 26 h-50 a16 16 0 0 1 -5 -29 z"/><path d="M300 44 a17 17 0 0 1 32 -8 a15 15 0 0 1 25 10 a13 13 0 0 1 -5 25 h-48 a15 15 0 0 1 -4 -27 z"/><path d="M410 40 a18 18 0 0 1 34 -8 a16 16 0 0 1 26 11 a14 14 0 0 1 -5 26 h-50 a16 16 0 0 1 -5 -29 z"/></g><path d="M232 66 l-9 16 l8 0 l-11 20 l19 -24 l-8 0 l7 -12 z" fill="#FFD23F" stroke="#E0A81E" stroke-width="1"/><g stroke="#E8EEF3" stroke-width="2" fill="none" opacity="0.75" stroke-linecap="round"><path d="M60 96 q30 -8 58 0"/><path d="M360 92 q30 -8 58 0"/></g><g stroke="#BFE0F2" stroke-width="1.7" stroke-linecap="round" opacity="0.9"><line x1="70" y1="70" x2="63" y2="88"/><line x1="110" y1="66" x2="103" y2="86"/><line x1="185" y1="72" x2="178" y2="90"/><line x1="270" y1="70" x2="263" y2="88"/><line x1="330" y1="66" x2="323" y2="86"/><line x1="405" y1="72" x2="398" y2="90"/><line x1="455" y1="68" x2="448" y2="88"/><line x1="150" y1="80" x2="143" y2="98"/><line x1="300" y1="80" x2="293" y2="98"/><line x1="430" y1="82" x2="423" y2="100"/></g><rect x="8" y="124" width="504" height="48" rx="4" fill="url(#fwater)"/><g stroke="#fff" stroke-width="1.4" fill="none" opacity="0.7"><path d="M20 136 q14 6 28 0 q14 -6 28 0 q14 6 28 0 q14 -6 28 0"/><path d="M180 142 q14 6 28 0 q14 -6 28 0 q14 6 28 0 q14 -6 28 0"/><path d="M340 138 q14 6 28 0 q14 -6 28 0 q14 6 28 0 q14 -6 28 0"/><path d="M60 156 q16 6 32 0 q16 -6 32 0 q16 6 32 0"/><path d="M300 158 q16 6 32 0 q16 -6 32 0 q16 6 32 0"/></g><g><rect x="102" y="110" width="6" height="26" rx="2" fill="#8A6A3A"/><circle cx="105" cy="98" r="20" fill="#5BA85C" stroke="#3C7A3E" stroke-width="1.6"/><circle cx="97" cy="94" r="4" fill="#F5A623" stroke="#D48806" stroke-width="1"/><circle cx="113" cy="96" r="4" fill="#F5A623" stroke="#D48806" stroke-width="1"/><circle cx="106" cy="105" r="4" fill="#F5A623" stroke="#D48806" stroke-width="1"/></g><g><rect x="253" y="106" width="7" height="30" rx="2" fill="#8A6A3A"/><circle cx="256" cy="92" r="23" fill="#5BA85C" stroke="#3C7A3E" stroke-width="1.6"/><circle cx="247" cy="88" r="4.3" fill="#F5A623" stroke="#D48806" stroke-width="1"/><circle cx="265" cy="90" r="4.3" fill="#F5A623" stroke="#D48806" stroke-width="1"/><circle cx="258" cy="100" r="4.3" fill="#F5A623" stroke="#D48806" stroke-width="1"/></g><g><rect x="404" y="110" width="6" height="26" rx="2" fill="#8A6A3A"/><circle cx="407" cy="98" r="20" fill="#5BA85C" stroke="#3C7A3E" stroke-width="1.6"/><circle cx="399" cy="94" r="4" fill="#F5A623" stroke="#D48806" stroke-width="1"/><circle cx="415" cy="96" r="4" fill="#F5A623" stroke="#D48806" stroke-width="1"/><circle cx="408" cy="105" r="4" fill="#F5A623" stroke="#D48806" stroke-width="1"/></g></svg>`,
+
+  vocab: `<svg viewBox="0 0 520 96" xmlns="http://www.w3.org/2000/svg" role="img"><title>Four colourful icons for the vocabulary words</title><desc>Climate change: a thermometer with a rising red arrow. Greenhouse gas: the Earth under a gas layer trapping heat. Tropical: a bright sun over palms. Precipitation: a blue raincloud.</desc><rect x="6" y="8" width="122" height="80" rx="9" fill="#FDEEE8" stroke="#E8892B" stroke-width="1.8"/><g><rect x="34" y="24" width="9" height="38" rx="4.5" fill="#fff" stroke="#C0392B" stroke-width="1.4"/><rect x="35.5" y="42" width="6" height="20" fill="#E24B4A"/><circle cx="38.5" cy="66" r="8" fill="#E24B4A" stroke="#C0392B" stroke-width="1.4"/></g><polyline points="60,66 76,54 88,60 104,36" fill="none" stroke="#C0392B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M104 36 l-11 1 l4 -10" fill="none" stroke="#C0392B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="82" font-size="10" fill="#A9762F" font-weight="bold">warming</text><rect x="136" y="8" width="122" height="80" rx="9" fill="#FDEEE8" stroke="#E8892B" stroke-width="1.8"/><path d="M152 30 q45 -13 90 0" fill="none" stroke="#7E8B57" stroke-width="3" stroke-dasharray="5 3"/><circle cx="197" cy="62" r="15" fill="#4FA9E0" stroke="#2E7DB5" stroke-width="1.4"/><path d="M186 58 q7 -5 14 0 q7 5 12 -1" fill="none" stroke="#3C7A3E" stroke-width="2"/><path d="M190 66 q9 4 20 0" fill="none" stroke="#3C7A3E" stroke-width="2"/><g stroke="#E24B4A" stroke-width="2" stroke-linecap="round"><path d="M176 44 v-9 m-3 4 l3 -4 l3 4"/><path d="M218 44 v-9 m-3 4 l3 -4 l3 4"/></g><text x="150" y="82" font-size="10" fill="#A9762F" font-weight="bold">traps heat</text><rect x="266" y="8" width="122" height="80" rx="9" fill="#FFF7DE" stroke="#E8892B" stroke-width="1.8"/><circle cx="318" cy="40" r="14" fill="#FFD23F" stroke="#E0A81E" stroke-width="1.6"/><g stroke="#F5A623" stroke-width="2.2" stroke-linecap="round"><line x1="318" y1="20" x2="318" y2="14"/><line x1="298" y1="40" x2="292" y2="40"/><line x1="344" y1="40" x2="338" y2="40"/><line x1="304" y1="26" x2="300" y2="22"/><line x1="332" y1="26" x2="336" y2="22"/></g><path d="M300 70 q-6 -16 -18 -20 q14 -2 22 10 q8 -12 22 -10 q-12 4 -18 20 z" fill="#5BA85C" stroke="#3C7A3E" stroke-width="1.2"/><path d="M310 70 v-14" stroke="#8A6A3A" stroke-width="2.4"/><text x="288" y="83" font-size="10" fill="#A9762F" font-weight="bold">hot all year</text><rect x="396" y="8" width="118" height="80" rx="9" fill="#E7F2FB" stroke="#4DABF7" stroke-width="1.8"/><path d="M424 42 a14 14 0 0 1 26 -6 a12 12 0 0 1 19 9 a11 11 0 0 1 -3 19 h-39 a12 12 0 0 1 -3 -21 z" fill="#8FB8D8" stroke="#5A7B98" stroke-width="1.6"/><g stroke="#4FA9E0" stroke-width="2.4" stroke-linecap="round"><line x1="432" y1="68" x2="428" y2="80"/><line x1="448" y1="68" x2="444" y2="82"/><line x1="464" y1="68" x2="460" y2="80"/></g><text x="440" y="86" font-size="10" fill="#2E7DB5" font-weight="bold">rain</text></svg>`,
+};
+
+/* eco-print climate scenes for the labelling item — outline strokes only (1 tropical · 2 wet season · 3 dry season) */
+function labelSVG(){
+  return `<div class="label-figure"><svg viewBox="0 0 520 190" xmlns="http://www.w3.org/2000/svg" role="img">
+    <title>Three Belize climate scenes to label</title>
+    <desc>Panel 1: a strong sun over a palm and coastline for the tropical climate. Panel 2: a cloud with heavy rain for the wet season. Panel 3: a blazing sun over cracked dry ground for the dry season.</desc>
+    <rect x="6" y="6" width="160" height="178" fill="none" stroke="#4DABF7" stroke-width="2" rx="8"/>
+    <text x="16" y="28" font-size="17" fill="#4DABF7" font-weight="bold">1</text>
+    <circle cx="60" cy="52" r="15" fill="none" stroke="#E8892B" stroke-width="2"/>
+    <g stroke="#E8892B" stroke-width="2" stroke-linecap="round">
+      <line x1="60" y1="28" x2="60" y2="20"/><line x1="60" y1="84" x2="60" y2="76"/>
+      <line x1="36" y1="52" x2="28" y2="52"/><line x1="92" y1="52" x2="84" y2="52"/>
+      <line x1="43" y1="35" x2="37" y2="29"/><line x1="77" y1="35" x2="83" y2="29"/>
+      <line x1="43" y1="69" x2="37" y2="75"/><line x1="77" y1="69" x2="83" y2="75"/>
+    </g>
+    <path d="M108 150 q-4 -34 2 -58" fill="none" stroke="#8A6A3A" stroke-width="3" stroke-linecap="round"/>
+    <g stroke="#2E8B57" stroke-width="2.5" fill="none" stroke-linecap="round">
+      <path d="M110 92 q-22 -12 -40 -6"/><path d="M110 92 q-14 -22 -30 -30"/>
+      <path d="M110 92 q14 -22 30 -30"/><path d="M110 92 q22 -12 40 -6"/>
+      <path d="M110 92 q2 -20 0 -34"/>
+    </g>
+    <line x1="16" y1="150" x2="156" y2="150" stroke="#4DABF7" stroke-width="2"/>
+    <path d="M16 160 q12 -7 24 0 q12 7 24 0 q12 -7 24 0 q12 7 24 0 q12 -7 24 0" fill="none" stroke="#4DABF7" stroke-width="1.6"/>
+    <rect x="178" y="6" width="160" height="178" fill="none" stroke="#2E8B57" stroke-width="2" rx="8"/>
+    <text x="188" y="28" font-size="17" fill="#2E8B57" font-weight="bold">2</text>
+    <path d="M228 78 a18 18 0 0 1 34 -8 a15 15 0 0 1 26 10 a14 14 0 0 1 -4 27 h-52 a16 16 0 0 1 -4 -29 z" fill="none" stroke="#5A6B7B" stroke-width="2.4" stroke-linejoin="round"/>
+    <g stroke="#4DABF7" stroke-width="2" stroke-linecap="round">
+      <line x1="232" y1="120" x2="226" y2="140"/><line x1="248" y1="120" x2="242" y2="146"/>
+      <line x1="264" y1="120" x2="258" y2="142"/><line x1="280" y1="120" x2="274" y2="146"/>
+      <line x1="296" y1="120" x2="290" y2="140"/>
+      <line x1="240" y1="126" x2="234" y2="150"/><line x1="272" y1="126" x2="266" y2="152"/>
+      <line x1="288" y1="126" x2="282" y2="150"/>
+    </g>
+    <line x1="188" y1="160" x2="328" y2="160" stroke="#2E8B57" stroke-width="2"/>
+    <path d="M212 160 q16 8 32 0" fill="none" stroke="#4DABF7" stroke-width="1.6"/>
+    <path d="M272 160 q14 8 28 0" fill="none" stroke="#4DABF7" stroke-width="1.6"/>
+    <rect x="350" y="6" width="164" height="178" fill="none" stroke="#9775FA" stroke-width="2" rx="8"/>
+    <text x="360" y="28" font-size="17" fill="#9775FA" font-weight="bold">3</text>
+    <circle cx="470" cy="50" r="17" fill="none" stroke="#E8892B" stroke-width="2.4"/>
+    <g stroke="#E8892B" stroke-width="2.4" stroke-linecap="round">
+      <line x1="470" y1="22" x2="470" y2="12"/><line x1="470" y1="88" x2="470" y2="78"/>
+      <line x1="442" y1="50" x2="432" y2="50"/><line x1="498" y1="50" x2="508" y2="50"/>
+      <line x1="451" y1="31" x2="444" y2="24"/><line x1="489" y1="31" x2="496" y2="24"/>
+      <line x1="451" y1="69" x2="444" y2="76"/><line x1="489" y1="69" x2="496" y2="76"/>
+    </g>
+    <line x1="360" y1="140" x2="504" y2="140" stroke="#9775FA" stroke-width="2"/>
+    <g stroke="#9C7A4A" stroke-width="1.8" fill="none" stroke-linecap="round">
+      <path d="M376 140 l4 16 l-8 12"/><path d="M380 156 l14 4"/>
+      <path d="M410 140 l-2 18 l10 10"/><path d="M408 158 l-14 6"/>
+      <path d="M444 140 l6 16 l-6 14"/><path d="M450 156 l12 8"/>
+      <path d="M478 140 l-2 20 l8 8"/>
+    </g>
+  </svg></div>`;
+}
+
+/* ---------------- INTERACTION / PROGRESS ---------------- */
+function attachInteractions(){
+  document.querySelectorAll('.opt').forEach(opt=>{
+    opt.addEventListener('click',function(){
+      if(document.body.classList.contains('test-locked'))return;
+      const grp=this.closest('.options');
+      grp.querySelectorAll('.opt').forEach(o=>{o.classList.remove('selected');const inp=o.querySelector('input');if(inp)inp.checked=false;});
+      const inp=this.querySelector('input'); if(inp)inp.checked=true;
+      this.classList.add('selected');
+      updateQuestionProgress();
+    });
+  });
+  document.querySelectorAll('.fib-input,.answer-input').forEach(el=>el.addEventListener('input',updateQuestionProgress));
+  document.querySelectorAll('.match-sel').forEach(el=>el.addEventListener('change',updateQuestionProgress));
+}
+
+function isAnswered(it){
+  if(it.type==="mc"||it.type==="tf") return !!document.querySelector(`input[name="${it.qid}"]:checked`);
+  if(it.type==="fib"||it.type==="sa"||it.type==="open"){const el=document.querySelector(`[name="${it.qid}"]`);return el&&el.value.trim().length>0;}
+  if(it.type==="match"){return it.terms.every((t,i)=>{const el=document.querySelector(`[name="${it.qid}_${i}"]`);return el&&el.value!=="";});}
+  if(it.type==="label"){return it.zones.every((z,i)=>{const el=document.querySelector(`[name="${it.qid}_${i}"]`);return el&&el.value!=="";});}
+  return false;
+}
+
+function updateQuestionProgress(){
+  const answered=ITEMS.filter(isAnswered).length;
+  const pct=Math.round((answered/TOTAL_Q)*100);
+  document.getElementById('qProgressCount').textContent=answered+' / '+TOTAL_Q;
+  const fill=document.getElementById('qProgressFill');
+  fill.style.width=pct+'%'; fill.classList.toggle('done',answered===TOTAL_Q);
+  const ready=answered===TOTAL_Q;
+  const btn=document.getElementById('submitBtn'); btn.disabled=!ready;
+  const hint=document.getElementById('submitHint');
+  hint.textContent=ready?'✅ All questions answered — ready to submit!':`Answer all ${TOTAL_Q} questions to submit (${TOTAL_Q-answered} remaining)`;
+  hint.classList.toggle('ready',ready);
+  updateFade();
+}
+
+function updateFade(){
+  ITEMS.forEach(it=>{
+    const el=document.querySelector(`.question[data-q="${it.qid}"]`); if(!el)return;
+    if(isAnswered(it))setTimeout(()=>el.classList.add('answered-fade'),800);
+    else el.classList.remove('answered-fade');
+  });
+}
+
+/* ---------------- COLLECT ANSWERS ---------------- */
+function collectAnswers(){
+  const out={};
+  ITEMS.forEach(it=>{
+    if(it.type==="mc") out[it.qid]=getRadio(it.qid);
+    else if(it.type==="tf") out[it.qid]=getRadio(it.qid);        // "true"/"false"
+    else if(it.type==="fib") out[it.qid]=getVal(it.qid).trim();
+    else if(it.type==="sa"||it.type==="open") out[it.qid]=getVal(it.qid).trim();
+    else if(it.type==="match") out[it.qid]=it.terms.map((t,i)=>getVal(`${it.qid}_${i}`));
+    else if(it.type==="label") out[it.qid]=it.zones.map((z,i)=>getVal(`${it.qid}_${i}`));
+  });
+  return out;
+}
+function getVal(name){const el=document.querySelector(`[name="${name}"]`);return el?el.value:"";}
+function getRadio(name){const el=document.querySelector(`input[name="${name}"]:checked`);return el?el.value:null;}
+/* human-readable version of a student's answer, for the PDF/report */
+function readableAnswer(it){
+  if(it.type==="mc"){const v=getRadio(it.qid);return v==null?"(not answered)":`${LETTERS[+v]}. ${it.options[+v]}`;}
+  if(it.type==="tf"){const v=getRadio(it.qid);return v==null?"(not answered)":(v==="true"?"True":"False");}
+  if(it.type==="fib"){const v=getVal(it.qid).trim();return v||"(not answered)";}
+  if(it.type==="match")return it.terms.map((t,i)=>{const v=getVal(`${it.qid}_${i}`);return `${t} → ${v===""?"(none)":LETTERS[+v]+". "+it.choices[+v]}`;}).join("; ");
+  if(it.type==="label")return it.zones.map((z,i)=>{const v=getVal(`${it.qid}_${i}`);return `Part ${i+1} → ${v===""?"(none)":it.choices[+v]}`;}).join("; ");
+  if(it.type==="sa"||it.type==="open"){const v=getVal(it.qid).trim();return v||"(not answered)";}
+  return "";
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SUBMIT FLOW  ·  passkey gate → Worker grade → Worker AI → merge
+   ═══════════════════════════════════════════════════════════ */
+let GRADED=null; // final merged results, drives report + PDF
+
+function startSubmit(){
+  if(document.body.classList.contains('test-locked'))return;
+  // passkey gate (modal) — carried forward from the S6 design
+  const saved=getSavedPasskey();
+  if(saved){ runSubmit(saved); }
+  else{ openPasskey(); }
+}
+
+function openPasskey(){
+  document.getElementById('passkeyModal').classList.remove('hidden');
+  document.getElementById('passkeyInput').value='';
+  document.getElementById('passkeyErr').classList.remove('show');
+  setTimeout(()=>document.getElementById('passkeyInput').focus(),100);
+}
+function validatePasskey(){
+  const k=document.getElementById('passkeyInput').value.trim();
+  if(!k){document.getElementById('passkeyErr').classList.add('show');return;}
+  document.getElementById('passkeyModal').classList.add('hidden');
+  runSubmit(k);
+}
+
+async function runSubmit(passkey){
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true; btn.textContent='Grading…';
+  document.getElementById('spinnerWrap').classList.add('show');
+  document.getElementById('submitHint').style.display='none';
+
+  const answers=collectAnswers();
+
+  // ---- ONE call: Worker grades the WHOLE test (fixed + written) ----
+  // The upgraded Worker scores fixed items against KV and AI-grades the
+  // written items against the rubrics stored in KV, all server-side.
+  let grade=null;
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({passkey,mode:'grade',testId:TEST_ID,answers})});
+    if(res.status===403){ badPasskey(); return; }
+    grade=await res.json();
+    if(!grade.ok) throw new Error(grade.error||'grade failed');
+  }catch(e){
+    console.error('grade error',e);
+    grade={ok:false,results:{}};   // everything falls back to pending in mergeAndShow
+  }
+
+  savePasskey(passkey);
+  mergeAndShow(grade,answers);
+  document.getElementById('spinnerWrap').classList.remove('show');
+}
+
+function badPasskey(){
+  clearPasskey();
+  document.getElementById('spinnerWrap').classList.remove('show');
+  document.getElementById('passkeyErr').classList.add('show');
+  document.getElementById('passkeyModal').classList.remove('hidden');
+  const btn=document.getElementById('submitBtn'); btn.disabled=false; btn.textContent='Submit Test';
+  document.getElementById('submitHint').style.display='block';
+}
+
+/* ---------------- MERGE + RENDER RESULTS ---------------- */
+function mergeAndShow(grade,answers){
+  const gr=grade.results||{};
+  let autoEarned=0, autoTotal=0, writtenEarned=0, writtenTotal=0, anyPending=false;
+  const perItem={}; const secEarned={},secTotal={};
+
+  ITEMS.forEach(it=>{
+    secTotal[it.sec]=(secTotal[it.sec]||0)+it.pts;
+    const r=gr[it.qid];   // Worker returns BOTH fixed and written here
+    if(AUTO_TYPES.includes(it.type)){
+      const got=r?r.earned:0;
+      autoEarned+=got; autoTotal+=it.pts;
+      secEarned[it.sec]=(secEarned[it.sec]||0)+got;
+      perItem[it.qid]={kind:'auto',got,pts:it.pts,correct:r?r.correct:false,
+        correctAnswer:r?r.correctAnswer:'',explain:r?r.explain:'',pending:!r};
+      if(!r) anyPending=true;
+      paintFixed(it,r);
+    }else{
+      // written item — Worker AI-graded it against the KV rubric
+      writtenTotal+=it.pts;
+      const pending=!r||r.pending;
+      const got=pending?null:r.earned;
+      const feedback=r?(r.explain||''):'';
+      if(pending){anyPending=true;}
+      else{writtenEarned+=got; secEarned[it.sec]=(secEarned[it.sec]||0)+got;}
+      perItem[it.qid]={kind:'ai',got,pts:it.pts,feedback,pending};
+      paintWritten(it,{got,pts:it.pts,feedback,pending});
+    }
+  });
+
+  const total=autoEarned+writtenEarned;
+  const pct=Math.round((total/MAX_MARKS)*100);
+  const band=bandFor(pct);
+
+  // score boxes
+  document.getElementById('s-auto').textContent=autoEarned+'/'+autoTotal;
+  document.getElementById('s-written').textContent=writtenEarned+'/'+writtenTotal;
+  document.getElementById('s-total').textContent=total+'/'+MAX_MARKS;
+  document.getElementById('s-pct').textContent=pct+'%';
+  document.getElementById('s-band').textContent=band.label;
+  document.getElementById('s-band').style.color=band.color;
+
+  // section strip
+  const strip=Object.keys(SECTIONS).map(s=>
+    `<span class="ss-item">${s} ${secEarned[s]||0}/${secTotal[s]}</span>`).join('<span class="ss-sep">·</span>');
+  document.getElementById('sectionStrip').innerHTML=strip;
+
+  // progress + performance
+  document.getElementById('prog-pct-lbl').textContent=pct+'%';
+  const pf=document.getElementById('progFill'); pf.style.width=pct+'%';
+  pf.style.background=pct>=85?'#69DB7C':pct>=70?'#4DABF7':pct>=50?'#FFD43B':'#FF6B6B';
+  const first=(document.getElementById('studentName').value||'Student').split(' ')[0];
+  document.getElementById('perfBadge').textContent=perfLine(pct,first);
+  document.getElementById('perfBadge').style.color=band.color;
+
+  if(anyPending){
+    const pn=document.getElementById('pendingNote');
+    pn.style.display='block';
+    pn.textContent='Some answers could not reach the grading server and are marked pending for Mr. EdLo. The percentage shown counts only the answers graded so far.';
+  }
+
+  // save + lock + reveal
+  const saveData=buildSaveData({autoEarned,autoTotal,writtenEarned,writtenTotal,secEarned,secTotal,total,pct,band,perItem,answers});
+  saveResult(saveData); window._savedData=saveData; GRADED=saveData;
+
+  document.getElementById('submitArea').style.display='none';
+  const rs=document.getElementById('resultsSection'); rs.classList.add('show');
+  document.body.classList.add('test-locked');
+  testSubmitted=true;
+  document.getElementById('resultsSection').scrollIntoView({behavior:'smooth'});
+}
+
+function paintFixed(it,r){
+  const fb=document.getElementById(it.qid+'-fb'); if(!fb)return;
+  if(!r){fb.innerHTML=`<div class="fb-score">pending</div>Mr. EdLo will review this item.`;fb.classList.add('show');return;}
+  // colour the selected option / inputs
+  if(it.type==="mc"||it.type==="tf"){
+    const chosen=getRadio(it.qid);
+    document.querySelectorAll(`#${it.qid}-opts .opt`).forEach(o=>{
+      const v=o.dataset.val;
+      if(String(v)===String(r.correctAnswerIndex)) {}
+      o.classList.add('locked-opt');
+    });
+    // mark chosen right/wrong; mark the correct one green using correctAnswer text/letter
+    document.querySelectorAll(`#${it.qid}-opts .opt`).forEach(o=>{
+      const tick=o.querySelector('.opt-tick');
+      const isChosen=(String(o.dataset.val)===String(chosen));
+      const label=(it.type==="tf")?(o.dataset.val==="true"?"True":"False"):(LETTERS[+o.dataset.val]);
+      const isCorrect=matchCorrect(it,o,r);
+      if(isCorrect){o.classList.add('correct');if(tick)tick.textContent='✅';}
+      else if(isChosen){o.classList.add('wrong');if(tick)tick.textContent='❌';}
+    });
+  }else if(it.type==="fib"){
+    const el=document.querySelector(`[name="${it.qid}"]`); if(el)el.classList.add(r.correct?'correct':'wrong');
+  }else if(it.type==="match"||it.type==="label"){
+    const keys=(it.type==="match")?it.terms:it.zones;
+    keys.forEach((k,i)=>{const el=document.querySelector(`[name="${it.qid}_${i}"]`);if(el)el.classList.add('locked-opt');});
+  }
+  const line=r.correct
+    ? `Correct!${r.explain?' '+r.explain:''}`
+    : `<span class="fb-correct">Correct answer: ${r.correctAnswer||'—'}.</span>${r.explain?' '+r.explain:''}`;
+  fb.innerHTML=`<div class="fb-score">${r.earned}/${r.points}</div>${line}`;
+  fb.classList.add('show');
+}
+/* best-effort: highlight the correct MC/TF option using the Worker's correctAnswer */
+function matchCorrect(it,optEl,r){
+  const ca=String(r.correctAnswer||'').trim().toLowerCase();
+  if(it.type==="tf"){return (optEl.dataset.val==="true"?"true":"false")===ca || (optEl.dataset.val===ca);}
+  // mc: correctAnswer may be an index, a letter, or the option text
+  const idx=optEl.dataset.val, letter=LETTERS[+idx].toLowerCase(), text=(it.options[+idx]||'').toLowerCase();
+  return ca===idx || ca===letter || ca===text || ca.includes(text);
+}
+
+function paintWritten(it,r){
+  const fb=document.getElementById(it.qid+'-fb'); if(!fb)return;
+  if(r.pending){fb.innerHTML=`<div class="fb-score">pending</div>${r.feedback||'Mr. EdLo will review this answer.'}`;}
+  else{fb.innerHTML=`<div class="fb-score">${r.got}/${r.pts}</div>${r.feedback||''}`;}
+  fb.classList.add('show');
+}
+
+function bandFor(pct){
+  if(pct>=85) return {label:"Mastering", color:"#2E8B57"};
+  if(pct>=70) return {label:"Achieving", color:"#1F6FB2"};
+  if(pct>=50) return {label:"Developing", color:"#B8860B"};
+  return {label:"Emerging", color:"#C0392B"};
+}
+function perfLine(pct,name){
+  if(pct>=85) return `🌟 Excellent — amazing work, ${name}!`;
+  if(pct>=70) return `👍 Great job, ${name}! Keep it up!`;
+  if(pct>=50) return `📚 Good effort, ${name} — keep studying!`;
+  return `💪 Don't give up, ${name} — review with Mr. EdLo.`;
+}
+
+/* ---------------- SAVE / LOCK ---------------- */
+function buildSaveData(x){
+  const answers={};
+  ITEMS.forEach(it=>answers[it.qid]=readableAnswer(it));
+  return {
+    name:document.getElementById('studentName').value||'',
+    group:document.getElementById('studentGroup').value||'',
+    date:document.getElementById('testDate').value,
+    auto:x.autoEarned,autoTotal:x.autoTotal,
+    written:x.writtenEarned,writtenTotal:x.writtenTotal,
+    secEarned:x.secEarned,secTotal:x.secTotal,
+    total:x.total,pct:x.pct,band:x.band.label,
+    perf:document.getElementById('perfBadge').textContent,
+    perItem:x.perItem, answers
+  };
+}
+function getSavedResult(){try{return JSON.parse(localStorage.getItem(QUIZ_KEY));}catch(e){return null;}}
+function saveResult(d){localStorage.setItem(QUIZ_KEY,JSON.stringify(d));}
+function getSavedPasskey(){return localStorage.getItem(PK_KEY)||'';}
+function savePasskey(k){localStorage.setItem(PK_KEY,k);}
+function clearPasskey(){localStorage.removeItem(PK_KEY);}
+
+function showLockScreen(d){
+  document.getElementById('testContainer').style.display='none';
+  const ls=document.getElementById('lockScreen'); ls.classList.add('show');
+  const pills=[
+    {label:'Selected',val:d.auto+'/'+d.autoTotal},
+    {label:'Written',val:d.written+'/'+d.writtenTotal},
+    {label:'Total',val:d.total+'/'+MAX_MARKS},
+    {label:'Percentage',val:d.pct+'%'}];
+  const c=document.getElementById('lockScores'); c.innerHTML='';
+  pills.forEach(p=>{const el=document.createElement('div');el.className='lock-score-pill';el.innerHTML=`<div class="lsp-label">${p.label}</div><div class="lsp-val">${p.val}</div>`;c.appendChild(el);});
+  window._savedData=d; GRADED=d;
+}
+function teacherReset(){
+  const k=prompt('Teacher reset — enter reset code:');
+  if(k===null)return;
+  if(k.trim().toUpperCase()==='RESET-EDLO'){localStorage.removeItem(QUIZ_KEY);location.reload();}
+  else alert('Incorrect reset code.');
+}
+
+/* ---------------- THEME / STARS / INTEGRITY (carried from S6) ---------------- */
+function setTheme(name,btn){
+  document.body.className='theme-'+name+(document.body.classList.contains('test-locked')?' test-locked':'');
+  document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  localStorage.setItem('vc-theme',name);
+}
+function makeStars(){
+  const wrap=document.getElementById('stars'); if(!wrap)return;
+  for(let i=0;i<70;i++){const s=document.createElement('div');s.className='star';const sz=Math.random()*2+1;
+    s.style.width=s.style.height=sz+'px';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';
+    s.style.setProperty('--d',(Math.random()*3+2)+'s');s.style.setProperty('--delay',(Math.random()*3)+'s');
+    s.style.setProperty('--op',(Math.random()*.5+.3).toFixed(2));wrap.appendChild(s);}
+}
+
+// idle blur
+const IDLE_SECONDS=10; let idleTimer=null,blurActive=false,testSubmitted=false;
+function resetIdleTimer(){if(testSubmitted)return;clearTimeout(idleTimer);if(blurActive)return;idleTimer=setTimeout(showBlur,IDLE_SECONDS*1000);}
+function showBlur(){if(testSubmitted)return;blurActive=true;document.getElementById('blurOverlay').classList.add('show');}
+function dismissBlur(){blurActive=false;document.getElementById('blurOverlay').classList.remove('show');resetIdleTimer();}
+function attachIdleListeners(){['mousemove','mousedown','keydown','touchstart','scroll','click'].forEach(e=>document.addEventListener(e,resetIdleTimer,{passive:true}));resetIdleTimer();}
+// tab-switch warnings
+let tabWarnings=0; const MAX_WARNINGS=3;
+function handleVisibilityChange(){if(testSubmitted)return;if(document.hidden){tabWarnings++;document.getElementById('warnCount').textContent='Warning '+tabWarnings+' of '+MAX_WARNINGS;document.getElementById('warnOverlay').classList.add('show');showBlur();}}
+function dismissWarning(){document.getElementById('warnOverlay').classList.remove('show');dismissBlur();}
+document.addEventListener('visibilitychange',handleVisibilityChange);
+window.addEventListener('blur',()=>{if(!testSubmitted&&!document.hidden){setTimeout(()=>{if(!document.hasFocus()&&!testSubmitted){tabWarnings++;document.getElementById('warnCount').textContent='Warning '+tabWarnings+' of '+MAX_WARNINGS;document.getElementById('warnOverlay').classList.add('show');showBlur();}},300);}});
+
+/* ---------------- PDF REPORT (jsPDF) ---------------- */
+function downloadPDF(){
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'p',unit:'mm',format:'a4'});
+  const d=window._savedData||GRADED||{};
+  const name=d.name||document.getElementById('studentName')?.value||'Not entered';
+  const group=d.group||'';
+  const date=d.date||'';
+  const pageW=210,margin=18,colW=pageW-margin*2; let y=0;
+
+  /* Decode any HTML entities to plain text before writing to the PDF.
+     jsPDF cannot interpret entities (&amp;, &#x25EF;, &ldquo;, …) — left raw
+     they render as garbled symbols. Uses the browser's own parser via a
+     detached textarea, then normalises a few typographic chars that the
+     PDF core font (Helvetica/WinAnsi) cannot draw. Apply to EVERY string
+     that enters doc.text(). */
+  const _dec=document.createElement('textarea');
+  function pdfText(s){
+    if(s==null) return '';
+    _dec.innerHTML=String(s).replace(/<[^>]+>/g,'');   // strip any HTML tags first
+    let t=_dec.value;                                   // browser decodes all entities
+    t=t.replace(/[\u2018\u2019]/g,"'")                  // curly single quotes → '
+         .replace(/[\u201C\u201D]/g,'"')               // curly double quotes → "
+         .replace(/[\u2013\u2014]/g,'-')               // en/em dash → -
+         .replace(/\u2192/g,'->')                      // arrow → ->
+         .replace(/\u25EF/g,'O')                        // large circle → O
+         .replace(/[\u2460-\u2468]/g,m=>String(m.charCodeAt(0)-0x245F)); // ①..⑨ → 1..9
+    return t;
+  }
+
+  // header
+  doc.setFillColor(32,201,151);doc.rect(0,0,210,8,'F');y=18;
+  doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(110,110,110);
+  doc.text('Howard Smith Nazarene School  |  Standard 5  |  Belize',pageW/2,y,{align:'center'});y+=7;
+  doc.setFontSize(16);doc.setTextColor(20,20,40);
+  doc.text('Unit Test 1 — Climate & Weather',pageW/2,y,{align:'center'});y+=5;
+  doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(80,80,100);
+  doc.text("Mr. EdLo's Virtual Classroom  ·  Cycle 1 · Technology, Climate & Belize's Seasons",pageW/2,y,{align:'center'});y+=8;
+  doc.setDrawColor(32,201,151);doc.setLineWidth(0.5);doc.line(margin,y,pageW-margin,y);y+=7;
+
+  // student block
+  doc.setFillColor(243,255,252);doc.setDrawColor(32,201,151);doc.setLineWidth(0.4);
+  doc.roundedRect(margin,y,colW,22,3,3,'FD');
+  doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(40,40,60);
+  doc.text('STUDENT:',margin+5,y+8);doc.setFont('helvetica','normal');doc.text(pdfText(name),margin+27,y+8);
+  doc.setFont('helvetica','bold');doc.text('GROUP:',margin+5,y+16);doc.setFont('helvetica','normal');doc.text(pdfText(group||'—'),margin+27,y+16);
+  doc.setFont('helvetica','bold');doc.text('TEACHER:',pageW/2,y+8);doc.setFont('helvetica','normal');doc.text('Mr. Edwin Lopez',pageW/2+24,y+8);
+  doc.setFont('helvetica','bold');doc.text('DATE:',pageW/2,y+16);doc.setFont('helvetica','normal');doc.text(pdfText(date||'—'),pageW/2+24,y+16);
+  y+=28;
+
+  // RESULTS boxes (grouped-plus-strip)
+  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(32,201,151);doc.text('RESULTS',margin,y);y+=5;
+  const boxes=[
+    {label:'SELECTED-ANSWER',val:(d.auto??'—')+'/'+(d.autoTotal??'—')},
+    {label:'WRITTEN',val:(d.written??'—')+'/'+(d.writtenTotal??'—')},
+    {label:'TOTAL SCORE',val:(d.total??'—')+'/'+56,hl:true},
+    {label:'PERCENTAGE',val:(d.pct??'—')+'%',hl:true}];
+  const bw=colW/4-2;
+  boxes.forEach((b,i)=>{const bx=margin+i*(bw+2.6);
+    doc.setFillColor(b.hl?32:240,b.hl?201:252,b.hl?151:248);
+    doc.setDrawColor(b.hl?20:200,b.hl?180:230,b.hl?100:230);
+    doc.roundedRect(bx,y,bw,18,2,2,'FD');
+    doc.setFont('helvetica','bold');doc.setFontSize(6.2);doc.setTextColor(b.hl?10:80,b.hl?70:80,b.hl?10:80);
+    doc.text(b.label,bx+bw/2,y+6,{align:'center'});
+    doc.setFontSize(b.hl?13:11);doc.setTextColor(b.hl?10:40,b.hl?70:40,b.hl?10:60);
+    doc.text(String(b.val),bx+bw/2,y+14,{align:'center'});});
+  y+=22;
+
+  // section strip
+  const se=d.secEarned||{},st=d.secTotal||{};
+  const stripTxt=Object.keys(SECTIONS).map(s=>`${s} ${se[s]||0}/${st[s]||0}`).join('   ·   ');
+  doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.setTextColor(90,90,110);
+  doc.text(stripTxt,pageW/2,y,{align:'center'});y+=8;
+
+  // performance line + band
+  doc.setFillColor(245,255,250);doc.setDrawColor(180,235,215);
+  doc.roundedRect(margin,y,colW,12,3,3,'FD');
+  doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(30,100,70);
+  const perf=String(d.perf||'').replace(/[^\x00-\x7F]/g,'').trim()+'  ('+(d.band||'')+')';
+  doc.text(perf,margin+5,y+7.5);y+=18;
+
+  // per-question detail — the "completed test paper"
+  doc.setDrawColor(200,225,215);doc.setLineWidth(0.3);doc.line(margin,y,pageW-margin,y);y+=6;
+  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(32,201,151);doc.text('QUESTION-BY-QUESTION',margin,y);y+=5;
+  const lh=4.4; doc.setFontSize(8);
+  ITEMS.forEach(it=>{
+    const n=DISPLAY_NUM[it.qid];
+    const pi=(d.perItem&&d.perItem[it.qid])||{};
+    const ans=(d.answers&&d.answers[it.qid])||'(not answered)';
+    const gotTxt=pi.pending?'pending':((pi.got==null?0:pi.got)+'/'+it.pts);
+    if(y>262){doc.addPage();y=20;}
+    // question line
+    doc.setFont('helvetica','bold');doc.setTextColor(50,50,80);
+    const stem=pdfText(it.stem);
+    doc.splitTextToSize(`Q${n}  (${gotTxt})  ${stem}`,colW).forEach(l=>{if(y>272){doc.addPage();y=20;}doc.text(l,margin,y);y+=lh;});
+    // student answer
+    doc.setFont('helvetica','normal');doc.setTextColor(70,70,90);
+    doc.splitTextToSize('Answer: '+pdfText(ans),colW-2).forEach(l=>{if(y>272){doc.addPage();y=20;}doc.text(l,margin+2,y);y+=lh;});
+    // correct answer (fixed items) or feedback (written)
+    if(pi.kind==='auto'&&!pi.correct&&pi.correctAnswer){
+      doc.setTextColor(30,120,70);
+      doc.splitTextToSize('Correct: '+pdfText(pi.correctAnswer),colW-2).forEach(l=>{if(y>272){doc.addPage();y=20;}doc.text(l,margin+2,y);y+=lh;});
+    }
+    if(pi.feedback||(pi.kind==='auto'&&pi.explain)){
+      const fbtxt=pi.feedback||pi.explain||'';
+      doc.setTextColor(110,80,150);
+      doc.splitTextToSize('Feedback: '+pdfText(fbtxt),colW-2).forEach(l=>{if(y>272){doc.addPage();y=20;}doc.text(l,margin+2,y);y+=lh;});
+    }
+    y+=2.5;
+  });
+
+  // footers
+  const pc=doc.getNumberOfPages();
+  for(let p=1;p<=pc;p++){doc.setPage(p);doc.setFillColor(32,201,151);doc.rect(0,290,210,7,'F');
+    doc.setFont('helvetica','normal');doc.setFontSize(6.5);doc.setTextColor(255,255,255);
+    doc.text('edlovirtualclassroom.com  ·  Std 5 Cycle 1 · Unit Test 1 — Climate & Weather  ·  Page '+p+' of '+pc,pageW/2,294.5,{align:'center'});}
+  const safe=String(name).replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
+  doc.save('Std5_Cycle1_'+(safe||'student')+'.pdf');
+}
+
+/* ---------------- INIT ---------------- */
+window.addEventListener('DOMContentLoaded',()=>{
+  makeStars();
+  const th=localStorage.getItem('vc-theme');
+  if(th){document.body.className='theme-'+th;document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));const map={night:0,sunny:1,cloudy:2,nature:3};const btns=document.querySelectorAll('.theme-btn');if(btns[map[th]])btns[map[th]].classList.add('active');}
+  const dt=new Date();document.getElementById('testDate').value=String(dt.getDate()).padStart(2,'0')+' / '+String(dt.getMonth()+1).padStart(2,'0')+' / '+dt.getFullYear();
+
+  const saved=getSavedResult();
+  if(saved){ showLockScreen(saved); const pw=document.getElementById('qProgressWrap'); if(pw)pw.style.display='none'; testSubmitted=true; }
+  else{ render(); updateQuestionProgress(); attachIdleListeners(); }
+
+});
+</script>
+</body>
+</html>

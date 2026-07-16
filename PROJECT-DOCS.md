@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** July 15, 2026
+**Last updated:** July 15, 2026 (evening — Standard 5 Science hub built)
 
 ---
 
@@ -22,27 +22,48 @@ If the docs are not updated, the task is **not** finished.
 
 ## ▶️ Take-off Point — Next Session (as of July 15, 2026)
 
-**Where we are:** the two-grade restructure is **LIVE and verified** on edlovirtualclassroom.com.
-- Grade picker at `/` (Standard 5 / Standard 6).
-- `/standard6/` holds all existing Standard 6 subjects (moved from the site root). Old links
-  (`/science/`, `/spanish/`, `/portfolios/`) redirect via stubs; deeper old links redirect via `404.html`.
-- `/standard5/` is a **hub shell only** — subject cards exist, but no Standard 5 subject pages are built yet.
+**Where we are (July 15, 2026 — evening):** the **Standard 5 Science hub is BUILT and wired up** this session — not yet pushed/verified live.
+- Grade picker at `/` (Standard 5 / Standard 6); `/standard6/` unchanged (stubs + `404.html` redirects still in place).
+- `standard5/science/index.html` — full Science hub cloned from the Std6 design (4 themes, stars,
+  molecule canvas, zoom button, teal accent). Four tabs:
+  - **📖 Lessons** — all 30 ATP weeks as placeholder cards, grouped by cycle
+    (🌦️ C1 Patterns in Our World Wks 1–8 · ⚙️ C2 Forces, Circuits & the Cosmos Wks 9–14 ·
+    🔭 C3 Light, Sight & the Sky Wks 15–21 · 🧠 C4 How We Sense & Sort Life Wks 22–30), each with Week + SC code.
+  - **🎯 Activities** — 20 paper classwork/project items from the Assessment Plan as placeholder cards
+    (ATP-authority weeks used where the plan drifts: Emit/Reflect Sort Wk 18, Tools project Wk 17,
+    Light-Travels-Straight Wk 19, Migration Log Wk 5 / Ecosystem poster Wk 6).
+  - **📝 Assessments** — all 16 built sy2627 online items as **LIVE links**, grouped by cycle:
+    per cycle 1 quiz + Unit Test 1 + Unit Test 2 + Review Test, each with SC codes, week, question count, marks.
+  - **🔬 Digital Labs** — single "Being Built" placeholder card.
+- **16 audited STUDENT test/quiz pages deployed into the repo** (admin copies NOT deployed):
+  `standard5/science/tests/{c1-unit1,c1-unit2,c1-review,c2-unit1,c2-unit2,c2-review,c3-unit1,c3-unit2,c3-review,c4-unit1,c4-unit2,c4-review}/index.html`
+  and `standard5/science/quizzes/{c1-adaptation,c2-solar-system,c3-reflection-refraction,c4-digital-citizenship}/index.html`.
+  All 16 re-audited after copy: no dev bar / DEV maps / answer / rubric fields; `pdfText()` present in each.
+- `standard5/index.html` — Science card converted to a live `<a href="/standard5/science/">` link
+  (soon-chip removed, arrow added); welcome text updated.
 
-**➡️ NEXT TASK: Build the Standard 5 Science hub** at `standard5/science/index.html`.
+**➡️ NEXT TASKS:**
 
-1. **Model it on the Standard 6 Science hub** (`standard6/science/index.html`): same structure —
-   hero banner, lessons grouped by cycle/week, then graded **Activities**, **Quizzes**, **Tests**, and
-   **Digital Labs**. Reuse the same theme system (Fredoka One / Nunito, 4 themes, stars, teal `--a-science` accent).
-2. **Rebrand for Standard 5:** page title, header badge "Standard 5 · Science & Technology",
-   subtitle, and footer `© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize · All rights reserved.`
-   Logo + back link point to `/standard5/`.
-3. **Content source:** Edwin's existing **Standard 5 Science & Technology assessment project**
-   (SY 2026-2027 — `sy2627` testIds, `SC x.y` outcome codes, `Std5_*` files). Pull the cycles, weeks,
-   SC codes, learning outcomes, and assessment list from there. Use the `project-planner` skill for the
-   planning step and `edlo-content-pipeline` for the build.
-4. **After building, wire it up:** in `standard5/index.html`, change the Science card from the current
-   non-link `<div class="card soon">` ("Building Now") into `<a class="card" href="/standard5/science/">`
-   (drop the `soon` class and `soon-chip`, add the `card-arrow`).
+1. **Hero banner:** Edwin generates the Std5 science banner with the AI prompt provided in chat
+   (1600×900, compress to ≤500 KB via squoosh.app) and saves it as
+   `standard5/science/images/hero/science-banner.png` — the page already points there; until then
+   only the alt text shows.
+2. **Push and verify live**, then click through all 16 assessment links, including at ~360px width.
+3. **After that:** next Standard 5 subject hub, or Standard 6's remaining hubs (Math, Scriptures, CS, PE).
+
+**Digital Labs decision (July 15, 2026):** the Std5 Science hub's Digital Labs tab stays a "Being Built"
+placeholder — labs are NOT in the sy2627 Assessment Plan and the gradebook slate is complete without
+them, so they are deferred to a future session. If/when built: start with **one ungraded pilot** — an
+interactive dichotomous key on Belizean animals (SC 6.13, Wks 27–28) — then decide grading category
+(would need Assessment Plan + master doc updates) before any graded lab. Each lab ≈ one build session.
+
+**KV status (corrected July 15, 2026 — Edwin confirmation):** ALL 16 items' KV entries are already
+deployed and live-verified in `EDLO_ANSWER_KEYS` — nothing pending. The master doc's four stale
+"⬜ not yet deployed" markers (c3-unit1, c3-unit2, c4-science, c4-quiz) were cleared in the newest
+master-doc copy (`Assessment/Cycle 4/Quiz/Std5_Assessment_System_MASTER_DOC.md`) this session.
+
+**Completed earlier (superseded):** the old NEXT TASK — building `standard5/science/index.html` on the Std6 model,
+rebranding for Standard 5, pulling content from the sy2627 assessment project, and wiring the Science card — is done as described above.
 
 **Conventions (do not break):**
 - New Standard 5 pages live under `/standard5/…` and link with `/standard5/…` paths.
@@ -68,6 +89,7 @@ previously-visited URLs may cache for up to ~10 min.
 |---|---|
 | Grade Picker (home) | https://edlovirtualclassroom.com |
 | Standard 5 Hub | https://edlovirtualclassroom.com/standard5/ |
+| Standard 5 Science Hub | https://edlovirtualclassroom.com/standard5/science/ |
 | Standard 6 Hub | https://edlovirtualclassroom.com/standard6/ |
 | Spanish Subject Hub (Std6) | https://edlovirtualclassroom.com/standard6/spanish/ |
 | Science Subject Hub (Std6) | https://edlovirtualclassroom.com/standard6/science/ |
@@ -122,7 +144,13 @@ Virtual-Classroom/
 ├── edlo-utils.js                       ← Shared LMS utilities — ROOT (serves both grades)
 │
 ├── standard5/
-│   └── index.html                      ← Standard 5 hub (subject cards; Science building now)
+│   ├── index.html                      ← Standard 5 hub (Science card LIVE, others coming soon)
+│   └── science/
+│       ├── index.html                  ← Std5 Science hub (30 wks, 4 tabs, 16 live assessments)
+│       ├── images/hero/                ← science-banner.png goes here (Edwin to add)
+│       ├── tests/                      ← 12 STUDENT test pages (c1–c4: unit1, unit2, review)
+│       └── quizzes/                    ← 4 STUDENT quiz pages (adaptation, solar-system,
+│                                          reflection-refraction, digital-citizenship)
 │
 ├── standard6/
 │   ├── index.html                      ← Standard 6 hub (subject cards)
@@ -364,7 +392,9 @@ cd "C:\Users\zoloe\OneDrive\Shared with me\Code Projects\Python Projects\Virtual
 | Page | URL | Status |
 |---|---|---|
 | Grade Picker (home) | edlovirtualclassroom.com | ✅ Live |
-| Standard 5 Hub | edlovirtualclassroom.com/standard5/ | ✅ Live (shell — subjects being built) |
+| Standard 5 Hub | edlovirtualclassroom.com/standard5/ | ✅ Live (Science card now links to its hub) |
+| Standard 5 Science Hub | edlovirtualclassroom.com/standard5/science/ | 🟡 Built July 15 — push to go live |
+| Std5 Science tests & quizzes (16) | edlovirtualclassroom.com/standard5/science/tests/… &amp; /quizzes/… | 🟡 Built July 15 — push to go live |
 | Standard 6 Hub | edlovirtualclassroom.com/standard6/ | ✅ Live |
 | Spanish Hub (Std6) | edlovirtualclassroom.com/standard6/spanish/ | ✅ Live |
 | Science Hub (Std6) | edlovirtualclassroom.com/standard6/science/ | ✅ Live |
@@ -373,7 +403,7 @@ cd "C:\Users\zoloe\OneDrive\Shared with me\Code Projects\Python Projects\Virtual
 | Scriptures Hub (Std6) | edlovirtualclassroom.com/standard6/scriptures/ | ❌ Not built yet |
 | Computer Science Hub (Std6) | edlovirtualclassroom.com/standard6/computersc/ | ❌ Not built yet |
 | PE Hub (Std6) | edlovirtualclassroom.com/standard6/pe/ | ❌ Not built yet |
-| Standard 5 subject hubs | edlovirtualclassroom.com/standard5/&lt;subject&gt;/ | ❌ Not built yet (Science first) |
+| Other Standard 5 subject hubs | edlovirtualclassroom.com/standard5/&lt;subject&gt;/ | ❌ Not built yet (Science done first) |
 | Login Page | edlovirtualclassroom.com/login/ | ❌ Not built yet (June) |
 | Student Dashboard | edlovirtualclassroom.com/dashboard/ | ❌ Not built yet (July) |
 | Teacher Dashboard | edlovirtualclassroom.com/teacher/ | ❌ Not built yet (August) |
