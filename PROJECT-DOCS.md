@@ -2,7 +2,59 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** July 2026
+**Last updated:** July 15, 2026
+
+---
+
+## 📌 STANDING RULE — read first, every session
+
+**Never end, leave, or conclude a working session on this project without first updating this
+PROJECT-DOCS.md file** to reflect what changed and where the next session should take off. This is a
+permanent rule set by Edwin. Before wrapping up any chat:
+1. Update the **Take-off Point** section below (current state + next task).
+2. Update the **Last updated** date at the top.
+3. Update any affected tables (Live URLs, Pages Built, Repo Structure) so they stay accurate.
+4. Remind Edwin to `git add -A → commit → push` so the updated docs reach GitHub.
+
+If the docs are not updated, the task is **not** finished.
+
+---
+
+## ▶️ Take-off Point — Next Session (as of July 15, 2026)
+
+**Where we are:** the two-grade restructure is **LIVE and verified** on edlovirtualclassroom.com.
+- Grade picker at `/` (Standard 5 / Standard 6).
+- `/standard6/` holds all existing Standard 6 subjects (moved from the site root). Old links
+  (`/science/`, `/spanish/`, `/portfolios/`) redirect via stubs; deeper old links redirect via `404.html`.
+- `/standard5/` is a **hub shell only** — subject cards exist, but no Standard 5 subject pages are built yet.
+
+**➡️ NEXT TASK: Build the Standard 5 Science hub** at `standard5/science/index.html`.
+
+1. **Model it on the Standard 6 Science hub** (`standard6/science/index.html`): same structure —
+   hero banner, lessons grouped by cycle/week, then graded **Activities**, **Quizzes**, **Tests**, and
+   **Digital Labs**. Reuse the same theme system (Fredoka One / Nunito, 4 themes, stars, teal `--a-science` accent).
+2. **Rebrand for Standard 5:** page title, header badge "Standard 5 · Science & Technology",
+   subtitle, and footer `© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize · All rights reserved.`
+   Logo + back link point to `/standard5/`.
+3. **Content source:** Edwin's existing **Standard 5 Science & Technology assessment project**
+   (SY 2026-2027 — `sy2627` testIds, `SC x.y` outcome codes, `Std5_*` files). Pull the cycles, weeks,
+   SC codes, learning outcomes, and assessment list from there. Use the `project-planner` skill for the
+   planning step and `edlo-content-pipeline` for the build.
+4. **After building, wire it up:** in `standard5/index.html`, change the Science card from the current
+   non-link `<div class="card soon">` ("Building Now") into `<a class="card" href="/standard5/science/">`
+   (drop the `soon` class and `soon-chip`, add the `card-arrow`).
+
+**Conventions (do not break):**
+- New Standard 5 pages live under `/standard5/…` and link with `/standard5/…` paths.
+- New Standard 6 pages live under `/standard6/…`. Never recreate subject folders at the site root —
+  those exist only as redirect stubs.
+- LMS files stay at the **root** (`/edlo-utils.js`, `/login/`, `/dashboard/`, `/teacher/`).
+
+**To publish (Edwin's workflow):** open the `Virtual-Classroom` folder in VS Code →
+`git add -A` → `git commit` → `git push` (the Claude Code plugin can run this). Git identity is set to
+name `teacherzoled`, email `221897977+teacherzoled@users.noreply.github.com` (GitHub blocks pushes that
+expose a real email, so the noreply address is required). After pushing, hard-refresh (Ctrl+Shift+R) —
+previously-visited URLs may cache for up to ~10 min.
 
 ---
 
