@@ -4,29 +4,31 @@ Copy the block below into a new chat (with the `Virtual-Classroom` folder connec
 
 ---
 
-Build the **Standard 5 Science hub** for my Virtual Classroom website.
+Build the **per-test open/closed switch + login gate retrofit** for my Virtual Classroom website.
 
-First, read `PROJECT-DOCS.md` in this repo — especially the **📌 Standing Rule** and the
-**▶️ Take-off Point** section — so you know the current state and conventions.
+First, read `PROJECT-DOCS.md` in this repo — especially the **📌 Standing Rule**, the
+**▶️ Take-off Point**, and the **🔐 LMS Login System** section — so you know the current state.
+The login system (Sheet + Apps Script + `edlo-lms` Worker + `/edlo-utils.js` + `/login/` page)
+is LIVE and verified as of July 16, 2026. Do NOT rebuild any of it.
 
 Then, **before you build anything, ask me the questions you need** (use multiple-choice
 questions where it helps). At minimum, ask me about:
 
-1. **Content source** — where the Standard 5 Science material lives (the SY 2026-2027 /
-   `sy2627` assessment project: which folder or file, and is it a different folder than this
-   website repo?).
-2. **Structure** — how many teaching cycles and weeks, and the lessons per week.
-3. **Outcome codes** — the SC codes / learning outcomes for each week.
-4. **Assessments** — the quizzes, tests, digital labs, and graded activities to list.
-5. **Links** — should the lesson/activity/test cards be live links or `#` placeholders for
-   now (matching how the Std6 Science hub currently works)?
-6. **Hero image** — is there a Standard 5 Science banner image, or should I use a placeholder?
-7. **Anything different** from the Standard 6 Science hub format that you want changed.
+1. **KV structure** — how the existing `EDLO_ANSWER_KEYS` entries are shaped in the
+   `edlo-gemini` Worker, and how to add an `"open": true/false` field per testId safely.
+2. **Which endpoint answers the open-check** — new route on `edlo-gemini` (it owns the KV)
+   or the `edlo-lms` Worker; remember every `edlo-gemini` change hits ALL live tests, so we
+   test against ONE testId first.
+3. **Gate behavior** — what a student sees when a test is closed (message, styling), and
+   whether closed tests also hide questions from view-source.
+4. **Retrofit scope** — confirm the 16 Std5 student pages get `vcRequireLogin()` + the
+   open-check, and whether the interim "publicly viewable" decision (July 15) is now lifted.
+5. **Re-audit** — the 16 pages must be re-audited after retrofit (no dev bars, no answer
+   fields, `pdfText()` present).
+6. **Student enrollment** — whether to enroll the real class lists in the `VC-LMS` Students
+   tab this session (plain passwords → run `hashPlainPasswords`).
 
-Model the page on `standard6/science/index.html` (same theme, layout, graded sections),
-rebrand it for Standard 5, save it to `standard5/science/index.html`, then update the Science
-card on `standard5/index.html` to link to it.
-
-When done, update `PROJECT-DOCS.md` (standing rule) and remind me to `git add -A → commit → push`.
+When done, update `PROJECT-DOCS.md` and this file (standing rule) and remind me to
+`git add -A → commit → push`.
 
 ---

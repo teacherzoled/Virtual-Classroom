@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** July 15, 2026 (evening — Standard 5 Science hub built)
+**Last updated:** July 16, 2026 (LMS login system built and verified end-to-end)
 
 ---
 
@@ -20,9 +20,27 @@ If the docs are not updated, the task is **not** finished.
 
 ---
 
-## ▶️ Take-off Point — Next Session (as of July 15, 2026)
+## ▶️ Take-off Point — Next Session (as of July 16, 2026)
 
-**Where we are (July 15, 2026 — evening):** the **Standard 5 Science hub is LIVE and phone-verified** at edlovirtualclassroom.com/standard5/science/ — themes confirmed working after the palette fix below. Only the hero banner is still pending.
+**Where we are (July 16, 2026): the LMS LOGIN SYSTEM IS LIVE and verified end-to-end.**
+- Built today: Google Sheet **`VC-LMS`** (4 tabs, auto-built by `setupSheet()`) + Apps Script backend
+  **`VC-LMS Backend`** (attached to the Sheet) + dedicated Cloudflare Worker **`edlo-lms`**
+  (edlo-lms.smartstandardsix.workers.dev) + `/edlo-utils.js` + `/login/` page.
+- **Two design decisions (differ from the July 15 plan):** ① **Apps Script bridge instead of a
+  service account** — proven TutorOS pattern, no keys/JWT in the Worker; ② **dedicated `edlo-lms`
+  Worker instead of new routes on `edlo-gemini`** — LMS changes can never break the AI proxy or
+  the live tests' grading. Token validation lives in Apps Script; the Worker is a thin CORS proxy.
+- **Verified July 16:** login ✓ · wrong password rejected ✓ · 30-day session persists across pages
+  (`localStorage` key `vc-session`) ✓ · `vcSaveProgress()` wrote an 80% row to All Results ✓ ·
+  `vcGetProgress()` returned it ✓ · formula Tabs 3–4 auto-calculate ✓.
+- Test account `test.student` / `test123` stays in the Students tab permanently.
+- **No page is protected yet** — `vcRequireLogin()` is not on any page (Edwin's interim call stands).
+  Login redirects to `/` for now; a TODO marker in `login/index.html` switches it to `/dashboard/` later.
+- Full as-built reference: see the **LMS Login System** section below. A step-by-step deploy/enroll/
+  reset guide (`LMS-SETUP-GUIDE.md`) was delivered in the July 16 Cowork session — Edwin keeps it
+  locally, NOT in this public repo.
+
+**Previous session (July 15, 2026 — evening):** the **Standard 5 Science hub is LIVE and phone-verified** at edlovirtualclassroom.com/standard5/science/ — themes confirmed working after the palette fix below. Only the hero banner is still pending.
 - Grade picker at `/` (Standard 5 / Standard 6); `/standard6/` unchanged (stubs + `404.html` redirects still in place).
 - `standard5/science/index.html` — full Science hub cloned from the Std6 design (4 themes, stars,
   molecule canvas, zoom button, teal accent). Four tabs:
@@ -44,16 +62,16 @@ If the docs are not updated, the task is **not** finished.
 
 **➡️ NEXT TASKS:**
 
-1. **NEXT BUILD (decided July 15, 2026): minimal login gate + Worker-side open/closed switch.**
-   Scope (≈2–3 build sessions, on the documented LMS architecture — no dashboards yet):
-   - Google Sheet **Students** tab + service account (Edwin's account work).
-   - Worker `/login` endpoint (validates username/password against the Sheet, returns session token).
-   - **Per-test open/closed switch, enforced Worker-side:** each test's KV entry gets an `"open": true/false`
-     field; the page asks the Worker before revealing questions; Edwin flips the flag in the Cloudflare KV
-     dashboard on test morning (no git push, server clock decides — device-clock cheating impossible).
-   - Login page (`/login/`, root — serves both grades) + `vcRequireLogin()` in `edlo-utils.js`.
-   - Retrofit the redirect + open-check to the 16 Std5 student pages, then re-audit them.
-   - ⚠️ Shared-Worker caution: every change hits ALL live tests — test against one testId first.
+1. **Login gate — foundation ✅ BUILT July 16, 2026** (Sheet, backend, `edlo-lms` Worker,
+   `edlo-utils.js`, `/login/` page — all live and verified). Still remaining from the July 15 decision:
+   - **Per-test open/closed switch, enforced Worker-side** — each test's KV entry gets an
+     `"open": true/false` field; the page asks the Worker before revealing questions; Edwin flips the
+     flag in the Cloudflare KV dashboard on test morning (server clock decides — device-clock
+     cheating impossible). ❌ NOT built yet.
+   - Retrofit `vcRequireLogin()` + the open-check to the 16 Std5 student pages, then re-audit them.
+   - ⚠️ Shared-Worker caution (KV work touches `edlo-gemini`): every change hits ALL live tests —
+     test against one testId first. (The new `edlo-lms` Worker is separate and safe to edit.)
+   - Enroll real students in the `VC-LMS` Students tab (plain passwords → run `hashPlainPasswords`).
    - Dashboards + `vcSaveProgress()` result logging bolt on later with no rework.
    **Interim decision:** tests/quizzes stay publicly viewable until the gate ships (Edwin's call, July 15) —
    submit-lock + server-side grading still prevent any scoring abuse.
@@ -110,6 +128,7 @@ previously-visited URLs may cache for up to ~10 min.
 | Page | URL |
 |---|---|
 | Grade Picker (home) | https://edlovirtualclassroom.com |
+| Student Login (both grades) | https://edlovirtualclassroom.com/login/ |
 | Standard 5 Hub | https://edlovirtualclassroom.com/standard5/ |
 | Standard 5 Science Hub | https://edlovirtualclassroom.com/standard5/science/ |
 | Standard 6 Hub | https://edlovirtualclassroom.com/standard6/ |
@@ -163,7 +182,7 @@ Virtual-Classroom/
 ├── index.html                          ← Grade picker (Standard 5 / Standard 6)
 ├── 404.html                            ← Catch-all: forwards old root links to /standard6/
 ├── CNAME                               ← Custom domain file
-├── edlo-utils.js                       ← Shared LMS utilities — ROOT (serves both grades)
+├── edlo-utils.js                       ← Shared LMS utilities — ROOT (✅ LIVE July 16, 2026)
 │
 ├── standard5/
 │   ├── index.html                      ← Standard 5 hub (Science card LIVE, others coming soon)
@@ -193,7 +212,8 @@ Virtual-Classroom/
 ├── spanish/index.html                  ← REDIRECT stub → /standard6/spanish/
 ├── portfolios/index.html               ← REDIRECT stub → /standard6/portfolios/
 │
-├── login/     (planned)                ← Student login page — ROOT
+├── login/
+│   └── index.html                      ← Student login page — ROOT (✅ LIVE July 16, 2026)
 ├── dashboard/ (planned)                ← Student dashboard — ROOT
 └── teacher/   (planned)                ← Teacher dashboard — ROOT
 ```
@@ -235,6 +255,98 @@ C:\Users\zoloe\OneDrive\Shared with me\Code Projects\Python Projects\
 
 ---
 
+## 🔐 LMS Login System (✅ LIVE — July 16, 2026)
+
+### Architecture (as built)
+```
+Student Browser
+     |
+     ├── edlo-utils.js  (shared JS, repo root — serves both grades)
+     |        ├── vcLogin()         → Worker /login
+     |        ├── vcSaveProgress()  → Worker /save-result
+     |        └── vcGetProgress()   → Worker /progress
+     |
+     └── Cloudflare Worker: edlo-lms  (DEDICATED — thin CORS proxy)
+              |   attaches secret API key, forwards request
+              └── Google Apps Script: "VC-LMS Backend"
+                       |   all logic: passwords, session tokens, Sheet reads/writes
+                       └── Google Sheet: "VC-LMS"
+                                ├── Tab 1: Students
+                                ├── Tab 2: All Results
+                                ├── Tab 3: Per Student Progress (formula-driven)
+                                └── Tab 4: Class Summary (formula-driven)
+```
+
+> **Design decisions (July 16, 2026) — differ from the original vision below:**
+> ① **Apps Script bridge instead of a Google service account** — same proven pattern as TutorOS;
+> no JWT code or private keys in the Worker. ② **Dedicated `edlo-lms` Worker instead of new routes
+> on `edlo-gemini`** — an LMS bug can never break AI feedback or live test grading. ③ **Session
+> tokens are validated in Apps Script, not the Worker** — the Worker is a dumb proxy that almost
+> never needs editing.
+
+### Components
+| Component | Name / Location |
+|---|---|
+| Google Sheet | `VC-LMS` (4 tabs, auto-built by `setupSheet()`) |
+| Apps Script | `VC-LMS Backend` — attached to the Sheet (Extensions → Apps Script) |
+| Cloudflare Worker | `edlo-lms` → https://edlo-lms.smartstandardsix.workers.dev |
+| Health check | `…workers.dev/?action=ping` → `{"ok":true,"message":"LMS backend is alive"}` |
+| Shared JS | `/edlo-utils.js` (repo root) |
+| Login page | `/login/index.html` (root — serves both grades, grade-neutral footer) |
+
+### Secrets (values NEVER written in this file — repo is public!)
+| Secret | Where it lives |
+|---|---|
+| `API_KEY` | Apps Script → Project Settings → Script Properties (same value as Worker's `APPS_SCRIPT_KEY`) |
+| `SESSION_SECRET` | Apps Script → Script Properties — ⚠️ NEVER change; password hashes depend on it |
+| `APPS_SCRIPT_URL` | Cloudflare Worker `edlo-lms` → Settings → Variables and Secrets |
+| `APPS_SCRIPT_KEY` | Cloudflare Worker `edlo-lms` → Settings → Variables and Secrets |
+
+### Sessions
+- Login lasts **30 days** per device (`SESSION_DAYS` in the Apps Script)
+- Stored in `localStorage` key **`vc-session`** (joins `vc-passkey`, `vc-theme`, `vc-zoom`)
+- Revisiting `/login/` while logged in skips the form and redirects
+- InPrivate/incognito sessions vanish when the window closes (by design)
+
+### Passwords (teacher workflow)
+- Stored **hashed** in the Students tab (`sha256:…`) — never plain text
+- Enroll: type the plain password in column B → run **`hashPlainPasswords`** in the Apps Script
+  editor → converts to a hash (already-hashed rows are skipped; always safe to re-run)
+- Reset: overwrite column B with a new plain password → run `hashPlainPasswords` again
+- Disable a student: set `active` to `NO` — blocks saves/progress immediately, even if he or she
+  is still logged in on a device
+- Test account: `test.student` / `test123` — kept permanently for testing
+
+### Protecting a page (2 lines — currently on NO pages, by interim decision)
+```html
+<script src="/edlo-utils.js"></script>
+<script> vcRequireLogin(); </script>
+```
+Pages WITHOUT these lines stay public. Policy: home/grade/subject hubs stay public;
+tests, quizzes, and dashboards get protected when the gate ships.
+
+### Logging a result from any submit button
+```javascript
+vcSaveProgress({
+  subject: 'Science', lo_code: 'SC6.19',
+  activity_type: 'test', activity_name: 'Plant Adaptations',
+  score: 24, max_score: 30, ai_feedback: feedbackText
+});
+```
+`vcSaveProgress` never blocks the student — on network failure it logs a console warning
+and the activity continues.
+
+### edlo-utils.js functions
+`vcLogin(u, p)` · `vcGetSession()` · `vcRequireLogin()` · `vcLogout()` · `vcSaveProgress(payload)` ·
+`vcGetProgress()` (returns the student's result rows — the student dashboard's data source)
+
+### Verified end-to-end (July 16, 2026)
+✅ Login → redirect · ✅ Session persists across pages · ✅ /login/ skips form when logged in ·
+✅ Wrong password rejected · ✅ Score saved to All Results (80%) · ✅ Progress retrieved ·
+✅ Tabs 3 & 4 auto-calculate
+
+---
+
 ## 🔑 Passkey System
 
 ### How it works
@@ -272,11 +384,11 @@ C:\Users\zoloe\OneDrive\Shared with me\Code Projects\Python Projects\
 ### How it works
 Student writes paragraph → clicks Enviar → browser checks for passkey → if none, modal appears → student enters code → browser sends paragraph + passkey to Cloudflare Worker → Worker validates passkey → forwards to OpenAI → OpenAI returns short feedback in Spanish → feedback appears on screen.
 
-### Cloudflare Worker
+### Cloudflare Workers
 | Item | Value |
 |---|---|
-| Worker Name | edlo-gemini |
-| Worker URL | https://edlo-gemini.smartstandardsix.workers.dev/ |
+| AI proxy Worker | `edlo-gemini` → https://edlo-gemini.smartstandardsix.workers.dev/ |
+| LMS Worker (added July 16, 2026) | `edlo-lms` → https://edlo-lms.smartstandardsix.workers.dev/ |
 | Cloudflare Account | Smartstandardsix@gmail.com |
 | Dashboard | dash.cloudflare.com |
 
@@ -426,7 +538,7 @@ cd "C:\Users\zoloe\OneDrive\Shared with me\Code Projects\Python Projects\Virtual
 | Computer Science Hub (Std6) | edlovirtualclassroom.com/standard6/computersc/ | ❌ Not built yet |
 | PE Hub (Std6) | edlovirtualclassroom.com/standard6/pe/ | ❌ Not built yet |
 | Other Standard 5 subject hubs | edlovirtualclassroom.com/standard5/&lt;subject&gt;/ | ❌ Not built yet (Science done first) |
-| Login Page | edlovirtualclassroom.com/login/ | ❌ Not built yet (June) |
+| Login Page | edlovirtualclassroom.com/login/ | ✅ Live (July 16, 2026) |
 | Student Dashboard | edlovirtualclassroom.com/dashboard/ | ❌ Not built yet (July) |
 | Teacher Dashboard | edlovirtualclassroom.com/teacher/ | ❌ Not built yet (August) |
 
@@ -461,6 +573,11 @@ cd "C:\Users\zoloe\OneDrive\Shared with me\Code Projects\Python Projects\Virtual
 ## 🏗️ LMS Vision — Summer 2026 Build Plan
 
 A lightweight Learning Management System built entirely on free infrastructure already in place. No new services needed.
+
+> **⚠️ July 16, 2026 — Foundation stage is BUILT.** The diagram below shows the ORIGINAL vision;
+> the as-built system differs (dedicated `edlo-lms` Worker + Apps Script bridge instead of
+> edlo-gemini routes + service account). See the **LMS Login System** section above for the
+> authoritative as-built reference.
 
 ### What it adds
 - One username/password per student stored in Google Sheets
@@ -590,13 +707,13 @@ The system is architected to scale beyond one school class with zero rework:
 
 ### Summer Build Order
 
-| Month | Stage | What gets built |
-|---|---|---|
-| June | Foundation | Google Sheet structure + service account + Worker `/login` + `/save-result` + `edlo-utils.js` + login page |
-| June | Retrofit | Add `vcSaveProgress()` to existing Science tests (2 lines each) |
-| July | Student Dashboard | `/dashboard/index.html` — personal progress view |
-| August | Teacher Dashboard | `/teacher/index.html` — full class management view |
-| September | Go Live | Enroll all students, brief them on login, every activity feeds dashboards from day one |
+| Month | Stage | What gets built | Status |
+|---|---|---|---|
+| June | Foundation | Google Sheet + Apps Script backend + `edlo-lms` Worker + `edlo-utils.js` + login page | ✅ Done July 16, 2026 |
+| July | Retrofit | Add `vcSaveProgress()` to existing tests (2 lines each) + per-test open/closed KV switch + `vcRequireLogin()` on the 16 Std5 pages | ❌ Next |
+| July | Student Dashboard | `/dashboard/index.html` — personal progress view | ❌ |
+| August | Teacher Dashboard | `/teacher/index.html` — full class management view | ❌ |
+| September | Go Live | Enroll all students, brief them on login, every activity feeds dashboards from day one | ❌ |
 
 ### AI Features — Later Phase
 - Hint mode — student clicks for a guiding question before submitting
@@ -619,7 +736,7 @@ Google Sheets limit is 10 million cells. At ~40 students with ~1,400 submissions
 | OpenAI (gpt-4o-mini) | ~$23/month | 40 students, all lessons active |
 | Google Fonts | Free | Fredoka One + Nunito |
 | Google Classroom | Free | Assignment submission + grading |
-| Google Sheets API | Free | LMS backend — service account |
+| Google Apps Script | Free | LMS backend bridge (`VC-LMS Backend`) — replaced the planned service account |
 
 **Total monthly cost when fully built:** ~$23/month + ~$1/month domain
 
