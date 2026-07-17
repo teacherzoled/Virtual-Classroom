@@ -10,5 +10,6 @@ When an idea ships, mark it ✅ and note where it lives.
 | 2 | Greet logged-in students by name in the welcome banners | July 16, 2026 | ✅ Shipped July 16 — home page + Std5 hub (`id="welcomeName"` pattern for future hubs) |
 | 3 | A Standard 5 student who logs in should see Standard 6 LOCKED (and vice versa) | July 16, 2026 | ✅ Soft lock shipped July 16 — grade picker locks the other grade's card (greyed, 🔒 chip, link removed). ⏳ HARD enforcement (blocking direct URLs to the other grade's pages) belongs to the login-gate retrofit session — decide there whether hubs check `class_id`. |
 | 4 | Dashboard gamification extras (group shuffle button, badge expansion, quest history, SVG team markers) | July 16, 2026 | ⏳ Parked — recorded as Layer 4 in `DASHBOARD-GAMIFICATION-PLAN.md` |
+| 5 | Class goal must grow as more subjects earn beans (all-subject lessons will skyrocket totals) | July 17, 2026 | ⏳ Convention agreed: after 2 real weeks of school, read the class total on `/teacher/`, multiply weekly rate × cycle weeks, set B8 slightly above — retune per cycle and when a new subject's lessons launch. One cell (Group Totals!B8), no code. |
 
 *Standing habit: when Edwin says "I just thought of something" — add it here FIRST, then keep working.*
