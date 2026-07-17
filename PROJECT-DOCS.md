@@ -39,7 +39,8 @@ lowercase) · class goal **6000** 🌱 (Edwin raised from 2000; cell B8 of Group
 - **`/dashboard/` (student, vcRequireLogin):** name header, team chip, bean + mastery pills, team race
   bars with ecosystem waypoint labels (Rainforest · Savanna · Mangroves · Reef), class-goal bar,
   subject mastery cards (test/quiz/exit-slip rows ONLY), 4-week streak badges, recent-activity feed.
-  Login page now redirects here (TODO flipped in `login/index.html`).
+  Login page now redirects here (TODO flipped in `login/index.html`). The home-page name chip is now
+  a LINK to `/dashboard/` ("👋 [name] · 📊 my dashboard"), with "log out" as its own action inside it.
 - **`/teacher/` (teacher, passcode gate → sessionStorage `vc-teacher-code`):** Section A MASTERY
   (class table w/ per-student drill-down, LO class-average bars, red under 70%) kept visually separate
   from Section B GAME (team totals, class goal line, bonus-bean awarder: student picker + 1–100 beans +

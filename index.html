@@ -266,7 +266,8 @@
     transition: transform 0.2s, box-shadow 0.2s;
   }
   .login-btn:hover { transform: translateY(-2px); box-shadow: 0 7px 20px rgba(32,201,151,0.45); }
-  .login-name { display: inline-flex; align-items: center; gap: 0.45rem; background: var(--badge-bg); border: 1px solid var(--badge-border); color: var(--badge-color); font-size: 0.8rem; font-weight: 800; padding: 0.5rem 1rem; border-radius: 999px; }
+  .login-name { display: inline-flex; align-items: center; gap: 0.45rem; background: var(--badge-bg); border: 1px solid var(--badge-border); color: var(--badge-color); font-size: 0.8rem; font-weight: 800; padding: 0.5rem 1rem; border-radius: 999px; text-decoration: none; transition: transform 0.2s, border-color 0.2s; }
+  .login-name:hover { transform: translateY(-2px); border-color: #20C997; }
   .logout-link { font-size: 0.72rem; font-weight: 800; color: var(--badge-color); cursor: pointer; text-decoration: underline; opacity: 0.8; }
   .logout-link:hover { opacity: 1; }
 
@@ -465,14 +466,19 @@
       }
     }
     if (!area) return;
-    /* Built with textContent (never innerHTML) so a stored name can never inject markup */
-    var chip = document.createElement('span');
+    /* Built with textContent (never innerHTML) so a stored name can never inject markup.
+       The name chip links to the student dashboard; "log out" stays its own action. */
+    var chip = document.createElement('a');
     chip.className = 'login-name';
-    chip.textContent = '👋 ' + (s.first_name || s.username) + ' ';
+    chip.href = '/dashboard/';
+    chip.title = 'Open my dashboard';
+    chip.textContent = '👋 ' + (s.first_name || s.username) + ' · 📊 my dashboard ';
     var out = document.createElement('span');
     out.className = 'logout-link';
     out.textContent = 'log out';
-    out.addEventListener('click', function () {
+    out.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
       if (typeof vcLogout === 'function') vcLogout();
     });
     chip.appendChild(out);
