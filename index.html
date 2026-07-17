@@ -364,7 +364,7 @@
   <div class="welcome">
     <div class="welcome-icon">👋</div>
     <div class="welcome-text">
-      <strong>Hello, students!</strong> This is your online home for all our subjects.
+      <strong id="welcomeName">Hello, students!</strong> This is your online home for all our subjects.
       Choose your class below, then pick a subject to find lessons, activities, quizzes and graded work.
     </div>
   </div>
@@ -438,11 +438,15 @@
 </script>
 <script src="/edlo-utils.js"></script>
 <script>
-  /* Login button ↔ welcome chip (added July 16, 2026) */
+  /* Login button ↔ welcome chip + personal banner greeting (added July 16, 2026) */
   (function () {
     var area = document.getElementById('loginArea');
     var s = (typeof vcGetSession === 'function') ? vcGetSession() : null;
-    if (!area || !s) return;
+    if (!s) return;
+    /* Personal greeting — textContent only, per standing rule */
+    var wn = document.getElementById('welcomeName');
+    if (wn) wn.textContent = 'Hello, ' + (s.first_name || s.username) + '!';
+    if (!area) return;
     /* Built with textContent (never innerHTML) so a stored name can never inject markup */
     var chip = document.createElement('span');
     chip.className = 'login-name';
