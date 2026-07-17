@@ -52,8 +52,9 @@ lowercase) · class goal **6000** 🌱 (Edwin raised from 2000; cell B8 of Group
 - **➡️ NEXT:** ① Edwin: deploy the Worker ROUTES line if not yet done, then live-test: leaderboard on
   `/dashboard/`, teacher code on `/teacher/`, award a test bonus → watch Group Totals move. ② More
   Std5 Science lessons (Wk 4+, clone Week 1 engine). ③ Login-gate + open/closed retrofit
-  (see `NEXT-SESSION-START.md` — view-source decision recorded). ④ Layer 2 ecosystem journey map +
-  quest, when Edwin calls for them.
+  (see `NEXT-SESSION-START.md` — view-source decision recorded). ④ **🏪 Bean Store — queued as the
+  session AFTER the gate retrofit** (design in `IDEAS.md` #6; Edwin brings the prize list + bean
+  costs). ⑤ Layer 2 ecosystem journey map + quest, when Edwin calls for them.
 
 **Previous session (July 16, 2026, evening):**
 
