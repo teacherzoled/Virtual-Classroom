@@ -101,6 +101,44 @@ function vcSaveProgress(payload) {
     });
 }
 
+/**
+ * Awards cacao beans 🌱 for a lesson activity — ONCE per activity per device.
+ * vcSaveBeans('std5-sci-wk01-vocab', 8, 10, { subject:'Science', lo_code:'SC1.09',
+ *   activity_name:'Wk1 Vocabulary Match' });
+ * - First-completion lock: localStorage key `vc-pts-<activityId>` blocks repeats.
+ * - Logged out: resolves { ok:false, error:'Not logged in' } silently — the lesson
+ *   continues; no lock is set, so beans can still be earned after a later login.
+ * - Writes one Tab 2 row with activity_type 'lesson' (score = beans earned,
+ *   max_score = beans possible). Never blocks the student on failure.
+ */
+function vcSaveBeans(activityId, beans, maxBeans, meta) {
+  var lockKey = 'vc-pts-' + activityId;
+  try {
+    if (localStorage.getItem(lockKey)) {
+      return Promise.resolve({ ok: false, locked: true });
+    }
+  } catch (e) { /* storage unavailable — proceed */ }
+
+  var session = vcGetSession();
+  if (!session) {
+    return Promise.resolve({ ok: false, error: 'Not logged in' });
+  }
+  meta = meta || {};
+  return vcSaveProgress({
+    subject:       meta.subject       || 'Science',
+    lo_code:       meta.lo_code       || '',
+    activity_type: 'lesson',
+    activity_name: meta.activity_name || activityId,
+    score:         beans,
+    max_score:     maxBeans
+  }).then(function (res) {
+    if (res && res.ok) {
+      try { localStorage.setItem(lockKey, String(Date.now())); } catch (e) {}
+    }
+    return res;
+  });
+}
+
 /** Fetches all result rows for the logged-in student. Returns Promise of an array. */
 function vcGetProgress() {
   var session = vcGetSession();

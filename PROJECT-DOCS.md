@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** July 16, 2026 (LMS login system built and verified end-to-end)
+**Last updated:** July 16, 2026 (evening — first three Std5 Science lessons built + `vcSaveBeans()` added)
 
 ---
 
@@ -20,9 +20,43 @@ If the docs are not updated, the task is **not** finished.
 
 ---
 
-## ▶️ Take-off Point — Next Session (as of July 16, 2026)
+## ▶️ Take-off Point — Next Session (as of July 16, 2026, evening)
 
-**Where we are (July 16, 2026): the LMS LOGIN SYSTEM IS LIVE and verified end-to-end.**
+**Newest work (July 16, 2026 — evening session): FIRST THREE STANDARD 5 SCIENCE LESSONS BUILT, with cacao beans 🌱 wired from day one.**
+- **Dashboard build PAUSED (Edwin's call):** the `DASHBOARD-GAMIFICATION-PLAN.md` build was opened, then
+  deliberately paused to build lessons first — so the dashboard has real bean data when it ships.
+  Standard 6 is on standby; **Standard 5 is Edwin's class for SY 2026–2027 and everything is built for
+  Std5 now.** One dashboard-plan piece WAS shipped early: **`vcSaveBeans()` in `/edlo-utils.js`**
+  (Layer 1 step 1.3, partial — no quest multiplier, no `/leaderboard` yet).
+- **Three interactive lessons live in the repo** under `standard5/science/lessons/` (anchored to the
+  enacted ATP weeks; all rule-based, ZERO AI cost; public pages — beans save only when logged in):
+  - `week01-technology-climate/` — Wk 1 · SC 1.09 (two-way loop, Belizean technology sort) · max 72 🌱
+  - `week02-climate-economy/` — Wk 2 · SC 1.10 (Eta/Iota hook, cause-effect chains, sector sort) · max 70 🌱
+  - `week03-weather-vs-climate/` — Wk 3 · SC 1.11 (weather/climate rule, statement sort, tropical Belize) · max 70 🌱
+- **Lesson engine (now the Std5 Science lesson template — clone It for Week 4+):** 8 sections
+  (Hook reveal → Learn It w/ inline SVG diagram → Vocabulary match → Sort cards → Sentence-starter
+  fill-ins → 6-question Checkpoint → Misconception True/False → Reflect &amp; Finish), 4 themes,
+  starfield, sticky progress bar, 1180px/17.5px layout, mobile-stack at 600px, 44px touch targets.
+  Bean economy locked: activities 5 + 1/correct · checkpoint 10 + 1/correct · completion bonus 15.
+  First-completion lock per activity: `localStorage` key **`vc-pts-<activity-id>`**
+  (e.g. `vc-pts-std5-sci-wk01-vocab`). Hidden video slot: set `VIDEO_URL` in each lesson file.
+- **Hub wired:** the Week 1–3 cards on `/standard5/science/` are now LIVE links (soon-chips removed).
+- **Verified this session:** `node --check` on all scripts ✓ · config integrity + bean math simulated ✓ ·
+  season-terms sweep ✓ (temperate names appear only as deliberate wrong options in Wk3 Q4) ·
+  no dev/rubric fields ✓ · no Wk1 content leaked into clones ✓. **Edwin still to do: phone test at
+  ~360px after push, and a live bean-save test with `test.student`.**
+
+**➡️ NEXT TASKS (updated):**
+1. **More Std5 Science lessons** — Week 4 (Reading Belize's Climate Data, SC 1.11) onward, cloning the
+   Week 1 engine. Each new lesson = copy `week01-technology-climate/index.html`, swap the header,
+   Sections 1/2/8, and the JS config block (LESSON, VOCAB, SORT, FILL, QUIZ, TF, ACTS).
+2. **Resume the dashboard build** (`DASHBOARD-GAMIFICATION-PLAN.md`) once a few lessons are live —
+   remaining: Sheet tabs (1.1), `/leaderboard` on `edlo-lms` (1.2 — NOT `edlo-gemini`; data lives in the
+   VC-LMS Sheet), student `/dashboard/` (1.4), teacher `/teacher/` (1.5). Open checklist answers Edwin
+   already gave July 16: beans start from lessons + teacher bonuses; teams/economy per plan.
+3. **Per-test open/closed switch + login gate retrofit** (see `NEXT-SESSION-START.md`) — unchanged.
+
+**Previous session (July 16, 2026): the LMS LOGIN SYSTEM IS LIVE and verified end-to-end.**
 - Built today: Google Sheet **`VC-LMS`** (4 tabs, auto-built by `setupSheet()`) + Apps Script backend
   **`VC-LMS Backend`** (attached to the Sheet) + dedicated Cloudflare Worker **`edlo-lms`**
   (edlo-lms.smartstandardsix.workers.dev) + `/edlo-utils.js` + `/login/` page.
@@ -80,6 +114,15 @@ If the docs are not updated, the task is **not** finished.
    `standard5/science/images/hero/science-banner.png` — the page already points there; until then
    only the alt text shows.
 3. **After that:** next Standard 5 subject hub, or Standard 6's remaining hubs (Math, Scriptures, CS, PE).
+
+**Back-link fix + `.nojekyll` (July 16, 2026):** the 16 deployed Std5 test/quiz pages linked
+"← Back to Science" to the old `/science/` root path, whose redirect stub sent students to the
+**Standard 6** hub. Claude Code fixed all 16 pages to `/standard5/science/` (commit `7e74a25`), but the
+GitHub Pages **Jekyll build failed twice** (runs #90–#91) and the site kept serving the old build —
+the repo had no `.nojekyll` and had hit heavy build traffic (Pages soft-limits ~10 builds/hour).
+**Fix: empty `.nojekyll` file added at the repo root** — the site is pure static HTML, so Pages now
+skips Jekyll and deploys directly (run #92 ✅, 32 s). Verified live: all test-page back links land on
+the Std5 Science hub. Keep `.nojekyll` forever; never add Jekyll-dependent features.
 
 **Theme fix (July 15, 2026 — after first live test):** the Std6 science page tints ALL three light
 themes green (Sunny #f0fdf6 / Cloudy #eaf2ee / Nature #e8f5ec), so on the phone they looked nearly
@@ -187,8 +230,13 @@ Virtual-Classroom/
 ├── standard5/
 │   ├── index.html                      ← Standard 5 hub (Science card LIVE, others coming soon)
 │   └── science/
-│       ├── index.html                  ← Std5 Science hub (30 wks, 4 tabs, 16 live assessments)
+│       ├── index.html                  ← Std5 Science hub (30 wks, 4 tabs, 16 live assessments,
+│       │                                  Wk 1–3 lesson cards LIVE)
 │       ├── images/hero/                ← science-banner.png goes here (Edwin to add)
+│       ├── lessons/                    ← Interactive lessons (✅ July 16, 2026)
+│       │   ├── week01-technology-climate/   ← Wk 1 · SC 1.09 · 🌱 beans wired
+│       │   ├── week02-climate-economy/      ← Wk 2 · SC 1.10 · 🌱 beans wired
+│       │   └── week03-weather-vs-climate/   ← Wk 3 · SC 1.11 · 🌱 beans wired
 │       ├── tests/                      ← 12 STUDENT test pages (c1–c4: unit1, unit2, review)
 │       └── quizzes/                    ← 4 STUDENT quiz pages (adaptation, solar-system,
 │                                          reflection-refraction, digital-citizenship)
@@ -338,7 +386,11 @@ and the activity continues.
 
 ### edlo-utils.js functions
 `vcLogin(u, p)` · `vcGetSession()` · `vcRequireLogin()` · `vcLogout()` · `vcSaveProgress(payload)` ·
-`vcGetProgress()` (returns the student's result rows — the student dashboard's data source)
+`vcGetProgress()` (returns the student's result rows — the student dashboard's data source) ·
+`vcSaveBeans(activityId, beans, maxBeans, meta)` *(added July 16, 2026)* — awards cacao beans 🌱 for a
+lesson activity ONCE per device (`localStorage` lock `vc-pts-<activityId>`); writes a Tab 2 row with
+`activity_type:'lesson'` (score = beans earned, max_score = beans possible); silent no-op when logged
+out (no lock set, so beans can still be earned after a later login). No quest multiplier yet.
 
 ### Verified end-to-end (July 16, 2026)
 ✅ Login → redirect · ✅ Session persists across pages · ✅ /login/ skips form when logged in ·
@@ -529,6 +581,9 @@ cd "C:\Users\zoloe\OneDrive\Shared with me\Code Projects\Python Projects\Virtual
 | Standard 5 Hub | edlovirtualclassroom.com/standard5/ | ✅ Live (Science card now links to its hub) |
 | Standard 5 Science Hub | edlovirtualclassroom.com/standard5/science/ | ✅ Live (July 15 — phone-verified, themes fixed) |
 | Std5 Science tests & quizzes (16) | edlovirtualclassroom.com/standard5/science/tests/… &amp; /quizzes/… | ✅ Live (July 15) |
+| Std5 Science Lesson Wk 1 | edlovirtualclassroom.com/standard5/science/lessons/week01-technology-climate/ | ✅ Built July 16 — live after next push |
+| Std5 Science Lesson Wk 2 | edlovirtualclassroom.com/standard5/science/lessons/week02-climate-economy/ | ✅ Built July 16 — live after next push |
+| Std5 Science Lesson Wk 3 | edlovirtualclassroom.com/standard5/science/lessons/week03-weather-vs-climate/ | ✅ Built July 16 — live after next push |
 | Standard 6 Hub | edlovirtualclassroom.com/standard6/ | ✅ Live |
 | Spanish Hub (Std6) | edlovirtualclassroom.com/standard6/spanish/ | ✅ Live |
 | Science Hub (Std6) | edlovirtualclassroom.com/standard6/science/ | ✅ Live |
@@ -556,6 +611,13 @@ cd "C:\Users\zoloe\OneDrive\Shared with me\Code Projects\Python Projects\Virtual
 |---|---|---|---|---|
 | SC 6.19 Plant Adaptations (Test) | science/ | ✅ Live | ✅ Full test | ✅ Active (OpenAI) |
 | SC 6.20 Plant Diversity (Test) | science/ | ✅ Live | ✅ Full test | ✅ Active (OpenAI) |
+
+### Science — Standard 5 (interactive lessons, 🌱 beans wired, zero AI cost)
+| Lesson | Folder | Status | Activities | Beans max |
+|---|---|---|---|---|
+| Wk 1 · SC 1.09 Technology & Climate Change | standard5/science/lessons/week01-technology-climate/ | ✅ Built July 16, 2026 | 5 rule-based + hook + reflect | 72 🌱 |
+| Wk 2 · SC 1.10 Climate Change & Belize's Economy | standard5/science/lessons/week02-climate-economy/ | ✅ Built July 16, 2026 | 5 rule-based + hook + reflect | 70 🌱 |
+| Wk 3 · SC 1.11 Weather vs. Climate | standard5/science/lessons/week03-weather-vs-climate/ | ✅ Built July 16, 2026 | 5 rule-based + hook + reflect | 70 🌱 |
 
 ---
 

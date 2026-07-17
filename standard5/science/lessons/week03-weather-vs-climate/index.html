@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="night">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 3 · Weather vs. Climate — Mr. EdLo's Virtual Classroom</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  html { font-size: 17.5px; }
+  html, body { overflow-x: hidden; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --accent: #20C997;
+    --accent-dark: #0CA678;
+  }
+  [data-theme="night"] {
+    --bg: #0b1026; --bg2: #141b3c; --card: #1a2247; --text: #eef1ff;
+    --muted: #aab3d6; --line: #2e3a6e; --star-op: 1;
+    --good: #51cf66; --bad: #ff8787; --chip: #232c58;
+  }
+  [data-theme="sunny"] {
+    --bg: #fff9e6; --bg2: #fff3c4; --card: #ffffff; --text: #4a3f16;
+    --muted: #8a7a35; --line: #f1dd8e; --star-op: 0;
+    --good: #2b8a3e; --bad: #c92a2a; --chip: #fdf0c2;
+  }
+  [data-theme="cloudy"] {
+    --bg: #e9eef5; --bg2: #d8e1ec; --card: #ffffff; --text: #2b3a4d;
+    --muted: #5f7288; --line: #c3d0e0; --star-op: 0;
+    --good: #2b8a3e; --bad: #c92a2a; --chip: #dde6f0;
+  }
+  [data-theme="nature"] {
+    --bg: #e8f5ec; --bg2: #d3ecd9; --card: #ffffff; --text: #1e3d29;
+    --muted: #4e7a5d; --line: #b7dcc2; --star-op: 0;
+    --good: #2b8a3e; --bad: #c92a2a; --chip: #d9efe0;
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text);
+    min-height: 100vh; position: relative;
+    background-image: linear-gradient(var(--bg), var(--bg2));
+    background-attachment: fixed;
+  }
+  #stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: var(--star-op); transition: opacity .4s; }
+
+  .wrapper { max-width: 1180px; margin: 0 auto; padding: 0 max(1rem, 2vw) 3rem; position: relative; z-index: 1; min-width: 0; }
+
+  .top-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem; padding: 1rem 0 .3rem; }
+  .back-link { color: var(--accent); text-decoration: none; font-weight: 800; font-size: .95rem; padding: .5rem .6rem .5rem 0; }
+  .back-link:hover { text-decoration: underline; }
+  .theme-bar { display: flex; gap: .4rem; }
+  .theme-bar button {
+    font-size: 1.05rem; background: var(--card); border: 2px solid var(--line);
+    border-radius: 10px; cursor: pointer; padding: .35rem .55rem; line-height: 1;
+    min-width: 44px; min-height: 40px;
+  }
+  .theme-bar button.active { border-color: var(--accent); }
+
+  header.lesson-head { text-align: center; padding: .8rem 0 1.2rem; }
+  .chip-row { display: flex; justify-content: center; flex-wrap: wrap; gap: .5rem; margin-bottom: .7rem; }
+  .chip {
+    background: var(--chip); border: 1px solid var(--line); color: var(--muted);
+    font-size: .8rem; font-weight: 800; border-radius: 999px; padding: .3rem .8rem;
+  }
+  .chip.bean { color: var(--text); }
+  h1 {
+    font-family: 'Fredoka One', cursive; font-weight: 400;
+    font-size: clamp(1.8rem, 8vw, 3rem); line-height: 1.15;
+    color: var(--accent); text-shadow: 0 2px 12px rgba(32,201,151,.25);
+  }
+  .subtitle { color: var(--muted); font-size: 1.02rem; max-width: 780px; margin: .6rem auto 0; min-width: 0; word-break: break-word; }
+  .login-hint { margin-top: .6rem; font-size: .85rem; color: var(--muted); }
+  .login-hint a { color: var(--accent); font-weight: 800; }
+
+  .progress-wrap { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: .5rem 0 .4rem; border-bottom: 1px solid var(--line); }
+  .progress-label { font-size: .78rem; font-weight: 800; color: var(--muted); margin-bottom: .25rem; display: flex; justify-content: space-between; }
+  .progress-track { height: 10px; background: var(--chip); border-radius: 999px; overflow: hidden; border: 1px solid var(--line); }
+  .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent-dark)); border-radius: 999px; transition: width .5s; }
+
+  section.sec {
+    background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+    padding: 1.4rem clamp(1rem, 3vw, 1.8rem); margin-top: 1.4rem;
+    box-shadow: 0 6px 22px rgba(0,0,0,.12);
+  }
+  .sec-tag { font-size: .75rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-dark); }
+  [data-theme="night"] .sec-tag { color: var(--accent); }
+  .sec h2 { font-family: 'Fredoka One', cursive; font-weight: 400; font-size: 1.45rem; margin: .25rem 0 .8rem; }
+  .sec p { margin: .55rem 0; line-height: 1.65; }
+  .sec .hint { color: var(--muted); font-size: .9rem; }
+  .done-badge { display: none; font-size: .8rem; font-weight: 800; color: var(--good); margin-left: .5rem; }
+  section.done .done-badge { display: inline; }
+
+  .reveal-btn, .check-btn {
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem;
+    background: var(--accent); color: #06281e; border: none; border-radius: 12px;
+    padding: .75rem 1.4rem; cursor: pointer; margin-top: .9rem; min-height: 44px;
+    box-shadow: 0 4px 14px rgba(32,201,151,.35);
+  }
+  .check-btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+  .reveal-box { display: none; margin-top: 1rem; border-left: 4px solid var(--accent); background: var(--chip); border-radius: 0 12px 12px 0; padding: .9rem 1rem; }
+
+  .vocab-row, .fill-row { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; padding: .55rem 0; border-bottom: 1px dashed var(--line); }
+  .vocab-term { font-weight: 800; min-width: 10.5rem; }
+  select {
+    font-family: 'Nunito', sans-serif; font-size: .95rem; font-weight: 700;
+    background: var(--chip); color: var(--text); border: 2px solid var(--line);
+    border-radius: 10px; padding: .55rem .6rem; min-height: 44px; max-width: 100%;
+  }
+  .mark { font-size: 1.05rem; min-width: 1.4rem; }
+
+  .sort-grid { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: .9rem; justify-content: center; }
+  .sort-card { flex: 0 1 250px; background: var(--chip); border: 1px solid var(--line); border-radius: 14px; padding: .8rem .9rem; text-align: center; }
+  .sort-card .sc-name { font-weight: 800; margin-bottom: .6rem; }
+  .sort-btns { display: flex; gap: .5rem; justify-content: center; }
+  .sort-btns button {
+    flex: 1 1 0; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .82rem;
+    border: 2px solid var(--line); background: var(--card); color: var(--text);
+    border-radius: 10px; padding: .5rem .3rem; cursor: pointer; min-height: 44px;
+  }
+  .sort-btns button.picked { border-color: var(--accent); background: var(--accent); color: #06281e; }
+  .sort-card .mark { display: block; margin-top: .4rem; }
+
+  .quiz-q { margin-top: 1.1rem; padding-top: .9rem; border-top: 1px dashed var(--line); }
+  .quiz-q .q-stem { font-weight: 800; }
+  .quiz-opts { display: flex; flex-direction: column; gap: .45rem; margin-top: .55rem; }
+  .quiz-opts label {
+    display: flex; align-items: center; gap: .6rem; background: var(--chip);
+    border: 2px solid var(--line); border-radius: 10px; padding: .6rem .7rem;
+    cursor: pointer; min-height: 44px; font-weight: 700; font-size: .95rem;
+  }
+  .quiz-opts input { accent-color: var(--accent); width: 1.1rem; height: 1.1rem; flex: none; }
+  .quiz-opts label.right { border-color: var(--good); }
+  .quiz-opts label.wrong { border-color: var(--bad); }
+
+  .tf-row { display: flex; align-items: center; justify-content: space-between; gap: .8rem; flex-wrap: wrap; padding: .6rem 0; border-bottom: 1px dashed var(--line); }
+  .tf-stmt { flex: 1 1 260px; font-weight: 700; }
+  .tf-btns { display: flex; gap: .5rem; align-items: center; }
+  .tf-btns button {
+    font-family: 'Nunito', sans-serif; font-weight: 800; border: 2px solid var(--line);
+    background: var(--chip); color: var(--text); border-radius: 10px;
+    padding: .5rem .9rem; cursor: pointer; min-height: 44px; min-width: 64px;
+  }
+  .tf-btns button.picked { border-color: var(--accent); background: var(--accent); color: #06281e; }
+
+  .feedback-line { display: none; margin-top: 1rem; font-weight: 800; }
+  .earned-note { display: none; margin-top: .35rem; font-size: .85rem; color: var(--muted); }
+
+  .fig-box { margin: 1rem auto; max-width: 640px; }
+  .fig-box svg { width: 100%; height: auto; display: block; }
+  .fig-cap { text-align: center; font-size: .82rem; color: var(--muted); margin-top: .35rem; }
+
+  .starter-box { background: var(--chip); border: 1px dashed var(--accent); border-radius: 12px; padding: .8rem 1rem; margin-top: .8rem; }
+  .starter-box li { margin: .35rem 0 .35rem 1.2rem; }
+
+  .video-box { position: relative; padding-top: 56.25%; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); margin-top: .9rem; }
+  .video-box iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+  #toast {
+    position: fixed; left: 50%; bottom: 1.4rem; transform: translateX(-50%) translateY(120%);
+    background: var(--accent); color: #06281e; font-weight: 800; border-radius: 999px;
+    padding: .7rem 1.4rem; z-index: 30; transition: transform .35s; box-shadow: 0 8px 24px rgba(0,0,0,.3);
+    max-width: 90vw; text-align: center;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+
+  .site-footer { text-align: center; color: var(--muted); font-size: .82rem; padding: 2.2rem max(1rem, 4vw) 1.4rem; position: relative; z-index: 1; }
+
+  @media (max-width: 600px) {
+    .vocab-term { min-width: 0; width: 100%; }
+    .vocab-row select, .fill-row select { width: 100%; }
+    .sort-card { flex: 0 1 100%; }
+    .tf-row { flex-direction: column; align-items: stretch; }
+    .tf-btns { justify-content: stretch; }
+    .tf-btns button { flex: 1 1 0; }
+  }
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="wrapper">
+
+  <div class="top-row">
+    <a class="back-link" href="/standard5/science/">← Back to Science</a>
+    <div class="theme-bar" id="themeBar">
+      <button data-t="night" title="Night">🌙</button>
+      <button data-t="sunny" title="Sunny">☀️</button>
+      <button data-t="cloudy" title="Cloudy">☁️</button>
+      <button data-t="nature" title="Nature">🌿</button>
+    </div>
+  </div>
+
+  <header class="lesson-head">
+    <div class="chip-row">
+      <span class="chip">📖 Lesson · Week 3</span>
+      <span class="chip">SC 1.11</span>
+      <span class="chip bean" id="beanPill">🌱 0 beans</span>
+    </div>
+    <h1>Weather vs. Climate</h1>
+    <p class="subtitle">Telling the Difference — weather is what happens TODAY; climate is the pattern over many years. Work through each section and earn cacao beans 🌱 as you go!</p>
+    <p class="login-hint" id="loginHint"></p>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Lesson progress</span><span id="progText">0 of 6 done</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+  </div>
+
+  <!-- ═══ SECTION 1 · HOOK ═══ -->
+  <section class="sec" id="sec-hook">
+    <span class="sec-tag">Section 1 · Think first</span>
+    <h2>🌧️ Vote with Your Thumbs</h2>
+    <p>Two sentences — think carefully:</p>
+    <p>💬 <strong>“It is raining right now.”</strong> Is that weather or climate?</p>
+    <p>💬 <strong>“Belize is hot all year.”</strong> And which is that?</p>
+    <p style="font-size:1.15rem; font-weight:800;">🤔 What is the difference between the two?</p>
+    <button class="reveal-btn" id="hookBtn">Think about it… then tap to reveal 💡</button>
+    <div class="reveal-box" id="hookReveal">
+      <p><strong>“Raining right now” = weather</strong> — what is happening TODAY. <strong>“Hot all year” = climate</strong> — the average pattern over MANY years. Keep that rule in your pocket; you will use It all lesson!</p>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION 2 · LEARN IT ═══ -->
+  <section class="sec" id="sec-learn">
+    <span class="sec-tag">Section 2 · Learn it</span>
+    <h2>⏱️ Today vs. Many Years</h2>
+    <p><strong>Weather</strong> is what happens TODAY — this morning's rain, this afternoon's wind. <strong>Climate</strong> is the average pattern over MANY years — Belize is hot and humid year-round.</p>
+    <p>Two measurements decide a place's <strong>climate type</strong>: <strong>temperature</strong> 🌡️ and <strong>precipitation</strong> (rainfall) 🌧️.</p>
+    <div class="fig-box">
+      <svg viewBox="0 0 640 320" role="img" aria-label="Weather versus climate comparison with climate types">
+        <rect x="0" y="0" width="640" height="320" rx="16" fill="#10254a"/>
+        <rect x="30" y="30" width="275" height="150" rx="14" fill="#1d3b74" stroke="#4DABF7" stroke-width="2.5"/>
+        <text x="167" y="62" text-anchor="middle" font-family="Nunito, sans-serif" font-size="18" font-weight="800" fill="#ffffff">☔ WEATHER</text>
+        <text x="167" y="92" text-anchor="middle" font-family="Nunito, sans-serif" font-size="13" fill="#bcd3f5">what happens NOW / today</text>
+        <text x="167" y="120" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" fill="#bcd3f5">“It is raining this morning”</text>
+        <text x="167" y="148" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" fill="#bcd3f5">“It is windy today”</text>
+        <rect x="335" y="30" width="275" height="150" rx="14" fill="#1d4a2c" stroke="#69DB7C" stroke-width="2.5"/>
+        <text x="472" y="62" text-anchor="middle" font-family="Nunito, sans-serif" font-size="18" font-weight="800" fill="#ffffff">🌍 CLIMATE</text>
+        <text x="472" y="92" text-anchor="middle" font-family="Nunito, sans-serif" font-size="13" fill="#c4ecd0">the average over MANY years</text>
+        <text x="472" y="120" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" fill="#c4ecd0">“Belize is hot all year”</text>
+        <text x="472" y="148" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" fill="#c4ecd0">“Belize has a wet and a dry season”</text>
+        <text x="320" y="218" text-anchor="middle" font-family="Nunito, sans-serif" font-size="14" font-weight="800" fill="#7fe0c3">CLIMATE TYPES AROUND THE WORLD</text>
+        <rect x="40" y="235" width="180" height="56" rx="10" fill="#4c3a12" stroke="#FFD43B" stroke-width="2"/>
+        <text x="130" y="258" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" font-weight="800" fill="#ffffff">🌴 TROPICAL — Belize</text>
+        <text x="130" y="278" text-anchor="middle" font-family="Nunito, sans-serif" font-size="11" fill="#f5e3b0">hot all year · wet &amp; dry season</text>
+        <rect x="235" y="235" width="180" height="56" rx="10" fill="#3c3556" stroke="#9775FA" stroke-width="2"/>
+        <text x="325" y="258" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" font-weight="800" fill="#ffffff">🍂 TEMPERATE — New York</text>
+        <text x="325" y="278" text-anchor="middle" font-family="Nunito, sans-serif" font-size="11" fill="#d5c9f7">swings from hot to cold</text>
+        <rect x="430" y="235" width="180" height="56" rx="10" fill="#173d4d" stroke="#66d9e8" stroke-width="2"/>
+        <text x="520" y="258" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" font-weight="800" fill="#ffffff">🧊 POLAR</text>
+        <text x="520" y="278" text-anchor="middle" font-family="Nunito, sans-serif" font-size="11" fill="#b8ecf3">cold all through the year</text>
+      </svg>
+      <p class="fig-cap">Weather = now. Climate = the long-run pattern — and It decides a place's climate type.</p>
+    </div>
+    <p>🌴 Belize sits in the <strong>tropical</strong> band: hot all year, with a <strong>dry season (roughly February–May)</strong> and a <strong>wet (rainy) season (roughly June–November)</strong>.</p>
+    <p>🗽 One comparison to remember: <strong>Belize City and New York City have different climates</strong> because their seasonal changes differ — Belize's are wet and dry, while New York swings from hot to cold.</p>
+    <p class="hint">Pocket rule: weather = now / today · climate = the long-run average. One cold morning does NOT change Belize's tropical climate.</p>
+  </section>
+
+  <!-- ═══ VIDEO (hidden until Mr. EdLo adds a URL) ═══ -->
+  <section class="sec" id="sec-video" style="display:none;">
+    <span class="sec-tag">Watch</span>
+    <h2>🎬 Watch &amp; Think</h2>
+    <div class="video-box"><iframe id="videoFrame" src="" title="Lesson video" allowfullscreen></iframe></div>
+  </section>
+
+  <!-- ═══ SECTION 3 · VOCABULARY ═══ -->
+  <section class="sec act" id="sec-vocab" data-act="vocab">
+    <span class="sec-tag">Section 3 · Word power</span>
+    <h2>📚 Vocabulary Match <span class="done-badge">✓ done</span></h2>
+    <p class="hint">Match each science word to its meaning. Answer all five, then check.</p>
+    <div id="vocabList"></div>
+    <button class="check-btn" disabled>Check my answers ✔</button>
+    <p class="feedback-line"></p><p class="earned-note"></p>
+  </section>
+
+  <!-- ═══ SECTION 4 · SORT IT ═══ -->
+  <section class="sec act" id="sec-sort" data-act="sort">
+    <span class="sec-tag">Section 4 · Sort it</span>
+    <h2>🗂️ Weather or Climate? <span class="done-badge">✓ done</span></h2>
+    <p class="hint">The same statement cards from class. Is each one about <strong>☔ weather</strong> (now / today) or <strong>🌍 climate</strong> (the long-run pattern)? Tap one button on every card.</p>
+    <div class="sort-grid" id="sortGrid"></div>
+    <button class="check-btn" disabled>Check my sorting ✔</button>
+    <p class="feedback-line"></p><p class="earned-note"></p>
+  </section>
+
+  <!-- ═══ SECTION 5 · PRACTICE ═══ -->
+  <section class="sec act" id="sec-practice" data-act="practice">
+    <span class="sec-tag">Section 5 · Your turn</span>
+    <h2>✏️ Label Belize's Climate <span class="done-badge">✓ done</span></h2>
+    <p class="hint">Use the word bank to finish the sentences — the same sentence starters from your worksheet.</p>
+    <div id="fillList"></div>
+    <div class="starter-box">
+      <strong>🗣️ Say it at home:</strong>
+      <li>Weather is ______ but climate is ______.</li>
+      <li>Belize's climate type is ______.</li>
+      <li>Two things that describe a climate are ______ and ______.</li>
+    </div>
+    <button class="check-btn" disabled>Check my sentences ✔</button>
+    <p class="feedback-line"></p><p class="earned-note"></p>
+  </section>
+
+  <!-- ═══ SECTION 6 · CHECKPOINT ═══ -->
+  <section class="sec act" id="sec-checkpoint" data-act="checkpoint">
+    <span class="sec-tag">Section 6 · Checkpoint</span>
+    <h2>🛑 ALTO — Checkpoint Quiz <span class="done-badge">✓ done</span></h2>
+    <p class="hint">Six questions on the whole lesson. Answer every one, then check. Checkpoints earn extra beans!</p>
+    <div id="quizList"></div>
+    <button class="check-btn" disabled>Check the quiz ✔</button>
+    <p class="feedback-line"></p><p class="earned-note"></p>
+  </section>
+
+  <!-- ═══ SECTION 7 · MISCONCEPTION BUSTER ═══ -->
+  <section class="sec act" id="sec-tf" data-act="tf">
+    <span class="sec-tag">Section 7 · Myth buster</span>
+    <h2>🕵️ True or False? <span class="done-badge">✓ done</span></h2>
+    <p class="hint">Students mix up weather and climate ALL the time. Can you keep the rule straight? Decide for each statement.</p>
+    <div id="tfList"></div>
+    <button class="check-btn" disabled>Check my choices ✔</button>
+    <p class="feedback-line"></p><p class="earned-note"></p>
+  </section>
+
+  <!-- ═══ SECTION 8 · FINISH LINE ═══ -->
+  <section class="sec" id="sec-finish">
+    <span class="sec-tag">Section 8 · Finish line</span>
+    <h2>🏁 Reflect &amp; Finish</h2>
+    <p>Before you go, answer these OUT LOUD or in your notebook:</p>
+    <p>1️⃣ Write <strong>the rule</strong> that tells weather from climate <strong>in your own words</strong>.</p>
+    <p>2️⃣ Say one <strong>weather</strong> sentence and one <strong>climate</strong> sentence about YOUR village or town.</p>
+    <p>3️⃣ Challenge: a friend says “It was cold this morning, so Belize's climate must be changing.” Use the rule to answer him or her.</p>
+    <p class="feedback-line" id="finishLine"></p>
+    <p class="hint" id="finishHint">Complete all six activity sections above to collect your 🌱 15-bean completion bonus!</p>
+  </section>
+
+  <footer class="site-footer">© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize · All rights reserved.</footer>
+</div>
+
+<div id="toast"></div>
+
+<script src="/edlo-utils.js"></script>
+<script>
+'use strict';
+/* ═══════════════ Lesson config — Week 3 · SC 1.11 ═══════════════ */
+var LESSON = { week: 'Wk3', lo: 'SC1.11', name: 'Weather vs. Climate', idBase: 'std5-sci-wk03' };
+var VIDEO_URL = ''; /* Mr. EdLo: paste a YouTube EMBED url (https://www.youtube.com/embed/XXXX) to show the video section */
+
+var VOCAB = [
+  { term: 'weather',        def: 'What is happening in the sky NOW — today' },
+  { term: 'climate',        def: 'The average weather pattern over many years' },
+  { term: 'temperature',    def: 'How hot or cold It is' },
+  { term: 'precipitation',  def: 'Water falling from the sky — rain' },
+  { term: 'tropical',       def: 'A climate type that is hot all year with wet and dry seasons' }
+];
+
+var SORT = {
+  labels: ['☔ Weather', '🌍 Climate'],
+  cards: [
+    { name: '💨 It is windy today',                                   ans: 0 },
+    { name: '🌧️ It rained this morning in Belize City',               ans: 0 },
+    { name: '☀️ This afternoon is sunny and hot',                     ans: 0 },
+    { name: '🌴 Belize has a wet season and a dry season',             ans: 1 },
+    { name: '🔥 Belize is hot and humid year-round',                   ans: 1 },
+    { name: '🧊 Polar regions stay cold all through the year',         ans: 1 }
+  ]
+};
+
+var FILL = [
+  { pre: 'Weather is what happens', post: '.', opts: ['now / today', 'over many years', 'only in December'], ans: 0 },
+  { pre: 'Climate is the', post: 'over many years.', opts: ['average pattern', 'rain this morning', 'wind right now'], ans: 0 },
+  { pre: 'Belize\'s climate type is', post: '.', opts: ['tropical', 'polar', 'temperate'], ans: 0 },
+  { pre: 'Two measurements that describe a climate are temperature and', post: '.', opts: ['precipitation', 'thunder', 'sea level'], ans: 0 }
+];
+
+var QUIZ = [
+  { stem: '1. “It is raining right now.” That sentence is about…',
+    opts: ['Weather', 'Climate', 'Neither'], ans: 0,
+    why: 'Rain RIGHT NOW is today\'s condition — that is weather.' },
+  { stem: '2. “Belize is hot all year.” That sentence is about…',
+    opts: ['Weather', 'Climate', 'A thunderstorm'], ans: 1,
+    why: '“All year” means the long-run pattern — that is climate.' },
+  { stem: '3. Which TWO measurements decide a climate type?',
+    opts: ['Wind and clouds', 'Temperature and precipitation', 'Waves and tides'], ans: 1,
+    why: 'Long-run temperature + precipitation (rainfall) define the climate type.' },
+  { stem: '4. Belize\'s two seasons are…',
+    opts: ['Spring and autumn', 'A dry season and a wet (rainy) season', 'Winter and summer'], ans: 1,
+    why: 'Belize is tropical: dry season roughly February–May, wet (rainy) season roughly June–November.' },
+  { stem: '5. Why do Belize City and New York City have different climates?',
+    opts: ['Their seasonal changes differ — Belize\'s are wet and dry, New York swings hot to cold',
+           'New York has no weather', 'Belize is closer to the moon'], ans: 0,
+    why: 'Different long-run patterns = different climate types: tropical vs temperate.' },
+  { stem: '6. One cold morning in Belize means…',
+    opts: ['The climate has changed', 'Just a change in the weather that day', 'Belize is now polar'], ans: 1,
+    why: 'One cold morning is weather. Climate only changes over MANY years.' }
+];
+
+var TF = [
+  { stmt: '“It is windy today” is a climate statement.', ans: false,
+    why: '“Today” is the clue — that is weather, not climate.' },
+  { stmt: '“Belize has a wet and a dry season” is a climate statement.', ans: true,
+    why: 'A repeating pattern across the years — that is climate.' },
+  { stmt: 'One cold morning changes Belize\'s tropical climate.', ans: false,
+    why: 'Climate is the LONG-RUN average; one morning cannot change It.' },
+  { stmt: 'Weather can change from morning to afternoon.', ans: true,
+    why: 'Weather changes fast — that is exactly what makes It different from climate.' }
+];
+
+/* Bean economy (locked): activities 5 + 1/correct · checkpoint 10 + 1/correct · completion 15 */
+var ACTS = {
+  vocab:      { flat: 5,  max: 10, label: 'Vocabulary Match' },
+  sort:       { flat: 5,  max: 11, label: 'Weather or Climate Sort' },
+  practice:   { flat: 5,  max: 9,  label: 'Label the Climate' },
+  checkpoint: { flat: 10, max: 16, label: 'Checkpoint Quiz' },
+  tf:         { flat: 5,  max: 9,  label: 'Myth Buster' }
+};
+var COMPLETION_BEANS = 15;
+var TOTAL_ACTS = 6; /* 5 activities + completion */
+
+/* ═══════════════ Engine (shared by all Std5 Science lessons) ═══════════════ */
+var sessionBeans = 0, doneCount = 0;
+
+function $(sel, root) { return (root || document).querySelector(sel); }
+function $all(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+function toast(msg) {
+  var t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._h); t._h = setTimeout(function () { t.classList.remove('show'); }, 2600);
+}
+function beanPillAdd(n) {
+  sessionBeans += n;
+  $('#beanPill').textContent = '🌱 ' + sessionBeans + ' bean' + (sessionBeans === 1 ? '' : 's');
+}
+function progressTick() {
+  doneCount++;
+  $('#progText').textContent = Math.min(doneCount, TOTAL_ACTS) + ' of ' + TOTAL_ACTS + ' done';
+  $('#progFill').style.width = (Math.min(doneCount, TOTAL_ACTS) / TOTAL_ACTS * 100) + '%';
+}
+function award(actKey, correct, totalItems, sec) {
+  var cfg = ACTS[actKey];
+  var beans = cfg.flat + correct;
+  var id = LESSON.idBase + '-' + actKey;
+  var note = $('.earned-note', sec);
+  beanPillAdd(beans);
+  vcSaveBeans(id, beans, cfg.max, {
+    subject: 'Science', lo_code: LESSON.lo,
+    activity_name: LESSON.week + ' ' + cfg.label
+  }).then(function (res) {
+    note.style.display = 'block';
+    if (res && res.ok)          { note.textContent = '🌱 +' + beans + ' beans saved to your account!'; toast('🌱 +' + beans + ' beans earned!'); }
+    else if (res && res.locked) { note.textContent = '🌱 Beans for this activity were already earned on this device.'; }
+    else                        { note.textContent = '🌱 +' + beans + ' beans — log in next time to save them to your account!'; toast('🌱 +' + beans + ' beans (not saved — not logged in)'); }
+  });
+}
+function finishCheck() {
+  if (doneCount !== 5) return;
+  var id = LESSON.idBase + '-complete';
+  beanPillAdd(COMPLETION_BEANS);
+  progressTick();
+  $('#finishHint').style.display = 'none';
+  var line = $('#finishLine');
+  line.style.display = 'block';
+  line.textContent = '🎉 Lesson complete! +' + COMPLETION_BEANS + ' bonus beans. Great work — Week 4 reads Belize\'s real climate data!';
+  vcSaveBeans(id, COMPLETION_BEANS, COMPLETION_BEANS, {
+    subject: 'Science', lo_code: LESSON.lo, activity_name: LESSON.week + ' Lesson Completed'
+  });
+  toast('🏁 Lesson complete! +' + COMPLETION_BEANS + ' 🌱');
+}
+function sectionDone(sec, actKey, correct, totalItems, msg) {
+  sec.classList.add('done');
+  var fb = $('.feedback-line', sec);
+  fb.style.display = 'block';
+  fb.textContent = msg;
+  $('.check-btn', sec).disabled = true;
+  award(actKey, correct, totalItems, sec);
+  progressTick();
+  finishCheck();
+}
+
+/* ---------- Section 1 · Hook ---------- */
+$('#hookBtn').addEventListener('click', function () {
+  $('#hookReveal').style.display = 'block';
+  this.style.display = 'none';
+});
+
+/* ---------- Video slot ---------- */
+if (VIDEO_URL) { $('#sec-video').style.display = 'block'; $('#videoFrame').src = VIDEO_URL; }
+
+/* ---------- Section 3 · Vocabulary ---------- */
+(function buildVocab() {
+  var sec = $('#sec-vocab'), list = $('#vocabList'), btn = $('.check-btn', sec);
+  var defs = shuffle(VOCAB.map(function (v) { return v.def; }));
+  VOCAB.forEach(function (v) {
+    var row = document.createElement('div');
+    row.className = 'vocab-row';
+    var opts = defs.map(function (d) { return '<option>' + d + '</option>'; }).join('');
+    row.innerHTML = '<span class="vocab-term">' + v.term + '</span>' +
+      '<select data-ans="' + v.def.replace(/"/g, '&quot;') + '"><option value="">— choose —</option>' + opts + '</select>' +
+      '<span class="mark"></span>';
+    list.appendChild(row);
+  });
+  function ready() { btn.disabled = $all('select', list).some(function (s) { return !s.value; }); }
+  list.addEventListener('change', ready);
+  btn.addEventListener('click', function () {
+    var correct = 0;
+    $all('select', list).forEach(function (s) {
+      var ok = s.value === s.getAttribute('data-ans');
+      if (ok) correct++;
+      s.parentNode.querySelector('.mark').textContent = ok ? '✅' : '❌';
+      s.disabled = true;
+    });
+    sectionDone(sec, 'vocab', correct, VOCAB.length, 'You matched ' + correct + ' of ' + VOCAB.length + ' words.' + (correct === VOCAB.length ? ' Perfect! 🎯' : ' Check the ❌ rows and re-read Section 2.'));
+  });
+})();
+
+/* ---------- Section 4 · Sort ---------- */
+(function buildSort() {
+  var sec = $('#sec-sort'), grid = $('#sortGrid'), btn = $('.check-btn', sec);
+  shuffle(SORT.cards).forEach(function (c) {
+    var card = document.createElement('div');
+    card.className = 'sort-card';
+    card.setAttribute('data-ans', c.ans);
+    card.innerHTML = '<div class="sc-name">' + c.name + '</div>' +
+      '<div class="sort-btns"><button type="button" data-v="0">' + SORT.labels[0] + '</button>' +
+      '<button type="button" data-v="1">' + SORT.labels[1] + '</button></div>' +
+      '<span class="mark"></span>';
+    grid.appendChild(card);
+  });
+  grid.addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b || b.disabled) return;
+    $all('button', b.parentNode).forEach(function (x) { x.classList.remove('picked'); });
+    b.classList.add('picked');
+    btn.disabled = $all('.sort-card', grid).some(function (c) { return !$('.picked', c); });
+  });
+  btn.addEventListener('click', function () {
+    var correct = 0;
+    $all('.sort-card', grid).forEach(function (c) {
+      var picked = $('.picked', c);
+      var ok = picked && picked.getAttribute('data-v') === c.getAttribute('data-ans');
+      if (ok) correct++;
+      $('.mark', c).textContent = ok ? '✅' : '❌ ' + SORT.labels[Number(c.getAttribute('data-ans'))];
+      $all('button', c).forEach(function (x) { x.disabled = true; });
+    });
+    sectionDone(sec, 'sort', correct, SORT.cards.length, 'You sorted ' + correct + ' of ' + SORT.cards.length + ' correctly.' + (correct === SORT.cards.length ? ' Excellent sorting! 🗂️' : ' The ❌ cards show the correct column.'));
+  });
+})();
+
+/* ---------- Section 5 · Practice fill-in ---------- */
+(function buildFill() {
+  var sec = $('#sec-practice'), list = $('#fillList'), btn = $('.check-btn', sec);
+  FILL.forEach(function (f) {
+    var row = document.createElement('div');
+    row.className = 'fill-row';
+    var opts = shuffle(f.opts.map(function (o, i) { return { o: o, i: i }; }))
+      .map(function (x) { return '<option value="' + x.i + '">' + x.o + '</option>'; }).join('');
+    row.innerHTML = '<span>' + f.pre + '</span>' +
+      '<select data-ans="' + f.ans + '"><option value="">— choose —</option>' + opts + '</select>' +
+      '<span>' + f.post + '</span><span class="mark"></span>';
+    list.appendChild(row);
+  });
+  function ready() { btn.disabled = $all('select', list).some(function (s) { return !s.value; }); }
+  list.addEventListener('change', ready);
+  btn.addEventListener('click', function () {
+    var correct = 0;
+    $all('select', list).forEach(function (s) {
+      var ok = s.value === s.getAttribute('data-ans');
+      if (ok) correct++;
+      s.parentNode.querySelector('.mark').textContent = ok ? '✅' : '❌';
+      s.disabled = true;
+    });
+    sectionDone(sec, 'practice', correct, FILL.length, 'You completed ' + correct + ' of ' + FILL.length + ' sentences.' + (correct === FILL.length ? ' The loop is yours! 🔁' : ' Look again at the loop picture in Section 2.'));
+  });
+})();
+
+/* ---------- Section 6 · Checkpoint quiz ---------- */
+(function buildQuiz() {
+  var sec = $('#sec-checkpoint'), list = $('#quizList'), btn = $('.check-btn', sec);
+  QUIZ.forEach(function (q, qi) {
+    var div = document.createElement('div');
+    div.className = 'quiz-q';
+    var opts = q.opts.map(function (o, oi) {
+      return '<label><input type="radio" name="q' + qi + '" value="' + oi + '"> ' + o + '</label>';
+    }).join('');
+    div.innerHTML = '<p class="q-stem">' + q.stem + '</p><div class="quiz-opts" data-ans="' + q.ans + '">' + opts + '</div>' +
+      '<p class="hint q-why" style="display:none;"></p>';
+    list.appendChild(div);
+  });
+  function ready() {
+    btn.disabled = $all('.quiz-opts', list).some(function (g) { return !$('input:checked', g); });
+  }
+  list.addEventListener('change', ready);
+  btn.addEventListener('click', function () {
+    var correct = 0;
+    $all('.quiz-q', list).forEach(function (qdiv, qi) {
+      var g = $('.quiz-opts', qdiv);
+      var ans = Number(g.getAttribute('data-ans'));
+      var picked = $('input:checked', g);
+      var ok = picked && Number(picked.value) === ans;
+      if (ok) correct++;
+      $all('label', g).forEach(function (lab, li) {
+        if (li === ans) lab.classList.add('right');
+        else if (picked && Number(picked.value) === li && !ok) lab.classList.add('wrong');
+        $('input', lab).disabled = true;
+      });
+      var why = $('.q-why', qdiv);
+      why.style.display = 'block';
+      why.textContent = (ok ? '✅ ' : '❌ ') + QUIZ[qi].why;
+    });
+    sectionDone(sec, 'checkpoint', correct, QUIZ.length, 'Checkpoint score: ' + correct + ' of ' + QUIZ.length + '.' + (correct === QUIZ.length ? ' Outstanding! 🛑➡️✅' : ' Read the explanations below each question.'));
+  });
+})();
+
+/* ---------- Section 7 · True / False ---------- */
+(function buildTF() {
+  var sec = $('#sec-tf'), list = $('#tfList'), btn = $('.check-btn', sec);
+  TF.forEach(function (t) {
+    var row = document.createElement('div');
+    row.className = 'tf-row';
+    row.setAttribute('data-ans', t.ans ? '1' : '0');
+    row.innerHTML = '<span class="tf-stmt">' + t.stmt + '</span>' +
+      '<div class="tf-btns"><button type="button" data-v="1">True</button>' +
+      '<button type="button" data-v="0">False</button><span class="mark"></span></div>';
+    list.appendChild(row);
+  });
+  list.addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b || b.disabled) return;
+    $all('button', b.parentNode).forEach(function (x) { x.classList.remove('picked'); });
+    b.classList.add('picked');
+    btn.disabled = $all('.tf-row', list).some(function (r) { return !$('.picked', r); });
+  });
+  btn.addEventListener('click', function () {
+    var correct = 0;
+    $all('.tf-row', list).forEach(function (r, i) {
+      var picked = $('.picked', r);
+      var ok = picked && picked.getAttribute('data-v') === r.getAttribute('data-ans');
+      if (ok) correct++;
+      $('.mark', r).textContent = ok ? '✅' : '❌';
+      var why = document.createElement('p');
+      why.className = 'hint';
+      why.textContent = (ok ? '✅ ' : '❌ ') + TF[i].why;
+      r.appendChild(why);
+      $all('button', r).forEach(function (x) { x.disabled = true; });
+    });
+    sectionDone(sec, 'tf', correct, TF.length, 'Myths busted: ' + correct + ' of ' + TF.length + '.' + (correct === TF.length ? ' Detective work! 🕵️' : ' Remember: technology is neutral.'));
+  });
+})();
+
+/* ---------- Theme bar ---------- */
+(function themes() {
+  var saved = localStorage.getItem('vc-theme') || 'night';
+  document.documentElement.setAttribute('data-theme', saved);
+  $all('#themeBar button').forEach(function (b) {
+    b.classList.toggle('active', b.getAttribute('data-t') === saved);
+    b.addEventListener('click', function () {
+      var t = b.getAttribute('data-t');
+      document.documentElement.setAttribute('data-theme', t);
+      localStorage.setItem('vc-theme', t);
+      $all('#themeBar button').forEach(function (x) { x.classList.toggle('active', x === b); });
+    });
+  });
+})();
+
+/* ---------- Login hint ---------- */
+(function loginHint() {
+  var hint = $('#loginHint');
+  var s = (typeof vcGetSession === 'function') ? vcGetSession() : null;
+  if (s) hint.innerHTML = '👋 Welcome back, <strong>' + (s.first_name || s.username) + '</strong> — your beans will be saved!';
+  else hint.innerHTML = '🌱 <a href="/login/">Log in</a> to save the cacao beans you earn in this lesson.';
+})();
+
+/* ---------- Starfield ---------- */
+(function starfield() {
+  var c = $('#stars'), ctx = c.getContext('2d'), stars = [];
+  function size() { c.width = innerWidth; c.height = innerHeight; }
+  size(); addEventListener('resize', size);
+  for (var i = 0; i < 90; i++) {
+    stars.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.6 + .4, p: Math.random() * Math.PI * 2 });
+  }
+  (function draw() {
+    ctx.clearRect(0, 0, c.width, c.height);
+    var t = Date.now() / 1000;
+    stars.forEach(function (s) {
+      ctx.globalAlpha = .45 + .45 * Math.sin(t * 1.4 + s.p);
+      ctx.fillStyle = '#cdd7ff';
+      ctx.beginPath();
+      ctx.arc(s.x * c.width, s.y * c.height, s.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  })();
+})();
+</script>
+</body>
+</html>

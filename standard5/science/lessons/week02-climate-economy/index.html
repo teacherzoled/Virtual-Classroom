@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="night">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 2 · Climate Change &amp; Belize's Economy — Mr. EdLo's Virtual Classroom</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  html { font-size: 17.5px; }
+  html, body { overflow-x: hidden; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --accent: #20C997;
+    --accent-dark: #0CA678;
+  }
+  [data-theme="night"] {
+    --bg: #0b1026; --bg2: #141b3c; --card: #1a2247; --text: #eef1ff;
+    --muted: #aab3d6; --line: #2e3a6e; --star-op: 1;
+    --good: #51cf66; --bad: #ff8787; --chip: #232c58;
+  }
+  [data-theme="sunny"] {
+    --bg: #fff9e6; --bg2: #fff3c4; --card: #ffffff; --text: #4a3f16;
+    --muted: #8a7a35; --line: #f1dd8e; --star-op: 0;
+    --good: #2b8a3e; --bad: #c92a2a; --chip: #fdf0c2;
+  }
+  [data-theme="cloudy"] {
+    --bg: #e9eef5; --bg2: #d8e1ec; --card: #ffffff; --text: #2b3a4d;
+    --muted: #5f7288; --line: #c3d0e0; --star-op: 0;
+    --good: #2b8a3e; --bad: #c92a2a; --chip: #dde6f0;
+  }
+  [data-theme="nature"] {
+    --bg: #e8f5ec; --bg2: #d3ecd9; --card: #ffffff; --text: #1e3d29;
+    --muted: #4e7a5d; --line: #b7dcc2; --star-op: 0;
+    --good: #2b8a3e; --bad: #c92a2a; --chip: #d9efe0;
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text);
+    min-height: 100vh; position: relative;
+    background-image: linear-gradient(var(--bg), var(--bg2));
+    background-attachment: fixed;
+  }
+  #stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: var(--star-op); transition: opacity .4s; }
+
+  .wrapper { max-width: 1180px; margin: 0 auto; padding: 0 max(1rem, 2vw) 3rem; position: relative; z-index: 1; min-width: 0; }
+
+  .top-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem; padding: 1rem 0 .3rem; }
+  .back-link { color: var(--accent); text-decoration: none; font-weight: 800; font-size: .95rem; padding: .5rem .6rem .5rem 0; }
+  .back-link:hover { text-decoration: underline; }
+  .theme-bar { display: flex; gap: .4rem; }
+  .theme-bar button {
+    font-size: 1.05rem; background: var(--card); border: 2px solid var(--line);
+    border-radius: 10px; cursor: pointer; padding: .35rem .55rem; line-height: 1;
+    min-width: 44px; min-height: 40px;
+  }
+  .theme-bar button.active { border-color: var(--accent); }
+
+  header.lesson-head { text-align: center; padding: .8rem 0 1.2rem; }
+  .chip-row { display: flex; justify-content: center; flex-wrap: wrap; gap: .5rem; margin-bottom: .7rem; }
+  .chip {
+    background: var(--chip); border: 1px solid var(--line); color: var(--muted);
+    font-size: .8rem; font-weight: 800; border-radius: 999px; padding: .3rem .8rem;
+  }
+  .chip.bean { color: var(--text); }
+  h1 {
+    font-family: 'Fredoka One', cursive; font-weight: 400;
+    font-size: clamp(1.8rem, 8vw, 3rem); line-height: 1.15;
+    color: var(--accent); text-shadow: 0 2px 12px rgba(32,201,151,.25);
+  }
+  .subtitle { color: var(--muted); font-size: 1.02rem; max-width: 780px; margin: .6rem auto 0; min-width: 0; word-break: break-word; }
+  .login-hint { margin-top: .6rem; font-size: .85rem; color: var(--muted); }
+  .login-hint a { color: var(--accent); font-weight: 800; }
+
+  .progress-wrap { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: .5rem 0 .4rem; border-bottom: 1px solid var(--line); }
+  .progress-label { font-size: .78rem; font-weight: 800; color: var(--muted); margin-bottom: .25rem; display: flex; justify-content: space-between; }
+  .progress-track { height: 10px; background: var(--chip); border-radius: 999px; overflow: hidden; border: 1px solid var(--line); }
+  .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent-dark)); border-radius: 999px; transition: width .5s; }
+
+  section.sec {
+    background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+    padding: 1.4rem clamp(1rem, 3vw, 1.8rem); margin-top: 1.4rem;
+    box-shadow: 0 6px 22px rgba(0,0,0,.12);
+  }
+  .sec-tag { font-size: .75rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-dark); }
+  [data-theme="night"] .sec-tag { color: var(--accent); }
+  .sec h2 { font-family: 'Fredoka One', cursive; font-weight: 400; font-size: 1.45rem; margin: .25rem 0 .8rem; }
+  .sec p { margin: .55rem 0; line-height: 1.65; }
+  .sec .hint { color: var(--muted); font-size: .9rem; }
+  .done-badge { display: none; font-size: .8rem; font-weight: 800; color: var(--good); margin-left: .5rem; }
+  section.done .done-badge { display: inline; }
+
+  .reveal-btn, .check-btn {
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem;
+    background: var(--accent); color: #06281e; border: none; border-radius: 12px;
+    padding: .75rem 1.4rem; cursor: pointer; margin-top: .9rem; min-height: 44px;
+    box-shadow: 0 4px 14px rgba(32,201,151,.35);
+  }
+  .check-btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+  .reveal-box { display: none; margin-top: 1rem; border-left: 4px solid var(--accent); background: var(--chip); border-radius: 0 12px 12px 0; padding: .9rem 1rem; }
+
+  .vocab-row, .fill-row { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; padding: .55rem 0; border-bottom: 1px dashed var(--line); }
+  .vocab-term { font-weight: 800; min-width: 10.5rem; }
+  select {
+    font-family: 'Nunito', sans-serif; font-size: .95rem; font-weight: 700;
+    background: var(--chip); color: var(--text); border: 2px solid var(--line);
+    border-radius: 10px; padding: .55rem .6rem; min-height: 44px; max-width: 100%;
+  }
+  .mark { font-size: 1.05rem; min-width: 1.4rem; }
+
+  .sort-grid { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: .9rem; justify-content: center; }
+  .sort-card { flex: 0 1 250px; background: var(--chip); border: 1px solid var(--line); border-radius: 14px; padding: .8rem .9rem; text-align: center; }
+  .sort-card .sc-name { font-weight: 800; margin-bottom: .6rem; }
+  .sort-btns { display: flex; gap: .5rem; justify-content: center; }
+  .sort-btns button {
+    flex: 1 1 0; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .82rem;
+    border: 2px solid var(--line); background: var(--card); color: var(--text);
+    border-radius: 10px; padding: .5rem .3rem; cursor: pointer; min-height: 44px;
+  }
+  .sort-btns button.picked { border-color: var(--accent); background: var(--accent); color: #06281e; }
+  .sort-card .mark { display: block; margin-top: .4rem; }
+
+  .quiz-q { margin-top: 1.1rem; padding-top: .9rem; border-top: 1px dashed var(--line); }
+  .quiz-q .q-stem { font-weight: 800; }
+  .quiz-opts { display: flex; flex-direction: column; gap: .45rem; margin-top: .55rem; }
+  .quiz-opts label {
+    display: flex; align-items: center; gap: .6rem; background: var(--chip);
+    border: 2px solid var(--line); border-radius: 10px; padding: .6rem .7rem;
+    cursor: pointer; min-height: 44px; font-weight: 700; font-size: .95rem;
+  }
+  .quiz-opts input { accent-color: var(--accent); width: 1.1rem; height: 1.1rem; flex: none; }
+  .quiz-opts label.right { border-color: var(--good); }
+  .quiz-opts label.wrong { border-color: var(--bad); }
+
+  .tf-row { display: flex; align-items: center; justify-content: space-between; gap: .8rem; flex-wrap: wrap; padding: .6rem 0; border-bottom: 1px dashed var(--line); }
+  .tf-stmt { flex: 1 1 260px; font-weight: 700; }
+  .tf-btns { display: flex; gap: .5rem; align-items: center; }
+  .tf-btns button {
+    font-family: 'Nunito', sans-serif; font-weight: 800; border: 2px solid var(--line);
+    background: var(--chip); color: var(--text); border-radius: 10px;
+    padding: .5rem .9rem; cursor: pointer; min-height: 44px; min-width: 64px;
+  }
+  .tf-btns button.picked { border-color: var(--accent); background: var(--accent); color: #06281e; }
+
+  .feedback-line { display: none; margin-top: 1rem; font-weight: 800; }
+  .earned-note { display: none; margin-top: .35rem; font-size: .85rem; color: var(--muted); }
+
+  .fig-box { margin: 1rem auto; max-width: 640px; }
+  .fig-box svg { width: 100%; height: auto; display: block; }
+  .fig-cap { text-align: center; font-size: .82rem; color: var(--muted); margin-top: .35rem; }
+
+  .starter-box { background: var(--chip); border: 1px dashed var(--accent); border-radius: 12px; padding: .8rem 1rem; margin-top: .8rem; }
+  .starter-box li { margin: .35rem 0 .35rem 1.2rem; }
+
+  .video-box { position: relative; padding-top: 56.25%; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); margin-top: .9rem; }
+  .video-box iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+  #toast {
+    position: fixed; left: 50%; bottom: 1.4rem; transform: translateX(-50%) translateY(120%);
+    background: var(--accent); color: #06281e; font-weight: 800; border-radius: 999px;
+    padding: .7rem 1.4rem; z-index: 30; transition: transform .35s; box-shadow: 0 8px 24px rgba(0,0,0,.3);
+    max-width: 90vw; text-align: center;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+
+  .site-footer { text-align: center; color: var(--muted); font-size: .82rem; padding: 2.2rem max(1rem, 4vw) 1.4rem; position: relative; z-index: 1; }
+
+  @media (max-width: 600px) {
+    .vocab-term { min-width: 0; width: 100%; }
+    .vocab-row select, .fill-row select { width: 100%; }
+    .sort-card { flex: 0 1 100%; }
+    .tf-row { flex-direction: column; align-items: stretch; }
+    .tf-btns { justify-content: stretch; }
+    .tf-btns button { flex: 1 1 0; }
+  }
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="wrapper">
+
+  <div class="top-row">
+    <a class="back-link" href="/standard5/science/">← Back to Science</a>
+    <div class="theme-bar" id="themeBar">
+      <button data-t="night" title="Night">🌙</button>
+      <button data-t="sunny" title="Sunny">☀️</button>
+      <button data-t="cloudy" title="Cloudy">☁️</button>
+      <button data-t="nature" title="Nature">🌿</button>
+    </div>
+  </div>
+
+  <header class="lesson-head">
+    <div class="chip-row">
+      <span class="chip">📖 Lesson · Week 2</span>
+      <span class="chip">SC 1.10</span>
+      <span class="chip bean" id="beanPill">🌱 0 beans</span>
+    </div>
+    <h1>Climate Change &amp; Belize's Economy</h1>
+    <p class="subtitle">Tourism &amp; Agriculture — trace how one climate event travels all the way to real Belizean families' pockets. Work through each section and earn cacao beans 🌱 as you go!</p>
+    <p class="login-hint" id="loginHint"></p>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Lesson progress</span><span id="progText">0 of 6 done</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+  </div>
+
+  <!-- ═══ SECTION 1 · HOOK ═══ -->
+  <section class="sec" id="sec-hook">
+    <span class="sec-tag">Section 1 · Think first</span>
+    <h2>🌀 Two Hurricanes, Two Weeks</h2>
+    <p>Here is one true sentence: <strong>“In 2020, hurricanes Eta and Iota flooded farms across Belize within two weeks of each other.”</strong></p>
+    <p>Now imagine it is YOUR family:</p>
+    <p style="font-size:1.15rem; font-weight:800;">🤔 If you were a corn farmer or a hotel owner, what would that flooding mean for you?</p>
+    <button class="reveal-btn" id="hookBtn">Think about it… then tap to reveal 💡</button>
+    <div class="reveal-box" id="hookReveal">
+      <p><strong>Both lose income.</strong> The farmer's crop drowns in the field, and the hotel owner's guests cancel their trips. Belize's two biggest earners — <strong>agriculture</strong> and <strong>tourism</strong> — both depend on the climate. This lesson traces exactly how.</p>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION 2 · LEARN IT ═══ -->
+  <section class="sec" id="sec-learn">
+    <span class="sec-tag">Section 2 · Learn it</span>
+    <h2>⛓️ Cause-and-Effect Chains</h2>
+    <p>Belize's two biggest earners are <strong>tourism</strong> (visitors who come for the reef, the cayes, the jungle) and <strong>agriculture</strong> (sugar in the north, citrus in the south, corn and more). Climate change threatens BOTH — and we can trace it link by link, like a chain:</p>
+    <div class="fig-box">
+      <svg viewBox="0 0 640 300" role="img" aria-label="Cause and effect chain from a warmer sea to less income">
+        <defs>
+          <marker id="arrC" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="#20C997"/>
+          </marker>
+        </defs>
+        <rect x="0" y="0" width="640" height="300" rx="16" fill="#10254a"/>
+        <text x="320" y="42" text-anchor="middle" font-family="Nunito, sans-serif" font-size="15" font-weight="800" fill="#7fe0c3">ONE TOURISM CHAIN, LINK BY LINK</text>
+        <rect x="35" y="70" width="130" height="72" rx="12" fill="#144a6b" stroke="#4DABF7" stroke-width="2.5"/>
+        <text x="100" y="100" text-anchor="middle" font-family="Nunito, sans-serif" font-size="24">🌊</text>
+        <text x="100" y="126" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" font-weight="800" fill="#ffffff">Warmer sea</text>
+        <rect x="255" y="70" width="130" height="72" rx="12" fill="#5a2e4d" stroke="#F783AC" stroke-width="2.5"/>
+        <text x="320" y="100" text-anchor="middle" font-family="Nunito, sans-serif" font-size="24">🪸</text>
+        <text x="320" y="126" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" font-weight="800" fill="#ffffff">Coral bleaches</text>
+        <rect x="475" y="70" width="130" height="72" rx="12" fill="#4c3a12" stroke="#FFD43B" stroke-width="2.5"/>
+        <text x="540" y="100" text-anchor="middle" font-family="Nunito, sans-serif" font-size="24">🧳</text>
+        <text x="540" y="126" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" font-weight="800" fill="#ffffff">Fewer tourists</text>
+        <path d="M 170 106 L 248 106" fill="none" stroke="#20C997" stroke-width="4" marker-end="url(#arrC)"/>
+        <path d="M 390 106 L 468 106" fill="none" stroke="#20C997" stroke-width="4" marker-end="url(#arrC)"/>
+        <path d="M 540 148 L 540 190 L 340 190" fill="none" stroke="#20C997" stroke-width="4" marker-end="url(#arrC)"/>
+        <rect x="190" y="160" width="140" height="72" rx="12" fill="#1d4a2c" stroke="#69DB7C" stroke-width="2.5"/>
+        <text x="260" y="192" text-anchor="middle" font-family="Nunito, sans-serif" font-size="24">💰</text>
+        <text x="260" y="218" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" font-weight="800" fill="#ffffff">Less income</text>
+        <text x="320" y="272" text-anchor="middle" font-family="Nunito, sans-serif" font-size="13" fill="#aab3d6">Every link CAUSES the next one — that is a cause-and-effect chain.</text>
+      </svg>
+      <p class="fig-cap">Warmer sea → coral bleaches → fewer tourists → less income.</p>
+    </div>
+    <p>🏖️ <strong>Tourism:</strong> warmer seas <strong>bleach the coral reef</strong> that snorkellers come to see, and stronger hurricanes damage hotels and cancel trips.</p>
+    <p>🌾 <strong>Agriculture:</strong> drought and flood cycles hurt <strong>sugar in the north</strong>, <strong>citrus in the south</strong> (like Stann Creek), and corn. Hurricanes Eta and Iota (2020) flooded farms across the country.</p>
+    <p class="hint">Think of two real people: a hotel owner in San Pedro and a citrus farmer in Stann Creek. A bad hurricane season reaches BOTH of their pockets — through different chains.</p>
+  </section>
+
+  <!-- ═══ VIDEO (hidden until Mr. EdLo adds a URL) ═══ -->
+  <section class="sec" id="sec-video" style="display:none;">
+    <span class="sec-tag">Watch</span>
+    <h2>🎬 Watch &amp; Think</h2>
+    <div class="video-box"><iframe id="videoFrame" src="" title="Lesson video" allowfullscreen></iframe></div>
+  </section>
+
+  <!-- ═══ SECTION 3 · VOCABULARY ═══ -->
+  <section class="sec act" id="sec-vocab" data-act="vocab">
+    <span class="sec-tag">Section 3 · Word power</span>
+    <h2>📚 Vocabulary Match <span class="done-badge">✓ done</span></h2>
+    <p class="hint">Match each science word to its meaning. Answer all five, then check.</p>
+    <div id="vocabList"></div>
+    <button class="check-btn" disabled>Check my answers ✔</button>
+    <p class="feedback-line"></p><p class="earned-note"></p>
+  </section>
+
+  <!-- ═══ SECTION 4 · SORT IT ═══ -->
+  <section class="sec act" id="sec-sort" data-act="sort">
+    <span class="sec-tag">Section 4 · Sort it</span>
+    <h2>🗂️ Which Sector Gets Hit? <span class="done-badge">✓ done</span></h2>
+    <p class="hint">Each card shows one climate effect in Belize. Does It hit <strong>🏖️ tourism</strong> or <strong>🌾 agriculture</strong>? Tap one button on every card.</p>
+    <div class="sort-grid" id="sortGrid"></div>
+    <button class="check-btn" disabled>Check my sorting ✔</button>
+    <p class="feedback-line"></p><p class="earned-note"></p>
+  </section>
+
+  <!-- ═══ SECTION 5 · PRACTICE ═══ -->
+  <section class="sec act" id="sec-practice" data-act="practice">
+    <span class="sec-tag">Section 5 · Your turn</span>
+    <h2>✏️ Build the Chains <span class="done-badge">✓ done</span></h2>
+    <p class="hint">Finish each cause-and-effect link — the same sentence starters from your worksheet.</p>
+    <div id="fillList"></div>
+    <div class="starter-box">
+      <strong>🗣️ Say it at home:</strong>
+      <li>When the sea gets warmer, ______, which means ______.</li>
+      <li>A hurricane could affect a farmer because ______.</li>
+      <li>Less rain would cause ______.</li>
+    </div>
+    <button class="check-btn" disabled>Check my sentences ✔</button>
+    <p class="feedback-line"></p><p class="earned-note"></p>
+  </section>
+
+  <!-- ═══ SECTION 6 · CHECKPOINT ═══ -->
+  <section class="sec act" id="sec-checkpoint" data-act="checkpoint">
+    <span class="sec-tag">Section 6 · Checkpoint</span>
+    <h2>🛑 ALTO — Checkpoint Quiz <span class="done-badge">✓ done</span></h2>
+    <p class="hint">Six questions on the whole lesson. Answer every one, then check. Checkpoints earn extra beans!</p>
+    <div id="quizList"></div>
+    <button class="check-btn" disabled>Check the quiz ✔</button>
+    <p class="feedback-line"></p><p class="earned-note"></p>
+  </section>
+
+  <!-- ═══ SECTION 7 · MISCONCEPTION BUSTER ═══ -->
+  <section class="sec act" id="sec-tf" data-act="tf">
+    <span class="sec-tag">Section 7 · Myth buster</span>
+    <h2>🕵️ True or False? <span class="done-badge">✓ done</span></h2>
+    <p class="hint">Many students think climate change only means “hotter days.” Is that right? Decide for each statement.</p>
+    <div id="tfList"></div>
+    <button class="check-btn" disabled>Check my choices ✔</button>
+    <p class="feedback-line"></p><p class="earned-note"></p>
+  </section>
+
+  <!-- ═══ SECTION 8 · FINISH LINE ═══ -->
+  <section class="sec" id="sec-finish">
+    <span class="sec-tag">Section 8 · Finish line</span>
+    <h2>🏁 Reflect &amp; Finish</h2>
+    <p>Before you go, answer these OUT LOUD or in your notebook:</p>
+    <p>1️⃣ Think of a <strong>tourism or farming family in YOUR district</strong> (real or imagined).</p>
+    <p>2️⃣ Say <strong>three ways</strong> climate change could affect that family — each one as a <strong>cause → effect</strong> sentence.</p>
+    <p>3️⃣ Challenge: which sector do you think is more at risk in YOUR district — tourism or agriculture? Say why.</p>
+    <p class="feedback-line" id="finishLine"></p>
+    <p class="hint" id="finishHint">Complete all six activity sections above to collect your 🌱 15-bean completion bonus!</p>
+  </section>
+
+  <footer class="site-footer">© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize · All rights reserved.</footer>
+</div>
+
+<div id="toast"></div>
+
+<script src="/edlo-utils.js"></script>
+<script>
+'use strict';
+/* ═══════════════ Lesson config — Week 2 · SC 1.10 ═══════════════ */
+var LESSON = { week: 'Wk2', lo: 'SC1.10', name: 'Climate Change & Belize\'s Economy', idBase: 'std5-sci-wk02' };
+var VIDEO_URL = ''; /* Mr. EdLo: paste a YouTube EMBED url (https://www.youtube.com/embed/XXXX) to show the video section */
+
+var VOCAB = [
+  { term: 'tourism',         def: 'The business of visitors coming to enjoy a place' },
+  { term: 'agriculture',     def: 'Farming — growing crops and raising animals' },
+  { term: 'economy',         def: 'All the ways a country earns and spends money' },
+  { term: 'drought',         def: 'A long time with much less rain than normal' },
+  { term: 'coral bleaching', def: 'Coral turning white and weak when the sea gets too warm' }
+];
+
+var SORT = {
+  labels: ['🏖️ Hits tourism', '🌾 Hits agriculture'],
+  cards: [
+    { name: '🪸 Warmer seas bleach the coral that snorkellers come to see', ans: 0 },
+    { name: '🏨 A hurricane damages hotels in San Pedro and trips are cancelled', ans: 0 },
+    { name: '⛵ Fewer visitors book reef tours after a bad storm season', ans: 0 },
+    { name: '🍬 Drought dries the sugar cane fields in the north', ans: 1 },
+    { name: '🍊 Floods damage the citrus trees in Stann Creek', ans: 1 },
+    { name: '🌽 Unpredictable rain ruins the corn harvest', ans: 1 }
+  ]
+};
+
+var FILL = [
+  { pre: 'When the sea gets warmer, the coral', post: '…', opts: ['bleaches', 'grows faster', 'turns blue'], ans: 0 },
+  { pre: '…which means', post: 'tourists come, so families earn less income.', opts: ['fewer', 'more', 'louder'], ans: 0 },
+  { pre: 'A hurricane could affect a farmer because floods can', post: 'the harvest.', opts: ['destroy', 'water', 'sell'], ans: 0 },
+  { pre: 'Less rain would cause a', post: 'that hurts the crops.', opts: ['drought', 'flood', 'holiday'], ans: 0 }
+];
+
+var QUIZ = [
+  { stem: '1. What are Belize\'s two biggest earners?',
+    opts: ['Mining and fishing', 'Tourism and agriculture', 'Banking and oil'], ans: 1,
+    why: 'Tourism and agriculture are Belize\'s two biggest earners — and both depend on the climate.' },
+  { stem: '2. What happens to coral when the sea gets too warm?',
+    opts: ['It bleaches — turns white and weak', 'It grows stronger', 'It moves to deeper water overnight'], ans: 0,
+    why: 'Warm water stresses the coral, and It bleaches — turning white and weak.' },
+  { stem: '3. Which chain is in the CORRECT order?',
+    opts: ['Fewer tourists → warmer sea → coral bleaches → less income',
+           'Warmer sea → coral bleaches → fewer tourists → less income',
+           'Less income → coral bleaches → warmer sea → fewer tourists'], ans: 1,
+    why: 'Each link causes the next: warmer sea → coral bleaches → fewer tourists → less income.' },
+  { stem: '4. Which crop grown in the NORTH of Belize is hurt by drought?',
+    opts: ['Sugar cane', 'Citrus', 'Seaweed'], ans: 0,
+    why: 'Sugar grows in the north; citrus grows in the south, like Stann Creek.' },
+  { stem: '5. Which two hurricanes flooded farms across Belize in 2020?',
+    opts: ['Mitch and Keith', 'Eta and Iota', 'Hattie and Iris'], ans: 1,
+    why: 'Hurricanes Eta and Iota struck about two weeks apart in November 2020, flooding farms nationwide.' },
+  { stem: '6. How could a bad hurricane season affect a hotel owner in San Pedro?',
+    opts: ['His hotel gets damaged and guests cancel trips, so he earns less',
+           'He gets more guests because of the exciting weather',
+           'It cannot affect him — hotels are not part of the economy'], ans: 0,
+    why: 'Damage plus cancelled trips means less income — that is the tourism chain.' }
+];
+
+var TF = [
+  { stmt: 'Climate change only means “hotter days.”', ans: false,
+    why: 'For Belize the bigger threats are stronger hurricanes, coral bleaching, and unpredictable rain.' },
+  { stmt: 'Stronger hurricanes and coral bleaching are climate change threats to Belize.', ans: true,
+    why: 'Both hit our tourism and farming families hard — they are the big threats here.' },
+  { stmt: 'Citrus grows mainly in the south of Belize, like Stann Creek.', ans: true,
+    why: 'Citrus is a southern crop; sugar cane grows in the north.' },
+  { stmt: 'A drought cannot affect a farmer\'s income.', ans: false,
+    why: 'Less rain → smaller harvest → less to sell → less income. The chain reaches the pocket.' }
+];
+
+/* Bean economy (locked): activities 5 + 1/correct · checkpoint 10 + 1/correct · completion 15 */
+var ACTS = {
+  vocab:      { flat: 5,  max: 10, label: 'Vocabulary Match' },
+  sort:       { flat: 5,  max: 11, label: 'Sector Sort' },
+  practice:   { flat: 5,  max: 9,  label: 'Build the Chains' },
+  checkpoint: { flat: 10, max: 16, label: 'Checkpoint Quiz' },
+  tf:         { flat: 5,  max: 9,  label: 'Myth Buster' }
+};
+var COMPLETION_BEANS = 15;
+var TOTAL_ACTS = 6; /* 5 activities + completion */
+
+/* ═══════════════ Engine (shared by all Std5 Science lessons) ═══════════════ */
+var sessionBeans = 0, doneCount = 0;
+
+function $(sel, root) { return (root || document).querySelector(sel); }
+function $all(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+function toast(msg) {
+  var t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._h); t._h = setTimeout(function () { t.classList.remove('show'); }, 2600);
+}
+function beanPillAdd(n) {
+  sessionBeans += n;
+  $('#beanPill').textContent = '🌱 ' + sessionBeans + ' bean' + (sessionBeans === 1 ? '' : 's');
+}
+function progressTick() {
+  doneCount++;
+  $('#progText').textContent = Math.min(doneCount, TOTAL_ACTS) + ' of ' + TOTAL_ACTS + ' done';
+  $('#progFill').style.width = (Math.min(doneCount, TOTAL_ACTS) / TOTAL_ACTS * 100) + '%';
+}
+function award(actKey, correct, totalItems, sec) {
+  var cfg = ACTS[actKey];
+  var beans = cfg.flat + correct;
+  var id = LESSON.idBase + '-' + actKey;
+  var note = $('.earned-note', sec);
+  beanPillAdd(beans);
+  vcSaveBeans(id, beans, cfg.max, {
+    subject: 'Science', lo_code: LESSON.lo,
+    activity_name: LESSON.week + ' ' + cfg.label
+  }).then(function (res) {
+    note.style.display = 'block';
+    if (res && res.ok)          { note.textContent = '🌱 +' + beans + ' beans saved to your account!'; toast('🌱 +' + beans + ' beans earned!'); }
+    else if (res && res.locked) { note.textContent = '🌱 Beans for this activity were already earned on this device.'; }
+    else                        { note.textContent = '🌱 +' + beans + ' beans — log in next time to save them to your account!'; toast('🌱 +' + beans + ' beans (not saved — not logged in)'); }
+  });
+}
+function finishCheck() {
+  if (doneCount !== 5) return;
+  var id = LESSON.idBase + '-complete';
+  beanPillAdd(COMPLETION_BEANS);
+  progressTick();
+  $('#finishHint').style.display = 'none';
+  var line = $('#finishLine');
+  line.style.display = 'block';
+  line.textContent = '🎉 Lesson complete! +' + COMPLETION_BEANS + ' bonus beans. Great work — see you in Week 3!';
+  vcSaveBeans(id, COMPLETION_BEANS, COMPLETION_BEANS, {
+    subject: 'Science', lo_code: LESSON.lo, activity_name: LESSON.week + ' Lesson Completed'
+  });
+  toast('🏁 Lesson complete! +' + COMPLETION_BEANS + ' 🌱');
+}
+function sectionDone(sec, actKey, correct, totalItems, msg) {
+  sec.classList.add('done');
+  var fb = $('.feedback-line', sec);
+  fb.style.display = 'block';
+  fb.textContent = msg;
+  $('.check-btn', sec).disabled = true;
+  award(actKey, correct, totalItems, sec);
+  progressTick();
+  finishCheck();
+}
+
+/* ---------- Section 1 · Hook ---------- */
+$('#hookBtn').addEventListener('click', function () {
+  $('#hookReveal').style.display = 'block';
+  this.style.display = 'none';
+});
+
+/* ---------- Video slot ---------- */
+if (VIDEO_URL) { $('#sec-video').style.display = 'block'; $('#videoFrame').src = VIDEO_URL; }
+
+/* ---------- Section 3 · Vocabulary ---------- */
+(function buildVocab() {
+  var sec = $('#sec-vocab'), list = $('#vocabList'), btn = $('.check-btn', sec);
+  var defs = shuffle(VOCAB.map(function (v) { return v.def; }));
+  VOCAB.forEach(function (v) {
+    var row = document.createElement('div');
+    row.className = 'vocab-row';
+    var opts = defs.map(function (d) { return '<option>' + d + '</option>'; }).join('');
+    row.innerHTML = '<span class="vocab-term">' + v.term + '</span>' +
+      '<select data-ans="' + v.def.replace(/"/g, '&quot;') + '"><option value="">— choose —</option>' + opts + '</select>' +
+      '<span class="mark"></span>';
+    list.appendChild(row);
+  });
+  function ready() { btn.disabled = $all('select', list).some(function (s) { return !s.value; }); }
+  list.addEventListener('change', ready);
+  btn.addEventListener('click', function () {
+    var correct = 0;
+    $all('select', list).forEach(function (s) {
+      var ok = s.value === s.getAttribute('data-ans');
+      if (ok) correct++;
+      s.parentNode.querySelector('.mark').textContent = ok ? '✅' : '❌';
+      s.disabled = true;
+    });
+    sectionDone(sec, 'vocab', correct, VOCAB.length, 'You matched ' + correct + ' of ' + VOCAB.length + ' words.' + (correct === VOCAB.length ? ' Perfect! 🎯' : ' Check the ❌ rows and re-read Section 2.'));
+  });
+})();
+
+/* ---------- Section 4 · Sort ---------- */
+(function buildSort() {
+  var sec = $('#sec-sort'), grid = $('#sortGrid'), btn = $('.check-btn', sec);
+  shuffle(SORT.cards).forEach(function (c) {
+    var card = document.createElement('div');
+    card.className = 'sort-card';
+    card.setAttribute('data-ans', c.ans);
+    card.innerHTML = '<div class="sc-name">' + c.name + '</div>' +
+      '<div class="sort-btns"><button type="button" data-v="0">' + SORT.labels[0] + '</button>' +
+      '<button type="button" data-v="1">' + SORT.labels[1] + '</button></div>' +
+      '<span class="mark"></span>';
+    grid.appendChild(card);
+  });
+  grid.addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b || b.disabled) return;
+    $all('button', b.parentNode).forEach(function (x) { x.classList.remove('picked'); });
+    b.classList.add('picked');
+    btn.disabled = $all('.sort-card', grid).some(function (c) { return !$('.picked', c); });
+  });
+  btn.addEventListener('click', function () {
+    var correct = 0;
+    $all('.sort-card', grid).forEach(function (c) {
+      var picked = $('.picked', c);
+      var ok = picked && picked.getAttribute('data-v') === c.getAttribute('data-ans');
+      if (ok) correct++;
+      $('.mark', c).textContent = ok ? '✅' : '❌ ' + SORT.labels[Number(c.getAttribute('data-ans'))];
+      $all('button', c).forEach(function (x) { x.disabled = true; });
+    });
+    sectionDone(sec, 'sort', correct, SORT.cards.length, 'You sorted ' + correct + ' of ' + SORT.cards.length + ' correctly.' + (correct === SORT.cards.length ? ' Excellent sorting! 🗂️' : ' The ❌ cards show the correct column.'));
+  });
+})();
+
+/* ---------- Section 5 · Practice fill-in ---------- */
+(function buildFill() {
+  var sec = $('#sec-practice'), list = $('#fillList'), btn = $('.check-btn', sec);
+  FILL.forEach(function (f) {
+    var row = document.createElement('div');
+    row.className = 'fill-row';
+    var opts = shuffle(f.opts.map(function (o, i) { return { o: o, i: i }; }))
+      .map(function (x) { return '<option value="' + x.i + '">' + x.o + '</option>'; }).join('');
+    row.innerHTML = '<span>' + f.pre + '</span>' +
+      '<select data-ans="' + f.ans + '"><option value="">— choose —</option>' + opts + '</select>' +
+      '<span>' + f.post + '</span><span class="mark"></span>';
+    list.appendChild(row);
+  });
+  function ready() { btn.disabled = $all('select', list).some(function (s) { return !s.value; }); }
+  list.addEventListener('change', ready);
+  btn.addEventListener('click', function () {
+    var correct = 0;
+    $all('select', list).forEach(function (s) {
+      var ok = s.value === s.getAttribute('data-ans');
+      if (ok) correct++;
+      s.parentNode.querySelector('.mark').textContent = ok ? '✅' : '❌';
+      s.disabled = true;
+    });
+    sectionDone(sec, 'practice', correct, FILL.length, 'You completed ' + correct + ' of ' + FILL.length + ' sentences.' + (correct === FILL.length ? ' The loop is yours! 🔁' : ' Look again at the loop picture in Section 2.'));
+  });
+})();
+
+/* ---------- Section 6 · Checkpoint quiz ---------- */
+(function buildQuiz() {
+  var sec = $('#sec-checkpoint'), list = $('#quizList'), btn = $('.check-btn', sec);
+  QUIZ.forEach(function (q, qi) {
+    var div = document.createElement('div');
+    div.className = 'quiz-q';
+    var opts = q.opts.map(function (o, oi) {
+      return '<label><input type="radio" name="q' + qi + '" value="' + oi + '"> ' + o + '</label>';
+    }).join('');
+    div.innerHTML = '<p class="q-stem">' + q.stem + '</p><div class="quiz-opts" data-ans="' + q.ans + '">' + opts + '</div>' +
+      '<p class="hint q-why" style="display:none;"></p>';
+    list.appendChild(div);
+  });
+  function ready() {
+    btn.disabled = $all('.quiz-opts', list).some(function (g) { return !$('input:checked', g); });
+  }
+  list.addEventListener('change', ready);
+  btn.addEventListener('click', function () {
+    var correct = 0;
+    $all('.quiz-q', list).forEach(function (qdiv, qi) {
+      var g = $('.quiz-opts', qdiv);
+      var ans = Number(g.getAttribute('data-ans'));
+      var picked = $('input:checked', g);
+      var ok = picked && Number(picked.value) === ans;
+      if (ok) correct++;
+      $all('label', g).forEach(function (lab, li) {
+        if (li === ans) lab.classList.add('right');
+        else if (picked && Number(picked.value) === li && !ok) lab.classList.add('wrong');
+        $('input', lab).disabled = true;
+      });
+      var why = $('.q-why', qdiv);
+      why.style.display = 'block';
+      why.textContent = (ok ? '✅ ' : '❌ ') + QUIZ[qi].why;
+    });
+    sectionDone(sec, 'checkpoint', correct, QUIZ.length, 'Checkpoint score: ' + correct + ' of ' + QUIZ.length + '.' + (correct === QUIZ.length ? ' Outstanding! 🛑➡️✅' : ' Read the explanations below each question.'));
+  });
+})();
+
+/* ---------- Section 7 · True / False ---------- */
+(function buildTF() {
+  var sec = $('#sec-tf'), list = $('#tfList'), btn = $('.check-btn', sec);
+  TF.forEach(function (t) {
+    var row = document.createElement('div');
+    row.className = 'tf-row';
+    row.setAttribute('data-ans', t.ans ? '1' : '0');
+    row.innerHTML = '<span class="tf-stmt">' + t.stmt + '</span>' +
+      '<div class="tf-btns"><button type="button" data-v="1">True</button>' +
+      '<button type="button" data-v="0">False</button><span class="mark"></span></div>';
+    list.appendChild(row);
+  });
+  list.addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b || b.disabled) return;
+    $all('button', b.parentNode).forEach(function (x) { x.classList.remove('picked'); });
+    b.classList.add('picked');
+    btn.disabled = $all('.tf-row', list).some(function (r) { return !$('.picked', r); });
+  });
+  btn.addEventListener('click', function () {
+    var correct = 0;
+    $all('.tf-row', list).forEach(function (r, i) {
+      var picked = $('.picked', r);
+      var ok = picked && picked.getAttribute('data-v') === r.getAttribute('data-ans');
+      if (ok) correct++;
+      $('.mark', r).textContent = ok ? '✅' : '❌';
+      var why = document.createElement('p');
+      why.className = 'hint';
+      why.textContent = (ok ? '✅ ' : '❌ ') + TF[i].why;
+      r.appendChild(why);
+      $all('button', r).forEach(function (x) { x.disabled = true; });
+    });
+    sectionDone(sec, 'tf', correct, TF.length, 'Myths busted: ' + correct + ' of ' + TF.length + '.' + (correct === TF.length ? ' Detective work! 🕵️' : ' Remember: technology is neutral.'));
+  });
+})();
+
+/* ---------- Theme bar ---------- */
+(function themes() {
+  var saved = localStorage.getItem('vc-theme') || 'night';
+  document.documentElement.setAttribute('data-theme', saved);
+  $all('#themeBar button').forEach(function (b) {
+    b.classList.toggle('active', b.getAttribute('data-t') === saved);
+    b.addEventListener('click', function () {
+      var t = b.getAttribute('data-t');
+      document.documentElement.setAttribute('data-theme', t);
+      localStorage.setItem('vc-theme', t);
+      $all('#themeBar button').forEach(function (x) { x.classList.toggle('active', x === b); });
+    });
+  });
+})();
+
+/* ---------- Login hint ---------- */
+(function loginHint() {
+  var hint = $('#loginHint');
+  var s = (typeof vcGetSession === 'function') ? vcGetSession() : null;
+  if (s) hint.innerHTML = '👋 Welcome back, <strong>' + (s.first_name || s.username) + '</strong> — your beans will be saved!';
+  else hint.innerHTML = '🌱 <a href="/login/">Log in</a> to save the cacao beans you earn in this lesson.';
+})();
+
+/* ---------- Starfield ---------- */
+(function starfield() {
+  var c = $('#stars'), ctx = c.getContext('2d'), stars = [];
+  function size() { c.width = innerWidth; c.height = innerHeight; }
+  size(); addEventListener('resize', size);
+  for (var i = 0; i < 90; i++) {
+    stars.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.6 + .4, p: Math.random() * Math.PI * 2 });
+  }
+  (function draw() {
+    ctx.clearRect(0, 0, c.width, c.height);
+    var t = Date.now() / 1000;
+    stars.forEach(function (s) {
+      ctx.globalAlpha = .45 + .45 * Math.sin(t * 1.4 + s.p);
+      ctx.fillStyle = '#cdd7ff';
+      ctx.beginPath();
+      ctx.arc(s.x * c.width, s.y * c.height, s.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  })();
+})();
+</script>
+</body>
+</html>
