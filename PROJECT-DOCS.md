@@ -56,6 +56,9 @@ If the docs are not updated, the task is **not** finished.
   `textContent`/`createTextNode`, never `innerHTML` — a name containing markup can never execute.
   **Standing rule for future pages: any value read from the Students sheet or a session goes into the
   DOM via `textContent`, not `innerHTML`.**
+- **Personal hub greeting (July 16, Edwin's request):** the Standard 5 hub's welcome banner now greets
+  a logged-in student by name — "Hello, [first name]!" replaces "Hello, Standard 5!" (session check at
+  the end of `standard5/index.html`, textContent only). Logged-out visitors still see "Hello, Standard 5!".
 - **Verified this session:** `node --check` on all scripts ✓ · config integrity + bean math simulated ✓ ·
   season-terms sweep ✓ (temperate names appear only as deliberate wrong options in Wk3 Q4) ·
   no dev/rubric fields ✓ · no Wk1 content leaked into clones ✓. **Edwin still to do: phone test at

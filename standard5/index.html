@@ -366,7 +366,7 @@
   <div class="welcome">
     <div class="welcome-icon">👋</div>
     <div class="welcome-text">
-      <strong>Hello, Standard 5!</strong> This is your online home for all our subjects.
+      <strong id="welcomeName">Hello, Standard 5!</strong> This is your online home for all our subjects.
       Science is now open — explore its lessons, activities and graded quizzes and tests. The other subjects are being built and are on the way.
     </div>
   </div>
@@ -472,6 +472,15 @@
     topBtn.style.display = window.scrollY > 300 ? 'flex' : 'none';
   });
   topBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+</script>
+<script src="/edlo-utils.js"></script>
+<script>
+  /* Personal greeting when logged in (added July 16, 2026) — textContent only, per standing rule */
+  (function () {
+    var el = document.getElementById('welcomeName');
+    var s = (typeof vcGetSession === 'function') ? vcGetSession() : null;
+    if (el && s) el.textContent = 'Hello, ' + (s.first_name || s.username) + '!';
+  })();
 </script>
 </body>
 </html>
