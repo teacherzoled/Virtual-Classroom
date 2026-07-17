@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="night">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Dashboard — Mr. EdLo's Virtual Classroom</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  html { font-size: 17.5px; }
+  html, body { overflow-x: hidden; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root { --accent: #20C997; --accent-dark: #0CA678; }
+  [data-theme="night"]  { --bg:#0b1026; --bg2:#141b3c; --card:#1a2247; --text:#eef1ff; --muted:#aab3d6; --line:#2e3a6e; --star-op:1; --good:#51cf66; --warn:#FFD43B; --bad:#ff8787; --chip:#232c58; }
+  [data-theme="sunny"]  { --bg:#fff9e6; --bg2:#fff3c4; --card:#ffffff; --text:#4a3f16; --muted:#8a7a35; --line:#f1dd8e; --star-op:0; --good:#2b8a3e; --warn:#b08a00; --bad:#c92a2a; --chip:#fdf0c2; }
+  [data-theme="cloudy"] { --bg:#e9eef5; --bg2:#d8e1ec; --card:#ffffff; --text:#2b3a4d; --muted:#5f7288; --line:#c3d0e0; --star-op:0; --good:#2b8a3e; --warn:#b08a00; --bad:#c92a2a; --chip:#dde6f0; }
+  [data-theme="nature"] { --bg:#e8f5ec; --bg2:#d3ecd9; --card:#ffffff; --text:#1e3d29; --muted:#4e7a5d; --line:#b7dcc2; --star-op:0; --good:#2b8a3e; --warn:#b08a00; --bad:#c92a2a; --chip:#d9efe0; }
+
+  body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--text); min-height:100vh;
+         background-image:linear-gradient(var(--bg),var(--bg2)); background-attachment:fixed; }
+  #stars { position:fixed; inset:0; z-index:0; pointer-events:none; opacity:var(--star-op); transition:opacity .4s; }
+  .wrapper { max-width:1180px; margin:0 auto; padding:0 max(1rem,2vw) 3rem; position:relative; z-index:1; min-width:0; }
+
+  .top-row { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.5rem; padding:1rem 0 .3rem; }
+  .back-link { color:var(--accent); text-decoration:none; font-weight:800; font-size:.95rem; }
+  .theme-bar { display:flex; gap:.4rem; }
+  .theme-bar button { font-size:1.05rem; background:var(--card); border:2px solid var(--line); border-radius:10px; cursor:pointer; padding:.35rem .55rem; line-height:1; min-width:44px; min-height:40px; }
+  .theme-bar button.active { border-color:var(--accent); }
+
+  header.dash-head { text-align:center; padding:.8rem 0 1rem; }
+  h1 { font-family:'Fredoka One',cursive; font-weight:400; font-size:clamp(1.7rem,7vw,2.6rem); color:var(--accent); line-height:1.15; }
+  .sub-title { color:var(--muted); font-size:.9rem; margin-top:.4rem; font-weight:700; }
+
+  section.panel { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:1.3rem clamp(1rem,3vw,1.7rem); margin-top:1.3rem; box-shadow:0 6px 22px rgba(0,0,0,.12); }
+  .panel h2 { font-family:'Fredoka One',cursive; font-weight:400; font-size:1.25rem; margin-bottom:.35rem; }
+  .panel .sub { color:var(--muted); font-size:.84rem; margin-bottom:.9rem; }
+  .section-divider { text-align:center; font-family:'Fredoka One',cursive; font-size:1.05rem; color:var(--muted); margin-top:2rem; letter-spacing:.06em; }
+
+  /* Gate */
+  .gate { max-width:420px; margin:3rem auto; text-align:center; }
+  .gate input { width:100%; font-family:'Nunito',sans-serif; font-size:1.05rem; font-weight:700; padding:.8rem 1rem; border-radius:12px; border:2px solid var(--line); background:var(--chip); color:var(--text); margin-top:1rem; text-align:center; }
+  .btn { font-family:'Nunito',sans-serif; font-weight:800; font-size:1rem; background:var(--accent); color:#06281e; border:none; border-radius:12px; padding:.75rem 1.4rem; cursor:pointer; margin-top:.9rem; min-height:44px; box-shadow:0 4px 14px rgba(32,201,151,.35); }
+  .btn:disabled { opacity:.45; cursor:not-allowed; box-shadow:none; }
+  .gate-err { color:var(--bad); font-weight:800; font-size:.9rem; margin-top:.7rem; display:none; }
+
+  /* Tables */
+  .tbl-wrap { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:.88rem; min-width:560px; }
+  th { text-align:left; font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); padding:.5rem .6rem; border-bottom:2px solid var(--line); }
+  td { padding:.55rem .6rem; border-bottom:1px dashed var(--line); }
+  tr.clickable { cursor:pointer; }
+  tr.clickable:hover td { background:var(--chip); }
+  .pct-good { color:var(--good); font-weight:800; } .pct-warn { color:var(--warn); font-weight:800; } .pct-bad { color:var(--bad); font-weight:800; }
+  .muted { color:var(--muted); }
+
+  /* Weak LOs */
+  .lo-row { display:flex; align-items:center; gap:.7rem; margin:.45rem 0; }
+  .lo-code { flex:0 0 5.2rem; font-weight:800; font-size:.85rem; }
+  .lo-track { flex:1 1 auto; background:var(--chip); border:1px solid var(--line); border-radius:999px; height:16px; overflow:hidden; min-width:0; }
+  .lo-fill { height:100%; border-radius:999px; }
+  .lo-pct { flex:0 0 3.4rem; text-align:right; font-weight:800; font-size:.84rem; }
+
+  /* Drill-down */
+  #drill { display:none; }
+  #drillClose { float:right; cursor:pointer; color:var(--muted); font-weight:800; text-decoration:underline; font-size:.8rem; }
+
+  /* Game section */
+  .race-row { display:flex; align-items:center; gap:.7rem; margin:.6rem 0; }
+  .race-label { flex:0 0 7rem; font-weight:800; font-size:.9rem; }
+  .race-track { flex:1 1 auto; background:var(--chip); border:1px solid var(--line); border-radius:999px; height:20px; overflow:hidden; min-width:0; }
+  .race-fill { height:100%; border-radius:999px; width:0%; transition:width 1s; }
+  .race-beans { flex:0 0 4.4rem; text-align:right; font-weight:800; font-size:.86rem; }
+
+  .bonus-form { display:flex; flex-wrap:wrap; gap:.7rem; align-items:flex-end; }
+  .bonus-form label { display:block; font-size:.75rem; font-weight:800; color:var(--muted); margin-bottom:.25rem; }
+  .bonus-form select, .bonus-form input { font-family:'Nunito',sans-serif; font-size:.95rem; font-weight:700; padding:.6rem .7rem; border-radius:10px; border:2px solid var(--line); background:var(--chip); color:var(--text); min-height:44px; max-width:100%; }
+  .bonus-note { font-weight:800; margin-top:.7rem; display:none; }
+
+  .load-note { text-align:center; color:var(--muted); font-weight:800; padding:2rem 0; }
+  .site-footer { text-align:center; color:var(--muted); font-size:.82rem; padding:2.2rem max(1rem,4vw) 1.4rem; position:relative; z-index:1; }
+
+  @media (max-width:640px) {
+    .bonus-form > div { flex:1 1 100%; }
+    .bonus-form select, .bonus-form input { width:100%; }
+  }
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="wrapper">
+
+  <div class="top-row">
+    <a class="back-link" href="/">← Home</a>
+    <div class="theme-bar" id="themeBar">
+      <button data-t="night" title="Night">🌙</button>
+      <button data-t="sunny" title="Sunny">☀️</button>
+      <button data-t="cloudy" title="Cloudy">☁️</button>
+      <button data-t="nature" title="Nature">🌿</button>
+    </div>
+  </div>
+
+  <header class="dash-head">
+    <h1>🍎 Teacher Dashboard</h1>
+    <p class="sub-title">Mr. EdLo's Virtual Classroom — class overview &amp; game management</p>
+  </header>
+
+  <!-- Passcode gate -->
+  <div class="gate" id="gate">
+    <p style="font-weight:800;">🔐 Enter the teacher code to open the dashboard.</p>
+    <input type="password" id="gateCode" placeholder="Teacher code" autocomplete="off">
+    <button class="btn" id="gateBtn">Open Dashboard</button>
+    <p class="gate-err" id="gateErr"></p>
+  </div>
+
+  <div id="dash" style="display:none;">
+    <p class="load-note" id="loadNote">Loading class data…</p>
+
+    <!-- ═══ SECTION A · MASTERY (academic — beans never shown here) ═══ -->
+    <p class="section-divider" id="divA" style="display:none;">— 🎯 MASTERY · GRADED WORK ONLY —</p>
+
+    <section class="panel" id="classPanel" style="display:none;">
+      <h2>📋 Class Overview</h2>
+      <p class="sub">Averages come from tests, quizzes and exit slips only. Tap a student for his or her full history.</p>
+      <div class="tbl-wrap"><table id="classTbl">
+        <thead><tr><th>Student</th><th>Class</th><th>Graded items</th><th>Average</th><th>Last activity</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </section>
+
+    <section class="panel" id="loPanel" style="display:none;">
+      <h2>🚩 Learning Outcomes — Class Average</h2>
+      <p class="sub">Red and yellow bars show where the class needs review (below 70%).</p>
+      <div id="loRows"></div>
+    </section>
+
+    <section class="panel" id="drill">
+      <span id="drillClose">✕ close</span>
+      <h2 id="drillName">Student</h2>
+      <div class="tbl-wrap"><table id="drillTbl">
+        <thead><tr><th>Date</th><th>Type</th><th>Activity</th><th>Subject · LO</th><th>Score</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </section>
+
+    <!-- ═══ SECTION B · GAME (engagement — never mixed with grades) ═══ -->
+    <p class="section-divider" id="divB" style="display:none;">— 🌱 CACAO BEAN GAME · ENGAGEMENT ONLY —</p>
+
+    <section class="panel" id="teamPanel" style="display:none;">
+      <h2>🏁 Team Totals</h2>
+      <div id="teamRows"></div>
+      <p class="sub" style="margin-top:.8rem;" id="goalLine"></p>
+    </section>
+
+    <section class="panel" id="bonusPanel" style="display:none;">
+      <h2>🎁 Award Bonus Beans</h2>
+      <p class="sub">Participation, kindness, a great question — you decide. Max 100 per bonus; each award writes one row to the Sheet.</p>
+      <div class="bonus-form">
+        <div><label>Student</label><select id="bonusWho"></select></div>
+        <div><label>Beans (1–100)</label><input type="number" id="bonusAmt" min="1" max="100" value="10"></div>
+        <div style="flex:1 1 220px;"><label>Reason (students see this)</label><input type="text" id="bonusWhy" placeholder="e.g. Great question in class!"></div>
+        <div><button class="btn" id="bonusBtn">Award 🌱</button></div>
+      </div>
+      <p class="bonus-note" id="bonusNote"></p>
+    </section>
+  </div>
+
+  <footer class="site-footer">© 2026 Mr. EdLo's Virtual Classroom — Belize · All rights reserved.</footer>
+</div>
+
+<script src="/edlo-utils.js"></script>
+<script>
+'use strict';
+var LMS = 'https://edlo-lms.smartstandardsix.workers.dev';
+var TEAMS = {
+  jaguars:  { name: 'Jaguars',  icon: '🐆', color: '#FF922B' },
+  toucans:  { name: 'Toucans',  icon: '🦜', color: '#FFD43B' },
+  tapirs:   { name: 'Tapirs',   icon: '🦙', color: '#9775FA' },
+  manatees: { name: 'Manatees', icon: '🦭', color: '#4DABF7' }
+};
+var ASSESS_TYPES = { test: 1, quiz: 1, 'exit-slip': 1 };
+var teacherCode = '';
+var DATA = null;
+
+function $(s, r) { return (r || document).querySelector(s); }
+function post(path, body) {
+  return fetch(LMS + path, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+  }).then(function (r) { return r.json(); });
+}
+
+/* ---------- Theme + stars (same engine as site) ---------- */
+(function themes() {
+  var saved = localStorage.getItem('vc-theme') || 'night';
+  document.documentElement.setAttribute('data-theme', saved);
+  Array.prototype.forEach.call(document.querySelectorAll('#themeBar button'), function (b) {
+    b.classList.toggle('active', b.getAttribute('data-t') === saved);
+    b.addEventListener('click', function () {
+      var t = b.getAttribute('data-t');
+      document.documentElement.setAttribute('data-theme', t);
+      localStorage.setItem('vc-theme', t);
+      Array.prototype.forEach.call(document.querySelectorAll('#themeBar button'), function (x) { x.classList.toggle('active', x === b); });
+    });
+  });
+})();
+(function starfield() {
+  var c = $('#stars'), ctx = c.getContext('2d'), stars = [];
+  function size() { c.width = innerWidth; c.height = innerHeight; }
+  size(); addEventListener('resize', size);
+  for (var i = 0; i < 90; i++) stars.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.6 + .4, p: Math.random() * Math.PI * 2 });
+  (function draw() {
+    ctx.clearRect(0, 0, c.width, c.height);
+    var t = Date.now() / 1000;
+    stars.forEach(function (s) {
+      ctx.globalAlpha = .45 + .45 * Math.sin(t * 1.4 + s.p);
+      ctx.fillStyle = '#cdd7ff';
+      ctx.beginPath(); ctx.arc(s.x * c.width, s.y * c.height, s.r, 0, Math.PI * 2); ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  })();
+})();
+
+/* ---------- Gate ---------- */
+$('#gateBtn').addEventListener('click', tryOpen);
+$('#gateCode').addEventListener('keydown', function (e) { if (e.key === 'Enter') tryOpen(); });
+var savedCode = sessionStorage.getItem('vc-teacher-code');
+if (savedCode) { $('#gateCode').value = savedCode; tryOpen(); }
+
+function tryOpen() {
+  var code = $('#gateCode').value.trim();
+  if (!code) return;
+  $('#gateBtn').disabled = true;
+  $('#gateErr').style.display = 'none';
+  post('/teacher-data', { teacher_code: code }).then(function (res) {
+    $('#gateBtn').disabled = false;
+    if (!res.ok) {
+      sessionStorage.removeItem('vc-teacher-code');
+      $('#gateErr').textContent = res.error || 'Could not open the dashboard.';
+      $('#gateErr').style.display = 'block';
+      return;
+    }
+    teacherCode = code;
+    sessionStorage.setItem('vc-teacher-code', code);
+    $('#gate').style.display = 'none';
+    $('#dash').style.display = 'block';
+    DATA = res;
+    render(res);
+  }).catch(function () {
+    $('#gateBtn').disabled = false;
+    $('#gateErr').textContent = 'Network problem — try again.';
+    $('#gateErr').style.display = 'block';
+  });
+}
+
+/* ---------- Render everything ---------- */
+function render(data) {
+  $('#loadNote').style.display = 'none';
+  var students = data.students;
+  var results = data.results;
+
+  /* Per-student aggregates */
+  var agg = {};
+  students.forEach(function (s) { agg[s.username] = { s: s, mSum: 0, mN: 0, beans: 0, last: '', rows: [] }; });
+  results.forEach(function (r) {
+    var a = agg[r.username]; if (!a) return;
+    a.rows.push(r);
+    if (String(r.timestamp) > a.last) a.last = String(r.timestamp);
+    if (ASSESS_TYPES[r.activity_type]) { a.mSum += r.percent; a.mN++; }
+    if (r.activity_type === 'lesson' || r.activity_type === 'bonus') a.beans += r.score;
+  });
+
+  /* SECTION A — class table */
+  $('#divA').style.display = 'block';
+  $('#classPanel').style.display = 'block';
+  var tbody = $('#classTbl tbody');
+  students.forEach(function (s) {
+    var a = agg[s.username];
+    var tr = document.createElement('tr');
+    tr.className = 'clickable';
+    var avg = a.mN ? Math.round(a.mSum / a.mN) : null;
+    var cls = avg === null ? 'muted' : (avg >= 80 ? 'pct-good' : avg >= 60 ? 'pct-warn' : 'pct-bad');
+    [s.full_name, s.class_id, a.mN ? a.mN : '—', avg === null ? 'no graded work' : avg + '%', a.last ? a.last.slice(0, 16) : 'never'].forEach(function (v, i) {
+      var td = document.createElement('td');
+      if (i === 3) td.className = cls;
+      td.textContent = v;
+      tr.appendChild(td);
+    });
+    tr.addEventListener('click', function () { drill(a); });
+    tbody.appendChild(tr);
+  });
+
+  /* SECTION A — LO breakdown (assessment rows only) */
+  var byLO = {};
+  results.forEach(function (r) {
+    if (!ASSESS_TYPES[r.activity_type] || !r.lo_code) return;
+    if (!byLO[r.lo_code]) byLO[r.lo_code] = { sum: 0, n: 0 };
+    byLO[r.lo_code].sum += r.percent; byLO[r.lo_code].n++;
+  });
+  var los = Object.keys(byLO).sort();
+  if (los.length) {
+    $('#loPanel').style.display = 'block';
+    var loRows = $('#loRows');
+    los.forEach(function (lo) {
+      var pct = Math.round(byLO[lo].sum / byLO[lo].n);
+      var color = pct >= 80 ? 'var(--good)' : pct >= 70 ? 'var(--warn)' : 'var(--bad)';
+      var row = document.createElement('div'); row.className = 'lo-row';
+      var c = document.createElement('span'); c.className = 'lo-code'; c.textContent = lo;
+      var track = document.createElement('div'); track.className = 'lo-track';
+      var fill = document.createElement('div'); fill.className = 'lo-fill';
+      fill.style.background = color; fill.style.width = pct + '%';
+      track.appendChild(fill);
+      var p = document.createElement('span'); p.className = 'lo-pct'; p.textContent = pct + '%';
+      row.appendChild(c); row.appendChild(track); row.appendChild(p);
+      loRows.appendChild(row);
+    });
+  }
+
+  /* SECTION B — team totals via leaderboard */
+  $('#divB').style.display = 'block';
+  vcGetLeaderboard().then(function (lb) {
+    if (!lb.ok) return;
+    $('#teamPanel').style.display = 'block';
+    var maxB = 1;
+    lb.groups.forEach(function (g) { if (g.beans > maxB) maxB = g.beans; });
+    var teamRows = $('#teamRows');
+    lb.groups.slice().sort(function (a, b) { return b.beans - a.beans; }).forEach(function (g) {
+      var meta = TEAMS[g.group] || { name: g.group, icon: '⭐', color: '#20C997' };
+      var row = document.createElement('div'); row.className = 'race-row';
+      var lab = document.createElement('span'); lab.className = 'race-label'; lab.textContent = meta.icon + ' ' + meta.name;
+      var track = document.createElement('div'); track.className = 'race-track';
+      var fill = document.createElement('div'); fill.className = 'race-fill'; fill.style.background = meta.color;
+      track.appendChild(fill);
+      var val = document.createElement('span'); val.className = 'race-beans'; val.textContent = g.beans + ' 🌱';
+      row.appendChild(lab); row.appendChild(track); row.appendChild(val);
+      teamRows.appendChild(row);
+      setTimeout(function () { fill.style.width = Math.max(3, Math.round(g.beans / maxB * 100)) + '%'; }, 60);
+    });
+    $('#goalLine').textContent = 'Class total: ' + lb.class_total + ' 🌱 of the ' + lb.class_goal + ' goal (' +
+      (lb.class_goal ? Math.min(100, Math.round(lb.class_total / lb.class_goal * 100)) : 0) + '%). Team membership is set in the Students tab, column G.';
+  });
+
+  /* SECTION B — bonus awarder */
+  $('#bonusPanel').style.display = 'block';
+  var who = $('#bonusWho');
+  students.forEach(function (s) {
+    var o = document.createElement('option');
+    o.value = s.username;
+    o.textContent = s.full_name + (s.group_id && TEAMS[s.group_id] ? ' (' + TEAMS[s.group_id].name + ')' : '');
+    who.appendChild(o);
+  });
+  $('#bonusBtn').addEventListener('click', function () {
+    var beans = Number($('#bonusAmt').value);
+    var note = $('#bonusNote');
+    $('#bonusBtn').disabled = true;
+    post('/award-bonus', {
+      teacher_code: teacherCode,
+      username: who.value,
+      beans: beans,
+      reason: $('#bonusWhy').value.trim() || 'Teacher bonus'
+    }).then(function (res) {
+      $('#bonusBtn').disabled = false;
+      note.style.display = 'block';
+      if (res.ok) {
+        note.style.color = 'var(--good)';
+        note.textContent = '✅ ' + res.awarded + ' 🌱 awarded to ' + res.to + '. The Sheet and team totals update immediately.';
+      } else {
+        note.style.color = 'var(--bad)';
+        note.textContent = '❌ ' + (res.error || 'Could not award beans.');
+      }
+    }).catch(function () {
+      $('#bonusBtn').disabled = false;
+      note.style.display = 'block';
+      note.style.color = 'var(--bad)';
+      note.textContent = '❌ Network problem — try again.';
+    });
+  });
+}
+
+/* ---------- Drill-down ---------- */
+function drill(a) {
+  $('#drill').style.display = 'block';
+  $('#drillName').textContent = '👤 ' + a.s.full_name + ' — full history';
+  var tbody = $('#drillTbl tbody');
+  tbody.textContent = '';
+  if (!a.rows.length) {
+    var tr0 = document.createElement('tr');
+    var td0 = document.createElement('td');
+    td0.colSpan = 5; td0.className = 'muted'; td0.textContent = 'No activity recorded yet.';
+    tr0.appendChild(td0); tbody.appendChild(tr0);
+  } else {
+    a.rows.slice().reverse().forEach(function (r) {
+      var tr = document.createElement('tr');
+      var isBean = (r.activity_type === 'lesson' || r.activity_type === 'bonus');
+      [String(r.timestamp).slice(0, 16), r.activity_type, r.activity_name,
+       (r.subject || '') + (r.lo_code ? ' · ' + r.lo_code : ''),
+       isBean ? '+' + r.score + ' 🌱' : r.score + '/' + r.max_score + ' (' + r.percent + '%)'
+      ].forEach(function (v) {
+        var td = document.createElement('td'); td.textContent = v; tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+  }
+  $('#drill').scrollIntoView({ behavior: 'smooth' });
+}
+$('#drillClose').addEventListener('click', function () { $('#drill').style.display = 'none'; });
+</script>
+</body>
+</html>

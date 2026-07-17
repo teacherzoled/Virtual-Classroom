@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="night">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Dashboard — Mr. EdLo's Virtual Classroom</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  html { font-size: 17.5px; }
+  html, body { overflow-x: hidden; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root { --accent: #20C997; --accent-dark: #0CA678; }
+  [data-theme="night"]  { --bg:#0b1026; --bg2:#141b3c; --card:#1a2247; --text:#eef1ff; --muted:#aab3d6; --line:#2e3a6e; --star-op:1; --good:#51cf66; --warn:#FFD43B; --bad:#ff8787; --chip:#232c58; }
+  [data-theme="sunny"]  { --bg:#fff9e6; --bg2:#fff3c4; --card:#ffffff; --text:#4a3f16; --muted:#8a7a35; --line:#f1dd8e; --star-op:0; --good:#2b8a3e; --warn:#b08a00; --bad:#c92a2a; --chip:#fdf0c2; }
+  [data-theme="cloudy"] { --bg:#e9eef5; --bg2:#d8e1ec; --card:#ffffff; --text:#2b3a4d; --muted:#5f7288; --line:#c3d0e0; --star-op:0; --good:#2b8a3e; --warn:#b08a00; --bad:#c92a2a; --chip:#dde6f0; }
+  [data-theme="nature"] { --bg:#e8f5ec; --bg2:#d3ecd9; --card:#ffffff; --text:#1e3d29; --muted:#4e7a5d; --line:#b7dcc2; --star-op:0; --good:#2b8a3e; --warn:#b08a00; --bad:#c92a2a; --chip:#d9efe0; }
+
+  body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--text); min-height:100vh;
+         background-image:linear-gradient(var(--bg),var(--bg2)); background-attachment:fixed; }
+  #stars { position:fixed; inset:0; z-index:0; pointer-events:none; opacity:var(--star-op); transition:opacity .4s; }
+  .wrapper { max-width:1180px; margin:0 auto; padding:0 max(1rem,2vw) 3rem; position:relative; z-index:1; min-width:0; }
+
+  .top-row { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.5rem; padding:1rem 0 .3rem; }
+  .back-link { color:var(--accent); text-decoration:none; font-weight:800; font-size:.95rem; padding:.5rem .6rem .5rem 0; }
+  .back-link:hover { text-decoration:underline; }
+  .theme-bar { display:flex; gap:.4rem; }
+  .theme-bar button { font-size:1.05rem; background:var(--card); border:2px solid var(--line); border-radius:10px; cursor:pointer; padding:.35rem .55rem; line-height:1; min-width:44px; min-height:40px; }
+  .theme-bar button.active { border-color:var(--accent); }
+
+  header.dash-head { text-align:center; padding:.8rem 0 1rem; }
+  h1 { font-family:'Fredoka One',cursive; font-weight:400; font-size:clamp(1.8rem,8vw,2.8rem); color:var(--accent); line-height:1.15; }
+  .chip-row { display:flex; justify-content:center; flex-wrap:wrap; gap:.5rem; margin-top:.8rem; }
+  .chip { background:var(--chip); border:1px solid var(--line); color:var(--text); font-size:.85rem; font-weight:800; border-radius:999px; padding:.42rem .95rem; }
+  .chip small { color:var(--muted); font-weight:800; }
+  .logout-link { font-size:.8rem; color:var(--muted); text-decoration:underline; cursor:pointer; }
+
+  section.panel { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:1.3rem clamp(1rem,3vw,1.7rem); margin-top:1.3rem; box-shadow:0 6px 22px rgba(0,0,0,.12); }
+  .panel h2 { font-family:'Fredoka One',cursive; font-weight:400; font-size:1.3rem; margin-bottom:.4rem; }
+  .panel .sub { color:var(--muted); font-size:.85rem; margin-bottom:.9rem; }
+
+  /* Team race */
+  .race-row { display:flex; align-items:center; gap:.7rem; margin:.65rem 0; }
+  .race-label { flex:0 0 7.2rem; font-weight:800; font-size:.9rem; display:flex; align-items:center; gap:.35rem; }
+  .race-track { flex:1 1 auto; background:var(--chip); border:1px solid var(--line); border-radius:999px; height:22px; overflow:hidden; position:relative; min-width:0; }
+  .race-fill { height:100%; border-radius:999px; width:0%; transition:width 1s cubic-bezier(.22,.68,0,1.1); }
+  .race-beans { flex:0 0 4.6rem; text-align:right; font-weight:800; font-size:.88rem; }
+  .race-row.mine .race-label::after { content:'★'; color:var(--warn); }
+  .eco-labels { display:flex; justify-content:space-between; margin-top:.6rem; padding-left:7.9rem; padding-right:5.3rem; color:var(--muted); font-size:.72rem; font-weight:800; }
+
+  /* Class goal */
+  .goal-track { background:var(--chip); border:1px solid var(--line); border-radius:999px; height:26px; overflow:hidden; margin-top:.4rem; }
+  .goal-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-dark)); border-radius:999px; width:0%; transition:width 1s; }
+  .goal-nums { display:flex; justify-content:space-between; font-size:.8rem; font-weight:800; color:var(--muted); margin-top:.35rem; }
+
+  /* Mastery cards */
+  .subject-grid { display:flex; flex-wrap:wrap; gap:.8rem; justify-content:center; }
+  .subj-card { flex:0 1 200px; background:var(--chip); border:1px solid var(--line); border-radius:14px; padding:.9rem; text-align:center; }
+  .subj-card .s-name { font-weight:800; font-size:.92rem; }
+  .subj-card .s-pct { font-family:'Fredoka One',cursive; font-size:1.7rem; margin:.3rem 0; }
+  .subj-card .s-meta { font-size:.75rem; color:var(--muted); font-weight:700; }
+  .pct-good { color:var(--good); } .pct-warn { color:var(--warn); } .pct-bad { color:var(--bad); }
+
+  /* Streak */
+  .streak-row { display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap; }
+  .streak-badge { background:var(--chip); border:1px solid var(--line); border-radius:12px; padding:.55rem .8rem; text-align:center; font-size:.78rem; font-weight:800; color:var(--muted); }
+  .streak-badge.hit { border-color:var(--accent); color:var(--text); }
+  .streak-badge .big { display:block; font-size:1.2rem; }
+
+  /* Feed */
+  .feed-item { display:flex; align-items:center; gap:.7rem; padding:.55rem 0; border-bottom:1px dashed var(--line); font-size:.9rem; }
+  .feed-icon { flex:0 0 1.6rem; text-align:center; font-size:1.1rem; }
+  .feed-main { flex:1 1 auto; min-width:0; }
+  .feed-name { font-weight:800; }
+  .feed-meta { color:var(--muted); font-size:.75rem; font-weight:700; }
+  .feed-score { flex:0 0 auto; font-weight:800; font-size:.88rem; }
+
+  .empty-note { color:var(--muted); font-size:.9rem; text-align:center; padding:.8rem 0; }
+  .load-note { text-align:center; color:var(--muted); font-weight:800; padding:2rem 0; }
+
+  .site-footer { text-align:center; color:var(--muted); font-size:.82rem; padding:2.2rem max(1rem,4vw) 1.4rem; position:relative; z-index:1; }
+
+  @media (max-width:640px) {
+    .race-label { flex-basis:5.6rem; font-size:.8rem; }
+    .race-beans { flex-basis:3.6rem; font-size:.8rem; }
+    .eco-labels { padding-left:6.3rem; padding-right:4.3rem; }
+    .subj-card { flex:0 1 100%; }
+  }
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="wrapper">
+
+  <div class="top-row">
+    <a class="back-link" href="/">← Home</a>
+    <div class="theme-bar" id="themeBar">
+      <button data-t="night" title="Night">🌙</button>
+      <button data-t="sunny" title="Sunny">☀️</button>
+      <button data-t="cloudy" title="Cloudy">☁️</button>
+      <button data-t="nature" title="Nature">🌿</button>
+    </div>
+  </div>
+
+  <header class="dash-head">
+    <h1 id="dashTitle">My Dashboard</h1>
+    <div class="chip-row">
+      <span class="chip" id="teamChip" style="display:none;"></span>
+      <span class="chip" id="beanChip">🌱 … beans</span>
+      <span class="chip" id="masteryChip">🎯 … mastery</span>
+      <span class="chip"><span class="logout-link" id="logoutLink">log out</span></span>
+    </div>
+  </header>
+
+  <p class="load-note" id="loadNote">Loading your progress…</p>
+
+  <section class="panel" id="racePanel" style="display:none;">
+    <h2>🏁 Team Race Across Belize</h2>
+    <p class="sub">Every cacao bean your team earns moves It along the journey — from the rainforest all the way to the reef!</p>
+    <div id="raceRows"></div>
+    <div class="eco-labels"><span>🌳 Rainforest</span><span>🌾 Savanna</span><span>🌿 Mangroves</span><span>🐠 Reef</span></div>
+  </section>
+
+  <section class="panel" id="goalPanel" style="display:none;">
+    <h2>🤝 Class Goal — All Teams Together</h2>
+    <p class="sub">Rivals in the race, partners in the goal: every team's beans count toward the class reward.</p>
+    <div class="goal-track"><div class="goal-fill" id="goalFill"></div></div>
+    <div class="goal-nums"><span id="goalNow">0 🌱</span><span id="goalTarget">of 0</span></div>
+  </section>
+
+  <section class="panel" id="masteryPanel" style="display:none;">
+    <h2>🎯 My Mastery by Subject</h2>
+    <p class="sub">From graded tests, quizzes and exit slips only — beans never touch these numbers.</p>
+    <div class="subject-grid" id="subjectGrid"></div>
+  </section>
+
+  <section class="panel" id="streakPanel" style="display:none;">
+    <h2>🔥 My Weekly Streak</h2>
+    <p class="sub">A week counts when you complete at least one activity in It.</p>
+    <div class="streak-row" id="streakRow"></div>
+  </section>
+
+  <section class="panel" id="feedPanel" style="display:none;">
+    <h2>📜 My Recent Activity</h2>
+    <div id="feedList"></div>
+  </section>
+
+  <footer class="site-footer">© 2026 Mr. EdLo's Virtual Classroom — Belize · All rights reserved.</footer>
+</div>
+
+<script src="/edlo-utils.js"></script>
+<script>
+'use strict';
+var session = vcRequireLogin();
+
+var TEAMS = {
+  jaguars:  { name: 'Jaguars',  icon: '🐆', color: '#FF922B' },
+  toucans:  { name: 'Toucans',  icon: '🦜', color: '#FFD43B' },
+  tapirs:   { name: 'Tapirs',   icon: '🦙', color: '#9775FA' },
+  manatees: { name: 'Manatees', icon: '🦭', color: '#4DABF7' }
+};
+var ASSESS_TYPES = { test: 1, quiz: 1, 'exit-slip': 1 };
+var TYPE_ICONS = { test: '📝', quiz: '❓', 'exit-slip': '🚪', lesson: '📖', bonus: '🎁' };
+
+function $(s, r) { return (r || document).querySelector(s); }
+
+/* ---------- Theme bar ---------- */
+(function themes() {
+  var saved = localStorage.getItem('vc-theme') || 'night';
+  document.documentElement.setAttribute('data-theme', saved);
+  Array.prototype.forEach.call(document.querySelectorAll('#themeBar button'), function (b) {
+    b.classList.toggle('active', b.getAttribute('data-t') === saved);
+    b.addEventListener('click', function () {
+      var t = b.getAttribute('data-t');
+      document.documentElement.setAttribute('data-theme', t);
+      localStorage.setItem('vc-theme', t);
+      Array.prototype.forEach.call(document.querySelectorAll('#themeBar button'), function (x) { x.classList.toggle('active', x === b); });
+    });
+  });
+})();
+
+/* ---------- Starfield ---------- */
+(function starfield() {
+  var c = $('#stars'), ctx = c.getContext('2d'), stars = [];
+  function size() { c.width = innerWidth; c.height = innerHeight; }
+  size(); addEventListener('resize', size);
+  for (var i = 0; i < 90; i++) stars.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.6 + .4, p: Math.random() * Math.PI * 2 });
+  (function draw() {
+    ctx.clearRect(0, 0, c.width, c.height);
+    var t = Date.now() / 1000;
+    stars.forEach(function (s) {
+      ctx.globalAlpha = .45 + .45 * Math.sin(t * 1.4 + s.p);
+      ctx.fillStyle = '#cdd7ff';
+      ctx.beginPath(); ctx.arc(s.x * c.width, s.y * c.height, s.r, 0, Math.PI * 2); ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  })();
+})();
+
+if (session) {
+  $('#dashTitle').textContent = (session.first_name || session.username) + "'s Dashboard";
+  $('#logoutLink').addEventListener('click', function () { vcLogout(); });
+
+  Promise.all([
+    vcGetProgress().catch(function () { return []; }),
+    vcGetLeaderboard()
+  ]).then(function (out) {
+    var rows = out[0] || [];
+    var lb = out[1] || { ok: false };
+    $('#loadNote').style.display = 'none';
+    renderPersonal(rows);
+    renderTeams(lb);
+  }).catch(function () {
+    $('#loadNote').textContent = 'Could not load your progress. Check your connection and refresh.';
+  });
+}
+
+/* ---------- Personal: beans, mastery, streak, feed ---------- */
+function renderPersonal(rows) {
+  var beans = 0, mSum = 0, mCount = 0, bySubject = {};
+  rows.forEach(function (r) {
+    if (r.activity_type === 'lesson' || r.activity_type === 'bonus') beans += Number(r.score) || 0;
+    if (ASSESS_TYPES[r.activity_type]) {
+      mSum += Number(r.percent) || 0; mCount++;
+      var s = r.subject || 'Other';
+      if (!bySubject[s]) bySubject[s] = { sum: 0, n: 0 };
+      bySubject[s].sum += Number(r.percent) || 0; bySubject[s].n++;
+    }
+  });
+  $('#beanChip').textContent = '🌱 ' + beans + ' bean' + (beans === 1 ? '' : 's');
+  $('#masteryChip').textContent = mCount ? ('🎯 ' + Math.round(mSum / mCount) + '% mastery') : '🎯 no graded work yet';
+
+  /* Subject mastery cards */
+  var grid = $('#subjectGrid');
+  var subjects = Object.keys(bySubject);
+  $('#masteryPanel').style.display = 'block';
+  if (!subjects.length) {
+    grid.innerHTML = '<p class="empty-note">No graded tests or quizzes recorded yet — your scores will appear here once assessments are logged.</p>';
+  } else {
+    subjects.forEach(function (s) {
+      var pct = Math.round(bySubject[s].sum / bySubject[s].n);
+      var cls = pct >= 80 ? 'pct-good' : (pct >= 60 ? 'pct-warn' : 'pct-bad');
+      var card = document.createElement('div');
+      card.className = 'subj-card';
+      var n1 = document.createElement('div'); n1.className = 's-name'; n1.textContent = s;
+      var n2 = document.createElement('div'); n2.className = 's-pct ' + cls; n2.textContent = pct + '%';
+      var n3 = document.createElement('div'); n3.className = 's-meta'; n3.textContent = bySubject[s].n + ' graded item' + (bySubject[s].n === 1 ? '' : 's');
+      card.appendChild(n1); card.appendChild(n2); card.appendChild(n3);
+      grid.appendChild(card);
+    });
+  }
+
+  /* Weekly streak — last 4 calendar weeks */
+  var weeks = {};
+  rows.forEach(function (r) {
+    var d = new Date(String(r.timestamp).replace(' ', 'T'));
+    if (!isNaN(d)) weeks[weekKey(d)] = true;
+  });
+  var streakRow = $('#streakRow');
+  var now = new Date();
+  for (var i = 3; i >= 0; i--) {
+    var d2 = new Date(now.getTime() - i * 7 * 24 * 3600 * 1000);
+    var hit = !!weeks[weekKey(d2)];
+    var b = document.createElement('div');
+    b.className = 'streak-badge' + (hit ? ' hit' : '');
+    var big = document.createElement('span'); big.className = 'big'; big.textContent = hit ? '🔥' : '·';
+    b.appendChild(big);
+    b.appendChild(document.createTextNode(i === 0 ? 'This week' : (i + ' wk ago')));
+    streakRow.appendChild(b);
+  }
+  $('#streakPanel').style.display = 'block';
+
+  /* Recent activity feed — newest 10 */
+  var feed = $('#feedList');
+  $('#feedPanel').style.display = 'block';
+  if (!rows.length) {
+    feed.innerHTML = '<p class="empty-note">Nothing yet — complete a lesson to start your record!</p>';
+  } else {
+    rows.slice(-10).reverse().forEach(function (r) {
+      var item = document.createElement('div'); item.className = 'feed-item';
+      var ic = document.createElement('span'); ic.className = 'feed-icon'; ic.textContent = TYPE_ICONS[r.activity_type] || '⭐';
+      var main = document.createElement('div'); main.className = 'feed-main';
+      var nm = document.createElement('div'); nm.className = 'feed-name'; nm.textContent = r.activity_name || r.activity_type;
+      var mt = document.createElement('div'); mt.className = 'feed-meta';
+      mt.textContent = (r.subject ? r.subject + ' · ' : '') + String(r.timestamp).slice(0, 16);
+      main.appendChild(nm); main.appendChild(mt);
+      var sc = document.createElement('span'); sc.className = 'feed-score';
+      sc.textContent = (r.activity_type === 'lesson' || r.activity_type === 'bonus')
+        ? '+' + r.score + ' 🌱'
+        : r.score + '/' + r.max_score + ' (' + r.percent + '%)';
+      item.appendChild(ic); item.appendChild(main); item.appendChild(sc);
+      feed.appendChild(item);
+    });
+  }
+}
+
+/* ---------- Teams: race bars + class goal ---------- */
+function renderTeams(lb) {
+  if (!lb || !lb.ok) return; /* leaderboard offline — personal panels still work */
+
+  /* My team chip */
+  if (lb.my_group && TEAMS[lb.my_group]) {
+    var t = TEAMS[lb.my_group];
+    var chip = $('#teamChip');
+    chip.style.display = 'inline-block';
+    chip.textContent = t.icon + ' Team ' + t.name;
+    chip.style.borderColor = t.color;
+  }
+
+  /* Race bars */
+  var maxBeans = 1;
+  lb.groups.forEach(function (g) { if (g.beans > maxBeans) maxBeans = g.beans; });
+  var rowsEl = $('#raceRows');
+  lb.groups.slice().sort(function (a, b) { return b.beans - a.beans; }).forEach(function (g) {
+    var meta = TEAMS[g.group] || { name: g.group, icon: '⭐', color: '#20C997' };
+    var row = document.createElement('div');
+    row.className = 'race-row' + (lb.my_group === g.group ? ' mine' : '');
+    var lab = document.createElement('span'); lab.className = 'race-label'; lab.textContent = meta.icon + ' ' + meta.name;
+    var track = document.createElement('div'); track.className = 'race-track';
+    var fill = document.createElement('div'); fill.className = 'race-fill';
+    fill.style.background = meta.color;
+    track.appendChild(fill);
+    var val = document.createElement('span'); val.className = 'race-beans'; val.textContent = g.beans + ' 🌱';
+    row.appendChild(lab); row.appendChild(track); row.appendChild(val);
+    rowsEl.appendChild(row);
+    setTimeout(function () { fill.style.width = Math.max(3, Math.round(g.beans / maxBeans * 100)) + '%'; }, 60);
+  });
+  $('#racePanel').style.display = 'block';
+
+  /* Class goal */
+  var goal = Number(lb.class_goal) || 0;
+  var total = Number(lb.class_total) || 0;
+  if (goal > 0) {
+    $('#goalPanel').style.display = 'block';
+    $('#goalNow').textContent = total + ' 🌱';
+    $('#goalTarget').textContent = 'of ' + goal + ' — ' + Math.min(100, Math.round(total / goal * 100)) + '%';
+    setTimeout(function () { $('#goalFill').style.width = Math.min(100, Math.round(total / goal * 100)) + '%'; }, 60);
+  }
+}
+
+function weekKey(d) {
+  var onejan = new Date(d.getFullYear(), 0, 1);
+  var week = Math.ceil((((d - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+  return d.getFullYear() + '-w' + week;
+}
+</script>
+</body>
+</html>

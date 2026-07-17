@@ -19,8 +19,16 @@ questions where it helps). At minimum, ask me about:
 2. **Which endpoint answers the open-check** — new route on `edlo-gemini` (it owns the KV)
    or the `edlo-lms` Worker; remember every `edlo-gemini` change hits ALL live tests, so we
    test against ONE testId first.
-3. **Gate behavior** — what a student sees when a test is closed (message, styling), and
-   whether closed tests also hide questions from view-source.
+3. **Gate behavior** — what a student sees when a test is closed (message, styling).
+   **DECIDED (July 16, 2026, Edwin):** closed tests MUST also hide questions from view-source —
+   student pages load empty and fetch questions from the Worker, which returns them only when
+   `open:true`. Scope this implies: extend each of the 16 KV entries with its question payload,
+   add ONE new Worker route with the open-check (test against ONE testId first — edlo-gemini
+   changes hit ALL live tests), refactor the 16 student pages to fetch-render, re-audit all 16.
+   **Figures travel WITH the questions into KV** (they are text — inline SVG markup or base64
+   data URIs; ~1 MB per test vs the 25 MB KV limit) so the page shell is truly empty; the
+   existing `figHTML()`/`FIGS` rendering is reused on the fetched payload.
+   Plan for one plumbing session + one rollout pass.
 4. **Retrofit scope** — confirm the 16 Std5 student pages get `vcRequireLogin()` + the
    open-check, and whether the interim "publicly viewable" decision (July 15) is now lifted.
 5. **Re-audit** — the 16 pages must be re-audited after retrofit (no dev bars, no answer

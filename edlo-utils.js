@@ -140,6 +140,27 @@ function vcSaveBeans(activityId, beans, maxBeans, meta) {
   });
 }
 
+/**
+ * Fetches the class leaderboard: 4 team bean totals, class total, class goal.
+ * Works logged OUT too (public class data). When logged in, the response also
+ * includes my_group — the student's own team.
+ * Returns Promise of { ok, groups:[{group,beans}], class_total, class_goal, my_group? }
+ */
+function vcGetLeaderboard() {
+  var session = vcGetSession();
+  var payload = session ? { token: session.token } : {};
+  return fetch(VC_LMS_URL + '/leaderboard', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+    .then(function (r) { return r.json(); })
+    .catch(function (err) {
+      console.warn('vcGetLeaderboard failed:', err);
+      return { ok: false, error: String(err) };
+    });
+}
+
 /** Fetches all result rows for the logged-in student. Returns Promise of an array. */
 function vcGetProgress() {
   var session = vcGetSession();

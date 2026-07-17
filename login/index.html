@@ -306,7 +306,7 @@
     var next = params.get('next');
     // only allow same-site relative paths
     if (next && next.charAt(0) === '/' && next.indexOf('//') !== 0) return next;
-    return '/'; // TODO: change to '/dashboard/' once the student dashboard is live
+    return '/dashboard/'; // student dashboard live July 17, 2026
   }
 
   // ── Already logged in? Skip the form ──

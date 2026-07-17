@@ -1,6 +1,6 @@
 # Dashboard & Gamification Build Plan
 **Mr. EdLo's Virtual Classroom — edlovirtualclassroom.com**
-*Plan created: July 16, 2026 · Status: **PAUSED July 16 (Edwin's call) — Std5 lessons are being built first so the dashboard launches with real bean data.** Focus is now **Standard 5** (Edwin's SY 2026–2027 class); Standard 6 is on standby. Already shipped early: `vcSaveBeans()` in edlo-utils.js (step 1.3, partial — no quest multiplier) and three bean-earning Std5 Science lessons (Layer 3 pattern, Wks 1–3). Checklist answers on record (July 16): teams + bean economy approved as planned. Build: Layer 1 when resumed.*
+*Plan created: July 16, 2026 · Status: **LAYER 1 BUILT July 17, 2026** (after a one-day pause to build three bean-earning Std5 lessons first). Focus is **Standard 5**; Standard 6 on standby. Shipped: Sheet Group Totals tab + group_id col · Apps Script leaderboard/teacher-data/award-bonus (v2) · Worker routes · vcSaveBeans + vcGetLeaderboard · `/dashboard/` · `/teacher/`. Decisions: teams as planned · class goal **6000** (Edwin) · teacher auth = TEACHER_CODE passcode · **quest DEFERRED** (Tab 6 + multiplier + banner/setter = next add-on). Step 1.6 dropped (Std6 lesson retrofit) — Std5 lessons carry beans natively. Remaining: Layer 2 journey map · quest · Layer 3 continues with each new lesson.*
 
 ---
 

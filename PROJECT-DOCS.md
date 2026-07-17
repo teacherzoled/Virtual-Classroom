@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** July 16, 2026 (evening — first three Std5 Science lessons built + `vcSaveBeans()` added)
+**Last updated:** July 17, 2026 (DASHBOARDS BUILT — student `/dashboard/` + teacher `/teacher/` + leaderboard backend live)
 
 ---
 
@@ -20,7 +20,37 @@ If the docs are not updated, the task is **not** finished.
 
 ---
 
-## ▶️ Take-off Point — Next Session (as of July 16, 2026, evening)
+## ▶️ Take-off Point — Next Session (as of July 17, 2026)
+
+**Newest work (July 17, 2026): DASHBOARD LAYER 1 BUILT (quest deferred).** Decisions locked this
+session: teams 🐆 Jaguars · 🦜 Toucans · 🦙 Tapirs · 🦭 Manatees (Students col G `group_id`,
+lowercase) · class goal **6000** 🌱 (Edwin raised from 2000; cell B8 of Group Totals) · teacher auth =
+**TEACHER_CODE** Script Property checked server-side in Apps Script · **weekly quest DEFERRED**
+(no Tab 6, no multiplier — clean add-on later).
+- **Sheet (done by Edwin):** Students col G `group_id` (test.student → jaguars, class_id now
+  Std5-2026); new **`Group Totals`** tab — teams A2:A5, SUMPRODUCT bean formulas B2:B5 (verified: 94 🌱
+  from lesson testing), class_total B7 `=SUM(B2:B5)`, class_goal B8.
+- **Apps Script (deployed as Version 2, July 17):** full-file replacement adding `leaderboard`
+  (public; returns groups + class_total + class_goal + `my_group` when a token is sent),
+  `teacher-data` + `award-bonus` (gated by `TEACHER_CODE`), `findStudent` now returns `group_id`.
+- **Worker `edlo-lms`:** ROUTES map extended with `/leaderboard`, `/teacher-data`, `/award-bonus`
+  (one-line change; Edwin deploys in Cloudflare editor). ⚠️ Verify with a live leaderboard fetch.
+- **edlo-utils.js:** added `vcGetLeaderboard()` (POSTs `/leaderboard`, includes token when logged in).
+- **`/dashboard/` (student, vcRequireLogin):** name header, team chip, bean + mastery pills, team race
+  bars with ecosystem waypoint labels (Rainforest · Savanna · Mangroves · Reef), class-goal bar,
+  subject mastery cards (test/quiz/exit-slip rows ONLY), 4-week streak badges, recent-activity feed.
+  Login page now redirects here (TODO flipped in `login/index.html`).
+- **`/teacher/` (teacher, passcode gate → sessionStorage `vc-teacher-code`):** Section A MASTERY
+  (class table w/ per-student drill-down, LO class-average bars, red under 70%) kept visually separate
+  from Section B GAME (team totals, class goal line, bonus-bean awarder: student picker + 1–100 beans +
+  reason → `bonus` row in Tab 2). Beans never appear in Section A.
+- **➡️ NEXT:** ① Edwin: deploy the Worker ROUTES line if not yet done, then live-test: leaderboard on
+  `/dashboard/`, teacher code on `/teacher/`, award a test bonus → watch Group Totals move. ② More
+  Std5 Science lessons (Wk 4+, clone Week 1 engine). ③ Login-gate + open/closed retrofit
+  (see `NEXT-SESSION-START.md` — view-source decision recorded). ④ Layer 2 ecosystem journey map +
+  quest, when Edwin calls for them.
+
+**Previous session (July 16, 2026, evening):**
 
 **Newest work (July 16, 2026 — evening session): FIRST THREE STANDARD 5 SCIENCE LESSONS BUILT, with cacao beans 🌱 wired from day one.**
 - **Dashboard build PAUSED (Edwin's call):** the `DASHBOARD-GAMIFICATION-PLAN.md` build was opened, then
@@ -622,8 +652,8 @@ cd "C:\Users\zoloe\OneDrive\Shared with me\Code Projects\Python Projects\Virtual
 | PE Hub (Std6) | edlovirtualclassroom.com/standard6/pe/ | ❌ Not built yet |
 | Other Standard 5 subject hubs | edlovirtualclassroom.com/standard5/&lt;subject&gt;/ | ❌ Not built yet (Science done first) |
 | Login Page | edlovirtualclassroom.com/login/ | ✅ Live (July 16, 2026) |
-| Student Dashboard | edlovirtualclassroom.com/dashboard/ | ❌ Not built yet (July) |
-| Teacher Dashboard | edlovirtualclassroom.com/teacher/ | ❌ Not built yet (August) |
+| Student Dashboard | edlovirtualclassroom.com/dashboard/ | ✅ Built July 17, 2026 — live after next push |
+| Teacher Dashboard | edlovirtualclassroom.com/teacher/ | ✅ Built July 17, 2026 — live after next push |
 
 ---
 
