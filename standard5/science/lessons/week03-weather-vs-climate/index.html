@@ -415,7 +415,7 @@ var COMPLETION_BEANS = 15;
 var TOTAL_ACTS = 6; /* 5 activities + completion */
 
 /* ═══════════════ Engine (shared by all Std5 Science lessons) ═══════════════ */
-var sessionBeans = 0, doneCount = 0;
+var sessionBeans = 0, doneCount = 0, completionDone = false;
 
 function $(sel, root) { return (root || document).querySelector(sel); }
 function $all(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
@@ -454,7 +454,8 @@ function award(actKey, correct, totalItems, sec) {
   });
 }
 function finishCheck() {
-  if (doneCount !== 5) return;
+  if (doneCount !== 5 || completionDone) return;
+  completionDone = true;
   var id = LESSON.idBase + '-complete';
   beanPillAdd(COMPLETION_BEANS);
   progressTick();
@@ -646,6 +647,41 @@ if (VIDEO_URL) { $('#sec-video').style.display = 'block'; $('#videoFrame').src =
     });
     sectionDone(sec, 'tf', correct, TF.length, 'Myths busted: ' + correct + ' of ' + TF.length + '.' + (correct === TF.length ? ' Detective work! 🕵️' : ' Remember: technology is neutral.'));
   });
+})();
+
+/* ---------- Restore beans already earned on this device ---------- */
+function lockBeans(key) {
+  try {
+    var raw = localStorage.getItem('vc-pts-' + key);
+    if (raw === null) return null;
+    var o = JSON.parse(raw);
+    return (o && typeof o.b === 'number') ? o.b : 0;
+  } catch (e) { return 0; }
+}
+(function restoreProgress() {
+  Object.keys(ACTS).forEach(function (k) {
+    var b = lockBeans(LESSON.idBase + '-' + k);
+    if (b === null) return;
+    var sec = document.querySelector('[data-act="' + k + '"]');
+    if (!sec) return;
+    sec.classList.add('done');
+    $all('select, input, button', sec).forEach(function (el) { el.disabled = true; });
+    var fb = $('.feedback-line', sec);
+    fb.style.display = 'block';
+    fb.textContent = '✓ Already completed on this device' + (b ? ' — 🌱 ' + b + ' beans earned.' : '.');
+    beanPillAdd(b);
+    progressTick();
+  });
+  var cb = lockBeans(LESSON.idBase + '-complete');
+  if (cb !== null) {
+    completionDone = true;
+    beanPillAdd(cb);
+    progressTick();
+    $('#finishHint').style.display = 'none';
+    var line = $('#finishLine');
+    line.style.display = 'block';
+    line.textContent = '🎉 You already completed this lesson — great work!';
+  }
 })();
 
 /* ---------- Theme bar ---------- */

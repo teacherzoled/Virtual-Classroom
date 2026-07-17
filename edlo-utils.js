@@ -133,7 +133,8 @@ function vcSaveBeans(activityId, beans, maxBeans, meta) {
     max_score:     maxBeans
   }).then(function (res) {
     if (res && res.ok) {
-      try { localStorage.setItem(lockKey, String(Date.now())); } catch (e) {}
+      /* Lock stores the beans earned so lesson pages can RESTORE the count on reload */
+      try { localStorage.setItem(lockKey, JSON.stringify({ b: beans, t: Date.now() })); } catch (e) {}
     }
     return res;
   });

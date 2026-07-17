@@ -40,6 +40,12 @@ If the docs are not updated, the task is **not** finished.
   Bean economy locked: activities 5 + 1/correct · checkpoint 10 + 1/correct · completion bonus 15.
   First-completion lock per activity: `localStorage` key **`vc-pts-<activity-id>`**
   (e.g. `vc-pts-std5-sci-wk01-vocab`). Hidden video slot: set `VIDEO_URL` in each lesson file.
+- **Restore-on-reload fix (July 16, live-testing find):** first build reset the bean pill and sections
+  to zero on every refresh (Sheet rows were never duplicated — display only). Fixed: `vcSaveBeans()`
+  now stores the beans earned inside the lock (`{b:beans,t:timestamp}` JSON), and every lesson restores
+  completed sections + bean count + completion state on load, with all inputs disabled on restored
+  sections. Restore only applies to SAVED beans (logged-in completions) — logged-out play never locks.
+  Note: answers themselves are not restored, only completion state and bean totals.
 - **Hub wired:** the Week 1–3 cards on `/standard5/science/` are now LIVE links (soon-chips removed).
 - **Verified this session:** `node --check` on all scripts ✓ · config integrity + bean math simulated ✓ ·
   season-terms sweep ✓ (temperate names appear only as deliberate wrong options in Wk3 Q4) ·
