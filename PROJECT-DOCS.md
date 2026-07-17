@@ -51,6 +51,11 @@ If the docs are not updated, the task is **not** finished.
   teal **🔑 Student Login** button in the site header (next to the Belize badge). When a session exists
   It swaps to a "👋 [first name] · log out" chip (loads `/edlo-utils.js` + a small session check at the
   end of the page).
+- **XSS hardening (July 16, flagged in Claude Code review):** everywhere a student's stored name is
+  shown on a page (home welcome chip + the three lessons' welcome lines), the text is now built with
+  `textContent`/`createTextNode`, never `innerHTML` — a name containing markup can never execute.
+  **Standing rule for future pages: any value read from the Students sheet or a session goes into the
+  DOM via `textContent`, not `innerHTML`.**
 - **Verified this session:** `node --check` on all scripts ✓ · config integrity + bean math simulated ✓ ·
   season-terms sweep ✓ (temperate names appear only as deliberate wrong options in Wk3 Q4) ·
   no dev/rubric fields ✓ · no Wk1 content leaked into clones ✓. **Edwin still to do: phone test at

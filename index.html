@@ -443,11 +443,19 @@
     var area = document.getElementById('loginArea');
     var s = (typeof vcGetSession === 'function') ? vcGetSession() : null;
     if (!area || !s) return;
-    area.innerHTML = '<span class="login-name">👋 ' + (s.first_name || s.username) +
-      ' <span class="logout-link" id="logoutLink">log out</span></span>';
-    document.getElementById('logoutLink').addEventListener('click', function () {
+    /* Built with textContent (never innerHTML) so a stored name can never inject markup */
+    var chip = document.createElement('span');
+    chip.className = 'login-name';
+    chip.textContent = '👋 ' + (s.first_name || s.username) + ' ';
+    var out = document.createElement('span');
+    out.className = 'logout-link';
+    out.textContent = 'log out';
+    out.addEventListener('click', function () {
       if (typeof vcLogout === 'function') vcLogout();
     });
+    chip.appendChild(out);
+    area.textContent = '';
+    area.appendChild(chip);
   })();
 </script>
 </body>

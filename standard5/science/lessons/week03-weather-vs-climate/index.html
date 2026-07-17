@@ -703,7 +703,15 @@ function lockBeans(key) {
 (function loginHint() {
   var hint = $('#loginHint');
   var s = (typeof vcGetSession === 'function') ? vcGetSession() : null;
-  if (s) hint.innerHTML = '👋 Welcome back, <strong>' + (s.first_name || s.username) + '</strong> — your beans will be saved!';
+  if (s) {
+    /* Built with textContent (never innerHTML) so a stored name can never inject markup */
+    hint.textContent = '';
+    var strong = document.createElement('strong');
+    strong.textContent = s.first_name || s.username;
+    hint.appendChild(document.createTextNode('👋 Welcome back, '));
+    hint.appendChild(strong);
+    hint.appendChild(document.createTextNode(' — your beans will be saved!'));
+  }
   else hint.innerHTML = '🌱 <a href="/login/">Log in</a> to save the cacao beans you earn in this lesson.';
 })();
 
