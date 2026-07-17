@@ -300,6 +300,9 @@
   .grade-chip { display: inline-block; background: var(--badge-bg); border: 1px solid var(--badge-border); color: var(--badge-color); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 14px; border-radius: 999px; }
   .grade-enter { margin-top: 1.2rem; font-family: 'Fredoka One', cursive; font-size: 0.95rem; color: var(--accent, var(--body-color)); display: inline-flex; align-items: center; gap: 0.4rem; transition: gap 0.2s; }
   .grade-card:hover .grade-enter { gap: 0.9rem; }
+  .grade-card.locked { opacity: 0.45; pointer-events: none; cursor: default; }
+  .grade-card.locked .grade-enter { display: none; }
+  .grade-lock-chip { display: inline-block; margin-top: 1.2rem; background: var(--badge-bg); border: 1px solid var(--badge-border); color: var(--badge-color); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.06em; padding: 5px 14px; border-radius: 999px; }
 
   @keyframes riseUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 
@@ -446,6 +449,21 @@
     /* Personal greeting — textContent only, per standing rule */
     var wn = document.getElementById('welcomeName');
     if (wn) wn.textContent = 'Hello, ' + (s.first_name || s.username) + '!';
+    /* Grade lock — a logged-in student sees the OTHER grade's card locked (soft lock, UX only) */
+    var cid = String(s.class_id || '');
+    var myGrade = /std\s*-?\s*5/i.test(cid) ? 5 : (/std\s*-?\s*6/i.test(cid) ? 6 : 0);
+    if (myGrade) {
+      var otherGrade = (myGrade === 5) ? 6 : 5;
+      var other = document.querySelector('.grade-card[href="/standard' + otherGrade + '/"]');
+      if (other) {
+        other.classList.add('locked');
+        other.removeAttribute('href');
+        var lockChip = document.createElement('span');
+        lockChip.className = 'grade-lock-chip';
+        lockChip.textContent = '🔒 For Standard ' + otherGrade + ' students';
+        other.appendChild(lockChip);
+      }
+    }
     if (!area) return;
     /* Built with textContent (never innerHTML) so a stored name can never inject markup */
     var chip = document.createElement('span');

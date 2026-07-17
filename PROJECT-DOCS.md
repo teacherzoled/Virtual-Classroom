@@ -61,6 +61,14 @@ If the docs are not updated, the task is **not** finished.
   / "Hello, students!" (session checks at the end of `standard5/index.html` and `/index.html`,
   textContent only). Logged-out visitors see the original class greetings. Pattern for future hubs:
   give the banner's `<strong>` an `id="welcomeName"` and reuse the same snippet.
+- **Grade soft-lock on the grade picker (July 16, Edwin's idea):** a logged-in student sees the OTHER
+  grade's card locked — greyed out, link removed, "🔒 For Standard N students" chip — based on the
+  session's `class_id` (`Std5…` → locks Standard 6, `Std6…` → locks Standard 5; unknown → nothing
+  locked). UX-only: direct URLs still work while pages stay public; HARD enforcement is parked for the
+  login-gate retrofit session. ⚠️ `test.student`'s lock follows whatever `class_id` It has in the
+  Students tab.
+- **`IDEAS.md` created (July 16):** parking lot at the repo root for Edwin's mid-session ideas —
+  write ideas there FIRST so they are never lost; Edwin decides when each gets built.
 - **Verified this session:** `node --check` on all scripts ✓ · config integrity + bean math simulated ✓ ·
   season-terms sweep ✓ (temperate names appear only as deliberate wrong options in Wk3 Q4) ·
   no dev/rubric fields ✓ · no Wk1 content leaked into clones ✓. **Edwin still to do: phone test at
