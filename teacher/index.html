@@ -319,6 +319,7 @@ function render(data) {
   vcGetLeaderboard().then(function (lb) {
     if (!lb.ok) return;
     $('#teamPanel').style.display = 'block';
+    var teamGoal = (Number(lb.class_goal) || 0) / 4; /* journey goal per team — full bar = reef */
     var maxB = 1;
     lb.groups.forEach(function (g) { if (g.beans > maxB) maxB = g.beans; });
     var teamRows = $('#teamRows');
@@ -332,7 +333,8 @@ function render(data) {
       var val = document.createElement('span'); val.className = 'race-beans'; val.textContent = g.beans + ' 🌱';
       row.appendChild(lab); row.appendChild(track); row.appendChild(val);
       teamRows.appendChild(row);
-      setTimeout(function () { fill.style.width = Math.max(3, Math.round(g.beans / maxB * 100)) + '%'; }, 60);
+      var pct = teamGoal > 0 ? Math.min(100, g.beans / teamGoal * 100) : (g.beans / maxB * 100);
+      setTimeout(function () { fill.style.width = Math.max(2, Math.round(pct)) + '%'; }, 60);
     });
     $('#goalLine').textContent = 'Class total: ' + lb.class_total + ' 🌱 of the ' + lb.class_goal + ' goal (' +
       (lb.class_goal ? Math.min(100, Math.round(lb.class_total / lb.class_goal * 100)) : 0) + '%). Team membership is set in the Students tab, column G.';

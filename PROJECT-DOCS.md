@@ -36,6 +36,10 @@ lowercase) · class goal **6000** 🌱 (Edwin raised from 2000; cell B8 of Group
 - **Worker `edlo-lms`:** ROUTES map extended with `/leaderboard`, `/teacher-data`, `/award-bonus`
   (one-line change; Edwin deploys in Cloudflare editor). ⚠️ Verify with a live leaderboard fetch.
 - **edlo-utils.js:** added `vcGetLeaderboard()` (POSTs `/leaderboard`, includes token when logged in).
+- **Race-bar scaling (July 17, Edwin's catch):** first build scaled bars relative to the leading team,
+  so first place always showed a FULL bar — misleading against the journey labels. Fixed on BOTH
+  dashboards: each team races toward a **journey goal = class_goal ÷ 4** (6000 → 1500 🌱 per team);
+  a full bar now genuinely means "reached the Reef". Race subtitle states the per-team goal number.
 - **`/dashboard/` (student, vcRequireLogin):** name header, team chip, bean + mastery pills, team race
   bars with ecosystem waypoint labels (Rainforest · Savanna · Mangroves · Reef), class-goal bar,
   subject mastery cards (test/quiz/exit-slip rows ONLY), 4-week streak badges, recent-activity feed.

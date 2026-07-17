@@ -116,7 +116,7 @@
 
   <section class="panel" id="racePanel" style="display:none;">
     <h2>🏁 Team Race Across Belize</h2>
-    <p class="sub">Every cacao bean your team earns moves It along the journey — from the rainforest all the way to the reef!</p>
+    <p class="sub" id="raceSub">Every cacao bean your team earns moves It along the journey — from the rainforest all the way to the reef!</p>
     <div id="raceRows"></div>
     <div class="eco-labels"><span>🌳 Rainforest</span><span>🌾 Savanna</span><span>🌿 Mangroves</span><span>🐠 Reef</span></div>
   </section>
@@ -307,7 +307,9 @@ function renderTeams(lb) {
     chip.style.borderColor = t.color;
   }
 
-  /* Race bars */
+  /* Race bars — each team races toward its JOURNEY GOAL (class goal ÷ 4),
+     so a full bar means "reached the Reef", not "currently in first place". */
+  var teamGoal = (Number(lb.class_goal) || 0) / 4;
   var maxBeans = 1;
   lb.groups.forEach(function (g) { if (g.beans > maxBeans) maxBeans = g.beans; });
   var rowsEl = $('#raceRows');
@@ -323,8 +325,15 @@ function renderTeams(lb) {
     var val = document.createElement('span'); val.className = 'race-beans'; val.textContent = g.beans + ' 🌱';
     row.appendChild(lab); row.appendChild(track); row.appendChild(val);
     rowsEl.appendChild(row);
-    setTimeout(function () { fill.style.width = Math.max(3, Math.round(g.beans / maxBeans * 100)) + '%'; }, 60);
+    var pct = teamGoal > 0
+      ? Math.min(100, g.beans / teamGoal * 100)
+      : (g.beans / maxBeans * 100); /* fallback if no goal set */
+    setTimeout(function () { fill.style.width = Math.max(2, Math.round(pct)) + '%'; }, 60);
   });
+  if (teamGoal > 0) {
+    $('#raceSub').textContent = 'Every cacao bean your team earns moves It along the journey — ' +
+      Math.round(teamGoal) + ' 🌱 takes a team from the rainforest all the way to the reef!';
+  }
   $('#racePanel').style.display = 'block';
 
   /* Class goal */
