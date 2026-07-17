@@ -6,6 +6,7 @@
 <title>Std 5 Science · Cycle 1 · Animal Adaptation Match-Up Quiz · Mr. EdLo</title>
 <link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<script src="/edlo-utils.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 /* ═══════════════════════════ THEME VARIABLES ═══════════════════════════ */
@@ -320,6 +321,15 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
   /* True/False buttons each take a full row for easy thumb tapping */
   .tf-opt{min-width:0;}
 }
+/* ═══════════════ SECURE TEST GATE — closed panel ═══════════════ */
+.gate-closed{display:none;max-width:640px;margin:3rem auto;padding:2.4rem 1.6rem;
+  text-align:center;background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:18px;}
+.gate-closed.show{display:block;}
+.gate-icon{font-size:3.4rem;line-height:1;margin-bottom:.6rem;}
+.gate-title{font-family:'Fredoka One',cursive;font-size:1.5rem;margin-bottom:.6rem;color:var(--body-color);}
+.gate-msg{color:var(--body-color);opacity:.85;font-size:1.02rem;line-height:1.55;margin:0 auto 1.4rem;max-width:30rem;}
+.gate-actions{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;}
 </style>
 </head>
 <body class="theme-night">
@@ -406,6 +416,17 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
     </div>
   </div>
 
+  <!-- GATE: CLOSED / NOT-YET-OPEN (shown until Mr. EdLo opens the test) -->
+  <div class="gate-closed" id="gateClosed">
+    <div class="gate-icon">🔒</div>
+    <div class="gate-title">This test is not open yet</div>
+    <p class="gate-msg">Mr. EdLo has not opened this test. It will appear here the moment he opens it — please wait and reload when he tells the class to begin.</p>
+    <div class="gate-actions">
+      <button class="btn-primary" onclick="location.reload()">↻ Reload</button>
+      <a class="btn-secondary" href="https://edlovirtualclassroom.com/standard5/science/">← Back to Science</a>
+    </div>
+  </div>
+
   <!-- TEST CONTAINER -->
   <div class="test-container" id="testContainer">
     <!-- Student info -->
@@ -489,63 +510,30 @@ const PK_KEY     = 'vc-passkey-std5';
 const MAX_MARKS  = 31;
 
 /* ---------------- ITEM DEFINITIONS (display data only) ----------------
-   NO answers. NO accept-lists. NO rubrics. Marks shown here are for
-   display and are the same values the mark scheme + KV key carry.
+   SECURE TEST GATE: the questions (stems/options/figures — NO answers) are
+   NO LONGER stored in this page. On load they are fetched from the Worker's
+   gate (mode:'questions'), which returns them ONLY when this test's KV entry
+   has "open": true. A closed test therefore shows nothing — on screen or in
+   view-source. Answers, accept-lists and rubrics stay server-side in KV.
    type: mc | tf | fib | match | label | sa | open
-   The qid MUST match the key used in the KV answer-key entry.
-*/
-const ITEMS = [
-  /* ---- SECTION A · Multiple Choice ---- */
-  { qid:"q1", sec:"A", type:"mc", pts:2,
-    stem:"A <b>physical</b> adaptation is best described as which of these?",
-    options:["A body structure or body part that helps an animal survive","An internal body process that helps an animal survive","Something an animal does or how it behaves","The place where an animal lives"] },
-  { qid:"q2", sec:"A", type:"mc", pts:2,
-    stem:"A <b>behavioural</b> adaptation is best described as which of these?",
-    options:["A body part built for survival","An internal process inside the animal's body","Something an animal does to help it survive","The number of babies an animal has"] },
-  { qid:"q3", sec:"A", type:"mc", pts:2,
-    stem:"A <b>physiological</b> adaptation is best described as which of these?",
-    options:["A colour pattern on an animal's skin","An internal body process that helps an animal survive","A sound an animal makes to warn others","The place an animal builds its home"] },
-  { qid:"q4", sec:"A", type:"mc", pts:4,
-    stem:"Scientists studying a new frog species in the Chiquibul rainforest notice that whenever a predator bites it, the frog's skin produces a bitter, poisonous slime made inside its body. Which type of adaptation is this?",
-    options:["Physical, because skin is a body part","Behavioural, because the frog chooses to release the slime","Physiological, because making the substance is an internal process","Not an adaptation, because it only happens when attacked"] },
-
-  /* ---- SECTION B · Matching ---- */
-  { qid:"q5", sec:"B", type:"match", pts:3,
-    stem:"The jaguar has several adaptations that help it survive in Belize's forests. Match each jaguar feature to its correct adaptation type.",
-    terms:["Spotted coat &amp; powerful jaws","Hunts at night","Strong digestion for raw meat"],
-    choices:["Behavioural","Physiological","Physical"] },
-  { qid:"q6", sec:"B", type:"match", pts:3,
-    stem:"Baird's tapir — Belize's national animal — also has adaptations that help it survive. Match each tapir feature to its correct adaptation type.",
-    terms:["Flexible snout for grabbing leaves and snorkelling","Swims to escape danger"],
-    choices:["Physiological","Behavioural","Physical"] },
-  { qid:"q7", sec:"B", type:"match", pts:4,
-    stem:"Green iguanas use camouflage to stay safe from predators. Match each part of this adaptation to its correct type — this one is tricky, so look closely!",
-    terms:["Green-brown skin colour that blends into leaves","Freezing completely still to make the camouflage work"],
-    choices:["Behavioural","Physical","Physiological"] },
-  { qid:"q8", sec:"B", type:"match", pts:5,
-    stem:"Three more Belizean animals were sorted in Week 7. Match each animal's feature to its correct adaptation type.",
-    terms:["Manatee: can slow its heart rate and hold its breath for several minutes while diving for sea grass","Leafcutter ant: works together with hundreds of other ants to cut and carry leaf pieces back to the nest to grow fungus for food","Frigatebird: has extremely long, pointed wings that let it stay in the air for hours without landing"],
-    choices:["Physical","Physiological","Behavioural"] },
-
-  /* ---- SECTION C · True / False ---- */
-  { qid:"q9", sec:"C", type:"tf", pts:3,
-    stem:"An animal can decide to grow a new body part or change its adaptations during its own lifetime." },
-  { qid:"q10", sec:"C", type:"tf", pts:3,
-    stem:"Adaptations like the jaguar's spotted coat developed slowly over many generations, not because one jaguar decided to change." },
-];
-
-const SECTIONS = {
-  A:{title:"📗 Section A — Multiple Choice", note:"Choose the best answer for each question.", accent:"#20C997"},
-  B:{title:"🔗 Section B — Matching", note:"Choose the correct adaptation type for each animal feature.", accent:"#4DABF7"},
-  C:{title:"⚖️ Section C — True or False", note:"Choose True or False for each statement.", accent:"#9775FA"},
-};
+   The qid MUST match the key used in the KV answer-key entry. */
+let ITEMS = [];      // filled by hydrate() from the Worker payload
+let SECTIONS = {};   // filled by hydrate() from the Worker payload
 
 const AUTO_TYPES = ["mc","tf","fib","match","label"];
 const AI_TYPES   = ["sa","open"];
 const byId = qid => ITEMS.find(i=>i.qid===qid);
 const DISPLAY_NUM = {};
-ITEMS.forEach((it,i)=>DISPLAY_NUM[it.qid]=i+1);
-const TOTAL_Q = ITEMS.length;
+let TOTAL_Q = 0;
+
+/* Populate the page's display data from the Worker's questions payload. */
+function hydrate(payload){
+  ITEMS    = (payload && payload.items)    || [];
+  SECTIONS = (payload && payload.sections) || {};
+  FIGS     = (payload && payload.figs)     || {};
+  TOTAL_Q  = ITEMS.length;
+  ITEMS.forEach((it,i)=>DISPLAY_NUM[it.qid]=i+1);
+}
 
 /* ---------------- RENDER ---------------- */
 function render(){
@@ -614,18 +602,16 @@ function fieldHTML(it){
   return "";
 }
 
-/* ---------------- FIGURES (eco-print line art; theme-aware strokes) ----------------
-   Each figure serves the STEM (shows the situation) and never reveals the answer.
-   This quiz uses no figures — every item is concrete text about a named animal
-   feature, so a picture would risk showing the answer (§8 visual rule). The
-   mechanism is kept in place so a figure could be added later without rework. */
+/* ---------------- FIGURES ----------------
+   Figures now travel WITH the questions inside the KV entry, already rendered
+   to SVG/HTML strings, so this page holds no figure builders. figHTML drops the
+   stored string in between the stem and the answer field. Each figure serves the
+   STEM and never reveals the answer (§8 visual rule). This quiz has no figures. */
+let FIGS = {};   // filled by hydrate() from the Worker payload
 function figHTML(it){
   if(!it.fig || !FIGS[it.fig]) return "";
-  return `<div class="label-figure">${FIGS[it.fig]()}</div>`;
+  return `<div class="label-figure">${FIGS[it.fig]}</div>`;
 }
-const FS = 'stroke="var(--body-color)" stroke-width="2" fill="none"';           // main outline
-const FA = 'fill="var(--top-badge-bg)"';                                        // accent (numbers/labels)
-const FIGS = {};
 
 /* ---------------- INTERACTION / PROGRESS ---------------- */
 function attachInteractions(){
@@ -827,6 +813,15 @@ function mergeAndShow(grade,answers){
   const saveData=buildSaveData({autoEarned,autoTotal,writtenEarned,writtenTotal,secEarned,secTotal,total,pct,band,perItem,answers});
   saveResult(saveData); window._savedData=saveData; GRADED=saveData;
 
+  // Log the result to the VC-LMS Sheet (never blocks the student; silent if logged out)
+  if(typeof vcSaveProgress==='function'){
+    try{ vcSaveProgress({
+      subject:'Science', lo_code:'SC6.12',
+      activity_type:'quiz', activity_name:'Animal Adaptation Match-Up Quiz',
+      score:total, max_score:MAX_MARKS
+    }); }catch(e){ console.warn('save-progress skipped',e); }
+  }
+
   document.getElementById('submitArea').style.display='none';
   const rs=document.getElementById('resultsSection'); rs.classList.add('show');
   document.body.classList.add('test-locked');
@@ -908,7 +903,9 @@ function buildSaveData(x){
     secEarned:x.secEarned,secTotal:x.secTotal,
     total:x.total,pct:x.pct,band:x.band.label,
     perf:document.getElementById('perfBadge').textContent,
-    perItem:x.perItem, answers
+    perItem:x.perItem, answers,
+    // keep the fetched questions so the PDF still renders after a reload
+    __q:{items:ITEMS,sections:SECTIONS,figs:FIGS}
   };
 }
 function getSavedResult(){try{return JSON.parse(localStorage.getItem(QUIZ_KEY));}catch(e){return null;}}
@@ -1085,15 +1082,48 @@ function downloadPDF(){
 }
 
 /* ---------------- INIT ---------------- */
+/* ---------------- GATE + LOAD ---------------- */
+function showGateClosed(){
+  const tc=document.getElementById('testContainer'); if(tc)tc.style.display='none';
+  const pw=document.getElementById('qProgressWrap'); if(pw)pw.style.display='none';
+  const g=document.getElementById('gateClosed'); if(g)g.classList.add('show');
+}
+function showGateError(msg){
+  const tc=document.getElementById('testContainer'); if(tc)tc.style.display='none';
+  const pw=document.getElementById('qProgressWrap'); if(pw)pw.style.display='none';
+  const g=document.getElementById('gateClosed'); if(g){g.querySelector('.gate-title').textContent='Test unavailable';g.querySelector('.gate-msg').textContent=msg;g.classList.add('show');}
+}
+
+async function loadTest(){
+  // Already submitted on this device → restore the saved lock (works offline).
+  const saved=getSavedResult();
+  if(saved){ hydrate(saved.__q||{}); showLockScreen(saved);
+    const pw=document.getElementById('qProgressWrap'); if(pw)pw.style.display='none'; testSubmitted=true; return; }
+
+  // Ask the Worker's secure gate whether this test is open, and for its questions.
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({mode:'questions',testId:TEST_ID})});
+    const data=await res.json();
+    if(!data||!data.ok){ showGateError('This test could not be loaded. Please tell Mr. EdLo.'+(data&&data.error?' ('+data.error+')':'')); return; }
+    if(!data.open){ showGateClosed(); return; }
+    if(!data.questions||!(data.questions.items||[]).length){ showGateError('This test has no questions yet. Please tell Mr. EdLo.'); return; }
+    hydrate(data.questions);
+    render(); updateQuestionProgress(); attachIdleListeners();
+  }catch(e){
+    console.error('load error',e);
+    showGateError('Could not reach the test server. Check your internet connection and reload.');
+  }
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
+  // Login required: redirects to /login/ if there is no session.
+  if(typeof vcRequireLogin==='function' && !vcRequireLogin()) return;
   makeStars();
   const th=localStorage.getItem('vc-theme');
   if(th){document.body.className='theme-'+th;document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));const map={night:0,sunny:1,cloudy:2,nature:3};const btns=document.querySelectorAll('.theme-btn');if(btns[map[th]])btns[map[th]].classList.add('active');}
   const dt=new Date();document.getElementById('testDate').value=String(dt.getDate()).padStart(2,'0')+' / '+String(dt.getMonth()+1).padStart(2,'0')+' / '+dt.getFullYear();
-
-  const saved=getSavedResult();
-  if(saved){ showLockScreen(saved); const pw=document.getElementById('qProgressWrap'); if(pw)pw.style.display='none'; testSubmitted=true; }
-  else{ render(); updateQuestionProgress(); attachIdleListeners(); }
+  loadTest();
 });
 </script>
 </body>
