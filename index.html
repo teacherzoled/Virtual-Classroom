@@ -256,6 +256,19 @@
   .site-header-logo img { height: 48px; width: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
   .site-header-logo span { font-family: 'Fredoka One', cursive; font-size: 1.15rem; color: var(--header-name); letter-spacing: 0.02em; transition: color 0.4s; }
   .header-badge { display: inline-block; background: var(--badge-bg); border: 1px solid var(--badge-border); color: var(--badge-color); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 14px; border-radius: 999px; transition: all 0.4s; }
+  .header-right { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
+  .login-btn {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 800;
+    background: #20C997; color: #06281e; text-decoration: none;
+    padding: 0.55rem 1.1rem; border-radius: 999px; min-height: 40px;
+    box-shadow: 0 4px 14px rgba(32,201,151,0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .login-btn:hover { transform: translateY(-2px); box-shadow: 0 7px 20px rgba(32,201,151,0.45); }
+  .login-name { display: inline-flex; align-items: center; gap: 0.45rem; background: var(--badge-bg); border: 1px solid var(--badge-border); color: var(--badge-color); font-size: 0.8rem; font-weight: 800; padding: 0.5rem 1rem; border-radius: 999px; }
+  .logout-link { font-size: 0.72rem; font-weight: 800; color: var(--badge-color); cursor: pointer; text-decoration: underline; opacity: 0.8; }
+  .logout-link:hover { opacity: 1; }
 
   /* Page header */
   header { text-align: center; padding: 2.5rem 1rem 1.5rem; animation: fadeDown 0.7s ease both; }
@@ -335,7 +348,10 @@
       <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
       <span>Mr. EdLo's Virtual Classroom</span>
     </a>
-    <span class="header-badge">Belize</span>
+    <div class="header-right">
+      <span class="header-badge">Belize</span>
+      <span id="loginArea"><a class="login-btn" href="/login/">🔑 Student Login</a></span>
+    </div>
   </div>
 
   <header>
@@ -418,6 +434,20 @@
         b.classList.toggle('active', b.textContent.toLowerCase().includes(saved));
       });
     }
+  })();
+</script>
+<script src="/edlo-utils.js"></script>
+<script>
+  /* Login button ↔ welcome chip (added July 16, 2026) */
+  (function () {
+    var area = document.getElementById('loginArea');
+    var s = (typeof vcGetSession === 'function') ? vcGetSession() : null;
+    if (!area || !s) return;
+    area.innerHTML = '<span class="login-name">👋 ' + (s.first_name || s.username) +
+      ' <span class="logout-link" id="logoutLink">log out</span></span>';
+    document.getElementById('logoutLink').addEventListener('click', function () {
+      if (typeof vcLogout === 'function') vcLogout();
+    });
   })();
 </script>
 </body>

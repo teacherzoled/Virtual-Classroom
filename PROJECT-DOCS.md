@@ -47,6 +47,10 @@ If the docs are not updated, the task is **not** finished.
   sections. Restore only applies to SAVED beans (logged-in completions) — logged-out play never locks.
   Note: answers themselves are not restored, only completion state and bean totals.
 - **Hub wired:** the Week 1–3 cards on `/standard5/science/` are now LIVE links (soon-chips removed).
+- **Home-page login button (July 16, Edwin's request):** the grade picker (`/index.html`) now shows a
+  teal **🔑 Student Login** button in the site header (next to the Belize badge). When a session exists
+  It swaps to a "👋 [first name] · log out" chip (loads `/edlo-utils.js` + a small session check at the
+  end of the page).
 - **Verified this session:** `node --check` on all scripts ✓ · config integrity + bean math simulated ✓ ·
   season-terms sweep ✓ (temperate names appear only as deliberate wrong options in Wk3 Q4) ·
   no dev/rubric fields ✓ · no Wk1 content leaked into clones ✓. **Edwin still to do: phone test at
