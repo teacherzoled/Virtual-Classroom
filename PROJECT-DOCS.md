@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** July 18, 2026 (🏪 BEAN STORE website code built — `/dashboard/` Store panel + spendable balance, `/teacher/` Redeem panel with hard block, `vcGetPrizes()`; backend deploy steps in `BEAN-STORE-DEPLOY.md` pending Edwin)
+**Last updated:** July 18, 2026 (🏪 BEAN STORE fully SHIPPED & verified live — front + backend deployed, end-to-end tested; next session queued: Progressive lesson unlock, IDEAS #8)
 
 ---
 
@@ -22,7 +22,45 @@ If the docs are not updated, the task is **not** finished.
 
 ## ▶️ Take-off Point — Next Session (as of July 18, 2026)
 
-**Newest work (July 18, 2026): 🏪 BEAN STORE — website code built (backend pending Edwin).**
+**Newest work (July 18, 2026): 🏪 BEAN STORE — SHIPPED & verified live end-to-end.**
+Front end AND backend deployed; tested with `test.student` (earned 114 → redeemed Sticker 100 →
+balance 14, Sticker stock 120→119, and **Jaguars team total stayed 114** — spending did NOT move the
+team race or class goal ✅). Students can cash earned cacao beans 🌱 for real class prizes without
+ever affecting the team race or class goal. Design in `BEAN-STORE-PLAN.md`; backend deploy steps in
+`BEAN-STORE-DEPLOY.md`.
+- **Backend (Edwin, done July 18):** `Prizes` tab added (9 rows) · `prizes` + `redeem-prize` actions
+  added to `VC-LMS Backend` Apps Script (new version deployed) · `/prizes` + `/redeem-prize` routes
+  added to `edlo-lms` Worker (deployed). `/prizes` console test returned all 9 ✓. Group Totals B2
+  formula confirmed to filter lesson+bonus only, so `redeem` rows are ignored — verified live.
+- **Local master copies (new `backend/` folder):** `backend/VC-LMS-Backend.gs` and
+  `backend/edlo-lms-worker.js` now mirror the deployed code (dated headers). **Standing rule going
+  forward:** when the live Apps Script or Worker changes, update its `backend/` mirror the same
+  session; next edit starts from the file and returns a complete paste-over version, not snippets.
+  (`edlo-gemini` AI-proxy Worker is not mirrored yet.)
+- **UI polish this session:** prize card text centered; prize-card grid centered in the panel;
+  muted secondary-text colour darkened on the Sunny/Cloudy/Nature themes (dashboard) for readability.
+  Locked-prize 50% dimming KEPT deliberately (Edwin's call) — it's an availability cue that brightens
+  as a student saves; a card regains full colour the moment it becomes affordable.
+- **Recorded design facts:** balance = earned (`lesson`+`bonus`) − spent (`redeem`); `redeem` rows
+  carry subject `Bean Store`, score = beans spent; every bean sum in the site + the Group Totals
+  formula whitelists lesson/bonus, so spending only lowers the individual's own balance. Redemption
+  is teacher-initiated on `/teacher/` (no student checkout); hard block on cost>balance or stock=0,
+  enforced in the UI AND server-side in Apps Script.
+
+**➡️ NEXT SESSION (queued): 🔓 Progressive lesson unlock — IDEAS #8.**
+Rule: only the current/first week's lesson is active; all later weeks are LOCKED, and this holds
+**even when logged OUT** (public sees a "taste" of Week 1 only, rest shown locked). Needs a design
+decision on **what unlocks each later week** — teacher toggle (like the Test Control idea #7), a
+date/schedule, or completion of the prior week. Apply to the Std5 Science lessons hub first
+(`/standard5/science/` Lessons tab), then future subjects. Lighter than the test gate (lessons are
+public pages, so likely a per-lesson "unlocked" flag rather than KV/Worker). Start by reading
+`IDEAS.md` #8 and the Std5 Science hub, then plan before building.
+Other parked items still open: more Std5 Science lessons (Wk 4+), revise Wk1–3 sample lessons
+(IDEAS #9), Test Control panel (IDEAS #7), Layer 2 ecosystem map + quest.
+
+---
+
+**Previous (July 18, 2026, earlier): 🏪 BEAN STORE website code first built.**
 Students can now cash earned cacao beans 🌱 for real class prizes without ever affecting the team
 race or class goal. Design in `BEAN-STORE-PLAN.md`; backend deploy steps in `BEAN-STORE-DEPLOY.md`.
 - **Balance model:** spendable balance = earned (`lesson`+`bonus`) − spent (`redeem`). A new

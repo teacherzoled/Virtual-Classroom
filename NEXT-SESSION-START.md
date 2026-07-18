@@ -1,46 +1,48 @@
 # ▶️ Paste this to start the next session
 
-Copy the block below into a new chat (with the `Virtual-Classroom` folder connected — Claude
-will also ask for the Std5 assessment project folder: **School stuff → School Matters →
-2026 - 2027 (std 5) → Curriculum → Science**).
+Copy the block below into a new chat (with the `Virtual-Classroom` folder connected).
 
 ---
 
-The **secure test gate is BUILT** across all 16 Std5 Science tests/quizzes (July 17, 2026). Read
-`PROJECT-DOCS.md` first — the **📌 Standing Rule** and the **▶️ Take-off Point** — for the full
-as-built state. Do NOT rebuild it.
+Read `PROJECT-DOCS.md` first — the **📌 Standing Rule** and the **▶️ Take-off Point** — for the full
+as-built state. The **🏪 Bean Store is SHIPPED and verified live** (July 18, 2026); do NOT rebuild it.
 
 ## What's already done (do not redo)
 
-- **Worker:** `edlo-gemini` v3 adds `mode:'questions'` (open-check gate; no passkey, no OpenAI key).
-  Grading + AI relay unchanged. Deployed.
-- **Pages:** all 16 student test/quiz pages are fetch-render shells with `vcRequireLogin()`, the
-  closed-gate panel, the account-based retake lock, and `vcSaveProgress()` logging. Re-audited clean.
-- **KV values:** new values (with `"open": false` + `questions`) are in
-  `…/Science/Assessment/_SECURE_GATE_KV/` — 14 ready to paste, 2 pending paste-out (c1-unit2,
-  c1-review). See that folder's `README_DEPLOY.md`.
-- **Passkey:** kept (still the OpenAI cost gate); students enter the monthly code at submit as before.
+- **🏪 Bean Store — live & tested end-to-end.** `/dashboard/` has a browse-only Store panel with
+  spendable balance (earned − spent); `/teacher/` has a Redeem panel (teacher-initiated, hard block
+  on cost>balance or stock=0, enforced server-side too). `redeem` rows never touch the team race or
+  class goal (Group Totals formula filters lesson+bonus only — verified). `Prizes` tab (9 rows) +
+  `prizes`/`redeem-prize` Apps Script actions + `/prizes`/`/redeem-prize` Worker routes all deployed.
+- **Local backend mirrors:** `backend/VC-LMS-Backend.gs` and `backend/edlo-lms-worker.js` mirror the
+  deployed Apps Script + Worker. **Standing rule:** edit the mirror whenever the live code changes,
+  and hand Edwin a COMPLETE paste-over file (not snippets).
+- **Secure test gate** (16 Std5 Science tests/quizzes) and **Layer 1 dashboards** — live, per prior
+  sessions.
 
-## What's left to finish the gate (the "deploy" — mostly Edwin pasting)
+## ➡️ NEXT BUILD (queued): 🔓 Progressive lesson unlock — `IDEAS.md` #8
 
-1. Paste the 14 ready KV values into Cloudflare → KV → `EDLO_ANSWER_KEYS` (leave `open:false`).
-2. Paste the LIVE value of `sy2627-std5-c1-unit2-science` and `sy2627-std5-c1-science` to Claude →
-   Claude merges the questions + `open:false` → paste the finished values back.
-3. `git add -A → commit → push` (16 refactored pages).
-4. Spot-check 2–3 tests live: closed screen → flip `open:true` → take it → score lands in the Sheet
-   → open on a 2nd device → "already completed" lock.
-5. Enroll the real class in the VC-LMS Students tab → run `hashPlainPasswords`.
+Students must NOT see the whole year's lesson catalogue at once.
+- **Rule:** only the current / first week's lesson is active; all later weeks are **LOCKED** — and
+  this holds **even when logged OUT**, so the general public gets a "taste" of Week 1 only, with the
+  rest shown locked.
+- **Open design decision to make first:** what unlocks each later week?
+  ① a teacher toggle (like the Test Control idea #7), ② a date/schedule, or ③ completion of the
+  prior week. Decide this before building.
+- **Scope:** the Std5 Science lessons hub first (`/standard5/science/` Lessons tab), then any future
+  subject. Distinct from the test gate — lessons are public pages, so this is likely a lighter
+  per-lesson "unlocked" flag rather than KV/Worker work.
+- **How to start:** read `IDEAS.md` #8 and the Std5 Science hub, run the planning skill, present a
+  plan, and wait for Edwin's approval before creating or modifying files.
 
-## Then the next build
+## Other parked items (Edwin decides when)
 
-**🏪 Bean Store** — queued as the session after the gate (design in `IDEAS.md` #6; Edwin brings the
-prize list + bean costs).
+- More Std5 Science lessons — Week 4+ (clone the Week 1 engine)
+- Revise the 3 Wk1–3 sample lessons — content + activities (`IDEAS.md` #9)
+- Test Control panel on `/teacher/` — open/close tests without hand-editing KV (`IDEAS.md` #7;
+  ⚠️ touches the shared `edlo-gemini` Worker)
+- Layer 2 ecosystem journey map + weekly quest (`DASHBOARD-GAMIFICATION-PLAN.md`)
 
-## Optional later
-
-- Swap the monthly passkey for the login token so students never type a code (drops the passkey
-  entirely while keeping the OpenAI cost protection).
-
-When done, update `PROJECT-DOCS.md` (standing rule) and remind Edwin to `git add -A → commit → push`.
+When done, update `PROJECT-DOCS.md` (Standing Rule) and remind Edwin to `git add -A → commit → push`.
 
 ---
