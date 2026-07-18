@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** July 17, 2026 (SECURE TEST GATE built across all 16 Std5 Science tests/quizzes — login gate + server-side open/closed switch + account-based retake lock; questions & figures moved into KV)
+**Last updated:** July 18, 2026 (🏪 BEAN STORE website code built — `/dashboard/` Store panel + spendable balance, `/teacher/` Redeem panel with hard block, `vcGetPrizes()`; backend deploy steps in `BEAN-STORE-DEPLOY.md` pending Edwin)
 
 ---
 
@@ -20,9 +20,37 @@ If the docs are not updated, the task is **not** finished.
 
 ---
 
-## ▶️ Take-off Point — Next Session (as of July 17, 2026)
+## ▶️ Take-off Point — Next Session (as of July 18, 2026)
 
-**Newest work (July 17, 2026, later): 🔒 SECURE TEST GATE built + verified live on the pilot,
+**Newest work (July 18, 2026): 🏪 BEAN STORE — website code built (backend pending Edwin).**
+Students can now cash earned cacao beans 🌱 for real class prizes without ever affecting the team
+race or class goal. Design in `BEAN-STORE-PLAN.md`; backend deploy steps in `BEAN-STORE-DEPLOY.md`.
+- **Balance model:** spendable balance = earned (`lesson`+`bonus`) − spent (`redeem`). A new
+  `redeem` activity_type carries the spend (score = beans spent, subject = `Bean Store`). Every
+  bean sum in the site code already whitelists `lesson`/`bonus`, so `redeem` rows are invisible to
+  the team race, class goal, and mastery — spending only lowers the individual's own balance.
+- **Redemption flow:** teacher-initiated only (no student checkout button). Student asks in class;
+  teacher uses the new **Redeem a Prize** panel on `/teacher/` (twin of the bonus awarder). **Hard
+  block** (Edwin's call): the Redeem button is disabled — and the Apps Script also rejects — when
+  `cost > balance` or `stock ≤ 0`.
+- **`/dashboard/`:** new browse-only **🏪 Bean Store** panel — spendable balance (bean chip now reads
+  "N beans to spend"), prizes grouped Quick/Medium/Big, each card greyed with "🔒 need N more" or
+  "🔒 out of stock" when unavailable. No redeem button for students.
+- **`/teacher/`:** new **Redeem a Prize** panel — student picker + prize picker (cost/stock inline),
+  live balance line, hard-disabled button with the reason shown; updates local state after each
+  redeem so counts stay accurate without reload.
+- **`edlo-utils.js`:** added `vcGetPrizes()` (public catalog fetch).
+- **Prize catalog (Edwin's final July 17 list + stock July 18):** Sticker/pencil 100🌱 (120) ·
+  Choose seat 150🌱 (20) · Pick own group 180🌱 (30) · Sit with friend/week 360🌱 (20) ·
+  Snack/juice 540🌱 (30) · Homework pass 750🌱 (12) · Teacher's chair/morning 1200🌱 (3) ·
+  Certificate+note home 1500🌱 (999=unlimited) · Hall of Fame 2500🌱 (5).
+- **➡️ Edwin's backend steps (`BEAN-STORE-DEPLOY.md`):** ① add `Prizes` tab (9 rows, provided) ·
+  ② add `prizes` + `redeem-prize` actions to `VC-LMS Backend` Apps Script (code provided) · ③ add
+  `/prizes` + `/redeem-prize` routes to `edlo-lms` Worker · ④ **verify the Group Totals formula
+  ignores `redeem` rows** (critical check in the deploy doc) · ⑤ live-test per the checklist · ⑥
+  `git add -A → commit → push` the 3 code files. Then Layer 2 map + quest when called for.
+
+**Previous (July 17, 2026, later): 🔒 SECURE TEST GATE built + verified live on the pilot,
 then rolled out to all 16 Std5 Science tests/quizzes.** Four security layers now stack on every
 test: (1) **login required** (`vcRequireLogin()` on each test/quiz page — hubs/lessons stay
 public); (2) **server-side open/closed switch** — questions live in KV, the Worker's new

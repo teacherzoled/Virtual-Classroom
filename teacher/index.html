@@ -75,6 +75,8 @@
   .bonus-form label { display:block; font-size:.75rem; font-weight:800; color:var(--muted); margin-bottom:.25rem; }
   .bonus-form select, .bonus-form input { font-family:'Nunito',sans-serif; font-size:.95rem; font-weight:700; padding:.6rem .7rem; border-radius:10px; border:2px solid var(--line); background:var(--chip); color:var(--text); min-height:44px; max-width:100%; }
   .bonus-note { font-weight:800; margin-top:.7rem; display:none; }
+  .redeem-bal { font-weight:800; font-size:.9rem; margin:.2rem 0 .8rem; color:var(--muted); }
+  .redeem-bal b { color:var(--accent); }
 
   .load-note { text-align:center; color:var(--muted); font-weight:800; padding:2rem 0; }
   .site-footer { text-align:center; color:var(--muted); font-size:.82rem; padding:2.2rem max(1rem,4vw) 1.4rem; position:relative; z-index:1; }
@@ -161,6 +163,18 @@
         <div><button class="btn" id="bonusBtn">Award 🌱</button></div>
       </div>
       <p class="bonus-note" id="bonusNote"></p>
+    </section>
+
+    <section class="panel" id="redeemPanel" style="display:none;">
+      <h2>🏪 Redeem a Prize</h2>
+      <p class="sub">Cash a student's beans for a prize from the Bean Store. Spending is deducted from the student's own balance only — team totals and the class goal never change.</p>
+      <p class="redeem-bal" id="redeemBal">Pick a student to see his or her balance.</p>
+      <div class="bonus-form">
+        <div><label>Student</label><select id="redeemWho"></select></div>
+        <div style="flex:1 1 260px;"><label>Prize</label><select id="redeemPrize"></select></div>
+        <div><button class="btn" id="redeemBtn">Redeem 🏪</button></div>
+      </div>
+      <p class="bonus-note" id="redeemNote"></p>
     </section>
   </div>
 
@@ -259,13 +273,14 @@ function render(data) {
 
   /* Per-student aggregates */
   var agg = {};
-  students.forEach(function (s) { agg[s.username] = { s: s, mSum: 0, mN: 0, beans: 0, last: '', rows: [] }; });
+  students.forEach(function (s) { agg[s.username] = { s: s, mSum: 0, mN: 0, beans: 0, spent: 0, last: '', rows: [] }; });
   results.forEach(function (r) {
     var a = agg[r.username]; if (!a) return;
     a.rows.push(r);
     if (String(r.timestamp) > a.last) a.last = String(r.timestamp);
     if (ASSESS_TYPES[r.activity_type]) { a.mSum += r.percent; a.mN++; }
     if (r.activity_type === 'lesson' || r.activity_type === 'bonus') a.beans += r.score;
+    else if (r.activity_type === 'redeem') a.spent += r.score;
   });
 
   /* SECTION A — class table */
@@ -375,6 +390,120 @@ function render(data) {
       note.textContent = '❌ Network problem — try again.';
     });
   });
+
+  /* SECTION B — prize redemption (hard block: cost > balance or stock <= 0) */
+  setupRedeem(students, agg);
+}
+
+/* ---------- Redeem a prize ---------- */
+function setupRedeem(students, agg) {
+  var PRIZES = {}; /* prize_name -> { cost, stock, category } */
+
+  var whoSel = $('#redeemWho');
+  students.forEach(function (s) {
+    var o = document.createElement('option');
+    o.value = s.username;
+    o.textContent = s.full_name + (s.group_id && TEAMS[s.group_id] ? ' (' + TEAMS[s.group_id].name + ')' : '');
+    whoSel.appendChild(o);
+  });
+
+  var prizeSel = $('#redeemPrize');
+  var balEl = $('#redeemBal');
+  var btn = $('#redeemBtn');
+  var note = $('#redeemNote');
+
+  function balanceOf(username) {
+    var a = agg[username];
+    return a ? (a.beans - a.spent) : 0;
+  }
+  function prizeOptionText(p) {
+    return p.prize_name + ' — ' + p.cost + ' 🌱' + (p.stock <= 0 ? ' (out of stock)' : ' (' + p.stock + ' left)');
+  }
+  function refreshState() {
+    var bal = balanceOf(whoSel.value);
+    var p = PRIZES[prizeSel.value];
+    var a = agg[whoSel.value];
+    if (a) {
+      balEl.textContent = '';
+      balEl.appendChild(document.createTextNode(a.s.full_name + ' can spend '));
+      var strong = document.createElement('b');
+      strong.textContent = bal + ' 🌱';
+      balEl.appendChild(strong);
+      balEl.appendChild(document.createTextNode(' (earned ' + a.beans + ' · spent ' + a.spent + ')'));
+    } else {
+      balEl.textContent = 'Pick a student to see his or her balance.';
+    }
+    if (!p) { btn.disabled = true; return; }
+    var reason = '';
+    if (p.stock <= 0) reason = 'out of stock';
+    else if (p.cost > bal) reason = 'needs ' + (p.cost - bal) + ' more 🌱';
+    btn.disabled = !!reason;
+    btn.textContent = reason ? ('Redeem 🏪 — ' + reason) : 'Redeem 🏪';
+  }
+
+  vcGetPrizes().then(function (res) {
+    if (!res || !res.ok || !res.prizes || !res.prizes.length) {
+      $('#redeemPanel').style.display = 'block';
+      balEl.textContent = 'The prize catalog could not be loaded (check the Prizes tab and the /prizes route).';
+      btn.disabled = true;
+      return;
+    }
+    res.prizes.slice().sort(function (a, b) { return a.cost - b.cost; }).forEach(function (p) {
+      PRIZES[p.prize_name] = { cost: p.cost, stock: p.stock, category: p.category };
+      var o = document.createElement('option');
+      o.value = p.prize_name;
+      o.textContent = prizeOptionText(p);
+      prizeSel.appendChild(o);
+    });
+    $('#redeemPanel').style.display = 'block';
+    refreshState();
+  });
+
+  whoSel.addEventListener('change', refreshState);
+  prizeSel.addEventListener('change', refreshState);
+
+  btn.addEventListener('click', function () {
+    var username = whoSel.value;
+    var prizeName = prizeSel.value;
+    var p = PRIZES[prizeName];
+    if (!p) return;
+    btn.disabled = true;
+    note.style.display = 'block';
+    note.style.color = 'var(--muted)';
+    note.textContent = 'Redeeming…';
+    post('/redeem-prize', {
+      teacher_code: teacherCode,
+      username: username,
+      prize_name: prizeName
+    }).then(function (res) {
+      if (res.ok) {
+        /* update local state so the panel stays accurate without a reload */
+        var a = agg[username];
+        if (a) { a.spent += res.spent; a.rows.push({
+          timestamp: '', username: username, student_name: a.s.full_name,
+          subject: 'Bean Store', lo_code: '', activity_type: 'redeem',
+          activity_name: prizeName, score: res.spent, max_score: res.spent, percent: 0
+        }); }
+        p.stock = (typeof res.newStock === 'number') ? res.newStock : (p.stock - 1);
+        /* refresh the prize option label with the new stock */
+        Array.prototype.forEach.call(prizeSel.options, function (opt) {
+          if (opt.value === prizeName) opt.textContent = prizeOptionText({ prize_name: prizeName, cost: p.cost, stock: p.stock });
+        });
+        note.style.color = 'var(--good)';
+        note.textContent = '✅ ' + res.to + ' redeemed "' + prizeName + '" for ' + res.spent +
+          ' 🌱. Balance now ' + res.newBalance + ' 🌱. ' + p.stock + ' left in stock.';
+        refreshState();
+      } else {
+        note.style.color = 'var(--bad)';
+        note.textContent = '❌ ' + (res.error || 'Could not redeem.');
+        refreshState();
+      }
+    }).catch(function () {
+      note.style.color = 'var(--bad)';
+      note.textContent = '❌ Network problem — try again.';
+      refreshState();
+    });
+  });
 }
 
 /* ---------- Drill-down ---------- */
@@ -392,9 +521,12 @@ function drill(a) {
     a.rows.slice().reverse().forEach(function (r) {
       var tr = document.createElement('tr');
       var isBean = (r.activity_type === 'lesson' || r.activity_type === 'bonus');
+      var scoreText = isBean ? '+' + r.score + ' 🌱'
+        : r.activity_type === 'redeem' ? '−' + r.score + ' 🌱'
+        : r.score + '/' + r.max_score + ' (' + r.percent + '%)';
       [String(r.timestamp).slice(0, 16), r.activity_type, r.activity_name,
        (r.subject || '') + (r.lo_code ? ' · ' + r.lo_code : ''),
-       isBean ? '+' + r.score + ' 🌱' : r.score + '/' + r.max_score + ' (' + r.percent + '%)'
+       scoreText
       ].forEach(function (v) {
         var td = document.createElement('td'); td.textContent = v; tr.appendChild(td);
       });

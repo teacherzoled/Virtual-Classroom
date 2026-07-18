@@ -75,6 +75,24 @@
   .feed-meta { color:var(--muted); font-size:.75rem; font-weight:700; }
   .feed-score { flex:0 0 auto; font-weight:800; font-size:.88rem; }
 
+  /* Bean Store */
+  .store-balance { text-align:center; margin-bottom:1rem; }
+  .store-balance .bal-big { font-family:'Fredoka One',cursive; font-size:2.2rem; color:var(--accent); line-height:1; }
+  .store-balance .bal-meta { color:var(--muted); font-size:.78rem; font-weight:800; margin-top:.35rem; }
+  .store-cat { font-weight:800; font-size:.9rem; margin:1.1rem 0 .5rem; display:flex; align-items:center; gap:.4rem; }
+  .store-grid { display:flex; flex-wrap:wrap; gap:.7rem; }
+  .prize-card { flex:0 1 220px; background:var(--chip); border:1px solid var(--line); border-radius:14px; padding:.85rem .9rem; position:relative; }
+  .prize-card.locked { opacity:.5; }
+  .prize-name { font-weight:800; font-size:.9rem; line-height:1.25; }
+  .prize-cost { font-family:'Fredoka One',cursive; font-size:1.15rem; margin-top:.4rem; }
+  .prize-state { font-size:.72rem; font-weight:800; margin-top:.35rem; }
+  .prize-state.ok   { color:var(--good); }
+  .prize-state.need { color:var(--muted); }
+  .prize-state.out  { color:var(--bad); }
+  .cat-quick  { color:var(--good); }
+  .cat-medium { color:var(--warn); }
+  .cat-big    { color:var(--accent); }
+
   .empty-note { color:var(--muted); font-size:.9rem; text-align:center; padding:.8rem 0; }
   .load-note { text-align:center; color:var(--muted); font-weight:800; padding:2rem 0; }
 
@@ -85,6 +103,7 @@
     .race-beans { flex-basis:3.6rem; font-size:.8rem; }
     .eco-labels { padding-left:6.3rem; padding-right:4.3rem; }
     .subj-card { flex:0 1 100%; }
+    .prize-card { flex:0 1 100%; }
   }
 </style>
 </head>
@@ -128,6 +147,16 @@
     <div class="goal-nums"><span id="goalNow">0 🌱</span><span id="goalTarget">of 0</span></div>
   </section>
 
+  <section class="panel" id="storePanel" style="display:none;">
+    <h2>🏪 Bean Store</h2>
+    <p class="sub">Spend the cacao beans you've earned on real class prizes. Ask Mr. EdLo in class to redeem — spending never lowers your team's race or the class goal.</p>
+    <div class="store-balance">
+      <div class="bal-big" id="balBig">0 🌱</div>
+      <div class="bal-meta" id="balMeta">to spend</div>
+    </div>
+    <div id="storeCats"></div>
+  </section>
+
   <section class="panel" id="masteryPanel" style="display:none;">
     <h2>🎯 My Mastery by Subject</h2>
     <p class="sub">From graded tests, quizzes and exit slips only — beans never touch these numbers.</p>
@@ -160,7 +189,7 @@ var TEAMS = {
   manatees: { name: 'Manatees', icon: '🦭', color: '#4DABF7' }
 };
 var ASSESS_TYPES = { test: 1, quiz: 1, 'exit-slip': 1 };
-var TYPE_ICONS = { test: '📝', quiz: '❓', 'exit-slip': '🚪', lesson: '📖', bonus: '🎁' };
+var TYPE_ICONS = { test: '📝', quiz: '❓', 'exit-slip': '🚪', lesson: '📖', bonus: '🎁', redeem: '🏪' };
 
 function $(s, r) { return (r || document).querySelector(s); }
 
@@ -203,13 +232,16 @@ if (session) {
 
   Promise.all([
     vcGetProgress().catch(function () { return []; }),
-    vcGetLeaderboard()
+    vcGetLeaderboard(),
+    vcGetPrizes().catch(function () { return { ok: false }; })
   ]).then(function (out) {
     var rows = out[0] || [];
     var lb = out[1] || { ok: false };
+    var pz = out[2] || { ok: false };
     $('#loadNote').style.display = 'none';
-    renderPersonal(rows);
+    var wallet = renderPersonal(rows);
     renderTeams(lb);
+    renderStore(pz, wallet);
   }).catch(function () {
     $('#loadNote').textContent = 'Could not load your progress. Check your connection and refresh.';
   });
@@ -217,9 +249,10 @@ if (session) {
 
 /* ---------- Personal: beans, mastery, streak, feed ---------- */
 function renderPersonal(rows) {
-  var beans = 0, mSum = 0, mCount = 0, bySubject = {};
+  var earned = 0, spent = 0, mSum = 0, mCount = 0, bySubject = {};
   rows.forEach(function (r) {
-    if (r.activity_type === 'lesson' || r.activity_type === 'bonus') beans += Number(r.score) || 0;
+    if (r.activity_type === 'lesson' || r.activity_type === 'bonus') earned += Number(r.score) || 0;
+    else if (r.activity_type === 'redeem') spent += Number(r.score) || 0;
     if (ASSESS_TYPES[r.activity_type]) {
       mSum += Number(r.percent) || 0; mCount++;
       var s = r.subject || 'Other';
@@ -227,7 +260,8 @@ function renderPersonal(rows) {
       bySubject[s].sum += Number(r.percent) || 0; bySubject[s].n++;
     }
   });
-  $('#beanChip').textContent = '🌱 ' + beans + ' bean' + (beans === 1 ? '' : 's');
+  var balance = earned - spent;
+  $('#beanChip').textContent = '🌱 ' + balance + ' bean' + (balance === 1 ? '' : 's') + ' to spend';
   $('#masteryChip').textContent = mCount ? ('🎯 ' + Math.round(mSum / mCount) + '% mastery') : '🎯 no graded work yet';
 
   /* Subject mastery cards */
@@ -287,11 +321,63 @@ function renderPersonal(rows) {
       var sc = document.createElement('span'); sc.className = 'feed-score';
       sc.textContent = (r.activity_type === 'lesson' || r.activity_type === 'bonus')
         ? '+' + r.score + ' 🌱'
-        : r.score + '/' + r.max_score + ' (' + r.percent + '%)';
+        : r.activity_type === 'redeem'
+          ? '−' + r.score + ' 🌱'
+          : r.score + '/' + r.max_score + ' (' + r.percent + '%)';
       item.appendChild(ic); item.appendChild(main); item.appendChild(sc);
       feed.appendChild(item);
     });
   }
+
+  return { earned: earned, spent: spent, balance: balance };
+}
+
+/* ---------- Bean Store (browse only — teacher redeems in class) ---------- */
+function renderStore(pz, wallet) {
+  if (!pz || !pz.ok || !pz.prizes || !pz.prizes.length) return; /* store offline — other panels still work */
+  var balance = (wallet && wallet.balance) || 0;
+
+  $('#balBig').textContent = balance + ' 🌱';
+  $('#balMeta').textContent = 'to spend · earned ' + ((wallet && wallet.earned) || 0) +
+    ' 🌱 · spent ' + ((wallet && wallet.spent) || 0) + ' 🌱 all-time';
+
+  var CATS = [
+    { key: 'quick',  label: '🟢 Quick wins',   cls: 'cat-quick'  },
+    { key: 'medium', label: '🟡 Medium saves', cls: 'cat-medium' },
+    { key: 'big',    label: '🔴 Big saves',    cls: 'cat-big'    }
+  ];
+  var wrap = $('#storeCats');
+  CATS.forEach(function (cat) {
+    var inCat = pz.prizes.filter(function (p) { return (p.category || 'quick') === cat.key; })
+                         .sort(function (a, b) { return a.cost - b.cost; });
+    if (!inCat.length) return;
+
+    var head = document.createElement('div');
+    head.className = 'store-cat ' + cat.cls;
+    head.textContent = cat.label;
+    wrap.appendChild(head);
+
+    var grid = document.createElement('div');
+    grid.className = 'store-grid';
+    inCat.forEach(function (p) {
+      var out = p.stock <= 0;
+      var afford = balance >= p.cost;
+      var card = document.createElement('div');
+      card.className = 'prize-card' + ((out || !afford) ? ' locked' : '');
+
+      var nm = document.createElement('div'); nm.className = 'prize-name'; nm.textContent = p.prize_name;
+      var ct = document.createElement('div'); ct.className = 'prize-cost'; ct.textContent = p.cost + ' 🌱';
+      var st = document.createElement('div'); st.className = 'prize-state';
+      if (out) { st.className += ' out'; st.textContent = '🔒 out of stock'; }
+      else if (!afford) { st.className += ' need'; st.textContent = '🔒 need ' + (p.cost - balance) + ' more'; }
+      else { st.className += ' ok'; st.textContent = '✅ you can get this!'; }
+
+      card.appendChild(nm); card.appendChild(ct); card.appendChild(st);
+      grid.appendChild(card);
+    });
+    wrap.appendChild(grid);
+  });
+  $('#storePanel').style.display = 'block';
 }
 
 /* ---------- Teams: race bars + class goal ---------- */

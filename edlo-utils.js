@@ -161,6 +161,24 @@ function vcGetLeaderboard() {
     });
 }
 
+/**
+ * Fetches the Bean Store prize catalog (active prizes only).
+ * Works logged OUT too (public catalog, no personal data).
+ * Returns Promise of { ok, prizes:[{prize_name, cost, category, stock}] }.
+ */
+function vcGetPrizes() {
+  return fetch(VC_LMS_URL + '/prizes', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: '{}'
+  })
+    .then(function (r) { return r.json(); })
+    .catch(function (err) {
+      console.warn('vcGetPrizes failed:', err);
+      return { ok: false, error: String(err) };
+    });
+}
+
 /** Fetches all result rows for the logged-in student. Returns Promise of an array. */
 function vcGetProgress() {
   var session = vcGetSession();
