@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** July 17, 2026 (DASHBOARDS BUILT — student `/dashboard/` + teacher `/teacher/` + leaderboard backend live)
+**Last updated:** July 17, 2026 (SECURE TEST GATE built across all 16 Std5 Science tests/quizzes — login gate + server-side open/closed switch + account-based retake lock; questions & figures moved into KV)
 
 ---
 
@@ -22,7 +22,41 @@ If the docs are not updated, the task is **not** finished.
 
 ## ▶️ Take-off Point — Next Session (as of July 17, 2026)
 
-**Newest work (July 17, 2026): DASHBOARD LAYER 1 BUILT (quest deferred).** Decisions locked this
+**Newest work (July 17, 2026, later): 🔒 SECURE TEST GATE built + verified live on the pilot,
+then rolled out to all 16 Std5 Science tests/quizzes.** Four security layers now stack on every
+test: (1) **login required** (`vcRequireLogin()` on each test/quiz page — hubs/lessons stay
+public); (2) **server-side open/closed switch** — questions live in KV, the Worker's new
+`mode:'questions'` returns them ONLY when that test's KV entry has `"open": true`; a closed test
+shows nothing on screen OR in view-source (Edwin flips the flag in the Cloudflare KV dashboard on
+test morning — server clock decides); (3) **device submit-lock** (unchanged `localStorage`); and
+(4) **account-based retake lock** — before showing an open test the page asks the LMS if THIS
+student already submitted it (matches the unique `ACTIVITY_NAME` in their results) and, if so,
+shows an "already completed" screen with their score on ANY device — so a retake is blocked even
+if a test is accidentally left open. Every submit now also logs to the VC-LMS Sheet via
+`vcSaveProgress()` (subject/LO/type/name/score) — so tests feed the dashboards from day one.
+- **Worker:** `edlo-gemini` gained `mode:'questions'` (runs BEFORE the passkey gate; needs no
+  passkey and never touches the OpenAI key; open-check only). Grading + AI relay UNCHANGED.
+  Deployed copy = `…/Science/Assessment/cycle 1/Final Cycle 1 Test/edlo-gemini_v3_WITH_QUESTIONS_MODE.js`
+  (the old `edlo_worker_UPGRADED (2).js` was stale gpt-4o-mini — superseded).
+- **Passkey:** KEPT (Edwin's call July 17) — still the cost gate protecting the OpenAI key on
+  written-item grading; students still enter the monthly code at submit. Can later be swapped for
+  the login token to drop it entirely.
+- **KV:** each test entry now carries `"open": false` + a `questions` block (stems/options/figures,
+  NO answers — those stay in `items` as before). Figures (SVG/base64) moved OUT of the pages INTO
+  KV, so pages shrank from up to 784 KB to ~71 KB. New KV values to paste are in
+  `…/Science/Assessment/_SECURE_GATE_KV/` (see its `README_DEPLOY.md`). 14 are ready; **2 need
+  Edwin to paste the live value OUT first** (c1-unit2, c1-review — no local answer key on file).
+- **Pages:** all 16 refactored to fetch-render shells; re-audited clean (no answer/dev-bar/question
+  text in source; `pdfText()` present; both script blocks pass `node --check`; ~360px fit
+  preserved). Verified programmatically: gate closed-hides / open-clean, grading Auto-Fill=full &
+  Fill-Wrong=0 simulated against the real v3 Worker, render pipeline builds every question.
+- **➡️ NEXT:** ① paste the 14 ready KV values into `EDLO_ANSWER_KEYS`; ② paste-out c1-unit2 &
+  c1-review live values → Claude merges → paste back; ③ `git add -A → commit → push` the 16 pages;
+  ④ spot-check a couple tests live (closed screen → flip open → take → score in Sheet → account
+  lock on 2nd device); ⑤ enroll the real class (Students tab → `hashPlainPasswords`). Then the
+  **🏪 Bean Store** (queued next, `IDEAS.md` #6).
+
+**Previous — DASHBOARD LAYER 1 BUILT (quest deferred).** Decisions locked this
 session: teams 🐆 Jaguars · 🦜 Toucans · 🦙 Tapirs · 🦭 Manatees (Students col G `group_id`,
 lowercase) · class goal **6000** 🌱 (Edwin raised from 2000; cell B8 of Group Totals) · teacher auth =
 **TEACHER_CODE** Script Property checked server-side in Apps Script · **weekly quest DEFERRED**

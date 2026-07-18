@@ -1,49 +1,46 @@
 # ▶️ Paste this to start the next session
 
-Copy the block below into a new chat (with the `Virtual-Classroom` folder connected —
-Claude will also ask for the Std5 assessment project folder: **School stuff → School Matters →
+Copy the block below into a new chat (with the `Virtual-Classroom` folder connected — Claude
+will also ask for the Std5 assessment project folder: **School stuff → School Matters →
 2026 - 2027 (std 5) → Curriculum → Science**).
 
 ---
 
-Build the **secure test gate** for my Virtual Classroom website: per-test open/closed switch
-PLUS moving questions & figures out of the student pages into KV, so a closed test shows
-nothing — on screen, in view-source, or in the public repo.
+The **secure test gate is BUILT** across all 16 Std5 Science tests/quizzes (July 17, 2026). Read
+`PROJECT-DOCS.md` first — the **📌 Standing Rule** and the **▶️ Take-off Point** — for the full
+as-built state. Do NOT rebuild it.
 
-First, read `PROJECT-DOCS.md` in this repo — especially the **📌 Standing Rule** and the
-**▶️ Take-off Point** — so you know the current state. As of July 17, 2026: the LMS login
-system, three Std5 Science lessons with cacao beans, the student `/dashboard/`, and the
-teacher `/teacher/` dashboard are ALL LIVE and verified. Do NOT rebuild any of it.
+## What's already done (do not redo)
 
-## Decisions already made (July 16–17, 2026 — do not re-ask)
+- **Worker:** `edlo-gemini` v3 adds `mode:'questions'` (open-check gate; no passkey, no OpenAI key).
+  Grading + AI relay unchanged. Deployed.
+- **Pages:** all 16 student test/quiz pages are fetch-render shells with `vcRequireLogin()`, the
+  closed-gate panel, the account-based retake lock, and `vcSaveProgress()` logging. Re-audited clean.
+- **KV values:** new values (with `"open": false` + `questions`) are in
+  `…/Science/Assessment/_SECURE_GATE_KV/` — 14 ready to paste, 2 pending paste-out (c1-unit2,
+  c1-review). See that folder's `README_DEPLOY.md`.
+- **Passkey:** kept (still the OpenAI cost gate); students enter the monthly code at submit as before.
 
-1. **Closed tests hide questions from view-source.** Student test pages become empty shells
-   that fetch questions from the Worker; the Worker returns them only when the test's KV
-   entry says `open: true`. Edwin flips the flag in the Cloudflare KV dashboard on test
-   morning (server clock decides — device-clock cheating impossible).
-2. **Figures travel WITH the questions into KV** (they are text — inline SVG or base64 data
-   URIs; ~1 MB per test vs the 25 MB KV limit). The page shell keeps only the engine:
-   themes, starfield, passkey modal, submit-lock, `pdfText()`, `figHTML()`/`FIGS` rendering.
-3. **Login gate:** the 16 Std5 student test/quiz pages also get `vcRequireLogin()`. Hubs and
-   lessons stay public. This lifts the July 15 interim "publicly viewable" decision for
-   tests/quizzes only.
-4. **Scope:** extend each of the 16 KV entries with its question payload · ONE new Worker
-   route/mode with the open-check · refactor the 16 student pages to fetch-render · re-audit
-   all 16 (no dev bars, no answer fields, `pdfText()` present). Plan: one plumbing session
-   (first test end-to-end) + one rollout pass (scripted extraction for the other 15).
+## What's left to finish the gate (the "deploy" — mostly Edwin pasting)
 
-## Cautions
+1. Paste the 14 ready KV values into Cloudflare → KV → `EDLO_ANSWER_KEYS` (leave `open:false`).
+2. Paste the LIVE value of `sy2627-std5-c1-unit2-science` and `sy2627-std5-c1-science` to Claude →
+   Claude merges the questions + `open:false` → paste the finished values back.
+3. `git add -A → commit → push` (16 refactored pages).
+4. Spot-check 2–3 tests live: closed screen → flip `open:true` → take it → score lands in the Sheet
+   → open on a 2nd device → "already completed" lock.
+5. Enroll the real class in the VC-LMS Students tab → run `hashPlainPasswords`.
 
-- ⚠️ The open-check touches **`edlo-gemini`** (it owns `EDLO_ANSWER_KEYS`) — every change
-  hits ALL live tests. Test against ONE testId first (suggest `sy2627-std5-c1-adaptquiz-science`,
-  the smallest). The `edlo-lms` Worker is separate and safe.
-- Content is NOT rewritten — questions/figures are lifted from the existing student pages
-  into the KV JSON by script. Admin copies and all Word documents stay untouched.
-- Ask before building: exact KV payload shape, whether Edwin pastes KV updates manually per
-  test or wants a bulk-paste file per entry, and when to enroll the real class lists
-  (plain passwords → run `hashPlainPasswords`).
+## Then the next build
 
-When done, update `PROJECT-DOCS.md` and this file (standing rule) and remind me to
-`git add -A → commit → push`.
+**🏪 Bean Store** — queued as the session after the gate (design in `IDEAS.md` #6; Edwin brings the
+prize list + bean costs).
+
+## Optional later
+
+- Swap the monthly passkey for the login token so students never type a code (drops the passkey
+  entirely while keeping the OpenAI cost protection).
+
+When done, update `PROJECT-DOCS.md` (standing rule) and remind Edwin to `git add -A → commit → push`.
 
 ---

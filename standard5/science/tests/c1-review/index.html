@@ -6,6 +6,7 @@
 <title>Std 5 Science · Cycle 1 Test — Patterns in Our World · Mr. EdLo</title>
 <link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<script src="/edlo-utils.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 /* ═══════════════════════════ THEME VARIABLES ═══════════════════════════ */
@@ -301,6 +302,13 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
 .warn-msg{font-size:.85rem;font-weight:600;color:var(--card-desc);line-height:1.6;margin-bottom:1.2rem;}
 .warn-count{font-size:.75rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--section-lbl);margin-bottom:1rem;}
 @media(max-width:600px){.sec-card{padding:1.2rem 1.1rem;}.match-item{min-width:130px;}}
+/* ══ SECURE TEST GATE — closed panel ══ */
+.gate-closed{display:none;max-width:640px;margin:3rem auto;padding:2.4rem 1.6rem;text-align:center;background:var(--card-bg);border:1px solid var(--card-border);border-radius:18px;}
+.gate-closed.show{display:block;}
+.gate-icon{font-size:3.4rem;line-height:1;margin-bottom:.6rem;}
+.gate-title{font-family:'Fredoka One',cursive;font-size:1.5rem;margin-bottom:.6rem;color:var(--body-color);}
+.gate-msg{color:var(--body-color);opacity:.85;font-size:1.02rem;line-height:1.55;margin:0 auto 1.4rem;max-width:30rem;}
+.gate-actions{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;}
 </style>
 </head>
 <body class="theme-night">
@@ -388,7 +396,18 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
   </div>
 
   <!-- TEST CONTAINER -->
-  <div class="test-container" id="testContainer">
+    <!-- GATE: CLOSED / NOT-YET-OPEN (shown until Mr. EdLo opens the test) -->
+  <div class="gate-closed" id="gateClosed">
+    <div class="gate-icon">🔒</div>
+    <div class="gate-title">This test is not open yet</div>
+    <p class="gate-msg">Mr. EdLo has not opened this test. It will appear here the moment he opens it — please wait and reload when he tells the class to begin.</p>
+    <div class="gate-actions">
+      <button class="btn-primary" onclick="location.reload()">↻ Reload</button>
+      <a class="btn-secondary" href="https://edlovirtualclassroom.com/standard5/science/">← Back to Science</a>
+    </div>
+  </div>
+
+<div class="test-container" id="testContainer">
     <!-- Student info -->
     <div class="student-card">
       <div class="sc-icon">🎓</div>
@@ -466,6 +485,11 @@ const TEST_ID    = 'sy2627-std5-c1-science';
 const QUIZ_KEY   = 'vc-quiz-std5-c1-science';
 const PK_KEY     = 'vc-passkey-std5';
 const MAX_MARKS  = 82;
+/* LMS result metadata — also the account-lock key. ACTIVITY_NAME must be UNIQUE. */
+const SUBJECT       = "Science";
+const LO_CODE       = "SC1.09";
+const ACTIVITY_TYPE = "test";
+const ACTIVITY_NAME = "Cycle 1 Review Test";
 
 /* ---------------- ITEM DEFINITIONS (display data only) ----------------
    NO answers. NO accept-lists. NO rubrics. Marks shown here are for
@@ -473,89 +497,26 @@ const MAX_MARKS  = 82;
    type: mc | tf | fib | match | label | sa | open
    The qid MUST match the key used in the KV answer-key entry.
 */
-const ITEMS = [
-  /* ---- SECTION A · Multiple Choice (19) ---- */
-  { qid:"q1", sec:"A", type:"mc", pts:3,
-    stem:"Which of these is a technology that helps <b>reduce</b> climate change?",
-    options:["A petrol-burning car","A solar panel","A coal power plant","A gas stove"] },
-  { qid:"q2", sec:"A", type:"mc", pts:3,
-    stem:"Belize's two largest earners are tourism and agriculture. Warmer seas cause coral bleaching. How does this <b>most directly</b> hurt tourism?",
-    options:["Farmers grow less corn","Fewer snorkellers come to see the reef","Hotels use more electricity","Roads flood in the city"] },
-  { qid:"q3", sec:"A", type:"mc", pts:2,
-    stem:"Which TWO things are used to describe the climate of a place?",
-    options:["Temperature and precipitation","Wind and traffic","Soil and sand","Day and night"] },
-  { qid:"q4", sec:"A", type:"mc", pts:3,
-    stem:"A jaguar hunts at night so it is harder for prey to see it. This is an example of which kind of adaptation?",
-    options:["Physical","Behavioural","Physiological","Seasonal"] },
-  { qid:"q5", sec:"A", type:"mc", pts:2,
-    stem:"Whale sharks gather at Gladden Spit at the end of the dry season. Why do they come at that time of year?",
-    options:["To lay eggs on the beach","To feed on fish spawn","To escape from hurricanes","To find fresh water"] },
-  { qid:"q6", sec:"A", type:"mc", pts:4,
-    stem:"A village wants to protect its animal diversity. Which action would <b>best</b> help?",
-    options:["Cutting down more forest for farms","Replanting trees and protecting the reef","Overfishing the lagoon","Building on the mangroves"] },
-  { qid:"q19", sec:"A", type:"mc", pts:2,
-    stem:"Which gas is the main greenhouse gas that traps heat and adds to climate change?",
-    options:["Oxygen","Nitrogen","Carbon dioxide","Hydrogen"] },
+/* SECURE TEST GATE: questions fetched from the Worker only when this test's
+   KV entry has "open": true. Closed test shows nothing in view-source. */
+let ITEMS = [];
 
-  /* ---- SECTION B · Matching (8) ---- */
-  { qid:"q7", sec:"B", type:"match", pts:8,
-    stem:"Match each Belizean animal to the ecosystem where it is usually found.",
-    terms:["Manatee","Jaguar","Parrotfish","Howler monkey"],
-    choices:["Mangrove / coastal lagoon","Rainforest","Coral reef","Tropical forest canopy"] },
-
-  /* ---- SECTION C · True / False (11) ---- */
-  { qid:"q8", sec:"C", type:"tf", pts:3,
-    stem:"&ldquo;It is raining right now in Belize City.&rdquo; This statement describes <b>climate</b>, not weather." },
-  { qid:"q9", sec:"C", type:"tf", pts:3,
-    stem:"All technology is harmful to the climate." },
-  { qid:"q10", sec:"C", type:"tf", pts:2,
-    stem:"Seasonal migration is the regular seasonal movement of animals for food or breeding." },
-  { qid:"q20", sec:"C", type:"tf", pts:3,
-    stem:"Hurricanes Eta and Iota (2020) flooded farms in Belize, which is an example of climate change affecting agriculture." },
-
-  /* ---- SECTION D · Fill in the Blank (7) ---- */
-  { qid:"q11", sec:"D", type:"fib", pts:2,
-    stem:"The wettest district in Belize is __________." },
-  { qid:"q12", sec:"D", type:"fib", pts:2,
-    stem:"The three types of animal adaptation are physical, behavioural, and __________." },
-  { qid:"q13", sec:"D", type:"fib", pts:3,
-    stem:"Belize is hot and humid all year. The word that describes this kind of climate is __________." },
-
-  /* ---- SECTION E · Labelling (6) ---- */
-  { qid:"q14", sec:"E", type:"label", pts:6,
-    stem:"Label each numbered Belizean ecosystem with the correct name from the word bank.",
-    zones:["1 — the underwater coral area","2 — the tall tree forest area","3 — the salty coastal trees in water"],
-    choices:["Coral reef","Rainforest","Mangrove"] },
-
-  /* ---- SECTION F · Short Answer (19) — AI graded ---- */
-  { qid:"q15", sec:"F", type:"sa", pts:6,
-    stem:"Write ONE way climate change could hurt a <b>farming</b> family in Belize. Write it as a cause and effect (for example: &ldquo;Less rain would cause ______.&rdquo;)." },
-  { qid:"q16", sec:"F", type:"sa", pts:6,
-    stem:"Choose ONE Belizean animal. Name one <b>physical</b> adaptation it has and explain what that adaptation helps it do." },
-  { qid:"q17", sec:"F", type:"sa", pts:7,
-    stem:"Name ONE way humans harm animal diversity in Belize, and ONE thing people could do to fix or reduce that harm." },
-
-  /* ---- SECTION G · Open-Ended (12) — AI graded ---- */
-  { qid:"q18", sec:"G", type:"open", pts:12,
-    stem:"A hurricane season damages both the coral reef and farms in Belize. Explain how this ONE event could affect BOTH tourism AND farming families, and suggest ONE thing the community could do to recover. Write 3–5 sentences." },
-];
-
-const SECTIONS = {
-  A:{title:"📗 Section A — Multiple Choice", note:"Choose the best answer for each question.", accent:"#20C997"},
-  B:{title:"🔗 Section B — Matching", note:"Choose the ecosystem that best matches each animal.", accent:"#4DABF7"},
-  C:{title:"⚖️ Section C — True or False", note:"Choose True or False for each statement.", accent:"#9775FA"},
-  D:{title:"✏️ Section D — Fill in the Blank", note:"Write the missing word.", accent:"#F783AC"},
-  E:{title:"🏷️ Section E — Labelling", note:"Pick the correct label for each numbered part.", accent:"#20C997"},
-  F:{title:"📝 Section F — Short Answer", note:"Answer in one or two complete sentences.", accent:"#4DABF7"},
-  G:{title:"🌎 Section G — Open-Ended", note:"Write 3–5 complete sentences.", accent:"#9775FA"},
-};
+let SECTIONS = {};
 
 const AUTO_TYPES = ["mc","tf","fib","match","label"];
 const AI_TYPES   = ["sa","open"];
 const byId = qid => ITEMS.find(i=>i.qid===qid);
 const DISPLAY_NUM = {};
 ITEMS.forEach((it,i)=>DISPLAY_NUM[it.qid]=i+1);
-const TOTAL_Q = ITEMS.length;
+let TOTAL_Q = ITEMS.length;
+/* Populate display data from the Worker payload; figures live in FIGURES. */
+function hydrate(payload){
+  ITEMS    = (payload && payload.items)    || [];
+  SECTIONS = (payload && payload.sections) || {};
+  FIGURES  = (payload && payload.figs)     || {};
+  TOTAL_Q  = ITEMS.length;
+  ITEMS.forEach((it,i)=>DISPLAY_NUM[it.qid]=i+1);
+}
 
 /* ---------------- RENDER ---------------- */
 function render(){
@@ -629,62 +590,8 @@ function fieldHTML(it){
    so it reads on all four themes). Panels: ① coral reef, ② rainforest, ③ mangrove —
    same illustration language as the Unit Test 2 "ecobands" reference build.
    A black-outline eco-print version is used separately in the Word admin test. */
-function labelSVG(){
-  return `<div class="label-figure"><svg viewBox="0 0 460 180" xmlns="http://www.w3.org/2000/svg" role="img">
-<defs><linearGradient id="c1seaR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9BDcEF"/><stop offset="1" stop-color="#15597E"/></linearGradient></defs>
-
-<clipPath id="c1r"><rect x="6" y="6" width="142" height="164" rx="9"/></clipPath>
-<g clip-path="url(#c1r)">
-<rect x="6" y="6" width="142" height="164" fill="url(#c1seaR)"/>
-<path d="M6 170 L60 150 L110 156 L148 140 L148 170 Z" fill="#CBB584"/>
-<path d="M40 158 v-20 M40 146 l-9 -9 M40 149 l10 -9" stroke="#FF8A3D" stroke-width="4" fill="none"/>
-<circle cx="92" cy="150" r="10" fill="#A972DB"/>
-<path d="M120 140 q-10 -14 0 -22 q10 8 0 22Z" fill="#FF74B0"/>
-<g transform="translate(70,80)" stroke="#333" stroke-width="0.7"><ellipse rx="9" ry="5.5" fill="#FFD447"/><polygon points="8,0 15,-5 15,5" fill="#FFB000"/><circle cx="-3" cy="-1" r="1.2" fill="#333"/></g>
-<g transform="translate(105,105)" stroke="#333" stroke-width="0.7"><ellipse rx="7" ry="4.5" fill="#4FA8FF"/><polygon points="6,0 12,-4 12,4" fill="#2A7FD6"/></g>
-</g>
-<rect x="6" y="6" width="142" height="164" rx="9" fill="none" stroke="#0d3a52" stroke-width="1.5"/>
-
-<clipPath id="c1f"><rect x="156" y="6" width="142" height="164" rx="9"/></clipPath>
-<g clip-path="url(#c1f)">
-<rect x="156" y="6" width="142" height="164" fill="#1B5E20"/>
-<rect x="156" y="120" width="142" height="50" fill="#3d2c14"/>
-<g>
-<rect x="196" y="70" width="7" height="60" fill="#6B4A2B"/><ellipse cx="199" cy="66" rx="30" ry="24" fill="#2E7D32"/><ellipse cx="199" cy="54" rx="20" ry="16" fill="#43A047"/>
-<rect x="240" y="58" width="8" height="72" fill="#5b3f24"/><ellipse cx="244" cy="54" rx="34" ry="28" fill="#357A38"/><ellipse cx="244" cy="42" rx="22" ry="17" fill="#4CAF50"/>
-<rect x="270" y="82" width="6" height="48" fill="#6B4A2B"/><ellipse cx="273" cy="78" rx="24" ry="19" fill="#2E7D32"/>
-</g>
-<g transform="translate(210,90)">
-<path d="M-6,-1 L-16,-5 L-7,2 Z" fill="#B71C1C"/>
-<ellipse cx="0" cy="0" rx="7" ry="4.5" fill="#E53935"/>
-<circle cx="6.5" cy="-3" r="3.3" fill="#E53935"/>
-<polygon points="9.5,-3.6 14.5,-3 9.5,-1.4" fill="#FF8F00"/>
-<path d="M0,0 q-3,4 -8,4" stroke="#B71C1C" stroke-width="1.3" fill="none"/>
-<line x1="-2" y1="4.3" x2="-2" y2="8" stroke="#6B4A2B" stroke-width="1"/>
-<line x1="2" y1="4.3" x2="2" y2="8" stroke="#6B4A2B" stroke-width="1"/>
-<circle cx="7.2" cy="-3.3" r="0.9" fill="#111"/></g>
-</g>
-<rect x="156" y="6" width="142" height="164" rx="9" fill="none" stroke="#0d3a52" stroke-width="1.5"/>
-
-<clipPath id="c1m"><rect x="306" y="6" width="142" height="164" rx="9"/></clipPath>
-<g clip-path="url(#c1m)">
-<rect x="306" y="6" width="142" height="164" fill="#CDEAF2"/>
-<rect x="306" y="112" width="142" height="58" fill="#3FA9A0"/>
-<g>
-<ellipse cx="350" cy="70" rx="30" ry="20" fill="#2E7D46"/><ellipse cx="350" cy="60" rx="20" ry="13" fill="#43A047"/><rect x="347" y="82" width="6" height="30" fill="#6B4A2B"/>
-<path d="M350 96 q-16 12 -20 30 M350 96 q16 12 20 30 M350 104 q-9 8 -11 22 M350 104 q9 8 11 22" stroke="#6B4A2B" stroke-width="3" fill="none"/>
-<ellipse cx="406" cy="78" rx="24" ry="15" fill="#357A46"/><rect x="403" y="88" width="5" height="26" fill="#6B4A2B"/>
-<path d="M406 100 q-12 9 -15 24 M406 100 q12 9 15 24" stroke="#6B4A2B" stroke-width="3" fill="none"/>
-</g>
-<path d="M312 150 q10 -5 20 0 t20 0 t20 0 t20 0" stroke="#bfe9ee" stroke-width="2" fill="none" opacity="0.7"/>
-</g>
-<rect x="306" y="6" width="142" height="164" rx="9" fill="none" stroke="#0d3a52" stroke-width="1.5"/>
-
-<g><circle cx="77" cy="22" r="11" fill="#0d3a52"/><text x="77" y="26" font-size="13" fill="#fff" font-weight="bold" text-anchor="middle" font-family="sans-serif">1</text></g>
-<g><circle cx="227" cy="22" r="11" fill="#0d3a52"/><text x="227" y="26" font-size="13" fill="#fff" font-weight="bold" text-anchor="middle" font-family="sans-serif">2</text></g>
-<g><circle cx="377" cy="22" r="11" fill="#0d3a52"/><text x="377" y="26" font-size="13" fill="#fff" font-weight="bold" text-anchor="middle" font-family="sans-serif">3</text></g>
-</svg></div>`;
-}
+let FIGURES = {};
+function labelSVG(){ return (FIGURES['__label__']||''); }
 
 /* ---------------- INTERACTION / PROGRESS ---------------- */
 function attachInteractions(){
@@ -884,7 +791,9 @@ function mergeAndShow(grade,answers){
 
   // save + lock + reveal
   const saveData=buildSaveData({autoEarned,autoTotal,writtenEarned,writtenTotal,secEarned,secTotal,total,pct,band,perItem,answers});
+  saveData.__q={items:ITEMS,sections:SECTIONS,figs:FIGURES};
   saveResult(saveData); window._savedData=saveData; GRADED=saveData;
+  if(typeof vcSaveProgress==='function'){ try{ vcSaveProgress({subject:SUBJECT,lo_code:LO_CODE,activity_type:ACTIVITY_TYPE,activity_name:ACTIVITY_NAME,score:total,max_score:MAX_MARKS}); }catch(e){ console.warn('save-progress skipped',e); } }
 
   document.getElementById('submitArea').style.display='none';
   const rs=document.getElementById('resultsSection'); rs.classList.add('show');
@@ -1146,15 +1055,68 @@ function downloadPDF(){
 }
 
 /* ---------------- INIT ---------------- */
+/* ---------------- GATE + LOGIN + LOAD (secure test gate) ---------------- */
+function showGateClosed(){
+  const tc=document.getElementById('testContainer'); if(tc)tc.style.display='none';
+  const pw=document.getElementById('qProgressWrap'); if(pw)pw.style.display='none';
+  const g=document.getElementById('gateClosed'); if(g)g.classList.add('show');
+}
+function showGateError(msg){
+  const tc=document.getElementById('testContainer'); if(tc)tc.style.display='none';
+  const pw=document.getElementById('qProgressWrap'); if(pw)pw.style.display='none';
+  const g=document.getElementById('gateClosed'); if(g){g.querySelector('.gate-title').textContent='Test unavailable';g.querySelector('.gate-msg').textContent=msg;g.classList.add('show');}
+}
+/* Account-based lock: has THIS logged-in student already submitted this test on
+   ANY device? Matches the unique ACTIVITY_NAME in the student's saved results.
+   Fails OPEN (null) on any error, so a network hiccup never locks out a
+   first-time taker — the device-lock + open flag still apply. */
+async function alreadySubmittedOnAccount(){
+  if(typeof vcGetProgress!=='function') return null;
+  let rows;
+  try{ rows=await vcGetProgress(); }catch(e){ console.warn('account-lock check skipped:',e); return null; }
+  if(!Array.isArray(rows)) return null;
+  return rows.find(r=> r && Object.keys(r).some(k=>String(r[k]).trim()===ACTIVITY_NAME)) || null;
+}
+function showAccountLock(row){
+  const tc=document.getElementById('testContainer'); if(tc)tc.style.display='none';
+  const pw=document.getElementById('qProgressWrap'); if(pw)pw.style.display='none';
+  const g=document.getElementById('gateClosed'); if(!g)return;
+  g.querySelector('.gate-icon').textContent='\u2705';
+  g.querySelector('.gate-title').textContent='You already completed this';
+  let msg='Our records show you have already submitted this, so it cannot be taken again. Mr. EdLo already has your result.';
+  try{ const sc=row.score,mx=row.max_score,pc=row.percent; if(sc!=null&&mx!=null) msg+=' Your score: '+sc+'/'+mx+(pc!=null?' ('+pc+'%)':'')+'.'; }catch(e){}
+  g.querySelector('.gate-msg').textContent=msg;
+  g.classList.add('show');
+}
+async function loadTest(){
+  // 1) Already submitted on THIS device -> restore the saved lock (works offline).
+  const saved=getSavedResult();
+  if(saved){ hydrate(saved.__q||{}); showLockScreen(saved);
+    const pw=document.getElementById('qProgressWrap'); if(pw)pw.style.display='none'; testSubmitted=true; return; }
+  // 2) Ask the Worker's secure gate whether this test is open, and for its questions.
+  let data;
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({mode:'questions',testId:TEST_ID})});
+    data=await res.json();
+  }catch(e){ console.error('load error',e); showGateError('Could not reach the test server. Check your internet connection and reload.'); return; }
+  if(!data||!data.ok){ showGateError('This test could not be loaded. Please tell Mr. EdLo.'+(data&&data.error?' ('+data.error+')':'')); return; }
+  if(!data.open){ showGateClosed(); return; }
+  if(!data.questions||!(data.questions.items||[]).length){ showGateError('This test has no questions yet. Please tell Mr. EdLo.'); return; }
+  // 3) Test is OPEN -> block a retake from ANOTHER device (also guards a test left open).
+  const priorRow=await alreadySubmittedOnAccount();
+  if(priorRow){ showAccountLock(priorRow); return; }
+  // 4) Cleared to take the test.
+  hydrate(data.questions);
+  render(); updateQuestionProgress(); attachIdleListeners();
+}
 window.addEventListener('DOMContentLoaded',()=>{
+  if(typeof vcRequireLogin==='function' && !vcRequireLogin()) return;
   makeStars();
   const th=localStorage.getItem('vc-theme');
   if(th){document.body.className='theme-'+th;document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));const map={night:0,sunny:1,cloudy:2,nature:3};const btns=document.querySelectorAll('.theme-btn');if(btns[map[th]])btns[map[th]].classList.add('active');}
-  const dt=new Date();document.getElementById('testDate').value=String(dt.getDate()).padStart(2,'0')+' / '+String(dt.getMonth()+1).padStart(2,'0')+' / '+dt.getFullYear();
-
-  const saved=getSavedResult();
-  if(saved){ showLockScreen(saved); const pw=document.getElementById('qProgressWrap'); if(pw)pw.style.display='none'; testSubmitted=true; }
-  else{ render(); updateQuestionProgress(); attachIdleListeners(); }
+  const de=document.getElementById('testDate'); if(de){const dt=new Date();de.value=String(dt.getDate()).padStart(2,'0')+' / '+String(dt.getMonth()+1).padStart(2,'0')+' / '+dt.getFullYear();}
+  loadTest();
 });
 </script>
 </body>
