@@ -508,6 +508,13 @@ const TEST_ID    = 'sy2627-std5-c1-adaptquiz-science';
 const QUIZ_KEY   = 'vc-quiz-std5-c1-adaptquiz-science';
 const PK_KEY     = 'vc-passkey-std5';
 const MAX_MARKS  = 31;
+/* LMS result metadata — also the account-lock key. ACTIVITY_NAME must be
+   UNIQUE to this test: the account-based lock recognises a prior submission
+   by matching this exact name in the student's saved results. */
+const SUBJECT       = 'Science';
+const LO_CODE       = 'SC6.12';
+const ACTIVITY_TYPE = 'quiz';
+const ACTIVITY_NAME = 'Animal Adaptation Match-Up Quiz';
 
 /* ---------------- ITEM DEFINITIONS (display data only) ----------------
    SECURE TEST GATE: the questions (stems/options/figures — NO answers) are
@@ -816,8 +823,8 @@ function mergeAndShow(grade,answers){
   // Log the result to the VC-LMS Sheet (never blocks the student; silent if logged out)
   if(typeof vcSaveProgress==='function'){
     try{ vcSaveProgress({
-      subject:'Science', lo_code:'SC6.12',
-      activity_type:'quiz', activity_name:'Animal Adaptation Match-Up Quiz',
+      subject:SUBJECT, lo_code:LO_CODE,
+      activity_type:ACTIVITY_TYPE, activity_name:ACTIVITY_NAME,
       score:total, max_score:MAX_MARKS
     }); }catch(e){ console.warn('save-progress skipped',e); }
   }
@@ -1094,26 +1101,60 @@ function showGateError(msg){
   const g=document.getElementById('gateClosed'); if(g){g.querySelector('.gate-title').textContent='Test unavailable';g.querySelector('.gate-msg').textContent=msg;g.classList.add('show');}
 }
 
+/* Account-based lock: has THIS logged-in student already submitted this test,
+   on ANY device? Matches the unique ACTIVITY_NAME in the student's saved
+   results. Fails OPEN (returns null) on any error, so a network hiccup never
+   locks out a first-time taker — the device-lock + open flag still apply. */
+async function alreadySubmittedOnAccount(){
+  if(typeof vcGetProgress!=='function') return null;
+  let rows;
+  try{ rows=await vcGetProgress(); }catch(e){ console.warn('account-lock check skipped:',e); return null; }
+  if(!Array.isArray(rows)) return null;
+  return rows.find(r=> r && Object.keys(r).some(k=>String(r[k]).trim()===ACTIVITY_NAME)) || null;
+}
+function showAccountLock(row){
+  const tc=document.getElementById('testContainer'); if(tc)tc.style.display='none';
+  const pw=document.getElementById('qProgressWrap'); if(pw)pw.style.display='none';
+  const g=document.getElementById('gateClosed'); if(!g)return;
+  g.querySelector('.gate-icon').textContent='✅';
+  g.querySelector('.gate-title').textContent='You already completed this quiz';
+  let msg='Our records show you have already submitted this quiz, so it cannot be taken again. Mr. EdLo already has your result.';
+  try{ // show the saved score if the row carries it
+    const sc=row.score,mx=row.max_score,pc=row.percent;
+    if(sc!=null&&mx!=null) msg+=' Your score: '+sc+'/'+mx+(pc!=null?' ('+pc+'%)':'')+'.';
+  }catch(e){}
+  g.querySelector('.gate-msg').textContent=msg;
+  g.classList.add('show');
+}
+
 async function loadTest(){
-  // Already submitted on this device → restore the saved lock (works offline).
+  // 1) Already submitted on THIS device → restore the saved lock (works offline).
   const saved=getSavedResult();
   if(saved){ hydrate(saved.__q||{}); showLockScreen(saved);
     const pw=document.getElementById('qProgressWrap'); if(pw)pw.style.display='none'; testSubmitted=true; return; }
 
-  // Ask the Worker's secure gate whether this test is open, and for its questions.
+  // 2) Ask the Worker's secure gate whether this test is open, and for its questions.
+  let data;
   try{
     const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({mode:'questions',testId:TEST_ID})});
-    const data=await res.json();
-    if(!data||!data.ok){ showGateError('This test could not be loaded. Please tell Mr. EdLo.'+(data&&data.error?' ('+data.error+')':'')); return; }
-    if(!data.open){ showGateClosed(); return; }
-    if(!data.questions||!(data.questions.items||[]).length){ showGateError('This test has no questions yet. Please tell Mr. EdLo.'); return; }
-    hydrate(data.questions);
-    render(); updateQuestionProgress(); attachIdleListeners();
+    data=await res.json();
   }catch(e){
     console.error('load error',e);
-    showGateError('Could not reach the test server. Check your internet connection and reload.');
+    showGateError('Could not reach the test server. Check your internet connection and reload.'); return;
   }
+  if(!data||!data.ok){ showGateError('This test could not be loaded. Please tell Mr. EdLo.'+(data&&data.error?' ('+data.error+')':'')); return; }
+  if(!data.open){ showGateClosed(); return; }
+  if(!data.questions||!(data.questions.items||[]).length){ showGateError('This test has no questions yet. Please tell Mr. EdLo.'); return; }
+
+  // 3) Test is OPEN — before showing it, block a retake from ANOTHER device
+  //    (this also protects if the test is accidentally left open).
+  const priorRow=await alreadySubmittedOnAccount();
+  if(priorRow){ showAccountLock(priorRow); return; }
+
+  // 4) Cleared to take the test.
+  hydrate(data.questions);
+  render(); updateQuestionProgress(); attachIdleListeners();
 }
 
 window.addEventListener('DOMContentLoaded',()=>{
