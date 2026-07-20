@@ -176,6 +176,18 @@
       </div>
       <p class="bonus-note" id="redeemNote"></p>
     </section>
+
+    <p class="section-divider" id="divC" style="display:none;">— 🔓 LESSON RELEASE · WHAT STUDENTS CAN OPEN —</p>
+
+    <section class="panel" id="unlockPanel" style="display:none;">
+      <h2>🔓 Release Lessons</h2>
+      <p class="sub">Students can open lessons up to and including the week shown. Later weeks stay locked — for everyone, including visitors who are not logged in. Once a week is open, leave it open; at the start of a new school year, reset everything to Week 1.</p>
+      <div id="unlockRows"></div>
+      <div style="margin-top:1.1rem;">
+        <button class="btn" id="unlockResetBtn" style="background:#FF6B6B;">↩️ Reset ALL subjects to Week 1</button>
+      </div>
+      <p class="bonus-note" id="unlockNote"></p>
+    </section>
   </div>
 
   <footer class="site-footer">© 2026 Mr. EdLo's Virtual Classroom — Belize · All rights reserved.</footer>
@@ -258,6 +270,7 @@ function tryOpen() {
     $('#dash').style.display = 'block';
     DATA = res;
     render(res);
+    loadLocks();
   }).catch(function () {
     $('#gateBtn').disabled = false;
     $('#gateErr').textContent = 'Network problem — try again.';
@@ -536,6 +549,116 @@ function drill(a) {
   $('#drill').scrollIntoView({ behavior: 'smooth' });
 }
 $('#drillClose').addEventListener('click', function () { $('#drill').style.display = 'none'; });
+
+/* ══════════════════════════════════════════════════════════════
+   PROGRESSIVE LESSON UNLOCK — teacher controls (IDEAS #8)
+   Reads the PUBLIC /lesson-locks endpoint, writes through the
+   teacher-gated /set-lesson-locks. Subject-generic: a new subject
+   appears here automatically once its Settings row exists — no
+   edit to this file is needed.
+   ══════════════════════════════════════════════════════════════ */
+var SUBJECT_NAMES = {
+  'std5-science':    '🔬 Standard 5 · Science',
+  'std5-math':       '🔢 Standard 5 · Mathematics',
+  'std5-spanish':    '🇪🇸 Standard 5 · Spanish',
+  'std5-scriptures': '📖 Standard 5 · Scriptures',
+  'std5-computersc': '💻 Standard 5 · Computer Science',
+  'std5-pe':         '⚽ Standard 5 · Physical Education'
+};
+var LOCKS = {};
+
+function loadLocks() {
+  fetch(LMS + '/lesson-locks')
+    .then(function (r) { return r.json(); })
+    .then(function (res) {
+      if (!res || !res.ok || !res.locks) return;
+      LOCKS = res.locks;
+      renderLocks();
+      $('#divC').style.display = 'block';
+      $('#unlockPanel').style.display = 'block';
+    })
+    .catch(function () { /* panel simply stays hidden */ });
+}
+
+function renderLocks() {
+  var wrap = $('#unlockRows');
+  wrap.textContent = '';
+  Object.keys(LOCKS).forEach(function (key) {
+    var week = Number(LOCKS[key]) || 1;
+
+    var row = document.createElement('div');
+    row.className = 'bonus-form';
+    row.style.cssText = 'align-items:flex-end;margin-bottom:.55rem;';
+
+    var nameBox = document.createElement('div');
+    nameBox.style.cssText = 'flex:1 1 230px;';
+    var lbl = document.createElement('label');
+    lbl.textContent = SUBJECT_NAMES[key] || key;
+    var cur = document.createElement('div');
+    cur.style.cssText = 'font-weight:800;font-size:.95rem;';
+    cur.textContent = 'Open through Week ' + week;
+    nameBox.appendChild(lbl); nameBox.appendChild(cur);
+
+    var inBox = document.createElement('div');
+    var inLbl = document.createElement('label');
+    inLbl.textContent = 'Set to week';
+    var input = document.createElement('input');
+    input.type = 'number'; input.min = '1'; input.max = '60';
+    input.value = week; input.style.width = '90px';
+    inBox.appendChild(inLbl); inBox.appendChild(input);
+
+    var btnBox = document.createElement('div');
+    var btn = document.createElement('button');
+    btn.className = 'btn'; btn.textContent = 'Release';
+    btn.addEventListener('click', function () { setWeek(key, Number(input.value), week, btn); });
+    btnBox.appendChild(btn);
+
+    row.appendChild(nameBox); row.appendChild(inBox); row.appendChild(btnBox);
+    wrap.appendChild(row);
+  });
+}
+
+function unlockMsg(text, ok) {
+  var note = $('#unlockNote');
+  note.textContent = text;
+  note.style.color = ok ? '' : '#FF6B6B';
+  note.style.display = 'block';
+}
+
+function setWeek(subject, week, current, btn) {
+  if (!week || week < 1 || week > 60) { unlockMsg('Week must be a whole number from 1 to 60.', false); return; }
+  /* "Once open, stays open" is classroom policy — enforced here as a prompt,
+     not on the server, because the yearly reset has to be able to lower it. */
+  if (week < current &&
+      !confirm('This CLOSES weeks ' + (week + 1) + '–' + current + ' for ' +
+               (SUBJECT_NAMES[subject] || subject) + '.\n\nStudents will lose access to lessons they can open today. Continue?')) {
+    return;
+  }
+  btn.disabled = true;
+  post('/set-lesson-locks', { teacher_code: teacherCode, subject: subject, week: week })
+    .then(function (res) {
+      btn.disabled = false;
+      if (!res.ok) { unlockMsg(res.error || 'Could not save.', false); return; }
+      LOCKS[subject] = week;
+      renderLocks();
+      unlockMsg('✅ ' + (SUBJECT_NAMES[subject] || subject) + ' is now open through Week ' + week + '.', true);
+    })
+    .catch(function () { btn.disabled = false; unlockMsg('Network problem — try again.', false); });
+}
+
+$('#unlockResetBtn').addEventListener('click', function () {
+  if (!confirm('Reset EVERY subject back to Week 1?\n\nThis re-locks the whole year for a new class. Only Week 1 will be open.')) return;
+  var b = this; b.disabled = true;
+  post('/set-lesson-locks', { teacher_code: teacherCode, reset_all: true })
+    .then(function (res) {
+      b.disabled = false;
+      if (!res.ok) { unlockMsg(res.error || 'Could not reset.', false); return; }
+      Object.keys(LOCKS).forEach(function (k) { LOCKS[k] = 1; });
+      renderLocks();
+      unlockMsg('✅ All subjects reset to Week 1 (' + res.rows_changed + ' changed).', true);
+    })
+    .catch(function () { b.disabled = false; unlockMsg('Network problem — try again.', false); });
+});
 </script>
 </body>
 </html>

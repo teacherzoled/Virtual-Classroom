@@ -4,6 +4,8 @@
  *  Routes:  POST /login  ·  POST /save-result  ·  POST /progress
  *           POST /leaderboard · POST /teacher-data · POST /award-bonus
  *           POST /prizes · POST /redeem-prize
+ *           GET or POST /lesson-locks   (PUBLIC — read released weeks, no auth)
+ *           POST /set-lesson-locks      (teacher_code required)
  *           GET  /?action=ping   (health check)
  *
  *  ⚠️ LOCAL MASTER COPY — mirrors the code deployed in the "edlo-lms"
@@ -11,7 +13,7 @@
  *  NOT run by GitHub Pages; it is the source of truth so future edits start
  *  from here and produce a complete file to paste back.
  *  When you change the live Worker, update this file too (and vice versa).
- *  Last synced: July 18, 2026 (added Bean Store routes: /prizes, /redeem-prize).
+ *  Last synced: July 19, 2026 (added lesson unlock routes — IDEAS #8).
  *
  *  Job: add CORS + attach the secret API key, then forward the
  *  request to the Google Apps Script backend. All real logic
@@ -34,7 +36,8 @@ const ALLOWED_ORIGINS = [
 const ROUTES = {
   '/login': 'login', '/save-result': 'save-result', '/progress': 'progress',
   '/leaderboard': 'leaderboard', '/teacher-data': 'teacher-data', '/award-bonus': 'award-bonus',
-  '/prizes': 'prizes', '/redeem-prize': 'redeem-prize'
+  '/prizes': 'prizes', '/redeem-prize': 'redeem-prize',
+  '/lesson-locks': 'lesson-locks', '/set-lesson-locks': 'set-lesson-locks'
 };
 
 export default {
@@ -52,6 +55,13 @@ export default {
     // Health check: GET /?action=ping  or  GET /ping
     if (request.method === 'GET' && (url.searchParams.get('action') === 'ping' || url.pathname === '/ping')) {
       const upstream = await callAppsScript(env, { action: 'ping' });
+      return json(upstream, cors);
+    }
+
+    // PUBLIC read: GET /lesson-locks — hub pages call this while logged OUT.
+    // Allowed as a GET so the browser can cache it; no body, no auth, no token.
+    if (request.method === 'GET' && url.pathname === '/lesson-locks') {
+      const upstream = await callAppsScript(env, { action: 'lesson-locks' });
       return json(upstream, cors);
     }
 

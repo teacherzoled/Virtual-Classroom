@@ -2,7 +2,8 @@
  * ═══════════════════════════════════════════════════════════════
  *  Mr. EdLo's Virtual Classroom — LMS Backend (Google Apps Script)
  *  Handles: login, save-result, progress, leaderboard,
- *           teacher-data, award-bonus, prizes, redeem-prize
+ *           teacher-data, award-bonus, prizes, redeem-prize,
+ *           lesson-locks, set-lesson-locks
  *           (called via edlo-lms Worker)
  *
  *  ⚠️ LOCAL MASTER COPY — this file mirrors the code deployed in the
@@ -10,7 +11,7 @@
  *  It is NOT executed by GitHub Pages; it is the source of truth so future
  *  edits start from here and produce a complete file to paste back.
  *  When you change the live Apps Script, update this file too (and vice versa).
- *  Last synced: July 18, 2026 (added Bean Store: prizes + redeem-prize).
+ *  Last synced: July 19, 2026 (added Progressive lesson unlock — IDEAS #8).
  *
  *  Sheet tabs used:
  *    Tab 1 "Students"     → username | password | full_name | first_name | class_id | active | group_id
@@ -18,6 +19,14 @@
  *                           activity_type | activity_name | score | max_score | percent | ai_feedback
  *    Tab 5 "Group Totals" → group | beans (rows 2–5) · class_total (B7) · class_goal (B8)
  *    Tab   "Prizes"       → prize_name | cost | category | stock | active
+ *    Tab   "Settings"     → key | value | note
+ *                           Lock rows are named "<subject>-released-week" (e.g.
+ *                           std5-science-released-week). A subject's lessons are open
+ *                           through that week number; higher weeks are locked.
+ *                           Set every row back to 1 to re-lock the year for a new class.
+ *                           ⚠️ ONLY keys ending in "-released-week" are exposed by the
+ *                           PUBLIC lesson-locks action, so any other setting stored on
+ *                           this tab stays private.
  *
  *  Script Properties required (File > Project Settings > Script Properties):
  *    API_KEY        → shared secret; must match the Worker's APPS_SCRIPT_KEY
@@ -30,7 +39,16 @@ var STUDENTS_TAB = 'Students';
 var RESULTS_TAB  = 'All Results';
 var GROUPS_TAB   = 'Group Totals';
 var PRIZES_TAB   = 'Prizes';
+var SETTINGS_TAB = 'Settings';
 var SESSION_DAYS = 30; // how long a login lasts
+
+// Progressive lesson unlock (IDEAS #8)
+var LOCK_SUFFIX  = '-released-week'; // only these Settings keys are public
+var MAX_WEEK     = 60;               // sanity bound on a released-week value
+var LOCK_SUBJECTS = [                // seeded by setupSettingsTab()
+  'std5-science', 'std5-math', 'std5-spanish',
+  'std5-scriptures', 'std5-computersc', 'std5-pe'
+];
 
 // ─────────────────────────────────────────────
 // ENTRY POINT — the Worker always POSTs JSON:
@@ -55,6 +73,8 @@ function doPost(e) {
     if (body.action === 'award-bonus')   return reply(handleAwardBonus(body));
     if (body.action === 'prizes')        return reply(handleGetPrizes(body));
     if (body.action === 'redeem-prize')  return reply(handleRedeemPrize(body));
+    if (body.action === 'lesson-locks')     return reply(handleLessonLocks(body));
+    if (body.action === 'set-lesson-locks') return reply(handleSetLessonLocks(body));
     if (body.action === 'ping')          return reply({ ok: true, message: 'LMS backend is alive' });
 
     return reply({ ok: false, error: 'Unknown action' });
@@ -330,6 +350,121 @@ function handleRedeemPrize(body) {
   pSheet.getRange(pRow + 1, 4).setValue(stock - 1);
 
   return { ok: true, to: student.full_name, spent: cost, newBalance: balance - cost, newStock: stock - 1 };
+}
+
+// ═══════════ PROGRESSIVE LESSON UNLOCK — IDEAS #8 (July 2026) ═══════════
+//
+// One integer per subject: "released through week N". A week is open when
+// N >= its week number, so unlocking is always cumulative and cannot hold an
+// invalid state. Set every row back to 1 to re-lock the year for a new class.
+//
+// Subject-generic on purpose: a new subject hub needs a Settings ROW, never a
+// code change here. A subject with NO row is treated as "not using locking"
+// (all its built lessons stay open), so deleting a row opts a subject out.
+
+// LESSON LOCKS — { action:'lesson-locks' } — PUBLIC, no auth, no login.
+// The hub pages call this while logged OUT, so it must never require a token.
+// Returns { ok:true, locks:{ 'std5-science':1, 'std5-math':1, ... } }
+function handleLessonLocks(body) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SETTINGS_TAB);
+  if (!sheet) return { ok: true, locks: {} }; // no tab yet = nothing is locked
+
+  var data = sheet.getDataRange().getValues();
+  var locks = {};
+  for (var i = 1; i < data.length; i++) {
+    var key = String(data[i][0]).trim();
+    if (!key || key.length <= LOCK_SUFFIX.length) continue;
+    // Only expose lock rows — other Settings stay private on a PUBLIC endpoint
+    if (key.slice(-LOCK_SUFFIX.length) !== LOCK_SUFFIX) continue;
+    var subject = key.slice(0, key.length - LOCK_SUFFIX.length);
+    var week = Math.floor(Number(data[i][1]));
+    if (!week || week < 1) week = 1;
+    if (week > MAX_WEEK) week = MAX_WEEK;
+    locks[subject] = week;
+  }
+  return { ok: true, locks: locks };
+}
+
+// SET LESSON LOCKS — teacher only. Two shapes:
+//   { action:'set-lesson-locks', teacher_code, subject:'std5-science', week:3 }
+//   { action:'set-lesson-locks', teacher_code, reset_all:true }  → every row back to 1
+// Lowering a value IS allowed — that is how the yearly reset works. The teacher
+// dashboard asks for confirmation before lowering; the rule "once open, stays
+// open" is a classroom policy, not a server restriction.
+function handleSetLessonLocks(body) {
+  var gate = checkTeacher(body);
+  if (!gate.ok) return gate;
+
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SETTINGS_TAB);
+  if (!sheet) return { ok: false, error: 'Settings tab not found — run setupSettingsTab() once' };
+
+  var data = sheet.getDataRange().getValues();
+  var resetAll = body.reset_all === true;
+  var subject  = String(body.subject || '').trim();
+  var week     = Math.floor(Number(body.week));
+
+  if (!resetAll) {
+    if (!subject) return { ok: false, error: 'Need a subject' };
+    if (!week || week < 1 || week > MAX_WEEK) {
+      return { ok: false, error: 'Week must be a whole number from 1 to ' + MAX_WEEK };
+    }
+  }
+
+  var wanted = subject + LOCK_SUFFIX;
+  var changed = 0, found = false;
+
+  for (var i = 1; i < data.length; i++) {
+    var key = String(data[i][0]).trim();
+    if (!key || key.slice(-LOCK_SUFFIX.length) !== LOCK_SUFFIX) continue;
+
+    if (resetAll) {
+      if (Number(data[i][1]) !== 1) { sheet.getRange(i + 1, 2).setValue(1); changed++; }
+      found = true;
+    } else if (key === wanted) {
+      sheet.getRange(i + 1, 2).setValue(week);
+      changed++; found = true;
+      break;
+    }
+  }
+
+  if (!found) return { ok: false, error: 'No lock row for ' + subject };
+  return resetAll
+    ? { ok: true, reset_all: true, rows_changed: changed }
+    : { ok: true, subject: subject, week: week };
+}
+
+/**
+ * TEACHER UTILITY — run ONCE from the Apps Script editor.
+ * Builds the Settings tab and seeds one lock row per Standard 5 subject at week 1
+ * (only Week 1 open, Weeks 2+ locked). Safe to re-run: existing keys are never
+ * overwritten, so it will not undo a release mid-year.
+ */
+function setupSettingsTab() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(SETTINGS_TAB) || ss.insertSheet(SETTINGS_TAB);
+
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(['key', 'value', 'note']);
+    sheet.getRange('1:1').setFontWeight('bold').setBackground('#FF922B').setFontColor('#ffffff');
+    sheet.setFrozenRows(1);
+    sheet.setColumnWidth(1, 260);
+    sheet.setColumnWidth(3, 420);
+  }
+
+  var existing = {};
+  var data = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) existing[String(data[i][0]).trim()] = true;
+
+  var added = 0;
+  for (var j = 0; j < LOCK_SUBJECTS.length; j++) {
+    var key = LOCK_SUBJECTS[j] + LOCK_SUFFIX;
+    if (existing[key]) continue;
+    sheet.appendRow([key, 1, 'Lessons open through this week · set from /teacher/ · back to 1 for a new class']);
+    added++;
+  }
+
+  Logger.log('Settings tab ready. ' + added + ' lock row(s) added, ' +
+             (LOCK_SUBJECTS.length - added) + ' already present.');
 }
 
 // ─────────────────────────────────────────────

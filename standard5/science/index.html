@@ -343,6 +343,20 @@
     padding:2px 8px; color:var(--badge-color);
   }
 
+  /* ═══ Progressive lesson unlock (IDEAS #8) ═══
+     A LOCKED card is a week that exists but Mr. EdLo has not released yet.
+     Distinct from .soon, which means the lesson is not written. Cards render
+     locked in the HTML and are opened by JS, so a slow network or a failed
+     fetch leaves them locked rather than briefly exposing the whole year. */
+  .card.locked { opacity:.5; pointer-events:none; cursor:default; }
+  .card.locked::after {
+    content:'🔒 Opens Later'; position:absolute; top:.65rem; right:.8rem;
+    font-size:.58rem; font-weight:800; letter-spacing:.07em; text-transform:uppercase;
+    background:var(--badge-bg); border:1px solid var(--badge-border); border-radius:999px;
+    padding:2px 8px; color:var(--badge-color);
+  }
+  .card.locked .card-arrow { display:none; }
+
   /* Animation delays */
   .card:nth-child(1){animation-delay:.05s}.card:nth-child(2){animation-delay:.10s}.card:nth-child(3){animation-delay:.15s}
   .card:nth-child(4){animation-delay:.20s}.card:nth-child(5){animation-delay:.25s}.card:nth-child(6){animation-delay:.30s}
@@ -540,7 +554,7 @@
     </div>
     <div class="grid">
 
-      <a class="card" href="/standard5/science/lessons/week01-technology-climate/" style="--accent:#20C997;">
+      <a class="card" data-week="1" href="/standard5/science/lessons/week01-technology-climate/" style="--accent:#20C997;">
         <div class="card-num">Week 1 · SC 1.09</div>
         <div class="card-icon">💻</div>
         <div class="card-title">Technology &amp; Climate Change — The Two-Way Connection</div>
@@ -549,7 +563,7 @@
         <span class="card-arrow">→</span>
       </a>
 
-      <a class="card" href="/standard5/science/lessons/week02-climate-economy/" style="--accent:#4DABF7;">
+      <a class="card locked" data-week="2" data-href="/standard5/science/lessons/week02-climate-economy/" style="--accent:#4DABF7;">
         <div class="card-num">Week 2 · SC 1.10</div>
         <div class="card-icon">🏝️</div>
         <div class="card-title">Climate Change &amp; Belize's Economy — Tourism &amp; Agriculture</div>
@@ -558,7 +572,7 @@
         <span class="card-arrow">→</span>
       </a>
 
-      <a class="card" href="/standard5/science/lessons/week03-weather-vs-climate/" style="--accent:#69DB7C;">
+      <a class="card locked" data-week="3" data-href="/standard5/science/lessons/week03-weather-vs-climate/" style="--accent:#69DB7C;">
         <div class="card-num">Week 3 · SC 1.11</div>
         <div class="card-icon">🌦️</div>
         <div class="card-title">Weather vs. Climate — Telling the Difference</div>
@@ -1360,6 +1374,57 @@ function showTab(id,btn){
   document.getElementById('tab-'+id).classList.add('active');
   btn.classList.add('active');
 }
+
+/* ══════════════════════════════════════════════════════════════
+   PROGRESSIVE LESSON UNLOCK — IDEAS #8
+   ── LIFT-OUT BLOCK ──────────────────────────────────────────
+   Self-contained on purpose: when the shared-CSS/JS refactor
+   (IDEAS #10) happens, move this whole block into the shared JS
+   file as-is and change only SUBJECT_KEY per hub page.
+   ────────────────────────────────────────────────────────────
+   How it works: week cards ship LOCKED in the HTML with their
+   destination parked in data-href. This asks the backend how far
+   the class has been released and restores the link on every week
+   at or below that number. Locking is for PACING, not security —
+   these are public pages, so a determined student can still reach
+   a locked URL. The lesson pages carry their own soft guard.
+   Fails CLOSED: no network, slow network, or a backend error
+   leaves later weeks locked. Week 1 is a plain href in the HTML,
+   so it opens even with JavaScript switched off entirely.
+   ══════════════════════════════════════════════════════════════ */
+(function () {
+  var SUBJECT_KEY = 'std5-science';
+  var LOCKS_URL   = 'https://edlo-lms.smartstandardsix.workers.dev/lesson-locks';
+
+  var cards = document.querySelectorAll('.card.locked[data-week]');
+  if (!cards.length) return;
+
+  function unlockThrough(week) {
+    cards.forEach(function (card) {
+      var wk = Number(card.getAttribute('data-week'));
+      if (!wk || wk > week) return;
+      var href = card.getAttribute('data-href');
+      if (!href) return;
+      card.setAttribute('href', href);
+      card.classList.remove('locked');
+    });
+  }
+
+  fetch(LOCKS_URL)
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (!data || !data.ok || !data.locks) return;      // backend error → stay locked
+      var raw = data.locks[SUBJECT_KEY];
+      // No row for this subject = it is not using the lock system at all.
+      // Open everything, so a future hub can never lock itself by accident
+      // just because someone forgot to add its Settings row.
+      if (raw === undefined || raw === null || raw === '') { unlockThrough(Infinity); return; }
+      var week = Number(raw);
+      if (!week || week < 1) return;                     // malformed value → stay locked
+      unlockThrough(week);
+    })
+    .catch(function () { /* offline — later weeks stay locked, Week 1 still works */ });
+})();
 
 /* Back to top */
 const topBtn=document.getElementById('back-to-top');

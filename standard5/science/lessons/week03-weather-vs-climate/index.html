@@ -338,6 +338,66 @@
 
 <script src="/edlo-utils.js"></script>
 <script>
+/* ══════════════════════════════════════════════════════════════
+   PROGRESSIVE LESSON UNLOCK — direct-URL guard (IDEAS #8)
+   ── LIFT-OUT BLOCK · change THIS_WEEK only ──────────────────
+   Closes the bookmark path: a student who saved this URL before
+   the week was released gets a friendly notice instead of the
+   lesson. This is a CURTAIN, not a lock — these are public pages
+   and anyone determined can still read the source. It exists for
+   pacing, which is all IDEAS #8 ever asked for.
+   Fails OPEN on a network error, unlike the hub, which fails
+   closed. Reason: the cost of being wrong differs. A locked hub
+   card just means one fewer link; a lesson page that fails closed
+   would shut a student out of a lesson he or she IS allowed to
+   read, on classroom wifi that drops. Blocking a real student
+   mid-lesson is worse than letting a curious one read ahead.
+   ══════════════════════════════════════════════════════════════ */
+(function () {
+  var SUBJECT_KEY = 'std5-science';
+  var THIS_WEEK   = 3;
+  var LOCKS_URL   = 'https://edlo-lms.smartstandardsix.workers.dev/lesson-locks';
+  var HUB_URL     = '/standard5/science/';
+  if (THIS_WEEK <= 1) return; // Week 1 is always open, to everyone
+
+  fetch(LOCKS_URL)
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (!data || !data.ok || !data.locks) return;                 // error → let him or her through
+      var raw = data.locks[SUBJECT_KEY];
+      if (raw === undefined || raw === null || raw === '') return;  // subject not locked at all
+      var released = Number(raw);
+      if (!released || THIS_WEEK <= released) return;               // released → open
+      lockScreen(released);
+    })
+    .catch(function () { /* offline → let him or her through */ });
+
+  function lockScreen(released) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;' +
+      'padding:max(1rem,4vw);text-align:center;">' +
+        '<div style="max-width:520px;background:var(--card-bg,rgba(255,255,255,.06));' +
+        'border:1px solid var(--card-border,rgba(255,255,255,.09));border-radius:20px;' +
+        'padding:2.2rem 1.6rem;">' +
+          '<div style="font-size:3rem;line-height:1;margin-bottom:.6rem;">🔒</div>' +
+          '<h1 style="font-family:\'Fredoka One\',cursive;font-weight:400;font-size:1.5rem;' +
+          'margin-bottom:.7rem;">This lesson opens later</h1>' +
+          '<p style="font-family:Nunito,sans-serif;font-size:1rem;line-height:1.6;opacity:.85;">' +
+            'Standard 5 Science is open through <strong>Week ' + released + '</strong> right now. ' +
+            'This is Week ' + THIS_WEEK + ' — Mr. EdLo will open it when the class gets there.' +
+          '</p>' +
+          '<p style="margin-top:1.4rem;">' +
+            '<a href="' + HUB_URL + '" style="font-family:Nunito,sans-serif;font-weight:800;' +
+            'text-decoration:none;background:#20C997;color:#0d1f1a;padding:12px 22px;' +
+            'border-radius:999px;display:inline-block;min-height:44px;line-height:20px;">' +
+            '← Back to Science lessons</a>' +
+          '</p>' +
+        '</div>' +
+      '</div>';
+  }
+})();
+</script>
+<script>
 'use strict';
 /* ═══════════════ Lesson config — Week 3 · SC 1.11 ═══════════════ */
 var LESSON = { week: 'Wk3', lo: 'SC1.11', name: 'Weather vs. Climate', idBase: 'std5-sci-wk03' };
