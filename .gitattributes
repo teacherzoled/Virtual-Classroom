@@ -1,0 +1,45 @@
+# ═══════════════════════════════════════════════════════════════
+#  .gitattributes — line-ending policy
+#  Mr. EdLo's Virtual Classroom
+#
+#  WHY THIS EXISTS (July 20, 2026):
+#  Windows editors save files with CRLF line endings; the repo stores
+#  LF. Without this file, git reported 40+ files as "modified" when
+#  nothing had actually changed — burying real edits in phantom noise.
+#
+#  "text=auto" tells git: normalise to LF when storing, convert to the
+#  platform's native endings on checkout. It travels WITH the repo, so
+#  it protects any machine that clones it — unlike a local git config.
+#
+#  DO NOT DELETE. The noise comes straight back.
+# ═══════════════════════════════════════════════════════════════
+
+# Default: let git normalise every text file to LF in the repository.
+* text=auto
+
+# Web source — always LF in the repo.
+*.html   text eol=lf
+*.css    text eol=lf
+*.js     text eol=lf
+*.json   text eol=lf
+*.md     text eol=lf
+*.svg    text eol=lf
+*.tsv    text eol=lf
+*.txt    text eol=lf
+
+# Binary — never touch these, conversion would corrupt them.
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.webp   binary
+*.ico    binary
+*.pdf    binary
+*.docx   binary
+*.xlsx   binary
+*.pptx   binary
+*.mp4    binary
+*.mp3    binary
+*.woff   binary
+*.woff2  binary
+*.ttf    binary

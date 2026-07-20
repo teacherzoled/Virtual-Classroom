@@ -20,9 +20,36 @@ If the docs are not updated, the task is **not** finished.
 
 ---
 
-## ▶️ Take-off Point — Next Session (as of July 19, 2026)
+## ▶️ Take-off Point — Next Session (as of July 20, 2026)
 
-**Newest work (July 19, 2026): 🔓 PROGRESSIVE LESSON UNLOCK (IDEAS #8) — SHIPPED & verified live.**
+**Newest work (July 20, 2026): 🎨 `vc-theme.css` CREATED for FUTURE pages only (IDEAS #10 — CLOSED).**
+The shared stylesheet now exists and is ready to use. **No existing page was changed.**
+
+- **`js/` folder DELETED** (Edwin's call, July 20). `js/main.js`, `js/subject-page.js` and the ten
+  orphaned pages under `js/modules/` were the April 2026 site. Evidence: **no live page linked
+  them** — the only references were inside `js/modules/` itself. Git history keeps them forever.
+  This settles the open question the IDEAS #10 note opened the session with.
+- **`vc-theme.css` (28.2 KB) added at repo root.** It holds the 172 CSS rules that were
+  **byte-identical across the 16 Std5 Science assessments** — the 4 theme variable sets, fonts,
+  layout, cards, buttons, question/option/results components, modal, footer, animations. It is the
+  proven shared core, extracted and verified, waiting for its first page.
+- **⚠️ NOTHING LINKS IT YET — that is correct, not unfinished.** The 16 assessments were converted
+  during this session, verified, then **REVERTED to their originals at Edwin's decision.** All 16
+  are byte-identical to the last commit; confirmed by hash. **Every page on the site is exactly as
+  it was.**
+- **Why reverted (Edwin, July 20):** those 16 are **live graded assessments** — a student sits each
+  one once, under time, with a KV gate and a PDF report. The mechanical checks proved the CSS was
+  equivalent (no rule lost, none gained, identical order, JS byte-identical), but no one had yet
+  seen a question paper actually render with the gate open. **The risk was small but the downside
+  landed on students mid-test**, so the conversion was not worth it for pages that already work.
+- **The standing rule that came out of it:** every EXISTING page stays as built; every NEW page
+  links `/vc-theme.css`. One rule, no exceptions, nothing to remember per-page. See the Design
+  System section for how to use it — including the Science-teal gotcha on non-Science pages.
+- **What was measured before reverting** (kept because it justifies using the file going forward):
+  the 16 pages carried 1139 KB of inline CSS; shared, that is 711 KB inline + one cached 28 KB
+  file — **35% less for a student who opens all 16.** That saving now applies to new pages instead.
+
+**Previous work (July 19, 2026): 🔓 PROGRESSIVE LESSON UNLOCK (IDEAS #8) — SHIPPED & verified live.**
 Students no longer see the whole year's lesson catalogue. Only weeks Mr. EdLo has released are
 open; later weeks show a 🔒 **Opens Later** card. This holds **when logged OUT**, so the public
 gets a "taste" of Week 1 only. Verified live July 19 (all six test steps passed).
@@ -716,6 +743,80 @@ Student writes paragraph → clicks Enviar → browser checks for passkey → if
 ---
 
 ## 🎨 Design System
+
+### Shared stylesheet — `/vc-theme.css` (July 20, 2026)
+The "every page is fully self-contained" convention now has **one documented exception: CSS.**
+
+```html
+<link rel="stylesheet" href="/vc-theme.css">
+<style>
+/* ── Page-specific styles (shared core lives in /vc-theme.css) ── */
+</style>
+```
+
+- The link goes **immediately before** the page's own `<style>` block, so inline rules always win.
+- Put a rule in `vc-theme.css` only if it is meant to be identical everywhere. Anything one page
+  does differently stays inline — that is not a mess, it is the design.
+- **Editing `vc-theme.css` changes every page that links it.** That is the payoff: one theme colour
+  change, one edit, instead of the "Find and replace across all files" ritual below.
+### ⚖️ THE STANDING RULE (Edwin's decision, July 20, 2026) — READ BEFORE BUILDING A PAGE
+
+**Every EXISTING page stays exactly as built. Every NEW page links `/vc-theme.css`.**
+
+No exceptions, nothing to remember per-page. This is a deliberate stopping point, not an
+unfinished job. Existing pages cost nothing to leave alone — students never see the difference —
+and converting them is plumbing time better spent on lessons. **Do NOT "tidy up" existing pages
+into the stylesheet without Edwin asking**, and note that the 16 Std5 assessments were deliberately
+reverted once already (see Take-off Point) — do not redo that work.
+
+**The one consequence to remember:** while both styles coexist, a site-wide theme colour change
+means editing `vc-theme.css` **AND** every self-contained page. Check both. This is the price of
+the split, and it was accepted knowingly.
+
+**Can the shared file break the existing pages? NO — provably.** CSS applies only to pages that
+link it. A page with no `<link>` to `vc-theme.css` cannot be affected by anything in it, ever. As
+of July 20, 2026 **zero pages link it**, so the file is currently inert — it cannot affect
+anything until a new page opts in.
+
+### 🎨 Using vc-theme.css on a NON-Science page (Spanish, Math, Scriptures, PE, CompSci)
+
+⚠️ `vc-theme.css` was extracted from **Science** pages, so its accent is **Science teal `#20C997`**.
+It is baked into **16 CSS variables** — but **all 16 are variable definitions, ZERO are plain
+rules**, so a page recolours itself by overriding variables inline. Never edit `vc-theme.css` to
+recolour one page — that repaints every page that links it.
+
+```html
+<link rel="stylesheet" href="/vc-theme.css">
+<style>
+/* Spanish page — override the 16 teal-tinted vars. Swap #FF922B for your subject accent. */
+:root, body[class*="theme-"]{
+  --top-badge-bg:#FF922B;  --input-focus:#FF922B;   --opt-sel-b:#FF922B;
+  --opt-sel-bg:rgba(255,146,43,0.15);   --opt-hover:rgba(255,146,43,0.12);
+  --score-bg:rgba(255,146,43,0.08);     --score-border:rgba(255,146,43,0.25);
+  --fb-bg:rgba(255,146,43,0.06);        --fb-border:rgba(255,146,43,0.22);
+  --info-border:rgba(255,146,43,0.18);  --lock-border:rgba(255,146,43,0.22);
+  --modal-border:rgba(255,146,43,0.30);
+  --scenario-bg:rgba(255,146,43,0.06);  --scenario-border:rgba(255,146,43,0.22);
+  --h1-grad:linear-gradient(135deg,#fff 0%,#FF922B 50%,#4DABF7 100%);
+  /* --grad-bar is the multi-colour rainbow bar — usually leave it alone */
+}
+</style>
+```
+
+Subject accent hexes are in the **Subject Accent Colors** table below.
+
+- **Currently linked by:** nothing yet — the first page to use it will be the next page built.
+- **Building a new test/quiz:** copy any existing Std5 assessment (e.g.
+  `standard5/science/tests/c1-unit1/index.html`), then **delete from its `<style>` block every rule
+  that already exists in `vc-theme.css`** and add the `<link>` above it. What remains should be
+  roughly 6–16 page-specific rules — typically `.wrapper`, `.test-container`, figure sizing,
+  `.q-progress-inner`, a `@media` block and any one-off tweak.
+- **First time you do this, check it in the browser with the test's KV gate OPEN.** Most of the
+  shared file styles the question paper, options, results, modal and feedback — none of which
+  render while the gate is closed. A closed-gate page looking right proves very little.
+- Redirect stubs (`/science/`, `/spanish/`, `/portfolios/`) stay fully inline **on purpose** — a
+  redirect must not wait on a stylesheet.
+- JS is still fully inline on every page. IDEAS #10's JS half is deliberately NOT done yet.
 
 ### Fonts
 - **Headings:** Fredoka One (Google Fonts)
