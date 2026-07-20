@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** July 18, 2026 (🏪 BEAN STORE fully SHIPPED & verified live — front + backend deployed, end-to-end tested; next session queued: Progressive lesson unlock, IDEAS #8)
+**Last updated:** July 19, 2026 (🔓 PROGRESSIVE LESSON UNLOCK SHIPPED & verified live — backend actions, hub card locking, lesson-page guard, teacher release panel; next session queued: shared CSS/JS refactor, IDEAS #10)
 
 ---
 
@@ -20,9 +20,74 @@ If the docs are not updated, the task is **not** finished.
 
 ---
 
-## ▶️ Take-off Point — Next Session (as of July 18, 2026)
+## ▶️ Take-off Point — Next Session (as of July 19, 2026)
 
-**Newest work (July 18, 2026): 🏪 BEAN STORE — SHIPPED & verified live end-to-end.**
+**Newest work (July 19, 2026): 🔓 PROGRESSIVE LESSON UNLOCK (IDEAS #8) — SHIPPED & verified live.**
+Students no longer see the whole year's lesson catalogue. Only weeks Mr. EdLo has released are
+open; later weeks show a 🔒 **Opens Later** card. This holds **when logged OUT**, so the public
+gets a "taste" of Week 1 only. Verified live July 19 (all six test steps passed).
+
+- **Design decision (Edwin, July 19):** lessons stay **PUBLIC — no login gate.** The lock is for
+  **PACING, not protection.** Reasoning worth keeping: (a) the site is the shop window for the
+  future tutoring academy — locked cards advertise the year's scope to visiting parents; (b) a
+  login wall on lessons taxes Edwin's own students daily (they switch devices constantly) for a
+  threat that does not exist — nobody is stealing Std5 climate lessons; (c) the material that WOULD
+  hurt if leaked (test items/answers) is already gated behind KV + Worker. **Login changes what a
+  student EARNS, not what he or she SEES.**
+- **Practice vs. real mode — already true, nothing built.** `vcSaveBeans` is a silent no-op when
+  logged out, so a logged-out student gets the full lesson and instant feedback but banks no beans;
+  logging in and redoing it earns them. Safe because beans measure ENGAGEMENT only — mastery comes
+  from tests/quizzes/exit slips, so practising twice cannot inflate mastery.
+- **Unlock rule chosen:** teacher toggle (not dates, not prior-week completion — the last conflicts
+  with the Science "no saved progress" rule and would never open for logged-out visitors).
+  Cumulative: once a week opens it stays open. Yearly reset closes everything back to Week 1.
+- **Storage — one integer per subject.** New `Settings` tab in `VC-LMS` (`key | value | note`), rows
+  named `<subject>-released-week` (e.g. `std5-science-released-week`). A week is open when
+  `N >= its week number`, so the state CANNOT go invalid the way 30 separate toggles could.
+  All six Std5 subjects seeded at 1 (only Science's hub exists yet; the rest wait for their hubs).
+  Seed file: `backend/settings-tab-seed.tsv`. Helper `setupSettingsTab()` builds the tab too.
+- **Subject-generic by design:** the Apps Script + Worker were written once for ALL subjects. A new
+  subject hub needs a Settings ROW and ~15 lines of page wiring — never a backend change. **A
+  subject with NO row = not using locking at all (its lessons stay open)**, so deleting a row opts
+  a subject out and a forgotten row can never silently lock a new hub.
+- **Backend added (both mirrors updated, per standing rule):**
+  `lesson-locks` (PUBLIC read, no auth — hubs call it logged out; also answers a plain GET so the
+  browser can cache it) and `set-lesson-locks` (teacher-gated write; accepts `{subject, week}` or
+  `{reset_all:true}`). ⚠️ Only keys ending in `-released-week` are exposed by the public read, so
+  the Settings tab is safe to use for other private settings later.
+- **Front end:** Std5 Science hub ships Weeks 2+ **locked in the HTML** with the destination parked
+  in `data-href`; JS restores the link only after the backend confirms. Locking-first means a slow
+  or failed fetch never flashes the whole year. **Week 1 is a plain `href`, so it opens even with
+  JavaScript off.** New `.card.locked` style (🔒 Opens Later) is deliberately distinct from `.soon`
+  (= lesson not written yet). Both unlock blocks are marked **LIFT-OUT BLOCK** for the IDEAS #10
+  refactor — change `SUBJECT_KEY` per hub.
+- **Direct-URL guard** on the built lesson pages (Wk2, Wk3; Week 1 exempt). ⚠️ **It is a repaint,
+  not a gate** — Pages serves the whole file, then the guard overwrites `document.body`. View-source
+  or JS-off defeats it. That is acceptable: real enforcement would mean serving lessons through the
+  Worker, breaking the self-contained-HTML model for a pacing feature.
+- **Deliberate asymmetry:** the hub fails **CLOSED** on a network error (a locked card just means
+  one fewer link) but the lesson guard fails **OPEN** (failing closed would shut a student out of a
+  lesson he or she IS allowed to read, on classroom wifi that drops).
+- **Teacher panel:** `/teacher/` → **🔓 Release Lessons** — every subject with its current week, a
+  Release button, and **Reset ALL to Week 1** for a new school year. Lowering a week is allowed on
+  the server (the yearly reset needs it) but prompts for confirmation in the UI; "once open, stays
+  open" is classroom policy, not a server rule. New subjects appear here automatically.
+- **⚠️ Deployment lesson (July 19):** the Pages build sat **Queued**, not failed — GitHub Actions
+  was in a **partial outage** (incident opened 23:34 UTC Jul 19). Pages builds run ON Actions, so
+  they queue when Actions is degraded, and Pages keeps serving the LAST GOOD BUILD meanwhile.
+  **Check githubstatus.com BEFORE cancelling or re-pushing** — a new run just joins the backlog.
+  Also: `git push` when local == origin does nothing; use `git commit --allow-empty` to force a build.
+- **⚠️ Repo hygiene (found July 19, not yet fixed):** 54 files show as modified with **zero real
+  changes** — 29,998 insertions vs 29,998 deletions, and `git diff --ignore-all-space` is empty.
+  Pure CRLF/LF churn from OneDrive. There is **no `.gitattributes`**. Risk: a future `git add -A`
+  buries a real change under 30k lines of noise. Fix queued with IDEAS #10.
+- **⚠️ Apps Script deployments are cluttered** — six exist, two named "Untitled". The Worker's
+  `APPS_SCRIPT_URL` must match the ACTIVE deployment ID. Archive the unused ones before they cause
+  an hour of confusion.
+
+---
+
+**Previous (July 18, 2026): 🏪 BEAN STORE — SHIPPED & verified live end-to-end.**
 Front end AND backend deployed; tested with `test.student` (earned 114 → redeemed Sticker 100 →
 balance 14, Sticker stock 120→119, and **Jaguars team total stayed 114** — spending did NOT move the
 team race or class goal ✅). Students can cash earned cacao beans 🌱 for real class prizes without
@@ -47,16 +112,24 @@ ever affecting the team race or class goal. Design in `BEAN-STORE-PLAN.md`; back
   is teacher-initiated on `/teacher/` (no student checkout); hard block on cost>balance or stock=0,
   enforced in the UI AND server-side in Apps Script.
 
-**➡️ NEXT SESSION (queued): 🔓 Progressive lesson unlock — IDEAS #8.**
-Rule: only the current/first week's lesson is active; all later weeks are LOCKED, and this holds
-**even when logged OUT** (public sees a "taste" of Week 1 only, rest shown locked). Needs a design
-decision on **what unlocks each later week** — teacher toggle (like the Test Control idea #7), a
-date/schedule, or completion of the prior week. Apply to the Std5 Science lessons hub first
-(`/standard5/science/` Lessons tab), then future subjects. Lighter than the test gate (lessons are
-public pages, so likely a per-lesson "unlocked" flag rather than KV/Worker). Start by reading
-`IDEAS.md` #8 and the Std5 Science hub, then plan before building.
+**➡️ NEXT SESSION (queued): 🧹 Shared CSS/JS refactor — IDEAS #10.**
+Measured July 19: **81 HTML files / 3.6 MB, and 31 of them each carry their own copy of the theme
+system** (the Std5 Science hub's `<style>` block alone is 473 lines). One theme-colour change = 31
+edits — the "Find and replace across all files" section below is the symptom. Gets worse with every
+new subject hub and every Week 4–30 lesson. **Real payoff is CACHING, not raw speed** — inline is
+actually faster on a FIRST visit (one request, no extra round trip); the win is repeat visits across
+many pages, which is exactly this site. ⚠️ **Own dedicated session** — it touches every page on a
+LIVE site (LMS, bean store, 16 gated tests, passkey, themes, zoom) and needs a page-by-page
+verification pass; do NOT bolt it onto a feature build. **Start by deciding the fate of
+`js/main.js` + `js/subject-page.js`** (April 2026, predate the self-contained convention, look
+abandoned). Note this REVERSES the documented "all pages fully self-contained" convention, whose
+rationale (Edwin can edit any file without deep CSS/JS knowledge) is weaker now that Claude Code
+handles bulk edits — update the Design System section when it ships. Fold in the `.gitattributes`
+fix for the CRLF churn at the same time.
 Other parked items still open: more Std5 Science lessons (Wk 4+), revise Wk1–3 sample lessons
-(IDEAS #9), Test Control panel (IDEAS #7), Layer 2 ecosystem map + quest.
+(IDEAS #9 — do this BEFORE cloning the Week 1 engine for Wk4+), Test Control panel (IDEAS #7),
+Layer 2 ecosystem map + quest. **Wk2 and Wk3 are currently LOCKED, which makes them a private
+workshop — revise them there without students seeing half-changed content.**
 
 ---
 
@@ -462,8 +535,10 @@ at the site root — those exist only as redirect stubs.
 
 All repos are saved locally at:
 ```
-C:\Users\zoloe\OneDrive\Shared with me\Code Projects\Python Projects\
+C:\Users\Dell Latitude 3520\OneDrive\Shared with me\Code Projects\Python Projects\
 ```
+> ⚠️ Corrected July 19, 2026 — the old path used the `zoloe` user folder, which does not exist on
+> this machine. If a session reports "path not found," check the Windows user folder name first.
 
 ---
 
@@ -729,7 +804,7 @@ git push
 
 ### Switching to Virtual-Classroom in terminal
 ```bash
-cd "C:\Users\zoloe\OneDrive\Shared with me\Code Projects\Python Projects\Virtual-Classroom"
+cd "C:\Users\Dell Latitude 3520\OneDrive\Shared with me\Code Projects\Python Projects\Virtual-Classroom"
 ```
 
 ### Find and replace across all files
