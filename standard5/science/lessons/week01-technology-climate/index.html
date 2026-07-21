@@ -53,7 +53,11 @@
   .login-hint { margin-top:.7rem; font-size:.85rem; color:var(--muted); }
   .login-hint a { color:var(--accent); font-weight:800; }
 
-  .progress-wrap { margin:.4rem 0 1.4rem; }
+  /* Sticky progress bar — same pattern as the Std5 tests */
+  .progress-wrap { position:sticky; top:0; z-index:50; background:var(--bg);
+                   border-bottom:1px solid var(--bd); padding:.7rem 0 .6rem;
+                   margin-bottom:1.4rem; transition:background .4s; }
+  .progress-inner { max-width:1000px; margin:0 auto; padding:0 max(1rem,4vw); }
   .progress-label { display:flex; justify-content:space-between; font-size:.78rem;
                     font-weight:800; color:var(--muted); margin-bottom:.35rem; }
   .progress-track { height:9px; border-radius:999px; background:var(--card);
@@ -62,16 +66,29 @@
                    background:linear-gradient(90deg,var(--accent),#4DABF7); transition:width .4s ease; }
 
   section.sec { background:var(--card); border:1.5px solid var(--bd); border-radius:18px;
-                padding:1.3rem; margin-bottom:1.2rem; position:relative; }
+                padding:1.3rem; margin-bottom:1.2rem; position:relative;
+                scroll-margin-top:4.6rem; /* clears the sticky progress bar */ }
   section.sec.locked-step { opacity:.45; pointer-events:none; }
   .sec-tag { font-size:.7rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase;
              color:var(--accent); display:block; margin-bottom:.3rem; }
   .sec h2 { font-family:'Fredoka One',cursive; font-size:1.28rem; font-weight:400; line-height:1.3; }
   .sec p { margin-top:.5rem; color:var(--muted); font-weight:600; font-size:.95rem; }
   .sec .hint { font-size:.85rem; font-style:italic; }
-  .done-badge { display:none; position:absolute; top:1rem; right:1rem; font-size:.7rem;
+  .done-badge { display:none; position:absolute; top:1rem; right:3rem; font-size:.7rem;
                 font-weight:900; color:var(--accent); }
   section.done .done-badge { display:block; }
+
+  /* Collapsible cards — tap the header to fold a section away */
+  .sec-toggle { position:absolute; top:.75rem; right:.8rem; background:none; border:none;
+                color:var(--muted); font-family:inherit; font-size:1.15rem; font-weight:900;
+                cursor:pointer; line-height:1; padding:.25rem .35rem; border-radius:8px; }
+  .sec-toggle:hover { color:var(--accent); background:var(--btn); }
+  section.sec.collapsed { padding-bottom:1rem; }
+  section.sec.collapsed .sec-body { display:none; }
+  section.sec.collapsed h2 { font-size:1.1rem; opacity:.85; }
+  .collapse-hint { display:none; font-size:.8rem; color:var(--muted);
+                   font-weight:700; margin-top:.35rem; }
+  section.sec.collapsed .collapse-hint { display:block; }
 
   /* Review cards */
   .review-grid { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:1rem; }
@@ -83,6 +100,11 @@
               border-radius:14px; padding:1rem; }
   .loop-arrow { font-weight:800; font-size:.9rem; margin:.35rem 0; }
   .loop-arrow.warm { color:#FF8787; } .loop-arrow.cool { color:#69DB7C; }
+  .fig-box { margin:1rem auto; max-width:640px; }
+  .fig-box svg { width:100%; height:auto; display:block; }
+  .fig-cap { text-align:center; font-size:.82rem; color:var(--muted); margin-top:.35rem; }
+  .concept-p { margin-top:.7rem; font-size:.95rem; font-weight:600; }
+  .concept-p strong { color:var(--fg); }
 
   /* Buttons */
   .btn { font-family:inherit; font-weight:900; cursor:pointer; border-radius:12px;
@@ -240,22 +262,65 @@
     </p>
   </header>
 
-  <div class="progress-wrap">
+</div><!-- /wrapper -->
+
+<!-- Sticky progress bar — stays visible while scrolling, like the tests -->
+<div class="progress-wrap">
+  <div class="progress-inner">
     <div class="progress-label"><span>Your progress</span><span id="progText">0 of 6 done</span></div>
     <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
   </div>
+</div>
+
+<div class="wrapper">
 
   <!-- 1. BRIEF REVIEW -->
   <section class="sec" id="secReview">
     <span class="sec-tag">Quick Review</span>
     <h2>🔁 Remember the Two-Way Loop</h2>
     <p>One minute to refresh. Then the practice begins.</p>
-    <div class="review-grid" id="reviewGrid"></div>
+    <p class="concept-p"><strong>Technology</strong> means the tools and machines people make to do work.
+       <strong>Climate change</strong> means a long-term shift in the average weather.</p>
+    <p class="concept-p">Here is the loop Mr. EdLo drew on the board:</p>
+
+    <div class="fig-box">
+<svg viewBox="0 0 640 300" role="img" aria-label="Two-way loop between technology and the climate">
+        <defs>
+          <marker id="arrA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="#e8590c"/>
+          </marker>
+          <marker id="arrB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="#0CA678"/>
+          </marker>
+        </defs>
+        <rect x="0" y="0" width="640" height="300" rx="16" fill="#10254a"/>
+        <rect x="30" y="105" width="180" height="90" rx="14" fill="#1d3b74" stroke="#4DABF7" stroke-width="2.5"/>
+        <text x="120" y="143" text-anchor="middle" font-family="Nunito, sans-serif" font-size="19" font-weight="800" fill="#ffffff">⚙️ TECHNOLOGY</text>
+        <text x="120" y="170" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" fill="#bcd3f5">tools &amp; machines</text>
+        <rect x="430" y="105" width="180" height="90" rx="14" fill="#5c3a10" stroke="#FFD43B" stroke-width="2.5"/>
+        <text x="520" y="143" text-anchor="middle" font-family="Nunito, sans-serif" font-size="19" font-weight="800" fill="#ffffff">🌡️ WARMER</text>
+        <text x="520" y="168" text-anchor="middle" font-family="Nunito, sans-serif" font-size="19" font-weight="800" fill="#ffffff">PLANET</text>
+        <path d="M 215 118 C 300 55, 360 55, 425 118" fill="none" stroke="#e8590c" stroke-width="4" marker-end="url(#arrA)"/>
+        <text x="320" y="52" text-anchor="middle" font-family="Nunito, sans-serif" font-size="13.5" font-weight="800" fill="#ffb38a">Some technology RELEASES greenhouse gases</text>
+        <text x="320" y="72" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12" fill="#ffb38a">vehicles · factories · refrigeration</text>
+        <path d="M 425 185 C 360 248, 300 248, 215 185" fill="none" stroke="#0CA678" stroke-width="4" marker-end="url(#arrB)"/>
+        <text x="320" y="255" text-anchor="middle" font-family="Nunito, sans-serif" font-size="13.5" font-weight="800" fill="#7fe0c3">Other technology SLOWS the warming</text>
+        <text x="320" y="275" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12" fill="#7fe0c3">solar panels · electric buses · efficient stoves</text>
+      </svg>
+      <p class="fig-cap">The two-way climate loop — technology sits on BOTH sides.</p>
+    </div>
+
+    <p class="concept-p">🔥 <strong>One way:</strong> a diesel generator burns fuel and <strong>adds greenhouse gases</strong> — gases (mainly CO₂) that trap heat in the atmosphere like a blanket.</p>
+    <p class="concept-p">💧 <strong>The other way:</strong> the hydro dams on the <strong>Macal River</strong> make electricity <strong>without burning any fuel</strong> at all.</p>
+    <p class="hint">Belize releases very little greenhouse gas compared to the world — but our low coastline, coral reef, and hurricane season mean we feel climate change strongly. That is why this lesson matters here at home.</p>
+
     <div class="loop-box">
       <div class="loop-arrow warm">🔥 Technology that BURNS fuel → greenhouse gases → traps heat → the planet warms</div>
       <div class="loop-arrow cool">🌿 Technology that AVOIDS burning → fewer emissions → warming slows down</div>
       <p class="hint">Technology is not automatically good or bad. It depends on whether it burns fossil fuels or replaces them.</p>
     </div>
+
+    <div class="review-grid" id="reviewGrid"></div>
     <button class="btn" id="reviewDone">I'm ready — start practising →</button>
   </section>
 
@@ -629,6 +694,62 @@ function unlock(sel){ var s=$(sel); s.classList.remove('locked-step');
   s.scrollIntoView({behavior:'smooth',block:'start'}); }
 function markDone(sel){ $(sel).classList.add('done'); }
 
+/* ── Collapsible cards ──────────────────────────────────────────
+   Built generically at boot: everything after each <h2> is wrapped
+   in .sec-body, and a ▾/▸ toggle is added. Works for any lesson —
+   no per-week markup needed. (LESSON-ENGINE-PLAN.md §2)          */
+function makeCollapsible(sec){
+  var h2 = $('h2', sec); if (!h2 || $('.sec-body', sec)) return;
+  var body = document.createElement('div'); body.className = 'sec-body';
+  var n = h2.nextSibling;
+  while (n){ var next = n.nextSibling; body.appendChild(n); n = next; }
+  sec.appendChild(body);
+
+  var hint = document.createElement('div');
+  hint.className = 'collapse-hint'; hint.textContent = 'Tap to open again ▸';
+  h2.parentNode.insertBefore(hint, body);
+
+  var btn = document.createElement('button');
+  btn.className = 'sec-toggle'; btn.textContent = '▾';
+  btn.setAttribute('aria-label','Fold this section');
+  sec.appendChild(btn);
+
+  function toggle(){
+    var now = sec.classList.toggle('collapsed');
+    btn.textContent = now ? '▸' : '▾';
+    btn.setAttribute('aria-label', now ? 'Open this section' : 'Fold this section');
+  }
+  btn.addEventListener('click', function(e){ e.stopPropagation(); toggle(); });
+  h2.style.cursor = 'pointer';
+  h2.addEventListener('click', toggle);
+  hint.addEventListener('click', toggle);
+}
+function collapseSec(sel){
+  var sec = $(sel); if (!sec || sec.classList.contains('collapsed')) return;
+  sec.classList.add('collapsed');
+  var b = $('.sec-toggle', sec);
+  if (b){ b.textContent = '▸'; b.setAttribute('aria-label','Open this section'); }
+}
+function expandSec(sel){
+  clearTimeout(foldTimers[sel]);
+  var sec = $(sel); if (!sec) return;
+  sec.classList.remove('collapsed');
+  var b = $('.sec-toggle', sec);
+  if (b){ b.textContent = '▾'; b.setAttribute('aria-label','Fold this section'); }
+}
+/* Fold a finished activity away once the student has read the result.
+   Timers are tracked so a mid-lesson tier switch can cancel a pending fold —
+   otherwise a card re-opened by the switch would collapse again a moment later. */
+var foldTimers = {};
+function foldWhenRead(sel){
+  clearTimeout(foldTimers[sel]);
+  foldTimers[sel] = setTimeout(function(){ collapseSec(sel); }, 2600);
+}
+function cancelPendingFolds(){
+  Object.keys(foldTimers).forEach(function(k){ clearTimeout(foldTimers[k]); });
+  foldTimers = {};
+}
+
 /* Award beans, respecting the per-lesson cap. The activity id carries the tier so a
    replay at a higher tier is a NEW row (vcSaveBeans locks one id per device). */
 function award(actKey, earned, maxPossible, sec){
@@ -690,6 +811,7 @@ function switchTier(t){
   missStreak = 0; hitStreak = 0;
   $$('.coach-box').forEach(function(b){ b.className='coach-box'; });
   toast(TIERS[t].icon+' Now playing '+TIERS[t].label+' — '+TIERS[t].rate+'× beans');
+  cancelPendingFolds();
   buildSim(); buildTrace(); buildMyth(); resetStreak();
 }
 
@@ -699,7 +821,9 @@ $('#reviewGrid').innerHTML = REVIEW.map(function(r){
 }).join('');
 
 $('#reviewDone').addEventListener('click', function(){
-  this.disabled = true; markDone('#secReview'); progressTick(); unlock('#secCalib');
+  this.disabled = true; markDone('#secReview'); progressTick();
+  collapseSec('#secReview');            /* fold the notes away — one tap to reopen */
+  unlock('#secCalib');
 });
 
 /* ── 2. Calibration ── */
@@ -734,7 +858,7 @@ $('#calibCheck').addEventListener('click', function(){
   var beans = Math.round(correct / CALIB.length * CALIB_BEANS);
   $('#calibFeedback').textContent = 'You got '+correct+' of '+CALIB.length+' right ('+calibPct+'%).';
   award('calibration', beans, CALIB_BEANS, $('#secCalib'));
-  markDone('#secCalib'); progressTick();
+  markDone('#secCalib'); progressTick(); foldWhenRead('#secCalib');
   offerTier(calibPct);
   unlock('#secTier');
 });
@@ -788,6 +912,7 @@ function startTier(t){
   $$('#tierGrid .tier-card').forEach(function(c){
     c.style.outline = (c.getAttribute('data-tier')===t) ? '3px solid var(--accent)' : 'none';
   });
+  cancelPendingFolds();
   buildSim(); buildTrace(); buildMyth(); resetStreak();
   ['#secSim','#secTrace','#secMyth','#secStreak'].forEach(function(s){ $(s).classList.remove('locked-step'); });
   unlock('#secSim');
@@ -802,7 +927,7 @@ function simRender(){
   $('#simMoneyVal').textContent = '$'+Math.max(0,simMoney);
   $('#simMoneyBar').style.width = Math.max(0,Math.min(100,simMoney))+'%';
 }
-function buildSim(){
+function buildSim(){ expandSec('#secSim');
   simStep=0; simCo2=50; simMoney=100; simScore=0;
   $('#simEnding').className='sim-ending'; $('#simResult').className='sim-result';
   $('#secSim').classList.remove('done');
@@ -840,12 +965,12 @@ function simEnd(){
   e.innerHTML = '<b>Four years later…</b><br>'+verdict
     + '<br><br>You made <b>'+simScore+' of '+SIM[tier].length+'</b> climate-friendly choices.';
   award('simulator', simScore * TIERS[tier].rate, SIM[tier].length * TIERS[tier].rate, $('#secSim'));
-  markDone('#secSim'); progressTick(); unlock('#secTrace');
+  markDone('#secSim'); progressTick(); foldWhenRead('#secSim'); unlock('#secTrace');
 }
 
 /* ── 5. Trace-it-back ── */
 var traceIdx = 0, traceScore = 0;
-function buildTrace(){ traceIdx=0; traceScore=0; $('#secTrace').classList.remove('done'); traceRender(); }
+function buildTrace(){ expandSec('#secTrace'); traceIdx=0; traceScore=0; $('#secTrace').classList.remove('done'); traceRender(); }
 function traceRender(){
   var set = TRACE[tier]; if(!set) return;
   if (traceIdx >= set.length) return traceEnd();
@@ -894,12 +1019,12 @@ function traceEnd(){
   $('#traceBox').innerHTML = '<div class="trace-final show">🔍 Investigation complete — <b>'
     + traceScore+' of '+TRACE[tier].length+'</b> traced correctly.</div>';
   award('trace', traceScore * TIERS[tier].rate, TRACE[tier].length * TIERS[tier].rate, $('#secTrace'));
-  markDone('#secTrace'); progressTick(); unlock('#secMyth');
+  markDone('#secTrace'); progressTick(); foldWhenRead('#secTrace'); unlock('#secMyth');
 }
 
 /* ── 6. Myth-buster ── */
 var mythIdx = 0, mythScore = 0;
-function buildMyth(){ mythIdx=0; mythScore=0; $('#secMyth').classList.remove('done'); mythRender(); }
+function buildMyth(){ expandSec('#secMyth'); mythIdx=0; mythScore=0; $('#secMyth').classList.remove('done'); mythRender(); }
 function mythRender(){
   var set = MYTH[tier]; if(!set) return;
   if (mythIdx >= set.length) return mythEnd();
@@ -929,7 +1054,7 @@ function mythEnd(){
   $('#mythBox').innerHTML = '<div class="myth-card"><b>🕵️ Arena complete — '
     + mythScore+' of '+MYTH[tier].length+' judged correctly.</b></div>';
   award('myth', mythScore * TIERS[tier].rate, MYTH[tier].length * TIERS[tier].rate, $('#secMyth'));
-  markDone('#secMyth'); progressTick(); unlock('#secStreak');
+  markDone('#secMyth'); progressTick(); foldWhenRead('#secMyth'); unlock('#secStreak');
 }
 
 /* ── 7. Beat-your-streak ── */
@@ -937,7 +1062,7 @@ var stkIdx=0, stkNow=0, stkBestRun=0, stkScore=0, stkTimer=null, stkLeft=STREAK_
 function bestKey(){ return 'vc-streak-'+LESSON.idBase; }
 function readBest(){ try{ return Number(localStorage.getItem(bestKey())||0); }catch(e){ return 0; } }
 function writeBest(n){ try{ localStorage.setItem(bestKey(), String(n)); }catch(e){} }
-function resetStreak(){
+function resetStreak(){ expandSec('#secStreak');
   clearInterval(stkTimer);
   stkIdx=0; stkNow=0; stkBestRun=0; stkScore=0; stkLeft=STREAK_SECONDS;
   $('#stkNow').textContent='0'; $('#stkBest').textContent=readBest();
@@ -981,7 +1106,7 @@ function streakEnd(){
   $('#stkBest').textContent = readBest();
   var deck = STREAK[tier].length;              /* beans capped at one full deck */
   award('streak', Math.min(stkScore,deck) * TIERS[tier].rate, deck * TIERS[tier].rate, $('#secStreak'));
-  markDone('#secStreak'); progressTick(); finish();
+  markDone('#secStreak'); progressTick(); foldWhenRead('#secStreak'); finish();
 }
 
 /* ── 8. Finish ── */
@@ -1028,6 +1153,8 @@ function finish(){
       + '</b>! Your beans will be saved.';
   }
   $('#stkBest').textContent = readBest();
+
+  $$('section.sec').forEach(makeCollapsible);
 
   var c = $('#stars'), ctx = c.getContext('2d');
   function draw(){

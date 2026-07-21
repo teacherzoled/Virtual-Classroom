@@ -11,8 +11,19 @@ including the scheduled daily builds of Weeks 4–30 (IDEAS #11).
 - The online lesson **enhances and supports** what was taught in class. It is **NOT a repetition
   of the classroom sessions** and does not duplicate the weekly scheme's activities.
 - Its job is **practice — plenty of it, varied** — so students cement the week's concept.
-- Keep the **brief concept review** section (as in the current Week 1–3 lessons), then go
-  straight to interactive activities.
+- Keep the **concept review** section, then go straight to interactive activities.
+
+  ⚠️ **"Brief" means CONCISE, not REDUCED. Clarified by Edwin July 20, 2026 after Claude wrongly
+  deleted the Week 1 two-way-loop SVG while "keeping the review brief."**
+  The concept section must still **teach the concept**, because students take notes from it:
+  - **KEEP the diagram/figure.** Any SVG the lesson had is preserved verbatim — a student copies
+    it into an exercise book. Never drop a figure to save space.
+  - **KEEP the definitions** of the week's key terms.
+  - **KEEP the local Belize framing** (why this matters here — coastline, reef, hurricane season,
+    Macal River, and so on). This is what makes the topic real rather than abstract.
+  - **CUT instead:** long paragraphs, restaged classroom activities, anything the class already
+    did in session. Trim wordiness, never substance.
+  - **A figure is content, not formatting.** Removing one is a content decision — ask Edwin first.
 - The Spanish lessons are a **guide for tone and polish, NOT a template** to clone.
 - Everything plugs into the existing bean/points system and Bean Store prizes.
 
@@ -20,7 +31,9 @@ including the scheduled daily builds of Weeks 4–30 (IDEAS #11).
 
 ## 2. Lesson flow (fixed skeleton, every week)
 
-1. **Brief review** — short concept cards recapping the week's idea. Keep tight.
+1. **Concept review** — teaches the week's idea concisely: definitions → **the diagram/figure** →
+   worked local examples → the Belize "why it matters here" note → key-term cards. Note-taking
+   material. Concise in wording, complete in substance (see the ⚠️ rule in §1).
 2. **Calibration activity** — same for every student, ~5 questions, game-feel not test-feel.
    Doubles as a diagnostic; its score sets the tier offer. Pays up to 5 🌱.
 3. **Tier offer** — based on calibration score (thresholds §3), bean rates shown up front
@@ -31,6 +44,16 @@ including the scheduled daily builds of Weeks 4–30 (IDEAS #11).
 
 The skeleton never changes; the mechanics inside it change weekly. Students learn the ladder
 once, the game stays fresh.
+
+**Collapsible cards (auto-collapse) — Edwin's decision, July 20, 2026.** Every `section.sec` gets
+a ▾/▸ toggle built automatically at boot by `makeCollapsible()` — no per-week markup needed.
+- The **concept review folds itself** when the student clicks "start practising", and each
+  **finished activity folds 2.6 s after its result appears** (long enough to read the score).
+- **Tapping the heading or the ▸ arrow reopens any card**, so the diagram and notes stay one tap
+  away all lesson. Nothing is ever deleted — only hidden.
+- A mid-lesson **tier switch re-expands** the rebuilt activities and cancels any pending fold.
+- Purpose: the page stays short as the student progresses, instead of forcing them to scroll
+  past a long review section to reach the questions.
 
 ---
 
@@ -98,6 +121,12 @@ thinking; match it to the week's outcome. The activity must make the student DO 
 **For the scheduled Weeks 4–30 generator (IDEAS #11):** the task prompt instructs — "pick 3–4
 mechanics from the bank in LESSON-ENGINE-PLAN.md §5 to fit this week's scheme outcome; do not
 reuse the previous week's set." Variety becomes an instruction, not a hope.
+The prompt must ALSO carry the §1 ⚠️ rule: **never delete a diagram, definition, or the Belize
+framing in the name of brevity** — otherwise one wrong reading of "brief" repeats 27 times.
+
+**When Edwin's instruction is ambiguous, ASK — do not pick a reading and proceed** (his standing
+request, July 20, 2026). Deleting the Week 1 diagram is the worked example of getting this wrong:
+"keep the review brief" was read as permission to cut content, when it meant tighten the wording.
 
 ---
 
