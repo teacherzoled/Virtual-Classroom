@@ -822,6 +822,32 @@ Subject accent hexes are in the **Subject Accent Colors** table below.
 - **Headings:** Fredoka One (Google Fonts)
 - **Body:** Nunito (Google Fonts)
 
+### ⚖️ STANDING RULE — every NEW page's accent FOLLOWS THE THEME (Edwin, July 21, 2026)
+
+**The accent colour changes with the theme, not with the subject:**
+
+| Theme | Accent |
+|---|---|
+| 🌙 Night | Teal `#20C997` |
+| ☀️ Sunny | Orange `#FF922B` |
+| ☁️ Cloudy | Blue `#4A90D9` |
+| 🌿 Nature | Green `#4CAF50` |
+
+- **Apply via `body.theme-*`** (site-wide convention) — **never `[data-theme]` on `<html>`.**
+  `[data-theme]` pages also tend to carry `overflow-x:hidden` on `html`, which breaks sticky
+  headers (see Mobile Rules).
+- **Change WITH the accent, not just `--bg`:** the accent itself, text-on-accent (a dark teal
+  label is unreadable on orange), the h1 gradient, right/wrong feedback colours (light themes
+  need darker `#2e7d1a` / `#c62828`, not `#69DB7C` / `#FF6B6B`), footer borders, soft accent tints.
+- **Copy the palette from** `standard5/science/index.html` (the Science hub).
+  **Worked example for a lesson page:** `standard5/science/lessons/week01-technology-climate/`.
+- **EXISTING pages are NOT being converted** (Edwin, July 21, 2026). The 16 Std5 tests and quizzes
+  keep a fixed subject accent, and `dashboard/`, `teacher/`, `login/`, Science Weeks 2–3 and
+  `prevenient-grace` keep what they have. They are live and they work; the gain is cosmetic.
+  **Accepted consequence:** a student going lesson → test sees the accent change. That is fine.
+  If one of those pages is rebuilt for another reason, bring it onto this rule then — but do not
+  open files just to recolour them. Full audit in `IDEAS.md` #12.
+
 ### Themes
 All pages support 4 themes switchable via the theme bar:
 - 🌙 Night (default) — dark blue background
