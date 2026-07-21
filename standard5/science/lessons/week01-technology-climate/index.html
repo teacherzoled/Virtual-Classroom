@@ -4,738 +4,1042 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Week 1 · Technology &amp; Climate Change — Mr. EdLo's Virtual Classroom</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<script src="/edlo-utils.js"></script>
 <style>
   html { font-size: 17.5px; }
   html, body { overflow-x: hidden; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --accent: #20C997;
-    --accent-dark: #0CA678;
-  }
-  [data-theme="night"] {
-    --bg: #0b1026; --bg2: #141b3c; --card: #1a2247; --text: #eef1ff;
-    --muted: #aab3d6; --line: #2e3a6e; --star-op: 1;
-    --good: #51cf66; --bad: #ff8787; --chip: #232c58;
-  }
-  [data-theme="sunny"] {
-    --bg: #fff9e6; --bg2: #fff3c4; --card: #ffffff; --text: #4a3f16;
-    --muted: #8a7a35; --line: #f1dd8e; --star-op: 0;
-    --good: #2b8a3e; --bad: #c92a2a; --chip: #fdf0c2;
-  }
-  [data-theme="cloudy"] {
-    --bg: #e9eef5; --bg2: #d8e1ec; --card: #ffffff; --text: #2b3a4d;
-    --muted: #5f7288; --line: #c3d0e0; --star-op: 0;
-    --good: #2b8a3e; --bad: #c92a2a; --chip: #dde6f0;
-  }
-  [data-theme="nature"] {
-    --bg: #e8f5ec; --bg2: #d3ecd9; --card: #ffffff; --text: #1e3d29;
-    --muted: #4e7a5d; --line: #b7dcc2; --star-op: 0;
-    --good: #2b8a3e; --bad: #c92a2a; --chip: #d9efe0;
-  }
+  :root { --accent: #20C997; --accent-dark: #0CA678;
+          --bronze: #CD7F32; --silver: #A8B3BD; --gold: #FFC93C; }
 
-  body {
-    font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text);
-    min-height: 100vh; position: relative;
-    background-image: linear-gradient(var(--bg), var(--bg2));
-    background-attachment: fixed;
-  }
-  #stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: var(--star-op); transition: opacity .4s; }
+  [data-theme="night"]  { --bg:#1a1a2e; --fg:#fff; --card:rgba(255,255,255,.07); --bd:rgba(255,255,255,.12);
+                          --muted:rgba(255,255,255,.62); --star:1; --btn:rgba(255,255,255,.08); }
+  [data-theme="sunny"]  { --bg:#fffbea; --fg:#2d2000; --card:rgba(255,255,255,.75); --bd:rgba(0,150,100,.20);
+                          --muted:#5a4a00; --star:0; --btn:rgba(255,255,255,.85); }
+  [data-theme="cloudy"] { --bg:#e8eef3; --fg:#1f2d3a; --card:rgba(255,255,255,.80); --bd:rgba(30,60,90,.18);
+                          --muted:#41566b; --star:0; --btn:rgba(255,255,255,.85); }
+  [data-theme="nature"] { --bg:#eaf7ee; --fg:#12331f; --card:rgba(255,255,255,.78); --bd:rgba(20,120,60,.20);
+                          --muted:#2c5a3c; --star:0; --btn:rgba(255,255,255,.85); }
 
-  .wrapper { max-width: 1180px; margin: 0 auto; padding: 0 max(1rem, 2vw) 3rem; position: relative; z-index: 1; min-width: 0; }
+  body { font-family:'Nunito',system-ui,sans-serif; background:var(--bg); color:var(--fg);
+         min-height:100vh; display:flex; flex-direction:column; line-height:1.6; }
+  #stars { position:fixed; inset:0; pointer-events:none; z-index:0; opacity:var(--star); }
+  .wrapper { position:relative; z-index:1; max-width:1000px; margin:0 auto; width:100%;
+             padding:0 max(1rem,4vw) 2rem; flex:1; }
 
-  .top-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem; padding: 1rem 0 .3rem; }
-  .back-link { color: var(--accent); text-decoration: none; font-weight: 800; font-size: .95rem; padding: .5rem .6rem .5rem 0; }
-  .back-link:hover { text-decoration: underline; }
-  .theme-bar { display: flex; gap: .4rem; }
-  .theme-bar button {
-    font-size: 1.05rem; background: var(--card); border: 2px solid var(--line);
-    border-radius: 10px; cursor: pointer; padding: .35rem .55rem; line-height: 1;
-    min-width: 44px; min-height: 40px;
-  }
-  .theme-bar button.active { border-color: var(--accent); }
+  .top-row { display:flex; justify-content:space-between; align-items:center; gap:1rem;
+             flex-wrap:wrap; padding:1rem 0 .3rem; }
+  .back-link { color:var(--muted); text-decoration:none; font-weight:800; font-size:.9rem; }
+  .back-link:hover { color:var(--accent); }
+  .theme-bar { display:flex; gap:.4rem; flex-wrap:wrap; }
+  .theme-bar button { font-family:inherit; font-size:.78rem; font-weight:800; cursor:pointer;
+        padding:.35rem .7rem; border-radius:999px; border:1.5px solid var(--bd);
+        background:var(--btn); color:var(--fg); }
+  .theme-bar button.active { border-color:var(--accent); }
 
-  header.lesson-head { text-align: center; padding: .8rem 0 1.2rem; }
-  .chip-row { display: flex; justify-content: center; flex-wrap: wrap; gap: .5rem; margin-bottom: .7rem; }
-  .chip {
-    background: var(--chip); border: 1px solid var(--line); color: var(--muted);
-    font-size: .8rem; font-weight: 800; border-radius: 999px; padding: .3rem .8rem;
-  }
-  .chip.bean { color: var(--text); }
-  h1 {
-    font-family: 'Fredoka One', cursive; font-weight: 400;
-    font-size: clamp(1.8rem, 8vw, 3rem); line-height: 1.15;
-    color: var(--accent); text-shadow: 0 2px 12px rgba(32,201,151,.25);
-  }
-  .subtitle { color: var(--muted); font-size: 1.02rem; max-width: 780px; margin: .6rem auto 0; min-width: 0; word-break: break-word; }
-  .login-hint { margin-top: .6rem; font-size: .85rem; color: var(--muted); }
-  .login-hint a { color: var(--accent); font-weight: 800; }
+  header.lesson-head { text-align:center; padding:.8rem 0 1rem; }
+  .chip-row { display:flex; gap:.5rem; justify-content:center; flex-wrap:wrap; margin-bottom:.8rem; }
+  .chip { font-size:.72rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase;
+          padding:.32rem .8rem; border-radius:999px; background:var(--card);
+          border:1.5px solid var(--bd); color:var(--muted); }
+  .chip.bean { background:var(--accent); color:#12231d; border-color:var(--accent); }
+  h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.7rem,7vw,2.9rem); line-height:1.15;
+       background:linear-gradient(135deg,var(--fg) 0%,var(--accent) 60%,#4DABF7 100%);
+       -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .subtitle { color:var(--muted); font-weight:700; margin-top:.4rem; font-size:.98rem; }
+  .login-hint { margin-top:.7rem; font-size:.85rem; color:var(--muted); }
+  .login-hint a { color:var(--accent); font-weight:800; }
 
-  .progress-wrap { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: .5rem 0 .4rem; border-bottom: 1px solid var(--line); }
-  .progress-label { font-size: .78rem; font-weight: 800; color: var(--muted); margin-bottom: .25rem; display: flex; justify-content: space-between; }
-  .progress-track { height: 10px; background: var(--chip); border-radius: 999px; overflow: hidden; border: 1px solid var(--line); }
-  .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent-dark)); border-radius: 999px; transition: width .5s; }
+  .progress-wrap { margin:.4rem 0 1.4rem; }
+  .progress-label { display:flex; justify-content:space-between; font-size:.78rem;
+                    font-weight:800; color:var(--muted); margin-bottom:.35rem; }
+  .progress-track { height:9px; border-radius:999px; background:var(--card);
+                    border:1px solid var(--bd); overflow:hidden; }
+  .progress-fill { height:100%; width:0; border-radius:999px;
+                   background:linear-gradient(90deg,var(--accent),#4DABF7); transition:width .4s ease; }
 
-  section.sec {
-    background: var(--card); border: 1px solid var(--line); border-radius: 18px;
-    padding: 1.4rem clamp(1rem, 3vw, 1.8rem); margin-top: 1.4rem;
-    box-shadow: 0 6px 22px rgba(0,0,0,.12);
-  }
-  .sec-tag { font-size: .75rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-dark); }
-  [data-theme="night"] .sec-tag { color: var(--accent); }
-  .sec h2 { font-family: 'Fredoka One', cursive; font-weight: 400; font-size: 1.45rem; margin: .25rem 0 .8rem; }
-  .sec p { margin: .55rem 0; line-height: 1.65; }
-  .sec .hint { color: var(--muted); font-size: .9rem; }
-  .done-badge { display: none; font-size: .8rem; font-weight: 800; color: var(--good); margin-left: .5rem; }
-  section.done .done-badge { display: inline; }
+  section.sec { background:var(--card); border:1.5px solid var(--bd); border-radius:18px;
+                padding:1.3rem; margin-bottom:1.2rem; position:relative; }
+  section.sec.locked-step { opacity:.45; pointer-events:none; }
+  .sec-tag { font-size:.7rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase;
+             color:var(--accent); display:block; margin-bottom:.3rem; }
+  .sec h2 { font-family:'Fredoka One',cursive; font-size:1.28rem; font-weight:400; line-height:1.3; }
+  .sec p { margin-top:.5rem; color:var(--muted); font-weight:600; font-size:.95rem; }
+  .sec .hint { font-size:.85rem; font-style:italic; }
+  .done-badge { display:none; position:absolute; top:1rem; right:1rem; font-size:.7rem;
+                font-weight:900; color:var(--accent); }
+  section.done .done-badge { display:block; }
 
-  .reveal-btn, .check-btn {
-    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem;
-    background: var(--accent); color: #06281e; border: none; border-radius: 12px;
-    padding: .75rem 1.4rem; cursor: pointer; margin-top: .9rem; min-height: 44px;
-    box-shadow: 0 4px 14px rgba(32,201,151,.35);
-  }
-  .check-btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
-  .reveal-box { display: none; margin-top: 1rem; border-left: 4px solid var(--accent); background: var(--chip); border-radius: 0 12px 12px 0; padding: .9rem 1rem; }
+  /* Review cards */
+  .review-grid { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:1rem; }
+  .rev-card { flex:1 1 220px; background:var(--btn); border:1.5px solid var(--bd);
+              border-radius:14px; padding:.9rem 1rem; }
+  .rev-card b { display:block; color:var(--accent); font-size:.95rem; margin-bottom:.25rem; }
+  .rev-card span { font-size:.88rem; color:var(--muted); font-weight:600; }
+  .loop-box { margin-top:1rem; background:var(--btn); border:1.5px solid var(--bd);
+              border-radius:14px; padding:1rem; }
+  .loop-arrow { font-weight:800; font-size:.9rem; margin:.35rem 0; }
+  .loop-arrow.warm { color:#FF8787; } .loop-arrow.cool { color:#69DB7C; }
 
-  .vocab-row, .fill-row { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; padding: .55rem 0; border-bottom: 1px dashed var(--line); }
-  .vocab-term { font-weight: 800; min-width: 10.5rem; }
-  select {
-    font-family: 'Nunito', sans-serif; font-size: .95rem; font-weight: 700;
-    background: var(--chip); color: var(--text); border: 2px solid var(--line);
-    border-radius: 10px; padding: .55rem .6rem; min-height: 44px; max-width: 100%;
-  }
-  .mark { font-size: 1.05rem; min-width: 1.4rem; }
+  /* Buttons */
+  .btn { font-family:inherit; font-weight:900; cursor:pointer; border-radius:12px;
+         padding:.65rem 1.2rem; font-size:.92rem; border:none;
+         background:var(--accent); color:#12231d; margin-top:1rem; }
+  .btn:disabled { opacity:.45; cursor:not-allowed; }
+  .btn.ghost { background:var(--btn); color:var(--fg); border:1.5px solid var(--bd); text-decoration:none;
+               display:inline-block; }
+  .btn-row { display:flex; gap:.6rem; flex-wrap:wrap; align-items:center; }
 
-  .sort-grid { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: .9rem; justify-content: center; }
-  .sort-card { flex: 0 1 250px; background: var(--chip); border: 1px solid var(--line); border-radius: 14px; padding: .8rem .9rem; text-align: center; }
-  .sort-card .sc-name { font-weight: 800; margin-bottom: .6rem; }
-  .sort-btns { display: flex; gap: .5rem; justify-content: center; }
-  .sort-btns button {
-    flex: 1 1 0; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .82rem;
-    border: 2px solid var(--line); background: var(--card); color: var(--text);
-    border-radius: 10px; padding: .5rem .3rem; cursor: pointer; min-height: 44px;
-  }
-  .sort-btns button.picked { border-color: var(--accent); background: var(--accent); color: #06281e; }
-  .sort-card .mark { display: block; margin-top: .4rem; }
+  /* Question blocks */
+  .q-block { margin-top:1rem; padding-top:1rem; border-top:1px solid var(--bd); }
+  .q-stem { font-weight:800; font-size:.98rem; margin-bottom:.55rem; }
+  .opts { display:flex; flex-direction:column; gap:.45rem; }
+  .opts label { display:flex; align-items:flex-start; gap:.55rem; cursor:pointer;
+                padding:.55rem .75rem; border-radius:11px; border:1.5px solid var(--bd);
+                background:var(--btn); font-size:.92rem; font-weight:600; }
+  .opts label.right { border-color:#69DB7C; background:rgba(105,219,124,.16); }
+  .opts label.wrong { border-color:#FF6B6B; background:rgba(255,107,107,.16); }
+  .opts input { margin-top:.25rem; flex-shrink:0; }
 
-  .quiz-q { margin-top: 1.1rem; padding-top: .9rem; border-top: 1px dashed var(--line); }
-  .quiz-q .q-stem { font-weight: 800; }
-  .quiz-opts { display: flex; flex-direction: column; gap: .45rem; margin-top: .55rem; }
-  .quiz-opts label {
-    display: flex; align-items: center; gap: .6rem; background: var(--chip);
-    border: 2px solid var(--line); border-radius: 10px; padding: .6rem .7rem;
-    cursor: pointer; min-height: 44px; font-weight: 700; font-size: .95rem;
-  }
-  .quiz-opts input { accent-color: var(--accent); width: 1.1rem; height: 1.1rem; flex: none; }
-  .quiz-opts label.right { border-color: var(--good); }
-  .quiz-opts label.wrong { border-color: var(--bad); }
+  /* Tier offer */
+  .tier-grid { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:1rem; }
+  .tier-card { flex:1 1 200px; border-radius:16px; padding:1rem; text-align:center;
+               border:2px solid var(--bd); background:var(--btn); cursor:pointer; }
+  .tier-card.bronze { border-color:var(--bronze); }
+  .tier-card.silver { border-color:var(--silver); }
+  .tier-card.gold   { border-color:var(--gold); }
+  .tier-card.locked { opacity:.5; cursor:not-allowed; }
+  .tier-card .t-name { font-family:'Fredoka One',cursive; font-size:1.15rem; }
+  .tier-card .t-rate { font-size:.82rem; font-weight:800; color:var(--accent); margin-top:.2rem; }
+  .tier-card .t-desc { font-size:.82rem; color:var(--muted); font-weight:600; margin-top:.35rem; }
+  .tier-card .t-lock { font-size:.75rem; font-weight:800; color:var(--muted); margin-top:.4rem; }
+  .chip.tier-now.bronze { background:var(--bronze); color:#2b1a08; border-color:var(--bronze); }
+  .chip.tier-now.silver { background:var(--silver); color:#1d232a; border-color:var(--silver); }
+  .chip.tier-now.gold   { background:var(--gold);   color:#3a2c00; border-color:var(--gold); }
+  .coach-box { margin-top:1rem; padding:.85rem 1rem; border-radius:13px;
+               border:1.5px dashed var(--accent); background:rgba(32,201,151,.08);
+               font-weight:700; font-size:.92rem; display:none; }
+  .coach-box.show { display:block; }
 
-  .tf-row { display: flex; align-items: center; justify-content: space-between; gap: .8rem; flex-wrap: wrap; padding: .6rem 0; border-bottom: 1px dashed var(--line); }
-  .tf-stmt { flex: 1 1 260px; font-weight: 700; }
-  .tf-btns { display: flex; gap: .5rem; align-items: center; }
-  .tf-btns button {
-    font-family: 'Nunito', sans-serif; font-weight: 800; border: 2px solid var(--line);
-    background: var(--chip); color: var(--text); border-radius: 10px;
-    padding: .5rem .9rem; cursor: pointer; min-height: 44px; min-width: 64px;
-  }
-  .tf-btns button.picked { border-color: var(--accent); background: var(--accent); color: #06281e; }
+  /* Simulator */
+  .sim-meters { display:flex; gap:.8rem; flex-wrap:wrap; margin:1rem 0; }
+  .meter { flex:1 1 150px; background:var(--btn); border:1.5px solid var(--bd);
+           border-radius:13px; padding:.7rem .9rem; }
+  .meter b { font-size:.78rem; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+  .meter .m-val { font-family:'Fredoka One',cursive; font-size:1.4rem; margin-top:.15rem; }
+  .meter-track { height:8px; border-radius:999px; background:var(--bd); overflow:hidden; margin-top:.4rem; }
+  .meter-fill { height:100%; width:50%; transition:width .5s ease; }
+  .meter-fill.co2 { background:linear-gradient(90deg,#69DB7C,#FFD43B,#FF6B6B); }
+  .meter-fill.money { background:linear-gradient(90deg,#FF6B6B,#FFD43B,#69DB7C); }
+  .sim-choice { margin-top:1rem; }
+  .sim-opts { display:flex; flex-direction:column; gap:.5rem; margin-top:.6rem; }
+  .sim-opts button { text-align:left; font-family:inherit; font-weight:700; font-size:.92rem;
+        cursor:pointer; padding:.7rem .9rem; border-radius:12px;
+        border:1.5px solid var(--bd); background:var(--btn); color:var(--fg); }
+  .sim-opts button:hover { border-color:var(--accent); }
+  .sim-result { margin-top:.8rem; font-size:.92rem; font-weight:700; display:none; }
+  .sim-result.show { display:block; }
+  .sim-ending { margin-top:1rem; padding:1rem; border-radius:14px;
+                border:1.5px solid var(--accent); background:rgba(32,201,151,.08); display:none; }
+  .sim-ending.show { display:block; }
 
-  .feedback-line { display: none; margin-top: 1rem; font-weight: 800; }
-  .earned-note { display: none; margin-top: .35rem; font-size: .85rem; color: var(--muted); }
+  /* Trace-it-back */
+  .trace-start { font-family:'Fredoka One',cursive; font-size:1.1rem; text-align:center;
+                 padding:.9rem; border-radius:14px; background:var(--btn);
+                 border:1.5px solid var(--bd); }
+  .trace-chain { margin-top:.8rem; }
+  .trace-link { padding:.7rem .9rem; border-radius:12px; background:var(--btn);
+                border:1.5px solid var(--bd); margin-bottom:.5rem; font-weight:700; font-size:.92rem; }
+  .trace-link.revealed { border-color:var(--accent); }
+  .trace-q { font-weight:800; font-size:.95rem; margin:.6rem 0 .5rem; }
+  .trace-final { margin-top:.8rem; padding:.9rem; border-radius:13px; font-weight:800;
+                 background:rgba(32,201,151,.10); border:1.5px solid var(--accent); display:none;
+                 font-size:.92rem; }
+  .trace-final.show { display:block; }
 
-  .fig-box { margin: 1rem auto; max-width: 640px; }
-  .fig-box svg { width: 100%; height: auto; display: block; }
-  .fig-cap { text-align: center; font-size: .82rem; color: var(--muted); margin-top: .35rem; }
+  /* Myth-buster */
+  .myth-card { margin-top:1rem; padding:1rem; border-radius:15px; background:var(--btn);
+               border:1.5px solid var(--bd); }
+  .myth-claim { font-weight:800; font-size:1.02rem; font-style:italic; }
+  .myth-btns { display:flex; gap:.6rem; margin-top:.8rem; flex-wrap:wrap; }
+  .myth-btns button { flex:1 1 130px; font-family:inherit; font-weight:900; font-size:.95rem;
+        cursor:pointer; padding:.7rem; border-radius:12px; border:2px solid var(--bd);
+        background:var(--bg); color:var(--fg); }
+  .myth-btns button:disabled { opacity:.5; cursor:not-allowed; }
+  .myth-verdict { margin-top:.8rem; font-size:.92rem; font-weight:700; display:none; }
+  .myth-verdict.show { display:block; }
 
-  .starter-box { background: var(--chip); border: 1px dashed var(--accent); border-radius: 12px; padding: .8rem 1rem; margin-top: .8rem; }
-  .starter-box li { margin: .35rem 0 .35rem 1.2rem; }
+  /* Streak */
+  .streak-hud { display:flex; gap:.8rem; flex-wrap:wrap; margin-top:1rem; }
+  .streak-hud > div { flex:1 1 110px; text-align:center; background:var(--btn);
+        border:1.5px solid var(--bd); border-radius:13px; padding:.6rem; }
+  .streak-hud b { display:block; font-size:.72rem; text-transform:uppercase;
+                  letter-spacing:.05em; color:var(--muted); }
+  .streak-hud span { font-family:'Fredoka One',cursive; font-size:1.5rem; }
+  .streak-q { margin-top:1rem; font-weight:800; font-size:1.05rem; text-align:center;
+              padding:1rem; border-radius:14px; background:var(--btn); border:1.5px solid var(--bd); }
+  .streak-opts { display:flex; gap:.6rem; margin-top:.8rem; flex-wrap:wrap; }
+  .streak-opts button { flex:1 1 130px; font-family:inherit; font-weight:800; font-size:.92rem;
+        cursor:pointer; padding:.75rem; border-radius:12px; border:1.5px solid var(--bd);
+        background:var(--btn); color:var(--fg); }
 
-  .video-box { position: relative; padding-top: 56.25%; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); margin-top: .9rem; }
-  .video-box iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .earned-note { display:none; margin-top:.9rem; font-weight:800; font-size:.9rem; color:var(--accent); }
+  .feedback-line { margin-top:.7rem; font-weight:800; font-size:.95rem; }
 
-  #toast {
-    position: fixed; left: 50%; bottom: 1.4rem; transform: translateX(-50%) translateY(120%);
-    background: var(--accent); color: #06281e; font-weight: 800; border-radius: 999px;
-    padding: .7rem 1.4rem; z-index: 30; transition: transform .35s; box-shadow: 0 8px 24px rgba(0,0,0,.3);
-    max-width: 90vw; text-align: center;
-  }
-  #toast.show { transform: translateX(-50%) translateY(0); }
+  /* Finish */
+  .finish-beans { font-family:'Fredoka One',cursive; font-size:2.6rem; color:var(--accent);
+                  text-align:center; margin:.5rem 0; }
+  .finish-badge { text-align:center; font-weight:900; font-size:1.05rem; }
+  .cap-note { text-align:center; font-size:.85rem; color:var(--muted); font-weight:700; margin-top:.6rem; }
 
-  .site-footer { text-align: center; color: var(--muted); font-size: .82rem; padding: 2.2rem max(1rem, 4vw) 1.4rem; position: relative; z-index: 1; }
+  #toast { position:fixed; left:50%; bottom:1.3rem; transform:translateX(-50%) translateY(140%);
+           background:var(--accent); color:#12231d; font-weight:900; font-size:.92rem;
+           padding:.7rem 1.2rem; border-radius:999px; z-index:99; transition:transform .35s ease;
+           max-width:90vw; text-align:center; }
+  #toast.show { transform:translateX(-50%) translateY(0); }
 
-  @media (max-width: 600px) {
-    .vocab-term { min-width: 0; width: 100%; }
-    .vocab-row select, .fill-row select { width: 100%; }
-    .sort-card { flex: 0 1 100%; }
-    .tf-row { flex-direction: column; align-items: stretch; }
-    .tf-btns { justify-content: stretch; }
-    .tf-btns button { flex: 1 1 0; }
+  .site-footer { text-align:center; padding:1.5rem max(1rem,4vw); font-size:.8rem;
+                 color:var(--muted); border-top:1px solid var(--bd); }
+
+  @media (max-width:600px) {
+    html { font-size:16.5px; }
+    .rev-card, .tier-card, .meter { flex:1 1 100%; }
+    .myth-btns button, .streak-opts button { flex:1 1 100%; }
   }
 </style>
 </head>
 <body>
 <canvas id="stars"></canvas>
+
 <div class="wrapper">
 
   <div class="top-row">
     <a class="back-link" href="/standard5/science/">← Back to Science</a>
     <div class="theme-bar" id="themeBar">
-      <button data-t="night" title="Night">🌙</button>
-      <button data-t="sunny" title="Sunny">☀️</button>
-      <button data-t="cloudy" title="Cloudy">☁️</button>
-      <button data-t="nature" title="Nature">🌿</button>
+      <button data-t="night">🌙 Night</button>
+      <button data-t="sunny">☀️ Sunny</button>
+      <button data-t="cloudy">☁️ Cloudy</button>
+      <button data-t="nature">🌿 Nature</button>
     </div>
   </div>
 
   <header class="lesson-head">
     <div class="chip-row">
-      <span class="chip">📖 Lesson · Week 1</span>
-      <span class="chip">SC 1.09</span>
+      <span class="chip">Standard 5 · Science</span>
+      <span class="chip">Week 1 · SC 1.09</span>
       <span class="chip bean" id="beanPill">🌱 0 beans</span>
+      <span class="chip" id="tierChip" style="display:none;"></span>
     </div>
     <h1>Technology &amp; Climate Change</h1>
-    <p class="subtitle">The Two-Way Connection — how technology can cause climate change AND help us fight it. Work through each section and earn cacao beans 🌱 as you go!</p>
-    <p class="login-hint" id="loginHint"></p>
+    <p class="subtitle">Practice time! Cement what Mr. EdLo taught you this week.</p>
+    <p class="login-hint" id="loginHint">
+      <a href="/login/">Log in</a> to save your beans 🌱 to your account.
+    </p>
   </header>
 
   <div class="progress-wrap">
-    <div class="progress-label"><span>Lesson progress</span><span id="progText">0 of 6 done</span></div>
+    <div class="progress-label"><span>Your progress</span><span id="progText">0 of 6 done</span></div>
     <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
   </div>
 
-  <!-- ═══ SECTION 1 · HOOK ═══ -->
-  <section class="sec" id="sec-hook">
-    <span class="sec-tag">Section 1 · Think first</span>
-    <h2>🚌 The Problem AND the Solver?</h2>
-    <p>Picture two scenes from Belize: a line of <strong>diesel buses</strong> stuck in Belize City traffic, engines rumbling… and the shining <strong>solar panels</strong> on the roof of a rural health post.</p>
-    <p><strong>Both are technology.</strong> So here is the big question of this lesson:</p>
-    <p style="font-size:1.15rem; font-weight:800;">🤔 How can technology be the problem AND the solver?</p>
-    <button class="reveal-btn" id="hookBtn">Think about it… then tap to reveal 💡</button>
-    <div class="reveal-box" id="hookReveal">
-      <p><strong>Technology works BOTH ways.</strong> Some technology burns fossil fuels and releases gases that warm the planet. Other technology makes clean energy and helps slow the warming down. That two-way link is exactly what this lesson is about!</p>
+  <!-- 1. BRIEF REVIEW -->
+  <section class="sec" id="secReview">
+    <span class="sec-tag">Quick Review</span>
+    <h2>🔁 Remember the Two-Way Loop</h2>
+    <p>One minute to refresh. Then the practice begins.</p>
+    <div class="review-grid" id="reviewGrid"></div>
+    <div class="loop-box">
+      <div class="loop-arrow warm">🔥 Technology that BURNS fuel → greenhouse gases → traps heat → the planet warms</div>
+      <div class="loop-arrow cool">🌿 Technology that AVOIDS burning → fewer emissions → warming slows down</div>
+      <p class="hint">Technology is not automatically good or bad. It depends on whether it burns fossil fuels or replaces them.</p>
+    </div>
+    <button class="btn" id="reviewDone">I'm ready — start practising →</button>
+  </section>
+
+  <!-- 2. CALIBRATION -->
+  <section class="sec locked-step" id="secCalib">
+    <span class="done-badge">✓ done</span>
+    <span class="sec-tag">Warm-Up Challenge</span>
+    <h2>🎯 Five Quick Questions</h2>
+    <p>This is not a test — it finds the right challenge level for you today. Answer all five.</p>
+    <div id="calibBox"></div>
+    <button class="btn" id="calibCheck" disabled>Check my level</button>
+    <div class="feedback-line" id="calibFeedback"></div>
+    <div class="earned-note"></div>
+  </section>
+
+  <!-- 3. TIER OFFER -->
+  <section class="sec locked-step" id="secTier">
+    <span class="sec-tag">Choose Your Challenge</span>
+    <h2 id="tierHead">🏅 Pick Your Level</h2>
+    <p id="tierMsg"></p>
+    <div class="tier-grid" id="tierGrid"></div>
+  </section>
+
+  <!-- 4. SIMULATOR -->
+  <section class="sec locked-step" id="secSim">
+    <span class="done-badge">✓ done</span>
+    <span class="sec-tag">Activity 1 · Decide</span>
+    <h2>🏛️ Mayor for a Year</h2>
+    <p>You are the mayor of a Belizean town. Every choice changes the air and the money. Choose well!</p>
+    <div class="sim-meters">
+      <div class="meter"><b>Greenhouse gases</b><div class="m-val" id="simCo2Val">Medium</div>
+        <div class="meter-track"><div class="meter-fill co2" id="simCo2Bar"></div></div></div>
+      <div class="meter"><b>Town money</b><div class="m-val" id="simMoneyVal">$100</div>
+        <div class="meter-track"><div class="meter-fill money" id="simMoneyBar"></div></div></div>
+    </div>
+    <div class="sim-choice" id="simChoice"></div>
+    <div class="sim-result" id="simResult"></div>
+    <div class="sim-ending" id="simEnding"></div>
+    <div class="coach-box" id="simCoach"></div>
+    <div class="earned-note"></div>
+  </section>
+
+  <!-- 5. TRACE-IT-BACK -->
+  <section class="sec locked-step" id="secTrace">
+    <span class="done-badge">✓ done</span>
+    <span class="sec-tag">Activity 2 · Investigate</span>
+    <h2>🔍 Trace It Back</h2>
+    <p>Some technology looks clean… until you follow the wire. Trace each one to its real source.</p>
+    <div id="traceBox"></div>
+    <div class="coach-box" id="traceCoach"></div>
+    <div class="earned-note"></div>
+  </section>
+
+  <!-- 6. MYTH-BUSTER -->
+  <section class="sec locked-step" id="secMyth">
+    <span class="done-badge">✓ done</span>
+    <span class="sec-tag">Activity 3 · Judge</span>
+    <h2>🕵️ Myth-Buster Arena</h2>
+    <p>People say these things about technology and climate. Which ones survive?</p>
+    <div id="mythBox"></div>
+    <div class="coach-box" id="mythCoach"></div>
+    <div class="earned-note"></div>
+  </section>
+
+  <!-- 7. STREAK -->
+  <section class="sec locked-step" id="secStreak">
+    <span class="done-badge">✓ done</span>
+    <span class="sec-tag">Activity 4 · Speed</span>
+    <h2>⚡ Beat Your Streak</h2>
+    <p>Quick-fire! How many can you get right in a row? Your best streak is saved.</p>
+    <div class="streak-hud">
+      <div><b>Streak</b><span id="stkNow">0</span></div>
+      <div><b>Best ever</b><span id="stkBest">0</span></div>
+      <div><b>Time left</b><span id="stkLeft">–</span></div>
+    </div>
+    <div id="streakBox"></div>
+    <button class="btn" id="streakStart">Start the round →</button>
+    <div class="earned-note"></div>
+  </section>
+
+  <!-- 8. FINISH -->
+  <section class="sec locked-step" id="secFinish">
+    <span class="sec-tag">Finish Line</span>
+    <h2>🏁 Great Work!</h2>
+    <div class="finish-beans" id="finishBeans">🌱 0</div>
+    <div class="finish-badge" id="finishBadge"></div>
+    <p class="cap-note" id="capNote"></p>
+    <div class="btn-row" style="justify-content:center;">
+      <a class="btn ghost" href="/standard5/science/">← Back to Science</a>
+      <button class="btn" id="replayBtn">🔁 Try a harder level</button>
     </div>
   </section>
 
-  <!-- ═══ SECTION 2 · LEARN IT ═══ -->
-  <section class="sec" id="sec-learn">
-    <span class="sec-tag">Section 2 · Learn it</span>
-    <h2>🔁 The Two-Way Climate Loop</h2>
-    <p><strong>Technology</strong> means the tools and machines people make to do work. <strong>Climate change</strong> means a long-term shift in the average weather.</p>
-    <p>Here is the loop Mr. EdLo drew on the board:</p>
-    <div class="fig-box">
-      <svg viewBox="0 0 640 300" role="img" aria-label="Two-way loop between technology and the climate">
-        <defs>
-          <marker id="arrA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-            <path d="M0,0 L10,5 L0,10 z" fill="#e8590c"/>
-          </marker>
-          <marker id="arrB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-            <path d="M0,0 L10,5 L0,10 z" fill="#0CA678"/>
-          </marker>
-        </defs>
-        <rect x="0" y="0" width="640" height="300" rx="16" fill="#10254a"/>
-        <rect x="30" y="105" width="180" height="90" rx="14" fill="#1d3b74" stroke="#4DABF7" stroke-width="2.5"/>
-        <text x="120" y="143" text-anchor="middle" font-family="Nunito, sans-serif" font-size="19" font-weight="800" fill="#ffffff">⚙️ TECHNOLOGY</text>
-        <text x="120" y="170" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" fill="#bcd3f5">tools &amp; machines</text>
-        <rect x="430" y="105" width="180" height="90" rx="14" fill="#5c3a10" stroke="#FFD43B" stroke-width="2.5"/>
-        <text x="520" y="143" text-anchor="middle" font-family="Nunito, sans-serif" font-size="19" font-weight="800" fill="#ffffff">🌡️ WARMER</text>
-        <text x="520" y="168" text-anchor="middle" font-family="Nunito, sans-serif" font-size="19" font-weight="800" fill="#ffffff">PLANET</text>
-        <path d="M 215 118 C 300 55, 360 55, 425 118" fill="none" stroke="#e8590c" stroke-width="4" marker-end="url(#arrA)"/>
-        <text x="320" y="52" text-anchor="middle" font-family="Nunito, sans-serif" font-size="13.5" font-weight="800" fill="#ffb38a">Some technology RELEASES greenhouse gases</text>
-        <text x="320" y="72" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12" fill="#ffb38a">vehicles · factories · refrigeration</text>
-        <path d="M 425 185 C 360 248, 300 248, 215 185" fill="none" stroke="#0CA678" stroke-width="4" marker-end="url(#arrB)"/>
-        <text x="320" y="255" text-anchor="middle" font-family="Nunito, sans-serif" font-size="13.5" font-weight="800" fill="#7fe0c3">Other technology SLOWS the warming</text>
-        <text x="320" y="275" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12" fill="#7fe0c3">solar panels · electric buses · efficient stoves</text>
-      </svg>
-      <p class="fig-cap">The two-way climate loop — technology sits on BOTH sides.</p>
-    </div>
-    <p>🔥 <strong>One way:</strong> a diesel generator burns fuel and <strong>adds greenhouse gases</strong> — gases (mainly CO₂) that trap heat in the atmosphere like a blanket.</p>
-    <p>💧 <strong>The other way:</strong> the hydro dams on the <strong>Macal River</strong> make electricity <strong>without burning any fuel</strong> at all.</p>
-    <p class="hint">Belize releases very little greenhouse gas compared to the world — but our low coastline, coral reef, and hurricane season mean we feel climate change strongly. That is why this lesson matters here at home.</p>
-  </section>
-
-  <!-- ═══ VIDEO (hidden until Mr. EdLo adds a URL) ═══ -->
-  <section class="sec" id="sec-video" style="display:none;">
-    <span class="sec-tag">Watch</span>
-    <h2>🎬 Watch &amp; Think</h2>
-    <div class="video-box"><iframe id="videoFrame" src="" title="Lesson video" allowfullscreen></iframe></div>
-  </section>
-
-  <!-- ═══ SECTION 3 · VOCABULARY ═══ -->
-  <section class="sec act" id="sec-vocab" data-act="vocab">
-    <span class="sec-tag">Section 3 · Word power</span>
-    <h2>📚 Vocabulary Match <span class="done-badge">✓ done</span></h2>
-    <p class="hint">Match each science word to its meaning. Answer all five, then check.</p>
-    <div id="vocabList"></div>
-    <button class="check-btn" disabled>Check my answers ✔</button>
-    <p class="feedback-line"></p><p class="earned-note"></p>
-  </section>
-
-  <!-- ═══ SECTION 4 · SORT IT ═══ -->
-  <section class="sec act" id="sec-sort" data-act="sort">
-    <span class="sec-tag">Section 4 · Sort it</span>
-    <h2>🗂️ Belizean Technology Sort <span class="done-badge">✓ done</span></h2>
-    <p class="hint">Just like the picture-card activity in class: does each technology <strong>🌡️ add to</strong> climate change, or <strong>🌱 help reduce</strong> it? Tap one button on every card.</p>
-    <div class="sort-grid" id="sortGrid"></div>
-    <button class="check-btn" disabled>Check my sorting ✔</button>
-    <p class="feedback-line"></p><p class="earned-note"></p>
-  </section>
-
-  <!-- ═══ SECTION 5 · PRACTICE ═══ -->
-  <section class="sec act" id="sec-practice" data-act="practice">
-    <span class="sec-tag">Section 5 · Your turn</span>
-    <h2>✏️ Complete the Loop <span class="done-badge">✓ done</span></h2>
-    <p class="hint">Use the word bank to finish the sentences — the same sentence starters from your worksheet.</p>
-    <div id="fillList"></div>
-    <div class="starter-box">
-      <strong>🗣️ Say it at home:</strong>
-      <li>The technology ______ adds to climate change because it ______.</li>
-      <li>The technology ______ helps reduce climate change because it ______.</li>
-      <li>One technology in my community is ______.</li>
-    </div>
-    <button class="check-btn" disabled>Check my sentences ✔</button>
-    <p class="feedback-line"></p><p class="earned-note"></p>
-  </section>
-
-  <!-- ═══ SECTION 6 · CHECKPOINT ═══ -->
-  <section class="sec act" id="sec-checkpoint" data-act="checkpoint">
-    <span class="sec-tag">Section 6 · Checkpoint</span>
-    <h2>🛑 ALTO — Checkpoint Quiz <span class="done-badge">✓ done</span></h2>
-    <p class="hint">Six questions on the whole lesson. Answer every one, then check. Checkpoints earn extra beans!</p>
-    <div id="quizList"></div>
-    <button class="check-btn" disabled>Check the quiz ✔</button>
-    <p class="feedback-line"></p><p class="earned-note"></p>
-  </section>
-
-  <!-- ═══ SECTION 7 · MISCONCEPTION BUSTER ═══ -->
-  <section class="sec act" id="sec-tf" data-act="tf">
-    <span class="sec-tag">Section 7 · Myth buster</span>
-    <h2>🕵️ True or False? <span class="done-badge">✓ done</span></h2>
-    <p class="hint">Many students think ALL technology is bad for the environment. Is that right? Decide for each statement.</p>
-    <div id="tfList"></div>
-    <button class="check-btn" disabled>Check my choices ✔</button>
-    <p class="feedback-line"></p><p class="earned-note"></p>
-  </section>
-
-  <!-- ═══ SECTION 8 · FINISH LINE ═══ -->
-  <section class="sec" id="sec-finish">
-    <span class="sec-tag">Section 8 · Finish line</span>
-    <h2>🏁 Reflect &amp; Finish</h2>
-    <p>Before you go, answer these OUT LOUD or in your notebook:</p>
-    <p>1️⃣ Name <strong>one technology in YOUR community</strong> that adds to climate change — and say why.</p>
-    <p>2️⃣ Name <strong>one that helps reduce it</strong> — and say why.</p>
-    <p>3️⃣ Explain the two-way loop to someone at home using the word <strong>“while”</strong>: <em>“Some technology warms the planet, while other technology…”</em></p>
-    <p class="feedback-line" id="finishLine"></p>
-    <p class="hint" id="finishHint">Complete all six activity sections above to collect your 🌱 15-bean completion bonus!</p>
-  </section>
-
-  <footer class="site-footer">© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize · All rights reserved.</footer>
 </div>
 
+<footer class="site-footer">© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize · All rights reserved.</footer>
 <div id="toast"></div>
 
-<script src="/edlo-utils.js"></script>
 <script>
-'use strict';
-/* ═══════════════ Lesson config — Week 1 · SC 1.09 ═══════════════ */
-var LESSON = { week: 'Wk1', lo: 'SC1.09', name: 'Technology & Climate Change', idBase: 'std5-sci-wk01' };
-var VIDEO_URL = ''; /* Mr. EdLo: paste a YouTube EMBED url (https://www.youtube.com/embed/XXXX) to show the video section */
+/* ═══════════════════════════════════════════════════════════════
+   ONLINE LESSON ENGINE — design spec: LESSON-ENGINE-PLAN.md
+   Structure: DATA first, ENGINE second. To build another week,
+   replace the DATA block only — the engine never changes.
+   ═══════════════════════════════════════════════════════════════ */
 
-var VOCAB = [
-  { term: 'technology',      def: 'Tools and machines people make to do work' },
-  { term: 'climate change',  def: 'A long-term shift in the average weather' },
-  { term: 'greenhouse gas',  def: 'A gas (mainly CO₂) that traps heat in the atmosphere' },
-  { term: 'emission',        def: 'Gas released into the air, for example from burning fuel' },
-  { term: 'renewable',       def: 'Energy nature keeps replacing, like sunlight and running water' }
+/* ───────────────────────── DATA ───────────────────────── */
+var LESSON = { week:'Wk1', lo:'SC1.09', name:'Technology & Climate Change', idBase:'std5-sci-wk01' };
+
+var REVIEW = [
+  { t:'Technology',      d:'Tools and machines people make to do work. A machete is technology too — not only electronics.' },
+  { t:'Climate change',  d:'A long-term shift in average weather. Today’s rain is weather; Belize getting hotter over thirty years is climate.' },
+  { t:'Greenhouse gas',  d:'A gas, mainly carbon dioxide, that traps heat in the air around the Earth.' },
+  { t:'Emission',        d:'The release of a gas into the air by an engine, a factory, or a fire.' },
+  { t:'Renewable energy',d:'Energy from sources that are not used up — sun, wind, and falling water.' },
+  { t:'Two-way relationship', d:'Some technology adds to warming. Other technology slows it down.' }
 ];
 
-var SORT = {
-  labels: ['🌡️ Adds to it', '🌱 Helps reduce it'],
-  cards: [
-    { name: '🚌 Diesel bus',                       ans: 0 },
-    { name: '⚡ Fuel-burning generator',           ans: 0 },
-    { name: '🍳 Gas stove',                        ans: 0 },
-    { name: '🪚 Gasoline chainsaw',                ans: 0 },
-    { name: '☀️ Solar panel',                      ans: 1 },
-    { name: '💧 Hydro dam on the Macal River',     ans: 1 },
-    { name: '🔋 Electric bus',                     ans: 1 },
-    { name: '🚲 Bicycle',                          ans: 1 }
+var CALIB = [
+  { q:'Which one is technology?', o:['A machete','A rain cloud','A jaguar','A mountain'], a:0 },
+  { q:'Belize has been getting hotter on average over thirty years. Is that weather or climate?',
+    o:['Weather','Climate','Neither','Both are the same'], a:1 },
+  { q:'Which technology releases the MOST greenhouse gas?',
+    o:['A solar panel','A bicycle','A diesel generator','A wheelbarrow'], a:2 },
+  { q:'Why do we say technology has a TWO-WAY relationship with climate change?',
+    o:['Because it is used twice a day','Because some technology warms the planet and some slows the warming',
+       'Because it works in two countries','Because it has two switches'], a:1 },
+  { q:'A chainsaw harms the climate in two ways. What are they?',
+    o:['It burns fuel, and it removes trees that absorb carbon dioxide',
+       'It is loud, and it is heavy','It burns fuel, and it is expensive',
+       'It is sharp, and it needs a driver'], a:0 }
+];
+
+var SIM = {
+  bronze:[
+    { q:'The town bus is old and smoky. What do you do?',
+      o:[{t:'Keep the old diesel bus — it is cheap',co2:2,money:0,fb:'Cheap today, but the diesel keeps releasing greenhouse gases.'},
+         {t:'Buy an electric bus',co2:-2,money:-30,fb:'Costly, but it stops burning fuel every day. Good for the air.'}] },
+    { q:'The clinic needs electricity at night.',
+      o:[{t:'Run a diesel generator',co2:2,money:-10,fb:'It works — but burning diesel adds greenhouse gases.'},
+         {t:'Install solar panels with a battery',co2:-2,money:-25,fb:'The sun is not used up. Fewer emissions for years.'}] },
+    { q:'Families are cooking on open wood fires.',
+      o:[{t:'Leave it as it is',co2:1,money:0,fb:'Open fires burn wood and release gases into the air.'},
+         {t:'Give out efficient stoves',co2:-2,money:-20,fb:'Efficient stoves burn far less wood for the same meal.'}] },
+    { q:'The town wants more light on the main street.',
+      o:[{t:'Old bulbs on the diesel grid',co2:2,money:-5,fb:'More electricity from burning fuel means more emissions.'},
+         {t:'Solar street lamps',co2:-1,money:-18,fb:'Each lamp makes its own power from the sun.'}] },
+    { q:'A logging company wants to cut the forest by the river.',
+      o:[{t:'Say yes — the town earns money',co2:3,money:30,fb:'Money now, but trees absorb carbon dioxide. Fewer trees, more warming.'},
+         {t:'Say no and protect the trees',co2:-2,money:0,fb:'The trees keep absorbing carbon dioxide for the town.'}] }
+  ],
+  silver:[
+    { q:'You can afford ONE big project this year. The town has a smoky bus AND a diesel clinic generator.',
+      o:[{t:'Replace the bus — it runs all day',co2:-2,money:-30,fb:'Good reasoning: the bus burns fuel for many hours daily.'},
+         {t:'Replace the generator — it runs at night only',co2:-1,money:-30,fb:'It helps, but the bus burns more fuel over a day.'},
+         {t:'Spend nothing this year',co2:2,money:0,fb:'Saving money, but both keep releasing gases.'}] },
+    { q:'A company offers free electric fans for every home. The town grid runs on diesel.',
+      o:[{t:'Accept — fans are clean technology',co2:2,money:0,fb:'Careful! The fan burns nothing, but its electricity comes from diesel.'},
+         {t:'Accept, and switch the grid to solar first',co2:-2,money:-25,fb:'Excellent. Clean devices need clean electricity behind them.'},
+         {t:'Refuse the fans completely',co2:0,money:0,fb:'Fans are not the problem — where the electricity comes from is.'}] },
+    { q:'Two villages need power. One sits near the Macal River; one is far from any river.',
+      o:[{t:'Hydro for the river village, solar for the far one',co2:-3,money:-30,fb:'Both use renewable sources that suit the place. Strong choice.'},
+         {t:'Diesel generators for both — simplest',co2:3,money:-15,fb:'Simple, but both villages now burn fuel every day.'},
+         {t:'Hydro for both villages',co2:-1,money:-35,fb:'The far village has no river — the plan cannot work there.'}] },
+    { q:'Tourists arrive by cruise ship. The town could buy tour vans or rent out bicycles.',
+      o:[{t:'Diesel tour vans — more comfort',co2:3,money:25,fb:'More visitors served, but every trip burns fuel.'},
+         {t:'Bicycle rentals — the town is flat',co2:-1,money:15,fb:'Bicycles are technology too, and they burn nothing.'},
+         {t:'A few electric vans',co2:0,money:-10,fb:'Better than diesel, but the electricity source still matters.'}] },
+    { q:'End of year. You have $40 left, and the dry season is getting hotter each year.',
+      o:[{t:'Plant and protect trees along the river',co2:-3,money:-15,fb:'Trees absorb carbon dioxide. A slow but real answer.'},
+         {t:'Buy more air conditioners for the school',co2:2,money:-35,fb:'Cooler classrooms today, more electricity burned every day after.'},
+         {t:'Keep the money for next year',co2:0,money:0,fb:'Safe, but the problem does not wait.'}] }
+  ],
+  gold:[
+    { q:'You have $100 and four years. Every choice locks in. A neighbouring town got rich on logging. Your first move?',
+      o:[{t:'Copy them — log the forest, buy solar later',co2:3,money:35,fb:'The forest takes decades to grow back. You lose its carbon absorption long before the solar arrives.'},
+         {t:'Protect the forest and start with one solar project',co2:-2,money:-25,fb:'You keep the trees absorbing carbon dioxide AND begin replacing burnt fuel. Both arrows of the loop.'},
+         {t:'Do nothing in year one and study the problem',co2:1,money:0,fb:'Studying is wise, but the diesel keeps running while you decide.'}] },
+    { q:'The grid is diesel. A donor offers EITHER 500 electric fans OR one solar farm — not both.',
+      o:[{t:'The 500 fans — more families helped now',co2:3,money:0,fb:'The trap: 500 fans on a diesel grid means 500 more reasons to burn diesel.'},
+         {t:'The solar farm — it changes where ALL the power comes from',co2:-3,money:0,fb:'Exactly. Change the source and every device in town gets cleaner.'},
+         {t:'The fans, then ask a second donor for solar',co2:1,money:0,fb:'Risky. Emissions rise now for a solar farm that may never come.'}] },
+    { q:'A factory will bring 200 jobs but burns fuel all day. Refusing keeps the air clean but the town poor.',
+      o:[{t:'Accept it with no conditions',co2:3,money:30,fb:'Jobs now, but nothing limits the emissions for years ahead.'},
+         {t:'Accept only if it runs on solar and hydro power',co2:-2,money:20,fb:'Strong. You take the jobs and require technology that avoids burning.'},
+         {t:'Refuse completely',co2:0,money:-10,fb:'The air stays clean, but you gave up a chance to shape the technology.'}] },
+    { q:'Halfway. Greenhouse gases fell, but the town is short of money. Cut the solar programme?',
+      o:[{t:'Yes — sell the panels back',co2:3,money:25,fb:'The money returns, and so do the emissions. The gains reverse.'},
+         {t:'No — charge a small fee for the solar power instead',co2:-1,money:15,fb:'Clever. The technology keeps working and pays its own way.'},
+         {t:'No — borrow more money',co2:-1,money:-20,fb:'The panels stay, but the debt grows heavy.'}] },
+    { q:'Final year. Tell the newspaper what made the real difference.',
+      o:[{t:'We stopped using technology',co2:2,money:0,fb:'Not true — bicycles, solar panels and efficient stoves are all technology.'},
+         {t:'We replaced technology that burns fuel with technology that does not',co2:-3,money:0,fb:'That is the whole outcome in one sentence. Both arrows of the loop.'},
+         {t:'We planted trees and changed nothing else',co2:0,money:0,fb:'Trees help, but the fuel-burning technology was still running.'}] }
   ]
 };
 
-var FILL = [
-  { pre: 'Some technology', post: 'greenhouse gases into the air.', opts: ['releases', 'traps', 'plants'], ans: 0 },
-  { pre: 'Those gases', post: 'heat, so the planet slowly warms.', opts: ['trap', 'cool', 'clean'], ans: 0 },
-  { pre: 'Other technology, like', post: ', makes clean electricity.', opts: ['solar panels', 'diesel buses', 'gas stoves'], ans: 0 },
-  { pre: 'So technology can cause climate change AND help', post: 'it.', opts: ['reduce', 'grow', 'hide'], ans: 0 }
-];
-
-var QUIZ = [
-  { stem: '1. What is technology?',
-    opts: ['Only computers and phones', 'Tools and machines people make to do work', 'Anything that uses gasoline'], ans: 1,
-    why: 'Technology means ALL the tools and machines people make to do work — from a bicycle to a solar panel.' },
-  { stem: '2. What is climate change?',
-    opts: ['A rainy morning', 'A long-term shift in the average weather', 'The wind changing direction today'], ans: 1,
-    why: 'Climate change is about the LONG-TERM average, not one day’s weather.' },
-  { stem: '3. Which Belizean technology ADDS greenhouse gases?',
-    opts: ['A diesel generator', 'A solar panel', 'A bicycle'], ans: 0,
-    why: 'The diesel generator burns fuel, so It releases greenhouse gases.' },
-  { stem: '4. Which technology makes electricity WITHOUT burning fuel?',
-    opts: ['A gas stove', 'The hydro dams on the Macal River', 'A diesel bus'], ans: 1,
-    why: 'The hydro dams use the river’s moving water — no fuel is burned.' },
-  { stem: '5. What do greenhouse gases do?',
-    opts: ['They trap heat in the atmosphere', 'They make the sea colder', 'They stop hurricanes'], ans: 0,
-    why: 'Greenhouse gases (mainly CO₂) trap heat like a blanket around the Earth.' },
-  { stem: '6. Which sentence shows the TWO-WAY link?',
-    opts: ['All technology warms the planet', 'Technology has nothing to do with climate',
-           'Some technology warms the planet, while other technology helps slow the warming'], ans: 2,
-    why: 'That is the loop — technology sits on BOTH sides of climate change.' }
-];
-
-var TF = [
-  { stmt: 'All technology is bad for the environment.', ans: false,
-    why: 'Technology is neutral — It depends on whether It burns fossil fuels or replaces them.' },
-  { stmt: 'Solar panels and electric buses are technology too.', ans: true,
-    why: 'Yes! Helpful machines are just as much technology as harmful ones.' },
-  { stmt: 'A diesel generator releases greenhouse gases.', ans: true,
-    why: 'It burns fuel, so It releases gases that trap heat.' },
-  { stmt: 'Technology can only cause climate change — It can never help fix it.', ans: false,
-    why: 'Solar panels, hydro dams and electric buses all help REDUCE climate change.' }
-];
-
-/* Bean economy (locked): activities 5 + 1/correct · checkpoint 10 + 1/correct · completion 15 */
-var ACTS = {
-  vocab:      { flat: 5,  max: 10, label: 'Vocabulary Match' },
-  sort:       { flat: 5,  max: 13, label: 'Technology Sort' },
-  practice:   { flat: 5,  max: 9,  label: 'Complete the Loop' },
-  checkpoint: { flat: 10, max: 16, label: 'Checkpoint Quiz' },
-  tf:         { flat: 5,  max: 9,  label: 'Myth Buster' }
+var TRACE = {
+  bronze:[
+    { start:'🌀 An electric fan', q:'The fan burns nothing. So is it clean?',
+      chain:['The fan runs on electricity','The electricity comes through a wire','The wire comes from the power station'],
+      final:'If the power station BURNS DIESEL, the fan adds greenhouse gases too — just not in your room.',
+      o:['Yes, completely clean','It depends where the electricity comes from','No, fans are always dirty'], a:1 },
+    { start:'🚌 A diesel bus', q:'Where do the greenhouse gases come from?',
+      chain:['The engine burns diesel fuel','Burning releases carbon dioxide','Carbon dioxide traps heat'],
+      final:'The bus burns fuel directly, so the emissions come straight out of the exhaust pipe.',
+      o:['From the tyres','From burning the fuel in the engine','From the passengers'], a:1 },
+    { start:'💡 A solar street lamp', q:'What does this lamp burn?',
+      chain:['The panel collects sunlight','Sunlight charges a battery','The battery lights the lamp at night'],
+      final:'Nothing is burned. Sunlight is renewable — it is not used up.',
+      o:['Diesel','Wood','Nothing at all'], a:2 },
+    { start:'🪚 A chainsaw', q:'A chainsaw harms the climate TWICE. What is the second harm?',
+      chain:['The chainsaw burns fuel — that is harm one','It cuts down trees','Trees absorb carbon dioxide'],
+      final:'Fewer trees means less carbon dioxide absorbed. That is the second harm.',
+      o:['It is very loud','It removes trees that absorb carbon dioxide','It needs sharpening'], a:1 },
+    { start:'🍳 A gas stove', q:'Follow the flame. What is happening?',
+      chain:['The stove burns gas','Burning releases carbon dioxide','The gas came from under the ground'],
+      final:'Fossil fuel comes out of the ground and its carbon ends up in the air.',
+      o:['Gas is renewable','Burning gas releases greenhouse gases','The stove makes its own gas'], a:1 }
+  ],
+  silver:[
+    { start:'🌀 An electric fan on a DIESEL grid', q:'Is this fan helping or harming the climate?',
+      chain:['The fan itself burns nothing','But its electricity comes from a diesel generator','More fans means the generator runs harder'],
+      final:'A clean-looking device on a dirty grid still causes emissions. Always ask where the electricity comes from.',
+      o:['Helping — it burns nothing','Harming — the diesel behind it burns more','It has no effect at all'], a:1 },
+    { start:'🌀 The SAME fan on a SOLAR grid', q:'Now is the fan helping or harming?',
+      chain:['The fan still burns nothing','Its electricity now comes from sunlight','No fuel is burned anywhere in the chain'],
+      final:'The same device changed from harmful to harmless — because the SOURCE changed, not the fan.',
+      o:['Still harming','Now harmless — nothing in the chain burns fuel','Fans cannot run on solar'], a:1 },
+    { start:'🔋 An electric car charged from a diesel generator', q:'Where are the emissions?',
+      chain:['The car has no exhaust pipe','The charging point draws from the generator','The generator burns diesel'],
+      final:'The emissions did not disappear — they moved from the car to the generator.',
+      o:['There are none','They moved to the generator','Only in the battery'], a:1 },
+    { start:'🏭 A factory that calls itself “green”', q:'What must you check before you believe it?',
+      chain:['The building burns no fuel itself','But its machines need electricity','That electricity must come from somewhere'],
+      final:'“Green” means nothing until you follow the energy back to its source.',
+      o:['The colour of the building','Where its electricity is made','How many workers it has'], a:1 },
+    { start:'🌳 A forest cleared for a solar farm', q:'Is this a clear win for the climate?',
+      chain:['Solar panels burn no fuel — that is good','But the trees that were cut absorbed carbon dioxide','The loss of trees works against the gain'],
+      final:'Both arrows matter. The best solar farms go where trees do not have to be lost.',
+      o:['Yes, solar is always a win','Not simple — the lost trees worked against it','No, solar is useless'], a:1 }
+  ],
+  gold:[
+    { start:'🌀 A fan on a grid that is HALF solar, HALF diesel', q:'How do you judge this fan?',
+      chain:['The fan burns nothing itself','Half its electricity is clean, half is burned','Adding fans increases demand on BOTH halves'],
+      final:'Partly clean is not clean. Every extra device pulls on the diesel half too, until the whole source is replaced.',
+      o:['Completely clean','Partly harmful — extra demand still pulls on the diesel half','Completely harmful'], a:1 },
+    { start:'🚌 An electric bus paid for by logging the forest', q:'Did the town help the climate?',
+      chain:['The bus stops burning diesel daily — a real gain','The forest that was cut absorbed carbon dioxide for decades','A new forest takes decades to replace what was lost'],
+      final:'Both arrows moved at once, in opposite directions. Gaining on one while losing on the other is not automatic progress.',
+      o:['Yes — electric is always better','Not clearly — the lost forest works against the gain','No — electric buses do not help'], a:1 },
+    { start:'⚡ A town cut emissions per person by half, then doubled its population', q:'What happened to TOTAL emissions?',
+      chain:['Each person now emits half as much','But there are twice as many people','Half of double is the same as before'],
+      final:'Emissions per person fell, but the total stayed the same. Always ask which number is being reported.',
+      o:['They halved','They stayed about the same','They doubled'], a:1 },
+    { start:'🔌 “Zero-emission” written on a machine', q:'What does that label actually promise?',
+      chain:['The machine releases nothing where it stands','It says nothing about making its electricity','It says nothing about building the machine'],
+      final:'The label covers one point in the chain. The emissions may simply sit somewhere else in it.',
+      o:['No emissions anywhere, ever','No emissions at that spot only','It is always a lie'], a:1 },
+    { start:'🇧🇿 Belize uses Macal River hydro AND imported diesel', q:'A new factory doubles electricity demand. What happens?',
+      chain:['The hydro dams already run at their limit','Extra demand must come from somewhere','The only source left to increase is diesel'],
+      final:'When the clean source is already full, ALL new demand is met by burning. Growing demand matters as much as the source.',
+      o:['The hydro simply makes more','The extra comes from burning diesel','Emissions stay the same'], a:1 }
+  ]
 };
-var COMPLETION_BEANS = 15;
-var TOTAL_ACTS = 6; /* 5 activities + completion */
 
-/* ═══════════════ Engine (shared by all Std5 Science lessons) ═══════════════ */
-var sessionBeans = 0, doneCount = 0, completionDone = false;
+var MYTH = {
+  bronze:[
+    { c:'All technology is bad for the environment.', bust:true,
+      why:'BUSTED. Solar panels, bicycles and efficient stoves are technology too — and they help.' },
+    { c:'Burning diesel releases greenhouse gases.', bust:false,
+      why:'TRUE. Burning fossil fuel releases carbon dioxide, which traps heat.' },
+    { c:'Today’s rainstorm proves the climate is changing.', bust:true,
+      why:'BUSTED. One day of rain is weather. Climate is the average over many years.' },
+    { c:'Sunlight and wind are not used up when we use them.', bust:false,
+      why:'TRUE. That is exactly what renewable means.' },
+    { c:'A bicycle is not technology because it has no engine.', bust:true,
+      why:'BUSTED. Technology is any tool or machine people make to do work — engine or not.' }
+  ],
+  silver:[
+    { c:'An electric fan is always clean, wherever you use it.', bust:true,
+      why:'BUSTED. If the electricity is made by burning diesel, the fan causes emissions too.' },
+    { c:'A chainsaw harms the climate in two different ways.', bust:false,
+      why:'TRUE. It burns fuel, AND it removes trees that absorb carbon dioxide.' },
+    { c:'Planting trees can help slow climate change.', bust:false,
+      why:'TRUE. Trees absorb carbon dioxide from the air as they grow.' },
+    { c:'If a machine has no exhaust pipe, it produces no emissions at all.', bust:true,
+      why:'BUSTED. The emissions may happen where its electricity is made instead.' },
+    { c:'Hydro power from the Macal River makes electricity without burning fuel.', bust:false,
+      why:'TRUE. Falling water turns the machines — nothing is burned.' }
+  ],
+  gold:[
+    { c:'A town that switches to electric buses has definitely reduced its emissions.', bust:true,
+      why:'BUSTED. Only if the electricity is not made by burning fuel. Follow the chain first.' },
+    { c:'Technology cannot solve climate change, because technology caused it.', bust:true,
+      why:'BUSTED. One word covers both arrows. Technology that burns caused harm; technology that replaces burning reduces it.' },
+    { c:'Cutting emissions per person always means total emissions fall.', bust:true,
+      why:'BUSTED. If the number of people grows enough, the total can stay the same or even rise.' },
+    { c:'A solar farm built on cleared forest may not be a clear climate gain.', bust:false,
+      why:'TRUE. The panels avoid burning, but the lost trees no longer absorb carbon dioxide.' },
+    { c:'“Zero-emission” on a label means no greenhouse gases were released anywhere.', bust:true,
+      why:'BUSTED. It usually means none at that spot. Making the electricity may still have burned fuel.' }
+  ]
+};
 
-function $(sel, root) { return (root || document).querySelector(sel); }
-function $all(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
-function shuffle(arr) {
-  var a = arr.slice();
-  for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
-  return a;
-}
-function toast(msg) {
-  var t = $('#toast'); t.textContent = msg; t.classList.add('show');
-  clearTimeout(t._h); t._h = setTimeout(function () { t.classList.remove('show'); }, 2600);
-}
-function beanPillAdd(n) {
+var STREAK = {
+  bronze:[
+    { q:'Solar panel — warms or slows?', o:['Warms','Slows'], a:1 },
+    { q:'Diesel generator — warms or slows?', o:['Warms','Slows'], a:0 },
+    { q:'Bicycle — warms or slows?', o:['Warms','Slows'], a:1 },
+    { q:'Gas stove — warms or slows?', o:['Warms','Slows'], a:0 },
+    { q:'Efficient wood stove — warms or slows?', o:['Warms','Slows'], a:1 },
+    { q:'Chainsaw — warms or slows?', o:['Warms','Slows'], a:0 },
+    { q:'Macal River hydro dam — warms or slows?', o:['Warms','Slows'], a:1 },
+    { q:'Old smoky bus — warms or slows?', o:['Warms','Slows'], a:0 }
+  ],
+  silver:[
+    { q:'Rain today in Belize City — weather or climate?', o:['Weather','Climate'], a:0 },
+    { q:'Belize hotter on average since 1990 — weather or climate?', o:['Weather','Climate'], a:1 },
+    { q:'Carbon dioxide — greenhouse gas or not?', o:['Greenhouse gas','Not'], a:0 },
+    { q:'Sunlight — renewable or used up?', o:['Renewable','Used up'], a:0 },
+    { q:'Diesel — renewable or used up?', o:['Renewable','Used up'], a:1 },
+    { q:'A machete — technology or not?', o:['Technology','Not'], a:0 },
+    { q:'Fan on a diesel grid — emissions or none?', o:['Emissions','None'], a:0 },
+    { q:'Fan on a solar grid — emissions or none?', o:['Emissions','None'], a:1 }
+  ],
+  gold:[
+    { q:'Electric bus charged by diesel — real cut or moved?', o:['Real cut','Moved'], a:1 },
+    { q:'Solar farm on cleared forest — clear gain or mixed?', o:['Clear gain','Mixed'], a:1 },
+    { q:'Per-person emissions fall, population doubles — total falls?', o:['Yes','Not always'], a:1 },
+    { q:'“Zero-emission” label — whole chain or one spot?', o:['Whole chain','One spot'], a:1 },
+    { q:'Hydro already full, demand rises — met by?', o:['More hydro','Burning fuel'], a:1 },
+    { q:'Technology caused warming — can it also help?', o:['No, never','Yes, the other arrow'], a:1 },
+    { q:'Trees cut for a road — affects absorption?', o:['Yes','No'], a:0 },
+    { q:'Efficient stove vs open fire — less burning?', o:['Yes','No'], a:0 }
+  ]
+};
+
+/* Tier config — bean rate per correct answer (LESSON-ENGINE-PLAN.md §4) */
+var TIERS = {
+  bronze:{ label:'Bronze', icon:'🥉', rate:1, desc:'Warm-up level. Solid practice, steady beans.' },
+  silver:{ label:'Silver', icon:'🥈', rate:2, desc:'Tougher questions. Double beans per answer.' },
+  gold:  { label:'Gold',   icon:'🥇', rate:3, desc:'Hardest challenge. Triple beans per answer.' }
+};
+var CALIB_BEANS    = 5;
+var LESSON_CAP     = 30;
+var STREAK_SECONDS = 60;
+var TOTAL_ACTS     = 6;
+
+/* ──────────────────────── ENGINE ──────────────────────── */
+function $(s,r){ return (r||document).querySelector(s); }
+function $$(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); }
+
+var sessionBeans = 0, doneCount = 0, tier = null, calibPct = 0;
+var missStreak = 0, hitStreak = 0;
+
+function toast(msg){ var t=$('#toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._h); t._h=setTimeout(function(){ t.classList.remove('show'); },2600); }
+
+function beansLeft(){ return Math.max(0, LESSON_CAP - sessionBeans); }
+
+function beanPillAdd(n){
   sessionBeans += n;
-  $('#beanPill').textContent = '🌱 ' + sessionBeans + ' bean' + (sessionBeans === 1 ? '' : 's');
+  $('#beanPill').textContent = '🌱 ' + sessionBeans + ' bean' + (sessionBeans===1?'':'s');
 }
-function progressTick() {
+function progressTick(){
   doneCount++;
-  $('#progText').textContent = Math.min(doneCount, TOTAL_ACTS) + ' of ' + TOTAL_ACTS + ' done';
-  $('#progFill').style.width = (Math.min(doneCount, TOTAL_ACTS) / TOTAL_ACTS * 100) + '%';
+  $('#progText').textContent = Math.min(doneCount,TOTAL_ACTS)+' of '+TOTAL_ACTS+' done';
+  $('#progFill').style.width = (Math.min(doneCount,TOTAL_ACTS)/TOTAL_ACTS*100)+'%';
 }
-function award(actKey, correct, totalItems, sec) {
-  var cfg = ACTS[actKey];
-  var beans = cfg.flat + correct;
-  var id = LESSON.idBase + '-' + actKey;
+function unlock(sel){ var s=$(sel); s.classList.remove('locked-step');
+  s.scrollIntoView({behavior:'smooth',block:'start'}); }
+function markDone(sel){ $(sel).classList.add('done'); }
+
+/* Award beans, respecting the per-lesson cap. The activity id carries the tier so a
+   replay at a higher tier is a NEW row (vcSaveBeans locks one id per device). */
+function award(actKey, earned, maxPossible, sec){
+  var capped = Math.min(earned, beansLeft());
+  var id = LESSON.idBase + '-' + actKey + (tier ? '-' + tier : '');
   var note = $('.earned-note', sec);
-  beanPillAdd(beans);
-  vcSaveBeans(id, beans, cfg.max, {
-    subject: 'Science', lo_code: LESSON.lo,
-    activity_name: LESSON.week + ' ' + cfg.label
-  }).then(function (res) {
-    note.style.display = 'block';
-    if (res && res.ok)          { note.textContent = '🌱 +' + beans + ' beans saved to your account!'; toast('🌱 +' + beans + ' beans earned!'); }
-    else if (res && res.locked) { note.textContent = '🌱 Beans for this activity were already earned on this device.'; }
-    else                        { note.textContent = '🌱 +' + beans + ' beans — log in next time to save them to your account!'; toast('🌱 +' + beans + ' beans (not saved — not logged in)'); }
+  beanPillAdd(capped);
+  if (capped < earned){
+    note.style.display='block';
+    note.textContent = '🌱 +'+capped+' beans (lesson cap of '+LESSON_CAP+' reached — keep playing for practice!)';
+  }
+  vcSaveBeans(id, capped, maxPossible, {
+    subject:'Science', lo_code:LESSON.lo,
+    activity_name: LESSON.week+' '+actKey+(tier?' ('+TIERS[tier].label+')':'')
+  }).then(function(res){
+    if (capped < earned) return;
+    note.style.display='block';
+    if (res && res.ok)          { note.textContent='🌱 +'+capped+' beans saved to your account!'; toast('🌱 +'+capped+' beans earned!'); }
+    else if (res && res.locked) { note.textContent='🌱 You already earned beans for this level on this device. Try a higher level!'; }
+    else                        { note.textContent='🌱 +'+capped+' beans — log in next time to save them!'; toast('🌱 +'+capped+' beans (not saved — not logged in)'); }
   });
-}
-function finishCheck() {
-  if (doneCount !== 5 || completionDone) return;
-  completionDone = true;
-  var id = LESSON.idBase + '-complete';
-  beanPillAdd(COMPLETION_BEANS);
-  progressTick();
-  $('#finishHint').style.display = 'none';
-  var line = $('#finishLine');
-  line.style.display = 'block';
-  line.textContent = '🎉 Lesson complete! +' + COMPLETION_BEANS + ' bonus beans. Great work — see you in Week 2!';
-  vcSaveBeans(id, COMPLETION_BEANS, COMPLETION_BEANS, {
-    subject: 'Science', lo_code: LESSON.lo, activity_name: LESSON.week + ' Lesson Completed'
-  });
-  toast('🏁 Lesson complete! +' + COMPLETION_BEANS + ' 🌱');
-}
-function sectionDone(sec, actKey, correct, totalItems, msg) {
-  sec.classList.add('done');
-  var fb = $('.feedback-line', sec);
-  fb.style.display = 'block';
-  fb.textContent = msg;
-  $('.check-btn', sec).disabled = true;
-  award(actKey, correct, totalItems, sec);
-  progressTick();
-  finishCheck();
 }
 
-/* ---------- Section 1 · Hook ---------- */
-$('#hookBtn').addEventListener('click', function () {
-  $('#hookReveal').style.display = 'block';
-  this.style.display = 'none';
+/* Coach-style step-down / step-up — LESSON-ENGINE-PLAN.md §3 */
+function coachCheck(boxSel){
+  var box = $(boxSel); if(!box) return;
+  if (missStreak >= 2 && tier !== 'bronze'){
+    var lower = (tier === 'gold') ? 'silver' : 'bronze';
+    box.className = 'coach-box show';
+    box.innerHTML = TIERS[tier].icon+' '+TIERS[tier].label+' is tough! Let’s sharpen up in '
+      + TIERS[lower].icon+' '+TIERS[lower].label+' and come back. '
+      + '<button class="btn" data-goto="'+lower+'" style="margin-top:.6rem;">Move to '+TIERS[lower].label+' →</button>';
+    wireCoach(box); missStreak = 0;
+  } else if (hitStreak >= 3 && tier !== 'gold'){
+    var higher = (tier === 'bronze') ? 'silver' : 'gold';
+    box.className = 'coach-box show';
+    box.innerHTML = '🔥 Three right in a row! You have unlocked '
+      + TIERS[higher].icon+' '+TIERS[higher].label+' — worth '+TIERS[higher].rate+'× beans. '
+      + '<button class="btn" data-goto="'+higher+'" style="margin-top:.6rem;">Level up →</button>';
+    wireCoach(box); hitStreak = 0;
+  } else { box.className = 'coach-box'; }
+}
+function wireCoach(box){
+  $$('button[data-goto]', box).forEach(function(b){
+    b.addEventListener('click', function(){ switchTier(b.getAttribute('data-goto')); });
+  });
+}
+function scoreHit(ok){ if(ok){ hitStreak++; missStreak=0; } else { missStreak++; hitStreak=0; } }
+
+function setTierChip(t){
+  var chip = $('#tierChip');
+  chip.style.display=''; chip.className='chip tier-now '+t;
+  chip.textContent = TIERS[t].icon+' '+TIERS[t].label;
+}
+
+/* Mid-lesson tier change: rebuild the remaining activities at the new tier */
+function switchTier(t){
+  tier = t; setTierChip(t);
+  missStreak = 0; hitStreak = 0;
+  $$('.coach-box').forEach(function(b){ b.className='coach-box'; });
+  toast(TIERS[t].icon+' Now playing '+TIERS[t].label+' — '+TIERS[t].rate+'× beans');
+  buildSim(); buildTrace(); buildMyth(); resetStreak();
+}
+
+/* ── 1. Review ── */
+$('#reviewGrid').innerHTML = REVIEW.map(function(r){
+  return '<div class="rev-card"><b>'+r.t+'</b><span>'+r.d+'</span></div>';
+}).join('');
+
+$('#reviewDone').addEventListener('click', function(){
+  this.disabled = true; markDone('#secReview'); progressTick(); unlock('#secCalib');
 });
 
-/* ---------- Video slot ---------- */
-if (VIDEO_URL) { $('#sec-video').style.display = 'block'; $('#videoFrame').src = VIDEO_URL; }
+/* ── 2. Calibration ── */
+$('#calibBox').innerHTML = CALIB.map(function(item,i){
+  return '<div class="q-block"><div class="q-stem">'+(i+1)+'. '+item.q+'</div><div class="opts">'
+    + item.o.map(function(o,j){
+        return '<label><input type="radio" name="cal'+i+'" value="'+j+'"><span>'+o+'</span></label>';
+      }).join('')
+    + '</div></div>';
+}).join('');
 
-/* ---------- Section 3 · Vocabulary ---------- */
-(function buildVocab() {
-  var sec = $('#sec-vocab'), list = $('#vocabList'), btn = $('.check-btn', sec);
-  var defs = shuffle(VOCAB.map(function (v) { return v.def; }));
-  VOCAB.forEach(function (v) {
-    var row = document.createElement('div');
-    row.className = 'vocab-row';
-    var opts = defs.map(function (d) { return '<option>' + d + '</option>'; }).join('');
-    row.innerHTML = '<span class="vocab-term">' + v.term + '</span>' +
-      '<select data-ans="' + v.def.replace(/"/g, '&quot;') + '"><option value="">— choose —</option>' + opts + '</select>' +
-      '<span class="mark"></span>';
-    list.appendChild(row);
+$$('#calibBox input').forEach(function(inp){
+  inp.addEventListener('change', function(){
+    var answered = CALIB.every(function(_,i){ return $('input[name="cal'+i+'"]:checked'); });
+    $('#calibCheck').disabled = !answered;
   });
-  function ready() { btn.disabled = $all('select', list).some(function (s) { return !s.value; }); }
-  list.addEventListener('change', ready);
-  btn.addEventListener('click', function () {
-    var correct = 0;
-    $all('select', list).forEach(function (s) {
-      var ok = s.value === s.getAttribute('data-ans');
-      if (ok) correct++;
-      s.parentNode.querySelector('.mark').textContent = ok ? '✅' : '❌';
-      s.disabled = true;
+});
+
+$('#calibCheck').addEventListener('click', function(){
+  this.disabled = true;
+  var correct = 0;
+  CALIB.forEach(function(item,i){
+    var picked = $('input[name="cal'+i+'"]:checked');
+    $$('input[name="cal'+i+'"]').forEach(function(inp){
+      inp.disabled = true;
+      if (Number(inp.value) === item.a) inp.parentNode.classList.add('right');
     });
-    sectionDone(sec, 'vocab', correct, VOCAB.length, 'You matched ' + correct + ' of ' + VOCAB.length + ' words.' + (correct === VOCAB.length ? ' Perfect! 🎯' : ' Check the ❌ rows and re-read Section 2.'));
+    if (picked && Number(picked.value) === item.a) correct++;
+    else if (picked) picked.parentNode.classList.add('wrong');
   });
-})();
+  calibPct = Math.round(correct / CALIB.length * 100);
+  var beans = Math.round(correct / CALIB.length * CALIB_BEANS);
+  $('#calibFeedback').textContent = 'You got '+correct+' of '+CALIB.length+' right ('+calibPct+'%).';
+  award('calibration', beans, CALIB_BEANS, $('#secCalib'));
+  markDone('#secCalib'); progressTick();
+  offerTier(calibPct);
+  unlock('#secTier');
+});
 
-/* ---------- Section 4 · Sort ---------- */
-(function buildSort() {
-  var sec = $('#sec-sort'), grid = $('#sortGrid'), btn = $('.check-btn', sec);
-  shuffle(SORT.cards).forEach(function (c) {
-    var card = document.createElement('div');
-    card.className = 'sort-card';
-    card.setAttribute('data-ans', c.ans);
-    card.innerHTML = '<div class="sc-name">' + c.name + '</div>' +
-      '<div class="sort-btns"><button type="button" data-v="0">' + SORT.labels[0] + '</button>' +
-      '<button type="button" data-v="1">' + SORT.labels[1] + '</button></div>' +
-      '<span class="mark"></span>';
-    grid.appendChild(card);
-  });
-  grid.addEventListener('click', function (e) {
-    var b = e.target.closest('button');
-    if (!b || b.disabled) return;
-    $all('button', b.parentNode).forEach(function (x) { x.classList.remove('picked'); });
-    b.classList.add('picked');
-    btn.disabled = $all('.sort-card', grid).some(function (c) { return !$('.picked', c); });
-  });
-  btn.addEventListener('click', function () {
-    var correct = 0;
-    $all('.sort-card', grid).forEach(function (c) {
-      var picked = $('.picked', c);
-      var ok = picked && picked.getAttribute('data-v') === c.getAttribute('data-ans');
-      if (ok) correct++;
-      $('.mark', c).textContent = ok ? '✅' : '❌ ' + SORT.labels[Number(c.getAttribute('data-ans'))];
-      $all('button', c).forEach(function (x) { x.disabled = true; });
-    });
-    sectionDone(sec, 'sort', correct, SORT.cards.length, 'You sorted ' + correct + ' of ' + SORT.cards.length + ' correctly.' + (correct === SORT.cards.length ? ' Excellent sorting! 🗂️' : ' The ❌ cards show the correct column.'));
-  });
-})();
+/* ── 3. Tier offer — 90 auto-gold · 80 free choice · 50 silver · else bronze ── */
+function offerTier(pct){
+  var msg = $('#tierMsg'), grid = $('#tierGrid'), head = $('#tierHead');
+  var allow = { bronze:true, silver:false, gold:false };
+  var auto = null;
 
-/* ---------- Section 5 · Practice fill-in ---------- */
-(function buildFill() {
-  var sec = $('#sec-practice'), list = $('#fillList'), btn = $('.check-btn', sec);
-  FILL.forEach(function (f) {
-    var row = document.createElement('div');
-    row.className = 'fill-row';
-    var opts = shuffle(f.opts.map(function (o, i) { return { o: o, i: i }; }))
-      .map(function (x) { return '<option value="' + x.i + '">' + x.o + '</option>'; }).join('');
-    row.innerHTML = '<span>' + f.pre + '</span>' +
-      '<select data-ans="' + f.ans + '"><option value="">— choose —</option>' + opts + '</select>' +
-      '<span>' + f.post + '</span><span class="mark"></span>';
-    list.appendChild(row);
-  });
-  function ready() { btn.disabled = $all('select', list).some(function (s) { return !s.value; }); }
-  list.addEventListener('change', ready);
-  btn.addEventListener('click', function () {
-    var correct = 0;
-    $all('select', list).forEach(function (s) {
-      var ok = s.value === s.getAttribute('data-ans');
-      if (ok) correct++;
-      s.parentNode.querySelector('.mark').textContent = ok ? '✅' : '❌';
-      s.disabled = true;
-    });
-    sectionDone(sec, 'practice', correct, FILL.length, 'You completed ' + correct + ' of ' + FILL.length + ' sentences.' + (correct === FILL.length ? ' The loop is yours! 🔁' : ' Look again at the loop picture in Section 2.'));
-  });
-})();
-
-/* ---------- Section 6 · Checkpoint quiz ---------- */
-(function buildQuiz() {
-  var sec = $('#sec-checkpoint'), list = $('#quizList'), btn = $('.check-btn', sec);
-  QUIZ.forEach(function (q, qi) {
-    var div = document.createElement('div');
-    div.className = 'quiz-q';
-    var opts = q.opts.map(function (o, oi) {
-      return '<label><input type="radio" name="q' + qi + '" value="' + oi + '"> ' + o + '</label>';
-    }).join('');
-    div.innerHTML = '<p class="q-stem">' + q.stem + '</p><div class="quiz-opts" data-ans="' + q.ans + '">' + opts + '</div>' +
-      '<p class="hint q-why" style="display:none;"></p>';
-    list.appendChild(div);
-  });
-  function ready() {
-    btn.disabled = $all('.quiz-opts', list).some(function (g) { return !$('input:checked', g); });
+  if (pct >= 90){
+    head.textContent = '🥇 Promoted to Gold!';
+    msg.innerHTML = '<b>'+pct+'%! Outstanding.</b> You have been promoted straight to Gold — the hardest challenge, worth 3× beans. '
+      + 'Would you rather warm up first? You can start at Silver instead.';
+    allow.silver = true; allow.gold = true; auto = 'gold';
+  } else if (pct >= 80){
+    head.textContent = '🏅 Your Choice!';
+    msg.innerHTML = '<b>'+pct+'% — strong work!</b> Every level is open to you. Higher levels are harder, but each correct answer earns more beans.';
+    allow.silver = true; allow.gold = true;
+  } else if (pct >= 50){
+    head.textContent = '🥈 Silver Unlocked';
+    msg.innerHTML = '<b>'+pct+'% — good going!</b> Silver is open. Gold is waiting: <b>three right in a row unlocks it</b>.';
+    allow.silver = true;
+  } else {
+    head.textContent = '🥉 Let’s Warm Up';
+    msg.innerHTML = '<b>'+pct+'%.</b> Bronze is the warm-up level — perfect for building your streak. '
+      + 'Get three right in a row at any point and the next level opens up.';
   }
-  list.addEventListener('change', ready);
-  btn.addEventListener('click', function () {
-    var correct = 0;
-    $all('.quiz-q', list).forEach(function (qdiv, qi) {
-      var g = $('.quiz-opts', qdiv);
-      var ans = Number(g.getAttribute('data-ans'));
-      var picked = $('input:checked', g);
-      var ok = picked && Number(picked.value) === ans;
-      if (ok) correct++;
-      $all('label', g).forEach(function (lab, li) {
-        if (li === ans) lab.classList.add('right');
-        else if (picked && Number(picked.value) === li && !ok) lab.classList.add('wrong');
-        $('input', lab).disabled = true;
-      });
-      var why = $('.q-why', qdiv);
-      why.style.display = 'block';
-      why.textContent = (ok ? '✅ ' : '❌ ') + QUIZ[qi].why;
-    });
-    sectionDone(sec, 'checkpoint', correct, QUIZ.length, 'Checkpoint score: ' + correct + ' of ' + QUIZ.length + '.' + (correct === QUIZ.length ? ' Outstanding! 🛑➡️✅' : ' Read the explanations below each question.'));
-  });
-})();
 
-/* ---------- Section 7 · True / False ---------- */
-(function buildTF() {
-  var sec = $('#sec-tf'), list = $('#tfList'), btn = $('.check-btn', sec);
-  TF.forEach(function (t) {
-    var row = document.createElement('div');
-    row.className = 'tf-row';
-    row.setAttribute('data-ans', t.ans ? '1' : '0');
-    row.innerHTML = '<span class="tf-stmt">' + t.stmt + '</span>' +
-      '<div class="tf-btns"><button type="button" data-v="1">True</button>' +
-      '<button type="button" data-v="0">False</button><span class="mark"></span></div>';
-    list.appendChild(row);
-  });
-  list.addEventListener('click', function (e) {
-    var b = e.target.closest('button');
-    if (!b || b.disabled) return;
-    $all('button', b.parentNode).forEach(function (x) { x.classList.remove('picked'); });
-    b.classList.add('picked');
-    btn.disabled = $all('.tf-row', list).some(function (r) { return !$('.picked', r); });
-  });
-  btn.addEventListener('click', function () {
-    var correct = 0;
-    $all('.tf-row', list).forEach(function (r, i) {
-      var picked = $('.picked', r);
-      var ok = picked && picked.getAttribute('data-v') === r.getAttribute('data-ans');
-      if (ok) correct++;
-      $('.mark', r).textContent = ok ? '✅' : '❌';
-      var why = document.createElement('p');
-      why.className = 'hint';
-      why.textContent = (ok ? '✅ ' : '❌ ') + TF[i].why;
-      r.appendChild(why);
-      $all('button', r).forEach(function (x) { x.disabled = true; });
-    });
-    sectionDone(sec, 'tf', correct, TF.length, 'Myths busted: ' + correct + ' of ' + TF.length + '.' + (correct === TF.length ? ' Detective work! 🕵️' : ' Remember: technology is neutral.'));
-  });
-})();
+  grid.innerHTML = ['bronze','silver','gold'].map(function(k){
+    var t = TIERS[k], open = allow[k];
+    return '<div class="tier-card '+k+(open?'':' locked')+'" data-tier="'+k+'">'
+      + '<div class="t-name">'+t.icon+' '+t.label+'</div>'
+      + '<div class="t-rate">'+t.rate+'× beans per answer</div>'
+      + '<div class="t-desc">'+t.desc+'</div>'
+      + (open ? '' : '<div class="t-lock">🔒 Three right in a row unlocks this</div>')
+      + '</div>';
+  }).join('');
 
-/* ---------- Restore beans already earned on this device ---------- */
-function lockBeans(key) {
-  try {
-    var raw = localStorage.getItem('vc-pts-' + key);
-    if (raw === null) return null;
-    var o = JSON.parse(raw);
-    return (o && typeof o.b === 'number') ? o.b : 0;
-  } catch (e) { return 0; }
+  $$('#tierGrid .tier-card').forEach(function(card){
+    if (card.classList.contains('locked')) return;
+    card.addEventListener('click', function(){ startTier(card.getAttribute('data-tier')); });
+  });
+
+  if (auto) setTimeout(function(){ startTier(auto); }, 1200);
 }
-(function restoreProgress() {
-  Object.keys(ACTS).forEach(function (k) {
-    var b = lockBeans(LESSON.idBase + '-' + k);
-    if (b === null) return;
-    var sec = document.querySelector('[data-act="' + k + '"]');
-    if (!sec) return;
-    sec.classList.add('done');
-    $all('select, input, button', sec).forEach(function (el) { el.disabled = true; });
-    var fb = $('.feedback-line', sec);
-    fb.style.display = 'block';
-    fb.textContent = '✓ Already completed on this device' + (b ? ' — 🌱 ' + b + ' beans earned.' : '.');
-    beanPillAdd(b);
-    progressTick();
-  });
-  var cb = lockBeans(LESSON.idBase + '-complete');
-  if (cb !== null) {
-    completionDone = true;
-    beanPillAdd(cb);
-    progressTick();
-    $('#finishHint').style.display = 'none';
-    var line = $('#finishLine');
-    line.style.display = 'block';
-    line.textContent = '🎉 You already completed this lesson — great work!';
-  }
-})();
 
-/* ---------- Theme bar ---------- */
-(function themes() {
-  var saved = localStorage.getItem('vc-theme') || 'night';
+function startTier(t){
+  tier = t; setTierChip(t);
+  missStreak = 0; hitStreak = 0;
+  $$('#tierGrid .tier-card').forEach(function(c){
+    c.style.outline = (c.getAttribute('data-tier')===t) ? '3px solid var(--accent)' : 'none';
+  });
+  buildSim(); buildTrace(); buildMyth(); resetStreak();
+  ['#secSim','#secTrace','#secMyth','#secStreak'].forEach(function(s){ $(s).classList.remove('locked-step'); });
+  unlock('#secSim');
+}
+
+/* ── 4. Simulator ── */
+var simStep = 0, simCo2 = 50, simMoney = 100, simScore = 0;
+function simRender(){
+  var lbl = simCo2 < 35 ? 'Low' : (simCo2 < 65 ? 'Medium' : 'High');
+  $('#simCo2Val').textContent = lbl;
+  $('#simCo2Bar').style.width = Math.max(0,Math.min(100,simCo2))+'%';
+  $('#simMoneyVal').textContent = '$'+Math.max(0,simMoney);
+  $('#simMoneyBar').style.width = Math.max(0,Math.min(100,simMoney))+'%';
+}
+function buildSim(){
+  simStep=0; simCo2=50; simMoney=100; simScore=0;
+  $('#simEnding').className='sim-ending'; $('#simResult').className='sim-result';
+  $('#secSim').classList.remove('done');
+  simRender(); simStepRender();
+}
+function simStepRender(){
+  var set = SIM[tier]; if(!set) return;
+  if (simStep >= set.length) return simEnd();
+  var s = set[simStep];
+  $('#simChoice').innerHTML = '<div class="q-stem">Year '+(simStep+1)+' — '+s.q+'</div><div class="sim-opts">'
+    + s.o.map(function(o,i){ return '<button data-i="'+i+'">'+o.t+'</button>'; }).join('') + '</div>';
+  $$('#simChoice button').forEach(function(b){
+    b.addEventListener('click', function(){ simPick(Number(b.getAttribute('data-i'))); });
+  });
+}
+function simPick(i){
+  var s = SIM[tier][simStep], o = s.o[i];
+  simCo2 += o.co2 * 6; simMoney += o.money;
+  var good = o.co2 < 0;
+  if (good) simScore++;
+  scoreHit(good);
+  simRender();
+  var r = $('#simResult'); r.className='sim-result show';
+  r.innerHTML = (good?'✅ ':'⚠️ ') + o.fb;
+  simStep++;
+  coachCheck('#simCoach');
+  setTimeout(function(){ r.className='sim-result'; simStepRender(); }, 2400);
+}
+function simEnd(){
+  $('#simChoice').innerHTML = '';
+  var e = $('#simEnding'); e.className='sim-ending show';
+  var verdict = simCo2 < 35 ? '🌿 Your town breathes clean air. You replaced burning with renewable technology.'
+              : simCo2 < 65 ? '🌤️ Mixed result. Some good choices, but fuel is still being burned in your town.'
+                            : '🔥 Your town got hotter. Most of your technology kept burning fossil fuels.';
+  e.innerHTML = '<b>Four years later…</b><br>'+verdict
+    + '<br><br>You made <b>'+simScore+' of '+SIM[tier].length+'</b> climate-friendly choices.';
+  award('simulator', simScore * TIERS[tier].rate, SIM[tier].length * TIERS[tier].rate, $('#secSim'));
+  markDone('#secSim'); progressTick(); unlock('#secTrace');
+}
+
+/* ── 5. Trace-it-back ── */
+var traceIdx = 0, traceScore = 0;
+function buildTrace(){ traceIdx=0; traceScore=0; $('#secTrace').classList.remove('done'); traceRender(); }
+function traceRender(){
+  var set = TRACE[tier]; if(!set) return;
+  if (traceIdx >= set.length) return traceEnd();
+  var t = set[traceIdx];
+  $('#traceBox').innerHTML =
+      '<div class="q-stem">Case '+(traceIdx+1)+' of '+set.length+'</div>'
+    + '<div class="trace-start">'+t.start+'</div>'
+    + '<div class="trace-chain" id="traceChain"></div>'
+    + '<button class="btn ghost" id="traceNext">Follow the chain →</button>'
+    + '<div class="trace-q" id="traceQ" style="display:none;">'+t.q+'</div>'
+    + '<div class="opts" id="traceOpts" style="display:none;">'
+    + t.o.map(function(o,i){ return '<label><input type="radio" name="tr'+traceIdx+'" value="'+i+'"><span>'+o+'</span></label>'; }).join('')
+    + '</div><div class="trace-final" id="traceFinal"></div>';
+  var step = 0;
+  $('#traceNext').addEventListener('click', function(){
+    if (step < t.chain.length){
+      var d=document.createElement('div');
+      d.className='trace-link revealed'; d.textContent='↓ '+t.chain[step];
+      $('#traceChain').appendChild(d); step++;
+      if (step === t.chain.length) this.textContent='Now answer →';
+    } else {
+      this.style.display='none';
+      $('#traceQ').style.display=''; $('#traceOpts').style.display='';
+      $$('#traceOpts input').forEach(function(inp){
+        inp.addEventListener('change', function(){ tracePick(Number(inp.value)); });
+      });
+    }
+  });
+}
+function tracePick(i){
+  var t = TRACE[tier][traceIdx], ok = (i === t.a);
+  $$('#traceOpts input').forEach(function(inp){
+    inp.disabled = true;
+    if (Number(inp.value) === t.a) inp.parentNode.classList.add('right');
+    else if (Number(inp.value) === i) inp.parentNode.classList.add('wrong');
+  });
+  if (ok) traceScore++;
+  scoreHit(ok);
+  var f = $('#traceFinal'); f.className='trace-final show';
+  f.innerHTML = (ok?'✅ Correct! ':'💡 Not quite. ') + t.final;
+  coachCheck('#traceCoach');
+  traceIdx++;
+  setTimeout(traceRender, 2800);
+}
+function traceEnd(){
+  $('#traceBox').innerHTML = '<div class="trace-final show">🔍 Investigation complete — <b>'
+    + traceScore+' of '+TRACE[tier].length+'</b> traced correctly.</div>';
+  award('trace', traceScore * TIERS[tier].rate, TRACE[tier].length * TIERS[tier].rate, $('#secTrace'));
+  markDone('#secTrace'); progressTick(); unlock('#secMyth');
+}
+
+/* ── 6. Myth-buster ── */
+var mythIdx = 0, mythScore = 0;
+function buildMyth(){ mythIdx=0; mythScore=0; $('#secMyth').classList.remove('done'); mythRender(); }
+function mythRender(){
+  var set = MYTH[tier]; if(!set) return;
+  if (mythIdx >= set.length) return mythEnd();
+  var m = set[mythIdx];
+  $('#mythBox').innerHTML = '<div class="myth-card">'
+    + '<div class="q-stem">Claim '+(mythIdx+1)+' of '+set.length+'</div>'
+    + '<div class="myth-claim">“'+m.c+'”</div>'
+    + '<div class="myth-btns"><button class="bust" data-b="1">💥 BUST IT</button>'
+    + '<button class="true" data-b="0">✅ IT’S TRUE</button></div>'
+    + '<div class="myth-verdict" id="mythVerdict"></div></div>';
+  $$('#mythBox .myth-btns button').forEach(function(b){
+    b.addEventListener('click', function(){ mythPick(b.getAttribute('data-b')==='1'); });
+  });
+}
+function mythPick(saidBust){
+  var m = MYTH[tier][mythIdx], ok = (saidBust === m.bust);
+  if (ok) mythScore++;
+  scoreHit(ok);
+  $$('#mythBox .myth-btns button').forEach(function(b){ b.disabled = true; });
+  var v = $('#mythVerdict'); v.className='myth-verdict show';
+  v.innerHTML = (ok?'✅ Correct! ':'❌ Not this time. ') + m.why;
+  coachCheck('#mythCoach');
+  mythIdx++;
+  setTimeout(mythRender, 2600);
+}
+function mythEnd(){
+  $('#mythBox').innerHTML = '<div class="myth-card"><b>🕵️ Arena complete — '
+    + mythScore+' of '+MYTH[tier].length+' judged correctly.</b></div>';
+  award('myth', mythScore * TIERS[tier].rate, MYTH[tier].length * TIERS[tier].rate, $('#secMyth'));
+  markDone('#secMyth'); progressTick(); unlock('#secStreak');
+}
+
+/* ── 7. Beat-your-streak ── */
+var stkIdx=0, stkNow=0, stkBestRun=0, stkScore=0, stkTimer=null, stkLeft=STREAK_SECONDS, stkOrder=[];
+function bestKey(){ return 'vc-streak-'+LESSON.idBase; }
+function readBest(){ try{ return Number(localStorage.getItem(bestKey())||0); }catch(e){ return 0; } }
+function writeBest(n){ try{ localStorage.setItem(bestKey(), String(n)); }catch(e){} }
+function resetStreak(){
+  clearInterval(stkTimer);
+  stkIdx=0; stkNow=0; stkBestRun=0; stkScore=0; stkLeft=STREAK_SECONDS;
+  $('#stkNow').textContent='0'; $('#stkBest').textContent=readBest();
+  $('#stkLeft').textContent='–'; $('#streakBox').innerHTML='';
+  $('#streakStart').style.display=''; $('#streakStart').disabled=false;
+  $('#secStreak').classList.remove('done');
+}
+$('#streakStart').addEventListener('click', function(){
+  this.style.display='none';
+  stkOrder = STREAK[tier].slice().sort(function(){ return Math.random()-0.5; });
+  stkLeft = STREAK_SECONDS; $('#stkLeft').textContent = stkLeft+'s';
+  stkTimer = setInterval(function(){
+    stkLeft--; $('#stkLeft').textContent = stkLeft+'s';
+    if (stkLeft <= 0) streakEnd();
+  }, 1000);
+  streakRender();
+});
+function streakRender(){
+  if (stkIdx >= stkOrder.length) stkIdx = 0;   /* loop the deck until time runs out */
+  var s = stkOrder[stkIdx];
+  $('#streakBox').innerHTML = '<div class="streak-q">'+s.q+'</div><div class="streak-opts">'
+    + s.o.map(function(o,i){ return '<button data-i="'+i+'">'+o+'</button>'; }).join('') + '</div>';
+  $$('#streakBox button').forEach(function(b){
+    b.addEventListener('click', function(){ streakPick(Number(b.getAttribute('data-i'))); });
+  });
+}
+function streakPick(i){
+  var s = stkOrder[stkIdx], ok = (i === s.a);
+  if (ok){ stkNow++; stkScore++; if (stkNow > stkBestRun) stkBestRun = stkNow; }
+  else   { stkNow = 0; }
+  scoreHit(ok);
+  $('#stkNow').textContent = stkNow;
+  stkIdx++;
+  streakRender();
+}
+function streakEnd(){
+  clearInterval(stkTimer);
+  $('#streakBox').innerHTML = '<div class="streak-q">⏱️ Time! Best streak this round: <b>'
+    + stkBestRun+'</b> · Correct: <b>'+stkScore+'</b></div>';
+  if (stkBestRun > readBest()){ writeBest(stkBestRun); toast('🏆 New best streak: '+stkBestRun+'!'); }
+  $('#stkBest').textContent = readBest();
+  var deck = STREAK[tier].length;              /* beans capped at one full deck */
+  award('streak', Math.min(stkScore,deck) * TIERS[tier].rate, deck * TIERS[tier].rate, $('#secStreak'));
+  markDone('#secStreak'); progressTick(); finish();
+}
+
+/* ── 8. Finish ── */
+function finish(){
+  unlock('#secFinish');
+  $('#finishBeans').textContent = '🌱 ' + sessionBeans;
+  $('#finishBadge').innerHTML = tier
+    ? 'Best level this visit: '+TIERS[tier].icon+' <b>'+TIERS[tier].label+'</b>' : '';
+  var note = $('#capNote'), btn = $('#replayBtn');
+  if (sessionBeans >= LESSON_CAP){
+    note.textContent = 'You have reached this lesson’s cap of '+LESSON_CAP+' 🌱. Play again any time for practice!';
+    btn.style.display = 'none';
+  } else if (tier === 'gold'){
+    note.textContent = 'You have '+beansLeft()+' 🌱 still available in this lesson.';
+    btn.textContent = '🔁 Play Gold again';
+    btn.onclick = function(){ doneCount = 2; startTier('gold'); };
+  } else {
+    var next = (tier === 'bronze') ? 'silver' : 'gold';
+    note.textContent = 'There are '+beansLeft()+' 🌱 left in this lesson — reach them by playing a harder level!';
+    btn.textContent = '🔁 Try '+TIERS[next].icon+' '+TIERS[next].label+' ('+TIERS[next].rate+'× beans)';
+    btn.onclick = function(){ doneCount = 2; startTier(next); };
+  }
+}
+
+/* ── Boot ── */
+(function boot(){
+  var saved = 'night';
+  try { saved = localStorage.getItem('vc-theme') || 'night'; } catch(e){}
   document.documentElement.setAttribute('data-theme', saved);
-  $all('#themeBar button').forEach(function (b) {
-    b.classList.toggle('active', b.getAttribute('data-t') === saved);
-    b.addEventListener('click', function () {
+  $$('#themeBar button').forEach(function(b){
+    if (b.getAttribute('data-t') === saved) b.classList.add('active');
+    b.addEventListener('click', function(){
       var t = b.getAttribute('data-t');
       document.documentElement.setAttribute('data-theme', t);
-      localStorage.setItem('vc-theme', t);
-      $all('#themeBar button').forEach(function (x) { x.classList.toggle('active', x === b); });
+      try { localStorage.setItem('vc-theme', t); } catch(e){}
+      $$('#themeBar button').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
     });
   });
-})();
 
-/* ---------- Login hint ---------- */
-(function loginHint() {
-  var hint = $('#loginHint');
-  var s = (typeof vcGetSession === 'function') ? vcGetSession() : null;
-  if (s) {
-    /* Built with textContent (never innerHTML) so a stored name can never inject markup */
-    hint.textContent = '';
-    var strong = document.createElement('strong');
-    strong.textContent = s.first_name || s.username;
-    hint.appendChild(document.createTextNode('👋 Welcome back, '));
-    hint.appendChild(strong);
-    hint.appendChild(document.createTextNode(' — your beans will be saved!'));
+  if (typeof vcGetSession === 'function' && vcGetSession()){
+    var s = vcGetSession();
+    $('#loginHint').innerHTML = '👋 Welcome back, <b>' + (s.first_name || s.name || 'student')
+      + '</b>! Your beans will be saved.';
   }
-  else hint.innerHTML = '🌱 <a href="/login/">Log in</a> to save the cacao beans you earn in this lesson.';
-})();
+  $('#stkBest').textContent = readBest();
 
-/* ---------- Starfield ---------- */
-(function starfield() {
-  var c = $('#stars'), ctx = c.getContext('2d'), stars = [];
-  function size() { c.width = innerWidth; c.height = innerHeight; }
-  size(); addEventListener('resize', size);
-  for (var i = 0; i < 90; i++) {
-    stars.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.6 + .4, p: Math.random() * Math.PI * 2 });
+  var c = $('#stars'), ctx = c.getContext('2d');
+  function draw(){
+    c.width = innerWidth; c.height = innerHeight;
+    ctx.clearRect(0,0,c.width,c.height);
+    for (var i=0;i<90;i++){
+      ctx.globalAlpha = Math.random()*0.7+0.15;
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(Math.random()*c.width, Math.random()*c.height, Math.random()*2+0.6, Math.random()*2+0.6);
+    }
   }
-  (function draw() {
-    ctx.clearRect(0, 0, c.width, c.height);
-    var t = Date.now() / 1000;
-    stars.forEach(function (s) {
-      ctx.globalAlpha = .45 + .45 * Math.sin(t * 1.4 + s.p);
-      ctx.fillStyle = '#cdd7ff';
-      ctx.beginPath();
-      ctx.arc(s.x * c.width, s.y * c.height, s.r, 0, Math.PI * 2);
-      ctx.fill();
-    });
-    requestAnimationFrame(draw);
-  })();
+  draw(); addEventListener('resize', draw);
 })();
 </script>
 </body>
