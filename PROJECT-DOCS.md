@@ -29,8 +29,11 @@ If the docs are not updated, the task is **not** finished.
   calibration → Bronze/Silver/Gold tier ladder → 3–4 mechanics from a bank → finish line.
 - **Week 1 (`week01-technology-climate`) is the REFERENCE IMPLEMENTATION.** Its JS is split into a
   DATA block and an ENGINE block — future weeks replace the DATA only. Copy it, never rewrite the
-  engine. It also carries the sticky progress bar, collapsible auto-folding cards, the 1400px
-  width, viewport-scaled type and the hub theme palette.
+  engine. It carries the sticky progress bar, the 1400px width, viewport-scaled type, the hub theme
+  palette, and the **one-card-at-a-time reveal flow** (July 21, 2026 — see `LESSON-ENGINE-PLAN.md`
+  §2): only the active card shows, each step is reached by tapping a **Next →** button, finished
+  cards fold to a tappable header, and no timers govern navigation. This replaced an earlier
+  auto-scroll/auto-fold model that threw the viewport to the bottom of the page on a phone.
 - **🌱 SERVER-SIDE BEAN CAP — DEPLOYED July 21, 2026 (Apps Script version 6).** The 30-bean
   per-lesson cap is now enforced in `handleSaveResult`, not just in the browser. Verified live:
   a replay after clearing the browser earns **+0**.
