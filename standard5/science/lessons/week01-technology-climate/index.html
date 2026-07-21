@@ -30,7 +30,7 @@
   body { font-family:'Nunito',system-ui,sans-serif; background:var(--bg); color:var(--fg);
          min-height:100vh; display:flex; flex-direction:column; line-height:1.6; }
   #stars { position:fixed; inset:0; pointer-events:none; z-index:0; opacity:var(--star); }
-  .wrapper { position:relative; z-index:1; max-width:1000px; margin:0 auto; width:100%;
+  .wrapper { position:relative; z-index:1; max-width:1400px; margin:0 auto; width:100%;
              padding:0 max(1rem,4vw) 2rem; flex:1; }
   /* The header sits in its own wrapper above the sticky bar — it must NOT grow,
      or it would split the vertical space with the content wrapper. */
@@ -63,7 +63,7 @@
   .progress-wrap { position:sticky; top:0; z-index:50; background:var(--bg);
                    border-bottom:1px solid var(--bd); padding:.7rem 0 .6rem;
                    margin-bottom:1.4rem; transition:background .4s; }
-  .progress-inner { max-width:1000px; margin:0 auto; padding:0 max(1rem,4vw); }
+  .progress-inner { max-width:1400px; margin:0 auto; padding:0 max(1rem,4vw); }
   .progress-label { display:flex; justify-content:space-between; font-size:.78rem;
                     font-weight:800; color:var(--muted); margin-bottom:.35rem; }
   .progress-track { height:9px; border-radius:999px; background:var(--card);
@@ -98,7 +98,7 @@
 
   /* Review cards */
   .review-grid { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:1rem; }
-  .rev-card { flex:1 1 220px; background:var(--btn); border:1.5px solid var(--bd);
+  .rev-card { flex:1 1 300px; background:var(--btn); border:1.5px solid var(--bd);
               border-radius:14px; padding:.9rem 1rem; }
   .rev-card b { display:block; color:var(--accent); font-size:.95rem; margin-bottom:.25rem; }
   .rev-card span { font-size:.88rem; color:var(--muted); font-weight:600; }
@@ -106,11 +106,14 @@
               border-radius:14px; padding:1rem; }
   .loop-arrow { font-weight:800; font-size:.9rem; margin:.35rem 0; }
   .loop-arrow.warm { color:#FF8787; } .loop-arrow.cool { color:#69DB7C; }
-  .fig-box { margin:1rem auto; max-width:640px; }
+  .fig-box { margin:1rem auto; max-width:820px; }
   .fig-box svg { width:100%; height:auto; display:block; }
   .fig-cap { text-align:center; font-size:.82rem; color:var(--muted); margin-top:.35rem; }
-  .concept-p { margin-top:.7rem; font-size:.95rem; font-weight:600; }
+  .concept-p { margin-top:.7rem; font-size:.95rem; font-weight:600; max-width:80ch; }
   .concept-p strong { color:var(--fg); }
+  /* Text lines stay readable even though the card is now full width —
+     the CARD uses the space, the LINE LENGTH stays comfortable. */
+  .sec > .sec-body > p, .sec .hint, .q-stem { max-width:80ch; }
 
   /* Buttons */
   .btn { font-family:inherit; font-weight:900; cursor:pointer; border-radius:12px;
@@ -134,7 +137,7 @@
 
   /* Tier offer */
   .tier-grid { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:1rem; }
-  .tier-card { flex:1 1 200px; border-radius:16px; padding:1rem; text-align:center;
+  .tier-card { flex:1 1 280px; border-radius:16px; padding:1rem; text-align:center;
                border:2px solid var(--bd); background:var(--btn); cursor:pointer; }
   .tier-card.bronze { border-color:var(--bronze); }
   .tier-card.silver { border-color:var(--silver); }
@@ -154,7 +157,7 @@
 
   /* Simulator */
   .sim-meters { display:flex; gap:.8rem; flex-wrap:wrap; margin:1rem 0; }
-  .meter { flex:1 1 150px; background:var(--btn); border:1.5px solid var(--bd);
+  .meter { flex:1 1 220px; background:var(--btn); border:1.5px solid var(--bd);
            border-radius:13px; padding:.7rem .9rem; }
   .meter b { font-size:.78rem; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
   .meter .m-val { font-family:'Fredoka One',cursive; font-size:1.4rem; margin-top:.15rem; }
@@ -164,6 +167,11 @@
   .meter-fill.money { background:linear-gradient(90deg,#FF6B6B,#FFD43B,#69DB7C); }
   .sim-choice { margin-top:1rem; }
   .sim-opts { display:flex; flex-direction:column; gap:.5rem; margin-top:.6rem; }
+  @media (min-width:1000px){
+    .sim-opts { flex-direction:row; }
+    .sim-opts button { flex:1 1 0; }
+    .opts { display:grid; grid-template-columns:1fr 1fr; gap:.55rem; }
+  }
   .sim-opts button { text-align:left; font-family:inherit; font-weight:700; font-size:.92rem;
         cursor:pointer; padding:.7rem .9rem; border-radius:12px;
         border:1.5px solid var(--bd); background:var(--btn); color:var(--fg); }
@@ -202,7 +210,7 @@
 
   /* Streak */
   .streak-hud { display:flex; gap:.8rem; flex-wrap:wrap; margin-top:1rem; }
-  .streak-hud > div { flex:1 1 110px; text-align:center; background:var(--btn);
+  .streak-hud > div { flex:1 1 160px; text-align:center; background:var(--btn);
         border:1.5px solid var(--bd); border-radius:13px; padding:.6rem; }
   .streak-hud b { display:block; font-size:.72rem; text-transform:uppercase;
                   letter-spacing:.05em; color:var(--muted); }
