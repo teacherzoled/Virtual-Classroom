@@ -8,7 +8,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
 <script src="/edlo-utils.js"></script>
 <style>
-  html { font-size: 17.5px; }
+  /* Root font size drives EVERYTHING — 164 of the 168 sized values are rem,
+     so raising this scales text, padding, cards and buttons together.
+     Steps up on bigger screens; phones keep the compact size. */
+  html { font-size: 19px; }
+  @media (min-width:1000px){ html { font-size: 20.5px; } }
+  @media (min-width:1400px){ html { font-size: 22px;   } }
   /* ⚠️ overflow-x:hidden must NOT go on <html> — it makes <html> a scroll
      container and breaks position:sticky on the progress bar. Body only,
      exactly as the Std5 test pages do it. */
@@ -66,7 +71,7 @@
   .progress-inner { max-width:1400px; margin:0 auto; padding:0 max(1rem,4vw); }
   .progress-label { display:flex; justify-content:space-between; font-size:.78rem;
                     font-weight:800; color:var(--muted); margin-bottom:.35rem; }
-  .progress-track { height:9px; border-radius:999px; background:var(--card);
+  .progress-track { height:.52rem; border-radius:999px; background:var(--card);
                     border:1px solid var(--bd); overflow:hidden; }
   .progress-fill { height:100%; width:0; border-radius:999px;
                    background:linear-gradient(90deg,var(--accent),#4DABF7); transition:width .4s ease; }
@@ -161,7 +166,7 @@
            border-radius:13px; padding:.7rem .9rem; }
   .meter b { font-size:.78rem; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
   .meter .m-val { font-family:'Fredoka One',cursive; font-size:1.4rem; margin-top:.15rem; }
-  .meter-track { height:8px; border-radius:999px; background:var(--bd); overflow:hidden; margin-top:.4rem; }
+  .meter-track { height:.46rem; border-radius:999px; background:var(--bd); overflow:hidden; margin-top:.4rem; }
   .meter-fill { height:100%; width:50%; transition:width .5s ease; }
   .meter-fill.co2 { background:linear-gradient(90deg,#69DB7C,#FFD43B,#FF6B6B); }
   .meter-fill.money { background:linear-gradient(90deg,#FF6B6B,#FFD43B,#69DB7C); }
@@ -314,10 +319,10 @@
         <rect x="430" y="105" width="180" height="90" rx="14" fill="#5c3a10" stroke="#FFD43B" stroke-width="2.5"/>
         <text x="520" y="143" text-anchor="middle" font-family="Nunito, sans-serif" font-size="19" font-weight="800" fill="#ffffff">🌡️ WARMER</text>
         <text x="520" y="168" text-anchor="middle" font-family="Nunito, sans-serif" font-size="19" font-weight="800" fill="#ffffff">PLANET</text>
-        <path d="M 215 118 C 300 55, 360 55, 425 118" fill="none" stroke="#e8590c" stroke-width="4" marker-end="url(#arrA)"/>
-        <text x="320" y="52" text-anchor="middle" font-family="Nunito, sans-serif" font-size="13.5" font-weight="800" fill="#ffb38a">Some technology RELEASES greenhouse gases</text>
-        <text x="320" y="72" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12" fill="#ffb38a">vehicles · factories · refrigeration</text>
-        <path d="M 425 185 C 360 248, 300 248, 215 185" fill="none" stroke="#0CA678" stroke-width="4" marker-end="url(#arrB)"/>
+        <path d="M 215 118 C 300 62, 360 62, 425 118" fill="none" stroke="#e8590c" stroke-width="4" marker-end="url(#arrA)"/>
+        <text x="320" y="36" text-anchor="middle" font-family="Nunito, sans-serif" font-size="13.5" font-weight="800" fill="#ffb38a">Some technology RELEASES greenhouse gases</text>
+        <text x="320" y="56" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12" fill="#ffb38a">vehicles · factories · refrigeration</text>
+        <path d="M 425 185 C 360 238, 300 238, 215 185" fill="none" stroke="#0CA678" stroke-width="4" marker-end="url(#arrB)"/>
         <text x="320" y="255" text-anchor="middle" font-family="Nunito, sans-serif" font-size="13.5" font-weight="800" fill="#7fe0c3">Other technology SLOWS the warming</text>
         <text x="320" y="275" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12" fill="#7fe0c3">solar panels · electric buses · efficient stoves</text>
       </svg>
