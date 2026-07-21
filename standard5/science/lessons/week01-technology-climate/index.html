@@ -116,6 +116,7 @@
                 scroll-margin-top:4.6rem; /* clears the sticky progress bar */ }
   section.sec.step-hidden { display:none; }          /* not revealed yet */
   .next-btn { display:block; width:100%; margin-top:1.1rem; font-size:1rem; padding:.85rem; }
+  .next-q { display:block; width:100%; margin-top:.9rem; font-size:.95rem; padding:.75rem; }
   .next-cue { text-align:center; font-size:.8rem; color:var(--muted); font-weight:700; margin-top:.5rem; }
   .sec-tag { font-size:.7rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase;
              color:var(--accent); display:block; margin-bottom:.3rem; }
@@ -483,7 +484,7 @@
    ═══════════════════════════════════════════════════════════════ */
 
 /* ───────────────────────── DATA ───────────────────────── */
-var LESSON = { week:'Wk1', lo:'SC1.09', name:'Technology & Climate Change', idBase:'std5-sci-wk01' };
+window.LESSON = { week:'Wk1', lo:'SC1.09', name:'Technology & Climate Change', idBase:'std5-sci-wk01' };
 
 var REVIEW = [
   { t:'Technology',      d:'Tools and machines people make to do work. A machete is technology too — not only electronics.' },
@@ -763,6 +764,18 @@ function revealStep(sel){
       s.scrollIntoView({ behavior:'smooth', block:'start' });
     });
   });
+}
+/* Inject a self-paced "continue" button into a per-QUESTION feedback box.
+   Replaces the old auto-advance timers so a slow or EAL reader is never cut
+   off mid-sentence — reading the feedback is a learning moment. Idempotent. */
+function continueBtn(holderSel, label, fn){
+  var holder = $(holderSel); if (!holder) return;
+  if ($('.next-q', holder)) return;
+  var b = document.createElement('button');
+  b.className = 'btn next-q';
+  b.textContent = label || 'Next question →';
+  b.addEventListener('click', function(){ b.disabled = true; fn(); });
+  holder.appendChild(b);
 }
 /* Inject a Next button into a finished card's body. Idempotent. */
 function nextButton(finishedSel, nextSel, label, cb){
@@ -1051,7 +1064,9 @@ function simPick(i){
   r.innerHTML = (good?'✅ ':'⚠️ ') + o.fb;
   simStep++;
   coachCheck('#simCoach');
-  setTimeout(function(){ r.className='sim-result'; simStepRender(); }, 2400);
+  continueBtn('#simResult',
+    (simStep >= SIM[tier].length ? 'See how your town did →' : 'Next choice →'),
+    function(){ r.className='sim-result'; simStepRender(); });
 }
 function simEnd(){
   $('#simChoice').innerHTML = '';
@@ -1111,7 +1126,9 @@ function tracePick(i){
   f.innerHTML = (ok?'✅ Correct! ':'💡 Not quite. ') + t.final;
   coachCheck('#traceCoach');
   traceIdx++;
-  setTimeout(traceRender, 2800);
+  continueBtn('#traceFinal',
+    (traceIdx >= TRACE[tier].length ? 'See the result →' : 'Next case →'),
+    traceRender);
 }
 function traceEnd(){
   $('#traceBox').innerHTML = '<div class="trace-final show">🔍 Investigation complete — <b>'
@@ -1147,7 +1164,9 @@ function mythPick(saidBust){
   v.innerHTML = (ok?'✅ Correct! ':'❌ Not this time. ') + m.why;
   coachCheck('#mythCoach');
   mythIdx++;
-  setTimeout(mythRender, 2600);
+  continueBtn('#mythVerdict',
+    (mythIdx >= MYTH[tier].length ? 'See the result →' : 'Next claim →'),
+    mythRender);
 }
 function mythEnd(){
   $('#mythBox').innerHTML = '<div class="myth-card"><b>🕵️ Arena complete — '
@@ -1290,5 +1309,61 @@ function finish(){
   draw(); addEventListener('resize', draw);
 })();
 </script>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   PROGRESSIVE LESSON UNLOCK — direct-URL guard (IDEAS #8)
+   Part of the ENGINE now: the week number is DERIVED from
+   LESSON.week, so copying this file to a new week carries the
+   guard automatically and it can never be dropped by a rebuild.
+   Week 1 self-disables (THIS_WEEK <= 1). A CURTAIN, not a lock —
+   public pages, fails OPEN on network error (a dropped-wifi
+   student must not be shut out of a lesson he or she may read).
+   ══════════════════════════════════════════════════════════════ */
+(function () {
+  var SUBJECT_KEY = 'std5-science';
+  var THIS_WEEK   = parseInt(String((window.LESSON||{}).week||'').replace(/\D/g,''), 10) || 1;
+  var LOCKS_URL   = 'https://edlo-lms.smartstandardsix.workers.dev/lesson-locks';
+  var HUB_URL     = '/standard5/science/';
+  if (THIS_WEEK <= 1) return; // Week 1 is always open, to everyone
+
+  fetch(LOCKS_URL)
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (!data || !data.ok || !data.locks) return;                 // error -> let him or her through
+      var raw = data.locks[SUBJECT_KEY];
+      if (raw === undefined || raw === null || raw === '') return;  // subject not locked at all
+      var released = Number(raw);
+      if (!released || THIS_WEEK <= released) return;               // released -> open
+      lockScreen(released);
+    })
+    .catch(function () { /* offline -> let him or her through */ });
+
+  function lockScreen(released) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;' +
+      'padding:max(1rem,4vw);text-align:center;">' +
+        '<div style="max-width:520px;background:var(--card,rgba(255,255,255,.06));' +
+        'border:1px solid var(--bd,rgba(255,255,255,.09));border-radius:20px;' +
+        'padding:2.2rem 1.6rem;">' +
+          '<div style="font-size:3rem;line-height:1;margin-bottom:.6rem;">\uD83D\uDD12</div>' +
+          '<h1 style="font-family:\'Fredoka One\',cursive;font-weight:400;font-size:1.5rem;' +
+          'margin-bottom:.7rem;">This lesson opens later</h1>' +
+          '<p style="font-family:Nunito,sans-serif;font-size:1rem;line-height:1.6;opacity:.85;">' +
+            'Standard 5 Science is open through <strong>Week ' + released + '</strong> right now. ' +
+            'This is Week ' + THIS_WEEK + ' \u2014 Mr. EdLo will open it when the class gets there.' +
+          '</p>' +
+          '<p style="margin-top:1.4rem;">' +
+            '<a href="' + HUB_URL + '" style="font-family:Nunito,sans-serif;font-weight:800;' +
+            'text-decoration:none;background:#20C997;color:#0d1f1a;padding:12px 22px;' +
+            'border-radius:999px;display:inline-block;min-height:44px;line-height:20px;">' +
+            '\u2190 Back to Science lessons</a>' +
+          '</p>' +
+        '</div>' +
+      '</div>';
+  }
+})();
+</script>
+
 </body>
 </html>

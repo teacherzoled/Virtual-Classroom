@@ -1,228 +1,344 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="night">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Week 2 · Climate Change &amp; Belize's Economy — Mr. EdLo's Virtual Classroom</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<script src="/edlo-utils.js"></script>
 <style>
-  html { font-size: 17.5px; }
-  html, body { overflow-x: hidden; }
+  /* Root font size drives EVERYTHING — 164 of the 168 sized values are rem,
+     so raising this scales text, padding, cards and buttons together.
+     Steps up on bigger screens; phones keep the compact size. */
+  html { font-size: 19px; }
+  @media (min-width:1000px){ html { font-size: 20.5px; } }
+  @media (min-width:1400px){ html { font-size: 22px;   } }
+  /* ⚠️ overflow-x:hidden must NOT go on <html> — it makes <html> a scroll
+     container and breaks position:sticky on the progress bar. Body only,
+     exactly as the Std5 test pages do it. */
+  body { overflow-x: hidden; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --accent: #20C997;
-    --accent-dark: #0CA678;
+  :root { --bronze:#CD7F32; --silver:#A8B3BD; --gold:#FFC93C; }
+
+  /* ═══ THEME PALETTE — mirrors standard5/science/index.html exactly ═══
+     Each theme recolours the ACCENT too, not just the background:
+     Night teal · Sunny orange · Cloudy blue · Nature green.
+     Selector is body.theme-* (site-wide convention), NOT [data-theme]. */
+  :root, body.theme-night {
+    --bg:#0d1f1a; --fg:#ffffff;
+    --card:rgba(255,255,255,0.06); --bd:rgba(255,255,255,0.09);
+    --bd-h:rgba(32,201,151,0.40); --muted:rgba(255,255,255,0.52);
+    --btn:rgba(255,255,255,0.08); --star:1;
+    --accent:#20C997; --accent-c:#0d1f1a; --accent-soft:rgba(32,201,151,0.12);
+    --h1-grad:linear-gradient(135deg,#fff 0%,#20C997 55%,#69DB7C 100%);
+    --footer-border:rgba(255,255,255,0.07); --footer-c:rgba(255,255,255,0.38);
+    --right:#69DB7C; --wrong:#FF6B6B;
   }
-  [data-theme="night"] {
-    --bg: #0b1026; --bg2: #141b3c; --card: #1a2247; --text: #eef1ff;
-    --muted: #aab3d6; --line: #2e3a6e; --star-op: 1;
-    --good: #51cf66; --bad: #ff8787; --chip: #232c58;
+  body.theme-sunny {
+    --bg:#fffbea; --fg:#2d2000;
+    --card:rgba(255,255,255,0.75); --bd:rgba(200,150,0,0.18);
+    --bd-h:rgba(200,120,0,0.45); --muted:rgba(80,50,0,0.72);
+    --btn:rgba(255,255,255,0.85); --star:0;
+    --accent:#FF922B; --accent-c:#ffffff; --accent-soft:rgba(255,180,0,0.15);
+    --h1-grad:linear-gradient(135deg,#b35c00 0%,#e67e00 50%,#f5a623 100%);
+    --footer-border:rgba(200,150,0,0.20); --footer-c:rgba(100,60,0,0.55);
+    --right:#2e7d1a; --wrong:#c62828;
   }
-  [data-theme="sunny"] {
-    --bg: #fff9e6; --bg2: #fff3c4; --card: #ffffff; --text: #4a3f16;
-    --muted: #8a7a35; --line: #f1dd8e; --star-op: 0;
-    --good: #2b8a3e; --bad: #c92a2a; --chip: #fdf0c2;
+  body.theme-cloudy {
+    --bg:#e8edf2; --fg:#1c2533;
+    --card:rgba(255,255,255,0.72); --bd:rgba(100,130,160,0.18);
+    --bd-h:rgba(80,110,150,0.40); --muted:rgba(40,60,90,0.72);
+    --btn:rgba(255,255,255,0.85); --star:0;
+    --accent:#4A90D9; --accent-c:#ffffff; --accent-soft:rgba(100,140,200,0.12);
+    --h1-grad:linear-gradient(135deg,#1a365d 0%,#2b6cb0 50%,#4299e1 100%);
+    --footer-border:rgba(80,120,180,0.18); --footer-c:rgba(30,60,100,0.55);
+    --right:#2e7d1a; --wrong:#c62828;
   }
-  [data-theme="cloudy"] {
-    --bg: #e9eef5; --bg2: #d8e1ec; --card: #ffffff; --text: #2b3a4d;
-    --muted: #5f7288; --line: #c3d0e0; --star-op: 0;
-    --good: #2b8a3e; --bad: #c92a2a; --chip: #dde6f0;
+  body.theme-nature {
+    --bg:#f0f7ee; --fg:#1a2e10;
+    --card:rgba(255,255,255,0.72); --bd:rgba(60,120,40,0.18);
+    --bd-h:rgba(40,100,20,0.40); --muted:rgba(30,70,15,0.72);
+    --btn:rgba(255,255,255,0.85); --star:0;
+    --accent:#4CAF50; --accent-c:#ffffff; --accent-soft:rgba(60,140,30,0.12);
+    --h1-grad:linear-gradient(135deg,#1b4d0f 0%,#2e7d1a 50%,#66bb44 100%);
+    --footer-border:rgba(50,120,20,0.18); --footer-c:rgba(20,70,10,0.55);
+    --right:#2e7d1a; --wrong:#c62828;
   }
-  [data-theme="nature"] {
-    --bg: #e8f5ec; --bg2: #d3ecd9; --card: #ffffff; --text: #1e3d29;
-    --muted: #4e7a5d; --line: #b7dcc2; --star-op: 0;
-    --good: #2b8a3e; --bad: #c92a2a; --chip: #d9efe0;
+  body { font-family:'Nunito',system-ui,sans-serif; background:var(--bg); color:var(--fg);
+         min-height:100vh; display:flex; flex-direction:column; line-height:1.6; }
+  #stars { position:fixed; inset:0; pointer-events:none; z-index:0; opacity:var(--star); }
+  .wrapper { position:relative; z-index:1; max-width:1400px; margin:0 auto; width:100%;
+             padding:0 max(1rem,4vw) 2rem; flex:1; }
+  /* The header sits in its own wrapper above the sticky bar — it must NOT grow,
+     or it would split the vertical space with the content wrapper. */
+  .wrapper.head-wrap { flex:none; padding-bottom:0; }
+
+  .top-row { display:flex; justify-content:space-between; align-items:center; gap:1rem;
+             flex-wrap:wrap; padding:1rem 0 .3rem; }
+  .back-link { color:var(--muted); text-decoration:none; font-weight:800; font-size:.9rem; }
+  .back-link:hover { color:var(--accent); }
+  .theme-bar { display:flex; gap:.4rem; flex-wrap:wrap; }
+  .theme-bar button { font-family:inherit; font-size:.78rem; font-weight:800; cursor:pointer;
+        padding:.35rem .7rem; border-radius:999px; border:1.5px solid var(--bd);
+        background:var(--btn); color:var(--fg); transition:border-color .25s,color .25s; }
+  .theme-bar button:hover { border-color:var(--bd-h); }
+  .theme-bar button.active { border-color:var(--accent); color:var(--accent); }
+
+  header.lesson-head { text-align:center; padding:.8rem 0 1rem; }
+  .chip-row { display:flex; gap:.5rem; justify-content:center; flex-wrap:wrap; margin-bottom:.8rem; }
+  .chip { font-size:.72rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase;
+          padding:.32rem .8rem; border-radius:999px; background:var(--card);
+          border:1.5px solid var(--bd); color:var(--muted); }
+  .chip.bean { background:var(--accent); color:var(--accent-c); border-color:var(--accent); }
+  h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.7rem,7vw,2.9rem); line-height:1.15;
+       background:var(--h1-grad);
+       -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .subtitle { color:var(--muted); font-weight:700; margin-top:.4rem; font-size:.98rem; }
+  .login-hint { margin-top:.7rem; font-size:.85rem; color:var(--muted); }
+  .login-hint a { color:var(--accent); font-weight:800; }
+
+  /* Sticky progress bar — same pattern as the Std5 tests */
+  .progress-wrap { position:sticky; top:0; z-index:50; background:var(--bg);
+                   border-bottom:1px solid var(--bd); padding:.7rem 0 .6rem;
+                   margin-bottom:1.4rem; transition:background .4s; }
+  .progress-inner { max-width:1400px; margin:0 auto; padding:0 max(1rem,4vw); }
+  .progress-label { display:flex; justify-content:space-between; font-size:.78rem;
+                    font-weight:800; color:var(--muted); margin-bottom:.35rem; }
+  .progress-track { height:.52rem; border-radius:999px; background:var(--card);
+                    border:1px solid var(--bd); overflow:hidden; }
+  .progress-fill { height:100%; width:0; border-radius:999px;
+                   background:linear-gradient(90deg,var(--accent),#4DABF7); transition:width .4s ease; }
+
+  section.sec { background:var(--card); border:1.5px solid var(--bd); border-radius:18px;
+                padding:1.3rem; margin-bottom:1.2rem; position:relative;
+                scroll-margin-top:4.6rem; /* clears the sticky progress bar */ }
+  section.sec.step-hidden { display:none; }          /* not revealed yet */
+  .next-btn { display:block; width:100%; margin-top:1.1rem; font-size:1rem; padding:.85rem; }
+  .next-q { display:block; width:100%; margin-top:.9rem; font-size:.95rem; padding:.75rem; }
+  .next-cue { text-align:center; font-size:.8rem; color:var(--muted); font-weight:700; margin-top:.5rem; }
+  .sec-tag { font-size:.7rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase;
+             color:var(--accent); display:block; margin-bottom:.3rem; }
+  .sec h2 { font-family:'Fredoka One',cursive; font-size:1.28rem; font-weight:400; line-height:1.3; }
+  .sec p { margin-top:.5rem; color:var(--muted); font-weight:600; font-size:.95rem; }
+  .sec .hint { font-size:.85rem; font-style:italic; }
+  .done-badge { display:none; position:absolute; top:1rem; right:3rem; font-size:.7rem;
+                font-weight:900; color:var(--accent); }
+  section.done .done-badge { display:block; }
+
+  /* Collapsible cards — tap the header to fold a section away */
+  .sec-toggle { position:absolute; top:.75rem; right:.8rem; background:none; border:none;
+                color:var(--muted); font-family:inherit; font-size:1.15rem; font-weight:900;
+                cursor:pointer; line-height:1; padding:.25rem .35rem; border-radius:8px; }
+  .sec-toggle:hover { color:var(--accent); background:var(--btn); }
+  section.sec.collapsed { padding-bottom:1rem; }
+  section.sec.collapsed .sec-body { display:none; }
+  section.sec.collapsed h2 { font-size:1.1rem; opacity:.85; }
+  .collapse-hint { display:none; font-size:.8rem; color:var(--muted);
+                   font-weight:700; margin-top:.35rem; }
+  section.sec.collapsed .collapse-hint { display:block; }
+
+  /* Review cards */
+  .review-grid { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:1rem; }
+  .rev-card { flex:1 1 300px; background:var(--btn); border:1.5px solid var(--bd);
+              border-radius:14px; padding:.9rem 1rem; }
+  .rev-card b { display:block; color:var(--accent); font-size:.95rem; margin-bottom:.25rem; }
+  .rev-card span { font-size:.88rem; color:var(--muted); font-weight:600; }
+  .loop-box { margin-top:1rem; background:var(--btn); border:1.5px solid var(--bd);
+              border-radius:14px; padding:1rem; }
+  .loop-arrow { font-weight:800; font-size:.9rem; margin:.35rem 0; }
+  .loop-arrow.warm { color:var(--wrong); } .loop-arrow.cool { color:var(--right); }
+  .fig-box { margin:1rem auto; max-width:820px; }
+  .fig-box svg { width:100%; height:auto; display:block; }
+  .fig-cap { text-align:center; font-size:.82rem; color:var(--muted); margin-top:.35rem; }
+  .concept-p { margin-top:.7rem; font-size:.95rem; font-weight:600; max-width:80ch; }
+  .concept-p strong { color:var(--fg); }
+  /* Text lines stay readable even though the card is now full width —
+     the CARD uses the space, the LINE LENGTH stays comfortable. */
+  .sec > .sec-body > p, .sec .hint, .q-stem { max-width:80ch; }
+
+  /* Buttons */
+  .btn { font-family:inherit; font-weight:900; cursor:pointer; border-radius:12px;
+         padding:.65rem 1.2rem; font-size:.92rem; border:none;
+         background:var(--accent); color:var(--accent-c); margin-top:1rem; }
+  .btn:disabled { opacity:.45; cursor:not-allowed; }
+  .btn.ghost { background:var(--btn); color:var(--fg); border:1.5px solid var(--bd); text-decoration:none;
+               display:inline-block; }
+  .btn-row { display:flex; gap:.6rem; flex-wrap:wrap; align-items:center; }
+
+  /* Question blocks */
+  .q-block { margin-top:1rem; padding-top:1rem; border-top:1px solid var(--footer-border); }
+  .q-stem { font-weight:800; font-size:.98rem; margin-bottom:.55rem; }
+  .opts { display:flex; flex-direction:column; gap:.45rem; }
+  .opts label { display:flex; align-items:flex-start; gap:.55rem; cursor:pointer;
+                padding:.55rem .75rem; border-radius:11px; border:1.5px solid var(--bd);
+                background:var(--btn); font-size:.92rem; font-weight:600; }
+  .opts label.right { border-color:var(--right); background:var(--accent-soft); }
+  .opts label.wrong { border-color:var(--wrong); background:rgba(198,40,40,.10); }
+  .opts input { margin-top:.25rem; flex-shrink:0; }
+
+  /* Tier offer */
+  .tier-grid { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:1rem; }
+  .tier-card { flex:1 1 280px; border-radius:16px; padding:1rem; text-align:center;
+               border:2px solid var(--bd); background:var(--btn); cursor:pointer; }
+  .tier-card.bronze { border-color:var(--bronze); }
+  .tier-card.silver { border-color:var(--silver); }
+  .tier-card.gold   { border-color:var(--gold); }
+  .tier-card.locked { opacity:.5; cursor:not-allowed; }
+  .tier-card .t-name { font-family:'Fredoka One',cursive; font-size:1.15rem; }
+  .tier-card .t-rate { font-size:.82rem; font-weight:800; color:var(--accent); margin-top:.2rem; }
+  .tier-card .t-desc { font-size:.82rem; color:var(--muted); font-weight:600; margin-top:.35rem; }
+  .tier-card .t-lock { font-size:.75rem; font-weight:800; color:var(--muted); margin-top:.4rem; }
+  .chip.tier-now.bronze { background:var(--bronze); color:#2b1a08; border-color:var(--bronze); }
+  .chip.tier-now.silver { background:var(--silver); color:#1d232a; border-color:var(--silver); }
+  .chip.tier-now.gold   { background:var(--gold);   color:#3a2c00; border-color:var(--gold); }
+  .coach-box { margin-top:1rem; padding:.85rem 1rem; border-radius:13px;
+               border:1.5px dashed var(--accent); background:var(--accent-soft);
+               font-weight:700; font-size:.92rem; display:none; }
+  .coach-box.show { display:block; }
+
+  /* Simulator */
+  .sim-meters { display:flex; gap:.8rem; flex-wrap:wrap; margin:1rem 0; }
+  .meter { flex:1 1 220px; background:var(--btn); border:1.5px solid var(--bd);
+           border-radius:13px; padding:.7rem .9rem; }
+  .meter b { font-size:.78rem; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+  .meter .m-val { font-family:'Fredoka One',cursive; font-size:1.4rem; margin-top:.15rem; }
+  .meter-track { height:.46rem; border-radius:999px; background:var(--bd); overflow:hidden; margin-top:.4rem; }
+  .meter-fill { height:100%; width:50%; transition:width .5s ease; }
+  .meter-fill.co2 { background:linear-gradient(90deg,#69DB7C,#FFD43B,#FF6B6B); }
+  .meter-fill.money { background:linear-gradient(90deg,#FF6B6B,#FFD43B,#69DB7C); }
+  .sim-choice { margin-top:1rem; }
+  .sim-opts { display:flex; flex-direction:column; gap:.5rem; margin-top:.6rem; }
+  @media (min-width:1000px){
+    .sim-opts { flex-direction:row; }
+    .sim-opts button { flex:1 1 0; }
+    .opts { display:grid; grid-template-columns:1fr 1fr; gap:.55rem; }
   }
+  .sim-opts button { text-align:left; font-family:inherit; font-weight:700; font-size:.92rem;
+        cursor:pointer; padding:.7rem .9rem; border-radius:12px;
+        border:1.5px solid var(--bd); background:var(--btn); color:var(--fg); }
+  .sim-opts button:hover { border-color:var(--accent); }
+  .sim-result { margin-top:.8rem; font-size:.92rem; font-weight:700; display:none; }
+  .sim-result.show { display:block; }
+  .sim-ending { margin-top:1rem; padding:1rem; border-radius:14px;
+                border:1.5px solid var(--accent); background:var(--accent-soft); display:none; }
+  .sim-ending.show { display:block; }
 
-  body {
-    font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text);
-    min-height: 100vh; position: relative;
-    background-image: linear-gradient(var(--bg), var(--bg2));
-    background-attachment: fixed;
-  }
-  #stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: var(--star-op); transition: opacity .4s; }
+  /* Trace-it-back */
+  .trace-start { font-family:'Fredoka One',cursive; font-size:1.1rem; text-align:center;
+                 padding:.9rem; border-radius:14px; background:var(--btn);
+                 border:1.5px solid var(--bd); }
+  .trace-chain { margin-top:.8rem; }
+  .trace-link { padding:.7rem .9rem; border-radius:12px; background:var(--btn);
+                border:1.5px solid var(--bd); margin-bottom:.5rem; font-weight:700; font-size:.92rem; }
+  .trace-link.revealed { border-color:var(--accent); }
+  .trace-q { font-weight:800; font-size:.95rem; margin:.6rem 0 .5rem; }
+  .trace-final { margin-top:.8rem; padding:.9rem; border-radius:13px; font-weight:800;
+                 background:var(--accent-soft); border:1.5px solid var(--accent); display:none;
+                 font-size:.92rem; }
+  .trace-final.show { display:block; }
 
-  .wrapper { max-width: 1180px; margin: 0 auto; padding: 0 max(1rem, 2vw) 3rem; position: relative; z-index: 1; min-width: 0; }
+  /* Myth-buster */
+  .myth-card { margin-top:1rem; padding:1rem; border-radius:15px; background:var(--btn);
+               border:1.5px solid var(--bd); }
+  .myth-claim { font-weight:800; font-size:1.02rem; font-style:italic; }
+  .myth-btns { display:flex; gap:.6rem; margin-top:.8rem; flex-wrap:wrap; }
+  .myth-btns button { flex:1 1 130px; font-family:inherit; font-weight:900; font-size:.95rem;
+        cursor:pointer; padding:.7rem; border-radius:12px; border:2px solid var(--bd);
+        background:var(--bg); color:var(--fg); }
+  .myth-btns button:disabled { opacity:.5; cursor:not-allowed; }
+  .myth-verdict { margin-top:.8rem; font-size:.92rem; font-weight:700; display:none; }
+  .myth-verdict.show { display:block; }
 
-  .top-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem; padding: 1rem 0 .3rem; }
-  .back-link { color: var(--accent); text-decoration: none; font-weight: 800; font-size: .95rem; padding: .5rem .6rem .5rem 0; }
-  .back-link:hover { text-decoration: underline; }
-  .theme-bar { display: flex; gap: .4rem; }
-  .theme-bar button {
-    font-size: 1.05rem; background: var(--card); border: 2px solid var(--line);
-    border-radius: 10px; cursor: pointer; padding: .35rem .55rem; line-height: 1;
-    min-width: 44px; min-height: 40px;
-  }
-  .theme-bar button.active { border-color: var(--accent); }
+  /* Streak */
+  .streak-hud { display:flex; gap:.8rem; flex-wrap:wrap; margin-top:1rem; }
+  .streak-hud > div { flex:1 1 160px; text-align:center; background:var(--btn);
+        border:1.5px solid var(--bd); border-radius:13px; padding:.6rem; }
+  .streak-hud b { display:block; font-size:.72rem; text-transform:uppercase;
+                  letter-spacing:.05em; color:var(--muted); }
+  .streak-hud span { font-family:'Fredoka One',cursive; font-size:1.5rem; }
+  .streak-q { margin-top:1rem; font-weight:800; font-size:1.05rem; text-align:center;
+              padding:1rem; border-radius:14px; background:var(--btn); border:1.5px solid var(--bd); }
+  .streak-opts { display:flex; gap:.6rem; margin-top:.8rem; flex-wrap:wrap; }
+  .streak-opts button { flex:1 1 130px; font-family:inherit; font-weight:800; font-size:.92rem;
+        cursor:pointer; padding:.75rem; border-radius:12px; border:1.5px solid var(--bd);
+        background:var(--btn); color:var(--fg); }
 
-  header.lesson-head { text-align: center; padding: .8rem 0 1.2rem; }
-  .chip-row { display: flex; justify-content: center; flex-wrap: wrap; gap: .5rem; margin-bottom: .7rem; }
-  .chip {
-    background: var(--chip); border: 1px solid var(--line); color: var(--muted);
-    font-size: .8rem; font-weight: 800; border-radius: 999px; padding: .3rem .8rem;
-  }
-  .chip.bean { color: var(--text); }
-  h1 {
-    font-family: 'Fredoka One', cursive; font-weight: 400;
-    font-size: clamp(1.8rem, 8vw, 3rem); line-height: 1.15;
-    color: var(--accent); text-shadow: 0 2px 12px rgba(32,201,151,.25);
-  }
-  .subtitle { color: var(--muted); font-size: 1.02rem; max-width: 780px; margin: .6rem auto 0; min-width: 0; word-break: break-word; }
-  .login-hint { margin-top: .6rem; font-size: .85rem; color: var(--muted); }
-  .login-hint a { color: var(--accent); font-weight: 800; }
+  .earned-note { display:none; margin-top:.9rem; font-weight:800; font-size:.9rem; color:var(--accent); }
+  .feedback-line { margin-top:.7rem; font-weight:800; font-size:.95rem; }
 
-  .progress-wrap { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: .5rem 0 .4rem; border-bottom: 1px solid var(--line); }
-  .progress-label { font-size: .78rem; font-weight: 800; color: var(--muted); margin-bottom: .25rem; display: flex; justify-content: space-between; }
-  .progress-track { height: 10px; background: var(--chip); border-radius: 999px; overflow: hidden; border: 1px solid var(--line); }
-  .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent-dark)); border-radius: 999px; transition: width .5s; }
+  /* Finish */
+  .finish-beans { font-family:'Fredoka One',cursive; font-size:2.6rem; color:var(--accent);
+                  text-align:center; margin:.5rem 0; }
+  .finish-badge { text-align:center; font-weight:900; font-size:1.05rem; }
+  .cap-note { text-align:center; font-size:.85rem; color:var(--muted); font-weight:700; margin-top:.6rem; }
 
-  section.sec {
-    background: var(--card); border: 1px solid var(--line); border-radius: 18px;
-    padding: 1.4rem clamp(1rem, 3vw, 1.8rem); margin-top: 1.4rem;
-    box-shadow: 0 6px 22px rgba(0,0,0,.12);
-  }
-  .sec-tag { font-size: .75rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-dark); }
-  [data-theme="night"] .sec-tag { color: var(--accent); }
-  .sec h2 { font-family: 'Fredoka One', cursive; font-weight: 400; font-size: 1.45rem; margin: .25rem 0 .8rem; }
-  .sec p { margin: .55rem 0; line-height: 1.65; }
-  .sec .hint { color: var(--muted); font-size: .9rem; }
-  .done-badge { display: none; font-size: .8rem; font-weight: 800; color: var(--good); margin-left: .5rem; }
-  section.done .done-badge { display: inline; }
+  #toast { position:fixed; left:50%; bottom:1.3rem; transform:translateX(-50%) translateY(140%);
+           background:var(--accent); color:var(--accent-c); font-weight:900; font-size:.92rem;
+           padding:.7rem 1.2rem; border-radius:999px; z-index:99; transition:transform .35s ease;
+           max-width:90vw; text-align:center; }
+  #toast.show { transform:translateX(-50%) translateY(0); }
 
-  .reveal-btn, .check-btn {
-    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem;
-    background: var(--accent); color: #06281e; border: none; border-radius: 12px;
-    padding: .75rem 1.4rem; cursor: pointer; margin-top: .9rem; min-height: 44px;
-    box-shadow: 0 4px 14px rgba(32,201,151,.35);
-  }
-  .check-btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
-  .reveal-box { display: none; margin-top: 1rem; border-left: 4px solid var(--accent); background: var(--chip); border-radius: 0 12px 12px 0; padding: .9rem 1rem; }
+  .site-footer { text-align:center; padding:1.5rem max(1rem,4vw); font-size:.8rem;
+                 color:var(--muted); border-top:1px solid var(--footer-border); }
 
-  .vocab-row, .fill-row { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; padding: .55rem 0; border-bottom: 1px dashed var(--line); }
-  .vocab-term { font-weight: 800; min-width: 10.5rem; }
-  select {
-    font-family: 'Nunito', sans-serif; font-size: .95rem; font-weight: 700;
-    background: var(--chip); color: var(--text); border: 2px solid var(--line);
-    border-radius: 10px; padding: .55rem .6rem; min-height: 44px; max-width: 100%;
-  }
-  .mark { font-size: 1.05rem; min-width: 1.4rem; }
-
-  .sort-grid { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: .9rem; justify-content: center; }
-  .sort-card { flex: 0 1 250px; background: var(--chip); border: 1px solid var(--line); border-radius: 14px; padding: .8rem .9rem; text-align: center; }
-  .sort-card .sc-name { font-weight: 800; margin-bottom: .6rem; }
-  .sort-btns { display: flex; gap: .5rem; justify-content: center; }
-  .sort-btns button {
-    flex: 1 1 0; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .82rem;
-    border: 2px solid var(--line); background: var(--card); color: var(--text);
-    border-radius: 10px; padding: .5rem .3rem; cursor: pointer; min-height: 44px;
-  }
-  .sort-btns button.picked { border-color: var(--accent); background: var(--accent); color: #06281e; }
-  .sort-card .mark { display: block; margin-top: .4rem; }
-
-  .quiz-q { margin-top: 1.1rem; padding-top: .9rem; border-top: 1px dashed var(--line); }
-  .quiz-q .q-stem { font-weight: 800; }
-  .quiz-opts { display: flex; flex-direction: column; gap: .45rem; margin-top: .55rem; }
-  .quiz-opts label {
-    display: flex; align-items: center; gap: .6rem; background: var(--chip);
-    border: 2px solid var(--line); border-radius: 10px; padding: .6rem .7rem;
-    cursor: pointer; min-height: 44px; font-weight: 700; font-size: .95rem;
-  }
-  .quiz-opts input { accent-color: var(--accent); width: 1.1rem; height: 1.1rem; flex: none; }
-  .quiz-opts label.right { border-color: var(--good); }
-  .quiz-opts label.wrong { border-color: var(--bad); }
-
-  .tf-row { display: flex; align-items: center; justify-content: space-between; gap: .8rem; flex-wrap: wrap; padding: .6rem 0; border-bottom: 1px dashed var(--line); }
-  .tf-stmt { flex: 1 1 260px; font-weight: 700; }
-  .tf-btns { display: flex; gap: .5rem; align-items: center; }
-  .tf-btns button {
-    font-family: 'Nunito', sans-serif; font-weight: 800; border: 2px solid var(--line);
-    background: var(--chip); color: var(--text); border-radius: 10px;
-    padding: .5rem .9rem; cursor: pointer; min-height: 44px; min-width: 64px;
-  }
-  .tf-btns button.picked { border-color: var(--accent); background: var(--accent); color: #06281e; }
-
-  .feedback-line { display: none; margin-top: 1rem; font-weight: 800; }
-  .earned-note { display: none; margin-top: .35rem; font-size: .85rem; color: var(--muted); }
-
-  .fig-box { margin: 1rem auto; max-width: 640px; }
-  .fig-box svg { width: 100%; height: auto; display: block; }
-  .fig-cap { text-align: center; font-size: .82rem; color: var(--muted); margin-top: .35rem; }
-
-  .starter-box { background: var(--chip); border: 1px dashed var(--accent); border-radius: 12px; padding: .8rem 1rem; margin-top: .8rem; }
-  .starter-box li { margin: .35rem 0 .35rem 1.2rem; }
-
-  .video-box { position: relative; padding-top: 56.25%; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); margin-top: .9rem; }
-  .video-box iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-
-  #toast {
-    position: fixed; left: 50%; bottom: 1.4rem; transform: translateX(-50%) translateY(120%);
-    background: var(--accent); color: #06281e; font-weight: 800; border-radius: 999px;
-    padding: .7rem 1.4rem; z-index: 30; transition: transform .35s; box-shadow: 0 8px 24px rgba(0,0,0,.3);
-    max-width: 90vw; text-align: center;
-  }
-  #toast.show { transform: translateX(-50%) translateY(0); }
-
-  .site-footer { text-align: center; color: var(--muted); font-size: .82rem; padding: 2.2rem max(1rem, 4vw) 1.4rem; position: relative; z-index: 1; }
-
-  @media (max-width: 600px) {
-    .vocab-term { min-width: 0; width: 100%; }
-    .vocab-row select, .fill-row select { width: 100%; }
-    .sort-card { flex: 0 1 100%; }
-    .tf-row { flex-direction: column; align-items: stretch; }
-    .tf-btns { justify-content: stretch; }
-    .tf-btns button { flex: 1 1 0; }
+  @media (max-width:600px) {
+    html { font-size:16.5px; }
+    .rev-card, .tier-card, .meter { flex:1 1 100%; }
+    .myth-btns button, .streak-opts button { flex:1 1 100%; }
   }
 </style>
 </head>
-<body>
+<body class="theme-night">
 <canvas id="stars"></canvas>
-<div class="wrapper">
+
+<div class="wrapper head-wrap">
 
   <div class="top-row">
     <a class="back-link" href="/standard5/science/">← Back to Science</a>
     <div class="theme-bar" id="themeBar">
-      <button data-t="night" title="Night">🌙</button>
-      <button data-t="sunny" title="Sunny">☀️</button>
-      <button data-t="cloudy" title="Cloudy">☁️</button>
-      <button data-t="nature" title="Nature">🌿</button>
+      <button class="theme-btn" data-t="night">🌙 Night</button>
+      <button class="theme-btn" data-t="sunny">☀️ Sunny</button>
+      <button class="theme-btn" data-t="cloudy">☁️ Cloudy</button>
+      <button class="theme-btn" data-t="nature">🌿 Nature</button>
     </div>
   </div>
 
   <header class="lesson-head">
     <div class="chip-row">
-      <span class="chip">📖 Lesson · Week 2</span>
-      <span class="chip">SC 1.10</span>
+      <span class="chip">Standard 5 · Science</span>
+      <span class="chip">Week 2 · SC 1.10</span>
       <span class="chip bean" id="beanPill">🌱 0 beans</span>
+      <span class="chip" id="tierChip" style="display:none;"></span>
     </div>
     <h1>Climate Change &amp; Belize's Economy</h1>
-    <p class="subtitle">Tourism &amp; Agriculture — trace how one climate event travels all the way to real Belizean families' pockets. Work through each section and earn cacao beans 🌱 as you go!</p>
-    <p class="login-hint" id="loginHint"></p>
+    <p class="subtitle">Practice time! Cement what Mr. EdLo taught you this week.</p>
+    <p class="login-hint" id="loginHint">
+      <a href="/login/">Log in</a> to save your beans 🌱 to your account.
+    </p>
   </header>
 
-  <div class="progress-wrap">
-    <div class="progress-label"><span>Lesson progress</span><span id="progText">0 of 6 done</span></div>
+</div><!-- /wrapper -->
+
+<!-- Sticky progress bar — stays visible while scrolling, like the tests -->
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="progress-label"><span>Your progress</span><span id="progText">0 of 6 done</span></div>
     <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
   </div>
+</div>
 
-  <!-- ═══ SECTION 1 · HOOK ═══ -->
-  <section class="sec" id="sec-hook">
-    <span class="sec-tag">Section 1 · Think first</span>
-    <h2>🌀 Two Hurricanes, Two Weeks</h2>
-    <p>Here is one true sentence: <strong>“In 2020, hurricanes Eta and Iota flooded farms across Belize within two weeks of each other.”</strong></p>
-    <p>Now imagine it is YOUR family:</p>
-    <p style="font-size:1.15rem; font-weight:800;">🤔 If you were a corn farmer or a hotel owner, what would that flooding mean for you?</p>
-    <button class="reveal-btn" id="hookBtn">Think about it… then tap to reveal 💡</button>
-    <div class="reveal-box" id="hookReveal">
-      <p><strong>Both lose income.</strong> The farmer's crop drowns in the field, and the hotel owner's guests cancel their trips. Belize's two biggest earners — <strong>agriculture</strong> and <strong>tourism</strong> — both depend on the climate. This lesson traces exactly how.</p>
-    </div>
-  </section>
+<div class="wrapper">
 
-  <!-- ═══ SECTION 2 · LEARN IT ═══ -->
-  <section class="sec" id="sec-learn">
-    <span class="sec-tag">Section 2 · Learn it</span>
+  <!-- 1. BRIEF REVIEW -->
+  <section class="sec" id="secReview">
+    <span class="sec-tag">Quick Review</span>
     <h2>⛓️ Cause-and-Effect Chains</h2>
-    <p>Belize's two biggest earners are <strong>tourism</strong> (visitors who come for the reef, the cayes, the jungle) and <strong>agriculture</strong> (sugar in the north, citrus in the south, corn and more). Climate change threatens BOTH — and we can trace it link by link, like a chain:</p>
+    <p>One minute to refresh. Then the practice begins.</p>
+    <p class="concept-p">Belize's two biggest <strong>earning sectors</strong> are <strong>tourism</strong> (visitors who come for the reef, the cayes, and the rainforest) and <strong>agriculture</strong> (sugar in the north, citrus in the south, corn and beans countrywide). Climate change threatens BOTH — and we can trace it link by link, like a chain.</p>
+    <p class="concept-p">A <strong>cause-and-effect chain</strong> is one event that triggers the next, so a change in the sea can end as a change in a family's income:</p>
+
     <div class="fig-box">
       <svg viewBox="0 0 640 300" role="img" aria-label="Cause and effect chain from a warmer sea to less income">
         <defs>
@@ -251,111 +367,962 @@
       </svg>
       <p class="fig-cap">Warmer sea → coral bleaches → fewer tourists → less income.</p>
     </div>
-    <p>🏖️ <strong>Tourism:</strong> warmer seas <strong>bleach the coral reef</strong> that snorkellers come to see, and stronger hurricanes damage hotels and cancel trips.</p>
-    <p>🌾 <strong>Agriculture:</strong> drought and flood cycles hurt <strong>sugar in the north</strong>, <strong>citrus in the south</strong> (like Stann Creek), and corn. Hurricanes Eta and Iota (2020) flooded farms across the country.</p>
-    <p class="hint">Think of two real people: a hotel owner in San Pedro and a citrus farmer in Stann Creek. A bad hurricane season reaches BOTH of their pockets — through different chains.</p>
-  </section>
 
-  <!-- ═══ VIDEO (hidden until Mr. EdLo adds a URL) ═══ -->
-  <section class="sec" id="sec-video" style="display:none;">
-    <span class="sec-tag">Watch</span>
-    <h2>🎬 Watch &amp; Think</h2>
-    <div class="video-box"><iframe id="videoFrame" src="" title="Lesson video" allowfullscreen></iframe></div>
-  </section>
+    <p class="concept-p">🏖️ <strong>Tourism:</strong> warmer seas <strong>bleach the coral reef</strong> that snorkellers come to see, and stronger hurricanes damage hotels and cancel trips.</p>
+    <p class="concept-p">🌾 <strong>Agriculture:</strong> <strong>drought and flood</strong> both destroy harvests — sugar in the north, citrus in Stann Creek, and corn. Hurricanes Eta and Iota (2020) flooded farms across the country within two weeks.</p>
+    <p class="hint">Climate change here is <strong>not only "hotter days."</strong> For Belize the bigger threats are stronger hurricanes, coral bleaching, and rain that no longer comes when expected. Picture two real people — a hotel owner in San Pedro and a citrus farmer in Stann Creek — and one bad hurricane season reaches BOTH of their pockets, through different chains.</p>
 
-  <!-- ═══ SECTION 3 · VOCABULARY ═══ -->
-  <section class="sec act" id="sec-vocab" data-act="vocab">
-    <span class="sec-tag">Section 3 · Word power</span>
-    <h2>📚 Vocabulary Match <span class="done-badge">✓ done</span></h2>
-    <p class="hint">Match each science word to its meaning. Answer all five, then check.</p>
-    <div id="vocabList"></div>
-    <button class="check-btn" disabled>Check my answers ✔</button>
-    <p class="feedback-line"></p><p class="earned-note"></p>
-  </section>
-
-  <!-- ═══ SECTION 4 · SORT IT ═══ -->
-  <section class="sec act" id="sec-sort" data-act="sort">
-    <span class="sec-tag">Section 4 · Sort it</span>
-    <h2>🗂️ Which Sector Gets Hit? <span class="done-badge">✓ done</span></h2>
-    <p class="hint">Each card shows one climate effect in Belize. Does It hit <strong>🏖️ tourism</strong> or <strong>🌾 agriculture</strong>? Tap one button on every card.</p>
-    <div class="sort-grid" id="sortGrid"></div>
-    <button class="check-btn" disabled>Check my sorting ✔</button>
-    <p class="feedback-line"></p><p class="earned-note"></p>
-  </section>
-
-  <!-- ═══ SECTION 5 · PRACTICE ═══ -->
-  <section class="sec act" id="sec-practice" data-act="practice">
-    <span class="sec-tag">Section 5 · Your turn</span>
-    <h2>✏️ Build the Chains <span class="done-badge">✓ done</span></h2>
-    <p class="hint">Finish each cause-and-effect link — the same sentence starters from your worksheet.</p>
-    <div id="fillList"></div>
-    <div class="starter-box">
-      <strong>🗣️ Say it at home:</strong>
-      <li>When the sea gets warmer, ______, which means ______.</li>
-      <li>A hurricane could affect a farmer because ______.</li>
-      <li>Less rain would cause ______.</li>
+    <div class="loop-box">
+      <div class="loop-arrow warm">🏖️ TOURISM chain: warmer sea → coral bleaches → fewer snorkellers → hotels and guides earn less</div>
+      <div class="loop-arrow cool">🌾 AGRICULTURE chain: drought or flood → the harvest fails → less to sell → the farming family earns less</div>
+      <p class="hint">Care in reasoning means never stopping at the first, easiest answer. Ask each time: "And then what happens? And who does that affect?"</p>
     </div>
-    <button class="check-btn" disabled>Check my sentences ✔</button>
-    <p class="feedback-line"></p><p class="earned-note"></p>
+
+    <div class="review-grid" id="reviewGrid"></div>
+    <button class="btn" id="reviewDone">I'm ready — start practising →</button>
   </section>
 
-  <!-- ═══ SECTION 6 · CHECKPOINT ═══ -->
-  <section class="sec act" id="sec-checkpoint" data-act="checkpoint">
-    <span class="sec-tag">Section 6 · Checkpoint</span>
-    <h2>🛑 ALTO — Checkpoint Quiz <span class="done-badge">✓ done</span></h2>
-    <p class="hint">Six questions on the whole lesson. Answer every one, then check. Checkpoints earn extra beans!</p>
-    <div id="quizList"></div>
-    <button class="check-btn" disabled>Check the quiz ✔</button>
-    <p class="feedback-line"></p><p class="earned-note"></p>
+  <!-- 2. CALIBRATION -->
+  <section class="sec step-hidden" id="secCalib">
+    <span class="done-badge">✓ done</span>
+    <span class="sec-tag">Warm-Up Challenge</span>
+    <h2>🎯 Five Quick Questions</h2>
+    <p>This is not a test — it finds the right challenge level for you today. Answer all five.</p>
+    <div id="calibBox"></div>
+    <button class="btn" id="calibCheck" disabled>Check my level</button>
+    <div class="feedback-line" id="calibFeedback"></div>
+    <div class="earned-note"></div>
   </section>
 
-  <!-- ═══ SECTION 7 · MISCONCEPTION BUSTER ═══ -->
-  <section class="sec act" id="sec-tf" data-act="tf">
-    <span class="sec-tag">Section 7 · Myth buster</span>
-    <h2>🕵️ True or False? <span class="done-badge">✓ done</span></h2>
-    <p class="hint">Many students think climate change only means “hotter days.” Is that right? Decide for each statement.</p>
-    <div id="tfList"></div>
-    <button class="check-btn" disabled>Check my choices ✔</button>
-    <p class="feedback-line"></p><p class="earned-note"></p>
+  <!-- 3. TIER OFFER -->
+  <section class="sec step-hidden" id="secTier">
+    <span class="sec-tag">Choose Your Challenge</span>
+    <h2 id="tierHead">🏅 Pick Your Level</h2>
+    <p id="tierMsg"></p>
+    <div class="tier-grid" id="tierGrid"></div>
   </section>
 
-  <!-- ═══ SECTION 8 · FINISH LINE ═══ -->
-  <section class="sec" id="sec-finish">
-    <span class="sec-tag">Section 8 · Finish line</span>
-    <h2>🏁 Reflect &amp; Finish</h2>
-    <p>Before you go, answer these OUT LOUD or in your notebook:</p>
-    <p>1️⃣ Think of a <strong>tourism or farming family in YOUR district</strong> (real or imagined).</p>
-    <p>2️⃣ Say <strong>three ways</strong> climate change could affect that family — each one as a <strong>cause → effect</strong> sentence.</p>
-    <p>3️⃣ Challenge: which sector do you think is more at risk in YOUR district — tourism or agriculture? Say why.</p>
-    <p class="feedback-line" id="finishLine"></p>
-    <p class="hint" id="finishHint">Complete all six activity sections above to collect your 🌱 15-bean completion bonus!</p>
+  <!-- 4. SIMULATOR -->
+  <section class="sec step-hidden" id="secSim">
+    <span class="done-badge">✓ done</span>
+    <span class="sec-tag">Activity 1 · Decide</span>
+    <h2>🌊 Protect the Season</h2>
+    <p>You help a Belizean coastal town whose living comes from the reef and the farms. Every choice changes the town's greenhouse gases and its income. Choose well!</p>
+    <div class="sim-meters">
+      <div class="meter"><b>Greenhouse gases</b><div class="m-val" id="simCo2Val">Medium</div>
+        <div class="meter-track"><div class="meter-fill co2" id="simCo2Bar"></div></div></div>
+      <div class="meter"><b>Town income</b><div class="m-val" id="simMoneyVal">$100</div>
+        <div class="meter-track"><div class="meter-fill money" id="simMoneyBar"></div></div></div>
+    </div>
+    <div class="sim-choice" id="simChoice"></div>
+    <div class="sim-result" id="simResult"></div>
+    <div class="sim-ending" id="simEnding"></div>
+    <div class="coach-box" id="simCoach"></div>
+    <div class="earned-note"></div>
   </section>
 
-  <footer class="site-footer">© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize · All rights reserved.</footer>
+  <!-- 5. TRACE-IT-BACK -->
+  <section class="sec step-hidden" id="secTrace">
+    <span class="done-badge">✓ done</span>
+    <span class="sec-tag">Activity 2 · Investigate</span>
+    <h2>⛓️ Build the Chain</h2>
+    <p>Follow each climate event forward, link by link, to the family it reaches. Complete the cause-and-effect chain.</p>
+    <div id="traceBox"></div>
+    <div class="coach-box" id="traceCoach"></div>
+    <div class="earned-note"></div>
+  </section>
+
+  <!-- 6. MYTH-BUSTER -->
+  <section class="sec step-hidden" id="secMyth">
+    <span class="done-badge">✓ done</span>
+    <span class="sec-tag">Activity 3 · Judge</span>
+    <h2>🕵️ Myth-Buster Arena</h2>
+    <p>People say these things about climate change and Belize's living. Which ones survive?</p>
+    <div id="mythBox"></div>
+    <div class="coach-box" id="mythCoach"></div>
+    <div class="earned-note"></div>
+  </section>
+
+  <!-- 7. STREAK -->
+  <section class="sec step-hidden" id="secStreak">
+    <span class="done-badge">✓ done</span>
+    <span class="sec-tag">Activity 4 · Speed</span>
+    <h2>⚡ Beat Your Streak</h2>
+    <p>Quick-fire! Sector or chain link — how many can you get right in a row? Your best streak is saved.</p>
+    <div class="streak-hud">
+      <div><b>Streak</b><span id="stkNow">0</span></div>
+      <div><b>Best ever</b><span id="stkBest">0</span></div>
+      <div><b>Time left</b><span id="stkLeft">–</span></div>
+    </div>
+    <div id="streakBox"></div>
+    <button class="btn" id="streakStart">Start the round →</button>
+    <div class="earned-note"></div>
+  </section>
+
+  <!-- 8. FINISH -->
+  <section class="sec step-hidden" id="secFinish">
+    <span class="sec-tag">Finish Line</span>
+    <h2>🏁 Great Work!</h2>
+    <div class="finish-beans" id="finishBeans">🌱 0</div>
+    <div class="finish-badge" id="finishBadge"></div>
+    <p class="cap-note" id="capNote"></p>
+    <div class="btn-row" style="justify-content:center;">
+      <a class="btn ghost" href="/standard5/science/">← Back to Science</a>
+      <button class="btn" id="replayBtn">🔁 Try a harder level</button>
+    </div>
+  </section>
+
 </div>
 
+<footer class="site-footer">© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize · All rights reserved.</footer>
 <div id="toast"></div>
 
-<script src="/edlo-utils.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   ONLINE LESSON ENGINE — design spec: LESSON-ENGINE-PLAN.md
+   Structure: DATA first, ENGINE second. To build another week,
+   replace the DATA block only — the engine never changes.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ───────────────────────── DATA ───────────────────────── */
+window.LESSON = { week:'Wk2', lo:'SC1.10', name:"Climate Change & Belize's Economy", idBase:'std5-sci-wk02' };
+
+var REVIEW = [
+  { t:'Economy',      d:'The way a country earns and spends. Belize depends heavily on tourism and agriculture.' },
+  { t:'Tourism',      d:'Visitors travelling to Belize, largely for the reef, the cayes, and the rainforest.' },
+  { t:'Agriculture',  d:'Farming — sugar in the north, citrus in the south, corn and beans countrywide.' },
+  { t:'Coral bleaching', d:'Coral turning white and dying when the sea stays too warm. A bleached reef loses its fish.' },
+  { t:'Drought and flood', d:'Too little rain and too much rain. Both destroy a harvest and cost the farmer.' },
+  { t:'Cause-and-effect chain', d:'One event triggering the next, so a change in the sea ends as a change in a family’s income.' }
+];
+
+var CALIB = [
+  { q:'Which two sectors earn the most money for Belize?',
+    o:['Tourism and agriculture','Mining and oil','Banking and shipping','Factories and fishing'], a:0 },
+  { q:'A citrus farmer in Stann Creek works in which sector?',
+    o:['Tourism','Agriculture','Manufacturing','Mining'], a:1 },
+  { q:'Warmer seas can make coral turn white and die. What is this called?',
+    o:['Coral bleaching','Coral farming','Coral flooding','Coral fishing'], a:0 },
+  { q:'Complete the chain: warmer sea → ??? → fewer snorkellers book → hotel earns less.',
+    o:['The coral bleaches and the reef loses its fish','The hotel is painted','More cruise ships arrive','The farmers plant more corn'], a:0 },
+  { q:'Is it true that climate change for Belize is only about hotter days?',
+    o:['Yes, only hotter days','No — the bigger threats are stronger hurricanes, coral bleaching, and rain at the wrong time',
+       'Yes, but only in the dry season','No — the climate never changes'], a:1 }
+];
+
+var SIM = {
+  bronze:[
+    { q:'The reef brings snorkellers, but the dive boats run old, smoky diesel engines.',
+      o:[{t:'Keep the cheap diesel boats',co2:2,money:0,fb:'They save money now, but the fumes add to the warming that stresses the reef the tourists pay to see.'},
+         {t:'Switch to cleaner electric boats',co2:-2,money:-25,fb:'Costly today, but it protects the reef — and the reef is what the visitors come for.'}] },
+    { q:'Your citrus farm needs water in the dry season.',
+      o:[{t:'Run a diesel pump all day',co2:2,money:-10,fb:'It waters the trees, but burning diesel adds to the warming that dries the land.'},
+         {t:'Install a solar pump',co2:-2,money:-20,fb:'The sun runs the pump for free after you buy it — no fuel, no fumes.'}] },
+    { q:'Hotels want to cool more rooms for cruise visitors.',
+      o:[{t:'Add many AC units on the diesel grid',co2:2,money:10,fb:'Comfort now, but more burning means a warmer sea and a weaker reef.'},
+         {t:'Add fans and shade trees, AC only where needed',co2:-1,money:-5,fb:'Cooler AND lower emissions — the trees also protect the coast.'}] },
+    { q:'Farmers keep burning their fields to clear them fast.',
+      o:[{t:'Let the burning continue',co2:2,money:0,fb:'Fast and cheap, but the smoke adds greenhouse gases and the soil grows poorer.'},
+         {t:'Teach clearing without burning',co2:-2,money:-8,fb:'Less smoke, healthier soil, and stronger harvests next season.'}] },
+    { q:'The mangroves along the shore could be cleared for a car park.',
+      o:[{t:'Clear the mangroves',co2:3,money:20,fb:'Money now, but mangroves shield the coast from hurricanes and shelter the fish.'},
+         {t:'Protect the mangroves',co2:-2,money:0,fb:'They guard the hotels from storm waves and keep the fish — both sectors win.'}] }
+  ],
+  silver:[
+    { q:'A bad hurricane season is coming and you can pay for ONE defence for the town.',
+      o:[{t:'Replant the reef nursery and the mangroves',co2:-2,money:-25,fb:'Living defences: the reef breaks the waves and the mangroves hold the shore. Both protect tourism.'},
+         {t:'Build a tall concrete seawall',co2:2,money:-30,fb:'Making concrete releases a lot of greenhouse gas, and it does nothing for the reef the tourists want.'},
+         {t:'Do nothing and hope',co2:1,money:0,fb:'Saving money, but the next storm will cost far more than the defence would.'}] },
+    { q:'Cruise tourism is booming. How should the town grow it?',
+      o:[{t:'Many diesel tour buses for day-trippers',co2:3,money:20,fb:'More visitors served, but every trip burns fuel and warms the sea they came to enjoy.'},
+         {t:'Bicycle and electric-cart tours on the caye',co2:-2,money:10,fb:'Visitors still pay, the caye stays clean, and nothing is burned.'},
+         {t:'Stop all tourism to protect the reef',co2:0,money:-30,fb:'The reef is safe, but the families who live on tourism lose everything. Balance is the goal.'}] },
+    { q:'Drought is hitting the corn farmers.',
+      o:[{t:'Hand out diesel irrigation pumps to everyone',co2:3,money:-15,fb:'Water reaches the corn, but hundreds of diesel pumps add a lot of greenhouse gas.'},
+         {t:'Solar pumps plus drought-hardy seed',co2:-3,money:-25,fb:'Clean water AND crops that survive dry spells — the harvest and the income hold.'},
+         {t:'Tell farmers to wait for rain',co2:0,money:0,fb:'Free, but the corn dies and the families earn nothing this season.'}] },
+    { q:'A factory offers jobs but will burn fuel beside the citrus groves.',
+      o:[{t:'Accept it with no conditions',co2:3,money:25,fb:'Jobs now, but the fumes and warming reach the very groves the town depends on.'},
+         {t:'Accept only if it runs on solar power',co2:-2,money:15,fb:'Jobs AND clean air for the groves — you shaped the technology.'},
+         {t:'Refuse it completely',co2:0,money:-10,fb:'The groves stay clean, but a chance to add income was lost.'}] },
+    { q:'End of the year, a little money left, and the sea is warmer each year.',
+      o:[{t:'Fund a coral-reef replanting team',co2:-3,money:-15,fb:'A living reef keeps the snorkellers coming for years. A slow but real answer.'},
+         {t:'Buy more diesel generators for hotel comfort',co2:2,money:-30,fb:'Comfort today, more burning every night, a warmer sea tomorrow.'},
+         {t:'Keep the money for next year',co2:0,money:0,fb:'Safe, but the reef will not wait for you.'}] }
+  ],
+  gold:[
+    { q:'Four years, and every choice locks in. A nearby town got rich clearing mangroves for resorts. Your first move?',
+      o:[{t:'Copy them — clear the mangroves, build resorts',co2:3,money:35,fb:'Money now, but without mangroves the next hurricane floods those same resorts. You lose more than you gained.'},
+         {t:'Protect the mangroves and build small eco-lodges behind them',co2:-2,money:-20,fb:'The mangroves shield the lodges AND shelter the fish. Income that lasts.'},
+         {t:'Study it for a year and do nothing',co2:1,money:0,fb:'Careful, but the warming sea keeps bleaching the reef while you wait.'}] },
+    { q:'A donor offers EITHER 400 AC units for hotels OR one solar farm — not both. The grid is diesel.',
+      o:[{t:'The 400 AC units — comfort sells rooms now',co2:3,money:10,fb:'The trap: 400 AC units on a diesel grid means far more burning — and a warmer sea for the reef.'},
+         {t:'The solar farm — it cleans ALL the town’s power',co2:-3,money:0,fb:'Change the source and every hotel, pump and light gets cleaner at once.'},
+         {t:'The AC units, then hope for a second solar donor',co2:1,money:0,fb:'Risky. Emissions rise now for a solar farm that may never come.'}] },
+    { q:'Citrus prices are high. Expand the groves by clearing rainforest?',
+      o:[{t:'Clear the forest for more citrus',co2:3,money:30,fb:'Quick money, but the forest stored carbon and held the rain. Clearing it worsens the drought that hurts citrus.'},
+         {t:'Grow more on existing land with better methods',co2:-2,money:15,fb:'More fruit, no forest lost — the rainforest keeps protecting the harvest.'},
+         {t:'Refuse to grow citrus at all',co2:0,money:-15,fb:'The forest is safe, but the farming families lose a fair chance to earn.'}] },
+    { q:'Halfway through. The reef is recovering, but the town is short of money. Cut the reef team?',
+      o:[{t:'Yes — dismiss the reef team',co2:3,money:25,fb:'The money returns and so does the bleaching. The tourism gains reverse.'},
+         {t:'No — charge visitors a small reef fee to pay the team',co2:-1,money:15,fb:'Clever. The reef pays for its own protection and the snorkellers keep coming.'},
+         {t:'No — borrow more money to keep them',co2:-1,money:-20,fb:'The reef is protected, but the town’s debt grows heavy.'}] },
+    { q:'Final year. Tell the newspaper what really protected the town’s living.',
+      o:[{t:'We stopped tourism and farming to save the planet',co2:1,money:-20,fb:'Not the answer — the families still need to earn. The goal is protecting BOTH the climate and the living.'},
+         {t:'We cut our burning and guarded the reef, mangroves and soil our income depends on',co2:-3,money:10,fb:'That is the whole outcome: climate change reaches the living, so protecting the climate protects the living.'},
+         {t:'We did nothing and got lucky with the weather',co2:2,money:0,fb:'Luck is not a plan. The next warm year would undo it all.'}] }
+  ]
+};
+
+var TRACE = {
+  bronze:[
+    { start:'🌊 The sea gets warmer', q:'What is the final link for the hotel owner?',
+      chain:['The coral reef bleaches and loses its fish','Snorkellers and divers stop booking trips','Guides and hotels have fewer visitors'],
+      final:'Warmer sea → bleached reef → fewer tourists → less income. Every link causes the next.',
+      o:['She earns less money','She earns more money','Nothing changes for her'], a:0 },
+    { start:'🌧️ A hurricane floods the corn fields', q:'What happens to the farmer?',
+      chain:['The young corn plants drown','The harvest fails','There is little corn to sell'],
+      final:'A flood destroys the harvest, so the farmer loses the income that harvest would have paid.',
+      o:['He earns less this season','He earns more this season','His corn grows faster'], a:0 },
+    { start:'☀️ A long drought hits the north', q:'Who feels the loss?',
+      chain:['The sugar cane dries in the field','Less cane is cut and sold','The sugar factory buys less cane'],
+      final:'Drought → weak cane → less to sell → farmers earn less. Agriculture depends on steady rain.',
+      o:['The cane farmers earn less','The cane grows taller','Tourists stop coming'], a:0 },
+    { start:'🏨 A strong hurricane hits San Pedro', q:'What is the effect on the hotel owner?',
+      chain:['Hotels are damaged and flights are cancelled','Visitors stay away for the season','Rooms sit empty for months'],
+      final:'Storm damage → cancelled trips → empty rooms → lost income. Tourism needs calm weather.',
+      o:['Lost income for the season','A busier season','Cheaper repairs'], a:0 },
+    { start:'🪸 The reef loses its colour', q:'What is the last link?',
+      chain:['Fewer fish live around the dead coral','Fishers catch less near the caye','Restaurants have less fresh fish to sell'],
+      final:'A dead reef feeds fewer fish, so the people who sell fish earn less. One chain, many pockets.',
+      o:['Fishers and restaurants earn less','Fishers catch more','The reef grows back overnight'], a:0 }
+  ],
+  silver:[
+    { start:'🌊 warmer sea → ??? → fewer snorkellers book → hotel earns less', q:'Which link fills the gap?',
+      chain:['We know the first link: the sea is warmer','We know the last links: fewer snorkellers, less income','One link is missing in the middle'],
+      final:'Warmer sea → coral bleaches → fewer snorkellers → less income. The reef is the missing link.',
+      o:['The coral bleaches and the reef loses its fish','The hotel gets a new coat of paint','More cruise ships arrive','The farmers plant more corn'], a:0 },
+    { start:'🌧️ rain at the wrong time → ??? → farmer earns less', q:'Which is the true middle link?',
+      chain:['First link: too much rain falls at the wrong time','Last link: the farmer earns less','What connects them?'],
+      final:'Flooding ruins the harvest, and no harvest means no income. Match the link to the right sector.',
+      o:['The flooded field ruins the harvest','The farmer buys a new hat','The tourists cancel their flights','The reef bleaches'], a:0 },
+    { start:'🏝️ stronger hurricanes → hotels damaged → ??? → guides earn less', q:'What belongs in the gap?',
+      chain:['First: hurricanes are stronger','Then: hotels are damaged','A link is missing before the guides lose income'],
+      final:'Damaged hotels → visitors stay away → guides have no one to guide → less income.',
+      o:['Visitors stay away for the season','The guides buy new boats','The sugar price rises','Corn grows faster'], a:0 },
+    { start:'☀️ drought → weak citrus trees → ??? → farm family earns less', q:'Choose the correct link.',
+      chain:['First: the drought dries the soil','Then: the citrus trees grow weak','What is the missing link?'],
+      final:'Weak trees give little fruit, so there is little to sell — the family earns less.',
+      o:['The trees give less fruit to sell','The trees give more fruit','The hotel closes','The reef bleaches'], a:0 },
+    { start:'🌊 warmer sea → coral bleaches → ??? → restaurant earns less', q:'Which link fits?',
+      chain:['First links: warmer sea, bleached coral','Last link: the restaurant earns less','Find the middle link'],
+      final:'Bleached reef → fewer fish → less fresh fish to sell → the restaurant earns less.',
+      o:['Fewer fish live on the reef, so less fresh fish to sell','More tourists arrive','The farmers get more rain','The hurricane weakens'], a:0 }
+  ],
+  gold:[
+    { start:'⚖️ Two chains for the SAME hurricane', q:'Which statement is true?',
+      chain:['Hotel owner: storm → hotel damaged → guests cancel → less income','Citrus farmer: storm → grove flooded → fruit ruined → less income','Which reasoning is a COMPLETE cause-and-effect chain?'],
+      final:'Both are genuine three-link chains. One storm reaches two sectors through two different chains.',
+      o:['Both are complete — each link truly causes the next','Only the hotel chain is real','Only the farm chain is real','Neither is a real chain'], a:0 },
+    { start:'🔗 A weak chain: “Climate change is bad, so the hotel loses money.”', q:'What is wrong with this chain?',
+      chain:['This jumps straight from cause to effect','It skips every link in between','A strong chain shows HOW, step by step'],
+      final:'“And then what happens?” A strong chain never jumps to the end — it shows each link.',
+      o:['It skips the middle links that explain how','It has too many links','It names the wrong sector','Nothing is wrong'], a:0 },
+    { start:'🏝️ Which sector does a coral-bleaching year hurt MORE?', q:'For a bleaching-only year, which is hit harder?',
+      chain:['Tourism sells the living reef itself','A bleached reef directly loses snorkellers','Corn in the west does not depend on the reef'],
+      final:'Match the threat to the sector. Bleaching strikes reef tourism hardest; a drought would strike farming hardest.',
+      o:['Reef tourism, because it sells the reef directly','Inland corn farming','Both exactly the same','Neither is affected'], a:0 },
+    { start:'🔁 “Fewer tourists → the sea gets warmer.” Is this chain correct?', q:'What is the error?',
+      chain:['It has the two ideas from the real chain','But it puts them in the WRONG order','A warmer sea CAUSES fewer tourists, not the other way around'],
+      final:'Order matters. The warmer sea is the cause; fewer tourists is the effect — never backwards.',
+      o:['Cause and effect are reversed','The sector is wrong','A link is missing','It is actually correct'], a:0 },
+    { start:'🌊 Long chain: warmer sea → coral bleaches → fewer fish → fishers catch less → ???', q:'What is the final link?',
+      chain:['Each link has caused the next so far','The chain has reached the fishers','One more link finishes it at the family'],
+      final:'A four-link chain ends where they all end — at a family with less income.',
+      o:['Fisher families earn less to live on','The sea cools down','The reef repairs itself','Tourists arrive'], a:0 }
+  ]
+};
+
+var MYTH = {
+  bronze:[
+    { c:'Belize’s two biggest earners are tourism and agriculture.', bust:false,
+      why:'TRUE. Visitors to the reef and cayes, and farms of sugar, citrus and corn, earn the most for Belize.' },
+    { c:'Climate change for Belize just means a few hotter days.', bust:true,
+      why:'BUSTED. The bigger threats here are stronger hurricanes, coral bleaching, and rain that comes at the wrong time.' },
+    { c:'Coral bleaching can drive tourists away.', bust:false,
+      why:'TRUE. Snorkellers come to see a living, colourful reef. A bleached reef means fewer bookings.' },
+    { c:'A flood on a farm has nothing to do with the family’s income.', bust:true,
+      why:'BUSTED. A flood ruins the harvest, and no harvest means no crop to sell — so the family earns less.' },
+    { c:'Drought and flood can both destroy a harvest.', bust:false,
+      why:'TRUE. Too little rain dries the crop; too much rain drowns it. Both cost the farmer.' }
+  ],
+  silver:[
+    { c:'Only farmers are hurt by climate change, never hotel owners.', bust:true,
+      why:'BUSTED. Stronger hurricanes damage hotels and cancel trips — tourism loses income too.' },
+    { c:'A bleached reef affects fishers as well as snorkelling guides.', bust:false,
+      why:'TRUE. Fewer fish live on a dead reef, so fishers and the restaurants they supply earn less.' },
+    { c:'“The sea got warmer, so the hotel lost money” is a complete cause-and-effect chain.', bust:true,
+      why:'BUSTED. It skips the middle: warmer sea → coral bleaches → fewer tourists → less income.' },
+    { c:'Citrus in the south and sugar in the north both depend on steady rain.', bust:false,
+      why:'TRUE. Drought or flooding at the wrong time hurts both harvests.' },
+    { c:'Belize can ignore climate change because it makes very little of the gas.', bust:true,
+      why:'BUSTED. Our low coast, reef and hurricane season mean we FEEL the effects strongly, whoever causes them.' }
+  ],
+  gold:[
+    { c:'In a coral-bleaching year, inland corn farming is hit harder than reef tourism.', bust:true,
+      why:'BUSTED. Bleaching strikes the reef that tourism sells directly; corn in the west does not depend on the reef.' },
+    { c:'One hurricane can reach two different sectors through two different chains.', bust:false,
+      why:'TRUE. The same storm damages hotels (tourism) AND floods groves (agriculture) — two chains, two losses.' },
+    { c:'“Fewer tourists made the sea warmer” shows a correct cause-and-effect order.', bust:true,
+      why:'BUSTED. The order is reversed. The warmer sea is the cause; fewer tourists is the effect.' },
+    { c:'Protecting mangroves can protect a hotel owner’s income.', bust:false,
+      why:'TRUE. Mangroves break storm waves and shelter fish, guarding both the coast and the tourism it earns.' },
+    { c:'A cause-and-effect chain is stronger when it jumps straight to the final effect.', bust:true,
+      why:'BUSTED. A strong chain shows every link in between — that is how it proves HOW the loss happens.' }
+  ]
+};
+
+var STREAK = {
+  bronze:[
+    { q:'Snorkelling on the reef — tourism or agriculture?', o:['Tourism','Agriculture'], a:0 },
+    { q:'Growing citrus in Stann Creek — which sector?', o:['Tourism','Agriculture'], a:1 },
+    { q:'A hotel in San Pedro — which sector?', o:['Tourism','Agriculture'], a:0 },
+    { q:'Cutting sugar cane in the north — which sector?', o:['Tourism','Agriculture'], a:1 },
+    { q:'A dive guide taking visitors to the reef — which sector?', o:['Tourism','Agriculture'], a:0 },
+    { q:'A corn farmer — which sector?', o:['Tourism','Agriculture'], a:1 },
+    { q:'Cruise ship visitors — which sector?', o:['Tourism','Agriculture'], a:0 },
+    { q:'A cacao grower — which sector?', o:['Tourism','Agriculture'], a:1 }
+  ],
+  silver:[
+    { q:'Warmer sea — start of the chain or a result?', o:['Start','Result'], a:0 },
+    { q:'Coral bleaches — start or result?', o:['Start','Result'], a:1 },
+    { q:'Fewer tourists book — start or result?', o:['Start','Result'], a:1 },
+    { q:'A hurricane strikes — start or result?', o:['Start','Result'], a:0 },
+    { q:'The harvest fails — start or result?', o:['Start','Result'], a:1 },
+    { q:'The farmer earns less — start or result?', o:['Start','Result'], a:1 },
+    { q:'A long drought — start or result?', o:['Start','Result'], a:0 },
+    { q:'Citrus trees give less fruit — start or result?', o:['Start','Result'], a:1 }
+  ],
+  gold:[
+    { q:'Coral bleaching hits which sector hardest?', o:['Tourism','Farming'], a:0 },
+    { q:'A drought hits which sector hardest?', o:['Tourism','Farming'], a:1 },
+    { q:'“Warmer sea → fewer tourists” — right order?', o:['Right','Reversed'], a:0 },
+    { q:'“Fewer tourists → warmer sea” — right order?', o:['Right','Reversed'], a:1 },
+    { q:'One hurricane can hurt both sectors — true?', o:['True','False'], a:0 },
+    { q:'A flood ruining a harvest cuts the farmer’s income — true?', o:['True','False'], a:0 },
+    { q:'Mangroves protect the coast and tourism — true?', o:['True','False'], a:0 },
+    { q:'“Climate change is only hotter days” — true?', o:['True','False'], a:1 }
+  ]
+};
+
+/* Tier config — bean rate per correct answer (LESSON-ENGINE-PLAN.md §4) */
+var TIERS = {
+  bronze:{ label:'Bronze', icon:'🥉', rate:1, desc:'Warm-up level. Solid practice, steady beans.' },
+  silver:{ label:'Silver', icon:'🥈', rate:2, desc:'Tougher questions. Double beans per answer.' },
+  gold:  { label:'Gold',   icon:'🥇', rate:3, desc:'Hardest challenge. Triple beans per answer.' }
+};
+var CALIB_BEANS    = 5;
+var LESSON_CAP     = 30;
+var STREAK_SECONDS = 60;
+var TOTAL_ACTS     = 6;
+
+/* ──────────────────────── ENGINE ──────────────────────── */
+function $(s,r){ return (r||document).querySelector(s); }
+function $$(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); }
+
+var sessionBeans = 0, doneCount = 0, tier = null, calibPct = 0;
+var missStreak = 0, hitStreak = 0;
+
+function toast(msg){ var t=$('#toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._h); t._h=setTimeout(function(){ t.classList.remove('show'); },2600); }
+
+function beansLeft(){ return Math.max(0, LESSON_CAP - sessionBeans); }
+
+function beanPillAdd(n){
+  sessionBeans += n;
+  $('#beanPill').textContent = '🌱 ' + sessionBeans + ' bean' + (sessionBeans===1?'':'s');
+}
+function progressTick(){
+  doneCount++;
+  $('#progText').textContent = Math.min(doneCount,TOTAL_ACTS)+' of '+TOTAL_ACTS+' done';
+  $('#progFill').style.width = (Math.min(doneCount,TOTAL_ACTS)/TOTAL_ACTS*100)+'%';
+}
+function markDone(sel){ $(sel).classList.add('done'); }
+
+/* ── ONE-CARD-AT-A-TIME REVEAL (LESSON-ENGINE-PLAN.md §2) ──────────
+   Only one activity is on screen at a time. Finishing a card shows a
+   Next button; tapping it collapses the finished card to its header
+   and reveals the next. No navigation timers — the student controls
+   every step, so nothing scrolls out from under them on a phone. */
+function revealStep(sel){
+  var s = $(sel); if (!s) return;
+  s.classList.remove('step-hidden');
+  /* wait for layout to settle, THEN one controlled scroll — never a
+     smooth scroll racing a reflow (that was the mobile jump bug). */
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      s.scrollIntoView({ behavior:'smooth', block:'start' });
+    });
+  });
+}
+/* Inject a self-paced "continue" button into a per-QUESTION feedback box.
+   Replaces the old auto-advance timers so a slow or EAL reader is never cut
+   off mid-sentence — reading the feedback is a learning moment. Idempotent. */
+function continueBtn(holderSel, label, fn){
+  var holder = $(holderSel); if (!holder) return;
+  if ($('.next-q', holder)) return;
+  var b = document.createElement('button');
+  b.className = 'btn next-q';
+  b.textContent = label || 'Next question →';
+  b.addEventListener('click', function(){ b.disabled = true; fn(); });
+  holder.appendChild(b);
+}
+/* Inject a Next button into a finished card's body. Idempotent. */
+function nextButton(finishedSel, nextSel, label, cb){
+  var sec = $(finishedSel); if (!sec) return;
+  var body = $('.sec-body', sec) || sec;
+  if ($('.next-btn', sec)) return;
+  var b = document.createElement('button');
+  b.className = 'btn next-btn';
+  b.textContent = label || 'Next →';
+  b.addEventListener('click', function(){
+    b.disabled = true;
+    collapseSec(finishedSel);
+    revealStep(nextSel);
+    if (typeof cb === 'function') cb();
+  });
+  body.appendChild(b);
+}
+
+/* ── Collapsible cards ──────────────────────────────────────────
+   Built generically at boot: everything after each <h2> is wrapped
+   in .sec-body, and a ▾/▸ toggle is added. Works for any lesson —
+   no per-week markup needed. (LESSON-ENGINE-PLAN.md §2)          */
+function makeCollapsible(sec){
+  var h2 = $('h2', sec); if (!h2 || $('.sec-body', sec)) return;
+  var body = document.createElement('div'); body.className = 'sec-body';
+  var n = h2.nextSibling;
+  while (n){ var next = n.nextSibling; body.appendChild(n); n = next; }
+  sec.appendChild(body);
+
+  var hint = document.createElement('div');
+  hint.className = 'collapse-hint'; hint.textContent = 'Tap to open again ▸';
+  h2.parentNode.insertBefore(hint, body);
+
+  var btn = document.createElement('button');
+  btn.className = 'sec-toggle'; btn.textContent = '▾';
+  btn.setAttribute('aria-label','Fold this section');
+  sec.appendChild(btn);
+
+  function toggle(){
+    var now = sec.classList.toggle('collapsed');
+    btn.textContent = now ? '▸' : '▾';
+    btn.setAttribute('aria-label', now ? 'Open this section' : 'Fold this section');
+  }
+  btn.addEventListener('click', function(e){ e.stopPropagation(); toggle(); });
+  h2.style.cursor = 'pointer';
+  h2.addEventListener('click', toggle);
+  hint.addEventListener('click', toggle);
+}
+function collapseSec(sel){
+  var sec = $(sel); if (!sec || sec.classList.contains('collapsed')) return;
+  sec.classList.add('collapsed');
+  var b = $('.sec-toggle', sec);
+  if (b){ b.textContent = '▸'; b.setAttribute('aria-label','Open this section'); }
+}
+function expandSec(sel){
+  var sec = $(sel); if (!sec) return;
+  sec.classList.remove('collapsed');
+  var b = $('.sec-toggle', sec);
+  if (b){ b.textContent = '▾'; b.setAttribute('aria-label','Fold this section'); }
+}
+/* (fold-on-timer removed — cards now collapse when the student taps Next) */
+
+/* Award beans, respecting the per-lesson cap. The activity id carries the tier so a
+   replay at a higher tier is a NEW row (vcSaveBeans locks one id per device). */
+function award(actKey, earned, maxPossible, sec){
+  var capped = Math.min(earned, beansLeft());
+  var id = LESSON.idBase + '-' + actKey + (tier ? '-' + tier : '');
+  var note = $('.earned-note', sec);
+  beanPillAdd(capped);
+  if (capped < earned){
+    note.style.display='block';
+    note.textContent = '🌱 +'+capped+' beans (lesson cap of '+LESSON_CAP+' reached — keep playing for practice!)';
+  }
+  vcSaveBeans(id, capped, maxPossible, {
+    subject:'Science', lo_code:LESSON.lo,
+    /* Groups every activity of this lesson so the BACKEND can enforce the
+       30-bean cap. The client cap above is only for instant feedback —
+       clearing the browser defeats it; the server is the real limit. */
+    lesson_key: LESSON.idBase,
+    activity_name: LESSON.week+' '+actKey+(tier?' ('+TIERS[tier].label+')':'')
+  }).then(function(res){
+    note.style.display='block';
+    if (res && res.ok) {
+      /* Trust the server: it may have trimmed the award to fit the cap. */
+      var granted = (res.granted != null) ? res.granted : capped;
+      if (granted < capped) {
+        /* reconcile the on-screen pill with what was actually banked */
+        sessionBeans -= (capped - granted);
+        $('#beanPill').textContent = '🌱 ' + sessionBeans + ' bean' + (sessionBeans===1?'':'s');
+      }
+      if (res.capped || granted < capped) {
+        note.textContent = '🌱 +'+granted+' beans — you have reached this lesson\'s cap of '
+                         + (res.lesson_cap || LESSON_CAP) + '. Play on for practice!';
+      } else {
+        note.textContent = '🌱 +'+granted+' beans saved to your account!';
+        toast('🌱 +'+granted+' beans earned!');
+      }
+    }
+    else if (res && res.locked) { note.textContent='🌱 You already earned beans for this level on this device. Try a higher level!'; }
+    else if (capped < earned)   { /* client-side cap message already shown above */ }
+    else                        { note.textContent='🌱 +'+capped+' beans — log in next time to save them!'; toast('🌱 +'+capped+' beans (not saved — not logged in)'); }
+  });
+}
+
+/* Coach-style step-down / step-up — LESSON-ENGINE-PLAN.md §3 */
+function coachCheck(boxSel){
+  var box = $(boxSel); if(!box) return;
+  if (missStreak >= 2 && tier !== 'bronze'){
+    var lower = (tier === 'gold') ? 'silver' : 'bronze';
+    box.className = 'coach-box show';
+    box.innerHTML = TIERS[tier].icon+' '+TIERS[tier].label+' is tough! Let’s sharpen up in '
+      + TIERS[lower].icon+' '+TIERS[lower].label+' and come back. '
+      + '<button class="btn" data-goto="'+lower+'" style="margin-top:.6rem;">Move to '+TIERS[lower].label+' →</button>';
+    wireCoach(box); missStreak = 0;
+  } else if (hitStreak >= 3 && tier !== 'gold'){
+    var higher = (tier === 'bronze') ? 'silver' : 'gold';
+    box.className = 'coach-box show';
+    box.innerHTML = '🔥 Three right in a row! You have unlocked '
+      + TIERS[higher].icon+' '+TIERS[higher].label+' — worth '+TIERS[higher].rate+'× beans. '
+      + '<button class="btn" data-goto="'+higher+'" style="margin-top:.6rem;">Level up →</button>';
+    wireCoach(box); hitStreak = 0;
+  } else { box.className = 'coach-box'; }
+}
+function wireCoach(box){
+  $$('button[data-goto]', box).forEach(function(b){
+    b.addEventListener('click', function(){ switchTier(b.getAttribute('data-goto')); });
+  });
+}
+function scoreHit(ok){ if(ok){ hitStreak++; missStreak=0; } else { missStreak++; hitStreak=0; } }
+
+function setTierChip(t){
+  var chip = $('#tierChip');
+  chip.style.display=''; chip.className='chip tier-now '+t;
+  chip.textContent = TIERS[t].icon+' '+TIERS[t].label;
+}
+
+/* Mid-lesson tier change: rebuild the remaining activities at the new tier */
+function switchTier(t){
+  tier = t; setTierChip(t);
+  missStreak = 0; hitStreak = 0;
+  $$('.coach-box').forEach(function(b){ b.className='coach-box'; });
+  toast(TIERS[t].icon+' Now playing '+TIERS[t].label+' — '+TIERS[t].rate+'× beans');
+  buildSim(); buildTrace(); buildMyth(); resetStreak();
+}
+
+/* ── 1. Review ── */
+$('#reviewGrid').innerHTML = REVIEW.map(function(r){
+  return '<div class="rev-card"><b>'+r.t+'</b><span>'+r.d+'</span></div>';
+}).join('');
+
+$('#reviewDone').addEventListener('click', function(){
+  this.disabled = true; markDone('#secReview'); progressTick();
+  collapseSec('#secReview');            /* fold the notes away — one tap to reopen */
+  revealStep('#secCalib');
+});
+
+/* ── 2. Calibration ── */
+$('#calibBox').innerHTML = CALIB.map(function(item,i){
+  return '<div class="q-block"><div class="q-stem">'+(i+1)+'. '+item.q+'</div><div class="opts">'
+    + item.o.map(function(o,j){
+        return '<label><input type="radio" name="cal'+i+'" value="'+j+'"><span>'+o+'</span></label>';
+      }).join('')
+    + '</div></div>';
+}).join('');
+
+$$('#calibBox input').forEach(function(inp){
+  inp.addEventListener('change', function(){
+    var answered = CALIB.every(function(_,i){ return $('input[name="cal'+i+'"]:checked'); });
+    $('#calibCheck').disabled = !answered;
+  });
+});
+
+$('#calibCheck').addEventListener('click', function(){
+  this.disabled = true;
+  var correct = 0;
+  CALIB.forEach(function(item,i){
+    var picked = $('input[name="cal'+i+'"]:checked');
+    $$('input[name="cal'+i+'"]').forEach(function(inp){
+      inp.disabled = true;
+      if (Number(inp.value) === item.a) inp.parentNode.classList.add('right');
+    });
+    if (picked && Number(picked.value) === item.a) correct++;
+    else if (picked) picked.parentNode.classList.add('wrong');
+  });
+  calibPct = Math.round(correct / CALIB.length * 100);
+  var beans = Math.round(correct / CALIB.length * CALIB_BEANS);
+  $('#calibFeedback').textContent = 'You got '+correct+' of '+CALIB.length+' right ('+calibPct+'%).';
+  award('calibration', beans, CALIB_BEANS, $('#secCalib'));
+  markDone('#secCalib'); progressTick();
+  offerTier(calibPct);                 /* builds the tier card, still hidden */
+  nextButton('#secCalib', '#secTier', 'See my level →');
+});
+
+/* ── 3. Tier offer — 90 auto-gold · 80 free choice · 50 silver · else bronze ── */
+function offerTier(pct){
+  var msg = $('#tierMsg'), grid = $('#tierGrid'), head = $('#tierHead');
+  var allow = { bronze:true, silver:false, gold:false };
+  var auto = null;
+
+  if (pct >= 90){
+    head.textContent = '🥇 Promoted to Gold!';
+    msg.innerHTML = '<b>'+pct+'%! Outstanding.</b> You have been promoted straight to Gold — the hardest challenge, worth 3× beans. '
+      + 'Would you rather warm up first? You can start at Silver instead.';
+    allow.silver = true; allow.gold = true; auto = 'gold';
+  } else if (pct >= 80){
+    head.textContent = '🏅 Your Choice!';
+    msg.innerHTML = '<b>'+pct+'% — strong work!</b> Every level is open to you. Higher levels are harder, but each correct answer earns more beans.';
+    allow.silver = true; allow.gold = true;
+  } else if (pct >= 50){
+    head.textContent = '🥈 Silver Unlocked';
+    msg.innerHTML = '<b>'+pct+'% — good going!</b> Silver is open. Gold is waiting: <b>three right in a row unlocks it</b>.';
+    allow.silver = true;
+  } else {
+    head.textContent = '🥉 Let’s Warm Up';
+    msg.innerHTML = '<b>'+pct+'%.</b> Bronze is the warm-up level — perfect for building your streak. '
+      + 'Get three right in a row at any point and the next level opens up.';
+  }
+
+  grid.innerHTML = ['bronze','silver','gold'].map(function(k){
+    var t = TIERS[k], open = allow[k];
+    return '<div class="tier-card '+k+(open?'':' locked')+'" data-tier="'+k+'">'
+      + '<div class="t-name">'+t.icon+' '+t.label+'</div>'
+      + '<div class="t-rate">'+t.rate+'× beans per answer</div>'
+      + '<div class="t-desc">'+t.desc+'</div>'
+      + (open ? '' : '<div class="t-lock">🔒 Three right in a row unlocks this</div>')
+      + '</div>';
+  }).join('');
+
+  $$('#tierGrid .tier-card').forEach(function(card){
+    if (card.classList.contains('locked')) return;
+    card.addEventListener('click', function(){ startTier(card.getAttribute('data-tier')); });
+  });
+
+  if (auto) {
+    /* promoted straight to Gold — highlight it, but the student still taps
+       to begin (no timer that could scroll away under them). */
+    var g = $('#tierGrid .tier-card.gold');
+    if (g) g.style.outline = '3px solid var(--gold)';
+  }
+}
+
+function startTier(t){
+  tier = t; setTierChip(t);
+  missStreak = 0; hitStreak = 0;
+  $$('#tierGrid .tier-card').forEach(function(c){
+    c.style.outline = (c.getAttribute('data-tier')===t) ? '3px solid var(--accent)' : 'none';
+  });
+  buildSim(); buildTrace(); buildMyth(); resetStreak();
+  collapseSec('#secTier');
+  revealStep('#secSim');
+}
+
+/* ── 4. Simulator ── */
+var simStep = 0, simCo2 = 50, simMoney = 100, simScore = 0;
+function simRender(){
+  var lbl = simCo2 < 35 ? 'Low' : (simCo2 < 65 ? 'Medium' : 'High');
+  $('#simCo2Val').textContent = lbl;
+  $('#simCo2Bar').style.width = Math.max(0,Math.min(100,simCo2))+'%';
+  $('#simMoneyVal').textContent = '$'+Math.max(0,simMoney);
+  $('#simMoneyBar').style.width = Math.max(0,Math.min(100,simMoney))+'%';
+}
+function buildSim(){ expandSec('#secSim');
+  simStep=0; simCo2=50; simMoney=100; simScore=0;
+  $('#simEnding').className='sim-ending'; $('#simResult').className='sim-result';
+  $('#secSim').classList.remove('done');
+  simRender(); simStepRender();
+}
+function simStepRender(){
+  var set = SIM[tier]; if(!set) return;
+  if (simStep >= set.length) return simEnd();
+  var s = set[simStep];
+  $('#simChoice').innerHTML = '<div class="q-stem">Year '+(simStep+1)+' — '+s.q+'</div><div class="sim-opts">'
+    + s.o.map(function(o,i){ return '<button data-i="'+i+'">'+o.t+'</button>'; }).join('') + '</div>';
+  $$('#simChoice button').forEach(function(b){
+    b.addEventListener('click', function(){ simPick(Number(b.getAttribute('data-i'))); });
+  });
+}
+function simPick(i){
+  var s = SIM[tier][simStep], o = s.o[i];
+  simCo2 += o.co2 * 6; simMoney += o.money;
+  var good = o.co2 < 0;
+  if (good) simScore++;
+  scoreHit(good);
+  simRender();
+  var r = $('#simResult'); r.className='sim-result show';
+  r.innerHTML = (good?'✅ ':'⚠️ ') + o.fb;
+  simStep++;
+  coachCheck('#simCoach');
+  continueBtn('#simResult',
+    (simStep >= SIM[tier].length ? 'See how your town did →' : 'Next choice →'),
+    function(){ r.className='sim-result'; simStepRender(); });
+}
+function simEnd(){
+  $('#simChoice').innerHTML = '';
+  var e = $('#simEnding'); e.className='sim-ending show';
+  var verdict = simCo2 < 35 ? '🌿 Your town breathes clean air. You replaced burning with renewable technology.'
+              : simCo2 < 65 ? '🌤️ Mixed result. Some good choices, but fuel is still being burned in your town.'
+                            : '🔥 Your town got hotter. Most of your technology kept burning fossil fuels.';
+  e.innerHTML = '<b>Four years later…</b><br>'+verdict
+    + '<br><br>You made <b>'+simScore+' of '+SIM[tier].length+'</b> climate-friendly choices.';
+  award('simulator', simScore * TIERS[tier].rate, SIM[tier].length * TIERS[tier].rate, $('#secSim'));
+  markDone('#secSim'); progressTick();
+  nextButton('#secSim', '#secTrace', 'Next activity →');
+}
+
+/* ── 5. Trace-it-back ── */
+var traceIdx = 0, traceScore = 0;
+function buildTrace(){ expandSec('#secTrace'); traceIdx=0; traceScore=0; $('#secTrace').classList.remove('done'); traceRender(); }
+function traceRender(){
+  var set = TRACE[tier]; if(!set) return;
+  if (traceIdx >= set.length) return traceEnd();
+  var t = set[traceIdx];
+  $('#traceBox').innerHTML =
+      '<div class="q-stem">Case '+(traceIdx+1)+' of '+set.length+'</div>'
+    + '<div class="trace-start">'+t.start+'</div>'
+    + '<div class="trace-chain" id="traceChain"></div>'
+    + '<button class="btn ghost" id="traceNext">Follow the chain →</button>'
+    + '<div class="trace-q" id="traceQ" style="display:none;">'+t.q+'</div>'
+    + '<div class="opts" id="traceOpts" style="display:none;">'
+    + t.o.map(function(o,i){ return '<label><input type="radio" name="tr'+traceIdx+'" value="'+i+'"><span>'+o+'</span></label>'; }).join('')
+    + '</div><div class="trace-final" id="traceFinal"></div>';
+  var step = 0;
+  $('#traceNext').addEventListener('click', function(){
+    if (step < t.chain.length){
+      var d=document.createElement('div');
+      d.className='trace-link revealed'; d.textContent='↓ '+t.chain[step];
+      $('#traceChain').appendChild(d); step++;
+      if (step === t.chain.length) this.textContent='Now answer →';
+    } else {
+      this.style.display='none';
+      $('#traceQ').style.display=''; $('#traceOpts').style.display='';
+      $$('#traceOpts input').forEach(function(inp){
+        inp.addEventListener('change', function(){ tracePick(Number(inp.value)); });
+      });
+    }
+  });
+}
+function tracePick(i){
+  var t = TRACE[tier][traceIdx], ok = (i === t.a);
+  $$('#traceOpts input').forEach(function(inp){
+    inp.disabled = true;
+    if (Number(inp.value) === t.a) inp.parentNode.classList.add('right');
+    else if (Number(inp.value) === i) inp.parentNode.classList.add('wrong');
+  });
+  if (ok) traceScore++;
+  scoreHit(ok);
+  var f = $('#traceFinal'); f.className='trace-final show';
+  f.innerHTML = (ok?'✅ Correct! ':'💡 Not quite. ') + t.final;
+  coachCheck('#traceCoach');
+  traceIdx++;
+  continueBtn('#traceFinal',
+    (traceIdx >= TRACE[tier].length ? 'See the result →' : 'Next case →'),
+    traceRender);
+}
+function traceEnd(){
+  $('#traceBox').innerHTML = '<div class="trace-final show">🔍 Investigation complete — <b>'
+    + traceScore+' of '+TRACE[tier].length+'</b> traced correctly.</div>';
+  award('trace', traceScore * TIERS[tier].rate, TRACE[tier].length * TIERS[tier].rate, $('#secTrace'));
+  markDone('#secTrace'); progressTick();
+  nextButton('#secTrace', '#secMyth', 'Next activity →');
+}
+
+/* ── 6. Myth-buster ── */
+var mythIdx = 0, mythScore = 0;
+function buildMyth(){ expandSec('#secMyth'); mythIdx=0; mythScore=0; $('#secMyth').classList.remove('done'); mythRender(); }
+function mythRender(){
+  var set = MYTH[tier]; if(!set) return;
+  if (mythIdx >= set.length) return mythEnd();
+  var m = set[mythIdx];
+  $('#mythBox').innerHTML = '<div class="myth-card">'
+    + '<div class="q-stem">Claim '+(mythIdx+1)+' of '+set.length+'</div>'
+    + '<div class="myth-claim">“'+m.c+'”</div>'
+    + '<div class="myth-btns"><button class="bust" data-b="1">💥 BUST IT</button>'
+    + '<button class="true" data-b="0">✅ IT’S TRUE</button></div>'
+    + '<div class="myth-verdict" id="mythVerdict"></div></div>';
+  $$('#mythBox .myth-btns button').forEach(function(b){
+    b.addEventListener('click', function(){ mythPick(b.getAttribute('data-b')==='1'); });
+  });
+}
+function mythPick(saidBust){
+  var m = MYTH[tier][mythIdx], ok = (saidBust === m.bust);
+  if (ok) mythScore++;
+  scoreHit(ok);
+  $$('#mythBox .myth-btns button').forEach(function(b){ b.disabled = true; });
+  var v = $('#mythVerdict'); v.className='myth-verdict show';
+  v.innerHTML = (ok?'✅ Correct! ':'❌ Not this time. ') + m.why;
+  coachCheck('#mythCoach');
+  mythIdx++;
+  continueBtn('#mythVerdict',
+    (mythIdx >= MYTH[tier].length ? 'See the result →' : 'Next claim →'),
+    mythRender);
+}
+function mythEnd(){
+  $('#mythBox').innerHTML = '<div class="myth-card"><b>🕵️ Arena complete — '
+    + mythScore+' of '+MYTH[tier].length+' judged correctly.</b></div>';
+  award('myth', mythScore * TIERS[tier].rate, MYTH[tier].length * TIERS[tier].rate, $('#secMyth'));
+  markDone('#secMyth'); progressTick();
+  nextButton('#secMyth', '#secStreak', 'Last activity →');
+}
+
+/* ── 7. Beat-your-streak ── */
+var stkIdx=0, stkNow=0, stkBestRun=0, stkScore=0, stkTimer=null, stkLeft=STREAK_SECONDS, stkOrder=[];
+function bestKey(){ return 'vc-streak-'+LESSON.idBase; }
+function readBest(){ try{ return Number(localStorage.getItem(bestKey())||0); }catch(e){ return 0; } }
+function writeBest(n){ try{ localStorage.setItem(bestKey(), String(n)); }catch(e){} }
+function resetStreak(){ expandSec('#secStreak');
+  clearInterval(stkTimer);
+  stkIdx=0; stkNow=0; stkBestRun=0; stkScore=0; stkLeft=STREAK_SECONDS;
+  $('#stkNow').textContent='0'; $('#stkBest').textContent=readBest();
+  $('#stkLeft').textContent='–'; $('#streakBox').innerHTML='';
+  $('#streakStart').style.display=''; $('#streakStart').disabled=false;
+  $('#secStreak').classList.remove('done');
+}
+$('#streakStart').addEventListener('click', function(){
+  this.style.display='none';
+  stkOrder = STREAK[tier].slice().sort(function(){ return Math.random()-0.5; });
+  stkLeft = STREAK_SECONDS; $('#stkLeft').textContent = stkLeft+'s';
+  stkTimer = setInterval(function(){
+    stkLeft--; $('#stkLeft').textContent = stkLeft+'s';
+    if (stkLeft <= 0) streakEnd();
+  }, 1000);
+  streakRender();
+});
+function streakRender(){
+  if (stkIdx >= stkOrder.length) stkIdx = 0;   /* loop the deck until time runs out */
+  var s = stkOrder[stkIdx];
+  $('#streakBox').innerHTML = '<div class="streak-q">'+s.q+'</div><div class="streak-opts">'
+    + s.o.map(function(o,i){ return '<button data-i="'+i+'">'+o+'</button>'; }).join('') + '</div>';
+  $$('#streakBox button').forEach(function(b){
+    b.addEventListener('click', function(){ streakPick(Number(b.getAttribute('data-i'))); });
+  });
+}
+function streakPick(i){
+  var s = stkOrder[stkIdx], ok = (i === s.a);
+  if (ok){ stkNow++; stkScore++; if (stkNow > stkBestRun) stkBestRun = stkNow; }
+  else   { stkNow = 0; }
+  scoreHit(ok);
+  $('#stkNow').textContent = stkNow;
+  stkIdx++;
+  streakRender();
+}
+function streakEnd(){
+  clearInterval(stkTimer);
+  $('#streakBox').innerHTML = '<div class="streak-q">⏱️ Time! Best streak this round: <b>'
+    + stkBestRun+'</b> · Correct: <b>'+stkScore+'</b></div>';
+  if (stkBestRun > readBest()){ writeBest(stkBestRun); toast('🏆 New best streak: '+stkBestRun+'!'); }
+  $('#stkBest').textContent = readBest();
+  var deck = STREAK[tier].length;              /* beans capped at one full deck */
+  award('streak', Math.min(stkScore,deck) * TIERS[tier].rate, deck * TIERS[tier].rate, $('#secStreak'));
+  markDone('#secStreak'); progressTick();
+  nextButton('#secStreak', '#secFinish', 'See my results →', finish);
+}
+
+/* ── 8. Finish ── */
+function replayFrom(t){
+  /* Reset the activity cards for another run at tier t: strip old Next
+     buttons, hide + re-expand trace/myth/streak/finish, then startTier
+     reveals the simulator again. */
+  ['#secSim','#secTrace','#secMyth','#secStreak','#secFinish'].forEach(function(sel){
+    var sec = $(sel); if (!sec) return;
+    var nb = $('.next-btn', sec); if (nb) nb.parentNode.removeChild(nb);
+    if (sel !== '#secSim') sec.classList.add('step-hidden');
+    sec.classList.remove('collapsed','done');
+  });
+  doneCount = 2;
+  startTier(t);
+}
+function finish(){
+  $('#finishBeans').textContent = '🌱 ' + sessionBeans;
+  $('#finishBadge').innerHTML = tier
+    ? 'Best level this visit: '+TIERS[tier].icon+' <b>'+TIERS[tier].label+'</b>' : '';
+  var note = $('#capNote'), btn = $('#replayBtn');
+  if (sessionBeans >= LESSON_CAP){
+    note.textContent = 'You have reached this lesson’s cap of '+LESSON_CAP+' 🌱. Play again any time for practice!';
+    btn.style.display = 'none';
+  } else if (tier === 'gold'){
+    note.textContent = 'You have '+beansLeft()+' 🌱 still available in this lesson.';
+    btn.textContent = '🔁 Play Gold again';
+    btn.onclick = function(){ replayFrom('gold'); };
+  } else {
+    var next = (tier === 'bronze') ? 'silver' : 'gold';
+    note.textContent = 'There are '+beansLeft()+' 🌱 left in this lesson — reach them by playing a harder level!';
+    btn.textContent = '🔁 Try '+TIERS[next].icon+' '+TIERS[next].label+' ('+TIERS[next].rate+'× beans)';
+    btn.onclick = function(){ replayFrom(next); };
+  }
+}
+
+/* ── Boot ── */
+(function boot(){
+  /* Theme is applied as a BODY CLASS (site-wide convention, same as the hub),
+     and shares the 'vc-theme' localStorage key so a student's choice follows
+     them between the hub, the tests and this lesson. */
+  var saved = 'night';
+  try { saved = localStorage.getItem('vc-theme') || 'night'; } catch(e){}
+  function applyTheme(t){
+    document.body.className = 'theme-' + t;
+    $$('#themeBar button').forEach(function(x){
+      x.classList.toggle('active', x.getAttribute('data-t') === t);
+    });
+    /* ctx is assigned further down; guard so the first call cannot throw */
+    if (typeof ctx !== 'undefined' && ctx) draw();
+  }
+  applyTheme(saved);
+  $$('#themeBar button').forEach(function(b){
+    b.addEventListener('click', function(){
+      var t = b.getAttribute('data-t');
+      applyTheme(t);
+      try { localStorage.setItem('vc-theme', t); } catch(e){}
+    });
+  });
+
+  if (typeof vcGetSession === 'function' && vcGetSession()){
+    var s = vcGetSession();
+    $('#loginHint').innerHTML = '👋 Welcome back, <b>' + (s.first_name || s.name || 'student')
+      + '</b>! Your beans will be saved.';
+  }
+  $('#stkBest').textContent = readBest();
+
+  $$('section.sec').forEach(makeCollapsible);
+
+  var c = $('#stars'), ctx = c.getContext('2d');
+  function draw(){
+    c.width = innerWidth; c.height = innerHeight;
+    ctx.clearRect(0,0,c.width,c.height);
+    for (var i=0;i<90;i++){
+      ctx.globalAlpha = Math.random()*0.7+0.15;
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(Math.random()*c.width, Math.random()*c.height, Math.random()*2+0.6, Math.random()*2+0.6);
+    }
+  }
+  draw(); addEventListener('resize', draw);
+})();
+</script>
+
 <script>
 /* ══════════════════════════════════════════════════════════════
    PROGRESSIVE LESSON UNLOCK — direct-URL guard (IDEAS #8)
-   ── LIFT-OUT BLOCK · change THIS_WEEK only ──────────────────
-   Closes the bookmark path: a student who saved this URL before
-   the week was released gets a friendly notice instead of the
-   lesson. This is a CURTAIN, not a lock — these are public pages
-   and anyone determined can still read the source. It exists for
-   pacing, which is all IDEAS #8 ever asked for.
-   Fails OPEN on a network error, unlike the hub, which fails
-   closed. Reason: the cost of being wrong differs. A locked hub
-   card just means one fewer link; a lesson page that fails closed
-   would shut a student out of a lesson he or she IS allowed to
-   read, on classroom wifi that drops. Blocking a real student
-   mid-lesson is worse than letting a curious one read ahead.
+   Part of the ENGINE now: the week number is DERIVED from
+   LESSON.week, so copying this file to a new week carries the
+   guard automatically and it can never be dropped by a rebuild.
+   Week 1 self-disables (THIS_WEEK <= 1). A CURTAIN, not a lock —
+   public pages, fails OPEN on network error (a dropped-wifi
+   student must not be shut out of a lesson he or she may read).
    ══════════════════════════════════════════════════════════════ */
 (function () {
   var SUBJECT_KEY = 'std5-science';
-  var THIS_WEEK   = 2;
+  var THIS_WEEK   = parseInt(String((window.LESSON||{}).week||'').replace(/\D/g,''), 10) || 1;
   var LOCKS_URL   = 'https://edlo-lms.smartstandardsix.workers.dev/lesson-locks';
   var HUB_URL     = '/standard5/science/';
   if (THIS_WEEK <= 1) return; // Week 1 is always open, to everyone
@@ -363,442 +1330,40 @@
   fetch(LOCKS_URL)
     .then(function (r) { return r.json(); })
     .then(function (data) {
-      if (!data || !data.ok || !data.locks) return;                 // error → let him or her through
+      if (!data || !data.ok || !data.locks) return;                 // error -> let him or her through
       var raw = data.locks[SUBJECT_KEY];
       if (raw === undefined || raw === null || raw === '') return;  // subject not locked at all
       var released = Number(raw);
-      if (!released || THIS_WEEK <= released) return;               // released → open
+      if (!released || THIS_WEEK <= released) return;               // released -> open
       lockScreen(released);
     })
-    .catch(function () { /* offline → let him or her through */ });
+    .catch(function () { /* offline -> let him or her through */ });
 
   function lockScreen(released) {
     document.body.innerHTML =
       '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;' +
       'padding:max(1rem,4vw);text-align:center;">' +
-        '<div style="max-width:520px;background:var(--card-bg,rgba(255,255,255,.06));' +
-        'border:1px solid var(--card-border,rgba(255,255,255,.09));border-radius:20px;' +
+        '<div style="max-width:520px;background:var(--card,rgba(255,255,255,.06));' +
+        'border:1px solid var(--bd,rgba(255,255,255,.09));border-radius:20px;' +
         'padding:2.2rem 1.6rem;">' +
-          '<div style="font-size:3rem;line-height:1;margin-bottom:.6rem;">🔒</div>' +
+          '<div style="font-size:3rem;line-height:1;margin-bottom:.6rem;">\uD83D\uDD12</div>' +
           '<h1 style="font-family:\'Fredoka One\',cursive;font-weight:400;font-size:1.5rem;' +
           'margin-bottom:.7rem;">This lesson opens later</h1>' +
           '<p style="font-family:Nunito,sans-serif;font-size:1rem;line-height:1.6;opacity:.85;">' +
             'Standard 5 Science is open through <strong>Week ' + released + '</strong> right now. ' +
-            'This is Week ' + THIS_WEEK + ' — Mr. EdLo will open it when the class gets there.' +
+            'This is Week ' + THIS_WEEK + ' \u2014 Mr. EdLo will open it when the class gets there.' +
           '</p>' +
           '<p style="margin-top:1.4rem;">' +
             '<a href="' + HUB_URL + '" style="font-family:Nunito,sans-serif;font-weight:800;' +
             'text-decoration:none;background:#20C997;color:#0d1f1a;padding:12px 22px;' +
             'border-radius:999px;display:inline-block;min-height:44px;line-height:20px;">' +
-            '← Back to Science lessons</a>' +
+            '\u2190 Back to Science lessons</a>' +
           '</p>' +
         '</div>' +
       '</div>';
   }
 })();
 </script>
-<script>
-'use strict';
-/* ═══════════════ Lesson config — Week 2 · SC 1.10 ═══════════════ */
-var LESSON = { week: 'Wk2', lo: 'SC1.10', name: 'Climate Change & Belize\'s Economy', idBase: 'std5-sci-wk02' };
-var VIDEO_URL = ''; /* Mr. EdLo: paste a YouTube EMBED url (https://www.youtube.com/embed/XXXX) to show the video section */
 
-var VOCAB = [
-  { term: 'tourism',         def: 'The business of visitors coming to enjoy a place' },
-  { term: 'agriculture',     def: 'Farming — growing crops and raising animals' },
-  { term: 'economy',         def: 'All the ways a country earns and spends money' },
-  { term: 'drought',         def: 'A long time with much less rain than normal' },
-  { term: 'coral bleaching', def: 'Coral turning white and weak when the sea gets too warm' }
-];
-
-var SORT = {
-  labels: ['🏖️ Hits tourism', '🌾 Hits agriculture'],
-  cards: [
-    { name: '🪸 Warmer seas bleach the coral that snorkellers come to see', ans: 0 },
-    { name: '🏨 A hurricane damages hotels in San Pedro and trips are cancelled', ans: 0 },
-    { name: '⛵ Fewer visitors book reef tours after a bad storm season', ans: 0 },
-    { name: '🍬 Drought dries the sugar cane fields in the north', ans: 1 },
-    { name: '🍊 Floods damage the citrus trees in Stann Creek', ans: 1 },
-    { name: '🌽 Unpredictable rain ruins the corn harvest', ans: 1 }
-  ]
-};
-
-var FILL = [
-  { pre: 'When the sea gets warmer, the coral', post: '…', opts: ['bleaches', 'grows faster', 'turns blue'], ans: 0 },
-  { pre: '…which means', post: 'tourists come, so families earn less income.', opts: ['fewer', 'more', 'louder'], ans: 0 },
-  { pre: 'A hurricane could affect a farmer because floods can', post: 'the harvest.', opts: ['destroy', 'water', 'sell'], ans: 0 },
-  { pre: 'Less rain would cause a', post: 'that hurts the crops.', opts: ['drought', 'flood', 'holiday'], ans: 0 }
-];
-
-var QUIZ = [
-  { stem: '1. What are Belize\'s two biggest earners?',
-    opts: ['Mining and fishing', 'Tourism and agriculture', 'Banking and oil'], ans: 1,
-    why: 'Tourism and agriculture are Belize\'s two biggest earners — and both depend on the climate.' },
-  { stem: '2. What happens to coral when the sea gets too warm?',
-    opts: ['It bleaches — turns white and weak', 'It grows stronger', 'It moves to deeper water overnight'], ans: 0,
-    why: 'Warm water stresses the coral, and It bleaches — turning white and weak.' },
-  { stem: '3. Which chain is in the CORRECT order?',
-    opts: ['Fewer tourists → warmer sea → coral bleaches → less income',
-           'Warmer sea → coral bleaches → fewer tourists → less income',
-           'Less income → coral bleaches → warmer sea → fewer tourists'], ans: 1,
-    why: 'Each link causes the next: warmer sea → coral bleaches → fewer tourists → less income.' },
-  { stem: '4. Which crop grown in the NORTH of Belize is hurt by drought?',
-    opts: ['Sugar cane', 'Citrus', 'Seaweed'], ans: 0,
-    why: 'Sugar grows in the north; citrus grows in the south, like Stann Creek.' },
-  { stem: '5. Which two hurricanes flooded farms across Belize in 2020?',
-    opts: ['Mitch and Keith', 'Eta and Iota', 'Hattie and Iris'], ans: 1,
-    why: 'Hurricanes Eta and Iota struck about two weeks apart in November 2020, flooding farms nationwide.' },
-  { stem: '6. How could a bad hurricane season affect a hotel owner in San Pedro?',
-    opts: ['His hotel gets damaged and guests cancel trips, so he earns less',
-           'He gets more guests because of the exciting weather',
-           'It cannot affect him — hotels are not part of the economy'], ans: 0,
-    why: 'Damage plus cancelled trips means less income — that is the tourism chain.' }
-];
-
-var TF = [
-  { stmt: 'Climate change only means “hotter days.”', ans: false,
-    why: 'For Belize the bigger threats are stronger hurricanes, coral bleaching, and unpredictable rain.' },
-  { stmt: 'Stronger hurricanes and coral bleaching are climate change threats to Belize.', ans: true,
-    why: 'Both hit our tourism and farming families hard — they are the big threats here.' },
-  { stmt: 'Citrus grows mainly in the south of Belize, like Stann Creek.', ans: true,
-    why: 'Citrus is a southern crop; sugar cane grows in the north.' },
-  { stmt: 'A drought cannot affect a farmer\'s income.', ans: false,
-    why: 'Less rain → smaller harvest → less to sell → less income. The chain reaches the pocket.' }
-];
-
-/* Bean economy (locked): activities 5 + 1/correct · checkpoint 10 + 1/correct · completion 15 */
-var ACTS = {
-  vocab:      { flat: 5,  max: 10, label: 'Vocabulary Match' },
-  sort:       { flat: 5,  max: 11, label: 'Sector Sort' },
-  practice:   { flat: 5,  max: 9,  label: 'Build the Chains' },
-  checkpoint: { flat: 10, max: 16, label: 'Checkpoint Quiz' },
-  tf:         { flat: 5,  max: 9,  label: 'Myth Buster' }
-};
-var COMPLETION_BEANS = 15;
-var TOTAL_ACTS = 6; /* 5 activities + completion */
-
-/* ═══════════════ Engine (shared by all Std5 Science lessons) ═══════════════ */
-var sessionBeans = 0, doneCount = 0, completionDone = false;
-
-function $(sel, root) { return (root || document).querySelector(sel); }
-function $all(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
-function shuffle(arr) {
-  var a = arr.slice();
-  for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
-  return a;
-}
-function toast(msg) {
-  var t = $('#toast'); t.textContent = msg; t.classList.add('show');
-  clearTimeout(t._h); t._h = setTimeout(function () { t.classList.remove('show'); }, 2600);
-}
-function beanPillAdd(n) {
-  sessionBeans += n;
-  $('#beanPill').textContent = '🌱 ' + sessionBeans + ' bean' + (sessionBeans === 1 ? '' : 's');
-}
-function progressTick() {
-  doneCount++;
-  $('#progText').textContent = Math.min(doneCount, TOTAL_ACTS) + ' of ' + TOTAL_ACTS + ' done';
-  $('#progFill').style.width = (Math.min(doneCount, TOTAL_ACTS) / TOTAL_ACTS * 100) + '%';
-}
-function award(actKey, correct, totalItems, sec) {
-  var cfg = ACTS[actKey];
-  var beans = cfg.flat + correct;
-  var id = LESSON.idBase + '-' + actKey;
-  var note = $('.earned-note', sec);
-  beanPillAdd(beans);
-  vcSaveBeans(id, beans, cfg.max, {
-    subject: 'Science', lo_code: LESSON.lo,
-    activity_name: LESSON.week + ' ' + cfg.label
-  }).then(function (res) {
-    note.style.display = 'block';
-    if (res && res.ok)          { note.textContent = '🌱 +' + beans + ' beans saved to your account!'; toast('🌱 +' + beans + ' beans earned!'); }
-    else if (res && res.locked) { note.textContent = '🌱 Beans for this activity were already earned on this device.'; }
-    else                        { note.textContent = '🌱 +' + beans + ' beans — log in next time to save them to your account!'; toast('🌱 +' + beans + ' beans (not saved — not logged in)'); }
-  });
-}
-function finishCheck() {
-  if (doneCount !== 5 || completionDone) return;
-  completionDone = true;
-  var id = LESSON.idBase + '-complete';
-  beanPillAdd(COMPLETION_BEANS);
-  progressTick();
-  $('#finishHint').style.display = 'none';
-  var line = $('#finishLine');
-  line.style.display = 'block';
-  line.textContent = '🎉 Lesson complete! +' + COMPLETION_BEANS + ' bonus beans. Great work — see you in Week 3!';
-  vcSaveBeans(id, COMPLETION_BEANS, COMPLETION_BEANS, {
-    subject: 'Science', lo_code: LESSON.lo, activity_name: LESSON.week + ' Lesson Completed'
-  });
-  toast('🏁 Lesson complete! +' + COMPLETION_BEANS + ' 🌱');
-}
-function sectionDone(sec, actKey, correct, totalItems, msg) {
-  sec.classList.add('done');
-  var fb = $('.feedback-line', sec);
-  fb.style.display = 'block';
-  fb.textContent = msg;
-  $('.check-btn', sec).disabled = true;
-  award(actKey, correct, totalItems, sec);
-  progressTick();
-  finishCheck();
-}
-
-/* ---------- Section 1 · Hook ---------- */
-$('#hookBtn').addEventListener('click', function () {
-  $('#hookReveal').style.display = 'block';
-  this.style.display = 'none';
-});
-
-/* ---------- Video slot ---------- */
-if (VIDEO_URL) { $('#sec-video').style.display = 'block'; $('#videoFrame').src = VIDEO_URL; }
-
-/* ---------- Section 3 · Vocabulary ---------- */
-(function buildVocab() {
-  var sec = $('#sec-vocab'), list = $('#vocabList'), btn = $('.check-btn', sec);
-  var defs = shuffle(VOCAB.map(function (v) { return v.def; }));
-  VOCAB.forEach(function (v) {
-    var row = document.createElement('div');
-    row.className = 'vocab-row';
-    var opts = defs.map(function (d) { return '<option>' + d + '</option>'; }).join('');
-    row.innerHTML = '<span class="vocab-term">' + v.term + '</span>' +
-      '<select data-ans="' + v.def.replace(/"/g, '&quot;') + '"><option value="">— choose —</option>' + opts + '</select>' +
-      '<span class="mark"></span>';
-    list.appendChild(row);
-  });
-  function ready() { btn.disabled = $all('select', list).some(function (s) { return !s.value; }); }
-  list.addEventListener('change', ready);
-  btn.addEventListener('click', function () {
-    var correct = 0;
-    $all('select', list).forEach(function (s) {
-      var ok = s.value === s.getAttribute('data-ans');
-      if (ok) correct++;
-      s.parentNode.querySelector('.mark').textContent = ok ? '✅' : '❌';
-      s.disabled = true;
-    });
-    sectionDone(sec, 'vocab', correct, VOCAB.length, 'You matched ' + correct + ' of ' + VOCAB.length + ' words.' + (correct === VOCAB.length ? ' Perfect! 🎯' : ' Check the ❌ rows and re-read Section 2.'));
-  });
-})();
-
-/* ---------- Section 4 · Sort ---------- */
-(function buildSort() {
-  var sec = $('#sec-sort'), grid = $('#sortGrid'), btn = $('.check-btn', sec);
-  shuffle(SORT.cards).forEach(function (c) {
-    var card = document.createElement('div');
-    card.className = 'sort-card';
-    card.setAttribute('data-ans', c.ans);
-    card.innerHTML = '<div class="sc-name">' + c.name + '</div>' +
-      '<div class="sort-btns"><button type="button" data-v="0">' + SORT.labels[0] + '</button>' +
-      '<button type="button" data-v="1">' + SORT.labels[1] + '</button></div>' +
-      '<span class="mark"></span>';
-    grid.appendChild(card);
-  });
-  grid.addEventListener('click', function (e) {
-    var b = e.target.closest('button');
-    if (!b || b.disabled) return;
-    $all('button', b.parentNode).forEach(function (x) { x.classList.remove('picked'); });
-    b.classList.add('picked');
-    btn.disabled = $all('.sort-card', grid).some(function (c) { return !$('.picked', c); });
-  });
-  btn.addEventListener('click', function () {
-    var correct = 0;
-    $all('.sort-card', grid).forEach(function (c) {
-      var picked = $('.picked', c);
-      var ok = picked && picked.getAttribute('data-v') === c.getAttribute('data-ans');
-      if (ok) correct++;
-      $('.mark', c).textContent = ok ? '✅' : '❌ ' + SORT.labels[Number(c.getAttribute('data-ans'))];
-      $all('button', c).forEach(function (x) { x.disabled = true; });
-    });
-    sectionDone(sec, 'sort', correct, SORT.cards.length, 'You sorted ' + correct + ' of ' + SORT.cards.length + ' correctly.' + (correct === SORT.cards.length ? ' Excellent sorting! 🗂️' : ' The ❌ cards show the correct column.'));
-  });
-})();
-
-/* ---------- Section 5 · Practice fill-in ---------- */
-(function buildFill() {
-  var sec = $('#sec-practice'), list = $('#fillList'), btn = $('.check-btn', sec);
-  FILL.forEach(function (f) {
-    var row = document.createElement('div');
-    row.className = 'fill-row';
-    var opts = shuffle(f.opts.map(function (o, i) { return { o: o, i: i }; }))
-      .map(function (x) { return '<option value="' + x.i + '">' + x.o + '</option>'; }).join('');
-    row.innerHTML = '<span>' + f.pre + '</span>' +
-      '<select data-ans="' + f.ans + '"><option value="">— choose —</option>' + opts + '</select>' +
-      '<span>' + f.post + '</span><span class="mark"></span>';
-    list.appendChild(row);
-  });
-  function ready() { btn.disabled = $all('select', list).some(function (s) { return !s.value; }); }
-  list.addEventListener('change', ready);
-  btn.addEventListener('click', function () {
-    var correct = 0;
-    $all('select', list).forEach(function (s) {
-      var ok = s.value === s.getAttribute('data-ans');
-      if (ok) correct++;
-      s.parentNode.querySelector('.mark').textContent = ok ? '✅' : '❌';
-      s.disabled = true;
-    });
-    sectionDone(sec, 'practice', correct, FILL.length, 'You completed ' + correct + ' of ' + FILL.length + ' sentences.' + (correct === FILL.length ? ' The loop is yours! 🔁' : ' Look again at the loop picture in Section 2.'));
-  });
-})();
-
-/* ---------- Section 6 · Checkpoint quiz ---------- */
-(function buildQuiz() {
-  var sec = $('#sec-checkpoint'), list = $('#quizList'), btn = $('.check-btn', sec);
-  QUIZ.forEach(function (q, qi) {
-    var div = document.createElement('div');
-    div.className = 'quiz-q';
-    var opts = q.opts.map(function (o, oi) {
-      return '<label><input type="radio" name="q' + qi + '" value="' + oi + '"> ' + o + '</label>';
-    }).join('');
-    div.innerHTML = '<p class="q-stem">' + q.stem + '</p><div class="quiz-opts" data-ans="' + q.ans + '">' + opts + '</div>' +
-      '<p class="hint q-why" style="display:none;"></p>';
-    list.appendChild(div);
-  });
-  function ready() {
-    btn.disabled = $all('.quiz-opts', list).some(function (g) { return !$('input:checked', g); });
-  }
-  list.addEventListener('change', ready);
-  btn.addEventListener('click', function () {
-    var correct = 0;
-    $all('.quiz-q', list).forEach(function (qdiv, qi) {
-      var g = $('.quiz-opts', qdiv);
-      var ans = Number(g.getAttribute('data-ans'));
-      var picked = $('input:checked', g);
-      var ok = picked && Number(picked.value) === ans;
-      if (ok) correct++;
-      $all('label', g).forEach(function (lab, li) {
-        if (li === ans) lab.classList.add('right');
-        else if (picked && Number(picked.value) === li && !ok) lab.classList.add('wrong');
-        $('input', lab).disabled = true;
-      });
-      var why = $('.q-why', qdiv);
-      why.style.display = 'block';
-      why.textContent = (ok ? '✅ ' : '❌ ') + QUIZ[qi].why;
-    });
-    sectionDone(sec, 'checkpoint', correct, QUIZ.length, 'Checkpoint score: ' + correct + ' of ' + QUIZ.length + '.' + (correct === QUIZ.length ? ' Outstanding! 🛑➡️✅' : ' Read the explanations below each question.'));
-  });
-})();
-
-/* ---------- Section 7 · True / False ---------- */
-(function buildTF() {
-  var sec = $('#sec-tf'), list = $('#tfList'), btn = $('.check-btn', sec);
-  TF.forEach(function (t) {
-    var row = document.createElement('div');
-    row.className = 'tf-row';
-    row.setAttribute('data-ans', t.ans ? '1' : '0');
-    row.innerHTML = '<span class="tf-stmt">' + t.stmt + '</span>' +
-      '<div class="tf-btns"><button type="button" data-v="1">True</button>' +
-      '<button type="button" data-v="0">False</button><span class="mark"></span></div>';
-    list.appendChild(row);
-  });
-  list.addEventListener('click', function (e) {
-    var b = e.target.closest('button');
-    if (!b || b.disabled) return;
-    $all('button', b.parentNode).forEach(function (x) { x.classList.remove('picked'); });
-    b.classList.add('picked');
-    btn.disabled = $all('.tf-row', list).some(function (r) { return !$('.picked', r); });
-  });
-  btn.addEventListener('click', function () {
-    var correct = 0;
-    $all('.tf-row', list).forEach(function (r, i) {
-      var picked = $('.picked', r);
-      var ok = picked && picked.getAttribute('data-v') === r.getAttribute('data-ans');
-      if (ok) correct++;
-      $('.mark', r).textContent = ok ? '✅' : '❌';
-      var why = document.createElement('p');
-      why.className = 'hint';
-      why.textContent = (ok ? '✅ ' : '❌ ') + TF[i].why;
-      r.appendChild(why);
-      $all('button', r).forEach(function (x) { x.disabled = true; });
-    });
-    sectionDone(sec, 'tf', correct, TF.length, 'Myths busted: ' + correct + ' of ' + TF.length + '.' + (correct === TF.length ? ' Detective work! 🕵️' : ' Remember: technology is neutral.'));
-  });
-})();
-
-/* ---------- Restore beans already earned on this device ---------- */
-function lockBeans(key) {
-  try {
-    var raw = localStorage.getItem('vc-pts-' + key);
-    if (raw === null) return null;
-    var o = JSON.parse(raw);
-    return (o && typeof o.b === 'number') ? o.b : 0;
-  } catch (e) { return 0; }
-}
-(function restoreProgress() {
-  Object.keys(ACTS).forEach(function (k) {
-    var b = lockBeans(LESSON.idBase + '-' + k);
-    if (b === null) return;
-    var sec = document.querySelector('[data-act="' + k + '"]');
-    if (!sec) return;
-    sec.classList.add('done');
-    $all('select, input, button', sec).forEach(function (el) { el.disabled = true; });
-    var fb = $('.feedback-line', sec);
-    fb.style.display = 'block';
-    fb.textContent = '✓ Already completed on this device' + (b ? ' — 🌱 ' + b + ' beans earned.' : '.');
-    beanPillAdd(b);
-    progressTick();
-  });
-  var cb = lockBeans(LESSON.idBase + '-complete');
-  if (cb !== null) {
-    completionDone = true;
-    beanPillAdd(cb);
-    progressTick();
-    $('#finishHint').style.display = 'none';
-    var line = $('#finishLine');
-    line.style.display = 'block';
-    line.textContent = '🎉 You already completed this lesson — great work!';
-  }
-})();
-
-/* ---------- Theme bar ---------- */
-(function themes() {
-  var saved = localStorage.getItem('vc-theme') || 'night';
-  document.documentElement.setAttribute('data-theme', saved);
-  $all('#themeBar button').forEach(function (b) {
-    b.classList.toggle('active', b.getAttribute('data-t') === saved);
-    b.addEventListener('click', function () {
-      var t = b.getAttribute('data-t');
-      document.documentElement.setAttribute('data-theme', t);
-      localStorage.setItem('vc-theme', t);
-      $all('#themeBar button').forEach(function (x) { x.classList.toggle('active', x === b); });
-    });
-  });
-})();
-
-/* ---------- Login hint ---------- */
-(function loginHint() {
-  var hint = $('#loginHint');
-  var s = (typeof vcGetSession === 'function') ? vcGetSession() : null;
-  if (s) {
-    /* Built with textContent (never innerHTML) so a stored name can never inject markup */
-    hint.textContent = '';
-    var strong = document.createElement('strong');
-    strong.textContent = s.first_name || s.username;
-    hint.appendChild(document.createTextNode('👋 Welcome back, '));
-    hint.appendChild(strong);
-    hint.appendChild(document.createTextNode(' — your beans will be saved!'));
-  }
-  else hint.innerHTML = '🌱 <a href="/login/">Log in</a> to save the cacao beans you earn in this lesson.';
-})();
-
-/* ---------- Starfield ---------- */
-(function starfield() {
-  var c = $('#stars'), ctx = c.getContext('2d'), stars = [];
-  function size() { c.width = innerWidth; c.height = innerHeight; }
-  size(); addEventListener('resize', size);
-  for (var i = 0; i < 90; i++) {
-    stars.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.6 + .4, p: Math.random() * Math.PI * 2 });
-  }
-  (function draw() {
-    ctx.clearRect(0, 0, c.width, c.height);
-    var t = Date.now() / 1000;
-    stars.forEach(function (s) {
-      ctx.globalAlpha = .45 + .45 * Math.sin(t * 1.4 + s.p);
-      ctx.fillStyle = '#cdd7ff';
-      ctx.beginPath();
-      ctx.arc(s.x * c.width, s.y * c.height, s.r, 0, Math.PI * 2);
-      ctx.fill();
-    });
-    requestAnimationFrame(draw);
-  })();
-})();
-</script>
 </body>
 </html>

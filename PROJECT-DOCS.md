@@ -34,6 +34,9 @@ If the docs are not updated, the task is **not** finished.
   §2): only the active card shows, each step is reached by tapping a **Next →** button, finished
   cards fold to a tappable header, and no timers govern navigation. This replaced an earlier
   auto-scroll/auto-fold model that threw the viewport to the bottom of the page on a phone.
+  **Per-question feedback inside activities is also self-paced** — each explanation waits for a
+  tap ("Next choice/case/claim →") rather than a 2–3 s timer, so a slow reader is never cut off
+  and reading the feedback becomes a learning moment. Only the streak's 60-second round is timed.
 - **🌱 SERVER-SIDE BEAN CAP — DEPLOYED July 21, 2026 (Apps Script version 6).** The 30-bean
   per-lesson cap is now enforced in `handleSaveResult`, not just in the browser. Verified live:
   a replay after clearing the browser earns **+0**.

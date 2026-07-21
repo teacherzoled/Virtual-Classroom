@@ -60,6 +60,14 @@ back to find where they were. The new model shows **only the active card**.
   **Next →** button into the finished card. Tapping it collapses that card to its header and
   reveals the next. **No navigation timers anywhere.** A slow or EAL reader takes as long as they
   like to read the bean result before moving on.
+- **Per-QUESTION feedback is also self-paced (July 21, 2026).** Inside the simulator, trace and
+  myth activities, after each answer the explanation appears with a `continueBtn()` — **Next
+  choice → / Next case → / Next claim →**, and **See the result →** on the last item. The feedback
+  stays until the student taps. This replaced 2.4–2.8 s auto-advance timers: any fixed delay still
+  cuts off the slowest readers, and **reading the feedback is a learning moment**, not a flash.
+  The only remaining timer in the whole lesson is the toast pop-up and the streak's own clock.
+  ⚠️ The continue button is injected INTO the shown feedback box, so it can never appear before the
+  explanation it follows.
 - Finished cards **collapse to a tappable header** (via `makeCollapsible()`), so the review
   diagram and earlier activities stay one tap away. Nothing is deleted, only folded.
 - **The streak is the one timed activity** — but the timer runs only the 60-second round, never
@@ -71,6 +79,16 @@ back to find where they were. The new model shows **only the active card**.
 - **Replay** (`replayFrom(tier)`) re-hides the downstream cards, strips old Next buttons, and
   `startTier` reveals the simulator again — a clean restart of the reveal chain.
 - Step chain: Review → Calibration → Tier offer → Simulator → Trace → Myth → Streak → Finish.
+
+**⚠️ PROGRESSIVE-UNLOCK GUARD is part of the ENGINE (fixed July 21, 2026).** The file ends with a
+`PROGRESSIVE LESSON UNLOCK` guard `<script>` before `</body>` (IDEAS #8). It derives the week from
+`window.LESSON.week` (so `LESSON.week:'Wk2'` → guards Week 2; Week 1 self-disables via
+`THIS_WEEK <= 1`) and shows a "this lesson opens later" curtain if the week is not yet released on
+the `lesson-locks` endpoint. **It must survive every rebuild — a DATA-swap must never delete an
+engine block.** On 21 July a daily-build rebuild of Week 2 silently dropped this guard (Week 1, the
+copy source, is always-open so had no visible guard), which would have leaked an unreleased week;
+it is now engine-level and derived from `LESSON.week` so a copy carries it automatically. The
+daily-task prompt greps for the guard as a required verification.
 - Purpose: focus. The student sees one thing, finishes it, taps to continue. Nothing scrolls out
   from under them — the exact failure this replaced.
 
@@ -132,6 +150,15 @@ Maps to the E/M/H differentiation already used in the weekly schemes.
 thinking; match it to the week's outcome. The activity must make the student DO the outcome.
 **Rule 2 — recent weeks veto repeats.** No mechanic combination repeats two weeks running.
 **Rule 3 — the bank grows.** Add mechanics mid-year; never let the rotation go stale.
+
+⚠️ **IMPLEMENTED vs DESIGNED (status July 21, 2026).** Only **4 of the 7 mechanics exist as engine
+code**: simulator, trace-it-back, myth-buster, beat-your-streak. Detective scene, chain-builder and
+field-mission are DESIGNS in the table below, not yet built. **Until they are coded, Rule 2 cannot
+be satisfied** — every lesson uses the same four activities (Weeks 1 and 2 both do). Students get
+**content** variation (different questions/scenarios) but not **format** variation. Building the
+remaining three mechanics into the engine as reusable blocks is the next real step toward the
+variation this design promises — until then, the daily task should vary content, not chase an
+impossible mechanic rotation.
 
 | # | Mechanic | Exercises | Example fit |
 |---|---|---|---|
