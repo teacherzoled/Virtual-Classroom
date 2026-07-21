@@ -129,12 +129,20 @@ function vcSaveBeans(activityId, beans, maxBeans, meta) {
     lo_code:       meta.lo_code       || '',
     activity_type: 'lesson',
     activity_name: meta.activity_name || activityId,
+    /* lesson_key groups every activity of ONE lesson so the backend can enforce
+       the per-lesson bean cap. NEVER use lo_code for this — one outcome can span
+       two weeks (SC1.11 = Wks 3 & 4), which would merge two lessons' budgets. */
+    lesson_key:    meta.lesson_key    || '',
     score:         beans,
     max_score:     maxBeans
   }).then(function (res) {
     if (res && res.ok) {
-      /* Lock stores the beans earned so lesson pages can RESTORE the count on reload */
-      try { localStorage.setItem(lockKey, JSON.stringify({ b: beans, t: Date.now() })); } catch (e) {}
+      /* The SERVER decides how many beans were actually banked — it may have
+         trimmed the award to fit the per-lesson cap. Store what it granted,
+         not what the page asked for, so a reload restores the truth. */
+      var granted = (res.awarded != null) ? Number(res.awarded) : beans;
+      res.granted = granted;
+      try { localStorage.setItem(lockKey, JSON.stringify({ b: granted, t: Date.now() })); } catch (e) {}
     }
     return res;
   });

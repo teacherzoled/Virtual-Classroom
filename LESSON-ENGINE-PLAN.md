@@ -89,9 +89,18 @@ Maps to the E/M/H differentiation already used in the weekly schemes.
   **This is deliberate: the student who most needs practice is the one with beans left on the
   table, so the cap itself is the reason to return.** Replay past the cap stays open — it just
   pays nothing.
-- **Enforcement must be BACKEND, not client-only** — the Sheet logs every bean row, so Apps
-  Script refuses beans past 30 per student per lesson. Client-only caps can be dodged by
-  clearing the browser. (Implementation detail for the build session.)
+- ✅ **BACKEND ENFORCEMENT BUILT July 21, 2026.** `handleSaveResult` in `VC-LMS-Backend.gs` sums a
+  student's existing beans for that lesson and trims the award to fit the 30 cap. The client cap
+  stays for instant feedback, but the server is the real limit — clearing the browser now earns 0.
+  **Deploy steps for Edwin: `BEAN-CAP-DEPLOY.md`** (paste script → run `addLessonKeyColumn` →
+  redeploy the Web App). Worker needs no change.
+  - **Lessons are keyed by a NEW `lesson_key` column (L) in `All Results`** — e.g. `std5-sci-wk01`.
+    ⚠️ **Never key the cap on `lo_code`:** one outcome spans two weeks (SC1.11 = Wks 3 & 4,
+    SC2.12 = 11 & 12, SC3.13 = 15 & 16, SC4.16 = 20 & 21), which would merge two lessons' budgets.
+  - **Every lesson page MUST pass `lesson_key: LESSON.idBase`** in its `vcSaveBeans` meta, and
+    display `res.granted` rather than the beans it asked for. Week 1 is the worked example.
+  - Only `activity_type === 'lesson'` is capped. Tests and quizzes are graded assessments and are
+    never trimmed.
 - Year math (sanity check): 30 lessons × 30 = 900 🌱 from Science alone. Sticker (100) ≈ 3–4
   lessons; homework pass (750) ≈ two-thirds of a year single-subject. ⚠️ When a SECOND subject's
   lessons launch, retune store prices AND the class goal (IDEAS #5 covers the goal side).
@@ -143,6 +152,7 @@ request, July 20, 2026). Deleting the Week 1 diagram is the worked example of ge
 ## 7. Open items before the first build
 
 1. Edwin confirms the Week 1 mechanics set (§5).
-2. Bean-cap backend enforcement design (Apps Script + Worker touch — plan in build session).
+2. ~~Bean-cap backend enforcement~~ ✅ **BUILT July 21, 2026** — see §4 and `BEAN-CAP-DEPLOY.md`.
+   ⏳ Awaiting Edwin's 3 deploy steps in Google Apps Script.
 3. Whether the calibration score feeds anything beyond the tier offer (e.g., logged to Sheet
    for Edwin's gradebook awareness — decide at build).

@@ -11,12 +11,20 @@
  *  It is NOT executed by GitHub Pages; it is the source of truth so future
  *  edits start from here and produce a complete file to paste back.
  *  When you change the live Apps Script, update this file too (and vice versa).
- *  Last synced: July 19, 2026 (added Progressive lesson unlock — IDEAS #8).
+ *  Last synced: July 21, 2026 (added SERVER-SIDE per-lesson bean cap — LESSON-ENGINE-PLAN §4).
  *
  *  Sheet tabs used:
  *    Tab 1 "Students"     → username | password | full_name | first_name | class_id | active | group_id
  *    Tab 2 "All Results"  → timestamp | username | student_name | subject | lo_code |
- *                           activity_type | activity_name | score | max_score | percent | ai_feedback
+ *                           activity_type | activity_name | score | max_score | percent | ai_feedback |
+ *                           lesson_key   ← column L, added July 21 2026
+ *                           lesson_key identifies ONE online lesson (e.g. "std5-sci-wk01").
+ *                           ⚠️ lo_code CANNOT be used for this — one outcome can span two
+ *                           weeks (SC1.11 = Wks 3 & 4, SC2.12 = Wks 11 & 12, SC3.13 = Wks
+ *                           15 & 16, SC4.16 = Wks 20 & 21), which would merge two lessons
+ *                           into one bean budget.
+ *                           Old rows leave it blank; the tab-3/4 formulas read A:J only,
+ *                           so they are unaffected.
  *    Tab 5 "Group Totals" → group | beans (rows 2–5) · class_total (B7) · class_goal (B8)
  *    Tab   "Prizes"       → prize_name | cost | category | stock | active
  *    Tab   "Settings"     → key | value | note
@@ -41,6 +49,12 @@ var GROUPS_TAB   = 'Group Totals';
 var PRIZES_TAB   = 'Prizes';
 var SETTINGS_TAB = 'Settings';
 var SESSION_DAYS = 30; // how long a login lasts
+
+// Per-lesson bean cap (LESSON-ENGINE-PLAN.md §4) — enforced HERE, server-side.
+// The lesson pages also cap client-side for instant feedback, but that can be
+// defeated by clearing the browser, so this is the real limit.
+var LESSON_BEAN_CAP = 30;   // max beans one student can earn from one lesson, ever
+var LESSON_KEY_COL  = 12;   // column L in 'All Results'
 
 // Progressive lesson unlock (IDEAS #8)
 var LOCK_SUFFIX  = '-released-week'; // only these Settings keys are public
@@ -131,7 +145,25 @@ function handleSaveResult(body) {
 
   var score    = Number(body.score)     || 0;
   var maxScore = Number(body.max_score) || 0;
-  var percent  = maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
+
+  var activityType = String(body.activity_type || '');
+  var lessonKey    = String(body.lesson_key || '');
+
+  // ── PER-LESSON BEAN CAP (server-side, LESSON-ENGINE-PLAN.md §4) ──
+  // Only ONLINE LESSONS are capped. Tests and quizzes are graded assessments,
+  // not repeatable practice — their marks must never be trimmed.
+  var capped      = false;
+  var lessonTotal = 0;
+  if (activityType === 'lesson' && lessonKey) {
+    lessonTotal = sumLessonBeans(session.username, lessonKey);
+    var remaining = Math.max(0, LESSON_BEAN_CAP - lessonTotal);
+    if (score > remaining) {
+      score  = remaining;   // trim to whatever is left in this lesson's budget
+      capped = true;
+    }
+  }
+
+  var percent = maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
 
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(RESULTS_TAB);
   sheet.appendRow([
@@ -140,15 +172,69 @@ function handleSaveResult(body) {
     student.full_name,
     String(body.subject || ''),
     String(body.lo_code || ''),
-    String(body.activity_type || ''),
+    activityType,
     String(body.activity_name || ''),
     score,
     maxScore,
     percent,
-    String(body.ai_feedback || '')
+    String(body.ai_feedback || ''),
+    lessonKey
   ]);
 
-  return { ok: true, percent: percent };
+  return {
+    ok: true,
+    percent: percent,
+    awarded: score,                                  // what was ACTUALLY banked
+    capped: capped,                                  // true if the cap trimmed it
+    lesson_total: lessonTotal + score,               // running total for this lesson
+    lesson_cap: LESSON_BEAN_CAP
+  };
+}
+
+// ─────────────────────────────────────────────
+// ONE-OFF MIGRATION — run once from the Apps Script editor after pasting
+// this version. Adds the 'lesson_key' header to column L of an EXISTING
+// 'All Results' tab. Existing rows keep a blank lesson_key, which is correct:
+// they were earned before the cap existed and must not be retro-counted.
+// Safe to run twice — it checks first.
+// ─────────────────────────────────────────────
+function addLessonKeyColumn() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(RESULTS_TAB);
+  var head  = sheet.getRange(1, LESSON_KEY_COL).getValue();
+  if (String(head) === 'lesson_key') {
+    Logger.log('Already migrated — nothing to do.');
+    return 'already done';
+  }
+  sheet.getRange(1, LESSON_KEY_COL)
+       .setValue('lesson_key')
+       .setFontWeight('bold')
+       .setBackground('#20C997')
+       .setFontColor('#ffffff');
+  Logger.log('lesson_key header added to column L.');
+  return 'ok';
+}
+
+// ─────────────────────────────────────────────
+// Sum every bean this student has already earned from ONE lesson.
+// Reads column L (lesson_key) and column H (score) of 'All Results'.
+// ─────────────────────────────────────────────
+function sumLessonBeans(username, lessonKey) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(RESULTS_TAB);
+  var last  = sheet.getLastRow();
+  if (last < 2) return 0;
+
+  // columns B (username) .. L (lesson_key)
+  var data  = sheet.getRange(2, 2, last - 1, LESSON_KEY_COL - 1).getValues();
+  var total = 0;
+  for (var i = 0; i < data.length; i++) {
+    var rowUser = String(data[i][0]);                 // B
+    var rowType = String(data[i][4]);                 // F activity_type
+    var rowKey  = String(data[i][10]);                // L lesson_key
+    if (rowUser === username && rowType === 'lesson' && rowKey === lessonKey) {
+      total += Number(data[i][6]) || 0;               // H score
+    }
+  }
+  return total;
 }
 
 // ─────────────────────────────────────────────
@@ -571,7 +657,8 @@ function setupSheet() {
   var results = ss.getSheetByName(RESULTS_TAB) || ss.insertSheet(RESULTS_TAB, 1);
   if (results.getLastRow() === 0) {
     results.appendRow(['timestamp', 'username', 'student_name', 'subject', 'lo_code',
-                       'activity_type', 'activity_name', 'score', 'max_score', 'percent', 'ai_feedback']);
+                       'activity_type', 'activity_name', 'score', 'max_score', 'percent', 'ai_feedback',
+                       'lesson_key']);
     results.getRange('1:1').setFontWeight('bold').setBackground('#20C997').setFontColor('#ffffff');
     results.setFrozenRows(1);
   }
@@ -627,4 +714,26 @@ function reply(obj) {
   return ContentService
     .createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+/**
+ * TEACHER UTILITY — diagnostic. Logs which tabs the script can see and dumps
+ * the Settings tab. Added live during the IDEAS #8 build (July 2026) and
+ * recovered into this mirror on July 21, 2026 — it existed ONLY in the live
+ * Apps Script and would have been lost on the next paste-over.
+ */
+function debugSettings() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  Logger.log('Spreadsheet: ' + ss.getName());
+  var tabs = ss.getSheets().map(function (s) { return '[' + s.getName() + ']'; });
+  Logger.log('Tabs the script sees: ' + tabs.join(' '));
+  var sh = ss.getSheetByName('Settings');
+  Logger.log('getSheetByName("Settings") -> ' + (sh ? 'FOUND' : 'NULL'));
+  if (sh) {
+    var d = sh.getDataRange().getValues();
+    Logger.log('Row count: ' + d.length);
+    for (var i = 0; i < d.length; i++) {
+      Logger.log(i + ': key=[' + d[i][0] + '] value=[' + d[i][1] + ']');
+    }
+  }
 }

@@ -817,12 +817,31 @@ function award(actKey, earned, maxPossible, sec){
   }
   vcSaveBeans(id, capped, maxPossible, {
     subject:'Science', lo_code:LESSON.lo,
+    /* Groups every activity of this lesson so the BACKEND can enforce the
+       30-bean cap. The client cap above is only for instant feedback —
+       clearing the browser defeats it; the server is the real limit. */
+    lesson_key: LESSON.idBase,
     activity_name: LESSON.week+' '+actKey+(tier?' ('+TIERS[tier].label+')':'')
   }).then(function(res){
-    if (capped < earned) return;
     note.style.display='block';
-    if (res && res.ok)          { note.textContent='🌱 +'+capped+' beans saved to your account!'; toast('🌱 +'+capped+' beans earned!'); }
+    if (res && res.ok) {
+      /* Trust the server: it may have trimmed the award to fit the cap. */
+      var granted = (res.granted != null) ? res.granted : capped;
+      if (granted < capped) {
+        /* reconcile the on-screen pill with what was actually banked */
+        sessionBeans -= (capped - granted);
+        $('#beanPill').textContent = '🌱 ' + sessionBeans + ' bean' + (sessionBeans===1?'':'s');
+      }
+      if (res.capped || granted < capped) {
+        note.textContent = '🌱 +'+granted+' beans — you have reached this lesson\'s cap of '
+                         + (res.lesson_cap || LESSON_CAP) + '. Play on for practice!';
+      } else {
+        note.textContent = '🌱 +'+granted+' beans saved to your account!';
+        toast('🌱 +'+granted+' beans earned!');
+      }
+    }
     else if (res && res.locked) { note.textContent='🌱 You already earned beans for this level on this device. Try a higher level!'; }
+    else if (capped < earned)   { /* client-side cap message already shown above */ }
     else                        { note.textContent='🌱 +'+capped+' beans — log in next time to save them!'; toast('🌱 +'+capped+' beans (not saved — not logged in)'); }
   });
 }
