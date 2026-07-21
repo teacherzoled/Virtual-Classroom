@@ -845,7 +845,14 @@ Theme preference saves to `localStorage` key: `vc-theme` — persists across all
 ### Mobile Rules (apply to every subject hub page)
 - At `max-width: 640px`: `.wide-card` and `.lab-card` → `flex: 0 1 100%`
 - At `max-width: 480px`: `.grid .card` → `flex: 0 1 100%`
-- `html`, `body`, and `.wrapper` must all have `overflow-x: hidden`
+- `overflow-x: hidden` goes on **`body` (and `.wrapper`) — NOT on `html`**
+  ⚠️ **Corrected July 20, 2026.** This rule used to say "`html`, `body`, and `.wrapper` must all
+  have `overflow-x: hidden`". That is wrong and it silently breaks `position: sticky`:
+  `overflow-x: hidden` on `<html>` makes `<html>` a scroll container, so a sticky header pins to
+  that instead of the viewport and just scrolls away. It cost a debugging round on the Week 1
+  lesson's sticky progress bar. **The live Std5 test pages never followed the old rule** — they
+  put `overflow-x: hidden` on `body` only, which is why their sticky progress bar works. Match
+  the tests. `body` alone still prevents horizontal scroll on a phone.
 - h1 font size must use `clamp(1.8rem, 8vw, 3.8rem)` — never a fixed size
 - `.welcome-text` must have `min-width: 0` and `word-break: break-word`
 

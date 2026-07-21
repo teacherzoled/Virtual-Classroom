@@ -9,7 +9,10 @@
 <script src="/edlo-utils.js"></script>
 <style>
   html { font-size: 17.5px; }
-  html, body { overflow-x: hidden; }
+  /* ⚠️ overflow-x:hidden must NOT go on <html> — it makes <html> a scroll
+     container and breaks position:sticky on the progress bar. Body only,
+     exactly as the Std5 test pages do it. */
+  body { overflow-x: hidden; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root { --accent: #20C997; --accent-dark: #0CA678;
@@ -29,6 +32,9 @@
   #stars { position:fixed; inset:0; pointer-events:none; z-index:0; opacity:var(--star); }
   .wrapper { position:relative; z-index:1; max-width:1000px; margin:0 auto; width:100%;
              padding:0 max(1rem,4vw) 2rem; flex:1; }
+  /* The header sits in its own wrapper above the sticky bar — it must NOT grow,
+     or it would split the vertical space with the content wrapper. */
+  .wrapper.head-wrap { flex:none; padding-bottom:0; }
 
   .top-row { display:flex; justify-content:space-between; align-items:center; gap:1rem;
              flex-wrap:wrap; padding:1rem 0 .3rem; }
@@ -236,7 +242,7 @@
 <body>
 <canvas id="stars"></canvas>
 
-<div class="wrapper">
+<div class="wrapper head-wrap">
 
   <div class="top-row">
     <a class="back-link" href="/standard5/science/">← Back to Science</a>
