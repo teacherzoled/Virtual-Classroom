@@ -20,9 +20,42 @@ If the docs are not updated, the task is **not** finished.
 
 ---
 
-## ▶️ Take-off Point — Next Session (as of July 20, 2026)
+## ▶️ Take-off Point — Next Session (as of July 21, 2026)
 
-**Newest work (July 20, 2026): 🎨 `vc-theme.css` CREATED for FUTURE pages only (IDEAS #10 — CLOSED).**
+**Newest work (July 21, 2026): 🎮 ONLINE LESSON ENGINE + 🌱 SERVER-SIDE BEAN CAP — both LIVE.**
+
+- **`LESSON-ENGINE-PLAN.md` is the source of truth for every online lesson.** Read it before
+  building or changing one. Design agreed with Edwin July 20–21: concept review → 5-question
+  calibration → Bronze/Silver/Gold tier ladder → 3–4 mechanics from a bank → finish line.
+- **Week 1 (`week01-technology-climate`) is the REFERENCE IMPLEMENTATION.** Its JS is split into a
+  DATA block and an ENGINE block — future weeks replace the DATA only. Copy it, never rewrite the
+  engine. It also carries the sticky progress bar, collapsible auto-folding cards, the 1400px
+  width, viewport-scaled type and the hub theme palette.
+- **🌱 SERVER-SIDE BEAN CAP — DEPLOYED July 21, 2026 (Apps Script version 6).** The 30-bean
+  per-lesson cap is now enforced in `handleSaveResult`, not just in the browser. Verified live:
+  a replay after clearing the browser earns **+0**.
+  - New **column L `lesson_key`** in `All Results` (e.g. `std5-sci-wk01`).
+    ⚠️ **Never key it on `lo_code`** — one outcome spans two weeks (SC1.11 = Wks 3 & 4, SC2.12 =
+    11 & 12, SC3.13 = 15 & 16, SC4.16 = 20 & 21) and the budgets would merge.
+  - **A lesson that omits `lesson_key` is SILENTLY UNCAPPED.** Every lesson must pass
+    `lesson_key: LESSON.idBase` in its `vcSaveBeans` meta. This was caught in live testing.
+  - Only `activity_type === 'lesson'` is capped — tests and quizzes are never trimmed.
+  - Steps + rollback: `BEAN-CAP-DEPLOY.md`.
+- **⚠️ The live Apps Script had DRIFTED from `backend/VC-LMS-Backend.gs`** — it held a
+  `debugSettings()` function that existed only in Google and would have been destroyed by a
+  paste-over. Recovered into the mirror July 21. **Before pasting the backend again, always
+  compare line counts first.** The mirror is now 739 lines and matches live exactly.
+- **🤖 DAILY BUILD SCHEDULED — `std5-science-daily-lesson-build`, 4:00 pm.** Builds ONE lesson per
+  run: Week 2, then Week 3 (both still on the OLD design), then Week 4 onward. It self-orients by
+  checking for `var TIERS`, **drafts only — never commits or pushes**, and STOPS rather than
+  inventing curriculum if a week has no scheme. 21 schemes written (Wks 1–21); Weeks 22–30
+  outstanding. 29 lessons at 1/day ≈ mid-August, well inside Edwin's December target.
+- **Next session should:** review whatever the daily task has drafted, push what is good, and keep
+  writing schemes for Weeks 22–30 so the builds never stall.
+
+---
+
+**Previous work (July 20, 2026): 🎨 `vc-theme.css` CREATED for FUTURE pages only (IDEAS #10 — CLOSED).**
 The shared stylesheet now exists and is ready to use. **No existing page was changed.**
 
 - **`js/` folder DELETED** (Edwin's call, July 20). `js/main.js`, `js/subject-page.js` and the ten
