@@ -114,7 +114,9 @@
   section.sec { background:var(--card); border:1.5px solid var(--bd); border-radius:18px;
                 padding:1.3rem; margin-bottom:1.2rem; position:relative;
                 scroll-margin-top:4.6rem; /* clears the sticky progress bar */ }
-  section.sec.locked-step { opacity:.45; pointer-events:none; }
+  section.sec.step-hidden { display:none; }          /* not revealed yet */
+  .next-btn { display:block; width:100%; margin-top:1.1rem; font-size:1rem; padding:.85rem; }
+  .next-cue { text-align:center; font-size:.8rem; color:var(--muted); font-weight:700; margin-top:.5rem; }
   .sec-tag { font-size:.7rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase;
              color:var(--accent); display:block; margin-bottom:.3rem; }
   .sec h2 { font-family:'Fredoka One',cursive; font-size:1.28rem; font-weight:400; line-height:1.3; }
@@ -379,7 +381,7 @@
   </section>
 
   <!-- 2. CALIBRATION -->
-  <section class="sec locked-step" id="secCalib">
+  <section class="sec step-hidden" id="secCalib">
     <span class="done-badge">✓ done</span>
     <span class="sec-tag">Warm-Up Challenge</span>
     <h2>🎯 Five Quick Questions</h2>
@@ -391,7 +393,7 @@
   </section>
 
   <!-- 3. TIER OFFER -->
-  <section class="sec locked-step" id="secTier">
+  <section class="sec step-hidden" id="secTier">
     <span class="sec-tag">Choose Your Challenge</span>
     <h2 id="tierHead">🏅 Pick Your Level</h2>
     <p id="tierMsg"></p>
@@ -399,7 +401,7 @@
   </section>
 
   <!-- 4. SIMULATOR -->
-  <section class="sec locked-step" id="secSim">
+  <section class="sec step-hidden" id="secSim">
     <span class="done-badge">✓ done</span>
     <span class="sec-tag">Activity 1 · Decide</span>
     <h2>🏛️ Mayor for a Year</h2>
@@ -418,7 +420,7 @@
   </section>
 
   <!-- 5. TRACE-IT-BACK -->
-  <section class="sec locked-step" id="secTrace">
+  <section class="sec step-hidden" id="secTrace">
     <span class="done-badge">✓ done</span>
     <span class="sec-tag">Activity 2 · Investigate</span>
     <h2>🔍 Trace It Back</h2>
@@ -429,7 +431,7 @@
   </section>
 
   <!-- 6. MYTH-BUSTER -->
-  <section class="sec locked-step" id="secMyth">
+  <section class="sec step-hidden" id="secMyth">
     <span class="done-badge">✓ done</span>
     <span class="sec-tag">Activity 3 · Judge</span>
     <h2>🕵️ Myth-Buster Arena</h2>
@@ -440,7 +442,7 @@
   </section>
 
   <!-- 7. STREAK -->
-  <section class="sec locked-step" id="secStreak">
+  <section class="sec step-hidden" id="secStreak">
     <span class="done-badge">✓ done</span>
     <span class="sec-tag">Activity 4 · Speed</span>
     <h2>⚡ Beat Your Streak</h2>
@@ -456,7 +458,7 @@
   </section>
 
   <!-- 8. FINISH -->
-  <section class="sec locked-step" id="secFinish">
+  <section class="sec step-hidden" id="secFinish">
     <span class="sec-tag">Finish Line</span>
     <h2>🏁 Great Work!</h2>
     <div class="finish-beans" id="finishBeans">🌱 0</div>
@@ -744,9 +746,40 @@ function progressTick(){
   $('#progText').textContent = Math.min(doneCount,TOTAL_ACTS)+' of '+TOTAL_ACTS+' done';
   $('#progFill').style.width = (Math.min(doneCount,TOTAL_ACTS)/TOTAL_ACTS*100)+'%';
 }
-function unlock(sel){ var s=$(sel); s.classList.remove('locked-step');
-  s.scrollIntoView({behavior:'smooth',block:'start'}); }
 function markDone(sel){ $(sel).classList.add('done'); }
+
+/* ── ONE-CARD-AT-A-TIME REVEAL (LESSON-ENGINE-PLAN.md §2) ──────────
+   Only one activity is on screen at a time. Finishing a card shows a
+   Next button; tapping it collapses the finished card to its header
+   and reveals the next. No navigation timers — the student controls
+   every step, so nothing scrolls out from under them on a phone. */
+function revealStep(sel){
+  var s = $(sel); if (!s) return;
+  s.classList.remove('step-hidden');
+  /* wait for layout to settle, THEN one controlled scroll — never a
+     smooth scroll racing a reflow (that was the mobile jump bug). */
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      s.scrollIntoView({ behavior:'smooth', block:'start' });
+    });
+  });
+}
+/* Inject a Next button into a finished card's body. Idempotent. */
+function nextButton(finishedSel, nextSel, label, cb){
+  var sec = $(finishedSel); if (!sec) return;
+  var body = $('.sec-body', sec) || sec;
+  if ($('.next-btn', sec)) return;
+  var b = document.createElement('button');
+  b.className = 'btn next-btn';
+  b.textContent = label || 'Next →';
+  b.addEventListener('click', function(){
+    b.disabled = true;
+    collapseSec(finishedSel);
+    revealStep(nextSel);
+    if (typeof cb === 'function') cb();
+  });
+  body.appendChild(b);
+}
 
 /* ── Collapsible cards ──────────────────────────────────────────
    Built generically at boot: everything after each <h2> is wrapped
@@ -785,24 +818,12 @@ function collapseSec(sel){
   if (b){ b.textContent = '▸'; b.setAttribute('aria-label','Open this section'); }
 }
 function expandSec(sel){
-  clearTimeout(foldTimers[sel]);
   var sec = $(sel); if (!sec) return;
   sec.classList.remove('collapsed');
   var b = $('.sec-toggle', sec);
   if (b){ b.textContent = '▾'; b.setAttribute('aria-label','Fold this section'); }
 }
-/* Fold a finished activity away once the student has read the result.
-   Timers are tracked so a mid-lesson tier switch can cancel a pending fold —
-   otherwise a card re-opened by the switch would collapse again a moment later. */
-var foldTimers = {};
-function foldWhenRead(sel){
-  clearTimeout(foldTimers[sel]);
-  foldTimers[sel] = setTimeout(function(){ collapseSec(sel); }, 2600);
-}
-function cancelPendingFolds(){
-  Object.keys(foldTimers).forEach(function(k){ clearTimeout(foldTimers[k]); });
-  foldTimers = {};
-}
+/* (fold-on-timer removed — cards now collapse when the student taps Next) */
 
 /* Award beans, respecting the per-lesson cap. The activity id carries the tier so a
    replay at a higher tier is a NEW row (vcSaveBeans locks one id per device). */
@@ -884,7 +905,6 @@ function switchTier(t){
   missStreak = 0; hitStreak = 0;
   $$('.coach-box').forEach(function(b){ b.className='coach-box'; });
   toast(TIERS[t].icon+' Now playing '+TIERS[t].label+' — '+TIERS[t].rate+'× beans');
-  cancelPendingFolds();
   buildSim(); buildTrace(); buildMyth(); resetStreak();
 }
 
@@ -896,7 +916,7 @@ $('#reviewGrid').innerHTML = REVIEW.map(function(r){
 $('#reviewDone').addEventListener('click', function(){
   this.disabled = true; markDone('#secReview'); progressTick();
   collapseSec('#secReview');            /* fold the notes away — one tap to reopen */
-  unlock('#secCalib');
+  revealStep('#secCalib');
 });
 
 /* ── 2. Calibration ── */
@@ -931,9 +951,9 @@ $('#calibCheck').addEventListener('click', function(){
   var beans = Math.round(correct / CALIB.length * CALIB_BEANS);
   $('#calibFeedback').textContent = 'You got '+correct+' of '+CALIB.length+' right ('+calibPct+'%).';
   award('calibration', beans, CALIB_BEANS, $('#secCalib'));
-  markDone('#secCalib'); progressTick(); foldWhenRead('#secCalib');
-  offerTier(calibPct);
-  unlock('#secTier');
+  markDone('#secCalib'); progressTick();
+  offerTier(calibPct);                 /* builds the tier card, still hidden */
+  nextButton('#secCalib', '#secTier', 'See my level →');
 });
 
 /* ── 3. Tier offer — 90 auto-gold · 80 free choice · 50 silver · else bronze ── */
@@ -976,7 +996,12 @@ function offerTier(pct){
     card.addEventListener('click', function(){ startTier(card.getAttribute('data-tier')); });
   });
 
-  if (auto) setTimeout(function(){ startTier(auto); }, 1200);
+  if (auto) {
+    /* promoted straight to Gold — highlight it, but the student still taps
+       to begin (no timer that could scroll away under them). */
+    var g = $('#tierGrid .tier-card.gold');
+    if (g) g.style.outline = '3px solid var(--gold)';
+  }
 }
 
 function startTier(t){
@@ -985,10 +1010,9 @@ function startTier(t){
   $$('#tierGrid .tier-card').forEach(function(c){
     c.style.outline = (c.getAttribute('data-tier')===t) ? '3px solid var(--accent)' : 'none';
   });
-  cancelPendingFolds();
   buildSim(); buildTrace(); buildMyth(); resetStreak();
-  ['#secSim','#secTrace','#secMyth','#secStreak'].forEach(function(s){ $(s).classList.remove('locked-step'); });
-  unlock('#secSim');
+  collapseSec('#secTier');
+  revealStep('#secSim');
 }
 
 /* ── 4. Simulator ── */
@@ -1038,7 +1062,8 @@ function simEnd(){
   e.innerHTML = '<b>Four years later…</b><br>'+verdict
     + '<br><br>You made <b>'+simScore+' of '+SIM[tier].length+'</b> climate-friendly choices.';
   award('simulator', simScore * TIERS[tier].rate, SIM[tier].length * TIERS[tier].rate, $('#secSim'));
-  markDone('#secSim'); progressTick(); foldWhenRead('#secSim'); unlock('#secTrace');
+  markDone('#secSim'); progressTick();
+  nextButton('#secSim', '#secTrace', 'Next activity →');
 }
 
 /* ── 5. Trace-it-back ── */
@@ -1092,7 +1117,8 @@ function traceEnd(){
   $('#traceBox').innerHTML = '<div class="trace-final show">🔍 Investigation complete — <b>'
     + traceScore+' of '+TRACE[tier].length+'</b> traced correctly.</div>';
   award('trace', traceScore * TIERS[tier].rate, TRACE[tier].length * TIERS[tier].rate, $('#secTrace'));
-  markDone('#secTrace'); progressTick(); foldWhenRead('#secTrace'); unlock('#secMyth');
+  markDone('#secTrace'); progressTick();
+  nextButton('#secTrace', '#secMyth', 'Next activity →');
 }
 
 /* ── 6. Myth-buster ── */
@@ -1127,7 +1153,8 @@ function mythEnd(){
   $('#mythBox').innerHTML = '<div class="myth-card"><b>🕵️ Arena complete — '
     + mythScore+' of '+MYTH[tier].length+' judged correctly.</b></div>';
   award('myth', mythScore * TIERS[tier].rate, MYTH[tier].length * TIERS[tier].rate, $('#secMyth'));
-  markDone('#secMyth'); progressTick(); foldWhenRead('#secMyth'); unlock('#secStreak');
+  markDone('#secMyth'); progressTick();
+  nextButton('#secMyth', '#secStreak', 'Last activity →');
 }
 
 /* ── 7. Beat-your-streak ── */
@@ -1179,12 +1206,25 @@ function streakEnd(){
   $('#stkBest').textContent = readBest();
   var deck = STREAK[tier].length;              /* beans capped at one full deck */
   award('streak', Math.min(stkScore,deck) * TIERS[tier].rate, deck * TIERS[tier].rate, $('#secStreak'));
-  markDone('#secStreak'); progressTick(); foldWhenRead('#secStreak'); finish();
+  markDone('#secStreak'); progressTick();
+  nextButton('#secStreak', '#secFinish', 'See my results →', finish);
 }
 
 /* ── 8. Finish ── */
+function replayFrom(t){
+  /* Reset the activity cards for another run at tier t: strip old Next
+     buttons, hide + re-expand trace/myth/streak/finish, then startTier
+     reveals the simulator again. */
+  ['#secSim','#secTrace','#secMyth','#secStreak','#secFinish'].forEach(function(sel){
+    var sec = $(sel); if (!sec) return;
+    var nb = $('.next-btn', sec); if (nb) nb.parentNode.removeChild(nb);
+    if (sel !== '#secSim') sec.classList.add('step-hidden');
+    sec.classList.remove('collapsed','done');
+  });
+  doneCount = 2;
+  startTier(t);
+}
 function finish(){
-  unlock('#secFinish');
   $('#finishBeans').textContent = '🌱 ' + sessionBeans;
   $('#finishBadge').innerHTML = tier
     ? 'Best level this visit: '+TIERS[tier].icon+' <b>'+TIERS[tier].label+'</b>' : '';
@@ -1195,12 +1235,12 @@ function finish(){
   } else if (tier === 'gold'){
     note.textContent = 'You have '+beansLeft()+' 🌱 still available in this lesson.';
     btn.textContent = '🔁 Play Gold again';
-    btn.onclick = function(){ doneCount = 2; startTier('gold'); };
+    btn.onclick = function(){ replayFrom('gold'); };
   } else {
     var next = (tier === 'bronze') ? 'silver' : 'gold';
     note.textContent = 'There are '+beansLeft()+' 🌱 left in this lesson — reach them by playing a harder level!';
     btn.textContent = '🔁 Try '+TIERS[next].icon+' '+TIERS[next].label+' ('+TIERS[next].rate+'× beans)';
-    btn.onclick = function(){ doneCount = 2; startTier(next); };
+    btn.onclick = function(){ replayFrom(next); };
   }
 }
 

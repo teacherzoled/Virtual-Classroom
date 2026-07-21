@@ -31,6 +31,9 @@ including the scheduled daily builds of Weeks 4–30 (IDEAS #11).
 
 ## 2. Lesson flow (fixed skeleton, every week)
 
+Shown **one card at a time** — each step appears only when the student taps to advance (see the
+reveal-flow note below). This is the fixed order:
+
 1. **Concept review** — teaches the week's idea concisely: definitions → **the diagram/figure** →
    worked local examples → the Belize "why it matters here" note → key-term cards. Note-taking
    material. Concise in wording, complete in substance (see the ⚠️ rule in §1).
@@ -45,15 +48,31 @@ including the scheduled daily builds of Weeks 4–30 (IDEAS #11).
 The skeleton never changes; the mechanics inside it change weekly. Students learn the ladder
 once, the game stays fresh.
 
-**Collapsible cards (auto-collapse) — Edwin's decision, July 20, 2026.** Every `section.sec` gets
-a ▾/▸ toggle built automatically at boot by `makeCollapsible()` — no per-week markup needed.
-- The **concept review folds itself** when the student clicks "start practising", and each
-  **finished activity folds 2.6 s after its result appears** (long enough to read the score).
-- **Tapping the heading or the ▸ arrow reopens any card**, so the diagram and notes stay one tap
-  away all lesson. Nothing is ever deleted — only hidden.
-- A mid-lesson **tier switch re-expands** the rebuilt activities and cancels any pending fold.
-- Purpose: the page stays short as the student progresses, instead of forcing them to scroll
-  past a long review section to reach the questions.
+**ONE CARD AT A TIME — reveal flow (Edwin's decision, July 21, 2026).** Rebuilt after phone
+testing: the old model kept every card on the page (locked/greyed) and auto-scrolled + auto-folded
+on a timer, which threw the viewport to the bottom of the page on a phone — a student had to scroll
+back to find where they were. The new model shows **only the active card**.
+
+- Downstream cards start `display:none` (`.step-hidden`). `revealStep(sel)` un-hides one card and
+  does a **single controlled scroll to it after layout settles** (double `requestAnimationFrame`),
+  so a scroll never races a reflow — that race was the bug.
+- **Every transition is a button the student taps** — `nextButton()` injects a full-width
+  **Next →** button into the finished card. Tapping it collapses that card to its header and
+  reveals the next. **No navigation timers anywhere.** A slow or EAL reader takes as long as they
+  like to read the bean result before moving on.
+- Finished cards **collapse to a tappable header** (via `makeCollapsible()`), so the review
+  diagram and earlier activities stay one tap away. Nothing is deleted, only folded.
+- **The streak is the one timed activity** — but the timer runs only the 60-second round, never
+  the navigation. The student taps **Start** to begin it (clock starts on their tap, not on
+  reveal) and taps **See my results →** to leave. Entry and exit are button-gated like every other
+  card; the clock creates urgency inside the activity, never in the flow between cards.
+- **90%+ auto-promotion** no longer auto-starts on a timer — the Gold card is highlighted and the
+  student taps it to begin (consistent with "every step is a tap").
+- **Replay** (`replayFrom(tier)`) re-hides the downstream cards, strips old Next buttons, and
+  `startTier` reveals the simulator again — a clean restart of the reveal chain.
+- Step chain: Review → Calibration → Tier offer → Simulator → Trace → Myth → Streak → Finish.
+- Purpose: focus. The student sees one thing, finishes it, taps to continue. Nothing scrolls out
+  from under them — the exact failure this replaced.
 
 ---
 
