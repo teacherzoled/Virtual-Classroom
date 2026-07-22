@@ -79,7 +79,7 @@
              flex-wrap:wrap; padding:1rem 0 .3rem; }
   .back-link { color:var(--muted); text-decoration:none; font-weight:800; font-size:.9rem; }
   .back-link:hover { color:var(--accent); }
-  .theme-bar { display:flex; gap:.4rem; flex-wrap:wrap; }
+  .theme-bar { display:flex; gap:.4rem; flex-wrap:wrap; justify-content:center; }
   .theme-bar button { font-family:inherit; font-size:.78rem; font-weight:800; cursor:pointer;
         padding:.35rem .7rem; border-radius:999px; border:1.5px solid var(--bd);
         background:var(--btn); color:var(--fg); transition:border-color .25s,color .25s; }
@@ -285,6 +285,8 @@
 
   @media (max-width:600px) {
     html { font-size:16.5px; }
+    .top-row { justify-content:center; }
+    .theme-bar { flex:1 1 100%; }      /* full width so the pills centre on screen */
     .rev-card, .tier-card, .meter { flex:1 1 100%; }
     .myth-btns button, .streak-opts button { flex:1 1 100%; }
   }
@@ -407,7 +409,7 @@
     <span class="done-badge">✓ done</span>
     <span class="sec-tag">Activity 1 · Decide</span>
     <h2>🌊 Protect the Season</h2>
-    <p>You help a Belizean coastal town whose living comes from the reef and the farms. Every choice changes the town's greenhouse gases and its income. Choose well!</p>
+    <p>You help a coastal town whose living comes from the reef and the farms. Every choice changes the town's greenhouse gases and its income. Choose well!</p>
     <div class="sim-meters">
       <div class="meter"><b>Greenhouse gases</b><div class="m-val" id="simCo2Val">Medium</div>
         <div class="meter-track"><div class="meter-fill co2" id="simCo2Bar"></div></div></div>
@@ -504,10 +506,10 @@ var CALIB = [
   { q:'Warmer seas can make coral turn white and die. What is this called?',
     o:['Coral bleaching','Coral farming','Coral flooding','Coral fishing'], a:0 },
   { q:'Complete the chain: warmer sea → ??? → fewer snorkellers book → hotel earns less.',
-    o:['The coral bleaches and the reef loses its fish','The hotel is painted','More cruise ships arrive','The farmers plant more corn'], a:0 },
+    o:['The coral bleaches and the reef loses its fish','The sea cools back down again','More cruise ships arrive','More fish arrive on the reef'], a:0 },
   { q:'Is it true that climate change for Belize is only about hotter days?',
-    o:['Yes, only hotter days','No — the bigger threats are stronger hurricanes, coral bleaching, and rain at the wrong time',
-       'Yes, but only in the dry season','No — the climate never changes'], a:1 }
+    o:['Yes — hotter days are the whole problem','No — stronger hurricanes and coral bleaching matter more',
+       'Yes, but the reef and farms are perfectly safe','No — but only farmers ever feel it'], a:1 }
 ];
 
 var SIM = {
@@ -534,7 +536,7 @@ var SIM = {
          {t:'Build a tall concrete seawall',co2:2,money:-30,fb:'Making concrete releases a lot of greenhouse gas, and it does nothing for the reef the tourists want.'},
          {t:'Do nothing and hope',co2:1,money:0,fb:'Saving money, but the next storm will cost far more than the defence would.'}] },
     { q:'Cruise tourism is booming. How should the town grow it?',
-      o:[{t:'Many diesel tour buses for day-trippers',co2:3,money:20,fb:'More visitors served, but every trip burns fuel and warms the sea they came to enjoy.'},
+      o:[{t:'Many diesel tour buses for visitors who come for one day',co2:3,money:20,fb:'More visitors served, but every trip burns fuel and warms the sea they came to enjoy.'},
          {t:'Bicycle and electric-cart tours on the caye',co2:-2,money:10,fb:'Visitors still pay, the caye stays clean, and nothing is burned.'},
          {t:'Stop all tourism to protect the reef',co2:0,money:-30,fb:'The reef is safe, but the families who live on tourism lose everything. Balance is the goal.'}] },
     { q:'Drought is hitting the corn farmers.',
@@ -551,7 +553,7 @@ var SIM = {
          {t:'Keep the money for next year',co2:0,money:0,fb:'Safe, but the reef will not wait for you.'}] }
   ],
   gold:[
-    { q:'Four years, and every choice locks in. A nearby town got rich clearing mangroves for resorts. Your first move?',
+    { q:'Four years, and every choice stays for years — it cannot be undone. A nearby town got rich clearing mangroves for resorts. Your first move?',
       o:[{t:'Copy them — clear the mangroves, build resorts',co2:3,money:35,fb:'Money now, but without mangroves the next hurricane floods those same resorts. You lose more than you gained.'},
          {t:'Protect the mangroves and build small eco-lodges behind them',co2:-2,money:-20,fb:'The mangroves shield the lodges AND shelter the fish. Income that lasts.'},
          {t:'Study it for a year and do nothing',co2:1,money:0,fb:'Careful, but the warming sea keeps bleaching the reef while you wait.'}] },
@@ -601,11 +603,11 @@ var TRACE = {
     { start:'🌊 warmer sea → ??? → fewer snorkellers book → hotel earns less', q:'Which link fills the gap?',
       chain:['We know the first link: the sea is warmer','We know the last links: fewer snorkellers, less income','One link is missing in the middle'],
       final:'Warmer sea → coral bleaches → fewer snorkellers → less income. The reef is the missing link.',
-      o:['The coral bleaches and the reef loses its fish','The hotel gets a new coat of paint','More cruise ships arrive','The farmers plant more corn'], a:0 },
+      o:['The coral bleaches and the reef loses its fish','The hotel lowers its prices for one night','More cruise ships arrive','The farmers plant more corn'], a:0 },
     { start:'🌧️ rain at the wrong time → ??? → farmer earns less', q:'Which is the true middle link?',
       chain:['First link: too much rain falls at the wrong time','Last link: the farmer earns less','What connects them?'],
       final:'Flooding ruins the harvest, and no harvest means no income. Match the link to the right sector.',
-      o:['The flooded field ruins the harvest','The farmer buys a new hat','The tourists cancel their flights','The reef bleaches'], a:0 },
+      o:['The flooded field ruins the harvest','The farmer waters the field once more','The tourists cancel their flights','The reef bleaches'], a:0 },
     { start:'🏝️ stronger hurricanes → hotels damaged → ??? → guides earn less', q:'What belongs in the gap?',
       chain:['First: hurricanes are stronger','Then: hotels are damaged','A link is missing before the guides lose income'],
       final:'Damaged hotels → visitors stay away → guides have no one to guide → less income.',
@@ -628,7 +630,7 @@ var TRACE = {
       chain:['This jumps straight from cause to effect','It skips every link in between','A strong chain shows HOW, step by step'],
       final:'“And then what happens?” A strong chain never jumps to the end — it shows each link.',
       o:['It skips the middle links that explain how','It has too many links','It names the wrong sector','Nothing is wrong'], a:0 },
-    { start:'🏝️ Which sector does a coral-bleaching year hurt MORE?', q:'For a bleaching-only year, which is hit harder?',
+    { start:'🏝️ Which sector does a coral-bleaching year hurt MORE?', q:'In a year with coral bleaching but no drought, which is hit harder?',
       chain:['Tourism sells the living reef itself','A bleached reef directly loses snorkellers','Corn in the west does not depend on the reef'],
       final:'Match the threat to the sector. Bleaching strikes reef tourism hardest; a drought would strike farming hardest.',
       o:['Reef tourism, because it sells the reef directly','Inland corn farming','Both exactly the same','Neither is affected'], a:0 },
@@ -729,6 +731,29 @@ var TOTAL_ACTS     = 6;
 /* ──────────────────────── ENGINE ──────────────────────── */
 function $(s,r){ return (r||document).querySelector(s); }
 function $$(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); }
+
+/* ── ANSWER-POSITION SHUFFLE (assessment integrity) ────────────────
+   Shuffles each question's options at render so the correct answer
+   is not in a fixed slot — a student cannot pass by clicking the
+   same position every time. Done in the ENGINE, so it protects
+   EVERY lesson regardless of how the DATA was authored (the daily
+   task tends to cluster correct answers; this neutralises that).
+   Runs once per item (_shuf guard), stable across re-renders. */
+function shuffleInPlace(a){
+  for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i];a[i]=a[j];a[j]=t; }
+}
+function shuffleItemOnce(item){          // items with an `a` index + `o` options
+  if (!item || item._shuf || !item.o || typeof item.a !== 'number') { if(item) item._shuf=true; return; }
+  var correct = item.o[item.a];
+  shuffleInPlace(item.o);
+  item.a = item.o.indexOf(correct);
+  item._shuf = true;
+}
+function shuffleSimOnce(s){               // SIM rounds: correct is co2<0, position-free
+  if (!s || s._shuf || !s.o) { if(s) s._shuf=true; return; }
+  shuffleInPlace(s.o);
+  s._shuf = true;
+}
 
 var sessionBeans = 0, doneCount = 0, tier = null, calibPct = 0;
 var missStreak = 0, hitStreak = 0;
@@ -933,6 +958,7 @@ $('#reviewDone').addEventListener('click', function(){
 });
 
 /* ── 2. Calibration ── */
+CALIB.forEach(shuffleItemOnce);
 $('#calibBox').innerHTML = CALIB.map(function(item,i){
   return '<div class="q-block"><div class="q-stem">'+(i+1)+'. '+item.q+'</div><div class="opts">'
     + item.o.map(function(o,j){
@@ -1047,6 +1073,7 @@ function simStepRender(){
   var set = SIM[tier]; if(!set) return;
   if (simStep >= set.length) return simEnd();
   var s = set[simStep];
+  shuffleSimOnce(s);
   $('#simChoice').innerHTML = '<div class="q-stem">Year '+(simStep+1)+' — '+s.q+'</div><div class="sim-opts">'
     + s.o.map(function(o,i){ return '<button data-i="'+i+'">'+o.t+'</button>'; }).join('') + '</div>';
   $$('#simChoice button').forEach(function(b){
@@ -1088,6 +1115,7 @@ function traceRender(){
   var set = TRACE[tier]; if(!set) return;
   if (traceIdx >= set.length) return traceEnd();
   var t = set[traceIdx];
+  shuffleItemOnce(t);
   $('#traceBox').innerHTML =
       '<div class="q-stem">Case '+(traceIdx+1)+' of '+set.length+'</div>'
     + '<div class="trace-start">'+t.start+'</div>'
@@ -1140,9 +1168,12 @@ function traceEnd(){
 
 /* ── 6. Myth-buster ── */
 var mythIdx = 0, mythScore = 0;
-function buildMyth(){ expandSec('#secMyth'); mythIdx=0; mythScore=0; $('#secMyth').classList.remove('done'); mythRender(); }
+var mythDeck = [];
+function buildMyth(){ expandSec('#secMyth'); mythIdx=0; mythScore=0;
+  mythDeck = MYTH[tier].slice(); shuffleInPlace(mythDeck);   /* break the true/false rhythm */
+  $('#secMyth').classList.remove('done'); mythRender(); }
 function mythRender(){
-  var set = MYTH[tier]; if(!set) return;
+  var set = mythDeck; if(!set || !set.length) return;
   if (mythIdx >= set.length) return mythEnd();
   var m = set[mythIdx];
   $('#mythBox').innerHTML = '<div class="myth-card">'
@@ -1156,7 +1187,7 @@ function mythRender(){
   });
 }
 function mythPick(saidBust){
-  var m = MYTH[tier][mythIdx], ok = (saidBust === m.bust);
+  var m = mythDeck[mythIdx], ok = (saidBust === m.bust);
   if (ok) mythScore++;
   scoreHit(ok);
   $$('#mythBox .myth-btns button').forEach(function(b){ b.disabled = true; });
@@ -1165,7 +1196,7 @@ function mythPick(saidBust){
   coachCheck('#mythCoach');
   mythIdx++;
   continueBtn('#mythVerdict',
-    (mythIdx >= MYTH[tier].length ? 'See the result →' : 'Next claim →'),
+    (mythIdx >= mythDeck.length ? 'See the result →' : 'Next claim →'),
     mythRender);
 }
 function mythEnd(){
@@ -1202,6 +1233,7 @@ $('#streakStart').addEventListener('click', function(){
 function streakRender(){
   if (stkIdx >= stkOrder.length) stkIdx = 0;   /* loop the deck until time runs out */
   var s = stkOrder[stkIdx];
+  shuffleItemOnce(s);
   $('#streakBox').innerHTML = '<div class="streak-q">'+s.q+'</div><div class="streak-opts">'
     + s.o.map(function(o,i){ return '<button data-i="'+i+'">'+o+'</button>'; }).join('') + '</div>';
   $$('#streakBox button').forEach(function(b){

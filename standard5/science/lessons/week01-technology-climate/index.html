@@ -79,7 +79,7 @@
              flex-wrap:wrap; padding:1rem 0 .3rem; }
   .back-link { color:var(--muted); text-decoration:none; font-weight:800; font-size:.9rem; }
   .back-link:hover { color:var(--accent); }
-  .theme-bar { display:flex; gap:.4rem; flex-wrap:wrap; }
+  .theme-bar { display:flex; gap:.4rem; flex-wrap:wrap; justify-content:center; }
   .theme-bar button { font-family:inherit; font-size:.78rem; font-weight:800; cursor:pointer;
         padding:.35rem .7rem; border-radius:999px; border:1.5px solid var(--bd);
         background:var(--btn); color:var(--fg); transition:border-color .25s,color .25s; }
@@ -285,6 +285,8 @@
 
   @media (max-width:600px) {
     html { font-size:16.5px; }
+    .top-row { justify-content:center; }
+    .theme-bar { flex:1 1 100%; }      /* full width so the pills centre on screen */
     .rev-card, .tier-card, .meter { flex:1 1 100%; }
     .myth-btns button, .streak-opts button { flex:1 1 100%; }
   }
@@ -406,7 +408,7 @@
     <span class="done-badge">✓ done</span>
     <span class="sec-tag">Activity 1 · Decide</span>
     <h2>🏛️ Mayor for a Year</h2>
-    <p>You are the mayor of a Belizean town. Every choice changes the air and the money. Choose well!</p>
+    <p>You are the mayor of a town. Every choice changes the air and the money. Choose well!</p>
     <div class="sim-meters">
       <div class="meter"><b>Greenhouse gases</b><div class="m-val" id="simCo2Val">Medium</div>
         <div class="meter-track"><div class="meter-fill co2" id="simCo2Bar"></div></div></div>
@@ -502,12 +504,12 @@ var CALIB = [
   { q:'Which technology releases the MOST greenhouse gas?',
     o:['A solar panel','A bicycle','A diesel generator','A wheelbarrow'], a:2 },
   { q:'Why do we say technology has a TWO-WAY relationship with climate change?',
-    o:['Because it is used twice a day','Because some technology warms the planet and some slows the warming',
-       'Because it works in two countries','Because it has two switches'], a:1 },
+    o:['Because you can turn it on or off','Because some technology warms the planet and some slows the warming',
+       'Because old technology harms and new technology always helps','Because its harm and its help cancel out to zero'], a:1 },
   { q:'A chainsaw harms the climate in two ways. What are they?',
     o:['It burns fuel, and it removes trees that absorb carbon dioxide',
-       'It is loud, and it is heavy','It burns fuel, and it is expensive',
-       'It is sharp, and it needs a driver'], a:0 }
+       'It burns fuel — that is the only harm','It burns fuel, and it is expensive',
+       'It cuts trees, but trees have nothing to do with the climate'], a:0 }
 ];
 
 var SIM = {
@@ -551,7 +553,7 @@ var SIM = {
          {t:'Keep the money for next year',co2:0,money:0,fb:'Safe, but the problem does not wait.'}] }
   ],
   gold:[
-    { q:'You have $100 and four years. Every choice locks in. A neighbouring town got rich on logging. Your first move?',
+    { q:'You have $100 and four years. Every choice stays for years — it cannot be undone. A neighbouring town got rich on logging. Your first move?',
       o:[{t:'Copy them — log the forest, buy solar later',co2:3,money:35,fb:'The forest takes decades to grow back. You lose its carbon absorption long before the solar arrives.'},
          {t:'Protect the forest and start with one solar project',co2:-2,money:-25,fb:'You keep the trees absorbing carbon dioxide AND begin replacing burnt fuel. Both arrows of the loop.'},
          {t:'Do nothing in year one and study the problem',co2:1,money:0,fb:'Studying is wise, but the diesel keeps running while you decide.'}] },
@@ -628,13 +630,13 @@ var TRACE = {
       chain:['The bus stops burning diesel daily — a real gain','The forest that was cut absorbed carbon dioxide for decades','A new forest takes decades to replace what was lost'],
       final:'Both arrows moved at once, in opposite directions. Gaining on one while losing on the other is not automatic progress.',
       o:['Yes — electric is always better','Not clearly — the lost forest works against the gain','No — electric buses do not help'], a:1 },
-    { start:'⚡ A town cut emissions per person by half, then doubled its population', q:'What happened to TOTAL emissions?',
-      chain:['Each person now emits half as much','But there are twice as many people','Half of double is the same as before'],
-      final:'Emissions per person fell, but the total stayed the same. Always ask which number is being reported.',
-      o:['They halved','They stayed about the same','They doubled'], a:1 },
+    { start:'☀️ A town with solar panels that still runs a diesel generator at night', q:'Is this town free of greenhouse gases?',
+      chain:['The panels make clean power in the daytime','At night there is no sun','So at night the town burns diesel again'],
+      final:'Solar cuts emissions by day, but a town is only truly clean when it stops burning fuel at ALL times.',
+      o:['Yes, it uses solar','No — it still burns diesel at night','Only when it rains'], a:1 },
     { start:'🔌 “Zero-emission” written on a machine', q:'What does that label actually promise?',
-      chain:['The machine releases nothing where it stands','It says nothing about making its electricity','It says nothing about building the machine'],
-      final:'The label covers one point in the chain. The emissions may simply sit somewhere else in it.',
+      chain:['The machine releases nothing where it stands','But its electricity is made somewhere else','If that somewhere burns fuel, the gases are still released'],
+      final:'A "zero-emission" label covers one spot only. Follow the wire to where the electricity is made.',
       o:['No emissions anywhere, ever','No emissions at that spot only','It is always a lie'], a:1 },
     { start:'🇧🇿 Belize uses Macal River hydro AND imported diesel', q:'A new factory doubles electricity demand. What happens?',
       chain:['The hydro dams already run at their limit','Extra demand must come from somewhere','The only source left to increase is diesel'],
@@ -673,8 +675,8 @@ var MYTH = {
       why:'BUSTED. Only if the electricity is not made by burning fuel. Follow the chain first.' },
     { c:'Technology cannot solve climate change, because technology caused it.', bust:true,
       why:'BUSTED. One word covers both arrows. Technology that burns caused harm; technology that replaces burning reduces it.' },
-    { c:'Cutting emissions per person always means total emissions fall.', bust:true,
-      why:'BUSTED. If the number of people grows enough, the total can stay the same or even rise.' },
+    { c:'Planting and protecting trees can work against the warming that burning fuel causes.', bust:false,
+      why:'TRUE. Trees absorb carbon dioxide as they grow — the other arrow of the loop, slowing the warming.' },
     { c:'A solar farm built on cleared forest may not be a clear climate gain.', bust:false,
       why:'TRUE. The panels avoid burning, but the lost trees no longer absorb carbon dioxide.' },
     { c:'“Zero-emission” on a label means no greenhouse gases were released anywhere.', bust:true,
@@ -729,6 +731,29 @@ var TOTAL_ACTS     = 6;
 /* ──────────────────────── ENGINE ──────────────────────── */
 function $(s,r){ return (r||document).querySelector(s); }
 function $$(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); }
+
+/* ── ANSWER-POSITION SHUFFLE (assessment integrity) ────────────────
+   Shuffles each question's options at render so the correct answer
+   is not in a fixed slot — a student cannot pass by clicking the
+   same position every time. Done in the ENGINE, so it protects
+   EVERY lesson regardless of how the DATA was authored (the daily
+   task tends to cluster correct answers; this neutralises that).
+   Runs once per item (_shuf guard), stable across re-renders. */
+function shuffleInPlace(a){
+  for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i];a[i]=a[j];a[j]=t; }
+}
+function shuffleItemOnce(item){          // items with an `a` index + `o` options
+  if (!item || item._shuf || !item.o || typeof item.a !== 'number') { if(item) item._shuf=true; return; }
+  var correct = item.o[item.a];
+  shuffleInPlace(item.o);
+  item.a = item.o.indexOf(correct);
+  item._shuf = true;
+}
+function shuffleSimOnce(s){               // SIM rounds: correct is co2<0, position-free
+  if (!s || s._shuf || !s.o) { if(s) s._shuf=true; return; }
+  shuffleInPlace(s.o);
+  s._shuf = true;
+}
 
 var sessionBeans = 0, doneCount = 0, tier = null, calibPct = 0;
 var missStreak = 0, hitStreak = 0;
@@ -933,6 +958,7 @@ $('#reviewDone').addEventListener('click', function(){
 });
 
 /* ── 2. Calibration ── */
+CALIB.forEach(shuffleItemOnce);
 $('#calibBox').innerHTML = CALIB.map(function(item,i){
   return '<div class="q-block"><div class="q-stem">'+(i+1)+'. '+item.q+'</div><div class="opts">'
     + item.o.map(function(o,j){
@@ -1047,6 +1073,7 @@ function simStepRender(){
   var set = SIM[tier]; if(!set) return;
   if (simStep >= set.length) return simEnd();
   var s = set[simStep];
+  shuffleSimOnce(s);
   $('#simChoice').innerHTML = '<div class="q-stem">Year '+(simStep+1)+' — '+s.q+'</div><div class="sim-opts">'
     + s.o.map(function(o,i){ return '<button data-i="'+i+'">'+o.t+'</button>'; }).join('') + '</div>';
   $$('#simChoice button').forEach(function(b){
@@ -1088,6 +1115,7 @@ function traceRender(){
   var set = TRACE[tier]; if(!set) return;
   if (traceIdx >= set.length) return traceEnd();
   var t = set[traceIdx];
+  shuffleItemOnce(t);
   $('#traceBox').innerHTML =
       '<div class="q-stem">Case '+(traceIdx+1)+' of '+set.length+'</div>'
     + '<div class="trace-start">'+t.start+'</div>'
@@ -1140,9 +1168,12 @@ function traceEnd(){
 
 /* ── 6. Myth-buster ── */
 var mythIdx = 0, mythScore = 0;
-function buildMyth(){ expandSec('#secMyth'); mythIdx=0; mythScore=0; $('#secMyth').classList.remove('done'); mythRender(); }
+var mythDeck = [];
+function buildMyth(){ expandSec('#secMyth'); mythIdx=0; mythScore=0;
+  mythDeck = MYTH[tier].slice(); shuffleInPlace(mythDeck);   /* break the true/false rhythm */
+  $('#secMyth').classList.remove('done'); mythRender(); }
 function mythRender(){
-  var set = MYTH[tier]; if(!set) return;
+  var set = mythDeck; if(!set || !set.length) return;
   if (mythIdx >= set.length) return mythEnd();
   var m = set[mythIdx];
   $('#mythBox').innerHTML = '<div class="myth-card">'
@@ -1156,7 +1187,7 @@ function mythRender(){
   });
 }
 function mythPick(saidBust){
-  var m = MYTH[tier][mythIdx], ok = (saidBust === m.bust);
+  var m = mythDeck[mythIdx], ok = (saidBust === m.bust);
   if (ok) mythScore++;
   scoreHit(ok);
   $$('#mythBox .myth-btns button').forEach(function(b){ b.disabled = true; });
@@ -1165,7 +1196,7 @@ function mythPick(saidBust){
   coachCheck('#mythCoach');
   mythIdx++;
   continueBtn('#mythVerdict',
-    (mythIdx >= MYTH[tier].length ? 'See the result →' : 'Next claim →'),
+    (mythIdx >= mythDeck.length ? 'See the result →' : 'Next claim →'),
     mythRender);
 }
 function mythEnd(){
@@ -1202,6 +1233,7 @@ $('#streakStart').addEventListener('click', function(){
 function streakRender(){
   if (stkIdx >= stkOrder.length) stkIdx = 0;   /* loop the deck until time runs out */
   var s = stkOrder[stkIdx];
+  shuffleItemOnce(s);
   $('#streakBox').innerHTML = '<div class="streak-q">'+s.q+'</div><div class="streak-opts">'
     + s.o.map(function(o,i){ return '<button data-i="'+i+'">'+o+'</button>'; }).join('') + '</div>';
   $$('#streakBox button').forEach(function(b){

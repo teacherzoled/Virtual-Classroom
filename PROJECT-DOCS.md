@@ -22,6 +22,20 @@ If the docs are not updated, the task is **not** finished.
 
 ## ▶️ Take-off Point — Next Session (as of July 21, 2026)
 
+**Latest additions (July 21, 2026, end of session) — all in the engine, all inherited by future lessons:**
+- **One-card-at-a-time reveal + self-paced feedback** — fixed the mobile scroll-jump; every step is
+  a Next/continue tap, no navigation timers (only the streak's own clock).
+- **Answer-position + myth-claim SHUFFLE** — kills the "click one slot / learn the true-false rhythm"
+  exploit. `shuffleItemOnce`/`shuffleSimOnce`/`mythDeck`. Protects even the daily task's drafts.
+- **IDEAS #8 unlock guard is now ENGINE-level**, derived from `window.LESSON.week` — a rebuild can no
+  longer silently drop it (it did once; caught by review). Week 1 self-disables.
+- **🎓 Pedagogue reviewer** — `LESSON-PEDAGOGY-RUBRIC.md`, a 9-point teaching-quality check, now a
+  required STEP 6.5 in the daily task. It caught a real gameability bug on its first run.
+- **Weeks 1 & 2 lessons: pedagogy fixes applied** (weak distractors, off-scheme Gold, EAL idioms).
+  Both SHIP WITH FIXES → fixed. ⚠️ These 2 lessons + the docs are STAGED, awaiting Edwin's push.
+- **Open build queued: IDEAS #14** — only 4 of 7 mechanics are coded; build detective/chain/
+  field-mission (dedicated chat, full spec in IDEAS #14) to unlock real week-to-week variety.
+
 **Newest work (July 21, 2026): 🎮 ONLINE LESSON ENGINE + 🌱 SERVER-SIDE BEAN CAP — both LIVE.**
 
 - **`LESSON-ENGINE-PLAN.md` is the source of truth for every online lesson.** Read it before

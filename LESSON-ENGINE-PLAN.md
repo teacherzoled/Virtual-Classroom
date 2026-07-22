@@ -146,6 +146,24 @@ Maps to the E/M/H differentiation already used in the weekly schemes.
 
 ## 5. Mechanics bank (variation system)
 
+**⚠️ TWO CONTENT RULES enforced in the engine / required of every lesson (added July 21, 2026):**
+
+- **Answer positions are SHUFFLED at render.** `shuffleItemOnce()` / `shuffleSimOnce()` randomise
+  each question's options so the correct answer is never in a fixed slot. **Myth-buster shuffles
+  its CLAIM ORDER too** (`mythDeck` in `buildMyth`, July 21, 2026) — before this the true/false
+  sequence was fixed and a student could learn the rhythm (Week 2 alternated in all three tiers).
+  A 2-choice activity still has an inherent ~50% guess floor; keep each tier's bust/true split
+  uneven-but-mixed so "always click one button" is not a strong strategy. **Do not rely on this to
+  excuse lazy authoring, but it means a lesson can never be beaten by clicking one position** —
+  even the daily task's clustered answers are neutralised. Any NEW mechanic must call the shuffle
+  helper in its render (or determine correctness position-free, as the simulator does via `co2<0`).
+  Found July 21: Week 1 & 2 trace/sim had the correct answer in the SAME slot every question.
+- **Local context only where it carries meaning** (Edwin's rule, `Std5_Science_CycleN_Teacher_Notes.md`).
+  The whole site is in Belize, so **do NOT write "Belizean town / Belizean bird / Belizean people"**
+  — name Belize, a district, a species or a place ONLY when it is the actual subject, the outcome's
+  wording names it, or two places are being compared (e.g. Belize vs the world, Belize City vs New
+  York in Wk3). "A town" not "a Belizean town." A wheelbarrow is still a wheelbarrow.
+
 **Rule 1 — the concept picks the mechanic.** Each mechanic exercises a different kind of
 thinking; match it to the week's outcome. The activity must make the student DO the outcome.
 **Rule 2 — recent weeks veto repeats.** No mechanic combination repeats two weeks running.
