@@ -169,24 +169,38 @@ thinking; match it to the week's outcome. The activity must make the student DO 
 **Rule 2 — recent weeks veto repeats.** No mechanic combination repeats two weeks running.
 **Rule 3 — the bank grows.** Add mechanics mid-year; never let the rotation go stale.
 
-⚠️ **IMPLEMENTED vs DESIGNED (status July 21, 2026).** Only **4 of the 7 mechanics exist as engine
-code**: simulator, trace-it-back, myth-buster, beat-your-streak. Detective scene, chain-builder and
-field-mission are DESIGNS in the table below, not yet built. **Until they are coded, Rule 2 cannot
-be satisfied** — every lesson uses the same four activities (Weeks 1 and 2 both do). Students get
-**content** variation (different questions/scenarios) but not **format** variation. Building the
-remaining three mechanics into the engine as reusable blocks is the next real step toward the
-variation this design promises — until then, the daily task should vary content, not chase an
-impossible mechanic rotation.
+✅ **ALL 7 MECHANICS IMPLEMENTED — July 21, 2026 (IDEAS #14).** Rule 2 is now satisfiable: seven
+mechanics give 35 combinations of four, so no week need repeat the one before it. Detective scene,
+chain builder and data reader were built and verified in the same session.
 
-| # | Mechanic | Exercises | Example fit |
-|---|---|---|---|
-| 1 | **Consequence simulator** — run a town/system with a budget; meters respond to choices; replay for a better ending | Apply, analyze | Wk1: mayor chooses diesel vs solar; emissions meter |
-| 2 | **Trace-it-back chain** — click backwards from an innocent-looking thing to its hidden source | Analyze (hidden causes) | Wk1: electric fan → wire → power plant → what burns? (encodes the fan trap from the scheme) |
-| 3 | **Detective scene** — one illustrated Belizean scene; find the N hidden examples in it | Analyze dressed as a hunt | Wk1: six emission sources in a street scene |
-| 4 | **Myth-buster arena** — claims pop up; bust or confirm; reason revealed after each | Evaluate | Wk1: "All technology harms the climate" |
-| 5 | **Chain builder** — drag cause-effect tiles into a valid chain; beans for finding a second valid chain | Apply, structure | Any causal-loop week |
-| 6 | **Beat-your-streak recall** — 60-second quick-fire round; best streak saved locally; bean multiplier | Recall/retrieval | Vocabulary-heavy weeks; cheap to build weekly |
-| 7 | **Field mission** — off-screen task: find real examples in your street/home; report back | Transfer to community | Wk1: feeds the Session 3 T-chart, doesn't duplicate it |
+⚠️ **FIELD MISSION WAS WITHDRAWN, NOT BUILT — Edwin's decision, July 21, 2026.** An off-screen
+"find a real example on your street" task cannot auto-grade a free-text answer, so every bean rule
+available to it was either unearnable or gameable in one keystroke. **Data reader replaced it** as
+mechanic 7: it fills a genuine gap — no other mechanic exercises reading a chart, which the science
+outcomes repeatedly ask for — and it grades itself honestly. A transfer-to-community task still has
+value, but it belongs in the classroom session or on paper, outside the bean economy.
+
+📍 **The code lives in `/standard5/science/lessons/_mechanics-lab/index.html`** — a runnable lesson
+carrying all seven at once, unlinked from any hub, with beans stubbed. It is both the test bed and
+the copy-paste source, deliberately the same file. **Schemas and build instructions:
+`MECHANICS-BANK.md`.**
+
+🔑 **A week now picks its activities in ONE LINE** — `LESSON.mechanics:['detective','myth','data']`.
+The step chain, Next-button labels, progress total, tier rebuild, replay reset and activity
+numbering are all derived from that array. Hand-edited `nextButton()` wiring is gone, and with it
+the failure where swapping a mechanic stranded the student on a dead card. A section left in the
+HTML but not named removes itself at boot; a mechanic named but not pasted is skipped rather than
+fatal.
+
+| # | Key | Mechanic | Exercises | Example fit |
+|---|---|---|---|---|
+| 1 | `sim` | **Consequence simulator** — run a town/system with a budget; meters respond to choices; replay for a better ending | Apply, analyze | Wk1: mayor chooses diesel vs solar; emissions meter |
+| 2 | `trace` | **Trace-it-back chain** — click backwards from an innocent-looking thing to its hidden source | Analyze (hidden causes) | Wk1: electric fan → wire → power plant → what burns? (encodes the fan trap from the scheme) |
+| 3 | `detective` | **Detective scene** — tap every example hidden in one scene; wrong taps cost 🔍 charges | Analyze dressed as a hunt | Wk1: five emission sources among decoys; Gold flips the rule to "what SLOWS warming" |
+| 4 | `myth` | **Myth-buster arena** — claims pop up; bust or confirm; reason revealed after each | Evaluate | Wk1: "All technology harms the climate" |
+| 5 | `chain` | **Chain builder** — tap cause-effect tiles into a valid chain; bonus bean for a SECOND valid chain | Apply, structure | Any causal-loop week; the two-chain rounds teach that one cause has several endings |
+| 6 | `streak` | **Beat-your-streak recall** — 60-second quick-fire round; best streak saved locally; bean multiplier | Recall/retrieval | Vocabulary-heavy weeks; cheap to build weekly |
+| 7 | `data` | **Data reader** — a bar/line chart drawn from the week's numbers, then questions about it | Interpret evidence | Any week with figures: temperature by decade, CO₂ by transport, sea level; Gold is where "weather is not climate" reasoning belongs |
 
 **Week 1 (SC 1.09) proposed set:** Simulator + Trace-it-back + Myth-buster + Streak
 — hits apply, analyze, evaluate, recall. ⏳ Awaiting Edwin's confirmation.
@@ -194,6 +208,11 @@ impossible mechanic rotation.
 **For the scheduled Weeks 4–30 generator (IDEAS #11):** the task prompt instructs — "pick 3–4
 mechanics from the bank in LESSON-ENGINE-PLAN.md §5 to fit this week's scheme outcome; do not
 reuse the previous week's set." Variety becomes an instruction, not a hope.
+⏳ **The daily task prompt still needs updating** — it is pinned to the original four mechanics and
+copies Week 1. It should now copy the mechanic blocks it picked from `_mechanics-lab/index.html`,
+set `LESSON.mechanics`, and read the previous week's `LESSON.mechanics` to enforce Rule 2
+mechanically rather than by instruction. Until that edit lands, the daily builds keep producing
+four-mechanic lessons even though seven are available.
 The prompt must ALSO carry the §1 ⚠️ rule: **never delete a diagram, definition, or the Belize
 framing in the name of brevity** — otherwise one wrong reading of "brief" repeats 27 times.
 

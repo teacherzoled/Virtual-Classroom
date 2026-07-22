@@ -3,10 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Week 2 · Climate Change &amp; Belize's Economy — Mr. EdLo's Virtual Classroom</title>
+<title>Mechanics Lab · all 7 lesson mechanics — Mr. EdLo's Virtual Classroom</title>
+<meta name="robots" content="noindex,nofollow">
+<!-- ═══════════════════════════════════════════════════════════════════════
+     🔬 MECHANICS LAB — THE MECHANICS BANK (IDEAS #14)
+     This page is the SOURCE OF TRUTH for all 7 lesson mechanics.
+     It is a real, runnable lesson carrying every mechanic at once, so a
+     mechanic can be seen working before a week's lesson depends on it.
+     • NOT linked from any hub. Students never reach it.
+     • Beans are STUBBED (see LAB HARNESS below) — nothing is written to
+       the Sheet, so testing never pollutes a student's account.
+     • To build a week: copy the sections + DATA + functions for the 3–4
+       mechanics chosen, and set LESSON.mechanics to those keys. Every
+       mechanic section NOT named in LESSON.mechanics deletes itself at
+       boot, so a stray paste cannot leave a dead card on the page.
+     Schema for each mechanic's DATA object: MECHANICS-BANK.md
+     ═══════════════════════════════════════════════════════════════════ -->
 <link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
 <script src="/edlo-utils.js"></script>
+<!-- LAB-ONLY:BEGIN -->
+<script>
+/* ═══════════ LAB HARNESS — DELETE THIS BLOCK WHEN COPYING ═══════════
+   Stubs the bean save so testing a mechanic never writes a row to the
+   Sheet or burns a student's one-award-per-device lock. The shape of
+   the resolved object matches what the real vcSaveBeans returns, so
+   the cap and "granted" reconciliation in award() are still exercised
+   — the lab tests the real code path, only the network is faked. */
+window.vcSaveBeans = function (id, beans) {
+  return Promise.resolve({ ok: true, granted: beans, capped: false, lesson_cap: 30 });
+};
+</script>
+<!-- LAB-ONLY:END -->
 <style>
   /* Root font size drives EVERYTHING — 164 of the 168 sized values are rem,
      so raising this scales text, padding, cards and buttons together.
@@ -338,6 +366,21 @@
                 border:1.5px solid var(--accent); display:none; }
   .data-final.show { display:block; }
 
+  /* LAB-ONLY:BEGIN
+     Dev toolbar, NOT part of the engine. Stripped by tools/new-week-from-bank.py. */
+  .lab-bar { background:var(--card); border:1.5px dashed var(--accent); border-radius:16px;
+             padding:.95rem 1.1rem; margin-bottom:1.2rem; }
+  .lab-bar h3 { font-family:'Fredoka One',cursive; font-weight:400; font-size:1.02rem; }
+  .lab-bar p { font-size:.82rem; color:var(--muted); font-weight:700; margin-top:.3rem; }
+  .lab-row { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.65rem; align-items:center; }
+  .lab-row .lab-lbl { font-size:.72rem; font-weight:900; text-transform:uppercase;
+                      letter-spacing:.06em; color:var(--muted); margin-right:.2rem; }
+  .lab-row button { font-family:inherit; font-size:.78rem; font-weight:800; cursor:pointer;
+        padding:.4rem .75rem; border-radius:999px; border:1.5px solid var(--bd);
+        background:var(--btn); color:var(--fg); }
+  .lab-row button:hover { border-color:var(--bd-h); }
+  .lab-row button.active { border-color:var(--accent); color:var(--accent); }
+  /* LAB-ONLY:END */
 
   .earned-note { display:none; margin-top:.9rem; font-weight:800; font-size:.9rem; color:var(--accent); }
   .feedback-line { margin-top:.7rem; font-weight:800; font-size:.95rem; }
@@ -386,15 +429,15 @@
 
   <header class="lesson-head">
     <div class="chip-row">
-      <span class="chip">Standard 5 · Science</span>
-      <span class="chip">Week 2 · SC1.10</span>
+      <span class="chip">🔬 Mechanics Lab</span>
+      <span class="chip">All 7 mechanics</span>
       <span class="chip bean" id="beanPill">🌱 0 beans</span>
       <span class="chip" id="tierChip" style="display:none;"></span>
     </div>
-    <h1>Climate Change &amp; Belize's Economy</h1>
-    <p class="subtitle">Practice time! Cement what Mr. EdLo taught you this week.</p>
+    <h1>Mechanics Lab</h1>
+    <p class="subtitle">Every activity type in the bank, running on Week 1 sample data.</p>
     <p class="login-hint" id="loginHint">
-      <a href="/login/">Log in</a> to save your beans 🌱 to your account.
+      🧪 Test page — beans shown here are <b>not saved</b> to any account.
     </p>
   </header>
 
@@ -410,6 +453,20 @@
 
 <div class="wrapper">
 
+  <!-- LAB-ONLY:BEGIN -->
+  <div class="lab-bar">
+    <h3>🔬 Mechanics Lab</h3>
+    <p>Jump straight to any mechanic at any tier, without playing through the
+       calibration first. Beans are stubbed — nothing is saved to the Sheet.</p>
+    <div class="lab-row">
+      <span class="lab-lbl">Tier</span>
+      <button data-lab-tier="bronze">🥉 Bronze</button>
+      <button data-lab-tier="silver">🥈 Silver</button>
+      <button data-lab-tier="gold">🥇 Gold</button>
+    </div>
+    <div class="lab-row" id="labJump"><span class="lab-lbl">Jump to</span></div>
+  </div>
+  <!-- LAB-ONLY:END -->
 
   <!-- 1. BRIEF REVIEW -->
   <section class="sec" id="secReview">
@@ -637,8 +694,8 @@
    ⚠️ THE LAB RUNS ALL SEVEN. A real lesson names 3–4 (plan §5 Rule 1),
    and must not repeat last week's set (Rule 2). */
 window.LESSON = {
-  week:'Wk2', lo:'SC1.10', name:'Climate Change & Belize\'s Economy', idBase:'std5-sci-wk02',
-  mechanics:['detective','chain','data','myth']
+  week:'Wk1', lo:'SC1.09', name:'Technology & Climate Change', idBase:'std5-sci-wk01',
+  mechanics:['detective','chain','data','sim','trace','myth','streak']
 };
 
 var REVIEW = [
@@ -2036,6 +2093,38 @@ function finish(){
   }
   draw(); addEventListener('resize', draw);
 
+  /* LAB-ONLY:BEGIN — LAB TOOLBAR
+     Jump straight to any mechanic at any tier. Sets the tier the way
+     the real ladder does (setTierChip + buildAll), so a mechanic
+     reached from here behaves exactly as it would in a real run. */
+  var LAB_NAMES = { sim:'🏙️ Simulator', trace:'🔍 Trace-it-back', myth:'🕵️ Myth-buster',
+                    streak:'⚡ Streak', detective:'🕶️ Detective', chain:'🔗 Chain builder',
+                    data:'📊 Data reader' };
+  function labTier(t){
+    tier = t; setTierChip(t); missStreak = 0; hitStreak = 0;
+    $$('[data-lab-tier]').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-lab-tier') === t);
+    });
+    buildAll();
+  }
+  $$('[data-lab-tier]').forEach(function(b){
+    b.addEventListener('click', function(){ labTier(b.getAttribute('data-lab-tier')); });
+  });
+  mechList().forEach(function(k){
+    var b = document.createElement('button');
+    b.textContent = LAB_NAMES[k] || k;
+    b.addEventListener('click', function(){
+      if (!tier) labTier('bronze');                    /* a jump implies a tier */
+      var sec = $(MECHANICS[k].sec);
+      sec.classList.remove('step-hidden');
+      expandSec(MECHANICS[k].sec);
+      MECHANICS[k].build();
+      revealStep(MECHANICS[k].sec);
+    });
+    $('#labJump').appendChild(b);
+  });
+  labTier('bronze');
+  /* LAB-ONLY:END */
 })();
 </script>
 
