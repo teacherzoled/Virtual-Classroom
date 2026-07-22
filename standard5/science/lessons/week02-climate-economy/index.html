@@ -183,6 +183,13 @@
   .opts label.right .opt-mark { color:var(--right); }
   .opts label.wrong .opt-mark { color:var(--wrong); }
 
+  /* Calibration — unanswered-question marker.
+     Outline + a ⚠️ glyph in the message, never colour alone (rubric R5). */
+  .q-block.unanswered { box-shadow:inset 0 0 0 2px var(--accent); background:var(--accent-soft);
+                        border-radius:12px; padding:.7rem; }
+  .calib-progress { margin-top:.7rem; font-size:.86rem; font-weight:800; color:var(--muted); }
+  .calib-progress.warn { color:var(--fg); }
+
   /* Tier offer */
   .tier-grid { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:1rem; }
   .tier-card { flex:1 1 280px; border-radius:16px; padding:1rem; text-align:center;
@@ -414,51 +421,89 @@
   <!-- 1. BRIEF REVIEW -->
   <section class="sec" id="secReview">
     <span class="sec-tag">Quick Review</span>
-    <h2>🔁 Remember the Two-Way Loop</h2>
+    <h2>&#9939; Cause-and-Effect Chains</h2>
     <p>One minute to refresh. Then the practice begins.</p>
-    <p class="concept-p"><strong>Technology</strong> means the tools and machines people make to do work.
-       <strong>Climate change</strong> means a long-term shift in the average weather.</p>
-    <p class="concept-p">Here is the loop Mr. EdLo drew on the board:</p>
+    <p class="concept-p">The <strong>economy</strong> is the way a country earns and spends. Belize's two biggest earning sectors are <strong>tourism</strong> &mdash; visitors who come for the reef, the cayes and the rainforest &mdash; and <strong>agriculture</strong> &mdash; sugar in the north, citrus in the south, corn and beans countrywide. Climate change threatens BOTH.</p>
+    <p class="concept-p">A <strong>cause-and-effect chain</strong> is one event triggering the next, so a change in the sea can end as a change in a family's income. Mr. EdLo drew two of them:</p>
 
     <div class="fig-box">
-<svg viewBox="0 0 640 300" role="img" aria-label="Two-way loop between technology and the climate">
+      <svg viewBox="0 0 640 350" role="img" aria-label="Two cause and effect chains. Tourism chain: warmer sea, then coral bleaches, then fewer visitors book a trip, then hotels and guides earn less. Agriculture chain: rain at the wrong time, then the harvest fails, then there is less to sell, then the family earns less.">
+        <style>
+          .vcFigT { font-family:Nunito,sans-serif; font-weight:800; fill:var(--fg); }
+          .vcFigM { font-family:Nunito,sans-serif; fill:var(--muted); }
+          .vcFigH { font-family:Nunito,sans-serif; font-weight:800; fill:var(--accent); }
+          .vcFigE { font-family:Nunito,sans-serif; }
+          .vcFigBg { fill:var(--card); stroke:var(--bd); stroke-width:2; }
+          .vcBoxSea { fill:var(--accent-soft); stroke:#4DABF7; stroke-width:2.5; }
+          .vcBoxLand { fill:var(--accent-soft); stroke:#FFA94D; stroke-width:2.5; }
+        </style>
         <defs>
-          <marker id="arrA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-            <path d="M0,0 L10,5 L0,10 z" fill="#e8590c"/>
+          <marker id="vcArrSea" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="#4DABF7"/>
           </marker>
-          <marker id="arrB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-            <path d="M0,0 L10,5 L0,10 z" fill="#0CA678"/>
+          <marker id="vcArrLand" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="#FFA94D"/>
           </marker>
         </defs>
-        <rect x="0" y="0" width="640" height="300" rx="16" fill="#10254a"/>
-        <rect x="30" y="105" width="180" height="90" rx="14" fill="#1d3b74" stroke="#4DABF7" stroke-width="2.5"/>
-        <text x="120" y="143" text-anchor="middle" font-family="Nunito, sans-serif" font-size="19" font-weight="800" fill="#ffffff">⚙️ TECHNOLOGY</text>
-        <text x="120" y="170" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" fill="#bcd3f5">tools &amp; machines</text>
-        <rect x="430" y="105" width="180" height="90" rx="14" fill="#5c3a10" stroke="#FFD43B" stroke-width="2.5"/>
-        <text x="520" y="143" text-anchor="middle" font-family="Nunito, sans-serif" font-size="19" font-weight="800" fill="#ffffff">🌡️ WARMER</text>
-        <text x="520" y="168" text-anchor="middle" font-family="Nunito, sans-serif" font-size="19" font-weight="800" fill="#ffffff">PLANET</text>
-        <path d="M 215 118 C 300 62, 360 62, 425 118" fill="none" stroke="#e8590c" stroke-width="4" marker-end="url(#arrA)"/>
-        <text x="320" y="36" text-anchor="middle" font-family="Nunito, sans-serif" font-size="13.5" font-weight="800" fill="#ffb38a">Some technology RELEASES greenhouse gases</text>
-        <text x="320" y="56" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12" fill="#ffb38a">vehicles · factories · refrigeration</text>
-        <path d="M 425 185 C 360 238, 300 238, 215 185" fill="none" stroke="#0CA678" stroke-width="4" marker-end="url(#arrB)"/>
-        <text x="320" y="255" text-anchor="middle" font-family="Nunito, sans-serif" font-size="13.5" font-weight="800" fill="#7fe0c3">Other technology SLOWS the warming</text>
-        <text x="320" y="275" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12" fill="#7fe0c3">solar panels · electric buses · efficient stoves</text>
+        <rect class="vcFigBg" x="1" y="1" width="638" height="348" rx="16"/>
+        <text class="vcFigH" x="320" y="28" text-anchor="middle" font-size="15">ONE CAUSE, TWO CHAINS, TWO FAMILIES</text>
+
+        <text class="vcFigT" x="15" y="58" font-size="13">TOURISM chain</text>
+        <rect class="vcBoxSea" x="15"  y="68" width="124" height="78" rx="12"/>
+        <rect class="vcBoxSea" x="173" y="68" width="124" height="78" rx="12"/>
+        <rect class="vcBoxSea" x="331" y="68" width="124" height="78" rx="12"/>
+        <rect class="vcBoxSea" x="489" y="68" width="124" height="78" rx="12"/>
+        <text class="vcFigE" x="77"  y="99" text-anchor="middle" font-size="22">&#127754;</text>
+        <text class="vcFigE" x="235" y="99" text-anchor="middle" font-size="22">&#129720;</text>
+        <text class="vcFigE" x="393" y="99" text-anchor="middle" font-size="22">&#129439;</text>
+        <text class="vcFigE" x="551" y="99" text-anchor="middle" font-size="22">&#128176;</text>
+        <text class="vcFigT" x="77"  y="126" text-anchor="middle" font-size="12.5">Warmer sea</text>
+        <text class="vcFigT" x="235" y="126" text-anchor="middle" font-size="12.5">Coral bleaches</text>
+        <text class="vcFigT" x="393" y="126" text-anchor="middle" font-size="12.5">Fewer visitors</text>
+        <text class="vcFigT" x="393" y="140" text-anchor="middle" font-size="12.5">book a trip</text>
+        <text class="vcFigT" x="551" y="126" text-anchor="middle" font-size="12.5">Hotels &amp; guides</text>
+        <text class="vcFigT" x="551" y="140" text-anchor="middle" font-size="12.5">earn less</text>
+        <path d="M 143 107 L 167 107" fill="none" stroke="#4DABF7" stroke-width="4" marker-end="url(#vcArrSea)"/>
+        <path d="M 301 107 L 325 107" fill="none" stroke="#4DABF7" stroke-width="4" marker-end="url(#vcArrSea)"/>
+        <path d="M 459 107 L 483 107" fill="none" stroke="#4DABF7" stroke-width="4" marker-end="url(#vcArrSea)"/>
+
+        <text class="vcFigT" x="15" y="196" font-size="13">AGRICULTURE chain</text>
+        <rect class="vcBoxLand" x="15"  y="206" width="124" height="78" rx="12"/>
+        <rect class="vcBoxLand" x="173" y="206" width="124" height="78" rx="12"/>
+        <rect class="vcBoxLand" x="331" y="206" width="124" height="78" rx="12"/>
+        <rect class="vcBoxLand" x="489" y="206" width="124" height="78" rx="12"/>
+        <text class="vcFigE" x="77"  y="237" text-anchor="middle" font-size="22">&#127783;</text>
+        <text class="vcFigE" x="235" y="237" text-anchor="middle" font-size="22">&#127805;</text>
+        <text class="vcFigE" x="393" y="237" text-anchor="middle" font-size="22">&#128230;</text>
+        <text class="vcFigE" x="551" y="237" text-anchor="middle" font-size="22">&#128176;</text>
+        <text class="vcFigT" x="77"  y="264" text-anchor="middle" font-size="12.5">Rain at the</text>
+        <text class="vcFigT" x="77"  y="278" text-anchor="middle" font-size="12.5">wrong time</text>
+        <text class="vcFigT" x="235" y="264" text-anchor="middle" font-size="12.5">Harvest fails</text>
+        <text class="vcFigT" x="393" y="264" text-anchor="middle" font-size="12.5">Less to sell</text>
+        <text class="vcFigT" x="551" y="264" text-anchor="middle" font-size="12.5">The family</text>
+        <text class="vcFigT" x="551" y="278" text-anchor="middle" font-size="12.5">earns less</text>
+        <path d="M 143 245 L 167 245" fill="none" stroke="#FFA94D" stroke-width="4" marker-end="url(#vcArrLand)"/>
+        <path d="M 301 245 L 325 245" fill="none" stroke="#FFA94D" stroke-width="4" marker-end="url(#vcArrLand)"/>
+        <path d="M 459 245 L 483 245" fill="none" stroke="#FFA94D" stroke-width="4" marker-end="url(#vcArrLand)"/>
+
+        <text class="vcFigM" x="320" y="322" text-anchor="middle" font-size="12.5">Every link CAUSES the next one. Never stop at the first link &mdash;</text>
+        <text class="vcFigM" x="320" y="338" text-anchor="middle" font-size="12.5">keep asking: "And then what happens? And who does that affect?"</text>
       </svg>
-      <p class="fig-cap">The two-way climate loop — technology sits on BOTH sides.</p>
+      <p class="fig-cap">Two chains, both ending at a family's income &mdash; tourism above, agriculture below.</p>
     </div>
 
-    <p class="concept-p">🔥 <strong>One way:</strong> a diesel generator burns fuel and <strong>adds greenhouse gases</strong> — gases (mainly CO₂) that trap heat in the atmosphere like a blanket.</p>
-    <p class="concept-p">💧 <strong>The other way:</strong> the hydro dams on the <strong>Macal River</strong> make electricity <strong>without burning any fuel</strong> at all.</p>
-    <p class="hint">Belize releases very little greenhouse gas compared to the world — but our low coastline, coral reef, and hurricane season mean we feel climate change strongly. That is why this lesson matters here at home.</p>
+    <p class="concept-p">&#127958;&#65039; <strong>Tourism:</strong> warmer seas cause <strong>coral bleaching</strong> &mdash; the coral turns white and dies. Snorkellers come to see living reef, so bookings fall and hotels and guides earn less. Stronger hurricanes damage hotels and cancel flights, emptying the rooms for a whole season.</p>
+    <p class="concept-p">&#127806; <strong>Agriculture:</strong> <strong>drought and flood</strong> both destroy a harvest &mdash; sugar in the north, citrus in Stann Creek, corn and beans everywhere. Hurricanes Eta and Iota flooded farms across the country within two weeks of each other in 2020.</p>
+    <p class="hint">Climate change here is <strong>not only "hotter days."</strong> The bigger threats are stronger hurricanes, coral bleaching, and rain that no longer comes when it is expected. Picture two real people &mdash; a hotel owner in San Pedro and a citrus farmer in Stann Creek. One bad season reaches BOTH of their pockets, by different chains.</p>
 
     <div class="loop-box">
-      <div class="loop-arrow warm">🔥 Technology that BURNS fuel → greenhouse gases → traps heat → the planet warms</div>
-      <div class="loop-arrow cool">🌿 Technology that AVOIDS burning → fewer emissions → warming slows down</div>
-      <p class="hint">Technology is not automatically good or bad. It depends on whether it burns fossil fuels or replaces them.</p>
+      <div class="loop-arrow warm">&#127958;&#65039; TOURISM: warmer sea &rarr; coral bleaches &rarr; fewer snorkellers book &rarr; hotels and guides earn less</div>
+      <div class="loop-arrow cool">&#127806; AGRICULTURE: drought or flood &rarr; the harvest fails &rarr; less to sell &rarr; the farming family earns less</div>
+      <p class="hint">The chain does not even stop at the family. Less food reaching the market raises prices for everyone &mdash; including families who grow nothing at all.</p>
     </div>
 
     <div class="review-grid" id="reviewGrid"></div>
-    <button class="btn" id="reviewDone">I'm ready — start practising →</button>
+    <button class="btn" id="reviewDone">I'm ready &mdash; start practising &rarr;</button>
   </section>
 
   <!-- 2. CALIBRATION -->
@@ -468,7 +513,8 @@
     <h2>🎯 Five Quick Questions</h2>
     <p>This is not a test — it finds the right challenge level for you today. Answer all five.</p>
     <div id="calibBox"></div>
-    <button class="btn" id="calibCheck" disabled>Check my level</button>
+    <button class="btn" id="calibCheck">Check my level</button>
+    <div class="calib-progress" id="calibProgress"></div>
     <div class="feedback-line" id="calibFeedback"></div>
     <div class="earned-note"></div>
   </section>
@@ -490,8 +536,8 @@
   <section class="sec step-hidden" id="secDetect">
     <span class="done-badge">✓ done</span>
     <span class="sec-tag">Activity · Investigate</span>
-    <h2>🕶️ Detective Scene</h2>
-    <p id="detPrompt">Look carefully and tap what belongs — but watch your magnifier charges.</p>
+    <h2>🕶️ Follow the Money</h2>
+    <p id="detPrompt">Which of these really reaches a family’s income? Tap carefully — a wrong tap costs a 🔍 charge.</p>
     <div class="det-hud">
       <div><b>Found</b><span id="detFound">0</span></div>
       <div><b>To find</b><span id="detTarget">0</span></div>
@@ -513,8 +559,8 @@
   <section class="sec step-hidden" id="secChain">
     <span class="done-badge">✓ done</span>
     <span class="sec-tag">Activity · Build</span>
-    <h2>🔗 Chain Builder</h2>
-    <p id="chainPrompt">Put the links in an order that actually works — cause first.</p>
+    <h2>🔗 Build the Chain</h2>
+    <p id="chainPrompt">Cause first, then link by link, all the way to the family. Some rounds have more than one correct chain.</p>
     <div class="chain-strip" id="chainStrip"></div>
     <div class="chain-pool" id="chainPool"></div>
     <div class="btn-row">
@@ -537,7 +583,7 @@
     <span class="done-badge">✓ done</span>
     <span class="sec-tag">Activity · Read the data</span>
     <h2>📊 What Does the Chart Say?</h2>
-    <p>Scientists read the graph before they draw a conclusion. Your turn.</p>
+    <p>Read the graph before you draw a conclusion — that is what a scientist does. Your turn.</p>
     <div id="dataBox"></div>
     <div class="coach-box" id="dataCoach"></div>
     <div class="earned-note"></div>
@@ -578,7 +624,7 @@
     <span class="done-badge">✓ done</span>
     <span class="sec-tag">Activity 3 · Judge</span>
     <h2>🕵️ Myth-Buster Arena</h2>
-    <p>People say these things about technology and climate. Which ones survive?</p>
+    <p>People say these things about climate change and the way families earn a living. Which ones survive?</p>
     <div id="mythBox"></div>
     <div class="coach-box" id="mythCoach"></div>
     <div class="earned-note"></div>
@@ -642,385 +688,237 @@ window.LESSON = {
 };
 
 var REVIEW = [
-  { t:'Technology',      d:'Tools and machines people make to do work. A machete is technology too — not only electronics.' },
-  { t:'Climate change',  d:'A long-term shift in average weather. Today’s rain is weather; Belize getting hotter over thirty years is climate.' },
-  { t:'Greenhouse gas',  d:'A gas, mainly carbon dioxide, that traps heat in the air around the Earth.' },
-  { t:'Emission',        d:'The release of a gas into the air by an engine, a factory, or a fire.' },
-  { t:'Renewable energy',d:'Energy from sources that are not used up — sun, wind, and falling water.' },
-  { t:'Two-way relationship', d:'Some technology adds to warming. Other technology slows it down.' }
+  { t:'Economy',        d:'The way a country earns and spends. Belize earns most from tourism and agriculture.' },
+  { t:'Tourism',        d:'Visitors travelling to Belize, mostly for the reef, the cayes and the rainforest.' },
+  { t:'Agriculture',    d:'Farming. Sugar in the north, citrus in the south, corn and beans countrywide.' },
+  { t:'Coral bleaching',d:'Coral turning white and dying because the sea stayed too warm. Bleached does not mean cleaned.' },
+  { t:'Drought and flood', d:'Too little rain and too much rain. Both destroy a harvest.' },
+  { t:'Cause-and-effect chain', d:'One event triggering the next, so a change in the sea ends as a change in a family’s income.' }
 ];
 
 var CALIB = [
-  { q:'Which one is technology?', o:['A machete','A rain cloud','A jaguar','A mountain'], a:0 },
-  { q:'Belize has been getting hotter on average over thirty years. Is that weather or climate?',
-    o:['Weather','Climate','Neither','Both are the same'], a:1 },
-  { q:'Which technology releases the MOST greenhouse gas?',
-    o:['A solar panel','A bicycle','A diesel generator','A wheelbarrow'], a:2 },
-  { q:'Why do we say technology has a TWO-WAY relationship with climate change?',
-    o:['Because you can turn it on or off','Because some technology warms the planet and some slows the warming',
-       'Because old technology harms and new technology always helps','Because its harm and its help cancel out to zero'], a:1 },
-  { q:'A chainsaw harms the climate in two ways. What are they?',
-    o:['It burns fuel, and it removes trees that absorb carbon dioxide',
-       'It burns fuel — that is the only harm','It burns fuel, and it is expensive',
-       'It cuts trees, but trees have nothing to do with the climate'], a:0 }
+  { q:'Which TWO sectors earn the most money for Belize?',
+    o:['Tourism and agriculture','Mining and international shipping','Banking and construction work','Logging and fishing'], a:0 },
+  { q:'What is coral bleaching?',
+    o:['Coral turns white and dies when the sea stays too warm',
+       'Coral changes colour for a season and then returns to normal on its own',
+       'Coral is scrubbed clean by strong waves after a storm',
+       'Coral is buried under sand and stops growing'], a:0 },
+  { q:'A hotel owner in San Pedro earns less after the reef bleaches. Which chain explains it BEST?',
+    o:['Warmer sea → coral bleaches → fewer snorkellers book → the hotel earns less',
+       'Warmer sea → the hotel earns less',
+       'Coral bleaches → the sea gets warmer → fewer fish arrive → the hotel earns less',
+       'Fewer snorkellers book → coral bleaches → warmer sea → the hotel earns less'], a:0 },
+  { q:'A student says "climate change just means hotter days." Why is that not enough for Belize?',
+    o:['It also brings stronger hurricanes, coral bleaching, and rain at the wrong time',
+       'Because Belize is already a hot country, so a few extra degrees would change nothing at all',
+       'Because heat affects farms but never affects hotels',
+       'Because the sea stays exactly the same temperature all year round'], a:0 },
+  { q:'Two weeks of flooding hit Stann Creek. Which effect comes FIRST in the chain?',
+    o:['The citrus harvest is damaged','The farming family earns less money',
+       'Food prices rise in the shops','The farmer plants a different crop next year'], a:0 }
 ];
 
-var SIM = {
-  bronze:[
-    { q:'The town bus is old and smoky. What do you do?',
-      o:[{t:'Keep the old diesel bus — it is cheap',co2:2,money:0,fb:'Cheap today, but the diesel keeps releasing greenhouse gases.'},
-         {t:'Buy an electric bus',co2:-2,money:-30,fb:'Costly, but it stops burning fuel every day. Good for the air.'}] },
-    { q:'The clinic needs electricity at night.',
-      o:[{t:'Run a diesel generator',co2:2,money:-10,fb:'It works — but burning diesel adds greenhouse gases.'},
-         {t:'Install solar panels with a battery',co2:-2,money:-25,fb:'The sun is not used up. Fewer emissions for years.'}] },
-    { q:'Families are cooking on open wood fires.',
-      o:[{t:'Leave it as it is',co2:1,money:0,fb:'Open fires burn wood and release gases into the air.'},
-         {t:'Give out efficient stoves',co2:-2,money:-20,fb:'Efficient stoves burn far less wood for the same meal.'}] },
-    { q:'The town wants more light on the main street.',
-      o:[{t:'Old bulbs on the diesel grid',co2:2,money:-5,fb:'More electricity from burning fuel means more emissions.'},
-         {t:'Solar street lamps',co2:-1,money:-18,fb:'Each lamp makes its own power from the sun.'}] },
-    { q:'A logging company wants to cut the forest by the river.',
-      o:[{t:'Say yes — the town earns money',co2:3,money:30,fb:'Money now, but trees absorb carbon dioxide. Fewer trees, more warming.'},
-         {t:'Say no and protect the trees',co2:-2,money:0,fb:'The trees keep absorbing carbon dioxide for the town.'}] }
-  ],
-  silver:[
-    { q:'You can afford ONE big project this year. The town has a smoky bus AND a diesel clinic generator.',
-      o:[{t:'Replace the bus — it runs all day',co2:-2,money:-30,fb:'Good reasoning: the bus burns fuel for many hours daily.'},
-         {t:'Replace the generator — it runs at night only',co2:-1,money:-30,fb:'It helps, but the bus burns more fuel over a day.'},
-         {t:'Spend nothing this year',co2:2,money:0,fb:'Saving money, but both keep releasing gases.'}] },
-    { q:'A company offers free electric fans for every home. The town grid runs on diesel.',
-      o:[{t:'Accept — fans are clean technology',co2:2,money:0,fb:'Careful! The fan burns nothing, but its electricity comes from diesel.'},
-         {t:'Accept, and switch the grid to solar first',co2:-2,money:-25,fb:'Excellent. Clean devices need clean electricity behind them.'},
-         {t:'Refuse the fans completely',co2:0,money:0,fb:'Fans are not the problem — where the electricity comes from is.'}] },
-    { q:'Two villages need power. One sits near the Macal River; one is far from any river.',
-      o:[{t:'Hydro for the river village, solar for the far one',co2:-3,money:-30,fb:'Both use renewable sources that suit the place. Strong choice.'},
-         {t:'Diesel generators for both — simplest',co2:3,money:-15,fb:'Simple, but both villages now burn fuel every day.'},
-         {t:'Hydro for both villages',co2:-1,money:-35,fb:'The far village has no river — the plan cannot work there.'}] },
-    { q:'Tourists arrive by cruise ship. The town could buy tour vans or rent out bicycles.',
-      o:[{t:'Diesel tour vans — more comfort',co2:3,money:25,fb:'More visitors served, but every trip burns fuel.'},
-         {t:'Bicycle rentals — the town is flat',co2:-1,money:15,fb:'Bicycles are technology too, and they burn nothing.'},
-         {t:'A few electric vans',co2:0,money:-10,fb:'Better than diesel, but the electricity source still matters.'}] },
-    { q:'End of year. You have $40 left, and the dry season is getting hotter each year.',
-      o:[{t:'Plant and protect trees along the river',co2:-3,money:-15,fb:'Trees absorb carbon dioxide. A slow but real answer.'},
-         {t:'Buy more air conditioners for the school',co2:2,money:-35,fb:'Cooler classrooms today, more electricity burned every day after.'},
-         {t:'Keep the money for next year',co2:0,money:0,fb:'Safe, but the problem does not wait.'}] }
-  ],
-  gold:[
-    { q:'You have $100 and four years. Every choice stays for years — it cannot be undone. A neighbouring town got rich on logging. Your first move?',
-      o:[{t:'Copy them — log the forest, buy solar later',co2:3,money:35,fb:'The forest takes decades to grow back. You lose its carbon absorption long before the solar arrives.'},
-         {t:'Protect the forest and start with one solar project',co2:-2,money:-25,fb:'You keep the trees absorbing carbon dioxide AND begin replacing burnt fuel. Both arrows of the loop.'},
-         {t:'Do nothing in year one and study the problem',co2:1,money:0,fb:'Studying is wise, but the diesel keeps running while you decide.'}] },
-    { q:'The grid is diesel. A donor offers EITHER 500 electric fans OR one solar farm — not both.',
-      o:[{t:'The 500 fans — more families helped now',co2:3,money:0,fb:'The trap: 500 fans on a diesel grid means 500 more reasons to burn diesel.'},
-         {t:'The solar farm — it changes where ALL the power comes from',co2:-3,money:0,fb:'Exactly. Change the source and every device in town gets cleaner.'},
-         {t:'The fans, then ask a second donor for solar',co2:1,money:0,fb:'Risky. Emissions rise now for a solar farm that may never come.'}] },
-    { q:'A factory will bring 200 jobs but burns fuel all day. Refusing keeps the air clean but the town poor.',
-      o:[{t:'Accept it with no conditions',co2:3,money:30,fb:'Jobs now, but nothing limits the emissions for years ahead.'},
-         {t:'Accept only if it runs on solar and hydro power',co2:-2,money:20,fb:'Strong. You take the jobs and require technology that avoids burning.'},
-         {t:'Refuse completely',co2:0,money:-10,fb:'The air stays clean, but you gave up a chance to shape the technology.'}] },
-    { q:'Halfway. Greenhouse gases fell, but the town is short of money. Cut the solar programme?',
-      o:[{t:'Yes — sell the panels back',co2:3,money:25,fb:'The money returns, and so do the emissions. The gains reverse.'},
-         {t:'No — charge a small fee for the solar power instead',co2:-1,money:15,fb:'Clever. The technology keeps working and pays its own way.'},
-         {t:'No — borrow more money',co2:-1,money:-20,fb:'The panels stay, but the debt grows heavy.'}] },
-    { q:'Final year. Tell the newspaper what made the real difference.',
-      o:[{t:'We stopped using technology',co2:2,money:0,fb:'Not true — bicycles, solar panels and efficient stoves are all technology.'},
-         {t:'We replaced technology that burns fuel with technology that does not',co2:-3,money:0,fb:'That is the whole outcome in one sentence. Both arrows of the loop.'},
-         {t:'We planted trees and changed nothing else',co2:0,money:0,fb:'Trees help, but the fuel-burning technology was still running.'}] }
-  ]
-};
-
-var TRACE = {
-  bronze:[
-    { start:'🌀 An electric fan', q:'The fan burns nothing. So is it clean?',
-      chain:['The fan runs on electricity','The electricity comes through a wire','The wire comes from the power station'],
-      final:'If the power station BURNS DIESEL, the fan adds greenhouse gases too — just not in your room.',
-      o:['Yes, completely clean','It depends where the electricity comes from','No, fans are always dirty'], a:1 },
-    { start:'🚌 A diesel bus', q:'Where do the greenhouse gases come from?',
-      chain:['The engine burns diesel fuel','Burning releases carbon dioxide','Carbon dioxide traps heat'],
-      final:'The bus burns fuel directly, so the emissions come straight out of the exhaust pipe.',
-      o:['From the tyres','From burning the fuel in the engine','From the passengers'], a:1 },
-    { start:'💡 A solar street lamp', q:'What does this lamp burn?',
-      chain:['The panel collects sunlight','Sunlight charges a battery','The battery lights the lamp at night'],
-      final:'Nothing is burned. Sunlight is renewable — it is not used up.',
-      o:['Diesel','Wood','Nothing at all'], a:2 },
-    { start:'🪚 A chainsaw', q:'A chainsaw harms the climate TWICE. What is the second harm?',
-      chain:['The chainsaw burns fuel — that is harm one','It cuts down trees','Trees absorb carbon dioxide'],
-      final:'Fewer trees means less carbon dioxide absorbed. That is the second harm.',
-      o:['It is very loud','It removes trees that absorb carbon dioxide','It needs sharpening'], a:1 },
-    { start:'🍳 A gas stove', q:'Follow the flame. What is happening?',
-      chain:['The stove burns gas','Burning releases carbon dioxide','The gas came from under the ground'],
-      final:'Fossil fuel comes out of the ground and its carbon ends up in the air.',
-      o:['Gas is renewable','Burning gas releases greenhouse gases','The stove makes its own gas'], a:1 }
-  ],
-  silver:[
-    { start:'🌀 An electric fan on a DIESEL grid', q:'Is this fan helping or harming the climate?',
-      chain:['The fan itself burns nothing','But its electricity comes from a diesel generator','More fans means the generator runs harder'],
-      final:'A clean-looking device on a dirty grid still causes emissions. Always ask where the electricity comes from.',
-      o:['Helping — it burns nothing','Harming — the diesel behind it burns more','It has no effect at all'], a:1 },
-    { start:'🌀 The SAME fan on a SOLAR grid', q:'Now is the fan helping or harming?',
-      chain:['The fan still burns nothing','Its electricity now comes from sunlight','No fuel is burned anywhere in the chain'],
-      final:'The same device changed from harmful to harmless — because the SOURCE changed, not the fan.',
-      o:['Still harming','Now harmless — nothing in the chain burns fuel','Fans cannot run on solar'], a:1 },
-    { start:'🔋 An electric car charged from a diesel generator', q:'Where are the emissions?',
-      chain:['The car has no exhaust pipe','The charging point draws from the generator','The generator burns diesel'],
-      final:'The emissions did not disappear — they moved from the car to the generator.',
-      o:['There are none','They moved to the generator','Only in the battery'], a:1 },
-    { start:'🏭 A factory that calls itself “green”', q:'What must you check before you believe it?',
-      chain:['The building burns no fuel itself','But its machines need electricity','That electricity must come from somewhere'],
-      final:'“Green” means nothing until you follow the energy back to its source.',
-      o:['The colour of the building','Where its electricity is made','How many workers it has'], a:1 },
-    { start:'🌳 A forest cleared for a solar farm', q:'Is this a clear win for the climate?',
-      chain:['Solar panels burn no fuel — that is good','But the trees that were cut absorbed carbon dioxide','The loss of trees works against the gain'],
-      final:'Both arrows matter. The best solar farms go where trees do not have to be lost.',
-      o:['Yes, solar is always a win','Not simple — the lost trees worked against it','No, solar is useless'], a:1 }
-  ],
-  gold:[
-    { start:'🌀 A fan on a grid that is HALF solar, HALF diesel', q:'How do you judge this fan?',
-      chain:['The fan burns nothing itself','Half its electricity is clean, half is burned','Adding fans increases demand on BOTH halves'],
-      final:'Partly clean is not clean. Every extra device pulls on the diesel half too, until the whole source is replaced.',
-      o:['Completely clean','Partly harmful — extra demand still pulls on the diesel half','Completely harmful'], a:1 },
-    { start:'🚌 An electric bus paid for by logging the forest', q:'Did the town help the climate?',
-      chain:['The bus stops burning diesel daily — a real gain','The forest that was cut absorbed carbon dioxide for decades','A new forest takes decades to replace what was lost'],
-      final:'Both arrows moved at once, in opposite directions. Gaining on one while losing on the other is not automatic progress.',
-      o:['Yes — electric is always better','Not clearly — the lost forest works against the gain','No — electric buses do not help'], a:1 },
-    { start:'☀️ A town with solar panels that still runs a diesel generator at night', q:'Is this town free of greenhouse gases?',
-      chain:['The panels make clean power in the daytime','At night there is no sun','So at night the town burns diesel again'],
-      final:'Solar cuts emissions by day, but a town is only truly clean when it stops burning fuel at ALL times.',
-      o:['Yes, it uses solar','No — it still burns diesel at night','Only when it rains'], a:1 },
-    { start:'🔌 “Zero-emission” written on a machine', q:'What does that label actually promise?',
-      chain:['The machine releases nothing where it stands','But its electricity is made somewhere else','If that somewhere burns fuel, the gases are still released'],
-      final:'A "zero-emission" label covers one spot only. Follow the wire to where the electricity is made.',
-      o:['No emissions anywhere, ever','No emissions at that spot only','It is always a lie'], a:1 },
-    { start:'🇧🇿 Belize uses Macal River hydro AND imported diesel', q:'A new factory doubles electricity demand. What happens?',
-      chain:['The hydro dams already run at their limit','Extra demand must come from somewhere','The only source left to increase is diesel'],
-      final:'When the clean source is already full, ALL new demand is met by burning. Growing demand matters as much as the source.',
-      o:['The hydro simply makes more','The extra comes from burning diesel','Emissions stay the same'], a:1 }
-  ]
-};
-
-var MYTH = {
-  bronze:[
-    { c:'All technology is bad for the environment.', bust:true,
-      why:'BUSTED. Solar panels, bicycles and efficient stoves are technology too — and they help.' },
-    { c:'Burning diesel releases greenhouse gases.', bust:false,
-      why:'TRUE. Burning fossil fuel releases carbon dioxide, which traps heat.' },
-    { c:'Today’s rainstorm proves the climate is changing.', bust:true,
-      why:'BUSTED. One day of rain is weather. Climate is the average over many years.' },
-    { c:'Sunlight and wind are not used up when we use them.', bust:false,
-      why:'TRUE. That is exactly what renewable means.' },
-    { c:'A bicycle is not technology because it has no engine.', bust:true,
-      why:'BUSTED. Technology is any tool or machine people make to do work — engine or not.' }
-  ],
-  silver:[
-    { c:'An electric fan is always clean, wherever you use it.', bust:true,
-      why:'BUSTED. If the electricity is made by burning diesel, the fan causes emissions too.' },
-    { c:'A chainsaw harms the climate in two different ways.', bust:false,
-      why:'TRUE. It burns fuel, AND it removes trees that absorb carbon dioxide.' },
-    { c:'Planting trees can help slow climate change.', bust:false,
-      why:'TRUE. Trees absorb carbon dioxide from the air as they grow.' },
-    { c:'If a machine has no exhaust pipe, it produces no emissions at all.', bust:true,
-      why:'BUSTED. The emissions may happen where its electricity is made instead.' },
-    { c:'Hydro power from the Macal River makes electricity without burning fuel.', bust:false,
-      why:'TRUE. Falling water turns the machines — nothing is burned.' }
-  ],
-  gold:[
-    { c:'A town that switches to electric buses has definitely reduced its emissions.', bust:true,
-      why:'BUSTED. Only if the electricity is not made by burning fuel. Follow the chain first.' },
-    { c:'Technology cannot solve climate change, because technology caused it.', bust:true,
-      why:'BUSTED. One word covers both arrows. Technology that burns caused harm; technology that replaces burning reduces it.' },
-    { c:'Planting and protecting trees can work against the warming that burning fuel causes.', bust:false,
-      why:'TRUE. Trees absorb carbon dioxide as they grow — the other arrow of the loop, slowing the warming.' },
-    { c:'A solar farm built on cleared forest may not be a clear climate gain.', bust:false,
-      why:'TRUE. The panels avoid burning, but the lost trees no longer absorb carbon dioxide.' },
-    { c:'“Zero-emission” on a label means no greenhouse gases were released anywhere.', bust:true,
-      why:'BUSTED. It usually means none at that spot. Making the electricity may still have burned fuel.' }
-  ]
-};
-
-var STREAK = {
-  bronze:[
-    { q:'Solar panel — warms or slows?', o:['Warms','Slows'], a:1 },
-    { q:'Diesel generator — warms or slows?', o:['Warms','Slows'], a:0 },
-    { q:'Bicycle — warms or slows?', o:['Warms','Slows'], a:1 },
-    { q:'Gas stove — warms or slows?', o:['Warms','Slows'], a:0 },
-    { q:'Efficient wood stove — warms or slows?', o:['Warms','Slows'], a:1 },
-    { q:'Chainsaw — warms or slows?', o:['Warms','Slows'], a:0 },
-    { q:'Macal River hydro dam — warms or slows?', o:['Warms','Slows'], a:1 },
-    { q:'Old smoky bus — warms or slows?', o:['Warms','Slows'], a:0 }
-  ],
-  silver:[
-    { q:'Rain today in Belize City — weather or climate?', o:['Weather','Climate'], a:0 },
-    { q:'Belize hotter on average since 1990 — weather or climate?', o:['Weather','Climate'], a:1 },
-    { q:'Carbon dioxide — greenhouse gas or not?', o:['Greenhouse gas','Not'], a:0 },
-    { q:'Sunlight — renewable or used up?', o:['Renewable','Used up'], a:0 },
-    { q:'Diesel — renewable or used up?', o:['Renewable','Used up'], a:1 },
-    { q:'A machete — technology or not?', o:['Technology','Not'], a:0 },
-    { q:'Fan on a diesel grid — emissions or none?', o:['Emissions','None'], a:0 },
-    { q:'Fan on a solar grid — emissions or none?', o:['Emissions','None'], a:1 }
-  ],
-  gold:[
-    { q:'Electric bus charged by diesel — real cut or moved?', o:['Real cut','Moved'], a:1 },
-    { q:'Solar farm on cleared forest — clear gain or mixed?', o:['Clear gain','Mixed'], a:1 },
-    { q:'Per-person emissions fall, population doubles — total falls?', o:['Yes','Not always'], a:1 },
-    { q:'“Zero-emission” label — whole chain or one spot?', o:['Whole chain','One spot'], a:1 },
-    { q:'Hydro already full, demand rises — met by?', o:['More hydro','Burning fuel'], a:1 },
-    { q:'Technology caused warming — can it also help?', o:['No, never','Yes, the other arrow'], a:1 },
-    { q:'Trees cut for a road — affects absorption?', o:['Yes','No'], a:0 },
-    { q:'Efficient stove vs open fire — less burning?', o:['Yes','No'], a:0 }
-  ]
-};
-
 /* ═══════════ DETECTIVE SCENE DATA ═══════════
-   items[] — `hit:true` is a target, `hit:false` is a decoy.
-   `why` shows on tap, for BOTH hits and decoys: a decoy the student
-   tapped is a misconception caught in the act, so it gets a reason too.
-   Targets are counted from the data — never hard-code the number.
-   ⚠️ Gold FLIPS the rule (find what SLOWS warming). Re-reading the
-   prompt is part of the difficulty. */
+   Bronze = tourism income, Silver = farm income, Gold FLIPS the rule to
+   "what PROTECTS income". Targets counted from the data; charges =
+   ceil(targets/2) = 3, and every tier carries 4 decoys, so tapping
+   everything loses. Decoys carry a `why` too — a tapped decoy is a
+   misconception caught in the act. */
 var DETECT = {
   bronze: {
-    prompt:'Tap the <b>5 things in this street that put carbon dioxide into the air</b>.',
+    prompt:'Tap the <b>5 things that would make a hotel owner in San Pedro earn LESS</b>.',
     items:[
-      { e:'🚌', label:'Bus engine',    hit:true,  why:'Diesel burns in the engine; carbon dioxide comes out of the exhaust pipe.' },
-      { e:'🔥', label:'Rubbish fire',  hit:true,  why:'Burning anything releases carbon dioxide — rubbish included.' },
-      { e:'🏭', label:'Factory chimney',hit:true, why:'The chimney is there to let burned gases out. That plume is the emission.' },
-      { e:'🛵', label:'Motorbike',     hit:true,  why:'A small engine still burns petrol.' },
-      { e:'⛽', label:'Fuel generator',hit:true,  why:'A generator makes electricity by burning fuel.' },
-      { e:'🚲', label:'Bicycle',       hit:false, why:'Powered by legs. Nothing burns, nothing is released.' },
-      { e:'🌳', label:'Mango tree',    hit:false, why:'The opposite — a tree takes carbon dioxide IN.' },
-      { e:'☀️', label:'Solar panel',   hit:false, why:'Sunlight is turned into electricity. Nothing is burned.' },
-      { e:'🚶', label:'Person walking',hit:false, why:'Walking releases nothing that changes the climate.' }
+      { e:'🪸', label:'Bleached reef',      hit:true,  why:'Snorkellers pay to see living, colourful coral. White dead coral is not worth the trip.' },
+      { e:'🌀', label:'Hurricane damage',   hit:true,  why:'Rooms cannot be rented while the roof is being repaired.' },
+      { e:'✈️', label:'Flights cancelled',  hit:true,  why:'Guests who cannot arrive cannot pay for a room.' },
+      { e:'🐟', label:'Fewer reef fish',    hit:true,  why:'Guides sell diving and fishing trips. Fewer fish means fewer bookings.' },
+      { e:'🏖️', label:'Beach washed away', hit:true, why:'A storm surge can strip the sand. A hotel with no beach loses the thing visitors came for.' },
+      { e:'☀️', label:'A bright dry-season week', hit:false, why:'Good weather brings MORE visitors. This raises the income, it does not cut it.' },
+      { e:'🚤', label:'New boat tour to the cayes', hit:false, why:'A new attraction gives guests another reason to book and stay longer.' },
+      { e:'🌳', label:'Mangroves growing back', hit:false, why:'Mangroves break the force of a storm surge, so they protect the hotel rather than harm it.' },
+      { e:'🌡️', label:'One afternoon 1°C hotter', hit:false, why:'One warm afternoon is weather, and guests still swim. This is the "climate change is only hotter days" trap.' }
     ]
   },
   silver: {
-    prompt:'Harder. Tap the <b>5 things that add carbon dioxide to the air</b> — even if the burning happens somewhere else.',
+    prompt:'Harder. Tap the <b>5 things that would make a citrus farmer in Stann Creek earn LESS</b> — follow each one all the way to the money.',
     items:[
-      { e:'🔌', label:'Electric fan',  hit:true,  why:'Nothing burns in the room — but follow the wire. The power station burned fuel to run it.' },
-      { e:'🧊', label:'Fridge',        hit:true,  why:'Same wire, same power station. A fridge runs day and night.' },
-      { e:'🚗', label:'Car',           hit:true,  why:'Petrol burns in the engine.' },
-      { e:'🏗️', label:'Cement works',  hit:true,  why:'Making cement needs enormous heat, and releases carbon dioxide from the rock itself.' },
-      { e:'✈️', label:'Aeroplane',     hit:true,  why:'A plane burns fuel high in the air, where it does the most harm.' },
-      { e:'💧', label:'Hydro turbine', hit:false, why:'Falling water spins the turbine. Nothing burns — this is renewable.' },
-      { e:'🔦', label:'Solar lamp',    hit:false, why:'Charged by the sun during the day.' },
-      { e:'💨', label:'Sea breeze',    hit:false, why:'Moving air is weather, not an emission.' },
-      { e:'🚲', label:'Bicycle',       hit:false, why:'Still legs. Still nothing burned.' }
+      { e:'🌊', label:'Flood water sits on the orchard', hit:true, why:'Roots left under water for days rot, so the trees give far less fruit.' },
+      { e:'☀️', label:'Drought in the growing season', hit:true, why:'Without rain the fruit stays small, and small fruit sells for less.' },
+      { e:'🌀', label:'Hurricane strips the trees', hit:true, why:'The crop is on the ground before it can be picked or sold.' },
+      { e:'🛣️', label:'Road to the packing plant washed out', hit:true, why:'Fruit that cannot reach the buyer earns nothing — even when the harvest was good.' },
+      { e:'🐛', label:'Pests now survive all year', hit:true, why:'Warmer weather means pests no longer die back, so they spoil fruit season after season.' },
+      { e:'🌧️', label:'Steady rain in the growing season', hit:false, why:'This is exactly what the trees need. Rain at the RIGHT time builds the harvest.' },
+      { e:'🌱', label:'A citrus variety that copes with heat', hit:false, why:'This helps the farmer cope with a warmer season. It protects income rather than cutting it.' },
+      { e:'🌤️', label:'One hot afternoon in April', hit:false, why:'One hot afternoon is weather. Climate change is the long-term pattern, not a single day.' },
+      { e:'🐝', label:'More bees in the orchard', hit:false, why:'Bees pollinate the flowers, so more fruit sets. The harvest goes up.' }
     ]
   },
   gold: {
-    prompt:'⚠️ The rule is <b>reversed</b>. Tap the <b>5 technologies that SLOW climate change</b>.',
+    prompt:'⚠️ The rule is <b>reversed</b>. Tap the <b>5 actions that would PROTECT a family’s income</b> from climate change.',
     items:[
-      { e:'☀️', label:'Solar panel',   hit:true,  why:'Makes electricity with no burning at all.' },
-      { e:'💨', label:'Wind turbine',  hit:true,  why:'Wind spins the blades. No fuel, no emission.' },
-      { e:'🔋', label:'Electric bus',  hit:true,  why:'Slows warming when its charge comes from solar or hydro — the source is what matters.' },
-      { e:'💡', label:'LED lighting',  hit:true,  why:'Same light for far less electricity, so less fuel is burned to supply it.' },
-      { e:'🌊', label:'Hydro dam',     hit:true,  why:'Falling water, not fuel.' },
-      { e:'⛽', label:'Diesel generator',hit:false,why:'Burns fuel every minute it runs — this ADDS to warming.' },
-      { e:'🛢️', label:'Oil furnace',   hit:false, why:'Burning oil for heat is exactly the problem.' },
-      { e:'🔥', label:'Charcoal stove',hit:false, why:'Charcoal is burned, so carbon dioxide is released.' },
-      { e:'🚗', label:'Petrol car',    hit:false, why:'Adds to warming — it does not slow it.' }
+      { e:'🌳', label:'Plant mangroves along the shore', hit:true, why:'Mangroves break the force of a storm surge, so less damage reaches the hotel and the road behind it.' },
+      { e:'🏦', label:'Save part of a good season’s earnings', hit:true, why:'Money set aside carries the family through the season a hurricane ruins.' },
+      { e:'🌾', label:'Grow two different crops, not one', hit:true, why:'If drought ruins one crop the other may survive. The income no longer rests on a single plant.' },
+      { e:'🏨', label:'Build the roof to a stronger storm standard', hit:true, why:'A roof that survives the storm reopens in days instead of months.' },
+      { e:'📻', label:'Follow the forecast and harvest early', hit:true, why:'Fruit picked before the storm arrives can still be sold.' },
+      { e:'🪓', label:'Clear the mangroves for a better sea view', hit:false, why:'The view improves, but the shore loses its storm protection. This RAISES the risk.' },
+      { e:'🍊', label:'Plant only the crop that paid best last year', hit:false, why:'All the income now rests on one plant. One bad season takes everything.' },
+      { e:'🌡️', label:'Wait and see if the climate really changes', hit:false, why:'Waiting is not protection. The damage arrives whether or not the family prepared for it.' },
+      { e:'🏗️', label:'Build new rooms closer to the water line', hit:false, why:'Closer to the sea means more exposed to surge and flooding, not less.' }
     ]
   }
 };
 
 /* ═══════════ CHAIN BUILDER DATA ═══════════
-   `tiles` is the pool the student picks from (all valid links + decoys).
-   `valid` holds EVERY acceptable chain — more than one order can be
-   right, and finding a second pays a bonus bean. Chain length is taken
-   from valid[0].length, so every chain in one round must be the same
-   length. Tile strings must match the pool EXACTLY. */
+   The heart of SC 1.10 — objective 2 asks for a chain of at least three
+   links from a climate event to a loss of income. Rounds with TWO valid
+   chains carry the outcome's real lesson: one cause, several livelihoods.
+   Every chain within a round is the same length; strings match the pool
+   exactly; each round carries one obviously irrelevant decoy tile. */
 var CHAIN = {
   bronze: [
-    { prompt:'How does driving a car change the air? Build the chain, cause first.',
-      tiles:['🚗 Petrol burns in the engine','💨 Carbon dioxide goes into the air',
-             '🌡️ The air traps more heat','🌏 Average temperature rises','🌧️ It rained yesterday'],
-      valid:[['🚗 Petrol burns in the engine','💨 Carbon dioxide goes into the air',
-              '🌡️ The air traps more heat','🌏 Average temperature rises']],
-      why:'Burning comes first, the gas second, the trapped heat third, the warmer world last. Yesterday’s rain is weather — it belongs to no part of this chain.' },
-    { prompt:'How does a solar panel help? Build the chain.',
-      tiles:['☀️ Sunlight hits the panel','🔌 Electricity is made without burning',
-             '⛽ Less fuel is burned in the power station','💨 Less carbon dioxide reaches the air',
-             '🌙 The moon was full'],
-      valid:[['☀️ Sunlight hits the panel','🔌 Electricity is made without burning',
-              '⛽ Less fuel is burned in the power station','💨 Less carbon dioxide reaches the air']],
-      why:'A solar panel does not remove gas from the air — it prevents gas being added. That is why "less fuel burned" sits in the middle of the chain.' }
+    { prompt:'A warmer sea reaches a hotel owner’s pocket. Build the chain, cause first.',
+      tiles:['🌊 The sea gets warmer','🪸 The coral bleaches',
+             '🤿 Fewer snorkellers book a trip','🏨 The hotel earns less',
+             '⚽ There was a football match on Saturday'],
+      valid:[['🌊 The sea gets warmer','🪸 The coral bleaches',
+              '🤿 Fewer snorkellers book a trip','🏨 The hotel earns less']],
+      why:'The sea first, the coral second, the visitors third, the money last. Saturday’s football match belongs to no chain — it is just something that happened.' },
+    { prompt:'Now the farming side. Build the chain, cause first.',
+      tiles:['🌧️ The rain does not come when it should','🌽 The harvest is small',
+             '📦 There is less to sell at the market','👨‍🌾 The farming family earns less',
+             '📺 A new film opened in town'],
+      valid:[['🌧️ The rain does not come when it should','🌽 The harvest is small',
+              '📦 There is less to sell at the market','👨‍🌾 The farming family earns less']],
+      why:'Notice the chain does not stop at the small harvest. Keep asking "and who does that affect?" — the last link is always a person.' }
   ],
   silver: [
-    { prompt:'Warmer seas reach the whole town. Build ONE chain that works — then look for a second one.',
-      tiles:['🌊 The sea gets warmer','🪸 Coral bleaches','🐟 Fewer fish live on the reef',
-             '🎣 Fishers earn less','🤿 Fewer snorkellers book a trip','🏨 The hotel earns less',
+    { prompt:'One warming sea, two different livelihoods. Build ONE chain that works — then look for a second.',
+      tiles:['🌊 The sea gets warmer','🪸 The coral bleaches',
+             '🐟 Fewer fish live on the reef','🎣 Fishers catch and sell less',
+             '🤿 Fewer snorkellers book a trip','🏨 The hotel owner earns less',
              '📻 The radio played music'],
-      valid:[['🌊 The sea gets warmer','🪸 Coral bleaches','🐟 Fewer fish live on the reef','🎣 Fishers earn less'],
-             ['🌊 The sea gets warmer','🪸 Coral bleaches','🤿 Fewer snorkellers book a trip','🏨 The hotel earns less']],
-      why:'One warming sea, two different livelihoods hurt. Both chains are correct — that is the point: a climate change never damages only one thing.' },
-    { prompt:'Cutting the forest changes the air too. Build the chain.',
-      tiles:['🪓 Trees are cut down','🌳 Fewer trees are left to take in carbon dioxide',
-             '💨 More carbon dioxide stays in the air','🌡️ More heat is trapped','🎵 A bird sang'],
-      valid:[['🪓 Trees are cut down','🌳 Fewer trees are left to take in carbon dioxide',
-              '💨 More carbon dioxide stays in the air','🌡️ More heat is trapped']],
-      why:'Nothing was burned here, yet the air still changed — because the thing that REMOVED the gas was taken away.' }
+      valid:[['🌊 The sea gets warmer','🪸 The coral bleaches',
+              '🐟 Fewer fish live on the reef','🎣 Fishers catch and sell less'],
+             ['🌊 The sea gets warmer','🪸 The coral bleaches',
+              '🤿 Fewer snorkellers book a trip','🏨 The hotel owner earns less']],
+      why:'Both chains are correct. One warm sea reaches a fisher AND a hotel owner by different routes — a climate change never damages only one thing.' },
+    { prompt:'A hard hurricane season hits San Pedro. Build the chain to the wages.',
+      tiles:['🌀 A stronger hurricane season arrives','🏨 Hotel roofs and docks are damaged',
+             '✈️ Visitors cancel their trips for the season','💵 Hotel workers lose wages',
+             '🐦 A bird flew over the caye'],
+      valid:[['🌀 A stronger hurricane season arrives','🏨 Hotel roofs and docks are damaged',
+              '✈️ Visitors cancel their trips for the season','💵 Hotel workers lose wages']],
+      why:'The chain does not end at the broken roof. Damage becomes cancelled bookings, and cancelled bookings become lost wages for the people who work there.' }
   ],
   gold: [
-    { prompt:'Five links. Follow it all the way from the factory to the coastline.',
-      tiles:['🏭 Factories burn coal','💨 Greenhouse gases build up','🌡️ Global temperature rises',
-             '🧊 Ice sheets melt','🌊 Sea level rises','📱 A phone rang'],
-      valid:[['🏭 Factories burn coal','💨 Greenhouse gases build up','🌡️ Global temperature rises',
-              '🧊 Ice sheets melt','🌊 Sea level rises']],
-      why:'Each link causes the next. Skip one and the story stops making sense — that is how you check a chain is real and not just a list.' },
-    { prompt:'Two very different endings, one cause. Build ONE chain — a second one also works.',
-      tiles:['🌡️ The air keeps warming','🌀 Storms carry more energy',
-             '🏠 Roofs are damaged more often','🌾 Dry spells last longer','🌽 Harvests get smaller',
-             '⚽ The match was on Saturday'],
-      valid:[['🌡️ The air keeps warming','🌀 Storms carry more energy','🏠 Roofs are damaged more often'],
-             ['🌡️ The air keeps warming','🌾 Dry spells last longer','🌽 Harvests get smaller']],
-      why:'Warming does not have one single result. Wetter and drier can both come from the same cause, which is why "it rained a lot, so there is no warming" is faulty reasoning.' }
+    { prompt:'Five links. Follow one bad season from the sky all the way to a shop shelf.',
+      tiles:['🌀 Two hurricanes flood the farms','🌽 The corn and citrus harvest is destroyed',
+             '📦 Less food reaches the market','💲 Food prices rise in the shops',
+             '🏠 Families pay more for the same meal','📱 A phone rang in the shop'],
+      valid:[['🌀 Two hurricanes flood the farms','🌽 The corn and citrus harvest is destroyed',
+              '📦 Less food reaches the market','💲 Food prices rise in the shops',
+              '🏠 Families pay more for the same meal']],
+      why:'Climate change does not stop at the farm gate. It arrives at the table of a family that never planted a seed — which is why this outcome is about the whole economy, not only farmers.' },
+    { prompt:'One hurricane season, two families. Build ONE chain — a second one also works.',
+      tiles:['🌀 A stronger hurricane season arrives','🍊 The citrus trees lose their fruit',
+             '👨‍🌾 The farming family earns less','🏨 The hotel is damaged and closes',
+             '🛎️ The hotel worker loses her wages','🎺 A band played in the square'],
+      valid:[['🌀 A stronger hurricane season arrives','🍊 The citrus trees lose their fruit',
+              '👨‍🌾 The farming family earns less'],
+             ['🌀 A stronger hurricane season arrives','🏨 The hotel is damaged and closes',
+              '🛎️ The hotel worker loses her wages']],
+      why:'The same storm reaches a farming family and a hotel worker by two separate chains. That is the Session 2 question — and it is why "which sector is hit harder?" needs local facts, not one national answer.' }
   ]
 };
 
 /* ═══════════ DATA READER DATA ═══════════
-   The chart is DRAWN from `labels` + `values` — never an image file.
-   type:'bar' for comparing separate things, 'line' for change over time.
-   `unit` labels the axis. Options are shuffled by the engine, so `a`
-   is the index in the array AS AUTHORED. */
+   ⚠️ FIGURES ARE ILLUSTRATIVE, from ONE named farm / ONE hotel — they are
+   teaching numbers, not national statistics, and the titles say so.
+   Ladder: read a value → compare and subtract → judge a claim. */
 var DATAR = {
   bronze: [
-    { title:'Average temperature, Belize City', unit:'°C', type:'line',
-      labels:['1990','2000','2010','2020'], values:[26.1,26.5,27.0,27.6],
-      q:'Which year on this graph was the warmest?',
-      o:['1990','2000','2010','2020'], a:3,
-      why:'The line climbs the whole way across, so the last point — 2020 — sits highest.' },
-    { title:'Carbon dioxide released per journey', unit:'kg', type:'bar',
-      labels:['Walk','Bicycle','Bus','Car'], values:[0,0,3,9],
-      q:'Which way of travelling released the most carbon dioxide?',
-      o:['Car','Walk','Bicycle','Bus'], a:0,
-      why:'The car’s bar is the tallest at 9 kg — three times the bus, which carries far more people.' }
+    { title:'Citrus harvest on one Stann Creek farm', unit:'boxes', type:'bar',
+      labels:['2016','2017','2018','2019'], values:[640,580,710,390],
+      q:'In which year did this farm harvest the FEWEST boxes?',
+      o:['2016','2017','2018','2019'], a:3,
+      why:'The 2019 bar is the shortest, at 390 boxes — a little over half of 2018. A harvest that size leaves the family far less to sell.' },
+    { title:'Guests each month at one San Pedro hotel', unit:'guests', type:'line',
+      labels:['Jan','Mar','May','Jul'], values:[310,295,240,120],
+      q:'What does this line show about the number of guests?',
+      o:['It is falling from January to July','It is rising all through the year',
+         'It stays about the same each month','It fell at first and then rose again'], a:0,
+      why:'Every point sits lower than the one before, from 310 down to 120. Fewer guests each month means less income for everyone who works there.' }
   ],
   silver: [
-    { title:'Sea level measured at the coast', unit:'cm', type:'line',
-      labels:['1980','1990','2000','2010','2020'], values:[0,3,7,12,19],
-      q:'What does this graph show about sea level?',
-      o:['It is rising, and rising faster over time','It is falling steadily',
-         'It stays the same every year','It rose then fell back'], a:0,
-      why:'Every point is higher than the one before, and the steps between them get bigger — 3 cm, then 4, then 5, then 7. Rising, and speeding up.' },
-    { title:'Electricity made without burning fuel', unit:'%', type:'bar',
-      labels:['2015','2017','2019','2021'], values:[22,29,38,46],
-      q:'By how much did this grow between 2015 and 2021?',
-      o:['46 percentage points','8 percentage points','24 percentage points',
-         'It fell by 24 percentage points'], a:2,
-      why:'46 minus 22 is 24. Read both bars, then subtract — do not guess from how tall they look.' }
+    { title:'Citrus harvest on one Stann Creek farm', unit:'boxes', type:'bar',
+      labels:['2016','2017','2018','2019'], values:[640,580,710,390],
+      q:'How many FEWER boxes were harvested in 2019 than in 2018?',
+      o:['320 boxes','390 boxes','710 boxes','250 boxes'], a:0,
+      why:'710 − 390 = 320. Read both bars and subtract. 390 is the 2019 total on its own, and 710 is the 2018 total — neither one is the difference.' },
+    { title:'Growing-season rain on that same farm', unit:'mm', type:'bar',
+      labels:['2016','2017','2018','2019'], values:[1150,980,1210,410],
+      q:'The trees need about 900 mm in the growing season. In how many of these years did the farm get LESS than 900 mm?',
+      o:['One year','Two years','Three years','None of them'], a:0,
+      why:'Only 2019, at 410 mm, sits below 900. 2017 came close at 980 mm but still cleared it — which is why the 2019 harvest collapsed and the 2017 one did not.' }
   ],
   gold: [
-    { title:'Yearly rainfall in one district', unit:'mm', type:'line',
-      labels:['2016','2017','2018','2019','2020','2021'], values:[1900,2400,1600,2600,1500,2700],
-      q:'A student says "rainfall is jumping about, so the climate cannot be changing." What is wrong with that?',
-      o:['One district’s year-to-year weather cannot settle a question about long-term climate',
-         'The graph is drawn wrongly','Rainfall has nothing to do with climate',
-         'Nothing — the student is correct'], a:0,
-      why:'The jumps ARE real — that is weather. Climate is the long-run average across many years and many places. This graph is too short and too local to answer the question either way.' },
-    { title:'Carbon dioxide in the air, worldwide', unit:'ppm', type:'line',
-      labels:['1960','1980','2000','2020'], values:[317,339,369,414],
-      q:'Between which two points did the amount grow the MOST?',
-      o:['1960 to 1980','2000 to 2020','1980 to 2000','It grew the same each time'], a:1,
-      why:'414 − 369 = 45, against 22 and 30 for the earlier gaps. The steepest part of the line is the most recent — the rise is accelerating.' }
+    { title:'Yearly rainfall at one Stann Creek farm', unit:'mm', type:'line',
+      labels:['2014','2015','2016','2017','2018','2019'], values:[1980,1420,1900,1650,2050,1120],
+      q:'A visitor says: "The rain jumps up and down every year, so climate change cannot be real here." What is wrong with that?',
+      o:['Six years on one farm is weather, not long-term climate',
+         'The graph must be drawn wrongly, because rain cannot change that much in one year',
+         'Rainfall is not connected to the climate in any way',
+         'Nothing is wrong — the visitor has read the graph and reached the right conclusion'], a:0,
+      why:'The jumps are real, and they are weather. Climate is the pattern across many years and many places, so six years on one farm cannot settle the question either way — yet the farmer still has to survive every one of those dry years.' },
+    { title:'Income after one bad hurricane season, as a share of a normal year', unit:'% of normal', type:'bar',
+      labels:['Hotel work','Citrus farm'], values:[45,70],
+      q:'Which claim does this chart actually support?',
+      o:['Hotel work lost a bigger share of its normal income than the citrus farm',
+         'The citrus farm was not affected at all, because farms are safe from hurricanes',
+         'Hotel work earned more money that season than the citrus farm did',
+         'Both were hurt by exactly the same amount'], a:0,
+      why:'Hotel work fell to 45% of normal — a loss of 55%. The farm fell to 70% — a loss of 30%. Both were hurt, but not equally. And the chart shows SHARES of a normal year, not amounts of money, so it cannot tell you which one earned more.' }
+  ]
+};
+
+var MYTH = {
+  bronze:[
+    { c:'Tourism and agriculture are Belize’s two biggest earning sectors.', bust:false,
+      why:'TRUE. Visitors come for the reef, the cayes and the rainforest; the farms grow sugar in the north and citrus in the south. Both depend on steady weather.' },
+    { c:'Climate change only means that the days are hotter.', bust:true,
+      why:'BUSTED. The bigger threats here are stronger hurricanes, coral bleaching, and rain that no longer comes when it should.' },
+    { c:'Coral bleaching means the coral has been cleaned.', bust:true,
+      why:'BUSTED. Bleached coral has turned white because it is dying — the sea stayed too warm for too long.' },
+    { c:'A bad hurricane season can cost a hotel owner money even when the hotel is not damaged.', bust:false,
+      why:'TRUE. Cancelled flights and worried visitors empty the rooms whether or not the roof was hit.' },
+    { c:'Only farmers lose money when the weather changes.', bust:true,
+      why:'BUSTED. Hotel owners, guides, boat captains and shopkeepers all lose income too. The chain reaches the whole economy.' }
+  ],
+  silver:[
+    { c:'More rain is always better for a farm.', bust:true,
+      why:'BUSTED. Flood water sitting on the roots rots them. Drought AND flood both destroy a harvest — the amount matters, and so does the timing.' },
+    { c:'A warmer sea can cost a fisher money as well as a hotel owner.', bust:false,
+      why:'TRUE. Bleached coral loses the fish that live in it, so the fisher catches less. One cause, two different chains.' },
+    { c:'Food can cost more in the shops after a flood, even for a family that grows nothing.', bust:false,
+      why:'TRUE. Less food reaching the market pushes prices up, so the chain reaches people who never planted a seed.' },
+    { c:'Once the harvest is ruined, the chain of effects has finished.', bust:true,
+      why:'BUSTED. Keep asking "and who does that affect?" — less to sell, less earned, less to spend, and higher prices for everybody. Never stop at the first link.' },
+    { c:'Growing two different crops can protect a farming family from one bad season.', bust:false,
+      why:'TRUE. If drought ruins one crop the other may survive, so the income does not all rest on a single plant.' }
+  ],
+  gold:[
+    { c:'A hotel rebuilt to a stronger storm standard has removed its climate risk completely.', bust:true,
+      why:'BUSTED. A stronger roof shortens the closure, but a bleached reef and cancelled flights still empty the rooms. Protecting ONE link does not protect the whole chain.' },
+    { c:'Because Belize releases very little greenhouse gas, it will feel little of the damage.', bust:true,
+      why:'BUSTED. The damage does not land where the gas was released. A low coastline, a coral reef and a hurricane season mean this country feels it strongly.' },
+    { c:'A wetter year and a drier year can both be signs of the same warming.', bust:false,
+      why:'TRUE. Warming loads storms with more water AND lengthens dry spells. That is why "it rained a lot this year, so there is no warming" is faulty reasoning.' },
+    { c:'Deciding which sector is more at risk needs local facts, not one answer for the whole country.', bust:false,
+      why:'TRUE. A family in San Pedro and a family in Stann Creek face different chains, which is exactly why Session 3 asked about YOUR district.' },
+    { c:'A record harvest this year proves the climate is not changing.', bust:true,
+      why:'BUSTED. One good year is weather. Climate is the pattern across many years, and one strong harvest does not remove the risk of the next bad one.' }
   ]
 };
 
@@ -1218,14 +1116,27 @@ function award(actKey, earned, maxPossible, sec){
     note.style.display='block';
     note.textContent = '🌱 +'+capped+' beans (lesson cap of '+LESSON_CAP+' reached — keep playing for practice!)';
   }
-  vcSaveBeans(id, capped, maxPossible, {
-    subject:'Science', lo_code:LESSON.lo,
-    /* Groups every activity of this lesson so the BACKEND can enforce the
-       30-bean cap. The client cap above is only for instant feedback —
-       clearing the browser defeats it; the server is the real limit. */
-    lesson_key: LESSON.idBase,
-    activity_name: LESSON.week+' '+actKey+(tier?' ('+TIERS[tier].label+')':'')
-  }).then(function(res){
+  /* ⚠️ A MISSING /edlo-utils.js MUST NEVER STRAND THE STUDENT.
+     If the shared script did not load, `vcSaveBeans` is undefined and
+     calling it throws — and because award() runs midway through the
+     calibration click handler, that one throw used to kill markDone,
+     progressTick, offerTier AND the "See my level" button after it.
+     The result: a scored quiz, a progress bar stuck on 1 of 6, and no
+     way forward — with nothing on screen a ten-year-old could act on.
+     Found July 21, 2026 (the preview panel cannot resolve the absolute
+     path; a dropped request or a stale cache would do the same live).
+     Beans failing to save is a bad day. A frozen lesson is a lost one. */
+  var saving = (typeof vcSaveBeans === 'function')
+    ? vcSaveBeans(id, capped, maxPossible, {
+        subject:'Science', lo_code:LESSON.lo,
+        /* Groups every activity of this lesson so the BACKEND can enforce the
+           30-bean cap. The client cap above is only for instant feedback —
+           clearing the browser defeats it; the server is the real limit. */
+        lesson_key: LESSON.idBase,
+        activity_name: LESSON.week+' '+actKey+(tier?' ('+TIERS[tier].label+')':'')
+      })
+    : Promise.resolve(null);
+  saving.catch(function(){ return null; }).then(function(res){
     note.style.display='block';
     if (res && res.ok) {
       /* Trust the server: it may have trimmed the award to fit the cap. */
@@ -1304,22 +1215,60 @@ $('#reviewDone').addEventListener('click', function(){
 /* ── 2. Calibration ── */
 CALIB.forEach(shuffleItemOnce);
 $('#calibBox').innerHTML = CALIB.map(function(item,i){
-  return '<div class="q-block"><div class="q-stem">'+(i+1)+'. '+item.q+'</div><div class="opts">'
+  return '<div class="q-block" data-q="'+i+'"><div class="q-stem">'+(i+1)+'. '+item.q+'</div><div class="opts">'
     + item.o.map(function(o,j){
         return '<label><input type="radio" name="cal'+i+'" value="'+j+'"><span>'+o+'</span></label>';
       }).join('')
     + '</div></div>';
 }).join('');
 
+/* ── Calibration completeness ─────────────────────────────────────
+   The button used to sit DISABLED until all five were answered, with
+   nothing on screen saying so. Miss one question on a phone — easy,
+   since all five share one card — and the lesson simply stopped, with
+   no way to find out what it wanted. Reported by Edwin, July 21 2026.
+   Now: the button is always tappable, and tapping it with anything
+   missing marks the gaps and scrolls to the first one. A student is
+   never left facing a control that refuses to explain itself. */
+function calibMissing(){
+  var m = [];
+  CALIB.forEach(function(_, i){ if (!$('input[name="cal'+i+'"]:checked')) m.push(i); });
+  return m;
+}
+function calibProgress(){
+  var left = calibMissing().length, el = $('#calibProgress');
+  if (!el) return;
+  el.className = 'calib-progress';
+  el.textContent = left
+    ? (CALIB.length - left) + ' of ' + CALIB.length + ' answered.'
+    : 'All ' + CALIB.length + ' answered — tap Check my level.';
+}
 $$('#calibBox input').forEach(function(inp){
   inp.addEventListener('change', function(){
-    var answered = CALIB.every(function(_,i){ return $('input[name="cal'+i+'"]:checked'); });
-    $('#calibCheck').disabled = !answered;
+    var b = inp.closest ? inp.closest('.q-block') : null;
+    if (b) b.classList.remove('unanswered');
+    calibProgress();
   });
 });
+calibProgress();
 
 $('#calibCheck').addEventListener('click', function(){
+  var missing = calibMissing();
+  if (missing.length){
+    $$('#calibBox .q-block').forEach(function(b){
+      b.classList.toggle('unanswered', missing.indexOf(Number(b.getAttribute('data-q'))) >= 0);
+    });
+    var el = $('#calibProgress');
+    el.className = 'calib-progress warn';
+    el.textContent = (missing.length === 1)
+      ? '⚠️ Question ' + (missing[0]+1) + ' still needs an answer — it is marked below.'
+      : '⚠️ ' + missing.length + ' questions still need an answer — they are marked below.';
+    var first = $('#calibBox .q-block.unanswered');
+    if (first) first.scrollIntoView({ behavior:'smooth', block:'center' });
+    return;                       /* not an error — just not finished yet */
+  }
   this.disabled = true;
+  $('#calibProgress').textContent = '';
   var correct = 0;
   CALIB.forEach(function(item,i){
     var picked = $('input[name="cal'+i+'"]:checked');

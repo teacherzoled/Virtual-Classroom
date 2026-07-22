@@ -190,9 +190,20 @@ var DATAR = { bronze:[ { title:'Average temperature, Belize City', unit:'°C', t
   get automatic headroom so a nearly-flat series still shows its shape.
 - viewBox is **320 × 210** and in-chart text is **11 units**, so it renders around 11px on a
   360px phone — legible without zooming.
+- **Four charts per tier is the floor.** A chart takes longer to read than a myth claim, but
+  not four times longer — two charts is an activity a student finishes in under a minute while
+  it carries a quarter of the lesson's marks.
 - Difficulty ladder that works: **read one value** → **compare two / subtract** → **judge a
   claim about the data**. Gold is where "weather is not climate" reasoning belongs — a short,
   local, jumpy series is exactly the graph that invites a wrong conclusion.
+- The distractors that earn their place are **arithmetic slips, not nonsense**: for a
+  difference question, offer the two values on their own and their *sum* — adding when the
+  question asks for a difference is the mistake a Standard 5 student actually makes.
+
+> ⚠️ **The sample data in the bank is a TEMPLATE, not filler.** Week 2 was generated with two
+> charts because the bank shipped with two — the build copied the shape, not the instruction.
+> Item counts, difficulty spread and distractor quality in the lab all propagate to every week
+> built from it. Author the sample as if it were a real lesson, because in effect it is thirty.
 
 ---
 

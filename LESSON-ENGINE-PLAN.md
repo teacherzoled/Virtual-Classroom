@@ -92,6 +92,36 @@ daily-task prompt greps for the guard as a required verification.
 - Purpose: focus. The student sees one thing, finishes it, taps to continue. Nothing scrolls out
   from under them — the exact failure this replaced.
 
+**⚠️ NO DEAD CONTROLS — a button must never refuse to explain itself (Edwin, July 21, 2026).**
+He finished the warm-up quiz and **Check my level** stayed greyed out, with nothing on screen
+saying why. The code was correct: he had answered four of the five, and the button was disabled
+until all five were in. All five questions share one card, so on a phone one scrolls past, or a
+tap lands on the edge of a radio and does not register — and the lesson simply stopped, with no
+way to discover what it wanted.
+- **The button is now always tappable.** Tapping it with anything missing marks the unanswered
+  questions, scrolls to the first one, and says which number it is. A live "3 of 5 answered"
+  counter sits under the button throughout.
+- The marker is an **outline plus a ⚠️ glyph in the message**, never colour alone (rubric R5).
+- **The general rule for the whole engine: prefer a control that explains the problem over a
+  control that is disabled.** A disabled button is invisible to a screen reader, gives no
+  feedback on tap, and teaches a ten-year-old that the page is broken. If an action cannot
+  proceed, say so in words and point at the reason.
+
+**⚠️ NO SINGLE FAILURE MAY FREEZE THE LESSON (found July 21, 2026).** Chasing the report above
+turned up a worse one underneath it. `award()` called `vcSaveBeans()` unguarded; if
+`/edlo-utils.js` had not loaded, that call threw — and because `award()` runs *midway through*
+the calibration click handler, the throw killed `markDone`, `progressTick`, `offerTier` and the
+**See my level** button that came after it. Symptom: the quiz scores and shows a percentage, the
+progress bar sticks on "1 of 6", and the lesson simply stops. Nothing on screen a child could
+act on. Surfaced in the preview panel (which cannot resolve an absolute `/edlo-utils.js`), but a
+dropped request or a stale cache would do the same to a student mid-lesson.
+- `award()` now falls back to a resolved promise when `vcSaveBeans` is absent, and `.catch()`es
+  a rejected one. The lesson runs to the end; only the saving is lost.
+- **The principle: a bean that fails to save is a bad day, a frozen lesson is a lost one.**
+  Anything touching the network or a shared script gets a `typeof` guard and a `.catch`, and
+  **the failure must never sit between the student and the next step.** Verify new mechanics
+  with `edlo-utils.js` removed entirely — that test now catches this whole class of bug.
+
 ---
 
 ## 3. Tier ladder — Bronze / Silver / Gold (Edwin's decisions)

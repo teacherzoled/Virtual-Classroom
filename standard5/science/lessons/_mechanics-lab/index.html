@@ -211,6 +211,13 @@ window.vcSaveBeans = function (id, beans) {
   .opts label.right .opt-mark { color:var(--right); }
   .opts label.wrong .opt-mark { color:var(--wrong); }
 
+  /* Calibration — unanswered-question marker.
+     Outline + a ⚠️ glyph in the message, never colour alone (rubric R5). */
+  .q-block.unanswered { box-shadow:inset 0 0 0 2px var(--accent); background:var(--accent-soft);
+                        border-radius:12px; padding:.7rem; }
+  .calib-progress { margin-top:.7rem; font-size:.86rem; font-weight:800; color:var(--muted); }
+  .calib-progress.warn { color:var(--fg); }
+
   /* Tier offer */
   .tier-grid { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:1rem; }
   .tier-card { flex:1 1 280px; border-radius:16px; padding:1rem; text-align:center;
@@ -525,7 +532,8 @@ window.vcSaveBeans = function (id, beans) {
     <h2>🎯 Five Quick Questions</h2>
     <p>This is not a test — it finds the right challenge level for you today. Answer all five.</p>
     <div id="calibBox"></div>
-    <button class="btn" id="calibCheck" disabled>Check my level</button>
+    <button class="btn" id="calibCheck">Check my level</button>
+    <div class="calib-progress" id="calibProgress"></div>
     <div class="feedback-line" id="calibFeedback"></div>
     <div class="earned-note"></div>
   </section>
@@ -1037,7 +1045,13 @@ var CHAIN = {
    The chart is DRAWN from `labels` + `values` — never an image file.
    type:'bar' for comparing separate things, 'line' for change over time.
    `unit` labels the axis. Options are shuffled by the engine, so `a`
-   is the index in the array AS AUTHORED. */
+   is the index in the array AS AUTHORED.
+   ⚠️ FOUR CHARTS PER TIER IS THE FLOOR — and the count here is not
+   decoration, it is the template every generated week copies. This
+   sample shipped with two, and Week 2 duly arrived with two: an
+   activity carrying a quarter of the lesson that a student finished in
+   under a minute. Whatever shape sits in this file becomes the default
+   for the whole year, so author it as if it were a real lesson. */
 var DATAR = {
   bronze: [
     { title:'Average temperature, Belize City', unit:'°C', type:'line',
@@ -1049,7 +1063,18 @@ var DATAR = {
       labels:['Walk','Bicycle','Bus','Car'], values:[0,0,3,9],
       q:'Which way of travelling released the most carbon dioxide?',
       o:['Car','Walk','Bicycle','Bus'], a:0,
-      why:'The car’s bar is the tallest at 9 kg — three times the bus, which carries far more people.' }
+      why:'The car’s bar is the tallest at 9 kg — three times the bus, which carries far more people.' },
+    { title:'Households with a solar panel in one village', unit:'households', type:'bar',
+      labels:['2018','2019','2020','2021'], values:[4,9,17,28],
+      q:'How many households had a solar panel in 2020?',
+      o:['9','28','17','4'], a:2,
+      why:'Find 2020 along the bottom, then read the number above its bar: 17. The other three numbers are the totals for the other years.' },
+    { title:'Electricity used by one school each term', unit:'kWh', type:'line',
+      labels:['Term 1','Term 2','Term 3'], values:[2100,2450,2780],
+      q:'What is happening to this school’s electricity use?',
+      o:['It is rising each term','It is falling each term',
+         'It stays about the same','It rises and then falls'], a:0,
+      why:'2100, then 2450, then 2780 — every point is higher than the one before. More electricity used means more fuel burned at the power station to supply it.' }
   ],
   silver: [
     { title:'Sea level measured at the coast', unit:'cm', type:'line',
@@ -1063,7 +1088,17 @@ var DATAR = {
       q:'By how much did this grow between 2015 and 2021?',
       o:['46 percentage points','8 percentage points','24 percentage points',
          'It fell by 24 percentage points'], a:2,
-      why:'46 minus 22 is 24. Read both bars, then subtract — do not guess from how tall they look.' }
+      why:'46 minus 22 is 24. Read both bars, then subtract — do not guess from how tall they look.' },
+    { title:'Households with a solar panel in one village', unit:'households', type:'bar',
+      labels:['2018','2019','2020','2021'], values:[4,9,17,28],
+      q:'How many MORE households had a panel in 2021 than in 2019?',
+      o:['28','19','9','37'], a:1,
+      why:'28 − 9 = 19. The 28 and the 9 are each year on its own, and 37 is the two added together — adding when the question asks for a difference is the easiest slip to make.' },
+    { title:'Carbon dioxide released making 1 kg of two building materials', unit:'kg CO₂', type:'bar',
+      labels:['Timber','Cement'], values:[1,9],
+      q:'About how many times more is released making cement than making timber?',
+      o:['Twice as much','Nine times as much','Ten times as much','About the same'], a:1,
+      why:'9 against 1 — nine times as much. Reading it as ten is the common slip: ten is the two bars added together, which is not what "how many times more" asks for.' }
   ],
   gold: [
     { title:'Yearly rainfall in one district', unit:'mm', type:'line',
@@ -1077,7 +1112,23 @@ var DATAR = {
       labels:['1960','1980','2000','2020'], values:[317,339,369,414],
       q:'Between which two points did the amount grow the MOST?',
       o:['1960 to 1980','2000 to 2020','1980 to 2000','It grew the same each time'], a:1,
-      why:'414 − 369 = 45, against 22 and 30 for the earlier gaps. The steepest part of the line is the most recent — the rise is accelerating.' }
+      why:'414 − 369 = 45, against 22 and 30 for the earlier gaps. The steepest part of the line is the most recent — the rise is accelerating.' },
+    { title:'Average temperature at one weather station', unit:'°C', type:'line',
+      labels:['2015','2016','2017','2018','2019','2020'], values:[26.8,27.4,26.6,27.1,26.9,27.5],
+      q:'Which conclusion does THIS graph actually support?',
+      o:['Every year is hotter than the year before',
+         'Six years at one station is too short to show a climate trend by itself',
+         'The temperature is falling',
+         '2017 proves the warming has stopped'], a:1,
+      why:'The line wobbles up and down, so "every year hotter" is plainly false — and picking out 2017 alone is choosing the single point that suits an argument. A climate trend needs many more years and many more places than one station can give you.' },
+    { title:'Where one town’s electricity came from last year', unit:'% of supply', type:'bar',
+      labels:['Hydro','Diesel','Solar'], values:[58,34,8],
+      q:'The town can change ONE source to cut its emissions the most. What does the chart suggest?',
+      o:['Replace the solar, since it supplies the least',
+         'Replace the hydro, since it supplies the most',
+         'Replace the diesel, since it is the biggest source that actually burns fuel',
+         'Nothing can be done — every source is the same'], a:2,
+      why:'Hydro and solar burn nothing, so replacing either would save no emissions at all. Only the diesel burns, and at 34% it is a large slice. The biggest bar is not the biggest problem — that is the trap this question is built on.' }
   ]
 };
 
@@ -1275,14 +1326,27 @@ function award(actKey, earned, maxPossible, sec){
     note.style.display='block';
     note.textContent = '🌱 +'+capped+' beans (lesson cap of '+LESSON_CAP+' reached — keep playing for practice!)';
   }
-  vcSaveBeans(id, capped, maxPossible, {
-    subject:'Science', lo_code:LESSON.lo,
-    /* Groups every activity of this lesson so the BACKEND can enforce the
-       30-bean cap. The client cap above is only for instant feedback —
-       clearing the browser defeats it; the server is the real limit. */
-    lesson_key: LESSON.idBase,
-    activity_name: LESSON.week+' '+actKey+(tier?' ('+TIERS[tier].label+')':'')
-  }).then(function(res){
+  /* ⚠️ A MISSING /edlo-utils.js MUST NEVER STRAND THE STUDENT.
+     If the shared script did not load, `vcSaveBeans` is undefined and
+     calling it throws — and because award() runs midway through the
+     calibration click handler, that one throw used to kill markDone,
+     progressTick, offerTier AND the "See my level" button after it.
+     The result: a scored quiz, a progress bar stuck on 1 of 6, and no
+     way forward — with nothing on screen a ten-year-old could act on.
+     Found July 21, 2026 (the preview panel cannot resolve the absolute
+     path; a dropped request or a stale cache would do the same live).
+     Beans failing to save is a bad day. A frozen lesson is a lost one. */
+  var saving = (typeof vcSaveBeans === 'function')
+    ? vcSaveBeans(id, capped, maxPossible, {
+        subject:'Science', lo_code:LESSON.lo,
+        /* Groups every activity of this lesson so the BACKEND can enforce the
+           30-bean cap. The client cap above is only for instant feedback —
+           clearing the browser defeats it; the server is the real limit. */
+        lesson_key: LESSON.idBase,
+        activity_name: LESSON.week+' '+actKey+(tier?' ('+TIERS[tier].label+')':'')
+      })
+    : Promise.resolve(null);
+  saving.catch(function(){ return null; }).then(function(res){
     note.style.display='block';
     if (res && res.ok) {
       /* Trust the server: it may have trimmed the award to fit the cap. */
@@ -1361,22 +1425,60 @@ $('#reviewDone').addEventListener('click', function(){
 /* ── 2. Calibration ── */
 CALIB.forEach(shuffleItemOnce);
 $('#calibBox').innerHTML = CALIB.map(function(item,i){
-  return '<div class="q-block"><div class="q-stem">'+(i+1)+'. '+item.q+'</div><div class="opts">'
+  return '<div class="q-block" data-q="'+i+'"><div class="q-stem">'+(i+1)+'. '+item.q+'</div><div class="opts">'
     + item.o.map(function(o,j){
         return '<label><input type="radio" name="cal'+i+'" value="'+j+'"><span>'+o+'</span></label>';
       }).join('')
     + '</div></div>';
 }).join('');
 
+/* ── Calibration completeness ─────────────────────────────────────
+   The button used to sit DISABLED until all five were answered, with
+   nothing on screen saying so. Miss one question on a phone — easy,
+   since all five share one card — and the lesson simply stopped, with
+   no way to find out what it wanted. Reported by Edwin, July 21 2026.
+   Now: the button is always tappable, and tapping it with anything
+   missing marks the gaps and scrolls to the first one. A student is
+   never left facing a control that refuses to explain itself. */
+function calibMissing(){
+  var m = [];
+  CALIB.forEach(function(_, i){ if (!$('input[name="cal'+i+'"]:checked')) m.push(i); });
+  return m;
+}
+function calibProgress(){
+  var left = calibMissing().length, el = $('#calibProgress');
+  if (!el) return;
+  el.className = 'calib-progress';
+  el.textContent = left
+    ? (CALIB.length - left) + ' of ' + CALIB.length + ' answered.'
+    : 'All ' + CALIB.length + ' answered — tap Check my level.';
+}
 $$('#calibBox input').forEach(function(inp){
   inp.addEventListener('change', function(){
-    var answered = CALIB.every(function(_,i){ return $('input[name="cal'+i+'"]:checked'); });
-    $('#calibCheck').disabled = !answered;
+    var b = inp.closest ? inp.closest('.q-block') : null;
+    if (b) b.classList.remove('unanswered');
+    calibProgress();
   });
 });
+calibProgress();
 
 $('#calibCheck').addEventListener('click', function(){
+  var missing = calibMissing();
+  if (missing.length){
+    $$('#calibBox .q-block').forEach(function(b){
+      b.classList.toggle('unanswered', missing.indexOf(Number(b.getAttribute('data-q'))) >= 0);
+    });
+    var el = $('#calibProgress');
+    el.className = 'calib-progress warn';
+    el.textContent = (missing.length === 1)
+      ? '⚠️ Question ' + (missing[0]+1) + ' still needs an answer — it is marked below.'
+      : '⚠️ ' + missing.length + ' questions still need an answer — they are marked below.';
+    var first = $('#calibBox .q-block.unanswered');
+    if (first) first.scrollIntoView({ behavior:'smooth', block:'center' });
+    return;                       /* not an error — just not finished yet */
+  }
   this.disabled = true;
+  $('#calibProgress').textContent = '';
   var correct = 0;
   CALIB.forEach(function(item,i){
     var picked = $('input[name="cal'+i+'"]:checked');
