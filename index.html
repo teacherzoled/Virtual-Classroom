@@ -355,7 +355,7 @@
     </a>
     <div class="header-right">
       <span class="header-badge">Belize</span>
-      <span id="loginArea"><a class="login-btn" href="/login/">🔑 Student Login</a></span>
+      <span id="loginArea"><a class="login-btn" href="/login/"><span data-vc-glyph="key"></span>Student Login</a></span>
     </div>
   </div>
 
@@ -493,18 +493,32 @@
         other.removeAttribute('href');
         var lockChip = document.createElement('span');
         lockChip.className = 'grade-lock-chip';
-        lockChip.textContent = '🔒 For Standard ' + otherGrade + ' students';
+        var lockG = document.createElement('span');
+        lockG.className = 'vc-glyph';
+        if (window.VCIcons) lockG.innerHTML = VCIcons.glyph('lock');   /* trusted, no user data */
+        lockChip.appendChild(lockG);
+        lockChip.appendChild(document.createTextNode(' For Standard ' + otherGrade + ' students'));
         other.appendChild(lockChip);
       }
     }
     if (!area) return;
-    /* Built with textContent (never innerHTML) so a stored name can never inject markup.
-       The name chip links to the student dashboard; "log out" stays its own action. */
+    /* Icons come from trusted VCIcons.glyph strings (no user data), injected via
+       innerHTML only on their own empty span. The student name stays a TEXT NODE,
+       so a stored name can never inject markup. */
     var chip = document.createElement('a');
     chip.className = 'login-name';
     chip.href = '/dashboard/';
     chip.title = 'Open my dashboard';
-    chip.textContent = '👋 ' + (s.first_name || s.username) + ' · 📊 my dashboard ';
+    var pawG = document.createElement('span');
+    pawG.className = 'vc-glyph';
+    if (window.VCIcons) pawG.innerHTML = VCIcons.glyph('paw');
+    chip.appendChild(pawG);
+    chip.appendChild(document.createTextNode(' ' + (s.first_name || s.username) + ' · '));
+    var dashG = document.createElement('span');
+    dashG.className = 'vc-glyph';
+    if (window.VCIcons) dashG.innerHTML = VCIcons.glyph('dashboard');
+    chip.appendChild(dashG);
+    chip.appendChild(document.createTextNode(' my dashboard '));
     var out = document.createElement('span');
     out.className = 'logout-link';
     out.textContent = 'log out';

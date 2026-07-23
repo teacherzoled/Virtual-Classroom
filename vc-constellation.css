@@ -35,3 +35,10 @@ body.theme-nature{--orb-g1:#ffffff;--orb-g2:#ddf2d4;--orb-stars:0;}
 .orbit-wrap .grade-num{font-size:3.4rem;margin-bottom:0;line-height:1;}
 .hero-const{display:flex;justify-content:center;margin:0 auto .4rem;line-height:0;}
 .hero-const svg{width:min(300px,70vw);height:auto;display:block;}
+/* Login / dashboard chrome glyphs */
+.vc-glyph{display:inline-flex;line-height:0;vertical-align:-2px;}
+.vc-glyph svg{width:15px;height:15px;display:block;}
+.login-btn .vc-glyph svg{width:16px;height:16px;}
+.login-name .vc-glyph svg{width:14px;height:14px;}
+.login-name .vc-glyph,.login-btn .vc-glyph{flex-shrink:0;}
+.grade-lock-chip .vc-glyph svg{width:13px;height:13px;}

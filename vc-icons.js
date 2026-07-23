@@ -120,12 +120,23 @@
     nature: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21 C12 13 15 8 20 5 C19 12 16 17 12 21 Z"/><path d="M12 21 C12 15 9 11 5 9 C6 14 8 18 12 21 Z" stroke-width="1.6"/></svg>'
   };
 
+  /* Small monochrome UI glyphs (inherit text colour, ~15px) — login/dashboard chrome */
+  var GLYPHS = {
+    key: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="7" r="3.6"/><line x1="12" y1="10.6" x2="12" y2="20"/><line x1="12" y1="15.5" x2="15.2" y2="15.5"/><line x1="12" y1="18.6" x2="14.4" y2="18.6"/></svg>',
+    dashboard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.3"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.3"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.3"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.3"/></svg>',
+    paw: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><ellipse cx="12" cy="15.5" rx="4.2" ry="3.4"/><circle cx="6.6" cy="11" r="1.7"/><circle cx="10.2" cy="8" r="1.7"/><circle cx="13.8" cy="8" r="1.7"/><circle cx="17.4" cy="11" r="1.7"/></svg>',
+    lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11 V7.5 a4 4 0 0 1 8 0 V11"/></svg>'
+  };
+
   function render(name) {
     var def = ICONS[name];
     if (!def) return '';
     var accent = 'var(' + def[0] + ')';
     return orb(accent, def[1](accent));
   }
+
+  /* Returns a small glyph SVG string (trusted, no user data) */
+  function glyph(name) { return GLYPHS[name] || ''; }
 
   function init() {
     var els = document.querySelectorAll('[data-vc-icon]');
@@ -138,6 +149,11 @@
       var t = TOGGLES[tg[j].getAttribute('data-vc-toggle')];
       if (t) { tg[j].classList.add('vc-tgl'); tg[j].innerHTML = t; }
     }
+    var gl = document.querySelectorAll('[data-vc-glyph]');
+    for (var k = 0; k < gl.length; k++) {
+      var gsvg = GLYPHS[gl[k].getAttribute('data-vc-glyph')];
+      if (gsvg) { gl[k].classList.add('vc-glyph'); gl[k].innerHTML = gsvg; }
+    }
   }
 
   if (document.readyState === 'loading') {
@@ -146,5 +162,5 @@
     init();
   }
 
-  window.VCIcons = { render: render, init: init };
+  window.VCIcons = { render: render, glyph: glyph, init: init };
 })();
