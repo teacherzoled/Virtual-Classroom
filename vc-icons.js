@@ -128,6 +128,51 @@
     lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11 V7.5 a4 4 0 0 1 8 0 V11"/></svg>'
   };
 
+  /* ── Content glyphs for lesson activities ──────────────────────────
+     Weather, climate & energy line-art, ~20px, monochrome (inherit the
+     surrounding text colour, so theme-aware for free). These are the
+     drawn replacements for the emoji the science lessons used to carry.
+     Add a new key here when a science topic needs an icon that is missing
+     — every lesson picks from this one shared set.
+     Render: VCIcons.content('rain')  or  <span data-vc-ico="rain"></span> */
+  var ICO0 = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+  var CONTENT = {
+    sun:'<circle cx="12" cy="12" r="4.2"/><line x1="12" y1="2.5" x2="12" y2="4.6"/><line x1="12" y1="19.4" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="4.6" y2="12"/><line x1="19.4" y1="12" x2="21.5" y2="12"/><line x1="5.2" y1="5.2" x2="6.7" y2="6.7"/><line x1="17.3" y1="17.3" x2="18.8" y2="18.8"/><line x1="18.8" y1="5.2" x2="17.3" y2="6.7"/><line x1="6.7" y1="17.3" x2="5.2" y2="18.8"/>',
+    moon:'<path d="M15.5 3.5 A8.5 8.5 0 1 0 15.5 20.5 A6.6 6.6 0 0 1 15.5 3.5 Z"/><circle cx="18.3" cy="6" r="0.8" fill="currentColor" stroke="none"/>',
+    cloud:'<path d="M7 18 A4.2 4.2 0 0 1 6.4 9.6 A5.3 5.3 0 0 1 16.7 8 A4.4 4.4 0 0 1 18 18 Z"/>',
+    partly:'<circle cx="8" cy="8" r="2.7"/><line x1="8" y1="3" x2="8" y2="4.3"/><line x1="3" y1="8" x2="4.3" y2="8"/><line x1="4.5" y1="4.5" x2="5.4" y2="5.4"/><line x1="11.5" y1="4.5" x2="10.6" y2="5.4"/><path d="M8 19 A3.3 3.3 0 0 1 7.5 12.5 A4.2 4.2 0 0 1 15.6 11.3 A3.5 3.5 0 0 1 16.7 19 Z"/>',
+    rain:'<path d="M7 14.5 A3.6 3.6 0 0 1 6.5 7.5 A4.5 4.5 0 0 1 15.6 6 A3.8 3.8 0 0 1 16.7 14.5 Z"/><line x1="8.5" y1="17.5" x2="7.6" y2="20.3"/><line x1="12" y1="17.5" x2="11.1" y2="20.3"/><line x1="15.5" y1="17.5" x2="14.6" y2="20.3"/>',
+    drizzle:'<path d="M7 14.5 A3.6 3.6 0 0 1 6.5 7.5 A4.5 4.5 0 0 1 15.6 6 A3.8 3.8 0 0 1 16.7 14.5 Z"/><line x1="9.5" y1="17.5" x2="9" y2="19.5"/><line x1="14" y1="17.5" x2="13.5" y2="19.5"/>',
+    storm:'<path d="M7 13.5 A3.6 3.6 0 0 1 6.5 6.5 A4.5 4.5 0 0 1 15.6 5 A3.8 3.8 0 0 1 16.7 13.5 Z"/><path d="M12.5 13 L9.5 17.5 H12 L10.5 21.5"/>',
+    snow:'<path d="M7 13.5 A3.6 3.6 0 0 1 6.5 6.5 A4.5 4.5 0 0 1 15.6 5 A3.8 3.8 0 0 1 16.7 13.5 Z"/><path d="M8.6 17.4 l1 1 M9.6 17.4 l-1 1 M13.4 17.4 l1 1 M14.4 17.4 l-1 1"/>',
+    snowflake:'<line x1="12" y1="3" x2="12" y2="21"/><line x1="4.2" y1="7.5" x2="19.8" y2="16.5"/><line x1="19.8" y1="7.5" x2="4.2" y2="16.5"/><path d="M12 6.2 l-1.8 -1.2 M12 6.2 l1.8 -1.2 M12 17.8 l-1.8 1.2 M12 17.8 l1.8 1.2"/>',
+    wind:'<path d="M3 9.5 H13.5 A2.5 2.5 0 1 0 11 7"/><path d="M3 14 H17 A2.6 2.6 0 1 1 14.4 16.6"/>',
+    fog:'<path d="M6.5 12.5 A3.4 3.4 0 0 1 6 6 A4.3 4.3 0 0 1 14.8 4.8 A3.6 3.6 0 0 1 16.5 11"/><line x1="4" y1="15.5" x2="20" y2="15.5"/><line x1="6" y1="18.5" x2="18" y2="18.5"/><line x1="4.5" y1="21" x2="15" y2="21"/>',
+    umbrella:'<path d="M12 11 V20 A2 2 0 0 0 15.4 21.4"/><path d="M3.2 11 A8.8 8.8 0 0 1 20.8 11 Z"/><line x1="12" y1="8.5" x2="12" y2="11"/>',
+    thermometer:'<path d="M10 13.5 V6 A2 2 0 0 1 14 6 V13.5 A3.4 3.4 0 1 1 10 13.5 Z"/><circle cx="12" cy="16.6" r="1.4" fill="currentColor" stroke="none"/><line x1="12" y1="8" x2="12" y2="14.5"/>',
+    calendar:'<rect x="4" y="5.5" width="16" height="14.5" rx="2"/><line x1="4" y1="10" x2="20" y2="10"/><line x1="8.5" y1="3.5" x2="8.5" y2="7"/><line x1="15.5" y1="3.5" x2="15.5" y2="7"/>',
+    globe:'<circle cx="12" cy="12" r="8.5"/><ellipse cx="12" cy="12" rx="3.8" ry="8.5"/><line x1="3.6" y1="12" x2="20.4" y2="12"/><line x1="5.2" y1="7.8" x2="18.8" y2="7.8"/><line x1="5.2" y1="16.2" x2="18.8" y2="16.2"/>',
+    city:'<rect x="3.5" y="9.5" width="5.5" height="10.5"/><rect x="9.5" y="4.5" width="5" height="15.5"/><rect x="15" y="11.5" width="5.5" height="8.5"/><line x1="5" y1="12.5" x2="7.5" y2="12.5"/><line x1="11" y1="8" x2="13" y2="8"/><line x1="16.5" y1="14.5" x2="19" y2="14.5"/>',
+    palm:'<path d="M12 21 C11.2 16 11.3 12.5 12.2 9.5"/><path d="M12 9.5 C9.2 6.8 6 6.6 3.4 8.4"/><path d="M12 9.5 C14.8 6.8 18 6.6 20.6 8.4"/><path d="M12 9.5 C10 5.8 7.6 4.2 5 4"/><path d="M12 9.5 C14 5.8 16.4 4.2 19 4"/>',
+    desert:'<path d="M11 20.5 V10.5 A2 2 0 0 1 15 10.5 V20.5"/><path d="M11 14 A2.6 2.6 0 0 1 8 11.4 V15"/><path d="M15 12.5 A2.6 2.6 0 0 1 18 9.9 V13.5"/><line x1="4.5" y1="20.5" x2="19.5" y2="20.5"/>',
+    waves:'<path d="M3 8.5 Q6 6 9 8.5 T15 8.5 T21 8.5"/><path d="M3 13 Q6 10.5 9 13 T15 13 T21 13"/><path d="M3 17.5 Q6 15 9 17.5 T15 17.5 T21 17.5"/>',
+    leaf:'<path d="M12 21 C12 13 15 8 20 5 C19 12 16 17 12 21 Z"/><path d="M12 21 C12 15 9 11 5 9 C6 14 8 18 12 21 Z"/>',
+    tree:'<circle cx="12" cy="9" r="5.3"/><line x1="12" y1="14.3" x2="12" y2="21"/>',
+    drop:'<path d="M12 3.5 C12 3.5 5.5 11.2 5.5 15.8 A6.5 6.5 0 0 0 18.5 15.8 C18.5 11.2 12 3.5 12 3.5 Z"/>',
+    chartbar:'<polyline points="4,4 4,20 20,20"/><rect x="6.6" y="13" width="2.6" height="6"/><rect x="11" y="9" width="2.6" height="10"/><rect x="15.4" y="6" width="2.6" height="13"/>',
+    chartline:'<polyline points="4,4 4,20 20,20"/><polyline points="6,16 10,12 13,14 18,7"/><circle cx="18" cy="7" r="1.1" fill="currentColor" stroke="none"/>',
+    fire:'<path d="M12 21 A5.6 5.6 0 0 0 16.2 11.4 C15 13.2 14 12 14 9 C11.8 10.4 9.4 12.4 9.4 15.4 A5.6 5.6 0 0 0 12 21 Z"/>',
+    bus:'<rect x="3.5" y="6" width="17" height="10.5" rx="2.2"/><line x1="3.5" y1="12" x2="20.5" y2="12"/><line x1="8" y1="6.5" x2="8" y2="11.6"/><line x1="13" y1="6.5" x2="13" y2="11.6"/><circle cx="7.5" cy="18" r="1.5"/><circle cx="16.5" cy="18" r="1.5"/>',
+    car:'<path d="M4 16 V13 L6.2 9 H15.5 L18.5 13 H20 V16"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="8" cy="16.5" r="1.6"/><circle cx="16" cy="16.5" r="1.6"/>',
+    bicycle:'<circle cx="6.6" cy="15.5" r="3.6"/><circle cx="17.4" cy="15.5" r="3.6"/><path d="M6.6 15.5 L10 9 H13.6 M10.4 15.5 L13.6 9 L17.4 15.5"/>',
+    factory:'<path d="M3.5 20 V11 L8.5 14 V11 L13.5 14 V8.5 H20 V20 Z"/><line x1="6.6" y1="17" x2="8" y2="17"/><line x1="11.6" y1="17" x2="13" y2="17"/><line x1="16" y1="17" x2="17.6" y2="17"/>',
+    solar:'<rect x="4.5" y="6" width="12" height="8" rx="0.8" transform="skewX(-10)"/><line x1="3.8" y1="9" x2="15.8" y2="9"/><line x1="9.4" y1="6" x2="8" y2="14"/><line x1="12" y1="15.5" x2="12" y2="20"/><line x1="8.5" y1="20" x2="15.5" y2="20"/>',
+    turbine:'<line x1="12" y1="12.5" x2="12" y2="21"/><line x1="12" y1="12.5" x2="12" y2="4"/><line x1="12" y1="12.5" x2="19" y2="16.5"/><line x1="12" y1="12.5" x2="5" y2="16.5"/><circle cx="12" cy="12.5" r="1.1" fill="currentColor" stroke="none"/>',
+    bulb:'<path d="M8.8 15 A5 5 0 1 1 15.2 15 C14.2 15.8 14 16.6 14 17.6 H10 C10 16.6 9.8 15.8 8.8 15 Z"/><line x1="10" y1="20" x2="14" y2="20"/>'
+  };
+
+  function content(name) { var i = CONTENT[name]; return i ? ICO0 + i + '</svg>' : ''; }
+
   function render(name) {
     var def = ICONS[name];
     if (!def) return '';
@@ -154,6 +199,11 @@
       var gsvg = GLYPHS[gl[k].getAttribute('data-vc-glyph')];
       if (gsvg) { gl[k].classList.add('vc-glyph'); gl[k].innerHTML = gsvg; }
     }
+    var ic = document.querySelectorAll('[data-vc-ico]');
+    for (var m = 0; m < ic.length; m++) {
+      var isvg = content(ic[m].getAttribute('data-vc-ico'));
+      if (isvg) { ic[m].classList.add('vc-ico'); ic[m].innerHTML = isvg; }
+    }
   }
 
   if (document.readyState === 'loading') {
@@ -162,5 +212,5 @@
     init();
   }
 
-  window.VCIcons = { render: render, glyph: glyph, init: init };
+  window.VCIcons = { render: render, glyph: glyph, content: content, init: init };
 })();

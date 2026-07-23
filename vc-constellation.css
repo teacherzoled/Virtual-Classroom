@@ -35,6 +35,13 @@ body.theme-nature{--orb-g1:#ffffff;--orb-g2:#ddf2d4;--orb-stars:0;}
 .orbit-wrap .grade-num{font-size:3.4rem;margin-bottom:0;line-height:1;}
 .hero-const{display:flex;justify-content:center;margin:0 auto .4rem;line-height:0;}
 .hero-const svg{width:min(300px,70vw);height:auto;display:block;}
+/* Content glyphs for lesson activities (VCIcons.content / data-vc-ico).
+   Monochrome line-art that inherits the surrounding text colour, so it is
+   theme-aware automatically. Default ~1.4em; size up in a tile with .vc-ico--lg. */
+.vc-ico{display:inline-flex;line-height:0;vertical-align:-0.22em;color:inherit;}
+.vc-ico svg{width:1.4em;height:1.4em;display:block;}
+.vc-ico--lg svg{width:2.2em;height:2.2em;}
+.vc-ico--xl svg{width:3rem;height:3rem;}
 /* Login / dashboard chrome glyphs */
 .vc-glyph{display:inline-flex;line-height:0;vertical-align:-2px;}
 .vc-glyph svg{width:15px;height:15px;display:block;}
