@@ -1,361 +1,1961 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="night">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Week 3 · Weather vs. Climate — Mr. EdLo's Virtual Classroom</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<title>Week 3 · Weather vs Climate — Mr. EdLo's Virtual Classroom</title>
+<link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<script src="/edlo-utils.js"></script>
 <style>
-  html { font-size: 17.5px; }
-  html, body { overflow-x: hidden; }
+  /* Root font size drives EVERYTHING — 164 of the 168 sized values are rem,
+     so raising this scales text, padding, cards and buttons together.
+     Steps up on bigger screens; phones keep the compact size. */
+  html { font-size: 19px; }
+  @media (min-width:1000px){ html { font-size: 20.5px; } }
+  @media (min-width:1400px){ html { font-size: 22px;   } }
+  /* ⚠️ overflow-x:hidden must NOT go on <html> — it makes <html> a scroll
+     container and breaks position:sticky on the progress bar. Body only,
+     exactly as the Std5 test pages do it. */
+  body { overflow-x: hidden; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --accent: #20C997;
-    --accent-dark: #0CA678;
+  :root { --bronze:#CD7F32; --silver:#A8B3BD; --gold:#FFC93C; }
+
+  /* ═══ THEME PALETTE — mirrors standard5/science/index.html exactly ═══
+     Each theme recolours the ACCENT too, not just the background:
+     Night teal · Sunny orange · Cloudy blue · Nature green.
+     Selector is body.theme-* (site-wide convention), NOT [data-theme]. */
+  :root, body.theme-night {
+    --bg:#0d1f1a; --fg:#ffffff;
+    --card:rgba(255,255,255,0.06); --bd:rgba(255,255,255,0.09);
+    --bd-h:rgba(32,201,151,0.40); --muted:rgba(255,255,255,0.52);
+    --btn:rgba(255,255,255,0.08); --star:1;
+    --accent:#20C997; --accent-c:#0d1f1a; --accent-soft:rgba(32,201,151,0.12);
+    --h1-grad:linear-gradient(135deg,#fff 0%,#20C997 55%,#69DB7C 100%);
+    --footer-border:rgba(255,255,255,0.07); --footer-c:rgba(255,255,255,0.38);
+    --right:#69DB7C; --wrong:#FF6B6B;
   }
-  [data-theme="night"] {
-    --bg: #0b1026; --bg2: #141b3c; --card: #1a2247; --text: #eef1ff;
-    --muted: #aab3d6; --line: #2e3a6e; --star-op: 1;
-    --good: #51cf66; --bad: #ff8787; --chip: #232c58;
+  body.theme-sunny {
+    --bg:#fffbea; --fg:#2d2000;
+    --card:rgba(255,255,255,0.75); --bd:rgba(200,150,0,0.18);
+    --bd-h:rgba(200,120,0,0.45); --muted:rgba(80,50,0,0.72);
+    --btn:rgba(255,255,255,0.85); --star:0;
+    --accent:#FF922B; --accent-c:#ffffff; --accent-soft:rgba(255,180,0,0.15);
+    --h1-grad:linear-gradient(135deg,#b35c00 0%,#e67e00 50%,#f5a623 100%);
+    --footer-border:rgba(200,150,0,0.20); --footer-c:rgba(100,60,0,0.55);
+    --right:#2e7d1a; --wrong:#c62828;
   }
-  [data-theme="sunny"] {
-    --bg: #fff9e6; --bg2: #fff3c4; --card: #ffffff; --text: #4a3f16;
-    --muted: #8a7a35; --line: #f1dd8e; --star-op: 0;
-    --good: #2b8a3e; --bad: #c92a2a; --chip: #fdf0c2;
+  body.theme-cloudy {
+    --bg:#e8edf2; --fg:#1c2533;
+    --card:rgba(255,255,255,0.72); --bd:rgba(100,130,160,0.18);
+    --bd-h:rgba(80,110,150,0.40); --muted:rgba(40,60,90,0.72);
+    --btn:rgba(255,255,255,0.85); --star:0;
+    --accent:#4A90D9; --accent-c:#ffffff; --accent-soft:rgba(100,140,200,0.12);
+    --h1-grad:linear-gradient(135deg,#1a365d 0%,#2b6cb0 50%,#4299e1 100%);
+    --footer-border:rgba(80,120,180,0.18); --footer-c:rgba(30,60,100,0.55);
+    --right:#2e7d1a; --wrong:#c62828;
   }
-  [data-theme="cloudy"] {
-    --bg: #e9eef5; --bg2: #d8e1ec; --card: #ffffff; --text: #2b3a4d;
-    --muted: #5f7288; --line: #c3d0e0; --star-op: 0;
-    --good: #2b8a3e; --bad: #c92a2a; --chip: #dde6f0;
+  body.theme-nature {
+    --bg:#f0f7ee; --fg:#1a2e10;
+    --card:rgba(255,255,255,0.72); --bd:rgba(60,120,40,0.18);
+    --bd-h:rgba(40,100,20,0.40); --muted:rgba(30,70,15,0.72);
+    --btn:rgba(255,255,255,0.85); --star:0;
+    --accent:#4CAF50; --accent-c:#ffffff; --accent-soft:rgba(60,140,30,0.12);
+    --h1-grad:linear-gradient(135deg,#1b4d0f 0%,#2e7d1a 50%,#66bb44 100%);
+    --footer-border:rgba(50,120,20,0.18); --footer-c:rgba(20,70,10,0.55);
+    --right:#2e7d1a; --wrong:#c62828;
   }
-  [data-theme="nature"] {
-    --bg: #e8f5ec; --bg2: #d3ecd9; --card: #ffffff; --text: #1e3d29;
-    --muted: #4e7a5d; --line: #b7dcc2; --star-op: 0;
-    --good: #2b8a3e; --bad: #c92a2a; --chip: #d9efe0;
+  body { font-family:'Nunito',system-ui,sans-serif; background:var(--bg); color:var(--fg);
+         min-height:100vh; display:flex; flex-direction:column; line-height:1.6; }
+  #stars { position:fixed; inset:0; pointer-events:none; z-index:0; opacity:var(--star); }
+  .wrapper { position:relative; z-index:1; max-width:1400px; margin:0 auto; width:100%;
+             padding:0 max(1rem,4vw) 2rem; flex:1; }
+  /* The header sits in its own wrapper above the sticky bar — it must NOT grow,
+     or it would split the vertical space with the content wrapper. */
+  .wrapper.head-wrap { flex:none; padding-bottom:0; }
+
+  .top-row { display:flex; justify-content:space-between; align-items:center; gap:1rem;
+             flex-wrap:wrap; padding:1rem 0 .3rem; }
+  .back-link { color:var(--muted); text-decoration:none; font-weight:800; font-size:.9rem; }
+  .back-link:hover { color:var(--accent); }
+  .theme-bar { display:flex; gap:.4rem; flex-wrap:wrap; justify-content:center; }
+  .theme-bar button { font-family:inherit; font-size:.78rem; font-weight:800; cursor:pointer;
+        padding:.35rem .7rem; border-radius:999px; border:1.5px solid var(--bd);
+        background:var(--btn); color:var(--fg); transition:border-color .25s,color .25s; }
+  .theme-bar button:hover { border-color:var(--bd-h); }
+  .theme-bar button.active { border-color:var(--accent); color:var(--accent); }
+
+  header.lesson-head { text-align:center; padding:.8rem 0 1rem; }
+  .chip-row { display:flex; gap:.5rem; justify-content:center; flex-wrap:wrap; margin-bottom:.8rem; }
+  .chip { font-size:.72rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase;
+          padding:.32rem .8rem; border-radius:999px; background:var(--card);
+          border:1.5px solid var(--bd); color:var(--muted); }
+  .chip.bean { background:var(--accent); color:var(--accent-c); border-color:var(--accent); }
+  h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.7rem,7vw,2.9rem); line-height:1.15;
+       background:var(--h1-grad);
+       -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .subtitle { color:var(--muted); font-weight:700; margin-top:.4rem; font-size:.98rem; }
+  .login-hint { margin-top:.7rem; font-size:.85rem; color:var(--muted); }
+  .login-hint a { color:var(--accent); font-weight:800; }
+
+  /* Sticky progress bar — same pattern as the Std5 tests */
+  .progress-wrap { position:sticky; top:0; z-index:50; background:var(--bg);
+                   border-bottom:1px solid var(--bd); padding:.7rem 0 .6rem;
+                   margin-bottom:1.4rem; transition:background .4s; }
+  .progress-inner { max-width:1400px; margin:0 auto; padding:0 max(1rem,4vw); }
+  .progress-label { display:flex; justify-content:space-between; font-size:.78rem;
+                    font-weight:800; color:var(--muted); margin-bottom:.35rem; }
+  .progress-track { height:.52rem; border-radius:999px; background:var(--card);
+                    border:1px solid var(--bd); overflow:hidden; }
+  .progress-fill { height:100%; width:0; border-radius:999px;
+                   background:linear-gradient(90deg,var(--accent),#4DABF7); transition:width .4s ease; }
+
+  section.sec { background:var(--card); border:1.5px solid var(--bd); border-radius:18px;
+                padding:1.3rem; margin-bottom:1.2rem; position:relative;
+                scroll-margin-top:4.6rem; /* clears the sticky progress bar */ }
+  section.sec.step-hidden { display:none; }          /* not revealed yet */
+  .next-btn { display:block; width:100%; margin-top:1.1rem; font-size:1rem; padding:.85rem; }
+  .next-q { display:block; width:100%; margin-top:.9rem; font-size:.95rem; padding:.75rem; }
+  .next-cue { text-align:center; font-size:.8rem; color:var(--muted); font-weight:700; margin-top:.5rem; }
+  .sec-tag { font-size:.7rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase;
+             color:var(--accent); display:block; margin-bottom:.3rem; }
+  .sec h2 { font-family:'Fredoka One',cursive; font-size:1.28rem; font-weight:400; line-height:1.3; }
+  .sec p { margin-top:.5rem; color:var(--muted); font-weight:600; font-size:.95rem; }
+  .sec .hint { font-size:.85rem; font-style:italic; }
+  .done-badge { display:none; position:absolute; top:1rem; right:3rem; font-size:.7rem;
+                font-weight:900; color:var(--accent); }
+  section.done .done-badge { display:block; }
+
+  /* Collapsible cards — tap the header to fold a section away */
+  .sec-toggle { position:absolute; top:.75rem; right:.8rem; background:none; border:none;
+                color:var(--muted); font-family:inherit; font-size:1.15rem; font-weight:900;
+                cursor:pointer; line-height:1; padding:.25rem .35rem; border-radius:8px; }
+  .sec-toggle:hover { color:var(--accent); background:var(--btn); }
+  section.sec.collapsed { padding-bottom:1rem; }
+  section.sec.collapsed .sec-body { display:none; }
+  section.sec.collapsed h2 { font-size:1.1rem; opacity:.85; }
+  .collapse-hint { display:none; font-size:.8rem; color:var(--muted);
+                   font-weight:700; margin-top:.35rem; }
+  section.sec.collapsed .collapse-hint { display:block; }
+
+  /* Review cards */
+  .review-grid { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:1rem; }
+  .rev-card { flex:1 1 300px; background:var(--btn); border:1.5px solid var(--bd);
+              border-radius:14px; padding:.9rem 1rem; }
+  .rev-card b { display:block; color:var(--accent); font-size:.95rem; margin-bottom:.25rem; }
+  .rev-card span { font-size:.88rem; color:var(--muted); font-weight:600; }
+  .loop-box { margin-top:1rem; background:var(--btn); border:1.5px solid var(--bd);
+              border-radius:14px; padding:1rem; }
+  .loop-arrow { font-weight:800; font-size:.9rem; margin:.35rem 0; }
+  .loop-arrow.warm { color:var(--wrong); } .loop-arrow.cool { color:var(--right); }
+  .fig-box { margin:1rem auto; max-width:820px; }
+  .fig-box svg { width:100%; height:auto; display:block; }
+  .fig-cap { text-align:center; font-size:.82rem; color:var(--muted); margin-top:.35rem; }
+  .concept-p { margin-top:.7rem; font-size:.95rem; font-weight:600; max-width:80ch; }
+  .concept-p strong { color:var(--fg); }
+  /* Text lines stay readable even though the card is now full width —
+     the CARD uses the space, the LINE LENGTH stays comfortable. */
+  .sec > .sec-body > p, .sec .hint, .q-stem { max-width:80ch; }
+
+  /* Buttons */
+  .btn { font-family:inherit; font-weight:900; cursor:pointer; border-radius:12px;
+         padding:.65rem 1.2rem; font-size:.92rem; border:none;
+         background:var(--accent); color:var(--accent-c); margin-top:1rem; }
+  .btn:disabled { opacity:.45; cursor:not-allowed; }
+  .btn.ghost { background:var(--btn); color:var(--fg); border:1.5px solid var(--bd); text-decoration:none;
+               display:inline-block; }
+  .btn-row { display:flex; gap:.6rem; flex-wrap:wrap; align-items:center; }
+
+  /* Question blocks */
+  .q-block { margin-top:1rem; padding-top:1rem; border-top:1px solid var(--footer-border); }
+  .q-stem { font-weight:800; font-size:.98rem; margin-bottom:.55rem; }
+  .opts { display:flex; flex-direction:column; gap:.45rem; }
+  .opts label { display:flex; align-items:flex-start; gap:.55rem; cursor:pointer;
+                padding:.55rem .75rem; border-radius:11px; border:1.5px solid var(--bd);
+                background:var(--btn); font-size:.92rem; font-weight:600; }
+  .opts label.right { border-color:var(--right); background:var(--accent-soft); }
+  .opts label.wrong { border-color:var(--wrong); background:rgba(198,40,40,.10); }
+  .opts input { margin-top:.25rem; flex-shrink:0; }
+  /* Right/wrong must never be colour alone (rubric R5) — the glyph is
+     the signal, the colour only reinforces it. */
+  .opt-mark { margin-left:auto; padding-left:.5rem; font-size:1.05rem; font-weight:900; }
+  .opts label.right .opt-mark { color:var(--right); }
+  .opts label.wrong .opt-mark { color:var(--wrong); }
+
+  /* Calibration — unanswered-question marker.
+     Outline + a ⚠️ glyph in the message, never colour alone (rubric R5). */
+  .q-block.unanswered { box-shadow:inset 0 0 0 2px var(--accent); background:var(--accent-soft);
+                        border-radius:12px; padding:.7rem; }
+  .calib-progress { margin-top:.7rem; font-size:.86rem; font-weight:800; color:var(--muted); }
+  .calib-progress.warn { color:var(--fg); }
+
+  /* Tier offer */
+  .tier-grid { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:1rem; }
+  .tier-card { flex:1 1 280px; border-radius:16px; padding:1rem; text-align:center;
+               border:2px solid var(--bd); background:var(--btn); cursor:pointer; }
+  .tier-card.bronze { border-color:var(--bronze); }
+  .tier-card.silver { border-color:var(--silver); }
+  .tier-card.gold   { border-color:var(--gold); }
+  .tier-card.locked { opacity:.5; cursor:not-allowed; }
+  .tier-card .t-name { font-family:'Fredoka One',cursive; font-size:1.15rem; }
+  .tier-card .t-rate { font-size:.82rem; font-weight:800; color:var(--accent); margin-top:.2rem; }
+  .tier-card .t-desc { font-size:.82rem; color:var(--muted); font-weight:600; margin-top:.35rem; }
+  .tier-card .t-lock { font-size:.75rem; font-weight:800; color:var(--muted); margin-top:.4rem; }
+  .chip.tier-now.bronze { background:var(--bronze); color:#2b1a08; border-color:var(--bronze); }
+  .chip.tier-now.silver { background:var(--silver); color:#1d232a; border-color:var(--silver); }
+  .chip.tier-now.gold   { background:var(--gold);   color:#3a2c00; border-color:var(--gold); }
+  .coach-box { margin-top:1rem; padding:.85rem 1rem; border-radius:13px;
+               border:1.5px dashed var(--accent); background:var(--accent-soft);
+               font-weight:700; font-size:.92rem; display:none; }
+  .coach-box.show { display:block; }
+
+  /* Simulator */
+  .sim-meters { display:flex; gap:.8rem; flex-wrap:wrap; margin:1rem 0; }
+  .meter { flex:1 1 220px; background:var(--btn); border:1.5px solid var(--bd);
+           border-radius:13px; padding:.7rem .9rem; }
+  .meter b { font-size:.78rem; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+  .meter .m-val { font-family:'Fredoka One',cursive; font-size:1.4rem; margin-top:.15rem; }
+  .meter-track { height:.46rem; border-radius:999px; background:var(--bd); overflow:hidden; margin-top:.4rem; }
+  .meter-fill { height:100%; width:50%; transition:width .5s ease; }
+  .meter-fill.co2 { background:linear-gradient(90deg,#69DB7C,#FFD43B,#FF6B6B); }
+  .meter-fill.money { background:linear-gradient(90deg,#FF6B6B,#FFD43B,#69DB7C); }
+  .sim-choice { margin-top:1rem; }
+  .sim-opts { display:flex; flex-direction:column; gap:.5rem; margin-top:.6rem; }
+  @media (min-width:1000px){
+    .sim-opts { flex-direction:row; }
+    .sim-opts button { flex:1 1 0; }
+    .opts { display:grid; grid-template-columns:1fr 1fr; gap:.55rem; }
   }
+  .sim-opts button { text-align:left; font-family:inherit; font-weight:700; font-size:.92rem;
+        cursor:pointer; padding:.7rem .9rem; border-radius:12px;
+        border:1.5px solid var(--bd); background:var(--btn); color:var(--fg); }
+  .sim-opts button:hover { border-color:var(--accent); }
+  .sim-result { margin-top:.8rem; font-size:.92rem; font-weight:700; display:none; }
+  .sim-result.show { display:block; }
+  .sim-ending { margin-top:1rem; padding:1rem; border-radius:14px;
+                border:1.5px solid var(--accent); background:var(--accent-soft); display:none; }
+  .sim-ending.show { display:block; }
 
-  body {
-    font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text);
-    min-height: 100vh; position: relative;
-    background-image: linear-gradient(var(--bg), var(--bg2));
-    background-attachment: fixed;
-  }
-  #stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: var(--star-op); transition: opacity .4s; }
+  /* Trace-it-back */
+  .trace-start { font-family:'Fredoka One',cursive; font-size:1.1rem; text-align:center;
+                 padding:.9rem; border-radius:14px; background:var(--btn);
+                 border:1.5px solid var(--bd); }
+  .trace-chain { margin-top:.8rem; }
+  .trace-link { padding:.7rem .9rem; border-radius:12px; background:var(--btn);
+                border:1.5px solid var(--bd); margin-bottom:.5rem; font-weight:700; font-size:.92rem; }
+  .trace-link.revealed { border-color:var(--accent); }
+  .trace-q { font-weight:800; font-size:.95rem; margin:.6rem 0 .5rem; }
+  .trace-final { margin-top:.8rem; padding:.9rem; border-radius:13px; font-weight:800;
+                 background:var(--accent-soft); border:1.5px solid var(--accent); display:none;
+                 font-size:.92rem; }
+  .trace-final.show { display:block; }
 
-  .wrapper { max-width: 1180px; margin: 0 auto; padding: 0 max(1rem, 2vw) 3rem; position: relative; z-index: 1; min-width: 0; }
+  /* Myth-buster */
+  .myth-card { margin-top:1rem; padding:1rem; border-radius:15px; background:var(--btn);
+               border:1.5px solid var(--bd); }
+  .myth-claim { font-weight:800; font-size:1.02rem; font-style:italic; }
+  .myth-btns { display:flex; gap:.6rem; margin-top:.8rem; flex-wrap:wrap; }
+  .myth-btns button { flex:1 1 130px; font-family:inherit; font-weight:900; font-size:.95rem;
+        cursor:pointer; padding:.7rem; border-radius:12px; border:2px solid var(--bd);
+        background:var(--bg); color:var(--fg); }
+  .myth-btns button:disabled { opacity:.5; cursor:not-allowed; }
+  .myth-verdict { margin-top:.8rem; font-size:.92rem; font-weight:700; display:none; }
+  .myth-verdict.show { display:block; }
 
-  .top-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem; padding: 1rem 0 .3rem; }
-  .back-link { color: var(--accent); text-decoration: none; font-weight: 800; font-size: .95rem; padding: .5rem .6rem .5rem 0; }
-  .back-link:hover { text-decoration: underline; }
-  .theme-bar { display: flex; gap: .4rem; }
-  .theme-bar button {
-    font-size: 1.05rem; background: var(--card); border: 2px solid var(--line);
-    border-radius: 10px; cursor: pointer; padding: .35rem .55rem; line-height: 1;
-    min-width: 44px; min-height: 40px;
-  }
-  .theme-bar button.active { border-color: var(--accent); }
+  /* Streak */
+  .streak-hud { display:flex; gap:.8rem; flex-wrap:wrap; margin-top:1rem; }
+  .streak-hud > div { flex:1 1 160px; text-align:center; background:var(--btn);
+        border:1.5px solid var(--bd); border-radius:13px; padding:.6rem; }
+  .streak-hud b { display:block; font-size:.72rem; text-transform:uppercase;
+                  letter-spacing:.05em; color:var(--muted); }
+  .streak-hud span { font-family:'Fredoka One',cursive; font-size:1.5rem; }
+  .streak-q { margin-top:1rem; font-weight:800; font-size:1.05rem; text-align:center;
+              padding:1rem; border-radius:14px; background:var(--btn); border:1.5px solid var(--bd); }
+  .streak-opts { display:flex; gap:.6rem; margin-top:.8rem; flex-wrap:wrap; }
+  .streak-opts button { flex:1 1 130px; font-family:inherit; font-weight:800; font-size:.92rem;
+        cursor:pointer; padding:.75rem; border-radius:12px; border:1.5px solid var(--bd);
+        background:var(--btn); color:var(--fg); }
 
-  header.lesson-head { text-align: center; padding: .8rem 0 1.2rem; }
-  .chip-row { display: flex; justify-content: center; flex-wrap: wrap; gap: .5rem; margin-bottom: .7rem; }
-  .chip {
-    background: var(--chip); border: 1px solid var(--line); color: var(--muted);
-    font-size: .8rem; font-weight: 800; border-radius: 999px; padding: .3rem .8rem;
-  }
-  .chip.bean { color: var(--text); }
-  h1 {
-    font-family: 'Fredoka One', cursive; font-weight: 400;
-    font-size: clamp(1.8rem, 8vw, 3rem); line-height: 1.15;
-    color: var(--accent); text-shadow: 0 2px 12px rgba(32,201,151,.25);
-  }
-  .subtitle { color: var(--muted); font-size: 1.02rem; max-width: 780px; margin: .6rem auto 0; min-width: 0; word-break: break-word; }
-  .login-hint { margin-top: .6rem; font-size: .85rem; color: var(--muted); }
-  .login-hint a { color: var(--accent); font-weight: 800; }
+  /* ═══════════ MECHANIC 5 · DETECTIVE SCENE ═══════════
+     Tap-to-find hunt. Tiles are a responsive grid so a 360px phone
+     still gets 3 columns. Right/wrong differ by GLYPH as well as
+     colour (rubric R5) — never colour alone. */
+  .det-hud { display:flex; gap:.8rem; flex-wrap:wrap; margin-top:1rem; }
+  .det-hud > div { flex:1 1 150px; text-align:center; background:var(--btn);
+        border:1.5px solid var(--bd); border-radius:13px; padding:.6rem; }
+  .det-hud b { display:block; font-size:.72rem; text-transform:uppercase;
+               letter-spacing:.05em; color:var(--muted); }
+  .det-hud span { font-family:'Fredoka One',cursive; font-size:1.5rem; }
+  .det-scene { display:grid; grid-template-columns:repeat(auto-fill,minmax(88px,1fr));
+               gap:.55rem; margin-top:1rem; }
+  .det-tile { position:relative; font-family:inherit; cursor:pointer; padding:.7rem .35rem;
+              border-radius:13px; border:1.5px solid var(--bd); background:var(--btn);
+              color:var(--fg); text-align:center; min-height:76px; }
+  .det-tile:hover { border-color:var(--accent); }
+  .det-tile .d-emoji { font-size:1.75rem; display:block; line-height:1.15; }
+  .det-tile .d-label { font-size:.7rem; font-weight:800; display:block; margin-top:.2rem;
+                       color:var(--muted); }
+  .det-tile .d-mark { position:absolute; top:.2rem; right:.3rem; font-size:.85rem; font-weight:900; }
+  .det-tile.found { border-color:var(--right); background:var(--accent-soft); }
+  .det-tile.found .d-mark { color:var(--right); }
+  .det-tile.miss  { border-color:var(--wrong); background:rgba(198,40,40,.10); opacity:.7; }
+  .det-tile.miss .d-mark { color:var(--wrong); }
+  .det-tile:disabled { cursor:default; }
+  .det-feedback { margin-top:.85rem; padding:.85rem; border-radius:13px; font-weight:700;
+                  font-size:.92rem; background:var(--btn); border:1.5px solid var(--bd); }
+  .det-final { margin-top:.8rem; padding:.9rem; border-radius:13px; font-weight:800; font-size:.92rem;
+               background:var(--accent-soft); border:1.5px solid var(--accent); display:none; }
+  .det-final.show { display:block; }
 
-  .progress-wrap { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: .5rem 0 .4rem; border-bottom: 1px solid var(--line); }
-  .progress-label { font-size: .78rem; font-weight: 800; color: var(--muted); margin-bottom: .25rem; display: flex; justify-content: space-between; }
-  .progress-track { height: 10px; background: var(--chip); border-radius: 999px; overflow: hidden; border: 1px solid var(--line); }
-  .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent-dark)); border-radius: 999px; transition: width .5s; }
+  /* ═══════════ MECHANIC 6 · CHAIN BUILDER ═══════════
+     Tap tiles from the pool into an ordered chain. Vertical strip so a
+     4-link chain fits a phone without horizontal scrolling. */
+  .chain-pool { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.85rem; }
+  .chain-pool button { font-family:inherit; font-weight:700; font-size:.88rem; cursor:pointer;
+        padding:.6rem .8rem; border-radius:12px; border:1.5px solid var(--bd);
+        background:var(--btn); color:var(--fg); text-align:left; }
+  .chain-pool button:hover:not(:disabled) { border-color:var(--accent); }
+  .chain-pool button:disabled { opacity:.32; cursor:not-allowed; }
+  .chain-strip { display:flex; flex-direction:column; gap:.28rem; margin-top:.9rem; }
+  .chain-node { padding:.65rem .85rem; border-radius:12px; border:1.5px solid var(--accent);
+                background:var(--accent-soft); font-weight:800; font-size:.9rem; }
+  .chain-node.slot { border-style:dashed; border-color:var(--bd); background:var(--btn);
+                     color:var(--muted); font-weight:700; }
+  .chain-arrow { text-align:center; font-weight:900; color:var(--muted); font-size:.95rem; line-height:1; }
+  .chain-strip.right .chain-node:not(.slot) { border-color:var(--right); }
+  .chain-strip.wrong .chain-node:not(.slot) { border-color:var(--wrong); }
+  .chain-verdict { margin-top:.8rem; padding:.9rem; border-radius:13px; font-weight:800;
+                   font-size:.92rem; background:var(--accent-soft);
+                   border:1.5px solid var(--accent); display:none; }
+  .chain-verdict.show { display:block; }
 
-  section.sec {
-    background: var(--card); border: 1px solid var(--line); border-radius: 18px;
-    padding: 1.4rem clamp(1rem, 3vw, 1.8rem); margin-top: 1.4rem;
-    box-shadow: 0 6px 22px rgba(0,0,0,.12);
-  }
-  .sec-tag { font-size: .75rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-dark); }
-  [data-theme="night"] .sec-tag { color: var(--accent); }
-  .sec h2 { font-family: 'Fredoka One', cursive; font-weight: 400; font-size: 1.45rem; margin: .25rem 0 .8rem; }
-  .sec p { margin: .55rem 0; line-height: 1.65; }
-  .sec .hint { color: var(--muted); font-size: .9rem; }
-  .done-badge { display: none; font-size: .8rem; font-weight: 800; color: var(--good); margin-left: .5rem; }
-  section.done .done-badge { display: inline; }
+  /* ═══════════ MECHANIC 7 · DATA READER ═══════════
+     SVG chart drawn from the DATA object, then a question about it.
+     viewBox is 320x210, so in-chart font-size 11 renders ~11px at a
+     360px phone width — legible without zooming (rubric R1/R2). */
+  .chart-box { margin-top:1rem; background:var(--btn); border:1.5px solid var(--bd);
+               border-radius:14px; padding:.9rem .7rem .6rem; }
+  .chart-box svg { width:100%; height:auto; display:block; }
+  .chart-title { font-weight:900; font-size:.9rem; text-align:center; margin-bottom:.45rem; }
+  .chart-note { text-align:center; font-size:.78rem; color:var(--muted);
+                font-weight:700; margin-top:.35rem; }
+  .data-final { margin-top:.8rem; padding:.9rem; border-radius:13px; font-weight:800;
+                font-size:.92rem; background:var(--accent-soft);
+                border:1.5px solid var(--accent); display:none; }
+  .data-final.show { display:block; }
 
-  .reveal-btn, .check-btn {
-    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem;
-    background: var(--accent); color: #06281e; border: none; border-radius: 12px;
-    padding: .75rem 1.4rem; cursor: pointer; margin-top: .9rem; min-height: 44px;
-    box-shadow: 0 4px 14px rgba(32,201,151,.35);
-  }
-  .check-btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
-  .reveal-box { display: none; margin-top: 1rem; border-left: 4px solid var(--accent); background: var(--chip); border-radius: 0 12px 12px 0; padding: .9rem 1rem; }
 
-  .vocab-row, .fill-row { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; padding: .55rem 0; border-bottom: 1px dashed var(--line); }
-  .vocab-term { font-weight: 800; min-width: 10.5rem; }
-  select {
-    font-family: 'Nunito', sans-serif; font-size: .95rem; font-weight: 700;
-    background: var(--chip); color: var(--text); border: 2px solid var(--line);
-    border-radius: 10px; padding: .55rem .6rem; min-height: 44px; max-width: 100%;
-  }
-  .mark { font-size: 1.05rem; min-width: 1.4rem; }
+  .earned-note { display:none; margin-top:.9rem; font-weight:800; font-size:.9rem; color:var(--accent); }
+  .feedback-line { margin-top:.7rem; font-weight:800; font-size:.95rem; }
 
-  .sort-grid { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: .9rem; justify-content: center; }
-  .sort-card { flex: 0 1 250px; background: var(--chip); border: 1px solid var(--line); border-radius: 14px; padding: .8rem .9rem; text-align: center; }
-  .sort-card .sc-name { font-weight: 800; margin-bottom: .6rem; }
-  .sort-btns { display: flex; gap: .5rem; justify-content: center; }
-  .sort-btns button {
-    flex: 1 1 0; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .82rem;
-    border: 2px solid var(--line); background: var(--card); color: var(--text);
-    border-radius: 10px; padding: .5rem .3rem; cursor: pointer; min-height: 44px;
-  }
-  .sort-btns button.picked { border-color: var(--accent); background: var(--accent); color: #06281e; }
-  .sort-card .mark { display: block; margin-top: .4rem; }
+  /* Finish */
+  .finish-beans { font-family:'Fredoka One',cursive; font-size:2.6rem; color:var(--accent);
+                  text-align:center; margin:.5rem 0; }
+  .finish-badge { text-align:center; font-weight:900; font-size:1.05rem; }
+  .cap-note { text-align:center; font-size:.85rem; color:var(--muted); font-weight:700; margin-top:.6rem; }
 
-  .quiz-q { margin-top: 1.1rem; padding-top: .9rem; border-top: 1px dashed var(--line); }
-  .quiz-q .q-stem { font-weight: 800; }
-  .quiz-opts { display: flex; flex-direction: column; gap: .45rem; margin-top: .55rem; }
-  .quiz-opts label {
-    display: flex; align-items: center; gap: .6rem; background: var(--chip);
-    border: 2px solid var(--line); border-radius: 10px; padding: .6rem .7rem;
-    cursor: pointer; min-height: 44px; font-weight: 700; font-size: .95rem;
-  }
-  .quiz-opts input { accent-color: var(--accent); width: 1.1rem; height: 1.1rem; flex: none; }
-  .quiz-opts label.right { border-color: var(--good); }
-  .quiz-opts label.wrong { border-color: var(--bad); }
+  #toast { position:fixed; left:50%; bottom:1.3rem; transform:translateX(-50%) translateY(140%);
+           background:var(--accent); color:var(--accent-c); font-weight:900; font-size:.92rem;
+           padding:.7rem 1.2rem; border-radius:999px; z-index:99; transition:transform .35s ease;
+           max-width:90vw; text-align:center; }
+  #toast.show { transform:translateX(-50%) translateY(0); }
 
-  .tf-row { display: flex; align-items: center; justify-content: space-between; gap: .8rem; flex-wrap: wrap; padding: .6rem 0; border-bottom: 1px dashed var(--line); }
-  .tf-stmt { flex: 1 1 260px; font-weight: 700; }
-  .tf-btns { display: flex; gap: .5rem; align-items: center; }
-  .tf-btns button {
-    font-family: 'Nunito', sans-serif; font-weight: 800; border: 2px solid var(--line);
-    background: var(--chip); color: var(--text); border-radius: 10px;
-    padding: .5rem .9rem; cursor: pointer; min-height: 44px; min-width: 64px;
-  }
-  .tf-btns button.picked { border-color: var(--accent); background: var(--accent); color: #06281e; }
+  .site-footer { text-align:center; padding:1.5rem max(1rem,4vw); font-size:.8rem;
+                 color:var(--muted); border-top:1px solid var(--footer-border); }
 
-  .feedback-line { display: none; margin-top: 1rem; font-weight: 800; }
-  .earned-note { display: none; margin-top: .35rem; font-size: .85rem; color: var(--muted); }
-
-  .fig-box { margin: 1rem auto; max-width: 640px; }
-  .fig-box svg { width: 100%; height: auto; display: block; }
-  .fig-cap { text-align: center; font-size: .82rem; color: var(--muted); margin-top: .35rem; }
-
-  .starter-box { background: var(--chip); border: 1px dashed var(--accent); border-radius: 12px; padding: .8rem 1rem; margin-top: .8rem; }
-  .starter-box li { margin: .35rem 0 .35rem 1.2rem; }
-
-  .video-box { position: relative; padding-top: 56.25%; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); margin-top: .9rem; }
-  .video-box iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-
-  #toast {
-    position: fixed; left: 50%; bottom: 1.4rem; transform: translateX(-50%) translateY(120%);
-    background: var(--accent); color: #06281e; font-weight: 800; border-radius: 999px;
-    padding: .7rem 1.4rem; z-index: 30; transition: transform .35s; box-shadow: 0 8px 24px rgba(0,0,0,.3);
-    max-width: 90vw; text-align: center;
-  }
-  #toast.show { transform: translateX(-50%) translateY(0); }
-
-  .site-footer { text-align: center; color: var(--muted); font-size: .82rem; padding: 2.2rem max(1rem, 4vw) 1.4rem; position: relative; z-index: 1; }
-
-  @media (max-width: 600px) {
-    .vocab-term { min-width: 0; width: 100%; }
-    .vocab-row select, .fill-row select { width: 100%; }
-    .sort-card { flex: 0 1 100%; }
-    .tf-row { flex-direction: column; align-items: stretch; }
-    .tf-btns { justify-content: stretch; }
-    .tf-btns button { flex: 1 1 0; }
+  @media (max-width:600px) {
+    html { font-size:16.5px; }
+    .top-row { justify-content:center; }
+    .theme-bar { flex:1 1 100%; }      /* full width so the pills centre on screen */
+    .rev-card, .tier-card, .meter { flex:1 1 100%; }
+    .myth-btns button, .streak-opts button { flex:1 1 100%; }
+    .det-hud > div { flex:1 1 45%; }
+    .det-scene { grid-template-columns:repeat(auto-fill,minmax(80px,1fr)); }
+    .chain-pool button { flex:1 1 100%; }
   }
 </style>
 </head>
-<body>
+<body class="theme-night">
 <canvas id="stars"></canvas>
-<div class="wrapper">
+
+<div class="wrapper head-wrap">
 
   <div class="top-row">
     <a class="back-link" href="/standard5/science/">← Back to Science</a>
     <div class="theme-bar" id="themeBar">
-      <button data-t="night" title="Night">🌙</button>
-      <button data-t="sunny" title="Sunny">☀️</button>
-      <button data-t="cloudy" title="Cloudy">☁️</button>
-      <button data-t="nature" title="Nature">🌿</button>
+      <button class="theme-btn" data-t="night">🌙 Night</button>
+      <button class="theme-btn" data-t="sunny">☀️ Sunny</button>
+      <button class="theme-btn" data-t="cloudy">☁️ Cloudy</button>
+      <button class="theme-btn" data-t="nature">🌿 Nature</button>
     </div>
   </div>
 
   <header class="lesson-head">
     <div class="chip-row">
-      <span class="chip">📖 Lesson · Week 3</span>
-      <span class="chip">SC 1.11</span>
+      <span class="chip">Standard 5 · Science</span>
+      <span class="chip">Week 3 · SC1.11</span>
       <span class="chip bean" id="beanPill">🌱 0 beans</span>
+      <span class="chip" id="tierChip" style="display:none;"></span>
     </div>
-    <h1>Weather vs. Climate</h1>
-    <p class="subtitle">Telling the Difference — weather is what happens TODAY; climate is the pattern over many years. Work through each section and earn cacao beans 🌱 as you go!</p>
-    <p class="login-hint" id="loginHint"></p>
+    <h1>Weather vs Climate</h1>
+    <p class="subtitle">Practice time! Cement what Mr. EdLo taught you this week.</p>
+    <p class="login-hint" id="loginHint">
+      <a href="/login/">Log in</a> to save your beans 🌱 to your account.
+    </p>
   </header>
 
-  <div class="progress-wrap">
-    <div class="progress-label"><span>Lesson progress</span><span id="progText">0 of 6 done</span></div>
+</div><!-- /wrapper -->
+
+<!-- Sticky progress bar — stays visible while scrolling, like the tests -->
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="progress-label"><span>Your progress</span><span id="progText">0 of 6 done</span></div>
     <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
   </div>
-
-  <!-- ═══ SECTION 1 · HOOK ═══ -->
-  <section class="sec" id="sec-hook">
-    <span class="sec-tag">Section 1 · Think first</span>
-    <h2>🌧️ Vote with Your Thumbs</h2>
-    <p>Two sentences — think carefully:</p>
-    <p>💬 <strong>“It is raining right now.”</strong> Is that weather or climate?</p>
-    <p>💬 <strong>“Belize is hot all year.”</strong> And which is that?</p>
-    <p style="font-size:1.15rem; font-weight:800;">🤔 What is the difference between the two?</p>
-    <button class="reveal-btn" id="hookBtn">Think about it… then tap to reveal 💡</button>
-    <div class="reveal-box" id="hookReveal">
-      <p><strong>“Raining right now” = weather</strong> — what is happening TODAY. <strong>“Hot all year” = climate</strong> — the average pattern over MANY years. Keep that rule in your pocket; you will use It all lesson!</p>
-    </div>
-  </section>
-
-  <!-- ═══ SECTION 2 · LEARN IT ═══ -->
-  <section class="sec" id="sec-learn">
-    <span class="sec-tag">Section 2 · Learn it</span>
-    <h2>⏱️ Today vs. Many Years</h2>
-    <p><strong>Weather</strong> is what happens TODAY — this morning's rain, this afternoon's wind. <strong>Climate</strong> is the average pattern over MANY years — Belize is hot and humid year-round.</p>
-    <p>Two measurements decide a place's <strong>climate type</strong>: <strong>temperature</strong> 🌡️ and <strong>precipitation</strong> (rainfall) 🌧️.</p>
-    <div class="fig-box">
-      <svg viewBox="0 0 640 320" role="img" aria-label="Weather versus climate comparison with climate types">
-        <rect x="0" y="0" width="640" height="320" rx="16" fill="#10254a"/>
-        <rect x="30" y="30" width="275" height="150" rx="14" fill="#1d3b74" stroke="#4DABF7" stroke-width="2.5"/>
-        <text x="167" y="62" text-anchor="middle" font-family="Nunito, sans-serif" font-size="18" font-weight="800" fill="#ffffff">☔ WEATHER</text>
-        <text x="167" y="92" text-anchor="middle" font-family="Nunito, sans-serif" font-size="13" fill="#bcd3f5">what happens NOW / today</text>
-        <text x="167" y="120" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" fill="#bcd3f5">“It is raining this morning”</text>
-        <text x="167" y="148" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" fill="#bcd3f5">“It is windy today”</text>
-        <rect x="335" y="30" width="275" height="150" rx="14" fill="#1d4a2c" stroke="#69DB7C" stroke-width="2.5"/>
-        <text x="472" y="62" text-anchor="middle" font-family="Nunito, sans-serif" font-size="18" font-weight="800" fill="#ffffff">🌍 CLIMATE</text>
-        <text x="472" y="92" text-anchor="middle" font-family="Nunito, sans-serif" font-size="13" fill="#c4ecd0">the average over MANY years</text>
-        <text x="472" y="120" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" fill="#c4ecd0">“Belize is hot all year”</text>
-        <text x="472" y="148" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" fill="#c4ecd0">“Belize has a wet and a dry season”</text>
-        <text x="320" y="218" text-anchor="middle" font-family="Nunito, sans-serif" font-size="14" font-weight="800" fill="#7fe0c3">CLIMATE TYPES AROUND THE WORLD</text>
-        <rect x="40" y="235" width="180" height="56" rx="10" fill="#4c3a12" stroke="#FFD43B" stroke-width="2"/>
-        <text x="130" y="258" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" font-weight="800" fill="#ffffff">🌴 TROPICAL — Belize</text>
-        <text x="130" y="278" text-anchor="middle" font-family="Nunito, sans-serif" font-size="11" fill="#f5e3b0">hot all year · wet &amp; dry season</text>
-        <rect x="235" y="235" width="180" height="56" rx="10" fill="#3c3556" stroke="#9775FA" stroke-width="2"/>
-        <text x="325" y="258" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" font-weight="800" fill="#ffffff">🍂 TEMPERATE — New York</text>
-        <text x="325" y="278" text-anchor="middle" font-family="Nunito, sans-serif" font-size="11" fill="#d5c9f7">swings from hot to cold</text>
-        <rect x="430" y="235" width="180" height="56" rx="10" fill="#173d4d" stroke="#66d9e8" stroke-width="2"/>
-        <text x="520" y="258" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" font-weight="800" fill="#ffffff">🧊 POLAR</text>
-        <text x="520" y="278" text-anchor="middle" font-family="Nunito, sans-serif" font-size="11" fill="#b8ecf3">cold all through the year</text>
-      </svg>
-      <p class="fig-cap">Weather = now. Climate = the long-run pattern — and It decides a place's climate type.</p>
-    </div>
-    <p>🌴 Belize sits in the <strong>tropical</strong> band: hot all year, with a <strong>dry season (roughly February–May)</strong> and a <strong>wet (rainy) season (roughly June–November)</strong>.</p>
-    <p>🗽 One comparison to remember: <strong>Belize City and New York City have different climates</strong> because their seasonal changes differ — Belize's are wet and dry, while New York swings from hot to cold.</p>
-    <p class="hint">Pocket rule: weather = now / today · climate = the long-run average. One cold morning does NOT change Belize's tropical climate.</p>
-  </section>
-
-  <!-- ═══ VIDEO (hidden until Mr. EdLo adds a URL) ═══ -->
-  <section class="sec" id="sec-video" style="display:none;">
-    <span class="sec-tag">Watch</span>
-    <h2>🎬 Watch &amp; Think</h2>
-    <div class="video-box"><iframe id="videoFrame" src="" title="Lesson video" allowfullscreen></iframe></div>
-  </section>
-
-  <!-- ═══ SECTION 3 · VOCABULARY ═══ -->
-  <section class="sec act" id="sec-vocab" data-act="vocab">
-    <span class="sec-tag">Section 3 · Word power</span>
-    <h2>📚 Vocabulary Match <span class="done-badge">✓ done</span></h2>
-    <p class="hint">Match each science word to its meaning. Answer all five, then check.</p>
-    <div id="vocabList"></div>
-    <button class="check-btn" disabled>Check my answers ✔</button>
-    <p class="feedback-line"></p><p class="earned-note"></p>
-  </section>
-
-  <!-- ═══ SECTION 4 · SORT IT ═══ -->
-  <section class="sec act" id="sec-sort" data-act="sort">
-    <span class="sec-tag">Section 4 · Sort it</span>
-    <h2>🗂️ Weather or Climate? <span class="done-badge">✓ done</span></h2>
-    <p class="hint">The same statement cards from class. Is each one about <strong>☔ weather</strong> (now / today) or <strong>🌍 climate</strong> (the long-run pattern)? Tap one button on every card.</p>
-    <div class="sort-grid" id="sortGrid"></div>
-    <button class="check-btn" disabled>Check my sorting ✔</button>
-    <p class="feedback-line"></p><p class="earned-note"></p>
-  </section>
-
-  <!-- ═══ SECTION 5 · PRACTICE ═══ -->
-  <section class="sec act" id="sec-practice" data-act="practice">
-    <span class="sec-tag">Section 5 · Your turn</span>
-    <h2>✏️ Label Belize's Climate <span class="done-badge">✓ done</span></h2>
-    <p class="hint">Use the word bank to finish the sentences — the same sentence starters from your worksheet.</p>
-    <div id="fillList"></div>
-    <div class="starter-box">
-      <strong>🗣️ Say it at home:</strong>
-      <li>Weather is ______ but climate is ______.</li>
-      <li>Belize's climate type is ______.</li>
-      <li>Two things that describe a climate are ______ and ______.</li>
-    </div>
-    <button class="check-btn" disabled>Check my sentences ✔</button>
-    <p class="feedback-line"></p><p class="earned-note"></p>
-  </section>
-
-  <!-- ═══ SECTION 6 · CHECKPOINT ═══ -->
-  <section class="sec act" id="sec-checkpoint" data-act="checkpoint">
-    <span class="sec-tag">Section 6 · Checkpoint</span>
-    <h2>🛑 ALTO — Checkpoint Quiz <span class="done-badge">✓ done</span></h2>
-    <p class="hint">Six questions on the whole lesson. Answer every one, then check. Checkpoints earn extra beans!</p>
-    <div id="quizList"></div>
-    <button class="check-btn" disabled>Check the quiz ✔</button>
-    <p class="feedback-line"></p><p class="earned-note"></p>
-  </section>
-
-  <!-- ═══ SECTION 7 · MISCONCEPTION BUSTER ═══ -->
-  <section class="sec act" id="sec-tf" data-act="tf">
-    <span class="sec-tag">Section 7 · Myth buster</span>
-    <h2>🕵️ True or False? <span class="done-badge">✓ done</span></h2>
-    <p class="hint">Students mix up weather and climate ALL the time. Can you keep the rule straight? Decide for each statement.</p>
-    <div id="tfList"></div>
-    <button class="check-btn" disabled>Check my choices ✔</button>
-    <p class="feedback-line"></p><p class="earned-note"></p>
-  </section>
-
-  <!-- ═══ SECTION 8 · FINISH LINE ═══ -->
-  <section class="sec" id="sec-finish">
-    <span class="sec-tag">Section 8 · Finish line</span>
-    <h2>🏁 Reflect &amp; Finish</h2>
-    <p>Before you go, answer these OUT LOUD or in your notebook:</p>
-    <p>1️⃣ Write <strong>the rule</strong> that tells weather from climate <strong>in your own words</strong>.</p>
-    <p>2️⃣ Say one <strong>weather</strong> sentence and one <strong>climate</strong> sentence about YOUR village or town.</p>
-    <p>3️⃣ Challenge: a friend says “It was cold this morning, so Belize's climate must be changing.” Use the rule to answer him or her.</p>
-    <p class="feedback-line" id="finishLine"></p>
-    <p class="hint" id="finishHint">Complete all six activity sections above to collect your 🌱 15-bean completion bonus!</p>
-  </section>
-
-  <footer class="site-footer">© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize · All rights reserved.</footer>
 </div>
 
+<div class="wrapper">
+
+
+  <!-- 1. BRIEF REVIEW -->
+  <section class="sec" id="secReview">
+    <span class="sec-tag">Quick Review</span>
+    <h2>🌦️ Weather vs Climate</h2>
+    <p>One minute to refresh. Then the practice begins.</p>
+    <p class="concept-p"><strong>Weather</strong> is what the air is doing today or right now — this morning's rain, this afternoon's wind. <strong>Climate</strong> is the average pattern of weather in a place over many years.</p>
+    <p class="concept-p">Two measurements decide a place's <strong>climate type</strong>: <strong>temperature</strong> (how hot or cold) and <strong>precipitation</strong> (rain and other water that falls). Here is the picture Mr. EdLo drew on the board:</p>
+
+    <div class="fig-box">
+<svg viewBox="0 0 640 300" role="img" aria-label="Weather is what the air is doing right now, today. Climate is the average pattern of weather over many years. Two measures, temperature and precipitation, name a climate type. Belize is tropical: hot all year with a wet season and a dry season.">
+        <rect x="0" y="0" width="640" height="300" rx="16" fill="#10254a"/>
+        <rect x="24" y="20" width="286" height="150" rx="14" fill="#1d3b74" stroke="#4DABF7" stroke-width="2.5"/>
+        <text x="167" y="52" text-anchor="middle" font-family="Nunito, sans-serif" font-size="20" font-weight="800" fill="#ffffff">🌦️ WEATHER</text>
+        <text x="167" y="80" text-anchor="middle" font-family="Nunito, sans-serif" font-size="13" fill="#bcd3f5">what the air is doing</text>
+        <text x="167" y="102" text-anchor="middle" font-family="Nunito, sans-serif" font-size="15" font-weight="800" fill="#ffd8a8">RIGHT NOW · TODAY</text>
+        <text x="167" y="132" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" fill="#bcd3f5">“It is raining this morning.”</text>
+        <text x="167" y="152" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" fill="#bcd3f5">“It is windy today.”</text>
+        <rect x="330" y="20" width="286" height="150" rx="14" fill="#123a2e" stroke="#0CA678" stroke-width="2.5"/>
+        <text x="473" y="52" text-anchor="middle" font-family="Nunito, sans-serif" font-size="20" font-weight="800" fill="#ffffff">📅 CLIMATE</text>
+        <text x="473" y="80" text-anchor="middle" font-family="Nunito, sans-serif" font-size="13" fill="#a7e8d0">the average pattern of weather</text>
+        <text x="473" y="102" text-anchor="middle" font-family="Nunito, sans-serif" font-size="15" font-weight="800" fill="#7fe0c3">OVER MANY YEARS</text>
+        <text x="473" y="132" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" fill="#a7e8d0">“Belize is hot all year.”</text>
+        <text x="473" y="152" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" fill="#a7e8d0">“Belize has a wet and a dry season.”</text>
+        <rect x="24" y="186" width="592" height="96" rx="14" fill="#5c3a10" stroke="#FFD43B" stroke-width="2.5"/>
+        <text x="320" y="212" text-anchor="middle" font-family="Nunito, sans-serif" font-size="14" font-weight="800" fill="#ffffff">Two measures name a climate type:</text>
+        <text x="320" y="240" text-anchor="middle" font-family="Nunito, sans-serif" font-size="16" font-weight="800" fill="#FFE08A">🌡️ Temperature  +  🌧️ Precipitation</text>
+        <text x="320" y="268" text-anchor="middle" font-family="Nunito, sans-serif" font-size="12.5" fill="#ffe8b0">Belize = TROPICAL — hot all year, with a wet season and a dry season</text>
+      </svg>
+      <p class="fig-cap">Weather is now; climate is the long-run average. Temperature and precipitation name the climate type.</p>
+    </div>
+
+    <p class="concept-p">🌴 <strong>Belize's climate type is tropical:</strong> hot all year, with a <strong>wet season</strong> and a <strong>dry season</strong> instead of a hot and a cold one.</p>
+    <p class="concept-p">🌏 <strong>Different places, different climates.</strong> Belize City swings from wet to dry; New York City swings from hot to cold. Same two measures, different patterns — so different climate types.</p>
+    <p class="hint">Belize sits near the equator, so it is warm every month, and its low coastline and reef mean the wet and dry seasons matter for farming and fishing. That is why knowing our own climate matters here at home.</p>
+
+    <div class="loop-box">
+      <div class="loop-arrow warm">☔ WEATHER — what the air is doing this moment: today's rain, today's wind, today's heat.</div>
+      <div class="loop-arrow cool">📅 CLIMATE — the average over many years: Belize is tropical, with a wet and a dry season.</div>
+      <p class="hint">One cold morning does not change Belize's climate. Weather is now; climate is the long run.</p>
+    </div>
+
+    <div class="review-grid" id="reviewGrid"></div>
+    <button class="btn" id="reviewDone">I'm ready — start practising →</button>
+  </section>
+
+  <!-- 2. CALIBRATION -->
+  <section class="sec step-hidden" id="secCalib">
+    <span class="done-badge">✓ done</span>
+    <span class="sec-tag">Warm-Up Challenge</span>
+    <h2>🎯 Five Quick Questions</h2>
+    <p>This is not a test — it finds the right challenge level for you today. Answer all five.</p>
+    <div id="calibBox"></div>
+    <button class="btn" id="calibCheck">Check my level</button>
+    <div class="calib-progress" id="calibProgress"></div>
+    <div class="feedback-line" id="calibFeedback"></div>
+    <div class="earned-note"></div>
+  </section>
+
+  <!-- 3. TIER OFFER -->
+  <section class="sec step-hidden" id="secTier">
+    <span class="sec-tag">Choose Your Challenge</span>
+    <h2 id="tierHead">🏅 Pick Your Level</h2>
+    <p id="tierMsg"></p>
+    <div class="tier-grid" id="tierGrid"></div>
+  </section>
+
+  <!-- ═══ MECHANIC 5 · DETECTIVE SCENE ═══════════════════════════════
+       Analysis dressed as a hunt. Tap every tile that IS an example of
+       the week's concept. Wrong taps cost a 🔍 charge, so tapping
+       everything is not a winning strategy — the student must judge
+       each tile, which is the actual thinking the outcome asks for.
+       DATA: DETECT[tier] = { prompt, items:[{e,label,hit,why}] }   -->
+  <section class="sec step-hidden" id="secDetect">
+    <span class="done-badge">✓ done</span>
+    <span class="sec-tag">Activity · Investigate</span>
+    <h2>🕶️ Detective Scene</h2>
+    <p id="detPrompt">Look carefully and tap what belongs — but watch your magnifier charges.</p>
+    <div class="det-hud">
+      <div><b>Found</b><span id="detFound">0</span></div>
+      <div><b>To find</b><span id="detTarget">0</span></div>
+      <div><b>🔍 Charges</b><span id="detCharges">0</span></div>
+    </div>
+    <div class="det-scene" id="detScene"></div>
+    <div class="det-feedback" id="detFeedback">Tap a tile to investigate it.</div>
+    <div class="det-final" id="detFinal"></div>
+    <div class="coach-box" id="detCoach"></div>
+    <div class="earned-note"></div>
+  </section>
+
+  <!-- ═══ MECHANIC 6 · CHAIN BUILDER ══════════════════════════════════
+       Structure and sequencing. Tap tiles from the pool to build a
+       cause → effect chain. MORE THAN ONE ORDER CAN BE RIGHT: every
+       chain in `valid` scores, and finding a second one pays a bonus,
+       which is what stops this being a memory test.
+       DATA: CHAIN[tier] = [{ prompt, tiles:[], valid:[[],[]], why }]  -->
+  <section class="sec step-hidden" id="secChain">
+    <span class="done-badge">✓ done</span>
+    <span class="sec-tag">Activity · Build</span>
+    <h2>🔗 Chain Builder</h2>
+    <p id="chainPrompt">Put the links in an order that actually works — cause first.</p>
+    <div class="chain-strip" id="chainStrip"></div>
+    <div class="chain-pool" id="chainPool"></div>
+    <div class="btn-row">
+      <button class="btn ghost" id="chainUndo">↩︎ Undo</button>
+      <button class="btn" id="chainCheck" disabled>Check my chain →</button>
+    </div>
+    <div class="chain-verdict" id="chainVerdict"></div>
+    <div class="coach-box" id="chainCoach"></div>
+    <div class="earned-note"></div>
+  </section>
+
+  <!-- ═══ MECHANIC 7 · DATA READER ════════════════════════════════════
+       Reading evidence off a chart — the science skill no other
+       mechanic in the bank exercises. The chart is DRAWN from the
+       numbers (chartSVG), never a picture file, so a week only
+       supplies labels and values.
+       DATA: DATAR[tier] = [{ title, unit, type, labels, values,
+                              q, o, a, why }]                        -->
+  <section class="sec step-hidden" id="secData">
+    <span class="done-badge">✓ done</span>
+    <span class="sec-tag">Activity · Read the data</span>
+    <h2>📊 What Does the Chart Say?</h2>
+    <p>Scientists read the graph before they draw a conclusion. Your turn.</p>
+    <div id="dataBox"></div>
+    <div class="coach-box" id="dataCoach"></div>
+    <div class="earned-note"></div>
+  </section>
+
+  <!-- 4. SIMULATOR -->
+  <section class="sec step-hidden" id="secSim">
+    <span class="done-badge">✓ done</span>
+    <span class="sec-tag">Activity 1 · Decide</span>
+    <h2>🏛️ Mayor for a Year</h2>
+    <p>You are the mayor of a town. Every choice changes the air and the money. Choose well!</p>
+    <div class="sim-meters">
+      <div class="meter"><b>Greenhouse gases</b><div class="m-val" id="simCo2Val">Medium</div>
+        <div class="meter-track"><div class="meter-fill co2" id="simCo2Bar"></div></div></div>
+      <div class="meter"><b>Town money</b><div class="m-val" id="simMoneyVal">$100</div>
+        <div class="meter-track"><div class="meter-fill money" id="simMoneyBar"></div></div></div>
+    </div>
+    <div class="sim-choice" id="simChoice"></div>
+    <div class="sim-result" id="simResult"></div>
+    <div class="sim-ending" id="simEnding"></div>
+    <div class="coach-box" id="simCoach"></div>
+    <div class="earned-note"></div>
+  </section>
+
+  <!-- 5. TRACE-IT-BACK -->
+  <section class="sec step-hidden" id="secTrace">
+    <span class="done-badge">✓ done</span>
+    <span class="sec-tag">Activity 2 · Investigate</span>
+    <h2>🔍 Trace It Back</h2>
+    <p>Some technology looks clean… until you follow the wire. Trace each one to its real source.</p>
+    <div id="traceBox"></div>
+    <div class="coach-box" id="traceCoach"></div>
+    <div class="earned-note"></div>
+  </section>
+
+  <!-- 6. MYTH-BUSTER -->
+  <section class="sec step-hidden" id="secMyth">
+    <span class="done-badge">✓ done</span>
+    <span class="sec-tag">Activity 3 · Judge</span>
+    <h2>🕵️ Myth-Buster Arena</h2>
+    <p>People say these things about technology and climate. Which ones survive?</p>
+    <div id="mythBox"></div>
+    <div class="coach-box" id="mythCoach"></div>
+    <div class="earned-note"></div>
+  </section>
+
+  <!-- 7. STREAK -->
+  <section class="sec step-hidden" id="secStreak">
+    <span class="done-badge">✓ done</span>
+    <span class="sec-tag">Activity 4 · Speed</span>
+    <h2>⚡ Beat Your Streak</h2>
+    <p>Quick-fire! How many can you get right in a row? Your best streak is saved.</p>
+    <div class="streak-hud">
+      <div><b>Streak</b><span id="stkNow">0</span></div>
+      <div><b>Best ever</b><span id="stkBest">0</span></div>
+      <div><b>Time left</b><span id="stkLeft">–</span></div>
+    </div>
+    <div id="streakBox"></div>
+    <button class="btn" id="streakStart">Start the round →</button>
+    <div class="earned-note"></div>
+  </section>
+
+  <!-- 8. FINISH -->
+  <section class="sec step-hidden" id="secFinish">
+    <span class="sec-tag">Finish Line</span>
+    <h2>🏁 Great Work!</h2>
+    <div class="finish-beans" id="finishBeans">🌱 0</div>
+    <div class="finish-badge" id="finishBadge"></div>
+    <p class="cap-note" id="capNote"></p>
+    <div class="btn-row" style="justify-content:center;">
+      <a class="btn ghost" href="/standard5/science/">← Back to Science</a>
+      <button class="btn" id="replayBtn">🔁 Try a harder level</button>
+    </div>
+  </section>
+
+</div>
+
+<footer class="site-footer">© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize · All rights reserved.</footer>
 <div id="toast"></div>
 
-<script src="/edlo-utils.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   ONLINE LESSON ENGINE — design spec: LESSON-ENGINE-PLAN.md
+   Structure: DATA first, ENGINE second. To build another week,
+   replace the DATA block only — the engine never changes.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ───────────────────────── DATA ───────────────────────── */
+/* ⚙️ THE ONE LINE A WEEK CHANGES TO PICK ITS ACTIVITIES.
+   `mechanics` names 3–4 keys from the MECHANICS registry (see ENGINE
+   below) in the order the student meets them. The step chain, the
+   progress bar total and the tier rebuild are all DERIVED from this
+   array — no nextButton wiring to edit by hand, which is how the
+   chain used to get broken when a mechanic was swapped in.
+   Any mechanic section left in the HTML but NOT named here removes
+   itself at boot.
+   ⚠️ THE LAB RUNS ALL SEVEN. A real lesson names 3–4 (plan §5 Rule 1),
+   and must not repeat last week's set (Rule 2). */
+window.LESSON = {
+  week:'Wk3', lo:'SC1.11', name:'Weather vs Climate', idBase:'std5-sci-wk03',
+  mechanics:['detective','trace','myth','streak']
+};
+
+var REVIEW = [
+  { t:'Weather',        d:'What the air is doing today or right now — this morning’s rain, this afternoon’s wind.' },
+  { t:'Climate',        d:'The average pattern of weather in a place over many years.' },
+  { t:'Temperature & precipitation', d:'The two measurements that together decide a place’s climate type. Precipitation means rain and other water that falls.' },
+  { t:'Tropical',       d:'Belize’s climate type: hot all year, with a wet season and a dry season instead of a hot and a cold one.' },
+  { t:'Average',        d:'The long-run figure. One unusual day — a cold morning — does not change it.' },
+  { t:'Climate distribution', d:'Different parts of the Earth have different climate types, from tropical near the equator to polar at the poles.' }
+];
+
+var CALIB = [
+  { q:'Which one of these is WEATHER?',
+    o:['It is raining in Belize City this morning','Belize is hot all year',
+       'Belize has a wet and a dry season','The tropics stay warm near the equator'], a:0 },
+  { q:'Which TWO measurements decide a place’s climate type?',
+    o:['Temperature and precipitation','Wind and clouds','Sunrise and sunset','Height and distance'], a:0 },
+  { q:'What is Belize’s climate type?',
+    o:['Tropical','Polar','Desert','It changes from week to week'], a:0 },
+  { q:'There is one cold morning in December. Has Belize’s climate changed?',
+    o:['No — one cold day is weather, not climate','Yes — a cold day means the climate is now cold',
+       'Yes — the climate changes whenever the weather does','Only if it stays cold until lunchtime'], a:0 },
+  { q:'Belize City and New York City have different climates. Why?',
+    o:['Belize swings wet to dry; New York swings hot to cold',
+       'New York City is a far bigger city, so its climate has to be different','It rained in New York today',
+       'They actually have exactly the same climate'], a:0 }
+];
+
+var TRACE = {
+  bronze:[
+    { start:'🌴 We call Belize’s climate “tropical”.', q:'What makes a climate “tropical”?',
+      chain:['Look at its temperature: hot in every month','Look at its rain: a wet season, then a dry season','Two measures — temperature and precipitation — together name the climate type'],
+      final:'Tropical means hot all year with wet and dry seasons. Temperature and precipitation decide it.',
+      o:['Only how hot it gets in the daytime','Its temperature and its precipitation','How windy it is on the day'], a:1 },
+    { start:'📅 Someone says “Belize is hot all year.”', q:'Is this weather or climate?',
+      chain:['“All year” is not one single day','It is the pattern averaged over many years','That long-run pattern is what we call climate'],
+      final:'Any statement about the long-run pattern is climate, not weather.',
+      o:['Weather','Climate','Neither of them'], a:1 },
+    { start:'☔ Someone says “It is raining right now.”', q:'Weather or climate?',
+      chain:['“Right now” is this one moment','One moment of rain is not a long-run pattern','It tells us nothing about the average over years'],
+      final:'What the air is doing at this moment is weather.',
+      o:['Weather','Climate','Both at the same time'], a:0 },
+    { start:'🌧️ Belize’s rain comes in a wet season and a dry season.', q:'Which measurement is this describing?',
+      chain:['Rain, drizzle and downpours are all water that falls','Water that falls from the sky is called precipitation','Precipitation is one of the two climate measures'],
+      final:'This is the precipitation pattern — one of the two measures that name a climate type.',
+      o:['Temperature','Precipitation','Wind speed'], a:1 },
+    { start:'🌡️ A place is warm in every single month.', q:'Which measurement decides this?',
+      chain:['“Warm” tells us how hot or cold the air is','How hot or cold the air is called temperature','Temperature is the other climate measure'],
+      final:'This is the temperature pattern — the second of the two measures.',
+      o:['Precipitation','Temperature','The time of sunrise'], a:1 }
+  ],
+  silver:[
+    { start:'🗽 New York City has a hot summer and a cold winter.', q:'How is New York’s climate different from Belize’s?',
+      chain:['Belize’s temperature stays hot all year','New York’s temperature swings hot in summer, cold in winter','Their yearly temperature patterns are not the same'],
+      final:'Belize swings wet to dry; New York swings hot to cold. Same measures, different patterns — different climates.',
+      o:['They both have the same climate','Their temperature patterns through the year differ','New York has weather but no climate'], a:1 },
+    { start:'🌏 Places near the equator are warm all year.', q:'Why do different parts of the Earth have different climates?',
+      chain:['Near the equator the sun’s energy is strong all year','Far from the equator the sun’s energy is weaker','So temperature and precipitation patterns differ from place to place'],
+      final:'Climate is spread out across the Earth: tropical near the equator, colder toward the poles.',
+      o:['Every place on Earth has the same climate','Sunlight and position change the temperature and rain patterns','Only some countries are allowed a climate'], a:1 },
+    { start:'🥶 There is one cold morning in December.', q:'Has Belize’s climate changed?',
+      chain:['A cold morning is a single day','The climate is the average of many years','One day cannot move a many-year average'],
+      final:'Weather is now; climate is the long run. One cold morning does not change a tropical climate.',
+      o:['Yes, the climate is cold now','No — one day cannot change the long-run average','Yes, the climate changes every day'], a:1 },
+    { start:'🌦️ “Belize had more rain this week than last week.”', q:'Weather or climate?',
+      chain:['This compares two single weeks','A couple of weeks is still short-term','Climate needs the pattern over many years'],
+      final:'Comparing this week with last week is still weather. Climate needs many years.',
+      o:['Weather','Climate','It cannot be decided at all'], a:0 },
+    { start:'📊 “On average, June to November is Belize’s wet season.”', q:'Weather or climate?',
+      chain:['“On average” points to many years, not one','It describes a pattern that repeats each year','A repeating long-run pattern is climate'],
+      final:'An average pattern that repeats every year is a climate statement.',
+      o:['Weather','Climate','Neither of them'], a:1 }
+  ],
+  gold:[
+    { start:'🏜️ A desert is hot in the day, yet “desert” is a climate type.', q:'What makes a climate a “desert”?',
+      chain:['A desert’s temperature can be very hot','But its precipitation is very low — little rain over many years','Low precipitation over the long run is what defines a desert climate'],
+      final:'It is the long-run precipitation — very little rain — that makes a climate “desert”, together with its temperature.',
+      o:['Only that it is hot during the daytime','Its long-run temperature and very low precipitation','That the ground there is sandy'], a:1 },
+    { start:'❄️ The Arctic and Belize are both real climate types.', q:'Why are they so different?',
+      chain:['The Arctic sits far from the equator — weak sunlight, cold most of the year','Belize sits near the equator — strong sunlight, hot all year','Distance from the equator shapes each place’s temperature and precipitation'],
+      final:'Climate is spread across the Earth: polar at the poles, tropical near the equator. Position decides the pattern.',
+      o:['One is real and the other one is completely invented','Their positions on Earth shape their temperature and rain','The Arctic has weather but no climate of its own'], a:1 },
+    { start:'🌡️ “Today in Belize City is hotter than today in New York.”', q:'Does this compare weather or climate?',
+      chain:['Both halves of the sentence say “today”','Comparing two places on one day compares their weather','Climate would compare their patterns over many years'],
+      final:'Two places compared on a single day is a weather comparison. To compare climates, use many years.',
+      o:['It compares their climates','It compares their weather today','It compares nothing measurable'], a:1 },
+    { start:'📅 “Belize has warmed by about half a degree on average since 1970.”', q:'Weather or climate?',
+      chain:['“On average since 1970” covers about fifty years','That is a long-run pattern, not a single day','A shift in the long-run average is a climate statement'],
+      final:'A change measured across decades is climate — this is what “climate change” means.',
+      o:['Weather','Climate','Too small a change to count'], a:1 },
+    { start:'🌴 “It felt cool today, so Belize is not really tropical.”', q:'What is wrong with this reasoning?',
+      chain:['“Today” is a single day of weather','“Tropical” describes the pattern over many years','One cool day cannot overturn a many-year pattern'],
+      final:'A single day’s weather cannot decide a climate type. Belize stays tropical whatever today feels like.',
+      o:['Nothing — one cool day changes the climate','A single day is weather; the climate type comes from many years','Belize was never really tropical'], a:1 }
+  ]
+};
+
+var MYTH = {
+  bronze:[
+    { c:'Weather and climate mean the same thing.', bust:true,
+      why:'BUSTED. Weather is what the air does today; climate is the average over many years.' },
+    { c:'Climate is the average pattern of weather over many years.', bust:false,
+      why:'TRUE. That is exactly what climate means.' },
+    { c:'“It is raining right now” is a weather statement.', bust:false,
+      why:'TRUE. “Right now” is this moment — that is weather.' },
+    { c:'One cold morning means Belize’s climate has changed.', bust:true,
+      why:'BUSTED. One day is weather. A many-year average does not move because of a single morning.' },
+    { c:'Belize’s climate type is tropical.', bust:false,
+      why:'TRUE. Belize is hot all year with a wet and a dry season — that is tropical.' }
+  ],
+  silver:[
+    { c:'Temperature and precipitation are the two measures that name a climate type.', bust:false,
+      why:'TRUE. Together they tell you what kind of climate a place has.' },
+    { c:'“Belize is hot all year” is a weather statement.', bust:true,
+      why:'BUSTED. “All year” is the long-run pattern — that is climate, not weather.' },
+    { c:'A wet season and a dry season are part of Belize’s tropical climate.', bust:false,
+      why:'TRUE. Tropical Belize swings between a wet season and a dry season, not summer and winter.' },
+    { c:'It rained hard today, so Belize’s climate must be getting wetter.', bust:true,
+      why:'BUSTED. One heavy day is weather. Climate is the average across many years.' },
+    { c:'New York City and Belize City have the same climate.', bust:true,
+      why:'BUSTED. New York swings hot to cold; Belize swings wet to dry. Different patterns, different climates.' }
+  ],
+  gold:[
+    { c:'A single unusually cold day proves Belize is not tropical.', bust:true,
+      why:'BUSTED. A single day is weather. The tropical climate is the pattern over many years.' },
+    { c:'Different parts of the Earth have different climate types, from tropical to polar.', bust:false,
+      why:'TRUE. Climate is spread out — warmest near the equator, coldest at the poles.' },
+    { c:'To compare two places’ climates fairly, you compare one single day in each.', bust:true,
+      why:'BUSTED. One day is weather. Comparing climates needs the pattern over many years.' },
+    { c:'A desert is a climate type because, over many years, very little rain falls there.', bust:false,
+      why:'TRUE. Its long-run precipitation is very low — that, with its temperature, names a desert climate.' },
+    { c:'“Belize has warmed on average over the last fifty years” is a climate statement.', bust:false,
+      why:'TRUE. A shift in the long-run average across decades is climate — this is climate change.' }
+  ]
+};
+
+var STREAK = {
+  bronze:[
+    { q:'It is raining right now — weather or climate?', o:['Weather','Climate'], a:0 },
+    { q:'Belize is hot all year — weather or climate?', o:['Weather','Climate'], a:1 },
+    { q:'It is windy this afternoon — weather or climate?', o:['Weather','Climate'], a:0 },
+    { q:'Belize has a wet and a dry season — weather or climate?', o:['Weather','Climate'], a:1 },
+    { q:'The sky is cloudy this morning — weather or climate?', o:['Weather','Climate'], a:0 },
+    { q:'The tropics stay warm every month — weather or climate?', o:['Weather','Climate'], a:1 },
+    { q:'A thunderstorm is passing over right now — weather or climate?', o:['Weather','Climate'], a:0 },
+    { q:'Belize’s climate type is tropical — weather or climate?', o:['Weather','Climate'], a:1 }
+  ],
+  silver:[
+    { q:'Rain that falls from the sky — temperature or precipitation?', o:['Temperature','Precipitation'], a:1 },
+    { q:'How hot or cold the air is — temperature or precipitation?', o:['Temperature','Precipitation'], a:0 },
+    { q:'The average over many years — weather or climate?', o:['Weather','Climate'], a:1 },
+    { q:'What the air is doing today — weather or climate?', o:['Weather','Climate'], a:0 },
+    { q:'Hot all year with wet and dry seasons — tropical or polar?', o:['Tropical','Polar'], a:0 },
+    { q:'Cold nearly every month near the poles — tropical or polar?', o:['Tropical','Polar'], a:1 },
+    { q:'One unusually cold morning — weather or climate?', o:['Weather','Climate'], a:0 },
+    { q:'On average, June to November is wet here — weather or climate?', o:['Weather','Climate'], a:1 }
+  ],
+  gold:[
+    { q:'Belize City hotter than New York City today — weather or climate?', o:['Weather','Climate'], a:0 },
+    { q:'Belize warmer on average since 1970 — weather or climate?', o:['Weather','Climate'], a:1 },
+    { q:'One cold day proves Belize is not tropical — true or false?', o:['True','False'], a:1 },
+    { q:'Temperature and precipitation name a climate type — true or false?', o:['True','False'], a:0 },
+    { q:'A desert climate is defined by very low rainfall — true or false?', o:['True','False'], a:0 },
+    { q:'It poured for an hour after lunch — weather or climate?', o:['Weather','Climate'], a:0 },
+    { q:'Places near the equator are warm all year — weather or climate?', o:['Weather','Climate'], a:1 },
+    { q:'Comparing climates fairly uses one single day — true or false?', o:['True','False'], a:1 }
+  ]
+};
+
+/* ═══════════ DETECTIVE SCENE DATA ═══════════
+   items[] — `hit:true` is a target, `hit:false` is a decoy.
+   `why` shows on tap, for BOTH hits and decoys: a decoy the student
+   tapped is a misconception caught in the act, so it gets a reason too.
+   Targets are counted from the data — never hard-code the number.
+   ⚠️ Gold FLIPS the rule (find what SLOWS warming). Re-reading the
+   prompt is part of the difficulty. */
+var DETECT = {
+  bronze: {
+    prompt:'Tap the <b>4 statements that describe CLIMATE</b> — the long-run pattern, not today’s weather.',
+    items:[
+      { e:'🌴', label:'Belize is hot all year',              hit:true,  why:'“All year” is the long-run pattern — that is climate.' },
+      { e:'🌧️', label:'Belize has a wet and a dry season',    hit:true,  why:'A season that returns every year is part of the climate.' },
+      { e:'❄️', label:'The Arctic is cold nearly every month', hit:true,  why:'“Nearly every month” describes the long-run pattern — climate.' },
+      { e:'🏜️', label:'A desert gets little rain most years',  hit:true,  why:'“Most years” is the average over the long run — climate.' },
+      { e:'☔', label:'It is raining right now',              hit:false, why:'“Right now” is this moment — that is weather, not climate.' },
+      { e:'💨', label:'It is windy this afternoon',           hit:false, why:'“This afternoon” is a single day — weather, not climate.' },
+      { e:'🌡️', label:'Today feels hotter than yesterday',     hit:false, why:'Comparing two days is still weather.' },
+      { e:'⛅', label:'The sky is cloudy this morning',        hit:false, why:'“This morning” is one moment — weather.' }
+    ]
+  },
+  silver: {
+    prompt:'Harder. Tap the <b>4 CLIMATE statements</b>. Some talk about a single day to trick you.',
+    items:[
+      { e:'📊', label:'On average, December is the coolest month here', hit:true,  why:'“On average” across many Decembers is the long-run pattern — climate.' },
+      { e:'🌧️', label:'Most of Belize’s rain falls June to November',    hit:true,  why:'The wet-season pattern repeats every year — climate.' },
+      { e:'🗽', label:'New York City has a cold winter every year',      hit:true,  why:'“Every year” is the long-run pattern — climate.' },
+      { e:'🌏', label:'Places near the equator are warm all year',       hit:true,  why:'This is climate distribution — warm near the equator over the long run.' },
+      { e:'☔', label:'It poured for an hour after lunch today',         hit:false, why:'One hour today is weather, however heavy.' },
+      { e:'🥶', label:'This morning was unusually cold',                 hit:false, why:'One unusual morning is weather — it does not change the average.' },
+      { e:'💨', label:'A gust just knocked a branch down',               hit:false, why:'“Just” is this moment — weather.' },
+      { e:'⛈️', label:'There is a thunderstorm outside right now',       hit:false, why:'“Right now” is weather, not the long-run pattern.' }
+    ]
+  },
+  gold: {
+    prompt:'⚠️ The rule is <b>reversed</b>. Tap the <b>4 WEATHER statements</b> — a single moment, not the long-run pattern.',
+    items:[
+      { e:'🌦️', label:'It started drizzling five minutes ago',   hit:true,  why:'“Five minutes ago” is this moment — weather.' },
+      { e:'🌡️', label:'Right now it is 31 degrees outside',       hit:true,  why:'A reading “right now” is weather, not the average.' },
+      { e:'💨', label:'The wind is gusting hard this evening',    hit:true,  why:'“This evening” is a single day — weather.' },
+      { e:'☁️', label:'Fog covered the town early this morning',  hit:true,  why:'“This morning” is one moment — weather.' },
+      { e:'🌴', label:'Belize’s climate is tropical',            hit:false, why:'This is the long-run climate type, not today’s weather.' },
+      { e:'📅', label:'Over thirty years Belize has warmed a little', hit:false, why:'A change across decades is climate, not weather.' },
+      { e:'🌧️', label:'The wet season usually starts in June',   hit:false, why:'“Usually” means the repeating yearly pattern — climate.' },
+      { e:'❄️', label:'Polar regions are cold most of the year',  hit:false, why:'“Most of the year” is the long-run pattern — climate.' }
+    ]
+  }
+};
+
+/* ═══════════ CHAIN BUILDER DATA ═══════════
+   `tiles` is the pool the student picks from (all valid links + decoys).
+   `valid` holds EVERY acceptable chain — more than one order can be
+   right, and finding a second pays a bonus bean. Chain length is taken
+   from valid[0].length, so every chain in one round must be the same
+   length. Tile strings must match the pool EXACTLY. */
+/* ═══════════ DATA READER DATA ═══════════
+   The chart is DRAWN from `labels` + `values` — never an image file.
+   type:'bar' for comparing separate things, 'line' for change over time.
+   `unit` labels the axis. Options are shuffled by the engine, so `a`
+   is the index in the array AS AUTHORED.
+   ⚠️ FOUR CHARTS PER TIER IS THE FLOOR — and the count here is not
+   decoration, it is the template every generated week copies. This
+   sample shipped with two, and Week 2 duly arrived with two: an
+   activity carrying a quarter of the lesson that a student finished in
+   under a minute. Whatever shape sits in this file becomes the default
+   for the whole year, so author it as if it were a real lesson. */
+/* Tier config — bean rate per correct answer (LESSON-ENGINE-PLAN.md §4) */
+var TIERS = {
+  bronze:{ label:'Bronze', icon:'🥉', rate:1, desc:'Warm-up level. Solid practice, steady beans.' },
+  silver:{ label:'Silver', icon:'🥈', rate:2, desc:'Tougher questions. Double beans per answer.' },
+  gold:  { label:'Gold',   icon:'🥇', rate:3, desc:'Hardest challenge. Triple beans per answer.' }
+};
+var CALIB_BEANS    = 5;
+var LESSON_CAP     = 30;
+var STREAK_SECONDS = 60;
+/* Review + calibration + however many mechanics this week uses. Derived,
+   so adding or removing a mechanic can never leave the progress bar lying. */
+var TOTAL_ACTS     = 2 + LESSON.mechanics.length;
+
+/* ──────────────────────── ENGINE ──────────────────────── */
+function $(s,r){ return (r||document).querySelector(s); }
+function $$(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); }
+
+/* ── ANSWER-POSITION SHUFFLE (assessment integrity) ────────────────
+   Shuffles each question's options at render so the correct answer
+   is not in a fixed slot — a student cannot pass by clicking the
+   same position every time. Done in the ENGINE, so it protects
+   EVERY lesson regardless of how the DATA was authored (the daily
+   task tends to cluster correct answers; this neutralises that).
+   Runs once per item (_shuf guard), stable across re-renders. */
+function shuffleInPlace(a){
+  for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i];a[i]=a[j];a[j]=t; }
+}
+function shuffleItemOnce(item){          // items with an `a` index + `o` options
+  if (!item || item._shuf || !item.o || typeof item.a !== 'number') { if(item) item._shuf=true; return; }
+  var correct = item.o[item.a];
+  shuffleInPlace(item.o);
+  item.a = item.o.indexOf(correct);
+  item._shuf = true;
+}
+function shuffleSimOnce(s){               // SIM rounds: correct is co2<0, position-free
+  if (!s || s._shuf || !s.o) { if(s) s._shuf=true; return; }
+  shuffleInPlace(s.o);
+  s._shuf = true;
+}
+
+/* ── MECHANICS REGISTRY — "the bank" (IDEAS #14) ──────────────────
+   One entry per mechanic: which card it owns, and how to build it.
+   LESSON.mechanics decides which run and in what order; the step
+   chain, the tier rebuild, the replay reset and the progress total
+   all read THIS, so swapping a mechanic never means editing wiring
+   by hand — which is exactly how the chain used to get broken.
+   Adding an 8th mechanic later = one section + one build function +
+   one line here. Nothing else in the engine changes. */
+var MECHANICS = {
+  sim:       { sec:'#secSim',    build:buildSim    },
+  trace:     { sec:'#secTrace',  build:buildTrace  },
+  myth:      { sec:'#secMyth',   build:buildMyth   },
+  streak:    { sec:'#secStreak', build:resetStreak },
+  detective: { sec:'#secDetect', build:buildDetect },
+  chain:     { sec:'#secChain',  build:buildChain  },
+  data:      { sec:'#secData',   build:buildData   }
+};
+/* Only mechanics that are BOTH named by the lesson AND present in the
+   DOM — so a half-finished paste degrades to a shorter lesson rather
+   than a broken chain that strands the student on a dead card. */
+function mechList(){
+  return LESSON.mechanics.filter(function(k){ return MECHANICS[k] && $(MECHANICS[k].sec); });
+}
+function buildAll(){ mechList().forEach(function(k){ MECHANICS[k].build(); }); }
+/* Hand the finished card on to the next mechanic; the last one hands
+   off to the finish line. Replaces the hard-coded nextButton chain. */
+function advance(key){
+  var list = mechList(), i = list.indexOf(key);
+  var last = (i < 0 || i === list.length - 1);
+  var nextSel = last ? '#secFinish' : MECHANICS[list[i+1]].sec;
+  var label = last ? 'See my results →'
+            : (i === list.length - 2 ? 'Last activity →' : 'Next activity →');
+  nextButton(MECHANICS[key].sec, nextSel, label, last ? finish : null);
+}
+
+var sessionBeans = 0, doneCount = 0, tier = null, calibPct = 0;
+var missStreak = 0, hitStreak = 0;
+
+function toast(msg){ var t=$('#toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._h); t._h=setTimeout(function(){ t.classList.remove('show'); },2600); }
+
+function beansLeft(){ return Math.max(0, LESSON_CAP - sessionBeans); }
+
+function beanPillAdd(n){
+  sessionBeans += n;
+  $('#beanPill').textContent = '🌱 ' + sessionBeans + ' bean' + (sessionBeans===1?'':'s');
+}
+function progressTick(){
+  doneCount++;
+  $('#progText').textContent = Math.min(doneCount,TOTAL_ACTS)+' of '+TOTAL_ACTS+' done';
+  $('#progFill').style.width = (Math.min(doneCount,TOTAL_ACTS)/TOTAL_ACTS*100)+'%';
+}
+function markDone(sel){ $(sel).classList.add('done'); }
+
+/* ── ONE-CARD-AT-A-TIME REVEAL (LESSON-ENGINE-PLAN.md §2) ──────────
+   Only one activity is on screen at a time. Finishing a card shows a
+   Next button; tapping it collapses the finished card to its header
+   and reveals the next. No navigation timers — the student controls
+   every step, so nothing scrolls out from under them on a phone. */
+function revealStep(sel){
+  var s = $(sel); if (!s) return;
+  s.classList.remove('step-hidden');
+  /* wait for layout to settle, THEN one controlled scroll — never a
+     smooth scroll racing a reflow (that was the mobile jump bug). */
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      s.scrollIntoView({ behavior:'smooth', block:'start' });
+    });
+  });
+}
+/* Inject a self-paced "continue" button into a per-QUESTION feedback box.
+   Replaces the old auto-advance timers so a slow or EAL reader is never cut
+   off mid-sentence — reading the feedback is a learning moment. Idempotent. */
+function continueBtn(holderSel, label, fn){
+  var holder = $(holderSel); if (!holder) return;
+  if ($('.next-q', holder)) return;
+  var b = document.createElement('button');
+  b.className = 'btn next-q';
+  b.textContent = label || 'Next question →';
+  b.addEventListener('click', function(){ b.disabled = true; fn(); });
+  holder.appendChild(b);
+}
+/* Inject a Next button into a finished card's body. Idempotent. */
+function nextButton(finishedSel, nextSel, label, cb){
+  var sec = $(finishedSel); if (!sec) return;
+  var body = $('.sec-body', sec) || sec;
+  if ($('.next-btn', sec)) return;
+  var b = document.createElement('button');
+  b.className = 'btn next-btn';
+  b.textContent = label || 'Next →';
+  b.addEventListener('click', function(){
+    b.disabled = true;
+    collapseSec(finishedSel);
+    revealStep(nextSel);
+    if (typeof cb === 'function') cb();
+  });
+  body.appendChild(b);
+}
+
+/* ── Collapsible cards ──────────────────────────────────────────
+   Built generically at boot: everything after each <h2> is wrapped
+   in .sec-body, and a ▾/▸ toggle is added. Works for any lesson —
+   no per-week markup needed. (LESSON-ENGINE-PLAN.md §2)          */
+function makeCollapsible(sec){
+  var h2 = $('h2', sec); if (!h2 || $('.sec-body', sec)) return;
+  var body = document.createElement('div'); body.className = 'sec-body';
+  var n = h2.nextSibling;
+  while (n){ var next = n.nextSibling; body.appendChild(n); n = next; }
+  sec.appendChild(body);
+
+  var hint = document.createElement('div');
+  hint.className = 'collapse-hint'; hint.textContent = 'Tap to open again ▸';
+  h2.parentNode.insertBefore(hint, body);
+
+  var btn = document.createElement('button');
+  btn.className = 'sec-toggle'; btn.textContent = '▾';
+  btn.setAttribute('aria-label','Fold this section');
+  sec.appendChild(btn);
+
+  function toggle(){
+    var now = sec.classList.toggle('collapsed');
+    btn.textContent = now ? '▸' : '▾';
+    btn.setAttribute('aria-label', now ? 'Open this section' : 'Fold this section');
+  }
+  btn.addEventListener('click', function(e){ e.stopPropagation(); toggle(); });
+  h2.style.cursor = 'pointer';
+  h2.addEventListener('click', toggle);
+  hint.addEventListener('click', toggle);
+}
+function collapseSec(sel){
+  var sec = $(sel); if (!sec || sec.classList.contains('collapsed')) return;
+  sec.classList.add('collapsed');
+  var b = $('.sec-toggle', sec);
+  if (b){ b.textContent = '▸'; b.setAttribute('aria-label','Open this section'); }
+}
+function expandSec(sel){
+  var sec = $(sel); if (!sec) return;
+  sec.classList.remove('collapsed');
+  var b = $('.sec-toggle', sec);
+  if (b){ b.textContent = '▾'; b.setAttribute('aria-label','Fold this section'); }
+}
+/* (fold-on-timer removed — cards now collapse when the student taps Next) */
+
+/* Award beans, respecting the per-lesson cap. The activity id carries the tier so a
+   replay at a higher tier is a NEW row (vcSaveBeans locks one id per device). */
+function award(actKey, earned, maxPossible, sec){
+  var capped = Math.min(earned, beansLeft());
+  var id = LESSON.idBase + '-' + actKey + (tier ? '-' + tier : '');
+  var note = $('.earned-note', sec);
+  beanPillAdd(capped);
+  if (capped < earned){
+    note.style.display='block';
+    note.textContent = '🌱 +'+capped+' beans (lesson cap of '+LESSON_CAP+' reached — keep playing for practice!)';
+  }
+  /* ⚠️ A MISSING /edlo-utils.js MUST NEVER STRAND THE STUDENT.
+     If the shared script did not load, `vcSaveBeans` is undefined and
+     calling it throws — and because award() runs midway through the
+     calibration click handler, that one throw used to kill markDone,
+     progressTick, offerTier AND the "See my level" button after it.
+     The result: a scored quiz, a progress bar stuck on 1 of 6, and no
+     way forward — with nothing on screen a ten-year-old could act on.
+     Found July 21, 2026 (the preview panel cannot resolve the absolute
+     path; a dropped request or a stale cache would do the same live).
+     Beans failing to save is a bad day. A frozen lesson is a lost one. */
+  var saving = (typeof vcSaveBeans === 'function')
+    ? vcSaveBeans(id, capped, maxPossible, {
+        subject:'Science', lo_code:LESSON.lo,
+        /* Groups every activity of this lesson so the BACKEND can enforce the
+           30-bean cap. The client cap above is only for instant feedback —
+           clearing the browser defeats it; the server is the real limit. */
+        lesson_key: LESSON.idBase,
+        activity_name: LESSON.week+' '+actKey+(tier?' ('+TIERS[tier].label+')':'')
+      })
+    : Promise.resolve(null);
+  saving.catch(function(){ return null; }).then(function(res){
+    note.style.display='block';
+    if (res && res.ok) {
+      /* Trust the server: it may have trimmed the award to fit the cap. */
+      var granted = (res.granted != null) ? res.granted : capped;
+      if (granted < capped) {
+        /* reconcile the on-screen pill with what was actually banked */
+        sessionBeans -= (capped - granted);
+        $('#beanPill').textContent = '🌱 ' + sessionBeans + ' bean' + (sessionBeans===1?'':'s');
+      }
+      if (res.capped || granted < capped) {
+        note.textContent = '🌱 +'+granted+' beans — you have reached this lesson\'s cap of '
+                         + (res.lesson_cap || LESSON_CAP) + '. Play on for practice!';
+      } else {
+        note.textContent = '🌱 +'+granted+' beans saved to your account!';
+        toast('🌱 +'+granted+' beans earned!');
+      }
+    }
+    else if (res && res.locked) { note.textContent='🌱 You already earned beans for this level on this device. Try a higher level!'; }
+    else if (capped < earned)   { /* client-side cap message already shown above */ }
+    else                        { note.textContent='🌱 +'+capped+' beans — log in next time to save them!'; toast('🌱 +'+capped+' beans (not saved — not logged in)'); }
+  });
+}
+
+/* Coach-style step-down / step-up — LESSON-ENGINE-PLAN.md §3 */
+function coachCheck(boxSel){
+  var box = $(boxSel); if(!box) return;
+  if (missStreak >= 2 && tier !== 'bronze'){
+    var lower = (tier === 'gold') ? 'silver' : 'bronze';
+    box.className = 'coach-box show';
+    box.innerHTML = TIERS[tier].icon+' '+TIERS[tier].label+' is tough! Let’s sharpen up in '
+      + TIERS[lower].icon+' '+TIERS[lower].label+' and come back. '
+      + '<button class="btn" data-goto="'+lower+'" style="margin-top:.6rem;">Move to '+TIERS[lower].label+' →</button>';
+    wireCoach(box); missStreak = 0;
+  } else if (hitStreak >= 3 && tier !== 'gold'){
+    var higher = (tier === 'bronze') ? 'silver' : 'gold';
+    box.className = 'coach-box show';
+    box.innerHTML = '🔥 Three right in a row! You have unlocked '
+      + TIERS[higher].icon+' '+TIERS[higher].label+' — worth '+TIERS[higher].rate+'× beans. '
+      + '<button class="btn" data-goto="'+higher+'" style="margin-top:.6rem;">Level up →</button>';
+    wireCoach(box); hitStreak = 0;
+  } else { box.className = 'coach-box'; }
+}
+function wireCoach(box){
+  $$('button[data-goto]', box).forEach(function(b){
+    b.addEventListener('click', function(){ switchTier(b.getAttribute('data-goto')); });
+  });
+}
+function scoreHit(ok){ if(ok){ hitStreak++; missStreak=0; } else { missStreak++; hitStreak=0; } }
+
+function setTierChip(t){
+  var chip = $('#tierChip');
+  chip.style.display=''; chip.className='chip tier-now '+t;
+  chip.textContent = TIERS[t].icon+' '+TIERS[t].label;
+}
+
+/* Mid-lesson tier change: rebuild the remaining activities at the new tier */
+function switchTier(t){
+  tier = t; setTierChip(t);
+  missStreak = 0; hitStreak = 0;
+  $$('.coach-box').forEach(function(b){ b.className='coach-box'; });
+  toast(TIERS[t].icon+' Now playing '+TIERS[t].label+' — '+TIERS[t].rate+'× beans');
+  buildAll();
+}
+
+/* ── 1. Review ── */
+$('#reviewGrid').innerHTML = REVIEW.map(function(r){
+  return '<div class="rev-card"><b>'+r.t+'</b><span>'+r.d+'</span></div>';
+}).join('');
+
+$('#reviewDone').addEventListener('click', function(){
+  this.disabled = true; markDone('#secReview'); progressTick();
+  collapseSec('#secReview');            /* fold the notes away — one tap to reopen */
+  revealStep('#secCalib');
+});
+
+/* ── 2. Calibration ── */
+CALIB.forEach(shuffleItemOnce);
+$('#calibBox').innerHTML = CALIB.map(function(item,i){
+  return '<div class="q-block" data-q="'+i+'"><div class="q-stem">'+(i+1)+'. '+item.q+'</div><div class="opts">'
+    + item.o.map(function(o,j){
+        return '<label><input type="radio" name="cal'+i+'" value="'+j+'"><span>'+o+'</span></label>';
+      }).join('')
+    + '</div></div>';
+}).join('');
+
+/* ── Calibration completeness ─────────────────────────────────────
+   The button used to sit DISABLED until all five were answered, with
+   nothing on screen saying so. Miss one question on a phone — easy,
+   since all five share one card — and the lesson simply stopped, with
+   no way to find out what it wanted. Reported by Edwin, July 21 2026.
+   Now: the button is always tappable, and tapping it with anything
+   missing marks the gaps and scrolls to the first one. A student is
+   never left facing a control that refuses to explain itself. */
+function calibMissing(){
+  var m = [];
+  CALIB.forEach(function(_, i){ if (!$('input[name="cal'+i+'"]:checked')) m.push(i); });
+  return m;
+}
+function calibProgress(){
+  var left = calibMissing().length, el = $('#calibProgress');
+  if (!el) return;
+  el.className = 'calib-progress';
+  el.textContent = left
+    ? (CALIB.length - left) + ' of ' + CALIB.length + ' answered.'
+    : 'All ' + CALIB.length + ' answered — tap Check my level.';
+}
+$$('#calibBox input').forEach(function(inp){
+  inp.addEventListener('change', function(){
+    var b = inp.closest ? inp.closest('.q-block') : null;
+    if (b) b.classList.remove('unanswered');
+    calibProgress();
+  });
+});
+calibProgress();
+
+$('#calibCheck').addEventListener('click', function(){
+  var missing = calibMissing();
+  if (missing.length){
+    $$('#calibBox .q-block').forEach(function(b){
+      b.classList.toggle('unanswered', missing.indexOf(Number(b.getAttribute('data-q'))) >= 0);
+    });
+    var el = $('#calibProgress');
+    el.className = 'calib-progress warn';
+    el.textContent = (missing.length === 1)
+      ? '⚠️ Question ' + (missing[0]+1) + ' still needs an answer — it is marked below.'
+      : '⚠️ ' + missing.length + ' questions still need an answer — they are marked below.';
+    var first = $('#calibBox .q-block.unanswered');
+    if (first) first.scrollIntoView({ behavior:'smooth', block:'center' });
+    return;                       /* not an error — just not finished yet */
+  }
+  this.disabled = true;
+  $('#calibProgress').textContent = '';
+  var correct = 0;
+  CALIB.forEach(function(item,i){
+    var picked = $('input[name="cal'+i+'"]:checked');
+    $$('input[name="cal'+i+'"]').forEach(function(inp){
+      inp.disabled = true;
+      if (Number(inp.value) === item.a) inp.parentNode.classList.add('right');
+    });
+    if (picked && Number(picked.value) === item.a) correct++;
+    else if (picked) picked.parentNode.classList.add('wrong');
+  });
+  calibPct = Math.round(correct / CALIB.length * 100);
+  var beans = Math.round(correct / CALIB.length * CALIB_BEANS);
+  $('#calibFeedback').textContent = 'You got '+correct+' of '+CALIB.length+' right ('+calibPct+'%).';
+  award('calibration', beans, CALIB_BEANS, $('#secCalib'));
+  markDone('#secCalib'); progressTick();
+  offerTier(calibPct);                 /* builds the tier card, still hidden */
+  nextButton('#secCalib', '#secTier', 'See my level →');
+});
+
+/* ── 3. Tier offer — 90 auto-gold · 80 free choice · 50 silver · else bronze ── */
+function offerTier(pct){
+  var msg = $('#tierMsg'), grid = $('#tierGrid'), head = $('#tierHead');
+  var allow = { bronze:true, silver:false, gold:false };
+  var auto = null;
+
+  if (pct >= 90){
+    head.textContent = '🥇 Promoted to Gold!';
+    msg.innerHTML = '<b>'+pct+'%! Outstanding.</b> You have been promoted straight to Gold — the hardest challenge, worth 3× beans. '
+      + 'Would you rather warm up first? You can start at Silver instead.';
+    allow.silver = true; allow.gold = true; auto = 'gold';
+  } else if (pct >= 80){
+    head.textContent = '🏅 Your Choice!';
+    msg.innerHTML = '<b>'+pct+'% — strong work!</b> Every level is open to you. Higher levels are harder, but each correct answer earns more beans.';
+    allow.silver = true; allow.gold = true;
+  } else if (pct >= 50){
+    head.textContent = '🥈 Silver Unlocked';
+    msg.innerHTML = '<b>'+pct+'% — good going!</b> Silver is open. Gold is waiting: <b>three right in a row unlocks it</b>.';
+    allow.silver = true;
+  } else {
+    head.textContent = '🥉 Let’s Warm Up';
+    msg.innerHTML = '<b>'+pct+'%.</b> Bronze is the warm-up level — perfect for building your streak. '
+      + 'Get three right in a row at any point and the next level opens up.';
+  }
+
+  grid.innerHTML = ['bronze','silver','gold'].map(function(k){
+    var t = TIERS[k], open = allow[k];
+    return '<div class="tier-card '+k+(open?'':' locked')+'" data-tier="'+k+'">'
+      + '<div class="t-name">'+t.icon+' '+t.label+'</div>'
+      + '<div class="t-rate">'+t.rate+'× beans per answer</div>'
+      + '<div class="t-desc">'+t.desc+'</div>'
+      + (open ? '' : '<div class="t-lock">🔒 Three right in a row unlocks this</div>')
+      + '</div>';
+  }).join('');
+
+  $$('#tierGrid .tier-card').forEach(function(card){
+    if (card.classList.contains('locked')) return;
+    card.addEventListener('click', function(){ startTier(card.getAttribute('data-tier')); });
+  });
+
+  if (auto) {
+    /* promoted straight to Gold — highlight it, but the student still taps
+       to begin (no timer that could scroll away under them). */
+    var g = $('#tierGrid .tier-card.gold');
+    if (g) g.style.outline = '3px solid var(--gold)';
+  }
+}
+
+function startTier(t){
+  tier = t; setTierChip(t);
+  missStreak = 0; hitStreak = 0;
+  $$('#tierGrid .tier-card').forEach(function(c){
+    c.style.outline = (c.getAttribute('data-tier')===t) ? '3px solid var(--accent)' : 'none';
+  });
+  buildAll();
+  collapseSec('#secTier');
+  var first = mechList()[0];
+  if (first) revealStep(MECHANICS[first].sec);
+}
+
+/* ── 4. Simulator ── */
+var simStep = 0, simCo2 = 50, simMoney = 100, simScore = 0;
+function simRender(){
+  var lbl = simCo2 < 35 ? 'Low' : (simCo2 < 65 ? 'Medium' : 'High');
+  $('#simCo2Val').textContent = lbl;
+  $('#simCo2Bar').style.width = Math.max(0,Math.min(100,simCo2))+'%';
+  $('#simMoneyVal').textContent = '$'+Math.max(0,simMoney);
+  $('#simMoneyBar').style.width = Math.max(0,Math.min(100,simMoney))+'%';
+}
+function buildSim(){ expandSec('#secSim');
+  simStep=0; simCo2=50; simMoney=100; simScore=0;
+  $('#simEnding').className='sim-ending'; $('#simResult').className='sim-result';
+  $('#secSim').classList.remove('done');
+  simRender(); simStepRender();
+}
+function simStepRender(){
+  var set = SIM[tier]; if(!set) return;
+  if (simStep >= set.length) return simEnd();
+  var s = set[simStep];
+  shuffleSimOnce(s);
+  $('#simChoice').innerHTML = '<div class="q-stem">Year '+(simStep+1)+' — '+s.q+'</div><div class="sim-opts">'
+    + s.o.map(function(o,i){ return '<button data-i="'+i+'">'+o.t+'</button>'; }).join('') + '</div>';
+  $$('#simChoice button').forEach(function(b){
+    b.addEventListener('click', function(){ simPick(Number(b.getAttribute('data-i'))); });
+  });
+}
+function simPick(i){
+  var s = SIM[tier][simStep], o = s.o[i];
+  simCo2 += o.co2 * 6; simMoney += o.money;
+  var good = o.co2 < 0;
+  if (good) simScore++;
+  scoreHit(good);
+  simRender();
+  var r = $('#simResult'); r.className='sim-result show';
+  r.innerHTML = (good?'✅ ':'⚠️ ') + o.fb;
+  simStep++;
+  coachCheck('#simCoach');
+  continueBtn('#simResult',
+    (simStep >= SIM[tier].length ? 'See how your town did →' : 'Next choice →'),
+    function(){ r.className='sim-result'; simStepRender(); });
+}
+function simEnd(){
+  $('#simChoice').innerHTML = '';
+  var e = $('#simEnding'); e.className='sim-ending show';
+  var verdict = simCo2 < 35 ? '🌿 Your town breathes clean air. You replaced burning with renewable technology.'
+              : simCo2 < 65 ? '🌤️ Mixed result. Some good choices, but fuel is still being burned in your town.'
+                            : '🔥 Your town got hotter. Most of your technology kept burning fossil fuels.';
+  e.innerHTML = '<b>Four years later…</b><br>'+verdict
+    + '<br><br>You made <b>'+simScore+' of '+SIM[tier].length+'</b> climate-friendly choices.';
+  award('simulator', simScore * TIERS[tier].rate, SIM[tier].length * TIERS[tier].rate, $('#secSim'));
+  markDone('#secSim'); progressTick();
+  advance('sim');
+}
+
+/* ── 5. Trace-it-back ── */
+var traceIdx = 0, traceScore = 0;
+function buildTrace(){ expandSec('#secTrace'); traceIdx=0; traceScore=0; $('#secTrace').classList.remove('done'); traceRender(); }
+function traceRender(){
+  var set = TRACE[tier]; if(!set) return;
+  if (traceIdx >= set.length) return traceEnd();
+  var t = set[traceIdx];
+  shuffleItemOnce(t);
+  $('#traceBox').innerHTML =
+      '<div class="q-stem">Case '+(traceIdx+1)+' of '+set.length+'</div>'
+    + '<div class="trace-start">'+t.start+'</div>'
+    + '<div class="trace-chain" id="traceChain"></div>'
+    + '<button class="btn ghost" id="traceNext">Follow the chain →</button>'
+    + '<div class="trace-q" id="traceQ" style="display:none;">'+t.q+'</div>'
+    + '<div class="opts" id="traceOpts" style="display:none;">'
+    + t.o.map(function(o,i){ return '<label><input type="radio" name="tr'+traceIdx+'" value="'+i+'"><span>'+o+'</span></label>'; }).join('')
+    + '</div><div class="trace-final" id="traceFinal"></div>';
+  var step = 0;
+  $('#traceNext').addEventListener('click', function(){
+    if (step < t.chain.length){
+      var d=document.createElement('div');
+      d.className='trace-link revealed'; d.textContent='↓ '+t.chain[step];
+      $('#traceChain').appendChild(d); step++;
+      if (step === t.chain.length) this.textContent='Now answer →';
+    } else {
+      this.style.display='none';
+      $('#traceQ').style.display=''; $('#traceOpts').style.display='';
+      $$('#traceOpts input').forEach(function(inp){
+        inp.addEventListener('change', function(){ tracePick(Number(inp.value)); });
+      });
+    }
+  });
+}
+function tracePick(i){
+  var t = TRACE[tier][traceIdx], ok = (i === t.a);
+  $$('#traceOpts input').forEach(function(inp){
+    inp.disabled = true;
+    if (Number(inp.value) === t.a) inp.parentNode.classList.add('right');
+    else if (Number(inp.value) === i) inp.parentNode.classList.add('wrong');
+  });
+  if (ok) traceScore++;
+  scoreHit(ok);
+  var f = $('#traceFinal'); f.className='trace-final show';
+  f.innerHTML = (ok?'✅ Correct! ':'💡 Not quite. ') + t.final;
+  coachCheck('#traceCoach');
+  traceIdx++;
+  continueBtn('#traceFinal',
+    (traceIdx >= TRACE[tier].length ? 'See the result →' : 'Next case →'),
+    traceRender);
+}
+function traceEnd(){
+  $('#traceBox').innerHTML = '<div class="trace-final show">🔍 Investigation complete — <b>'
+    + traceScore+' of '+TRACE[tier].length+'</b> traced correctly.</div>';
+  award('trace', traceScore * TIERS[tier].rate, TRACE[tier].length * TIERS[tier].rate, $('#secTrace'));
+  markDone('#secTrace'); progressTick();
+  advance('trace');
+}
+
+/* ── 6. Myth-buster ── */
+var mythIdx = 0, mythScore = 0;
+var mythDeck = [];
+function buildMyth(){ expandSec('#secMyth'); mythIdx=0; mythScore=0;
+  mythDeck = MYTH[tier].slice(); shuffleInPlace(mythDeck);   /* break the true/false rhythm */
+  $('#secMyth').classList.remove('done'); mythRender(); }
+function mythRender(){
+  var set = mythDeck; if(!set || !set.length) return;
+  if (mythIdx >= set.length) return mythEnd();
+  var m = set[mythIdx];
+  $('#mythBox').innerHTML = '<div class="myth-card">'
+    + '<div class="q-stem">Claim '+(mythIdx+1)+' of '+set.length+'</div>'
+    + '<div class="myth-claim">“'+m.c+'”</div>'
+    + '<div class="myth-btns"><button class="bust" data-b="1">💥 BUST IT</button>'
+    + '<button class="true" data-b="0">✅ IT’S TRUE</button></div>'
+    + '<div class="myth-verdict" id="mythVerdict"></div></div>';
+  $$('#mythBox .myth-btns button').forEach(function(b){
+    b.addEventListener('click', function(){ mythPick(b.getAttribute('data-b')==='1'); });
+  });
+}
+function mythPick(saidBust){
+  var m = mythDeck[mythIdx], ok = (saidBust === m.bust);
+  if (ok) mythScore++;
+  scoreHit(ok);
+  $$('#mythBox .myth-btns button').forEach(function(b){ b.disabled = true; });
+  var v = $('#mythVerdict'); v.className='myth-verdict show';
+  v.innerHTML = (ok?'✅ Correct! ':'❌ Not this time. ') + m.why;
+  coachCheck('#mythCoach');
+  mythIdx++;
+  continueBtn('#mythVerdict',
+    (mythIdx >= mythDeck.length ? 'See the result →' : 'Next claim →'),
+    mythRender);
+}
+function mythEnd(){
+  $('#mythBox').innerHTML = '<div class="myth-card"><b>🕵️ Arena complete — '
+    + mythScore+' of '+MYTH[tier].length+' judged correctly.</b></div>';
+  award('myth', mythScore * TIERS[tier].rate, MYTH[tier].length * TIERS[tier].rate, $('#secMyth'));
+  markDone('#secMyth'); progressTick();
+  advance('myth');
+}
+
+/* ── 7. Beat-your-streak ── */
+var stkIdx=0, stkNow=0, stkBestRun=0, stkScore=0, stkTimer=null, stkLeft=STREAK_SECONDS, stkOrder=[];
+function bestKey(){ return 'vc-streak-'+LESSON.idBase; }
+function readBest(){ try{ return Number(localStorage.getItem(bestKey())||0); }catch(e){ return 0; } }
+function writeBest(n){ try{ localStorage.setItem(bestKey(), String(n)); }catch(e){} }
+function resetStreak(){ expandSec('#secStreak');
+  clearInterval(stkTimer);
+  stkIdx=0; stkNow=0; stkBestRun=0; stkScore=0; stkLeft=STREAK_SECONDS;
+  $('#stkNow').textContent='0'; $('#stkBest').textContent=readBest();
+  $('#stkLeft').textContent='–'; $('#streakBox').innerHTML='';
+  $('#streakStart').style.display=''; $('#streakStart').disabled=false;
+  $('#secStreak').classList.remove('done');
+}
+/* Guarded: a lesson that does not use the streak mechanic never pastes
+   this section, and an unguarded listener would throw at load. */
+if ($('#streakStart')) $('#streakStart').addEventListener('click', function(){
+  this.style.display='none';
+  stkOrder = STREAK[tier].slice().sort(function(){ return Math.random()-0.5; });
+  stkLeft = STREAK_SECONDS; $('#stkLeft').textContent = stkLeft+'s';
+  stkTimer = setInterval(function(){
+    stkLeft--; $('#stkLeft').textContent = stkLeft+'s';
+    if (stkLeft <= 0) streakEnd();
+  }, 1000);
+  streakRender();
+});
+function streakRender(){
+  if (stkIdx >= stkOrder.length) stkIdx = 0;   /* loop the deck until time runs out */
+  var s = stkOrder[stkIdx];
+  shuffleItemOnce(s);
+  $('#streakBox').innerHTML = '<div class="streak-q">'+s.q+'</div><div class="streak-opts">'
+    + s.o.map(function(o,i){ return '<button data-i="'+i+'">'+o+'</button>'; }).join('') + '</div>';
+  $$('#streakBox button').forEach(function(b){
+    b.addEventListener('click', function(){ streakPick(Number(b.getAttribute('data-i'))); });
+  });
+}
+function streakPick(i){
+  var s = stkOrder[stkIdx], ok = (i === s.a);
+  if (ok){ stkNow++; stkScore++; if (stkNow > stkBestRun) stkBestRun = stkNow; }
+  else   { stkNow = 0; }
+  scoreHit(ok);
+  $('#stkNow').textContent = stkNow;
+  stkIdx++;
+  streakRender();
+}
+function streakEnd(){
+  clearInterval(stkTimer);
+  $('#streakBox').innerHTML = '<div class="streak-q">⏱️ Time! Best streak this round: <b>'
+    + stkBestRun+'</b> · Correct: <b>'+stkScore+'</b></div>';
+  if (stkBestRun > readBest()){ writeBest(stkBestRun); toast('🏆 New best streak: '+stkBestRun+'!'); }
+  $('#stkBest').textContent = readBest();
+  var deck = STREAK[tier].length;              /* beans capped at one full deck */
+  award('streak', Math.min(stkScore,deck) * TIERS[tier].rate, deck * TIERS[tier].rate, $('#secStreak'));
+  markDone('#secStreak'); progressTick();
+  advance('streak');
+}
+
+/* Right/wrong must never be signalled by COLOUR ALONE (rubric R5) —
+   a colour-blind student and a washed-out phone screen both need the glyph. */
+function markGlyph(inp, g){
+  if ($('.opt-mark', inp.parentNode)) return;
+  var b = document.createElement('b');
+  b.className = 'opt-mark'; b.textContent = g;
+  inp.parentNode.appendChild(b);
+}
+
+/* ═══════════ MECHANIC 5 · DETECTIVE SCENE ═══════════
+   Tap every tile that IS an example. A wrong tap costs a 🔍 charge and
+   charges = ceil(targets / 2), so tapping everything runs the student
+   out before he or she finds them all. That constraint is the whole
+   point: it forces a judgement on each tile, which is the thinking the
+   outcome asks for, instead of rewarding patience.
+   Score = targets found · Beans = score × tier rate · no timers. */
+var detFound = 0, detCharges = 0, detTargets = 0, detOver = false, detHits = [];
+function detSet(){ return DETECT[tier]; }
+function buildDetect(){
+  expandSec('#secDetect');
+  var d = detSet(); if (!d) return;
+  if (!d._shuf){ shuffleInPlace(d.items); d._shuf = true; }  /* tile position is never a hint */
+  detTargets = d.items.filter(function(x){ return x.hit; }).length;
+  detFound = 0; detOver = false; detHits = [];
+  detCharges = Math.ceil(detTargets / 2);
+  $('#secDetect').classList.remove('done');
+  $('#detPrompt').innerHTML = d.prompt;
+  $('#detFinal').className = 'det-final';
+  $('#detFeedback').innerHTML = 'Tap a tile to investigate it. A wrong tap costs one 🔍 charge.';
+  $('#detScene').innerHTML = d.items.map(function(it,i){
+    return '<button class="det-tile" data-i="'+i+'">'
+         + '<span class="d-mark"></span>'
+         + '<span class="d-emoji">'+it.e+'</span>'
+         + '<span class="d-label">'+it.label+'</span></button>';
+  }).join('');
+  $$('#detScene .det-tile').forEach(function(b){
+    b.addEventListener('click', function(){ detTap(Number(b.getAttribute('data-i')), b); });
+  });
+  detHud();
+}
+function detHud(){
+  $('#detFound').textContent   = detFound;
+  $('#detTarget').textContent  = detTargets;
+  $('#detCharges').textContent = detCharges;
+}
+function detTap(i, btn){
+  if (detOver) return;
+  var it = detSet().items[i];
+  btn.disabled = true;
+  btn.classList.add(it.hit ? 'found' : 'miss');
+  $('.d-mark', btn).textContent = it.hit ? '✓' : '✗';
+  if (it.hit){ detFound++; detHits.push(i); } else { detCharges--; }
+  scoreHit(it.hit);
+  /* A decoy the student tapped is a misconception caught in the act,
+     so it gets an explanation exactly like a correct find does. */
+  $('#detFeedback').innerHTML =
+    (it.hit ? '✅ <b>Found one.</b> ' : '❌ <b>Not that one.</b> ') + it.why;
+  detHud();
+  coachCheck('#detCoach');
+  if (detFound >= detTargets || detCharges <= 0) detEnd();
+}
+function detEnd(){
+  detOver = true;
+  $$('#detScene .det-tile').forEach(function(b){ b.disabled = true; });
+  var f = $('#detFinal'); f.className = 'det-final show';
+  if (detFound >= detTargets){
+    f.innerHTML = '🕶️ <b>Case closed</b> — you found all ' + detTargets + '.';
+  } else {
+    /* Name what was missed. Ending a hunt without ever seeing the
+       hidden items teaches nothing. */
+    var missed = detSet().items.filter(function(x,ix){ return x.hit && detHits.indexOf(ix) < 0; })
+                              .map(function(x){ return x.e + ' ' + x.label; });
+    f.innerHTML = '🔍 <b>Out of charges.</b> You found ' + detFound + ' of ' + detTargets
+                + '. Still hidden: <b>' + missed.join(', ') + '</b>.';
+  }
+  award('detective', detFound * TIERS[tier].rate, detTargets * TIERS[tier].rate, $('#secDetect'));
+  markDone('#secDetect'); progressTick();
+  advance('detective');
+}
+
+/* ═══════════ MECHANIC 6 · CHAIN BUILDER ═══════════
+   Tap tiles into a cause → effect order. MORE THAN ONE CHAIN CAN BE
+   VALID: the round pays 1 for the first valid chain and a bonus 1 for
+   a second, different one. That is deliberate — it rewards seeing that
+   a single cause has several consequences, rather than recalling one
+   "right answer", and it is what stops this being a memory test.
+   Score = valid chains built · Beans = score × tier rate. */
+var chainIdx = 0, chainScore = 0, chainPicked = [], chainSolved = [], chainBonus = false;
+function chainRounds(){ return CHAIN[tier] || []; }
+function chainMax(){
+  return chainRounds().reduce(function(n,r){ return n + (r.valid.length > 1 ? 2 : 1); }, 0);
+}
+function chainLen(){ return chainRounds()[chainIdx].valid[0].length; }
+function buildChain(){
+  expandSec('#secChain');
+  chainIdx = 0; chainScore = 0; chainSolved = []; chainBonus = false;
+  $('#secChain').classList.remove('done');
+  $('#chainUndo').style.display = ''; $('#chainCheck').style.display = '';
+  chainRender();
+}
+function chainRender(){
+  var rounds = chainRounds();
+  if (chainIdx >= rounds.length) return chainEnd();
+  var r = rounds[chainIdx];
+  if (!r._shuf){ shuffleInPlace(r.tiles); r._shuf = true; }  /* pool order is never the answer */
+  chainPicked = [];
+  if (!chainBonus) chainSolved = [];
+  $('#chainPrompt').innerHTML = '<b>Chain ' + (chainIdx+1) + ' of ' + rounds.length + '</b> · ' + r.prompt
+    + (chainBonus ? ' <b>Bonus round — find a DIFFERENT chain that also works.</b>' : '');
+  $('#chainVerdict').className = 'chain-verdict';
+  $('#chainVerdict').innerHTML = '';
+  $('#chainPool').innerHTML = r.tiles.map(function(t,i){
+    return '<button data-t="' + i + '">' + t + '</button>';
+  }).join('');
+  $$('#chainPool button').forEach(function(b){
+    b.addEventListener('click', function(){
+      chainAdd(r.tiles[Number(b.getAttribute('data-t'))]);
+    });
+  });
+  chainStrip();
+}
+function chainStrip(state){
+  var n = chainLen(), html = [];
+  for (var i = 0; i < n; i++){
+    if (i) html.push('<div class="chain-arrow">↓</div>');
+    html.push(chainPicked[i]
+      ? '<div class="chain-node">' + chainPicked[i] + '</div>'
+      : '<div class="chain-node slot">link ' + (i+1) + '</div>');
+  }
+  var strip = $('#chainStrip');
+  strip.className = 'chain-strip' + (state ? ' ' + state : '');
+  strip.innerHTML = html.join('');
+  $('#chainCheck').disabled = (chainPicked.length !== n);
+  var tiles = chainRounds()[chainIdx].tiles;
+  $$('#chainPool button').forEach(function(b){
+    var label = tiles[Number(b.getAttribute('data-t'))];
+    b.disabled = (chainPicked.indexOf(label) >= 0) || (chainPicked.length >= n);
+  });
+}
+function chainAdd(label){
+  if (chainPicked.length >= chainLen()) return;
+  chainPicked.push(label);
+  chainStrip();
+}
+function chainCheck(){
+  var r = chainRounds()[chainIdx], built = chainPicked.join(' ▸ ');
+  var match = -1;
+  r.valid.forEach(function(v, vi){ if (v.join(' ▸ ') === built) match = vi; });
+  var already = (match >= 0 && chainSolved.indexOf(match) >= 0);
+  var fresh   = (match >= 0 && !already);
+  if (fresh){ chainSolved.push(match); chainScore++; }
+  scoreHit(match >= 0);
+  chainStrip(match >= 0 ? 'right' : 'wrong');
+  $$('#chainPool button').forEach(function(b){ b.disabled = true; });
+  $('#chainCheck').disabled = true;
+
+  var v = $('#chainVerdict'); v.className = 'chain-verdict show';
+  if (match < 0)          v.innerHTML = '❌ <b>That order does not hold up.</b> ' + r.why;
+  else if (already)       v.innerHTML = '↩︎ <b>That is the chain you already built.</b> ' + r.why;
+  else if (chainSolved.length === 1 && r.valid.length > 1)
+                          v.innerHTML = '✅ <b>Valid chain!</b> ' + r.why;
+  else                    v.innerHTML = '🌟 <b>Another valid chain — bonus bean!</b> ' + r.why;
+  coachCheck('#chainCoach');
+
+  var goBonus = fresh && (r.valid.length > chainSolved.length);
+  if (goBonus){
+    continueBtn('#chainVerdict', 'Find another chain →', function(){ chainBonus = true; chainRender(); });
+  } else {
+    chainIdx++; chainBonus = false; chainSolved = [];
+    continueBtn('#chainVerdict',
+      (chainIdx >= chainRounds().length ? 'See the result →' : 'Next chain →'),
+      chainRender);
+  }
+}
+function chainEnd(){
+  $('#chainPool').innerHTML = ''; $('#chainStrip').innerHTML = '';
+  $('#chainUndo').style.display = 'none'; $('#chainCheck').style.display = 'none';
+  $('#chainPrompt').textContent = 'All chains built.';
+  var v = $('#chainVerdict'); v.className = 'chain-verdict show';
+  v.innerHTML = '🔗 You built <b>' + chainScore + ' of ' + chainMax() + '</b> valid chains.';
+  award('chain', chainScore * TIERS[tier].rate, chainMax() * TIERS[tier].rate, $('#secChain'));
+  markDone('#secChain'); progressTick();
+  advance('chain');
+}
+/* Listeners bound ONCE — binding inside chainRender would stack a new
+   handler on every round. Guarded so a lesson that never pastes this
+   section cannot throw at load. */
+if ($('#chainUndo')){
+  $('#chainUndo').addEventListener('click', function(){ chainPicked.pop(); chainStrip(); });
+  $('#chainCheck').addEventListener('click', chainCheck);
+}
+
+/* ═══════════ MECHANIC 7 · DATA READER ═══════════
+   Reading evidence off a chart — the science skill no other mechanic
+   in the bank exercises. chartSVG() is the reusable half: hand it
+   labels + values + type and it returns a chart. A week supplies
+   NUMBERS, never an image file, so a chart can never go stale or
+   arrive unreadable.
+   viewBox is 320×210, so text set at 11 units renders about 11px on a
+   360px phone — legible without zooming (rubric R1/R2). Colours come
+   from var(--accent) and currentColor, so it recolours with the theme. */
+function chartSVG(item){
+  var W = 320, H = 210, padL = 40, padR = 12, padT = 16, padB = 34;
+  var vals = item.values, labs = item.labels, n = vals.length;
+  var max = Math.max.apply(null, vals), min = Math.min.apply(null, vals);
+  var lo = 0, hi = max;
+  if (item.type === 'line'){                 /* a line needs headroom or it flattens */
+    var span = (max - min) || 1;
+    lo = min - span * 0.35; hi = max + span * 0.28;
+  }
+  if (hi === lo) hi = lo + 1;
+  var pw = W - padL - padR, ph = H - padT - padB;
+  function yOf(v){ return padT + ph - ((v - lo) / (hi - lo)) * ph; }
+  function xOf(i){
+    return (item.type === 'bar')
+      ? padL + (pw / n) * i + (pw / n) / 2
+      : padL + pw * (n === 1 ? 0.5 : i / (n - 1));
+  }
+  function round(v){ return Math.round(v * 10) / 10; }
+
+  var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + item.title + '">';
+  [lo, (lo + hi) / 2, hi].forEach(function(v){
+    var yy = yOf(v);
+    s += '<line x1="' + padL + '" y1="' + yy + '" x2="' + (W - padR) + '" y2="' + yy
+       + '" stroke="currentColor" stroke-opacity=".13" stroke-width="1"/>'
+       + '<text x="' + (padL - 6) + '" y="' + (yy + 4) + '" text-anchor="end" font-size="11"'
+       + ' font-weight="700" fill="currentColor" fill-opacity=".62">' + round(v) + '</text>';
+  });
+  s += '<line x1="' + padL + '" y1="' + padT + '" x2="' + padL + '" y2="' + (padT + ph)
+     + '" stroke="currentColor" stroke-opacity=".38" stroke-width="1.2"/>'
+     + '<line x1="' + padL + '" y1="' + (padT + ph) + '" x2="' + (W - padR) + '" y2="' + (padT + ph)
+     + '" stroke="currentColor" stroke-opacity=".38" stroke-width="1.2"/>';
+
+  if (item.type === 'bar'){
+    var gap = pw / n, bw = gap * 0.58;
+    vals.forEach(function(v, i){
+      var yy = yOf(v), x = xOf(i) - bw / 2, h = Math.max((padT + ph) - yy, 1.5);
+      s += '<rect x="' + x + '" y="' + yy + '" width="' + bw + '" height="' + h
+         + '" rx="3" fill="var(--accent)"/>'
+         + '<text x="' + xOf(i) + '" y="' + (yy - 5) + '" text-anchor="middle" font-size="11"'
+         + ' font-weight="900" fill="currentColor">' + v + '</text>';
+    });
+  } else {
+    s += '<polyline points="' + vals.map(function(v, i){ return xOf(i) + ',' + yOf(v); }).join(' ')
+       + '" fill="none" stroke="var(--accent)" stroke-width="2.6"'
+       + ' stroke-linejoin="round" stroke-linecap="round"/>';
+    vals.forEach(function(v, i){
+      s += '<circle cx="' + xOf(i) + '" cy="' + yOf(v) + '" r="3.6" fill="var(--accent)"/>'
+         + '<text x="' + xOf(i) + '" y="' + (yOf(v) - 8) + '" text-anchor="middle" font-size="11"'
+         + ' font-weight="900" fill="currentColor">' + v + '</text>';
+    });
+  }
+  labs.forEach(function(L, i){
+    s += '<text x="' + xOf(i) + '" y="' + (H - 13) + '" text-anchor="middle" font-size="11"'
+       + ' font-weight="800" fill="currentColor" fill-opacity=".8">' + L + '</text>';
+  });
+  s += '<text x="' + (padL - 6) + '" y="' + (padT - 4) + '" text-anchor="end" font-size="10"'
+     + ' font-weight="800" fill="currentColor" fill-opacity=".55">' + item.unit + '</text>';
+  return s + '</svg>';
+}
+
+var dataIdx = 0, dataScore = 0;
+function dataSet(){ return DATAR[tier] || []; }
+function buildData(){
+  expandSec('#secData');
+  dataIdx = 0; dataScore = 0;
+  $('#secData').classList.remove('done');
+  dataRender();
+}
+function dataRender(){
+  var set = dataSet();
+  if (dataIdx >= set.length) return dataEnd();
+  var d = set[dataIdx];
+  shuffleItemOnce(d);
+  $('#dataBox').innerHTML =
+      '<div class="q-stem">Chart ' + (dataIdx+1) + ' of ' + set.length + '</div>'
+    + '<div class="chart-box"><div class="chart-title">' + d.title + '</div>'
+    + chartSVG(d)
+    + '<div class="chart-note">Measured in ' + d.unit + ' — check the side of the chart before you answer.</div></div>'
+    + '<div class="q-stem" style="margin-top:1rem;">' + d.q + '</div>'
+    + '<div class="opts" id="dataOpts">'
+    + d.o.map(function(o, i){
+        return '<label><input type="radio" name="dt' + dataIdx + '" value="' + i + '"><span>' + o + '</span></label>';
+      }).join('')
+    + '</div><div class="data-final" id="dataFinal"></div>';
+  $$('#dataOpts input').forEach(function(inp){
+    inp.addEventListener('change', function(){ dataPick(Number(inp.value)); });
+  });
+}
+function dataPick(i){
+  var d = dataSet()[dataIdx], ok = (i === d.a);
+  $$('#dataOpts input').forEach(function(inp){
+    inp.disabled = true;
+    if (Number(inp.value) === d.a){ inp.parentNode.classList.add('right'); markGlyph(inp, '✓'); }
+    else if (Number(inp.value) === i){ inp.parentNode.classList.add('wrong'); markGlyph(inp, '✗'); }
+  });
+  if (ok) dataScore++;
+  scoreHit(ok);
+  var f = $('#dataFinal'); f.className = 'data-final show';
+  f.innerHTML = (ok ? '✅ Correct! ' : '💡 Not quite. ') + d.why;
+  coachCheck('#dataCoach');
+  dataIdx++;
+  continueBtn('#dataFinal',
+    (dataIdx >= dataSet().length ? 'See the result →' : 'Next chart →'),
+    dataRender);
+}
+function dataEnd(){
+  $('#dataBox').innerHTML = '<div class="data-final show">📊 You read <b>'
+    + dataScore + ' of ' + dataSet().length + '</b> charts correctly.</div>';
+  award('data', dataScore * TIERS[tier].rate, dataSet().length * TIERS[tier].rate, $('#secData'));
+  markDone('#secData'); progressTick();
+  advance('data');
+}
+
+/* ── 8. Finish ── */
+function replayFrom(t){
+  /* Reset the activity cards for another run at tier t: strip old Next
+     buttons, hide + re-expand trace/myth/streak/finish, then startTier
+     reveals the simulator again. */
+  var first = mechList()[0], firstSel = first ? MECHANICS[first].sec : null;
+  mechList().map(function(k){ return MECHANICS[k].sec; }).concat(['#secFinish'])
+    .forEach(function(sel){
+      var sec = $(sel); if (!sec) return;
+      var nb = $('.next-btn', sec); if (nb) nb.parentNode.removeChild(nb);
+      if (sel !== firstSel) sec.classList.add('step-hidden');
+      sec.classList.remove('collapsed','done');
+    });
+  doneCount = 2;
+  startTier(t);
+}
+function finish(){
+  $('#finishBeans').textContent = '🌱 ' + sessionBeans;
+  $('#finishBadge').innerHTML = tier
+    ? 'Best level this visit: '+TIERS[tier].icon+' <b>'+TIERS[tier].label+'</b>' : '';
+  var note = $('#capNote'), btn = $('#replayBtn');
+  if (sessionBeans >= LESSON_CAP){
+    note.textContent = 'You have reached this lesson’s cap of '+LESSON_CAP+' 🌱. Play again any time for practice!';
+    btn.style.display = 'none';
+  } else if (tier === 'gold'){
+    note.textContent = 'You have '+beansLeft()+' 🌱 still available in this lesson.';
+    btn.textContent = '🔁 Play Gold again';
+    btn.onclick = function(){ replayFrom('gold'); };
+  } else {
+    var next = (tier === 'bronze') ? 'silver' : 'gold';
+    note.textContent = 'There are '+beansLeft()+' 🌱 left in this lesson — reach them by playing a harder level!';
+    btn.textContent = '🔁 Try '+TIERS[next].icon+' '+TIERS[next].label+' ('+TIERS[next].rate+'× beans)';
+    btn.onclick = function(){ replayFrom(next); };
+  }
+}
+
+/* ── Boot ── */
+(function boot(){
+  /* Theme is applied as a BODY CLASS (site-wide convention, same as the hub),
+     and shares the 'vc-theme' localStorage key so a student's choice follows
+     them between the hub, the tests and this lesson. */
+  var saved = 'night';
+  try { saved = localStorage.getItem('vc-theme') || 'night'; } catch(e){}
+  function applyTheme(t){
+    document.body.className = 'theme-' + t;
+    $$('#themeBar button').forEach(function(x){
+      x.classList.toggle('active', x.getAttribute('data-t') === t);
+    });
+    /* ctx is assigned further down; guard so the first call cannot throw */
+    if (typeof ctx !== 'undefined' && ctx) draw();
+  }
+  applyTheme(saved);
+  $$('#themeBar button').forEach(function(b){
+    b.addEventListener('click', function(){
+      var t = b.getAttribute('data-t');
+      applyTheme(t);
+      try { localStorage.setItem('vc-theme', t); } catch(e){}
+    });
+  });
+
+  if (typeof vcGetSession === 'function' && vcGetSession()){
+    var s = vcGetSession();
+    $('#loginHint').innerHTML = '👋 Welcome back, <b>' + (s.first_name || s.name || 'student')
+      + '</b>! Your beans will be saved.';
+  }
+  if ($('#stkBest')) $('#stkBest').textContent = readBest();
+
+  /* ── Prune mechanics this lesson does not use ────────────────────
+     Every mechanic section can be pasted in; only the ones named in
+     LESSON.mechanics survive. A stray paste therefore cannot leave a
+     dead card in the middle of the chain — the commonest way a
+     copy-paste build used to break. */
+  Object.keys(MECHANICS).forEach(function(k){
+    if (LESSON.mechanics.indexOf(k) >= 0) return;
+    var s = $(MECHANICS[k].sec);
+    if (s && s.parentNode) s.parentNode.removeChild(s);
+  });
+
+  /* ── Put the cards in the order the lesson chose ──────────────────
+     The sections sit in a fixed order in the HTML, but LESSON.mechanics
+     may name them in any order. Only one card shows at a time, so the
+     chain still works either way — but FINISHED cards stay on the page
+     collapsed, and a student scrolling back would find Activity 1, then
+     3, then 2. Re-homing them before #secFinish keeps the page reading
+     in the same order the student played it. */
+  var finishSec = $('#secFinish');
+  if (finishSec) mechList().forEach(function(k){
+    finishSec.parentNode.insertBefore($(MECHANICS[k].sec), finishSec);
+  });
+
+  /* Activity numbers follow the ORDER THE LESSON CHOSE, so they can
+     never contradict the chain after a mechanic is swapped. */
+  mechList().forEach(function(k, i){
+    var tag = $('.sec-tag', $(MECHANICS[k].sec));
+    if (!tag) return;
+    tag.textContent = 'Activity ' + (i+1) + ' · '
+      + tag.textContent.replace(/^Activity\s*\d*\s*·\s*/, '');
+  });
+  $('#progText').textContent = '0 of ' + TOTAL_ACTS + ' done';
+
+  $$('section.sec').forEach(makeCollapsible);
+
+  var c = $('#stars'), ctx = c.getContext('2d');
+  function draw(){
+    c.width = innerWidth; c.height = innerHeight;
+    ctx.clearRect(0,0,c.width,c.height);
+    for (var i=0;i<90;i++){
+      ctx.globalAlpha = Math.random()*0.7+0.15;
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(Math.random()*c.width, Math.random()*c.height, Math.random()*2+0.6, Math.random()*2+0.6);
+    }
+  }
+  draw(); addEventListener('resize', draw);
+
+})();
+</script>
+
 <script>
 /* ══════════════════════════════════════════════════════════════
    PROGRESSIVE LESSON UNLOCK — direct-URL guard (IDEAS #8)
-   ── LIFT-OUT BLOCK · change THIS_WEEK only ──────────────────
-   Closes the bookmark path: a student who saved this URL before
-   the week was released gets a friendly notice instead of the
-   lesson. This is a CURTAIN, not a lock — these are public pages
-   and anyone determined can still read the source. It exists for
-   pacing, which is all IDEAS #8 ever asked for.
-   Fails OPEN on a network error, unlike the hub, which fails
-   closed. Reason: the cost of being wrong differs. A locked hub
-   card just means one fewer link; a lesson page that fails closed
-   would shut a student out of a lesson he or she IS allowed to
-   read, on classroom wifi that drops. Blocking a real student
-   mid-lesson is worse than letting a curious one read ahead.
+   Part of the ENGINE now: the week number is DERIVED from
+   LESSON.week, so copying this file to a new week carries the
+   guard automatically and it can never be dropped by a rebuild.
+   Week 1 self-disables (THIS_WEEK <= 1). A CURTAIN, not a lock —
+   public pages, fails OPEN on network error (a dropped-wifi
+   student must not be shut out of a lesson he or she may read).
    ══════════════════════════════════════════════════════════════ */
 (function () {
   var SUBJECT_KEY = 'std5-science';
-  var THIS_WEEK   = 3;
+  var THIS_WEEK   = parseInt(String((window.LESSON||{}).week||'').replace(/\D/g,''), 10) || 1;
   var LOCKS_URL   = 'https://edlo-lms.smartstandardsix.workers.dev/lesson-locks';
   var HUB_URL     = '/standard5/science/';
   if (THIS_WEEK <= 1) return; // Week 1 is always open, to everyone
@@ -363,439 +1963,40 @@
   fetch(LOCKS_URL)
     .then(function (r) { return r.json(); })
     .then(function (data) {
-      if (!data || !data.ok || !data.locks) return;                 // error → let him or her through
+      if (!data || !data.ok || !data.locks) return;                 // error -> let him or her through
       var raw = data.locks[SUBJECT_KEY];
       if (raw === undefined || raw === null || raw === '') return;  // subject not locked at all
       var released = Number(raw);
-      if (!released || THIS_WEEK <= released) return;               // released → open
+      if (!released || THIS_WEEK <= released) return;               // released -> open
       lockScreen(released);
     })
-    .catch(function () { /* offline → let him or her through */ });
+    .catch(function () { /* offline -> let him or her through */ });
 
   function lockScreen(released) {
     document.body.innerHTML =
       '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;' +
       'padding:max(1rem,4vw);text-align:center;">' +
-        '<div style="max-width:520px;background:var(--card-bg,rgba(255,255,255,.06));' +
-        'border:1px solid var(--card-border,rgba(255,255,255,.09));border-radius:20px;' +
+        '<div style="max-width:520px;background:var(--card,rgba(255,255,255,.06));' +
+        'border:1px solid var(--bd,rgba(255,255,255,.09));border-radius:20px;' +
         'padding:2.2rem 1.6rem;">' +
-          '<div style="font-size:3rem;line-height:1;margin-bottom:.6rem;">🔒</div>' +
+          '<div style="font-size:3rem;line-height:1;margin-bottom:.6rem;">\uD83D\uDD12</div>' +
           '<h1 style="font-family:\'Fredoka One\',cursive;font-weight:400;font-size:1.5rem;' +
           'margin-bottom:.7rem;">This lesson opens later</h1>' +
           '<p style="font-family:Nunito,sans-serif;font-size:1rem;line-height:1.6;opacity:.85;">' +
             'Standard 5 Science is open through <strong>Week ' + released + '</strong> right now. ' +
-            'This is Week ' + THIS_WEEK + ' — Mr. EdLo will open it when the class gets there.' +
+            'This is Week ' + THIS_WEEK + ' \u2014 Mr. EdLo will open it when the class gets there.' +
           '</p>' +
           '<p style="margin-top:1.4rem;">' +
             '<a href="' + HUB_URL + '" style="font-family:Nunito,sans-serif;font-weight:800;' +
             'text-decoration:none;background:#20C997;color:#0d1f1a;padding:12px 22px;' +
             'border-radius:999px;display:inline-block;min-height:44px;line-height:20px;">' +
-            '← Back to Science lessons</a>' +
+            '\u2190 Back to Science lessons</a>' +
           '</p>' +
         '</div>' +
       '</div>';
   }
 })();
 </script>
-<script>
-'use strict';
-/* ═══════════════ Lesson config — Week 3 · SC 1.11 ═══════════════ */
-var LESSON = { week: 'Wk3', lo: 'SC1.11', name: 'Weather vs. Climate', idBase: 'std5-sci-wk03' };
-var VIDEO_URL = ''; /* Mr. EdLo: paste a YouTube EMBED url (https://www.youtube.com/embed/XXXX) to show the video section */
 
-var VOCAB = [
-  { term: 'weather',        def: 'What is happening in the sky NOW — today' },
-  { term: 'climate',        def: 'The average weather pattern over many years' },
-  { term: 'temperature',    def: 'How hot or cold It is' },
-  { term: 'precipitation',  def: 'Water falling from the sky — rain' },
-  { term: 'tropical',       def: 'A climate type that is hot all year with wet and dry seasons' }
-];
-
-var SORT = {
-  labels: ['☔ Weather', '🌍 Climate'],
-  cards: [
-    { name: '💨 It is windy today',                                   ans: 0 },
-    { name: '🌧️ It rained this morning in Belize City',               ans: 0 },
-    { name: '☀️ This afternoon is sunny and hot',                     ans: 0 },
-    { name: '🌴 Belize has a wet season and a dry season',             ans: 1 },
-    { name: '🔥 Belize is hot and humid year-round',                   ans: 1 },
-    { name: '🧊 Polar regions stay cold all through the year',         ans: 1 }
-  ]
-};
-
-var FILL = [
-  { pre: 'Weather is what happens', post: '.', opts: ['now / today', 'over many years', 'only in December'], ans: 0 },
-  { pre: 'Climate is the', post: 'over many years.', opts: ['average pattern', 'rain this morning', 'wind right now'], ans: 0 },
-  { pre: 'Belize\'s climate type is', post: '.', opts: ['tropical', 'polar', 'temperate'], ans: 0 },
-  { pre: 'Two measurements that describe a climate are temperature and', post: '.', opts: ['precipitation', 'thunder', 'sea level'], ans: 0 }
-];
-
-var QUIZ = [
-  { stem: '1. “It is raining right now.” That sentence is about…',
-    opts: ['Weather', 'Climate', 'Neither'], ans: 0,
-    why: 'Rain RIGHT NOW is today\'s condition — that is weather.' },
-  { stem: '2. “Belize is hot all year.” That sentence is about…',
-    opts: ['Weather', 'Climate', 'A thunderstorm'], ans: 1,
-    why: '“All year” means the long-run pattern — that is climate.' },
-  { stem: '3. Which TWO measurements decide a climate type?',
-    opts: ['Wind and clouds', 'Temperature and precipitation', 'Waves and tides'], ans: 1,
-    why: 'Long-run temperature + precipitation (rainfall) define the climate type.' },
-  { stem: '4. Belize\'s two seasons are…',
-    opts: ['Spring and autumn', 'A dry season and a wet (rainy) season', 'Winter and summer'], ans: 1,
-    why: 'Belize is tropical: dry season roughly February–May, wet (rainy) season roughly June–November.' },
-  { stem: '5. Why do Belize City and New York City have different climates?',
-    opts: ['Their seasonal changes differ — Belize\'s are wet and dry, New York swings hot to cold',
-           'New York has no weather', 'Belize is closer to the moon'], ans: 0,
-    why: 'Different long-run patterns = different climate types: tropical vs temperate.' },
-  { stem: '6. One cold morning in Belize means…',
-    opts: ['The climate has changed', 'Just a change in the weather that day', 'Belize is now polar'], ans: 1,
-    why: 'One cold morning is weather. Climate only changes over MANY years.' }
-];
-
-var TF = [
-  { stmt: '“It is windy today” is a climate statement.', ans: false,
-    why: '“Today” is the clue — that is weather, not climate.' },
-  { stmt: '“Belize has a wet and a dry season” is a climate statement.', ans: true,
-    why: 'A repeating pattern across the years — that is climate.' },
-  { stmt: 'One cold morning changes Belize\'s tropical climate.', ans: false,
-    why: 'Climate is the LONG-RUN average; one morning cannot change It.' },
-  { stmt: 'Weather can change from morning to afternoon.', ans: true,
-    why: 'Weather changes fast — that is exactly what makes It different from climate.' }
-];
-
-/* Bean economy (locked): activities 5 + 1/correct · checkpoint 10 + 1/correct · completion 15 */
-var ACTS = {
-  vocab:      { flat: 5,  max: 10, label: 'Vocabulary Match' },
-  sort:       { flat: 5,  max: 11, label: 'Weather or Climate Sort' },
-  practice:   { flat: 5,  max: 9,  label: 'Label the Climate' },
-  checkpoint: { flat: 10, max: 16, label: 'Checkpoint Quiz' },
-  tf:         { flat: 5,  max: 9,  label: 'Myth Buster' }
-};
-var COMPLETION_BEANS = 15;
-var TOTAL_ACTS = 6; /* 5 activities + completion */
-
-/* ═══════════════ Engine (shared by all Std5 Science lessons) ═══════════════ */
-var sessionBeans = 0, doneCount = 0, completionDone = false;
-
-function $(sel, root) { return (root || document).querySelector(sel); }
-function $all(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
-function shuffle(arr) {
-  var a = arr.slice();
-  for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
-  return a;
-}
-function toast(msg) {
-  var t = $('#toast'); t.textContent = msg; t.classList.add('show');
-  clearTimeout(t._h); t._h = setTimeout(function () { t.classList.remove('show'); }, 2600);
-}
-function beanPillAdd(n) {
-  sessionBeans += n;
-  $('#beanPill').textContent = '🌱 ' + sessionBeans + ' bean' + (sessionBeans === 1 ? '' : 's');
-}
-function progressTick() {
-  doneCount++;
-  $('#progText').textContent = Math.min(doneCount, TOTAL_ACTS) + ' of ' + TOTAL_ACTS + ' done';
-  $('#progFill').style.width = (Math.min(doneCount, TOTAL_ACTS) / TOTAL_ACTS * 100) + '%';
-}
-function award(actKey, correct, totalItems, sec) {
-  var cfg = ACTS[actKey];
-  var beans = cfg.flat + correct;
-  var id = LESSON.idBase + '-' + actKey;
-  var note = $('.earned-note', sec);
-  beanPillAdd(beans);
-  vcSaveBeans(id, beans, cfg.max, {
-    subject: 'Science', lo_code: LESSON.lo,
-    activity_name: LESSON.week + ' ' + cfg.label
-  }).then(function (res) {
-    note.style.display = 'block';
-    if (res && res.ok)          { note.textContent = '🌱 +' + beans + ' beans saved to your account!'; toast('🌱 +' + beans + ' beans earned!'); }
-    else if (res && res.locked) { note.textContent = '🌱 Beans for this activity were already earned on this device.'; }
-    else                        { note.textContent = '🌱 +' + beans + ' beans — log in next time to save them to your account!'; toast('🌱 +' + beans + ' beans (not saved — not logged in)'); }
-  });
-}
-function finishCheck() {
-  if (doneCount !== 5 || completionDone) return;
-  completionDone = true;
-  var id = LESSON.idBase + '-complete';
-  beanPillAdd(COMPLETION_BEANS);
-  progressTick();
-  $('#finishHint').style.display = 'none';
-  var line = $('#finishLine');
-  line.style.display = 'block';
-  line.textContent = '🎉 Lesson complete! +' + COMPLETION_BEANS + ' bonus beans. Great work — Week 4 reads Belize\'s real climate data!';
-  vcSaveBeans(id, COMPLETION_BEANS, COMPLETION_BEANS, {
-    subject: 'Science', lo_code: LESSON.lo, activity_name: LESSON.week + ' Lesson Completed'
-  });
-  toast('🏁 Lesson complete! +' + COMPLETION_BEANS + ' 🌱');
-}
-function sectionDone(sec, actKey, correct, totalItems, msg) {
-  sec.classList.add('done');
-  var fb = $('.feedback-line', sec);
-  fb.style.display = 'block';
-  fb.textContent = msg;
-  $('.check-btn', sec).disabled = true;
-  award(actKey, correct, totalItems, sec);
-  progressTick();
-  finishCheck();
-}
-
-/* ---------- Section 1 · Hook ---------- */
-$('#hookBtn').addEventListener('click', function () {
-  $('#hookReveal').style.display = 'block';
-  this.style.display = 'none';
-});
-
-/* ---------- Video slot ---------- */
-if (VIDEO_URL) { $('#sec-video').style.display = 'block'; $('#videoFrame').src = VIDEO_URL; }
-
-/* ---------- Section 3 · Vocabulary ---------- */
-(function buildVocab() {
-  var sec = $('#sec-vocab'), list = $('#vocabList'), btn = $('.check-btn', sec);
-  var defs = shuffle(VOCAB.map(function (v) { return v.def; }));
-  VOCAB.forEach(function (v) {
-    var row = document.createElement('div');
-    row.className = 'vocab-row';
-    var opts = defs.map(function (d) { return '<option>' + d + '</option>'; }).join('');
-    row.innerHTML = '<span class="vocab-term">' + v.term + '</span>' +
-      '<select data-ans="' + v.def.replace(/"/g, '&quot;') + '"><option value="">— choose —</option>' + opts + '</select>' +
-      '<span class="mark"></span>';
-    list.appendChild(row);
-  });
-  function ready() { btn.disabled = $all('select', list).some(function (s) { return !s.value; }); }
-  list.addEventListener('change', ready);
-  btn.addEventListener('click', function () {
-    var correct = 0;
-    $all('select', list).forEach(function (s) {
-      var ok = s.value === s.getAttribute('data-ans');
-      if (ok) correct++;
-      s.parentNode.querySelector('.mark').textContent = ok ? '✅' : '❌';
-      s.disabled = true;
-    });
-    sectionDone(sec, 'vocab', correct, VOCAB.length, 'You matched ' + correct + ' of ' + VOCAB.length + ' words.' + (correct === VOCAB.length ? ' Perfect! 🎯' : ' Check the ❌ rows and re-read Section 2.'));
-  });
-})();
-
-/* ---------- Section 4 · Sort ---------- */
-(function buildSort() {
-  var sec = $('#sec-sort'), grid = $('#sortGrid'), btn = $('.check-btn', sec);
-  shuffle(SORT.cards).forEach(function (c) {
-    var card = document.createElement('div');
-    card.className = 'sort-card';
-    card.setAttribute('data-ans', c.ans);
-    card.innerHTML = '<div class="sc-name">' + c.name + '</div>' +
-      '<div class="sort-btns"><button type="button" data-v="0">' + SORT.labels[0] + '</button>' +
-      '<button type="button" data-v="1">' + SORT.labels[1] + '</button></div>' +
-      '<span class="mark"></span>';
-    grid.appendChild(card);
-  });
-  grid.addEventListener('click', function (e) {
-    var b = e.target.closest('button');
-    if (!b || b.disabled) return;
-    $all('button', b.parentNode).forEach(function (x) { x.classList.remove('picked'); });
-    b.classList.add('picked');
-    btn.disabled = $all('.sort-card', grid).some(function (c) { return !$('.picked', c); });
-  });
-  btn.addEventListener('click', function () {
-    var correct = 0;
-    $all('.sort-card', grid).forEach(function (c) {
-      var picked = $('.picked', c);
-      var ok = picked && picked.getAttribute('data-v') === c.getAttribute('data-ans');
-      if (ok) correct++;
-      $('.mark', c).textContent = ok ? '✅' : '❌ ' + SORT.labels[Number(c.getAttribute('data-ans'))];
-      $all('button', c).forEach(function (x) { x.disabled = true; });
-    });
-    sectionDone(sec, 'sort', correct, SORT.cards.length, 'You sorted ' + correct + ' of ' + SORT.cards.length + ' correctly.' + (correct === SORT.cards.length ? ' Excellent sorting! 🗂️' : ' The ❌ cards show the correct column.'));
-  });
-})();
-
-/* ---------- Section 5 · Practice fill-in ---------- */
-(function buildFill() {
-  var sec = $('#sec-practice'), list = $('#fillList'), btn = $('.check-btn', sec);
-  FILL.forEach(function (f) {
-    var row = document.createElement('div');
-    row.className = 'fill-row';
-    var opts = shuffle(f.opts.map(function (o, i) { return { o: o, i: i }; }))
-      .map(function (x) { return '<option value="' + x.i + '">' + x.o + '</option>'; }).join('');
-    row.innerHTML = '<span>' + f.pre + '</span>' +
-      '<select data-ans="' + f.ans + '"><option value="">— choose —</option>' + opts + '</select>' +
-      '<span>' + f.post + '</span><span class="mark"></span>';
-    list.appendChild(row);
-  });
-  function ready() { btn.disabled = $all('select', list).some(function (s) { return !s.value; }); }
-  list.addEventListener('change', ready);
-  btn.addEventListener('click', function () {
-    var correct = 0;
-    $all('select', list).forEach(function (s) {
-      var ok = s.value === s.getAttribute('data-ans');
-      if (ok) correct++;
-      s.parentNode.querySelector('.mark').textContent = ok ? '✅' : '❌';
-      s.disabled = true;
-    });
-    sectionDone(sec, 'practice', correct, FILL.length, 'You completed ' + correct + ' of ' + FILL.length + ' sentences.' + (correct === FILL.length ? ' The loop is yours! 🔁' : ' Look again at the loop picture in Section 2.'));
-  });
-})();
-
-/* ---------- Section 6 · Checkpoint quiz ---------- */
-(function buildQuiz() {
-  var sec = $('#sec-checkpoint'), list = $('#quizList'), btn = $('.check-btn', sec);
-  QUIZ.forEach(function (q, qi) {
-    var div = document.createElement('div');
-    div.className = 'quiz-q';
-    var opts = q.opts.map(function (o, oi) {
-      return '<label><input type="radio" name="q' + qi + '" value="' + oi + '"> ' + o + '</label>';
-    }).join('');
-    div.innerHTML = '<p class="q-stem">' + q.stem + '</p><div class="quiz-opts" data-ans="' + q.ans + '">' + opts + '</div>' +
-      '<p class="hint q-why" style="display:none;"></p>';
-    list.appendChild(div);
-  });
-  function ready() {
-    btn.disabled = $all('.quiz-opts', list).some(function (g) { return !$('input:checked', g); });
-  }
-  list.addEventListener('change', ready);
-  btn.addEventListener('click', function () {
-    var correct = 0;
-    $all('.quiz-q', list).forEach(function (qdiv, qi) {
-      var g = $('.quiz-opts', qdiv);
-      var ans = Number(g.getAttribute('data-ans'));
-      var picked = $('input:checked', g);
-      var ok = picked && Number(picked.value) === ans;
-      if (ok) correct++;
-      $all('label', g).forEach(function (lab, li) {
-        if (li === ans) lab.classList.add('right');
-        else if (picked && Number(picked.value) === li && !ok) lab.classList.add('wrong');
-        $('input', lab).disabled = true;
-      });
-      var why = $('.q-why', qdiv);
-      why.style.display = 'block';
-      why.textContent = (ok ? '✅ ' : '❌ ') + QUIZ[qi].why;
-    });
-    sectionDone(sec, 'checkpoint', correct, QUIZ.length, 'Checkpoint score: ' + correct + ' of ' + QUIZ.length + '.' + (correct === QUIZ.length ? ' Outstanding! 🛑➡️✅' : ' Read the explanations below each question.'));
-  });
-})();
-
-/* ---------- Section 7 · True / False ---------- */
-(function buildTF() {
-  var sec = $('#sec-tf'), list = $('#tfList'), btn = $('.check-btn', sec);
-  TF.forEach(function (t) {
-    var row = document.createElement('div');
-    row.className = 'tf-row';
-    row.setAttribute('data-ans', t.ans ? '1' : '0');
-    row.innerHTML = '<span class="tf-stmt">' + t.stmt + '</span>' +
-      '<div class="tf-btns"><button type="button" data-v="1">True</button>' +
-      '<button type="button" data-v="0">False</button><span class="mark"></span></div>';
-    list.appendChild(row);
-  });
-  list.addEventListener('click', function (e) {
-    var b = e.target.closest('button');
-    if (!b || b.disabled) return;
-    $all('button', b.parentNode).forEach(function (x) { x.classList.remove('picked'); });
-    b.classList.add('picked');
-    btn.disabled = $all('.tf-row', list).some(function (r) { return !$('.picked', r); });
-  });
-  btn.addEventListener('click', function () {
-    var correct = 0;
-    $all('.tf-row', list).forEach(function (r, i) {
-      var picked = $('.picked', r);
-      var ok = picked && picked.getAttribute('data-v') === r.getAttribute('data-ans');
-      if (ok) correct++;
-      $('.mark', r).textContent = ok ? '✅' : '❌';
-      var why = document.createElement('p');
-      why.className = 'hint';
-      why.textContent = (ok ? '✅ ' : '❌ ') + TF[i].why;
-      r.appendChild(why);
-      $all('button', r).forEach(function (x) { x.disabled = true; });
-    });
-    sectionDone(sec, 'tf', correct, TF.length, 'Myths busted: ' + correct + ' of ' + TF.length + '.' + (correct === TF.length ? ' Detective work! 🕵️' : ' Remember: technology is neutral.'));
-  });
-})();
-
-/* ---------- Restore beans already earned on this device ---------- */
-function lockBeans(key) {
-  try {
-    var raw = localStorage.getItem('vc-pts-' + key);
-    if (raw === null) return null;
-    var o = JSON.parse(raw);
-    return (o && typeof o.b === 'number') ? o.b : 0;
-  } catch (e) { return 0; }
-}
-(function restoreProgress() {
-  Object.keys(ACTS).forEach(function (k) {
-    var b = lockBeans(LESSON.idBase + '-' + k);
-    if (b === null) return;
-    var sec = document.querySelector('[data-act="' + k + '"]');
-    if (!sec) return;
-    sec.classList.add('done');
-    $all('select, input, button', sec).forEach(function (el) { el.disabled = true; });
-    var fb = $('.feedback-line', sec);
-    fb.style.display = 'block';
-    fb.textContent = '✓ Already completed on this device' + (b ? ' — 🌱 ' + b + ' beans earned.' : '.');
-    beanPillAdd(b);
-    progressTick();
-  });
-  var cb = lockBeans(LESSON.idBase + '-complete');
-  if (cb !== null) {
-    completionDone = true;
-    beanPillAdd(cb);
-    progressTick();
-    $('#finishHint').style.display = 'none';
-    var line = $('#finishLine');
-    line.style.display = 'block';
-    line.textContent = '🎉 You already completed this lesson — great work!';
-  }
-})();
-
-/* ---------- Theme bar ---------- */
-(function themes() {
-  var saved = localStorage.getItem('vc-theme') || 'night';
-  document.documentElement.setAttribute('data-theme', saved);
-  $all('#themeBar button').forEach(function (b) {
-    b.classList.toggle('active', b.getAttribute('data-t') === saved);
-    b.addEventListener('click', function () {
-      var t = b.getAttribute('data-t');
-      document.documentElement.setAttribute('data-theme', t);
-      localStorage.setItem('vc-theme', t);
-      $all('#themeBar button').forEach(function (x) { x.classList.toggle('active', x === b); });
-    });
-  });
-})();
-
-/* ---------- Login hint ---------- */
-(function loginHint() {
-  var hint = $('#loginHint');
-  var s = (typeof vcGetSession === 'function') ? vcGetSession() : null;
-  if (s) {
-    /* Built with textContent (never innerHTML) so a stored name can never inject markup */
-    hint.textContent = '';
-    var strong = document.createElement('strong');
-    strong.textContent = s.first_name || s.username;
-    hint.appendChild(document.createTextNode('👋 Welcome back, '));
-    hint.appendChild(strong);
-    hint.appendChild(document.createTextNode(' — your beans will be saved!'));
-  }
-  else hint.innerHTML = '🌱 <a href="/login/">Log in</a> to save the cacao beans you earn in this lesson.';
-})();
-
-/* ---------- Starfield ---------- */
-(function starfield() {
-  var c = $('#stars'), ctx = c.getContext('2d'), stars = [];
-  function size() { c.width = innerWidth; c.height = innerHeight; }
-  size(); addEventListener('resize', size);
-  for (var i = 0; i < 90; i++) {
-    stars.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.6 + .4, p: Math.random() * Math.PI * 2 });
-  }
-  (function draw() {
-    ctx.clearRect(0, 0, c.width, c.height);
-    var t = Date.now() / 1000;
-    stars.forEach(function (s) {
-      ctx.globalAlpha = .45 + .45 * Math.sin(t * 1.4 + s.p);
-      ctx.fillStyle = '#cdd7ff';
-      ctx.beginPath();
-      ctx.arc(s.x * c.width, s.y * c.height, s.r, 0, Math.PI * 2);
-      ctx.fill();
-    });
-    requestAnimationFrame(draw);
-  })();
-})();
-</script>
 </body>
 </html>
