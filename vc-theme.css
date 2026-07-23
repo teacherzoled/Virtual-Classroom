@@ -305,3 +305,4 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
 .gate-title{font-family:'Fredoka One',cursive;font-size:1.5rem;margin-bottom:.6rem;color:var(--body-color);}
 .gate-msg{color:var(--body-color);opacity:.85;font-size:1.02rem;line-height:1.55;margin:0 auto 1.4rem;max-width:30rem;}
 .gate-actions{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;}
+

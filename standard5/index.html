@@ -6,6 +6,7 @@
 <title>Standard 5 — Mr. EdLo's Virtual Classroom</title>
 <link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/vc-constellation.css">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -337,10 +338,10 @@
 
 <!-- Theme switcher -->
 <div class="theme-bar">
-  <button class="theme-btn active" onclick="setTheme('night',this)">🌙 Night</button>
-  <button class="theme-btn" onclick="setTheme('sunny',this)">☀️ Sunny</button>
-  <button class="theme-btn" onclick="setTheme('cloudy',this)">☁️ Cloudy</button>
-  <button class="theme-btn" onclick="setTheme('nature',this)">🌿 Nature</button>
+  <button class="theme-btn active" onclick="setTheme('night',this)"><span data-vc-toggle="night"></span>Night</button>
+  <button class="theme-btn" onclick="setTheme('sunny',this)"><span data-vc-toggle="sunny"></span>Sunny</button>
+  <button class="theme-btn" onclick="setTheme('cloudy',this)"><span data-vc-toggle="cloudy"></span>Cloudy</button>
+  <button class="theme-btn" onclick="setTheme('nature',this)"><span data-vc-toggle="nature"></span>Nature</button>
 </div>
 
 <div class="wrapper">
@@ -376,7 +377,8 @@
   <div class="grid">
 
     <a class="card" href="/standard5/science/" style="--accent:var(--a-science);">
-      <div class="card-icon">🔬</div>
+      <span class="open-chip pill-open"><span class="sp-dot"></span>Now Open</span>
+      <div class="card-icon"><span data-vc-icon="science"></span></div>
       <div class="card-title">Science</div>
       <div class="card-desc">Experiments, concepts & discoveries — graded quizzes, tests & labs</div>
       <span class="card-arrow">→</span>
@@ -384,35 +386,35 @@
 
     <div class="card soon" style="--accent:var(--a-spanish);">
       <span class="soon-chip">Coming Soon</span>
-      <div class="card-icon">🌎</div>
+      <div class="card-icon"><span data-vc-icon="spanish"></span></div>
       <div class="card-title">Spanish</div>
       <div class="card-desc">Vocabulary, grammar & conversation practice</div>
     </div>
 
     <div class="card soon" style="--accent:var(--a-math);">
       <span class="soon-chip">Coming Soon</span>
-      <div class="card-icon">➗</div>
+      <div class="card-icon"><span data-vc-icon="math"></span></div>
       <div class="card-title">Mathematics</div>
       <div class="card-desc">Numbers, operations & problem solving</div>
     </div>
 
     <div class="card soon" style="--accent:var(--a-scripture);">
       <span class="soon-chip">Coming Soon</span>
-      <div class="card-icon">✝️</div>
+      <div class="card-icon"><span data-vc-icon="scripture"></span></div>
       <div class="card-title">Scriptures</div>
       <div class="card-desc">Bible stories, verses & devotions</div>
     </div>
 
     <div class="card soon" style="--accent:var(--a-cs);">
       <span class="soon-chip">Coming Soon</span>
-      <div class="card-icon">💻</div>
+      <div class="card-icon"><span data-vc-icon="cs"></span></div>
       <div class="card-title">Computer Science</div>
       <div class="card-desc">Technology, coding & digital skills</div>
     </div>
 
     <div class="card soon" style="--accent:var(--a-pe);">
       <span class="soon-chip">Coming Soon</span>
-      <div class="card-icon">⚽</div>
+      <div class="card-icon"><span data-vc-icon="pe"></span></div>
       <div class="card-title">Physical Education</div>
       <div class="card-desc">Fitness, sports & healthy living</div>
     </div>
@@ -474,6 +476,8 @@
   topBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
 </script>
 <script src="/edlo-utils.js"></script>
+<script src="/vc-icons.js"></script>
+<script src="/vc-mascot.js"></script>
 <script>
   /* Personal greeting when logged in (added July 16, 2026) — textContent only, per standing rule */
   (function () {

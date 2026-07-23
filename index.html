@@ -6,6 +6,7 @@
 <title>Mr. EdLo's Virtual Classroom — Choose Your Class</title>
 <link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/vc-constellation.css">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -338,10 +339,10 @@
 
 <!-- Theme switcher -->
 <div class="theme-bar">
-  <button class="theme-btn active" onclick="setTheme('night',this)">🌙 Night</button>
-  <button class="theme-btn" onclick="setTheme('sunny',this)">☀️ Sunny</button>
-  <button class="theme-btn" onclick="setTheme('cloudy',this)">☁️ Cloudy</button>
-  <button class="theme-btn" onclick="setTheme('nature',this)">🌿 Nature</button>
+  <button class="theme-btn active" onclick="setTheme('night',this)"><span data-vc-toggle="night"></span>Night</button>
+  <button class="theme-btn" onclick="setTheme('sunny',this)"><span data-vc-toggle="sunny"></span>Sunny</button>
+  <button class="theme-btn" onclick="setTheme('cloudy',this)"><span data-vc-toggle="cloudy"></span>Cloudy</button>
+  <button class="theme-btn" onclick="setTheme('nature',this)"><span data-vc-toggle="nature"></span>Nature</button>
 </div>
 
 <div class="wrapper">
@@ -360,6 +361,29 @@
 
   <header>
     <span class="badge">Choose Your Class</span>
+    <!-- Constellation hero: open book with rising stars (theme-aware) -->
+    <div class="hero-const" aria-hidden="true">
+      <svg viewBox="0 0 340 210" role="img" aria-hidden="true" focusable="false">
+        <path d="M170 150 C140 132 90 130 50 142 V186 C90 174 140 176 170 194 C200 176 250 174 290 186 V142 C250 130 200 132 170 150 Z"
+              fill="none" stroke="var(--a-math)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+        <line x1="170" y1="150" x2="170" y2="194" stroke="var(--a-science)" stroke-width="3" stroke-linecap="round"/>
+        <line x1="66" y1="150" x2="66" y2="180" stroke="var(--a-math)" stroke-width="1.6" opacity="0.5"/>
+        <line x1="84" y1="146" x2="84" y2="178" stroke="var(--a-math)" stroke-width="1.6" opacity="0.5"/>
+        <line x1="256" y1="150" x2="256" y2="180" stroke="var(--a-science)" stroke-width="1.6" opacity="0.5"/>
+        <line x1="238" y1="146" x2="238" y2="178" stroke="var(--a-science)" stroke-width="1.6" opacity="0.5"/>
+        <g stroke="var(--subtitle-c)" stroke-width="1.4" opacity="0.65">
+          <line x1="170" y1="128" x2="140" y2="90"/><line x1="140" y1="90" x2="150" y2="52"/>
+          <line x1="150" y1="52" x2="196" y2="40"/><line x1="196" y1="40" x2="220" y2="68"/>
+          <line x1="170" y1="128" x2="205" y2="100"/><line x1="205" y1="100" x2="220" y2="68"/>
+        </g>
+        <circle cx="170" cy="128" r="4.5" fill="var(--a-worksheet)"><animate attributeName="opacity" values="1;0.5;1" dur="2.6s" repeatCount="indefinite"/></circle>
+        <circle cx="140" cy="90" r="3.2" fill="var(--a-portfolio)"><animate attributeName="opacity" values="1;0.5;1" dur="3s" begin="0.3s" repeatCount="indefinite"/></circle>
+        <circle cx="150" cy="52" r="5.5" fill="var(--a-scripture)"><animate attributeName="opacity" values="1;0.5;1" dur="2.2s" begin="0.6s" repeatCount="indefinite"/></circle>
+        <circle cx="196" cy="40" r="3.6" fill="var(--a-math)"><animate attributeName="opacity" values="1;0.5;1" dur="2.8s" begin="0.9s" repeatCount="indefinite"/></circle>
+        <circle cx="220" cy="68" r="4" fill="var(--a-cs)"><animate attributeName="opacity" values="1;0.5;1" dur="3.2s" begin="1.1s" repeatCount="indefinite"/></circle>
+        <circle cx="205" cy="100" r="3" fill="var(--a-pe)"><animate attributeName="opacity" values="1;0.5;1" dur="2.4s" begin="1.4s" repeatCount="indefinite"/></circle>
+      </svg>
+    </div>
     <h1>Welcome to Our Classroom!</h1>
     <p class="subtitle">Tap your class to find all your subjects, lessons & activities.</p>
   </header>
@@ -378,18 +402,24 @@
   <div class="grade-grid">
 
     <a class="grade-card" href="/standard5/" style="--accent:var(--a-math);">
-      <div class="grade-num">5</div>
+      <div class="orbit-wrap">
+        <span class="orbit-ring"></span><span class="orbit-dot"></span>
+        <div class="grade-num">5</div>
+      </div>
       <div class="grade-title">Standard 5</div>
       <div class="grade-desc">Lessons, activities & graded assessments for our Standard 5 class.</div>
-      <span class="grade-chip">Now Open</span>
+      <span class="grade-chip pill-open"><span class="sp-dot"></span>Now Open</span>
       <span class="grade-enter">Enter Standard 5 →</span>
     </a>
 
     <a class="grade-card" href="/standard6/" style="--accent:var(--a-science);">
-      <div class="grade-num">6</div>
+      <div class="orbit-wrap">
+        <span class="orbit-ring"></span><span class="orbit-dot"></span>
+        <div class="grade-num">6</div>
+      </div>
       <div class="grade-title">Standard 6</div>
       <div class="grade-desc">All six subjects, 30 weeks of lessons, activities, quizzes, tests & labs.</div>
-      <span class="grade-chip">Now Open</span>
+      <span class="grade-chip pill-open"><span class="sp-dot"></span>Now Open</span>
       <span class="grade-enter">Enter Standard 6 →</span>
     </a>
 
@@ -441,6 +471,8 @@
   })();
 </script>
 <script src="/edlo-utils.js"></script>
+<script src="/vc-icons.js"></script>
+<script src="/vc-mascot.js"></script>
 <script>
   /* Login button ↔ welcome chip + personal banner greeting (added July 16, 2026) */
   (function () {

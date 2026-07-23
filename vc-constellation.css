@@ -1,0 +1,37 @@
+/* ═══════════════════════════════════════════════════════════════
+ *  vc-constellation.css — Constellation kit (July 22, 2026 redesign)
+ *  Shared styles for the vc-icons.js icon system, glowing status
+ *  pills, orbit rings and SVG theme-bar glyphs.
+ *  Link on any page that uses data-vc-icon / data-vc-toggle,
+ *  BEFORE the page's own <style> block:
+ *    <link rel="stylesheet" href="/vc-constellation.css">
+ * ═══════════════════════════════════════════════════════════════ */
+/* ═══════════════ CONSTELLATION KIT — July 22, 2026 redesign ═══════════════
+ * Theme-aware "space orb" icons (vc-icons.js), glowing status pills,
+ * orbit rings for class numbers, SVG theme-bar glyphs.
+ * Orb background adapts per theme; tiny white orb-stars only show on Night. */
+:root,body.theme-night{--orb-g1:#232a4d;--orb-g2:#0d1128;--orb-stars:1;}
+body.theme-sunny{--orb-g1:#fffdf4;--orb-g2:#fff0c2;--orb-stars:0;}
+body.theme-cloudy{--orb-g1:#ffffff;--orb-g2:#dce6f0;--orb-stars:0;}
+body.theme-nature{--orb-g1:#ffffff;--orb-g2:#ddf2d4;--orb-stars:0;}
+.vc-icon{display:inline-block;line-height:0;}
+.vc-icon svg{width:64px;height:64px;display:block;}
+.vc-icon .orb-star{opacity:var(--orb-stars,1);transition:opacity .5s;}
+.card-icon .vc-icon svg{width:56px;height:56px;}
+.feature-card-icon .vc-icon svg{width:46px;height:46px;}
+.card.portfolio .card-icon .vc-icon svg{width:52px;height:52px;}
+.theme-btn{display:inline-flex;align-items:center;gap:6px;}
+.vc-tgl{display:inline-block;line-height:0;}
+.vc-tgl svg{width:15px;height:15px;display:block;}
+.pill-open{display:inline-flex;align-items:center;gap:7px;}
+.pill-open .sp-dot{width:6px;height:6px;border-radius:2px;transform:rotate(45deg);background:var(--accent,var(--top-badge-bg));box-shadow:0 0 8px 1px var(--accent,var(--top-badge-bg));animation:vcPulse 2.4s ease-in-out infinite;flex-shrink:0;}
+@keyframes vcPulse{0%,100%{opacity:1}50%{opacity:.45}}
+.open-chip{position:absolute;top:.85rem;right:.85rem;background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--accent,var(--badge-color));font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;}
+.orbit-wrap{position:relative;width:128px;height:128px;margin:0 auto .6rem;display:flex;align-items:center;justify-content:center;}
+.orbit-ring{position:absolute;inset:6px;border:1.5px dashed var(--accent,#999);opacity:.35;border-radius:50%;}
+.orbit-dot{position:absolute;inset:6px;border-radius:50%;animation:vcSpin 12s linear infinite;pointer-events:none;}
+.orbit-dot::before{content:'';position:absolute;top:-4px;left:calc(50% - 4px);width:8px;height:8px;border-radius:50%;background:var(--accent,#999);box-shadow:0 0 10px 1px var(--accent,#999);}
+@keyframes vcSpin{to{transform:rotate(360deg)}}
+.orbit-wrap .grade-num{font-size:3.4rem;margin-bottom:0;line-height:1;}
+.hero-const{display:flex;justify-content:center;margin:0 auto .4rem;line-height:0;}
+.hero-const svg{width:min(300px,70vw);height:auto;display:block;}

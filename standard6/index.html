@@ -6,6 +6,7 @@
 <title>Standard 6 — Mr. EdLo's Virtual Classroom</title>
 <link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/vc-constellation.css">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -354,10 +355,10 @@
 
 <!-- Theme switcher -->
 <div class="theme-bar">
-  <button class="theme-btn active" onclick="setTheme('night',this)">🌙 Night</button>
-  <button class="theme-btn" onclick="setTheme('sunny',this)">☀️ Sunny</button>
-  <button class="theme-btn" onclick="setTheme('cloudy',this)">☁️ Cloudy</button>
-  <button class="theme-btn" onclick="setTheme('nature',this)">🌿 Nature</button>
+  <button class="theme-btn active" onclick="setTheme('night',this)"><span data-vc-toggle="night"></span>Night</button>
+  <button class="theme-btn" onclick="setTheme('sunny',this)"><span data-vc-toggle="sunny"></span>Sunny</button>
+  <button class="theme-btn" onclick="setTheme('cloudy',this)"><span data-vc-toggle="cloudy"></span>Cloudy</button>
+  <button class="theme-btn" onclick="setTheme('nature',this)"><span data-vc-toggle="nature"></span>Nature</button>
 </div>
 
 <div class="wrapper">
@@ -392,19 +393,19 @@
   <p class="section-label">What You Can Do Here</p>
   <div class="features-grid">
     <div class="feature-card">
-      <div class="feature-card-icon">📖</div>
+      <div class="feature-card-icon"><span data-vc-icon="review"></span></div>
       <div class="feature-card-text"><strong>Review Lessons</strong>Explore subjects and go over lessons at your own pace, any time.</div>
     </div>
     <div class="feature-card">
-      <div class="feature-card-icon">📋</div>
+      <div class="feature-card-icon"><span data-vc-icon="weekly"></span></div>
       <div class="feature-card-text"><strong>Weekly Materials</strong>Access learning materials for all your subjects each week.</div>
     </div>
     <div class="feature-card">
-      <div class="feature-card-icon">📝</div>
+      <div class="feature-card-icon"><span data-vc-icon="activities"></span></div>
       <div class="feature-card-text"><strong>Activities & Worksheets</strong>Download worksheets and complete interactive activities.</div>
     </div>
     <div class="feature-card">
-      <div class="feature-card-icon">📤</div>
+      <div class="feature-card-icon"><span data-vc-icon="submit"></span></div>
       <div class="feature-card-text"><strong>Submit Work</strong>Turn in your assignments easily through Google Classroom.</div>
     </div>
   </div>
@@ -414,56 +415,56 @@
   <div class="grid">
 
     <a class="card" href="/standard6/spanish/" style="--accent:var(--a-spanish);">
-      <div class="card-icon">🌎</div>
+      <div class="card-icon"><span data-vc-icon="spanish"></span></div>
       <div class="card-title">Spanish</div>
       <div class="card-desc">Mis aspiraciones, future plans & more</div>
       <span class="card-arrow">→</span>
     </a>
 
     <a class="card" href="/standard6/science/" style="--accent:var(--a-science);">
-      <div class="card-icon">🔬</div>
+      <div class="card-icon"><span data-vc-icon="science"></span></div>
       <div class="card-title">Science</div>
       <div class="card-desc">Experiments, concepts & discoveries</div>
       <span class="card-arrow">→</span>
     </a>
 
     <a class="card" href="/standard6/math/" style="--accent:var(--a-math);">
-      <div class="card-icon">➗</div>
+      <div class="card-icon"><span data-vc-icon="math"></span></div>
       <div class="card-title">Mathematics</div>
       <div class="card-desc">Numbers, operations & problem solving</div>
       <span class="card-arrow">→</span>
     </a>
 
     <a class="card" href="/standard6/scriptures/" style="--accent:var(--a-scripture);">
-      <div class="card-icon">✝️</div>
+      <div class="card-icon"><span data-vc-icon="scripture"></span></div>
       <div class="card-title">Scriptures</div>
       <div class="card-desc">Bible stories, verses & devotions</div>
       <span class="card-arrow">→</span>
     </a>
 
     <a class="card" href="/standard6/computersc/" style="--accent:var(--a-cs);">
-      <div class="card-icon">💻</div>
+      <div class="card-icon"><span data-vc-icon="cs"></span></div>
       <div class="card-title">Computer Science</div>
       <div class="card-desc">Technology, coding & digital skills</div>
       <span class="card-arrow">→</span>
     </a>
 
     <a class="card" href="/standard6/pe/" style="--accent:var(--a-pe);">
-      <div class="card-icon">⚽</div>
+      <div class="card-icon"><span data-vc-icon="pe"></span></div>
       <div class="card-title">Physical Education</div>
       <div class="card-desc">Fitness, sports & healthy living</div>
       <span class="card-arrow">→</span>
     </a>
 
     <a class="card" href="https://classroom.google.com" target="_blank" style="--accent:var(--a-gclass);">
-      <div class="card-icon"><img src="https://ssl.gstatic.com/classroom/favicon.png" alt="Google Classroom" style="width:2.2rem;height:2.2rem;object-fit:contain;border-radius:6px;"></div>
+      <div class="card-icon"><span data-vc-icon="gclass"></span></div>
       <div class="card-title">Google Classroom</div>
       <div class="card-desc">Sign in to submit assignments & access class materials</div>
       <span class="card-arrow">→</span>
     </a>
 
     <a class="card" href="#" style="--accent:var(--a-worksheet);">
-      <div class="card-icon">📄</div>
+      <div class="card-icon"><span data-vc-icon="worksheet"></span></div>
       <div class="card-title">Worksheets</div>
       <div class="card-desc">Download and print worksheets for all subjects</div>
       <span class="card-arrow">→</span>
@@ -475,7 +476,7 @@
   <p class="section-label">Student Work</p>
   <div class="grid">
     <a class="card portfolio" href="/standard6/portfolios/" style="--accent:var(--a-portfolio);">
-      <div class="card-icon">🗂️</div>
+      <div class="card-icon"><span data-vc-icon="portfolio"></span></div>
       <div class="card-body">
         <div class="card-title">Student Portfolios</div>
         <div class="card-desc">Click here to access individual student portfolio links — Google Docs, projects & collected work</div>
@@ -538,5 +539,7 @@
   });
   topBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
 </script>
+<script src="/vc-icons.js"></script>
+<script src="/vc-mascot.js"></script>
 </body>
 </html>
