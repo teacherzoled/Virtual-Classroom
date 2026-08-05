@@ -540,6 +540,7 @@
     <button class="tab-btn"        onclick="showTab('activities',this)">🎯 Activities</button>
     <button class="tab-btn"        onclick="showTab('assessments',this)">📝 Assessments</button>
     <button class="tab-btn"        onclick="showTab('labs',this)">🔬 Digital Labs</button>
+    <button class="tab-btn"        onclick="showTab('powerups',this)">⚡ Power-Ups</button>
   </div>
 
   <!-- ══════════════════════════════
@@ -1284,6 +1285,51 @@
     </div>
   </div><!-- /tab-labs -->
 
+  <!-- ══════════════════════════════
+       POWER-UPS TAB
+  ══════════════════════════════ -->
+  <div class="tab-panel" id="tab-powerups">
+    <p class="section-label">Power-Ups &nbsp;·&nbsp; Standard 5 Science &amp; Technology &nbsp;·&nbsp; Quick self-check worksheets</p>
+    <div class="grid">
+
+      <a class="lab-card" href="power-ups/1a/" style="--accent:#FFD43B;">
+        <div class="lab-icon">⚡</div>
+        <div class="lab-body">
+          <div class="lab-title">Power-Up 1A</div>
+          <div class="lab-desc">5 quick recall questions on technology &amp; climate change, the scientific method, the water cycle and states of matter — instant self-check feedback, with read-aloud audio.</div>
+          <div class="lab-meta">
+            <span class="lab-tag">Goes Home Monday</span>
+            <span class="lab-tag">Discuss Wednesday</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="lab-card" href="power-ups/1b/" style="--accent:#FFD43B;">
+        <div class="lab-icon">⚡</div>
+        <div class="lab-body">
+          <div class="lab-title">Power-Up 1B</div>
+          <div class="lab-desc">5 more recall questions on climate-friendly technology, food chains, cells and the scientific method — with read-aloud audio on every question.</div>
+          <div class="lab-meta">
+            <span class="lab-tag">Goes Home Thursday</span>
+            <span class="lab-tag">Discuss Following Monday</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="lab-card soon" style="--accent:#FFD43B;">
+        <div class="lab-icon">⚡</div>
+        <div class="lab-body">
+          <div class="lab-title">More Power-Ups — Being Built</div>
+          <div class="lab-desc">A new Power-Up worksheet drops each cycle, drawing questions from every week released so far. Check back soon!</div>
+          <div class="lab-meta">
+            <span class="lab-tag">In Progress</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div><!-- /tab-powerups -->
+
 </div><!-- /wrapper -->
 
 <footer class="site-footer">
@@ -1374,6 +1420,12 @@ function showTab(id,btn){
   document.getElementById('tab-'+id).classList.add('active');
   btn.classList.add('active');
 }
+(function(){
+  const hash = location.hash.replace('#','');
+  if (!hash) return;
+  const btn = document.querySelector('.tab-btn[onclick*="\'' + hash + '\'"]');
+  if (btn) showTab(hash, btn);
+})();
 
 /* ══════════════════════════════════════════════════════════════
    PROGRESSIVE LESSON UNLOCK — IDEAS #8
