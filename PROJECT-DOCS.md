@@ -20,7 +20,32 @@ If the docs are not updated, the task is **not** finished.
 
 ---
 
-## ▶️ Take-off Point — Next Session (as of July 21, 2026)
+## ▶️ Take-off Point — Next Session (as of August 5, 2026)
+
+**Newest work (August 5, 2026): ⚡ POWER-UPS NOW PAY BEANS — LIVE & VERIFIED.**
+
+- **Both Cycle 1 Power-Up worksheets earn cacao beans**: `/standard5/science/power-ups/1a/` and
+  `1b/`. Each pays **1 🌱 per question answered correctly, max 5** — the same number the Score shows.
+- **Two attempts per question** (the Section 9 doctrine applied to self-check): attempt 1 returns a
+  **hint and never the answer**, so a correct revision still earns its bean; the answer appears only
+  after attempt 2, when the bean is already gone. A third Check does nothing.
+- **Every question is checked, including the written ones.** They have many right answers, not none,
+  so each carries a generous `mode:'any'` accept list. ⚠️ **Matching is by substring, so keys must be
+  plural-tolerant** — `factories` does not contain `factory`. The checker searches the typed text
+  plus two naive singular forms (`ies`→`y`, trailing `s` stripped). This was a live bug, not theory.
+- **The self-mark button ("Mine says the same thing") pays nothing** and no longer moves the Score —
+  nothing can verify a student marking their own work. Score and beans are therefore always equal.
+- **Backend: no change at all.** Power-Ups write `activity_type:'lesson'` with
+  `lesson_key:'std5-sci-pu-1a'` / `'-1b'`. The `pu-` prefix keeps them out of any real lesson's
+  30-bean budget, and Group Totals already sums `lesson`+`bonus`, so team race and class goal
+  update automatically. No new type, no cap branch, no Apps Script redeploy.
+- **Locks:** `vc-pts-std5-sci-pu-1a` / `-1b`, the existing `vc-pts-<activity-id>` pattern. Beans
+  deliberately survive **Start Over** — a replay is practice, never a second payout.
+- **The bean code sits in a marked `LIFT-OUT BLOCK`** in each page's script, ready to move into
+  shared JS when IDEAS #10 happens. Only the `PU` config differs between the two files.
+- **IDEAS #13 (Science Trivia tab) is DISCARDED** — the Power-Ups tab supersedes it (Edwin,
+  Aug 5, 2026). Do not build a Trivia tab.
+
 
 **Latest additions (July 21, 2026, end of session) — all in the engine, all inherited by future lessons:**
 - **One-card-at-a-time reveal + self-paced feedback** — fixed the mobile scroll-jump; every step is

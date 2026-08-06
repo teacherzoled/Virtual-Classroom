@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Power-Up 1A — Mr. EdLo's Virtual Classroom</title>
 <link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<script src="/edlo-utils.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -261,6 +262,18 @@
   .pu-score { margin-left:auto; display:flex; align-items:center; gap:.5rem; font-family:'Fredoka One',cursive; font-size:1rem; color:var(--header-name); }
   .pu-score span { background:var(--top-badge-bg); color:var(--top-badge-c); padding:3px 12px; border-radius:999px; font-size:.95rem; }
 
+  /* Bean bar (see the LIFT-OUT BLOCK in the script) */
+  .pu-beanbar { display:flex; flex-wrap:wrap; align-items:center; gap:.6rem 1rem; margin:0 0 1.1rem; padding:.75rem 1.1rem; background:var(--card-bg); border:1.5px solid var(--card-border); border-radius:16px; animation:riseUp .5s ease .15s both; }
+  .pu-bean { font-family:'Fredoka One',cursive; font-size:.95rem; background:var(--badge-bg); border:1.5px solid var(--badge-border); color:var(--badge-color); padding:5px 14px; border-radius:999px; white-space:nowrap; }
+  .pu-hint { font-size:.78rem; font-weight:700; color:var(--card-desc); }
+  .pu-rule { font-size:.72rem; font-weight:800; letter-spacing:.03em; text-transform:uppercase; color:var(--section-lbl); }
+  .pu-hint a { color:var(--top-badge-bg); font-weight:800; }
+  .pu-note { display:none; width:100%; font-size:.8rem; font-weight:800; line-height:1.5; color:var(--ok-color); background:var(--ok-bg); border:1.5px solid var(--ok-border); border-radius:10px; padding:.55rem .75rem; }
+  .save-btn { font-family:'Fredoka One',cursive; font-size:.85rem; padding:9px 22px; border-radius:999px; border:none; background:var(--top-badge-bg); color:var(--top-badge-c); cursor:pointer; transition:filter .2s, transform .2s; }
+  .save-btn:hover:not(:disabled) { filter:brightness(1.08); transform:translateY(-1px); }
+  .save-btn:disabled { opacity:.45; cursor:not-allowed; }
+  .pu-controls .save-btn, .pu-controls .reset-btn { min-height:44px; }
+
   /* Question rows */
   .qrow { display:flex; align-items:stretch; border-radius:18px; overflow:hidden; border:1.5px solid var(--card-border); background:var(--card-bg); margin-bottom:1rem; animation:riseUp .5s ease both; transition:border-color .2s, box-shadow .2s; }
   .qrow:hover { border-color:var(--card-border-h); box-shadow:0 8px 26px var(--card-shadow); }
@@ -296,7 +309,7 @@
   .pu-tagline p { font-size:.85rem; font-weight:800; color:var(--header-name); }
   .pu-tagline .tl-sub { color:var(--section-lbl); font-weight:700; text-transform:uppercase; letter-spacing:.06em; font-size:.7rem; }
 
-  .pu-controls { display:flex; justify-content:center; margin-bottom:1.6rem; }
+  .pu-controls { display:flex; justify-content:center; gap:.8rem; flex-wrap:wrap; margin-bottom:1.6rem; }
   .reset-btn { font-family:'Fredoka One',cursive; font-size:.85rem; padding:9px 22px; border-radius:999px; border:2px solid var(--card-border-h); background:transparent; color:var(--body-color); cursor:pointer; transition:all .2s; }
   .reset-btn:hover { background:var(--card-bg); }
 
@@ -404,6 +417,13 @@
     <div class="pu-score">Score: <span id="scoreVal">0 / 5</span></div>
   </div>
 
+  <div class="pu-beanbar">
+    <span class="pu-bean" id="beanPill">🌱 0 beans</span>
+    <span class="pu-rule">1 🌱 per correct answer · two tries each</span>
+    <span class="pu-hint" id="loginHint"><a href="/login/">Log in</a> to save your beans 🌱 to your account.</span>
+    <span class="pu-note" id="beanNote"></span>
+  </div>
+
   <!-- ══════════════════════════════
        Q1 — technology & climate change
   ══════════════════════════════ -->
@@ -417,7 +437,7 @@
         </div>
         <div class="qanswer-row">
           <input class="ans-input" id="q1" type="text" placeholder="type your answer…">
-          <button class="check-btn" onclick="checkOpen(1)">Check</button>
+          <button class="check-btn" onclick="checkQ(1)">Check</button>
         </div>
         <div class="feedback open-reveal" id="fb1"></div>
       </div>
@@ -476,7 +496,7 @@
         </div>
         <div class="qanswer-row">
           <input class="ans-input" id="q2" type="text" placeholder="type your answer…">
-          <button class="check-btn" onclick="checkAuto(2)">Check</button>
+          <button class="check-btn" onclick="checkQ(2)">Check</button>
         </div>
         <div class="feedback" id="fb2"></div>
       </div>
@@ -538,7 +558,7 @@
         </div>
         <div class="qanswer-row">
           <input class="ans-input" id="q3" type="text" placeholder="type your answer…">
-          <button class="check-btn" onclick="checkAuto(3)">Check</button>
+          <button class="check-btn" onclick="checkQ(3)">Check</button>
         </div>
         <div class="feedback" id="fb3"></div>
       </div>
@@ -590,7 +610,7 @@
         </div>
         <div class="qanswer-row">
           <input class="ans-input" id="q4" type="text" placeholder="type your answer…">
-          <button class="check-btn" onclick="checkAuto(4)">Check</button>
+          <button class="check-btn" onclick="checkQ(4)">Check</button>
         </div>
         <div class="feedback" id="fb4"></div>
       </div>
@@ -632,7 +652,7 @@
         </div>
         <div class="qanswer-row">
           <input class="ans-input" id="q5" type="text" placeholder="type your answer…">
-          <button class="check-btn" onclick="checkOpen(5)">Check</button>
+          <button class="check-btn" onclick="checkQ(5)">Check</button>
         </div>
         <div class="feedback open-reveal" id="fb5"></div>
       </div>
@@ -661,6 +681,7 @@
   </div>
 
   <div class="pu-controls">
+    <button class="save-btn" id="saveBtn" onclick="puSave()" disabled>🌱 Finish &amp; Save My Beans</button>
     <button class="reset-btn" onclick="resetWorksheet()">🔄 Start Over</button>
   </div>
 
@@ -739,74 +760,257 @@ const QUESTION_AUDIO = {
 };
 function readQuestionAudio(id){ if (QUESTION_AUDIO[id]) speakText(QUESTION_AUDIO[id]); }
 
-/* ── Self-check questions ──────────────────────────────────────
-   Q2/Q3/Q4 have one factual answer → auto-checked against keywords.
-   Q1/Q5 are open-ended → student self-marks against sample answers,
-   same "no single right answer" honesty model used across the site. */
-const AUTO = {
-  2: { keywords:['scientific','method'], correct:'Scientific Method' },
-  3: { keywords:['evapor'],              correct:'Evaporation' },
-  4: { keywords:['solid'],               correct:'Solid' }
-};
-const OPEN_SAMPLE = {
-  1: 'Cars, trucks, buses, factories, power plants, airplanes — anything that burns fossil fuels and releases greenhouse gases counts!',
-  5: 'Any honest observation counts — sunny, cloudy, rainy, windy, hot, humid… what do YOU see right now?'
+/* ── Question bank ─────────────────────────────────────
+   EVERY question is checked — including the two written ones. They
+   have many right answers, not none, so they carry a generous accept
+   list (mode:'any' — one match is enough) instead of a single key.
+   Widening a list is a one-line edit; add the word and redeploy.
+
+   TWO ATTEMPTS per question, matching the site's Section 9 doctrine
+   (PROJECT-DOCS.md): one attempt is too rigid, two force a deliberate
+   revision, three or more just encourage guessing. So attempt 1 gets a
+   HINT and never the answer — the answer only appears after attempt 2,
+   when the bean is already gone and nothing can be farmed from it. */
+const Q = {
+  1: { mode:'any', open:true,
+       keys:['car','truck','bus','van','vehicle','plane','jet','motorcycle','factory','mill',
+             'plant','generator','engine','motor','diesel','gasoline','gas','petrol','oil',
+             'coal','boat','ship','tractor','chainsaw','air condition','aircon','fridge',
+             'refrigerator','freezer','stove','burn','electricity','aircraft','mower'],
+       good:'Anything that burns fuel — cars, trucks, planes, factories — adds greenhouse gases',
+       hint:'think about machines that BURN fuel. What do you see on the road, hear at a factory, or watch in the sky? Try once more.',
+       sample:'Cars, trucks, buses, factories, power plants, airplanes — anything that burns fossil fuels and releases greenhouse gases counts!' },
+
+  2: { mode:'all', keys:['scientific','method'],
+       good:'The Scientific Method',
+       hint:'it is the name for the five ordered steps in the picture — ask, research, experiment, analyse, conclude. Two words, and the first starts with S.',
+       reveal:'Scientific Method' },
+
+  3: { mode:'all', keys:['evapor'],
+       good:'Evaporation',
+       hint:'the sun heats the river and the water rises into the air as an invisible gas. That step starts with E.',
+       reveal:'Evaporation' },
+
+  4: { mode:'all', keys:['solid'],
+       good:'Solid — it keeps its own shape',
+       hint:'water takes the shape of its cup, and gas fills the whole room. Which one in the picture keeps its own shape wherever you put it?',
+       reveal:'Solid' },
+
+  5: { mode:'any', open:true,
+       keys:['sun','cloud','rain','wind','breez','hot','warm','cool','cold','humid','muggy',
+             'sticky','clear','blue','grey','gray','dark','bright','storm','thunder','lightning',
+             'drizzle','shower','wet','dry','sky','temperature','degree'],
+       good:'That is a real weather observation',
+       hint:'use a weather word — is it sunny, cloudy, rainy, windy, hot or humid where you are right now? Try once more.',
+       sample:'Any honest observation counts — sunny, cloudy, rainy, windy, hot, humid… what do YOU see right now?' }
 };
 const solved = {1:false,2:false,3:false,4:false,5:false};
+const tries  = {1:0,2:0,3:0,4:0,5:0};
+
+/* ═════════════════════════════════════════════════════════════
+   🌱 POWER-UP BEANS — LIFT-OUT BLOCK
+   Self-contained on purpose (site rule: no external JS). When the
+   shared-JS refactor (IDEAS #10) happens, lift this whole block out
+   as-is; only the PU config below changes per worksheet.
+
+   Rules approved Aug 5, 2026:
+   • 1 🌱 per question ANSWERED CORRECTLY, max 5 — always equal to
+     the Score, because both now come from the same check.
+   • TWO attempts. Attempt 1 gets a hint, never the answer, so a
+     correct REVISION still earns its bean — that is the behaviour we
+     want. The answer only appears after attempt 2, once the bean is
+     gone, so the reveal can never be farmed.
+   • Typing something is NOT enough, on any question. The two written
+     questions are matched against a generous accept list, and the
+     "Yes, mine works" button is reflection only — it pays nothing,
+     because nothing verifies it.
+   • ONE save per worksheet. vcSaveBeans sets the localStorage lock
+     vc-pts-<id>, so a reload or Start Over can never re-earn.
+   • Ungraded activity: no login gate, no test gate, no KV. Logged out,
+     the beans still show on screen — they are simply not banked.
+   • lesson_key is REQUIRED: a row without it is silently uncapped
+     server-side (PROJECT-DOCS.md, July 21 2026).
+══════════════════════════════════════════════════════════════ */
+var PU = {
+  id:      'std5-sci-pu-1a',      /* also the lesson_key — 'pu-' keeps it */
+  name:    'Power-Up 1A',         /* out of any real lesson's bean budget */
+  subject: 'Science',
+  lo:      '',                    /* mixed retrieval — no single outcome */
+  total:   5
+};
+
+var puBeans = 0, puAttempted = {}, puEarned = {}, puSaved = false;
+
+function puPill(){
+  document.getElementById('beanPill').textContent =
+    '🌱 ' + puBeans + ' bean' + (puBeans === 1 ? '' : 's');
+}
+function puNote(msg){
+  var n = document.getElementById('beanNote');
+  n.style.display = 'block';
+  n.textContent = msg;
+}
+function puTouch(id){
+  puAttempted[id] = true;
+  document.getElementById('saveBtn').disabled = puSaved;
+}
+/* One bean per QUESTION, ever — not per attempt. Survives Start Over,
+   so a replay of an unsaved sheet cannot pay a second time. */
+function puEarn(id){
+  if (puEarned[id] || puBeans >= PU.total) return;
+  puEarned[id] = true;
+  puBeans++;
+  puPill();
+}
+/* Auto-save once every question has been attempted. */
+function puMaybeSave(){
+  for (var i = 1; i <= PU.total; i++) { if (!puAttempted[i]) return; }
+  puSave();
+}
+function puSave(){
+  if (puSaved) return;
+  puSaved = true;
+  var btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+  btn.textContent = '🌱 Beans Saved ✓';
+
+  if (typeof vcSaveBeans !== 'function'){
+    puNote('🌱 ' + puBeans + ' beans earned — the classroom server could not be reached this time.');
+    return;
+  }
+  vcSaveBeans(PU.id, puBeans, PU.total, {
+    subject:       PU.subject,
+    lo_code:       PU.lo,
+    lesson_key:    PU.id,
+    activity_name: PU.name
+  }).then(function(res){
+    if (res && res.ok){
+      /* Trust the server — it decides what was actually banked. */
+      var granted = (res.granted != null) ? Number(res.granted) : puBeans;
+      puBeans = granted; puPill();
+      puNote('🌱 +' + granted + ' bean' + (granted === 1 ? '' : 's') + ' saved to your account!');
+    } else if (res && res.locked){
+      puNote('🌱 You already earned your beans for this Power-Up. Play again for practice!');
+    } else {
+      puNote('🌱 ' + puBeans + ' bean' + (puBeans === 1 ? '' : 's')
+           + ' earned — log in next time to save them to your account!');
+    }
+  });
+}
+/* On load: respect an existing lock, and greet a logged-in student. */
+(function puInit(){
+  try {
+    var raw = localStorage.getItem('vc-pts-' + PU.id);
+    if (raw){
+      puSaved = true;
+      var got = 0;
+      try { got = Number(JSON.parse(raw).b) || 0; } catch(e){}
+      puBeans = got;
+      var b = document.getElementById('saveBtn');
+      b.disabled = true; b.textContent = '🌱 Beans Saved ✓';
+      puNote('🌱 You already earned ' + got + ' bean' + (got === 1 ? '' : 's')
+           + ' for this Power-Up. Play again for practice — they are already in your account.');
+    }
+  } catch(e){}
+
+  if (typeof vcGetSession === 'function' && vcGetSession()){
+    var s = vcGetSession();
+    document.getElementById('loginHint').innerHTML =
+      '👋 Welcome back, <b>' + (s.first_name || s.full_name || 'student')
+      + '</b>! Your beans will be saved.';
+    var nm = document.getElementById('stuName');
+    if (nm && !nm.value) nm.value = s.full_name || s.first_name || '';
+  }
+  puPill();
+})();
+/* ────────── end LIFT-OUT BLOCK ────────── */
 
 function updateScore(){
   const n = Object.values(solved).filter(Boolean).length;
   document.getElementById('scoreVal').textContent = n + ' / 5';
 }
 
-function checkAuto(id){
+/* ── ONE checker for all five questions ────────────────────────
+   Attempt 1 → hint only. Attempt 2 → answer (or samples) revealed.
+   A correct answer on EITHER attempt earns the bean; after that the
+   question is settled and further Checks change nothing. */
+function checkQ(id){
+  const d     = Q[id];
   const input = document.getElementById('q'+id);
-  const val = input.value.trim().toLowerCase();
-  const fb = document.getElementById('fb'+id);
-  if (!val) { fb.className='feedback bad show'; fb.textContent='Type an answer first!'; return; }
-  const def = AUTO[id];
-  const ok = def.keywords.every(k => val.includes(k));
-  if (ok) {
+  const val   = input.value.trim().toLowerCase();
+  const fb    = document.getElementById('fb'+id);
+
+  if (!val){ fb.className='feedback bad show'; fb.textContent='Type an answer first!'; return; }
+  if (solved[id] || tries[id] >= 2) return;      /* settled — no third bite */
+
+  tries[id]++;
+  puTouch(id);
+
+  /* Plural-tolerant search. A Standard 5 student writes "factories", not
+     "factory", and the accept lists match by substring — so raw matching
+     failed a correct answer (caught in live testing, Aug 5 2026). We search
+     the typed text PLUS two naive singular forms, so a key never has to
+     list every plural of itself. */
+  const hay = val + ' | ' + val.replace(/ies\b/g,'y') + ' | ' + val.replace(/s\b/g,'');
+  const ok = (d.mode === 'any')
+    ? d.keys.some(function(k){ return hay.indexOf(k) !== -1; })
+    : d.keys.every(function(k){ return hay.indexOf(k) !== -1; });
+
+  if (ok){
     solved[id] = true;
-    fb.className='feedback ok show';
-    fb.textContent = '✓ Correct! The answer is "'+def.correct+'".';
-  } else {
-    fb.className='feedback bad show';
-    fb.textContent = '✗ Not quite — the answer is "'+def.correct+'". Try the next one!';
+    puEarn(id);
+    fb.className = 'feedback ok show';
+    fb.textContent = (tries[id] === 1 ? '\u2713 Correct! ' : '\u2713 Yes \u2014 good revision! ') + d.good + '.';
   }
+  else if (tries[id] === 1){
+    /* HINT ONLY — revealing the answer here would make attempt 2 free. */
+    fb.className = 'feedback bad show';
+    fb.textContent = '\u2717 Not quite \u2014 ' + d.hint;
+  }
+  else if (d.open){
+    fb.className = 'feedback open-reveal show';
+    fb.innerHTML = '<strong>Sample answers:</strong> ' + d.sample +
+      '<div class="fb-actions">' +
+      '<button class="fb-mini-btn yes" onclick="markOpen('+id+',true)">\u2705 Mine says the same thing</button>' +
+      '<button class="fb-mini-btn" onclick="markOpen('+id+',false)">\u{1F501} I will fix mine</button>' +
+      '</div>';
+  }
+  else {
+    fb.className = 'feedback bad show';
+    fb.textContent = '\u2717 The answer is "' + d.reveal + '". Mr. EdLo will go over this one in class.';
+  }
+
   updateScore();
+  puMaybeSave();
 }
 
-function checkOpen(id){
-  const input = document.getElementById('q'+id);
-  const val = input.value.trim();
-  const fb = document.getElementById('fb'+id);
-  if (!val) { fb.className='feedback bad show'; fb.textContent='Type an answer first!'; return; }
-  fb.className='feedback open-reveal show';
-  fb.innerHTML = '<strong>Sample answers:</strong> ' + OPEN_SAMPLE[id] +
-    '<div class="fb-actions">' +
-    '<button class="fb-mini-btn yes" onclick="markOpen('+id+',true)">✅ Yes, mine works</button>' +
-    '<button class="fb-mini-btn" onclick="markOpen('+id+',false)">🔁 I\'ll revise it</button>' +
-    '</div>';
-}
-
+/* Reflection only. Deliberately awards NO bean and does NOT move the
+   Score: nothing can verify a student marking their own work, and the
+   sheet is discussed in class anyway. */
 function markOpen(id, yes){
-  solved[id] = yes;
   const fb = document.getElementById('fb'+id);
-  fb.className = yes ? 'feedback ok show' : 'feedback open-reveal show';
-  if (yes) fb.innerHTML = '✓ Nice thinking! Sample: ' + OPEN_SAMPLE[id];
-  updateScore();
+  fb.className = 'feedback open-reveal show';
+  fb.textContent = yes
+    ? '\u{1F44D} Good \u2014 keep that answer and bring it to the class discussion.'
+    : '\u{1F501} Fix it on your sheet, then bring your new answer to the class discussion.';
 }
 
 function resetWorksheet(){
   [1,2,3,4,5].forEach(id=>{
     document.getElementById('q'+id).value='';
     const fb=document.getElementById('fb'+id);
-    fb.className='feedback'+(OPEN_SAMPLE[id]?' open-reveal':'');
+    fb.className='feedback'+(Q[id].open?' open-reveal':'');
     fb.innerHTML='';
     solved[id]=false;
+    tries[id]=0;
   });
   updateScore();
+  /* Beans deliberately SURVIVE a reset: puBeans, puEarned and puSaved are
+     not cleared, so Start Over is a practice replay, never a second payout. */
+  if (puBeans > 0){
+    puNote('\u{1F331} Your ' + puBeans + ' bean' + (puBeans === 1 ? '' : 's')
+         + ' are already earned \u2014 this replay is just for practice.');
+  }
 }
 </script>
 </body>

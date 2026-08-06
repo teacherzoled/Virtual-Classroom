@@ -1,0 +1,10 @@
+# Lesson icon library — raw source images (intermediate inputs only).
+# The finished base64-embedded SVGs in assets/lesson-icons/ ARE committed;
+# these large source PNGs are not, to keep the repo and git history lean.
+# Path-anchored rules do NOT match nested folders: the real path is
+# assets/lesson-icons/science/<cycle>/_source/. A leading **/ matches at any depth.
+**/_source/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
