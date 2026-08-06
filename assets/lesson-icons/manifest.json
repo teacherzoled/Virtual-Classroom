@@ -1,0 +1,881 @@
+{
+  "adapt-behavioural": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/adapt-behavioural.svg",
+    "label": "Behavioural",
+    "reusable": false,
+    "tags": [
+      "adapt",
+      "behavioural"
+    ],
+    "topic": "adapt"
+  },
+  "adapt-camouflage": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/adapt-camouflage.svg",
+    "label": "Camouflage",
+    "reusable": false,
+    "tags": [
+      "adapt",
+      "camouflage"
+    ],
+    "topic": "adapt"
+  },
+  "adapt-physical": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/adapt-physical.svg",
+    "label": "Physical",
+    "reusable": false,
+    "tags": [
+      "adapt",
+      "physical"
+    ],
+    "topic": "adapt"
+  },
+  "adapt-physiological": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/adapt-physiological.svg",
+    "label": "Physiological",
+    "reusable": false,
+    "tags": [
+      "adapt",
+      "physiological"
+    ],
+    "topic": "adapt"
+  },
+  "animal-butterfly": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/animal-butterfly.svg",
+    "label": "Butterfly",
+    "reusable": false,
+    "tags": [
+      "animal",
+      "butterfly"
+    ],
+    "topic": "animal"
+  },
+  "animal-conch": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/animal-conch.svg",
+    "label": "Conch",
+    "reusable": false,
+    "tags": [
+      "animal",
+      "conch"
+    ],
+    "topic": "animal"
+  },
+  "animal-frigatebird": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/animal-frigatebird.svg",
+    "label": "Frigatebird",
+    "reusable": false,
+    "tags": [
+      "animal",
+      "frigatebird"
+    ],
+    "topic": "animal"
+  },
+  "animal-howler-monkey": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/animal-howler-monkey.svg",
+    "label": "Howler monkey",
+    "reusable": false,
+    "tags": [
+      "animal",
+      "howler",
+      "monkey"
+    ],
+    "topic": "animal"
+  },
+  "animal-iguana": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/animal-iguana.svg",
+    "label": "Iguana",
+    "reusable": false,
+    "tags": [
+      "animal",
+      "iguana"
+    ],
+    "topic": "animal"
+  },
+  "animal-jabiru": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/animal-jabiru.svg",
+    "label": "Jabiru",
+    "reusable": false,
+    "tags": [
+      "animal",
+      "jabiru"
+    ],
+    "topic": "animal"
+  },
+  "animal-jaguar": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/animal-jaguar.svg",
+    "label": "Jaguar",
+    "reusable": false,
+    "tags": [
+      "animal",
+      "jaguar"
+    ],
+    "topic": "animal"
+  },
+  "animal-leafcutter-ant": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/animal-leafcutter-ant.svg",
+    "label": "Leafcutter ant",
+    "reusable": false,
+    "tags": [
+      "animal",
+      "leafcutter",
+      "ant"
+    ],
+    "topic": "animal"
+  },
+  "animal-lobster": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/animal-lobster.svg",
+    "label": "Lobster",
+    "reusable": false,
+    "tags": [
+      "animal",
+      "lobster"
+    ],
+    "topic": "animal"
+  },
+  "animal-manatee": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/animal-manatee.svg",
+    "label": "Manatee",
+    "reusable": false,
+    "tags": [
+      "animal",
+      "manatee"
+    ],
+    "topic": "animal"
+  },
+  "animal-parrotfish": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/animal-parrotfish.svg",
+    "label": "Parrotfish",
+    "reusable": false,
+    "tags": [
+      "animal",
+      "parrotfish"
+    ],
+    "topic": "animal"
+  },
+  "animal-poison-frog": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/animal-poison-frog.svg",
+    "label": "Poison frog",
+    "reusable": false,
+    "tags": [
+      "animal",
+      "poison",
+      "frog"
+    ],
+    "topic": "animal"
+  },
+  "animal-sea-turtle": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/animal-sea-turtle.svg",
+    "label": "Sea turtle",
+    "reusable": false,
+    "tags": [
+      "animal",
+      "sea",
+      "turtle"
+    ],
+    "topic": "animal"
+  },
+  "animal-tapir": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/animal-tapir.svg",
+    "label": "Tapir",
+    "reusable": false,
+    "tags": [
+      "animal",
+      "tapir"
+    ],
+    "topic": "animal"
+  },
+  "animal-toucan": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/animal-toucan.svg",
+    "label": "Toucan",
+    "reusable": false,
+    "tags": [
+      "animal",
+      "toucan"
+    ],
+    "topic": "animal"
+  },
+  "animal-warbler": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/animal-warbler.svg",
+    "label": "Warbler",
+    "reusable": false,
+    "tags": [
+      "animal",
+      "warbler"
+    ],
+    "topic": "animal"
+  },
+  "animal-whale-shark": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/animal-whale-shark.svg",
+    "label": "Whale shark",
+    "reusable": false,
+    "tags": [
+      "animal",
+      "whale",
+      "shark"
+    ],
+    "topic": "animal"
+  },
+  "climate-globe-bands": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/climate-globe-bands.svg",
+    "label": "Globe bands",
+    "reusable": false,
+    "tags": [
+      "climate",
+      "globe",
+      "bands"
+    ],
+    "topic": "climate"
+  },
+  "climate-palm-tropical": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/climate-palm-tropical.svg",
+    "label": "Palm tropical",
+    "reusable": false,
+    "tags": [
+      "climate",
+      "palm",
+      "tropical"
+    ],
+    "topic": "climate"
+  },
+  "climate-snow-ice": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/climate-snow-ice.svg",
+    "label": "Snow ice",
+    "reusable": false,
+    "tags": [
+      "climate",
+      "snow",
+      "ice"
+    ],
+    "topic": "climate"
+  },
+  "climate-thermometer": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/climate-thermometer.svg",
+    "label": "Thermometer",
+    "reusable": false,
+    "tags": [
+      "climate",
+      "thermometer"
+    ],
+    "topic": "climate"
+  },
+  "conserve-anchor": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/conserve-anchor.svg",
+    "label": "Anchor",
+    "reusable": false,
+    "tags": [
+      "conserve",
+      "anchor"
+    ],
+    "topic": "conserve"
+  },
+  "conserve-closed-season": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/conserve-closed-season.svg",
+    "label": "Closed season",
+    "reusable": false,
+    "tags": [
+      "conserve",
+      "closed",
+      "season"
+    ],
+    "topic": "conserve"
+  },
+  "conserve-deforestation-stump": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/conserve-deforestation-stump.svg",
+    "label": "Deforestation stump",
+    "reusable": false,
+    "tags": [
+      "conserve",
+      "deforestation",
+      "stump"
+    ],
+    "topic": "conserve"
+  },
+  "conserve-fishing-net": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/conserve-fishing-net.svg",
+    "label": "Fishing net",
+    "reusable": false,
+    "tags": [
+      "conserve",
+      "fishing",
+      "net"
+    ],
+    "topic": "conserve"
+  },
+  "conserve-pollution": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/conserve-pollution.svg",
+    "label": "Pollution",
+    "reusable": false,
+    "tags": [
+      "conserve",
+      "pollution"
+    ],
+    "topic": "conserve"
+  },
+  "conserve-protected-sign": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/conserve-protected-sign.svg",
+    "label": "Protected sign",
+    "reusable": false,
+    "tags": [
+      "conserve",
+      "protected",
+      "sign"
+    ],
+    "topic": "conserve"
+  },
+  "crop-citrus": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/crop-citrus.svg",
+    "label": "Citrus",
+    "reusable": false,
+    "tags": [
+      "crop",
+      "citrus"
+    ],
+    "topic": "crop"
+  },
+  "crop-corn": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/crop-corn.svg",
+    "label": "Corn",
+    "reusable": false,
+    "tags": [
+      "crop",
+      "corn"
+    ],
+    "topic": "crop"
+  },
+  "crop-sugarcane": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/crop-sugarcane.svg",
+    "label": "Sugarcane",
+    "reusable": false,
+    "tags": [
+      "crop",
+      "sugarcane"
+    ],
+    "topic": "crop"
+  },
+  "data-bar-chart": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/data-bar-chart.svg",
+    "label": "Bar chart",
+    "reusable": false,
+    "tags": [
+      "data",
+      "bar",
+      "chart"
+    ],
+    "topic": "data"
+  },
+  "data-rain-gauge": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/data-rain-gauge.svg",
+    "label": "Rain gauge",
+    "reusable": false,
+    "tags": [
+      "data",
+      "rain",
+      "gauge"
+    ],
+    "topic": "data"
+  },
+  "econ-airplane": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/econ-airplane.svg",
+    "label": "Airplane",
+    "reusable": false,
+    "tags": [
+      "econ",
+      "airplane"
+    ],
+    "topic": "econ"
+  },
+  "econ-coral-bleached": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/econ-coral-bleached.svg",
+    "label": "Coral bleached",
+    "reusable": false,
+    "tags": [
+      "econ",
+      "coral",
+      "bleached"
+    ],
+    "topic": "econ"
+  },
+  "econ-drought": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/econ-drought.svg",
+    "label": "Drought",
+    "reusable": false,
+    "tags": [
+      "econ",
+      "drought"
+    ],
+    "topic": "econ"
+  },
+  "econ-flood": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/econ-flood.svg",
+    "label": "Flood",
+    "reusable": false,
+    "tags": [
+      "econ",
+      "flood"
+    ],
+    "topic": "econ"
+  },
+  "econ-hotel": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/econ-hotel.svg",
+    "label": "Hotel",
+    "reusable": false,
+    "tags": [
+      "econ",
+      "hotel"
+    ],
+    "topic": "econ"
+  },
+  "econ-snorkeler": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/econ-snorkeler.svg",
+    "label": "Snorkeler",
+    "reusable": false,
+    "tags": [
+      "econ",
+      "snorkeler"
+    ],
+    "topic": "econ"
+  },
+  "ecosystem-mangrove": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/ecosystem-mangrove.svg",
+    "label": "Mangrove",
+    "reusable": false,
+    "tags": [
+      "ecosystem",
+      "mangrove"
+    ],
+    "topic": "ecosystem"
+  },
+  "ecosystem-rainforest": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/ecosystem-rainforest.svg",
+    "label": "Rainforest",
+    "reusable": false,
+    "tags": [
+      "ecosystem",
+      "rainforest"
+    ],
+    "topic": "ecosystem"
+  },
+  "ecosystem-reef": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/ecosystem-reef.svg",
+    "label": "Reef",
+    "reusable": false,
+    "tags": [
+      "ecosystem",
+      "reef"
+    ],
+    "topic": "ecosystem"
+  },
+  "ecosystem-savanna": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/ecosystem-savanna.svg",
+    "label": "Savanna",
+    "reusable": false,
+    "tags": [
+      "ecosystem",
+      "savanna"
+    ],
+    "topic": "ecosystem"
+  },
+  "migration-full-moon": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/migration-full-moon.svg",
+    "label": "Full moon",
+    "reusable": false,
+    "tags": [
+      "migration",
+      "full",
+      "moon"
+    ],
+    "topic": "migration"
+  },
+  "nature-coral-reef": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/nature-coral-reef.svg",
+    "label": "Coral reef",
+    "reusable": false,
+    "tags": [
+      "nature",
+      "coral",
+      "reef"
+    ],
+    "topic": "nature"
+  },
+  "tech-bicycle": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/tech-bicycle.svg",
+    "label": "Bicycle",
+    "reusable": false,
+    "tags": [
+      "tech",
+      "bicycle"
+    ],
+    "topic": "tech"
+  },
+  "tech-car": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/tech-car.svg",
+    "label": "Car",
+    "reusable": false,
+    "tags": [
+      "tech",
+      "car"
+    ],
+    "topic": "tech"
+  },
+  "tech-chainsaw": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/tech-chainsaw.svg",
+    "label": "Chainsaw",
+    "reusable": false,
+    "tags": [
+      "tech",
+      "chainsaw"
+    ],
+    "topic": "tech"
+  },
+  "tech-diesel-bus": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/tech-diesel-bus.svg",
+    "label": "Diesel bus",
+    "reusable": false,
+    "tags": [
+      "tech",
+      "diesel",
+      "bus"
+    ],
+    "topic": "tech"
+  },
+  "tech-electric-fan": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/tech-electric-fan.svg",
+    "label": "Electric fan",
+    "reusable": false,
+    "tags": [
+      "tech",
+      "electric",
+      "fan"
+    ],
+    "topic": "tech"
+  },
+  "tech-factory": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/tech-factory.svg",
+    "label": "Factory",
+    "reusable": false,
+    "tags": [
+      "tech",
+      "factory"
+    ],
+    "topic": "tech"
+  },
+  "tech-fridge": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/tech-fridge.svg",
+    "label": "Fridge",
+    "reusable": false,
+    "tags": [
+      "tech",
+      "fridge"
+    ],
+    "topic": "tech"
+  },
+  "tech-fuel-pump": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/tech-fuel-pump.svg",
+    "label": "Fuel pump",
+    "reusable": false,
+    "tags": [
+      "tech",
+      "fuel",
+      "pump"
+    ],
+    "topic": "tech"
+  },
+  "tech-gas-stove": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/tech-gas-stove.svg",
+    "label": "Gas stove",
+    "reusable": false,
+    "tags": [
+      "tech",
+      "gas",
+      "stove"
+    ],
+    "topic": "tech"
+  },
+  "tech-generator": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/tech-generator.svg",
+    "label": "Generator",
+    "reusable": false,
+    "tags": [
+      "tech",
+      "generator"
+    ],
+    "topic": "tech"
+  },
+  "tech-greenhouse-gas": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/tech-greenhouse-gas.svg",
+    "label": "Greenhouse gas",
+    "reusable": false,
+    "tags": [
+      "tech",
+      "greenhouse",
+      "gas"
+    ],
+    "topic": "tech"
+  },
+  "tech-hydro-dam": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/tech-hydro-dam.svg",
+    "label": "Hydro dam",
+    "reusable": false,
+    "tags": [
+      "tech",
+      "hydro",
+      "dam"
+    ],
+    "topic": "tech"
+  },
+  "tech-lightbulb": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/tech-lightbulb.svg",
+    "label": "Lightbulb",
+    "reusable": false,
+    "tags": [
+      "tech",
+      "lightbulb"
+    ],
+    "topic": "tech"
+  },
+  "tech-solar-panel": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/tech-solar-panel.svg",
+    "label": "Solar panel",
+    "reusable": false,
+    "tags": [
+      "tech",
+      "solar",
+      "panel"
+    ],
+    "topic": "tech"
+  },
+  "tool-observation-log": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/tool-observation-log.svg",
+    "label": "Observation log",
+    "reusable": false,
+    "tags": [
+      "tool",
+      "observation",
+      "log"
+    ],
+    "topic": "tool"
+  },
+  "weather-cloud": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/weather-cloud.svg",
+    "label": "Cloud",
+    "reusable": false,
+    "tags": [
+      "weather",
+      "cloud"
+    ],
+    "topic": "weather"
+  },
+  "weather-hurricane": {
+    "animated": true,
+    "cycle": 1,
+    "file": "science/cycle-one/weather-hurricane.svg",
+    "label": "Hurricane",
+    "reusable": false,
+    "tags": [
+      "weather",
+      "hurricane"
+    ],
+    "topic": "weather"
+  },
+  "weather-partly-cloudy": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/weather-partly-cloudy.svg",
+    "label": "Partly cloudy",
+    "reusable": false,
+    "tags": [
+      "weather",
+      "partly",
+      "cloudy"
+    ],
+    "topic": "weather"
+  },
+  "weather-rain-cloud": {
+    "animated": true,
+    "cycle": 1,
+    "file": "science/cycle-one/weather-rain-cloud.svg",
+    "label": "Rain cloud",
+    "reusable": false,
+    "tags": [
+      "weather",
+      "rain",
+      "cloud"
+    ],
+    "topic": "weather"
+  },
+  "weather-raindrop": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/weather-raindrop.svg",
+    "label": "Raindrop",
+    "reusable": false,
+    "tags": [
+      "weather",
+      "raindrop"
+    ],
+    "topic": "weather"
+  },
+  "weather-sun": {
+    "animated": true,
+    "cycle": 1,
+    "file": "science/cycle-one/weather-sun.svg",
+    "label": "Sun",
+    "reusable": false,
+    "tags": [
+      "weather",
+      "sun"
+    ],
+    "topic": "weather"
+  },
+  "weather-umbrella": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/weather-umbrella.svg",
+    "label": "Umbrella",
+    "reusable": false,
+    "tags": [
+      "weather",
+      "umbrella"
+    ],
+    "topic": "weather"
+  },
+  "weather-wind": {
+    "animated": false,
+    "cycle": 1,
+    "file": "science/cycle-one/weather-wind.svg",
+    "label": "Wind",
+    "reusable": false,
+    "tags": [
+      "weather",
+      "wind"
+    ],
+    "topic": "weather"
+  }
+}
