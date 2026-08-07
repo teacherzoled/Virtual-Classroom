@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Power-Up 2B — Mr. EdLo's Virtual Classroom</title>
+<link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<script src="/edlo-utils.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ═══════════════════════════════════════════
+     THEME VARIABLES (matches the Std5 Science hub)
+  ═══════════════════════════════════════════ */
+
+  :root, body.theme-night {
+    --bg:            #0d1f1a;
+    --body-color:    #ffffff;
+    --card-bg:       rgba(255,255,255,0.06);
+    --card-border:   rgba(255,255,255,0.09);
+    --card-border-h: rgba(32,201,151,0.40);
+    --card-shadow:   rgba(0,0,0,0.45);
+    --card-desc:     rgba(255,255,255,0.48);
+    --section-lbl:   rgba(255,255,255,0.32);
+    --subtitle-c:    rgba(255,255,255,0.52);
+    --header-name:   rgba(255,255,255,0.55);
+    --badge-bg:      rgba(32,201,151,0.12);
+    --badge-border:  rgba(32,201,151,0.22);
+    --badge-color:   rgba(32,201,151,0.85);
+    --top-badge-bg:  #20C997;
+    --top-badge-c:   #0d1f1a;
+    --h1-grad:       linear-gradient(135deg,#fff 0%,#20C997 55%,#69DB7C 100%);
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.50) 100%);
+    --footer-border: rgba(255,255,255,0.07);
+    --footer-name:   rgba(255,255,255,0.38);
+    --footer-tag:    rgba(255,255,255,0.43);
+    --footer-copy:   rgba(255,255,255,0.18);
+    --back-top-bg:   #20C997;
+    --back-top-c:    #0d1f1a;
+    --back-color:    rgba(255,255,255,0.38);
+    --back-hover:    #20C997;
+    --radial1:       rgba(32,201,151,0.12);
+    --radial2:       rgba(105,219,124,0.08);
+    --star-show:     1;
+    --input-bg:      rgba(255,255,255,0.05);
+    --ok-bg:         rgba(105,219,124,0.14);
+    --ok-border:     rgba(105,219,124,0.40);
+    --ok-color:      #69DB7C;
+    --bad-bg:        rgba(255,107,107,0.14);
+    --bad-border:    rgba(255,107,107,0.42);
+    --bad-color:     #FF6B6B;
+    --grad-bar:      linear-gradient(90deg,#20C997,#69DB7C,#4DABF7,#9775FA);
+    --pu-b1: #1c3d8f; --pu-b2: #0b1f52; --pu-b3: #071438;
+  }
+
+  body.theme-sunny {
+    --bg:            #fffbea;
+    --body-color:    #2d2000;
+    --card-bg:       rgba(255,255,255,0.75);
+    --card-border:   rgba(200,150,0,0.18);
+    --card-border-h: rgba(200,120,0,0.45);
+    --card-shadow:   rgba(180,100,0,0.18);
+    --card-desc:     rgba(80,50,0,0.55);
+    --section-lbl:   rgba(120,80,0,0.50);
+    --subtitle-c:    rgba(100,60,0,0.65);
+    --header-name:   #b35c00;
+    --badge-bg:      rgba(255,180,0,0.15);
+    --badge-border:  rgba(255,160,0,0.30);
+    --badge-color:   #8a4800;
+    --top-badge-bg:  #FF922B;
+    --top-badge-c:   #fff;
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(255,200,50,0.18) 100%);
+    --footer-border: rgba(200,150,0,0.20);
+    --footer-name:   rgba(100,60,0,0.50);
+    --footer-tag:    rgba(100,60,0,0.55);
+    --footer-copy:   rgba(100,60,0,0.30);
+    --back-top-bg:   #FF922B;
+    --back-top-c:    #fff;
+    --back-color:    rgba(120,80,0,0.55);
+    --back-hover:    #b35c00;
+    --radial1:       rgba(255,220,80,0.25);
+    --radial2:       rgba(255,160,30,0.18);
+    --star-show:     0;
+    --input-bg:      rgba(45,32,0,0.05);
+    --ok-bg:         rgba(46,125,26,0.12);
+    --ok-border:     rgba(46,125,26,0.35);
+    --ok-color:      #2e7d1a;
+    --bad-bg:        rgba(198,40,40,0.10);
+    --bad-border:    rgba(198,40,40,0.32);
+    --bad-color:     #c62828;
+    --grad-bar:      linear-gradient(90deg,#FF922B,#f5a623,#0077cc,#7a3abf);
+    --pu-b1: #b35c00; --pu-b2: #7a3e00; --pu-b3: #3d1f00;
+  }
+
+  body.theme-cloudy {
+    --bg:            #e8edf2;
+    --body-color:    #1c2533;
+    --card-bg:       rgba(255,255,255,0.72);
+    --card-border:   rgba(100,130,160,0.18);
+    --card-border-h: rgba(80,110,150,0.40);
+    --card-shadow:   rgba(50,80,120,0.15);
+    --card-desc:     rgba(40,60,90,0.55);
+    --section-lbl:   rgba(60,90,130,0.50);
+    --subtitle-c:    rgba(40,65,100,0.65);
+    --header-name:   #2c5282;
+    --badge-bg:      rgba(100,140,200,0.12);
+    --badge-border:  rgba(80,120,180,0.25);
+    --badge-color:   #2c5282;
+    --top-badge-bg:  #4A90D9;
+    --top-badge-c:   #fff;
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(100,140,200,0.15) 100%);
+    --footer-border: rgba(80,120,180,0.18);
+    --footer-name:   rgba(30,60,100,0.50);
+    --footer-tag:    rgba(30,60,100,0.55);
+    --footer-copy:   rgba(30,60,100,0.30);
+    --back-top-bg:   #4A90D9;
+    --back-top-c:    #fff;
+    --back-color:    rgba(60,90,130,0.55);
+    --back-hover:    #2c5282;
+    --radial1:       rgba(150,190,240,0.30);
+    --radial2:       rgba(100,140,200,0.20);
+    --star-show:     0;
+    --input-bg:      rgba(28,37,51,0.05);
+    --ok-bg:         rgba(46,125,26,0.12);
+    --ok-border:     rgba(46,125,26,0.35);
+    --ok-color:      #2e7d1a;
+    --bad-bg:        rgba(198,40,40,0.10);
+    --bad-border:    rgba(198,40,40,0.32);
+    --bad-color:     #c62828;
+    --grad-bar:      linear-gradient(90deg,#4A90D9,#4299e1,#0d9488,#7c3aed);
+    --pu-b1: #1a365d; --pu-b2: #122540; --pu-b3: #081526;
+  }
+
+  body.theme-nature {
+    --bg:            #f0f7ee;
+    --body-color:    #1a2e10;
+    --card-bg:       rgba(255,255,255,0.72);
+    --card-border:   rgba(60,120,40,0.18);
+    --card-border-h: rgba(40,100,20,0.40);
+    --card-shadow:   rgba(20,80,10,0.15);
+    --card-desc:     rgba(30,70,15,0.55);
+    --section-lbl:   rgba(40,90,20,0.50);
+    --subtitle-c:    rgba(30,75,15,0.65);
+    --header-name:   #276221;
+    --badge-bg:      rgba(60,140,30,0.12);
+    --badge-border:  rgba(50,120,20,0.28);
+    --badge-color:   #276221;
+    --top-badge-bg:  #4CAF50;
+    --top-badge-c:   #fff;
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(60,140,30,0.12) 100%);
+    --footer-border: rgba(50,120,20,0.18);
+    --footer-name:   rgba(20,70,10,0.50);
+    --footer-tag:    rgba(20,70,10,0.55);
+    --footer-copy:   rgba(20,70,10,0.30);
+    --back-top-bg:   #4CAF50;
+    --back-top-c:    #fff;
+    --back-color:    rgba(40,90,20,0.55);
+    --back-hover:    #276221;
+    --radial1:       rgba(100,200,60,0.22);
+    --radial2:       rgba(60,160,30,0.16);
+    --star-show:     0;
+    --input-bg:      rgba(26,46,16,0.05);
+    --ok-bg:         rgba(46,125,26,0.12);
+    --ok-border:     rgba(46,125,26,0.35);
+    --ok-color:      #2e7d1a;
+    --bad-bg:        rgba(198,40,40,0.10);
+    --bad-border:    rgba(198,40,40,0.32);
+    --bad-color:     #c62828;
+    --grad-bar:      linear-gradient(90deg,#4CAF50,#66bb44,#1565c0,#4a148c);
+    --pu-b1: #1b4d0f; --pu-b2: #12330a; --pu-b3: #081a05;
+  }
+
+  /* ═══════════════════════════════════════════
+     BASE
+  ═══════════════════════════════════════════ */
+  html { overflow-x: hidden; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--body-color);
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.5s ease, color 0.5s ease;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, var(--radial1) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, var(--radial2) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+    transition: background 0.5s ease;
+  }
+  .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; opacity: var(--star-show,1); transition: opacity 0.5s ease; }
+  .star  { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--d,3s) ease-in-out infinite var(--delay,0s); opacity: 0; }
+  @keyframes twinkle { 0%,100% { opacity:0; transform:scale(1); } 50% { opacity:var(--op,0.5); transform:scale(1.3); } }
+
+  .wrapper { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 0 max(1rem, 4vw) 2rem; flex: 1; }
+
+  /* Theme bar */
+  .theme-bar { position: relative; z-index: 10; display: flex; justify-content: center; gap: 0.5rem; padding: 0.55rem 1rem; background: rgba(0,0,0,0.22); border-bottom: 1px solid rgba(0,0,0,0.12); flex-wrap: wrap; }
+  body.theme-sunny .theme-bar, body.theme-cloudy .theme-bar, body.theme-nature .theme-bar { background: rgba(0,0,0,0.05); }
+  .theme-btn { font-family: 'Fredoka One', cursive; font-size: 0.85rem; padding: 5px 18px; border-radius: 999px; border: 2px solid transparent; background: rgba(128,128,128,0.12); color: var(--body-color); cursor: pointer; opacity: 0.6; transition: all 0.22s ease; }
+  .theme-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .theme-btn.active { opacity:1; background:var(--top-badge-bg); color:var(--top-badge-c); box-shadow:0 3px 12px rgba(0,0,0,.20); }
+
+  .site-header { display:flex; align-items:center; justify-content:space-between; padding:1.2rem 0 0; animation:fadeDown 0.6s ease both; }
+  .site-header-logo { display:flex; align-items:center; gap:.75rem; text-decoration:none; }
+  .site-header-logo img { height:48px; width:auto; border-radius:10px; box-shadow:0 4px 14px rgba(0,0,0,.25); }
+  .site-header-logo span { font-family:'Fredoka One',cursive; font-size:1.15rem; color:var(--header-name); letter-spacing:.02em; transition:color .4s; }
+  .header-badge { display:inline-block; background:var(--badge-bg); border:1px solid var(--badge-border); color:var(--badge-color); font-size:.72rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:5px 14px; border-radius:999px; transition:all .4s; }
+
+  .back-link { display:inline-flex; align-items:center; gap:6px; margin-top:1.4rem; font-size:.8rem; font-weight:700; color:var(--back-color); text-decoration:none; transition:color .2s; letter-spacing:.04em; }
+  .back-link:hover { color:var(--back-hover); }
+
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-24px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes riseUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ═══════════════════════════════════════════
+     POWER-UP BANNER (series branding — stays
+     consistent across all Power-Up worksheets,
+     like the printed sheet's fixed logo band)
+  ═══════════════════════════════════════════ */
+  .pu-banner {
+    position: relative; overflow: hidden;
+    margin-top: 1.4rem; border-radius: 20px;
+    background: radial-gradient(ellipse at 15% 20%, var(--pu-b1) 0%, var(--pu-b2) 55%, var(--pu-b3) 100%);
+    padding: 1.4rem 1.6rem;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+    box-shadow: 0 14px 40px rgba(5,10,40,.35);
+    animation: riseUp .6s ease both;
+    transition: background 0.5s ease;
+  }
+  .pu-banner .pu-star { position:absolute; border-radius:50%; background:#FFD43B; animation: twinkle 2.6s ease-in-out infinite; }
+  .pu-logo { font-family:'Fredoka One',cursive; line-height:.95; transform: rotate(-3deg); flex-shrink:0; }
+  .pu-logo .l1 { font-size: clamp(1.6rem,4.2vw,2.3rem); color:#FFD43B; -webkit-text-stroke: 2px #071438; letter-spacing:.02em; display:block; }
+  .pu-logo .l2 { font-size: clamp(2.1rem,5.6vw,3rem); color:#fff; -webkit-text-stroke: 2px #071438; display:block; margin-top:.1rem; }
+  .pu-pills { display:flex; gap:.6rem; flex-wrap:wrap; }
+  .pu-pill { display:flex; align-items:center; gap:7px; background:rgba(255,255,255,0.92); color:#0b1f52; font-weight:800; font-size:.72rem; letter-spacing:.03em; padding:8px 14px; border-radius:999px; white-space:nowrap; }
+  .pu-pill svg { width:16px; height:16px; flex-shrink:0; }
+  .pu-rocket { width:46px; height:46px; flex-shrink:0; }
+
+  /* Instructions banner */
+  .pu-instructions { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin:1.1rem 0; padding:1rem 1.2rem; background:var(--card-bg); border:1.5px solid var(--card-border); border-radius:16px; animation:riseUp .5s ease .05s both; }
+  .pu-instructions .ii-text { display:flex; gap:.8rem; align-items:flex-start; }
+  .pu-instructions .ii-icon { font-size:1.6rem; flex-shrink:0; }
+  .pu-instructions h2 { font-family:'Fredoka One',cursive; font-size:.95rem; color:var(--header-name); margin-bottom:.2rem; }
+  .pu-instructions p { font-size:.8rem; color:var(--card-desc); font-weight:600; line-height:1.5; }
+  .audio-btn { font-family:'Fredoka One',cursive; font-size:.78rem; padding:8px 16px; border-radius:999px; border:none; background:var(--top-badge-bg); color:var(--top-badge-c); cursor:pointer; white-space:nowrap; transition:transform .15s, filter .15s; flex-shrink:0; }
+  .audio-btn:hover { filter:brightness(1.08); transform:translateY(-1px); }
+  .audio-btn-mini { font-family:'Nunito',sans-serif; font-size:.72rem; font-weight:800; padding:0; border:none; background:none; color:var(--section-lbl); cursor:pointer; display:inline-flex; align-items:center; gap:4px; margin-top:.3rem; transition:color .2s; }
+  .audio-btn-mini:hover { color:var(--top-badge-bg); }
+
+  /* Info bar: name / group / score */
+  .pu-info { display:flex; flex-wrap:wrap; align-items:center; gap:1rem 1.6rem; margin:1.1rem 0; padding: .9rem 1.1rem; background:var(--card-bg); border:1.5px solid var(--card-border); border-radius:16px; animation:riseUp .5s ease .1s both; }
+  .pu-field { display:flex; align-items:center; gap:.5rem; font-size:.82rem; font-weight:800; color:var(--subtitle-c); }
+  .pu-field input { font-family:'Nunito',sans-serif; font-weight:700; font-size:.85rem; color:var(--body-color); background:var(--input-bg); border:none; border-bottom:2px solid var(--card-border); padding:3px 4px; min-width:120px; }
+  .pu-field input:focus { outline:none; border-color:var(--top-badge-bg); }
+  .pu-score { margin-left:auto; display:flex; align-items:center; gap:.5rem; font-family:'Fredoka One',cursive; font-size:1rem; color:var(--header-name); }
+  .pu-score span { background:var(--top-badge-bg); color:var(--top-badge-c); padding:3px 12px; border-radius:999px; font-size:.95rem; }
+
+  /* Bean bar (see the LIFT-OUT BLOCK in the script) */
+  .pu-beanbar { display:flex; flex-wrap:wrap; align-items:center; gap:.6rem 1rem; margin:0 0 1.1rem; padding:.75rem 1.1rem; background:var(--card-bg); border:1.5px solid var(--card-border); border-radius:16px; animation:riseUp .5s ease .15s both; }
+  .pu-bean { font-family:'Fredoka One',cursive; font-size:.95rem; background:var(--badge-bg); border:1.5px solid var(--badge-border); color:var(--badge-color); padding:5px 14px; border-radius:999px; white-space:nowrap; }
+  .pu-hint { font-size:.78rem; font-weight:700; color:var(--card-desc); }
+  .pu-rule { font-size:.72rem; font-weight:800; letter-spacing:.03em; text-transform:uppercase; color:var(--section-lbl); }
+  .pu-hint a { color:var(--top-badge-bg); font-weight:800; }
+  .pu-note { display:none; width:100%; font-size:.8rem; font-weight:800; line-height:1.5; color:var(--ok-color); background:var(--ok-bg); border:1.5px solid var(--ok-border); border-radius:10px; padding:.55rem .75rem; }
+  .save-btn { font-family:'Fredoka One',cursive; font-size:.85rem; padding:9px 22px; border-radius:999px; border:none; background:var(--top-badge-bg); color:var(--top-badge-c); cursor:pointer; transition:filter .2s, transform .2s; }
+  .save-btn:hover:not(:disabled) { filter:brightness(1.08); transform:translateY(-1px); }
+  .save-btn:disabled { opacity:.45; cursor:not-allowed; }
+  .pu-controls .save-btn, .pu-controls .reset-btn { min-height:44px; }
+
+  /* Question rows */
+  .qrow { display:flex; align-items:stretch; border-radius:18px; overflow:hidden; border:1.5px solid var(--card-border); background:var(--card-bg); margin-bottom:1rem; animation:riseUp .5s ease both; transition:border-color .2s, box-shadow .2s; }
+  .qrow:hover { border-color:var(--card-border-h); box-shadow:0 8px 26px var(--card-shadow); }
+  .qnum-col { flex:0 0 58px; display:flex; align-items:center; justify-content:center; font-family:'Fredoka One',cursive; font-size:1.9rem; background:var(--rowtint); color:var(--rownum); }
+  .qbody { flex:1; min-width:0; display:flex; }
+  .qmain { flex:0 1 480px; min-width:0; padding:1.2rem 1.5rem; display:flex; flex-direction:column; gap:.6rem; }
+  .qtext { font-weight:800; font-size:1.08rem; line-height:1.45; }
+  .qanswer-row { display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; }
+  .ans-input { flex:1; min-width:160px; padding:8px 12px; border-radius:10px; border:1.5px solid var(--card-border); background:var(--input-bg); color:var(--body-color); font-family:'Nunito',sans-serif; font-weight:700; font-size:.88rem; }
+  .ans-input:focus { outline:none; border-color:var(--top-badge-bg); }
+  .check-btn { font-family:'Fredoka One',cursive; font-size:.82rem; padding:8px 16px; border-radius:999px; border:none; background:var(--top-badge-bg); color:var(--top-badge-c); cursor:pointer; transition:transform .15s, filter .15s; white-space:nowrap; }
+  .check-btn:hover { filter:brightness(1.08); transform:translateY(-1px); }
+  .feedback { display:none; font-size:.82rem; font-weight:700; line-height:1.5; padding:.6rem .8rem; border-radius:10px; }
+  .feedback.show { display:block; animation:riseUp .3s ease both; }
+  .feedback.ok  { background:var(--ok-bg);  border:1.5px solid var(--ok-border);  color:var(--ok-color); }
+  .feedback.bad { background:var(--bad-bg); border:1.5px solid var(--bad-border); color:var(--bad-color); }
+  .feedback.open-reveal { background:var(--input-bg); border:1.5px dashed var(--card-border-h); color:var(--card-desc); }
+  .feedback .fb-actions { display:flex; gap:.5rem; margin-top:.5rem; flex-wrap:wrap; }
+  .fb-mini-btn { font-family:'Fredoka One',cursive; font-size:.72rem; padding:5px 12px; border-radius:999px; border:1.5px solid var(--card-border-h); background:transparent; color:var(--body-color); cursor:pointer; }
+  .fb-mini-btn.yes { background:var(--top-badge-bg); border-color:var(--top-badge-bg); color:var(--top-badge-c); }
+
+  .illus-col { flex:1 1 400px; display:flex; align-items:center; justify-content:center; padding:1rem 1.4rem; }
+  .illus-col svg { width:100%; height:auto; max-width:560px; display:block; }
+
+  .qrow[data-tint="blue"]   { --rowtint: rgba(59,130,246,.14);  --rownum:#2563eb; }
+  .qrow[data-tint="purple"] { --rowtint: rgba(168,85,247,.14);  --rownum:#7e22ce; }
+  .qrow[data-tint="orange"] { --rowtint: rgba(249,115,22,.16);  --rownum:#c2410c; }
+  .qrow[data-tint="green"]  { --rowtint: rgba(34,197,94,.16);   --rownum:#15803d; }
+  .qrow[data-tint="pink"]   { --rowtint: rgba(244,114,182,.16); --rownum:#be185d; }
+  .qrow[data-tint="teal"]   { --rowtint: rgba(20,184,166,.16);  --rownum:#0f766e; }
+
+  /* ═══════════════════════════════════════════
+     Q3 — DRAG-TO-ORDER LIST
+     Pointer Events, so one code path serves mouse,
+     touch and stylus. ▲▼ buttons are a deliberate
+     fallback: seven students share one Chromebook
+     and touchpad drags are not always reliable.
+  ═══════════════════════════════════════════ */
+  .order-list { display:flex; flex-direction:column; gap:.45rem; }
+  .order-item { display:flex; align-items:center; gap:.55rem; padding:.5rem .65rem; border-radius:12px; border:1.5px solid var(--card-border); background:var(--input-bg); font-weight:800; font-size:.85rem; line-height:1.35; touch-action:none; cursor:grab; user-select:none; -webkit-user-select:none; transition:border-color .15s, box-shadow .15s, transform .12s; }
+  .order-item:hover { border-color:var(--card-border-h); }
+  .order-item.dragging { cursor:grabbing; border-color:var(--top-badge-bg); box-shadow:0 8px 22px var(--card-shadow); transform:scale(1.02); }
+  .order-item.locked { cursor:default; opacity:.9; }
+  .order-item.locked:hover { border-color:var(--card-border); }
+  .order-num { flex:0 0 26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Fredoka One',cursive; font-size:.82rem; background:var(--top-badge-bg); color:var(--top-badge-c); }
+  .order-grip { flex:0 0 auto; color:var(--section-lbl); font-size:.95rem; letter-spacing:-1px; }
+  .order-label { flex:1; min-width:0; }
+  .order-arrows { flex:0 0 auto; display:flex; flex-direction:column; gap:2px; }
+  .order-arrows button { width:24px; height:17px; line-height:1; padding:0; border:1.5px solid var(--card-border); background:transparent; color:var(--body-color); border-radius:5px; cursor:pointer; font-size:.55rem; }
+  .order-arrows button:hover { border-color:var(--top-badge-bg); }
+  .order-tip { font-size:.71rem; font-weight:800; letter-spacing:.04em; text-transform:uppercase; color:var(--section-lbl); }
+
+  /* ═══════════════════════════════════════════
+     Q4 — MULTIPLE CHOICE
+  ═══════════════════════════════════════════ */
+  .mcq { display:flex; flex-direction:column; gap:.4rem; }
+  .mcq-opt { display:flex; align-items:center; gap:.6rem; padding:.5rem .7rem; border-radius:12px; border:1.5px solid var(--card-border); background:var(--input-bg); color:var(--body-color); font-family:'Nunito',sans-serif; font-weight:800; font-size:.86rem; text-align:left; cursor:pointer; transition:all .15s; }
+  .mcq-opt:hover:not(:disabled) { border-color:var(--card-border-h); }
+  .mcq-let { flex:0 0 26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Fredoka One',cursive; font-size:.82rem; background:var(--badge-bg); border:1.5px solid var(--badge-border); color:var(--badge-color); }
+  .mcq-opt.sel { border-color:var(--top-badge-bg); }
+  .mcq-opt.sel .mcq-let { background:var(--top-badge-bg); color:var(--top-badge-c); border-color:var(--top-badge-bg); }
+  .mcq-opt:disabled { opacity:.38; cursor:not-allowed; text-decoration:line-through; }
+
+  /* Sub-labelled fields (Q4 explanation, Q5 two lines) */
+  .subfield { display:flex; flex-direction:column; gap:.25rem; }
+  .subfield > span { font-size:.72rem; font-weight:800; text-transform:uppercase; letter-spacing:.04em; color:var(--section-lbl); }
+  .subgroup { display:flex; flex-direction:column; gap:.5rem; padding:.7rem .8rem; border-radius:12px; border:1.5px dashed var(--card-border); background:var(--input-bg); }
+
+  /* Footer strip */
+  .pu-tagline { display:flex; align-items:center; justify-content:center; gap:.8rem; flex-wrap:wrap; text-align:center; background:var(--card-bg); border:1.5px solid var(--card-border); border-radius:16px; padding:1rem 1.2rem; margin:1.4rem 0; animation:riseUp .5s ease both; }
+  .pu-tagline .tl-icon { flex-shrink:0; width:30px; height:30px; }
+  .pu-tagline p { font-size:.85rem; font-weight:800; color:var(--header-name); }
+  .pu-tagline .tl-sub { color:var(--section-lbl); font-weight:700; text-transform:uppercase; letter-spacing:.06em; font-size:.7rem; }
+
+  .pu-controls { display:flex; justify-content:center; gap:.8rem; flex-wrap:wrap; margin-bottom:1.6rem; }
+  .reset-btn { font-family:'Fredoka One',cursive; font-size:.85rem; padding:9px 22px; border-radius:999px; border:2px solid var(--card-border-h); background:transparent; color:var(--body-color); cursor:pointer; transition:all .2s; }
+  .reset-btn:hover { background:var(--card-bg); }
+
+  /* Footer */
+  .site-footer { position:relative; z-index:1; background:var(--footer-bg); border-top:1px solid var(--footer-border); padding:2rem max(1rem, 4vw); margin-top:1.5rem; display:flex; flex-direction:column; align-items:center; gap:.5rem; transition:background .4s,border-color .4s; }
+  .site-footer::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--grad-bar); }
+  .footer-logo { display:flex; align-items:center; gap:.6rem; margin-bottom:.4rem; }
+  .footer-logo img { height:36px; width:auto; border-radius:8px; opacity:.75; }
+  .footer-logo span { font-family:'Fredoka One',cursive; font-size:1rem; color:var(--footer-name); transition:color .4s; }
+  .footer-tagline { font-size:.82rem; font-weight:700; color:var(--footer-tag); letter-spacing:.03em; font-style:italic; transition:color .4s; text-align:center; }
+  .footer-copy { font-size:.72rem; color:var(--footer-copy); font-weight:600; letter-spacing:.04em; margin-top:.2rem; transition:color .4s; text-align:center; }
+
+  #back-to-top { display:none; position:fixed; bottom:1.5rem; right:1.5rem; z-index:99; background:var(--back-top-bg); color:var(--back-top-c); border:none; border-radius:12px; width:42px; height:42px; font-size:1.2rem; font-weight:900; cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,.25); transition:background .2s,transform .2s,color .4s; align-items:center; justify-content:center; }
+  #back-to-top:hover { transform:translateY(-3px); filter:brightness(1.1); }
+
+  @media (max-width:640px) {
+    .wrapper { padding:0 1rem 2rem; }
+    .site-footer { padding:1.5rem 1rem; }
+    .site-header { flex-direction:column; align-items:flex-start; gap:.5rem; }
+    .qbody { flex-direction:column; }
+    .qmain { flex:0 0 auto; }
+    .illus-col { flex:0 0 auto; padding-top:0; }
+    .pu-banner { flex-direction:column; align-items:flex-start; }
+    .pu-score { margin-left:0; }
+    .pu-instructions { flex-direction:column; align-items:stretch; }
+  }
+</style>
+</head>
+<body class="theme-night">
+
+<div class="stars" id="stars"></div>
+
+<div class="theme-bar">
+  <button class="theme-btn active" onclick="setTheme('night',this)">🌙 Night</button>
+  <button class="theme-btn" onclick="setTheme('sunny',this)">☀️ Sunny</button>
+  <button class="theme-btn" onclick="setTheme('cloudy',this)">☁️ Cloudy</button>
+  <button class="theme-btn" onclick="setTheme('nature',this)">🌿 Nature</button>
+</div>
+
+<div class="wrapper">
+
+  <div class="site-header">
+    <a class="site-header-logo" href="/standard5/">
+      <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+      <span>Mr. EdLo's Virtual Classroom</span>
+    </a>
+    <span class="header-badge">Standard 5 &nbsp;·&nbsp; Belize</span>
+  </div>
+
+  <a class="back-link" href="/standard5/science/#powerups">← Back to Science · Power-Ups</a>
+
+  <!-- ══════════════════════════════
+       BANNER
+  ══════════════════════════════ -->
+  <div class="pu-banner">
+    <div class="pu-logo">
+      <span class="l1">⚡ POWER-UP</span>
+      <span class="l2">2B</span>
+    </div>
+    <div class="pu-pills">
+      <span class="pu-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0b1f52" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 L12 4 L20 11"/><path d="M6 10 V20 H18 V10"/></svg>
+        Goes Home: Thursday
+      </span>
+      <span class="pu-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0b1f52" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5 H20 V16 H9 L5 19 V16 H4 Z"/><circle cx="9" cy="10.5" r="1" fill="#0b1f52" stroke="none"/><circle cx="12" cy="10.5" r="1" fill="#0b1f52" stroke="none"/><circle cx="15" cy="10.5" r="1" fill="#0b1f52" stroke="none"/></svg>
+        Discuss: Following Monday
+      </span>
+    </div>
+    <svg class="pu-rocket" viewBox="0 0 48 48">
+      <path d="M24 4 C30 10 32 20 30 30 L18 30 C16 20 18 10 24 4 Z" fill="#F1F5F9"/>
+      <path d="M24 4 C30 10 32 20 30 30 L24 30 Z" fill="#CBD5E1"/>
+      <circle cx="24" cy="18" r="4" fill="#4DABF7"/>
+      <path d="M18 26 L10 36 L18 32 Z" fill="#FF922B"/>
+      <path d="M30 26 L38 36 L30 32 Z" fill="#FF922B"/>
+      <path d="M20 30 L24 42 L28 30 Z" fill="#FFD43B"/>
+      <path d="M22 33 L24 40 L26 33 Z" fill="#FF6B6B"/>
+    </svg>
+    <div class="pu-star" style="width:5px;height:5px;top:14%;left:38%;--op:.9;"></div>
+    <div class="pu-star" style="width:3px;height:3px;top:60%;left:44%;--op:.7;animation-delay:-1s;"></div>
+    <div class="pu-star" style="width:4px;height:4px;top:78%;left:8%;--op:.8;animation-delay:-.6s;"></div>
+    <div class="pu-star" style="width:3px;height:3px;top:20%;left:70%;--op:.6;animation-delay:-1.4s;"></div>
+  </div>
+
+  <!-- ══════════════════════════════
+       INSTRUCTIONS
+  ══════════════════════════════ -->
+  <div class="pu-instructions">
+    <div class="ii-text">
+      <div class="ii-icon">📋</div>
+      <div>
+        <h2>Instructions</h2>
+        <p>Read each question carefully and fill in your answer based on what you have learned. Tap the speaker button to hear it read aloud!</p>
+      </div>
+    </div>
+    <button class="audio-btn" onclick="readInstructionsAudio()">🔊 Read Instructions</button>
+  </div>
+
+  <!-- ══════════════════════════════
+       NAME / GROUP / SCORE
+  ══════════════════════════════ -->
+  <div class="pu-info">
+    <label class="pu-field">Name: <input type="text" id="stuName" placeholder="type your name"></label>
+    <label class="pu-field">Group: <input type="text" id="stuGroup" placeholder="your group" style="min-width:70px;"></label>
+    <div class="pu-score">Score: <span id="scoreVal">0 / 5</span></div>
+  </div>
+
+  <div class="pu-beanbar">
+    <span class="pu-bean" id="beanPill">🌱 0 beans</span>
+    <span class="pu-rule">1 🌱 per correct answer · two tries each</span>
+    <span class="pu-hint" id="loginHint"><a href="/login/">Log in</a> to save your beans 🌱 to your account.</span>
+    <span class="pu-note" id="beanNote"></span>
+  </div>
+
+  <!-- ══════════════════════════════
+       Q1 — climate change & coral reefs
+  ══════════════════════════════ -->
+  <div class="qrow" data-tint="green">
+    <div class="qnum-col">1</div>
+    <div class="qbody">
+      <div class="qmain">
+        <div>
+          <div class="qtext">What effect can climate change have on coral reefs in Belize?</div>
+          <button class="audio-btn-mini" onclick="readQuestionAudio(1)">🔊 Read Aloud</button>
+        </div>
+        <div class="qanswer-row">
+          <input class="ans-input" id="q1" type="text" placeholder="type your answer…">
+          <button class="check-btn" onclick="checkQ(1)">Check</button>
+        </div>
+        <div class="feedback" id="fb1"></div>
+      </div>
+      <div class="illus-col">
+        <svg viewBox="0 0 400 230" role="img" aria-label="Two halves of a reef: on the left a colourful reef with fish and a turtle, on the right the same reef gone pale and bare">
+          <defs>
+            <clipPath id="leftHalf2b"><path d="M0 0 H214 L186 230 H0 Z"/></clipPath>
+            <clipPath id="rightHalf2b"><path d="M214 0 H400 V230 H186 Z"/></clipPath>
+          </defs>
+
+          <!-- healthy side -->
+          <g clip-path="url(#leftHalf2b)">
+            <rect x="0" y="0" width="220" height="230" fill="#1F7FC4"/>
+            <rect x="0" y="0" width="220" height="70" fill="#3EA8DE"/>
+            <rect x="0" y="196" width="220" height="34" fill="#E8D9AE"/>
+            <g opacity=".35" stroke="#BFE3FA" stroke-width="3" fill="none">
+              <path d="M24 0 C34 40 14 70 26 110"/><path d="M120 0 C132 44 110 76 122 116"/>
+            </g>
+            <!-- branching coral -->
+            <path d="M40 198 C38 172 30 160 22 148 M40 198 C42 172 52 160 60 150 M40 198 C40 176 40 164 40 152"
+                  stroke="#F06595" stroke-width="8" fill="none" stroke-linecap="round"/>
+            <!-- fan coral -->
+            <path d="M96 198 C92 172 96 150 110 138 C124 150 128 172 124 198 Z" fill="#9775FA"/>
+            <g stroke="#E2D4FF" stroke-width="1.6" fill="none">
+              <path d="M110 196 V142 M104 194 C100 174 102 156 108 146 M116 194 C120 174 118 156 112 146"/>
+            </g>
+            <!-- brain coral -->
+            <ellipse cx="168" cy="184" rx="26" ry="18" fill="#FFA94D"/>
+            <g stroke="#C2410C" stroke-width="1.6" fill="none">
+              <path d="M148 182 q10 -8 20 0 t20 0 M150 190 q9 -7 18 0 t18 0 M154 174 q7 -6 14 0 t14 0"/>
+            </g>
+            <!-- tube coral -->
+            <g fill="#20C997">
+              <rect x="66" y="166" width="9" height="32" rx="4"/><rect x="78" y="156" width="9" height="42" rx="4"/>
+              <rect x="90" y="172" width="9" height="26" rx="4"/>
+            </g>
+            <!-- fish -->
+            <g>
+              <ellipse cx="60" cy="76" rx="16" ry="10" fill="#FFD43B"/>
+              <path d="M76 76 L88 68 L88 84 Z" fill="#FFB01F"/>
+              <circle cx="52" cy="73" r="2.2" fill="#3D2B1F"/>
+            </g>
+            <g>
+              <ellipse cx="150" cy="112" rx="13" ry="8" fill="#FF6B6B"/>
+              <path d="M137 112 L127 106 L127 118 Z" fill="#E03131"/>
+              <circle cx="156" cy="110" r="2" fill="#3D2B1F"/>
+            </g>
+            <g>
+              <ellipse cx="104" cy="52" rx="11" ry="7" fill="#4DABF7"/>
+              <path d="M93 52 L84 47 L84 57 Z" fill="#2563EB"/>
+              <circle cx="109" cy="50" r="1.8" fill="#3D2B1F"/>
+            </g>
+            <!-- turtle -->
+            <g transform="translate(44,132)">
+              <ellipse cx="0" cy="0" rx="22" ry="15" fill="#4C9E5A"/>
+              <g stroke="#2F6B3A" stroke-width="1.6" fill="none">
+                <path d="M-14 -4 h28 M-12 5 h24 M-4 -14 v29 M8 -13 v27"/>
+              </g>
+              <circle cx="24" cy="-5" r="6" fill="#6BBF73"/>
+              <circle cx="26" cy="-6" r="1.6" fill="#1F2937"/>
+              <path d="M-16 -12 l-9 -6 M-16 12 l-9 6 M12 -13 l6 -8 M12 13 l6 8" stroke="#6BBF73" stroke-width="6" stroke-linecap="round"/>
+            </g>
+            <!-- sea grass -->
+            <g stroke="#69DB7C" stroke-width="3.4" fill="none" stroke-linecap="round">
+              <path d="M12 198 C8 184 16 176 12 164"/><path d="M22 198 C18 186 26 178 22 168"/>
+            </g>
+          </g>
+
+          <!-- bleached side -->
+          <g clip-path="url(#rightHalf2b)">
+            <rect x="180" y="0" width="220" height="230" fill="#6E8394"/>
+            <rect x="180" y="0" width="220" height="70" fill="#93A5B3"/>
+            <rect x="180" y="196" width="220" height="34" fill="#CFC6AE"/>
+            <path d="M238 198 C236 172 228 160 220 148 M238 198 C240 172 250 160 258 150 M238 198 C238 176 238 164 238 152"
+                  stroke="#F3F4F6" stroke-width="8" fill="none" stroke-linecap="round"/>
+            <path d="M296 198 C292 172 296 150 310 138 C324 150 328 172 324 198 Z" fill="#E5E7EB"/>
+            <g stroke="#C7CDD4" stroke-width="1.6" fill="none">
+              <path d="M310 196 V142 M304 194 C300 174 302 156 308 146 M316 194 C320 174 318 156 312 146"/>
+            </g>
+            <ellipse cx="366" cy="184" rx="26" ry="18" fill="#EDEFF2"/>
+            <g stroke="#BEC5CD" stroke-width="1.6" fill="none">
+              <path d="M346 182 q10 -8 20 0 t20 0 M348 190 q9 -7 18 0 t18 0 M352 174 q7 -6 14 0 t14 0"/>
+            </g>
+            <g fill="#E9EBEE">
+              <rect x="264" y="166" width="9" height="32" rx="4"/><rect x="276" y="158" width="9" height="40" rx="4"/>
+              <rect x="288" y="174" width="9" height="24" rx="4"/>
+            </g>
+            <!-- one lonely fish -->
+            <g opacity=".7">
+              <ellipse cx="330" cy="70" rx="11" ry="7" fill="#B6BEC6"/>
+              <path d="M319 70 L310 65 L310 75 Z" fill="#9AA3AC"/>
+              <circle cx="335" cy="68" r="1.8" fill="#3D4B59"/>
+            </g>
+            <!-- rubble -->
+            <g fill="#B9B09A">
+              <ellipse cx="212" cy="206" rx="9" ry="4"/><ellipse cx="266" cy="212" rx="7" ry="3.4"/>
+              <ellipse cx="344" cy="208" rx="8" ry="3.6"/>
+            </g>
+          </g>
+
+          <line x1="214" y1="0" x2="186" y2="230" stroke="#FFFFFF" stroke-width="4"/>
+
+          <!-- the LEFT pill is labelled; the RIGHT is deliberately a "?" —
+               naming it "Bleached Reef" would hand over the answer -->
+          <rect x="30" y="10" width="112" height="24" rx="12" fill="#15803D"/>
+          <text x="86" y="27" font-family="Nunito,sans-serif" font-size="13" font-weight="800" fill="#fff" text-anchor="middle">Healthy Reef</text>
+          <rect x="262" y="10" width="112" height="24" rx="12" fill="#B91C1C"/>
+          <text x="318" y="28" font-family="Fredoka One,cursive" font-size="15" fill="#fff" text-anchor="middle">? ? ?</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       Q2 — green technology
+  ══════════════════════════════ -->
+  <div class="qrow" data-tint="blue">
+    <div class="qnum-col">2</div>
+    <div class="qbody">
+      <div class="qmain">
+        <div>
+          <div class="qtext">Give ONE example of green technology that can help the environment.</div>
+          <button class="audio-btn-mini" onclick="readQuestionAudio(2)">🔊 Read Aloud</button>
+        </div>
+        <div class="qanswer-row">
+          <input class="ans-input" id="q2" type="text" placeholder="type your answer…">
+          <button class="check-btn" onclick="checkQ(2)">Check</button>
+        </div>
+        <div class="feedback" id="fb2"></div>
+      </div>
+      <div class="illus-col">
+        <svg viewBox="0 0 400 230" role="img" aria-label="Four pictures of green technology: a house with solar panels, a wind turbine, a recycling bin, and a car at a charging point">
+          <!-- tile 1 · solar house -->
+          <rect x="6" y="6" width="188" height="104" rx="12" fill="#DCEBFA" stroke="#93A9C4" stroke-width="1.6"/>
+          <circle cx="166" cy="30" r="12" fill="#FFD43B"/>
+          <g stroke="#FFD43B" stroke-width="2.2" stroke-linecap="round">
+            <line x1="166" y1="12" x2="166" y2="7"/><line x1="184" y1="30" x2="189" y2="30"/><line x1="179" y1="17" x2="183" y2="13"/>
+          </g>
+          <rect x="10" y="88" width="180" height="20" fill="#BFE0B8"/>
+          <path d="M44 66 L94 40 L144 66 Z" fill="#B45309"/>
+          <rect x="56" y="66" width="76" height="24" fill="#F4EFE6" stroke="#B8AA92" stroke-width="1.4"/>
+          <rect x="86" y="72" width="18" height="18" fill="#8B5A2B"/>
+          <rect x="62" y="70" width="14" height="12" fill="#DCEBFA" stroke="#93A9C4"/>
+          <path d="M60 62 L92 46 L118 60 L86 76 Z" fill="#2C5CA8" stroke="#1E3A6E" stroke-width="1.4"/>
+          <g stroke="#7FA8DC" stroke-width="1"><line x1="70" y1="58" x2="96" y2="70"/><line x1="80" y1="53" x2="106" y2="65"/><line x1="74" y1="70" x2="102" y2="55"/></g>
+          <path d="M22 88 C20 72 24 62 28 54 C32 62 36 72 34 88 Z" fill="#4C9E5A"/>
+
+          <!-- tile 2 · wind turbine -->
+          <rect x="206" y="6" width="188" height="104" rx="12" fill="#DCEBFA" stroke="#93A9C4" stroke-width="1.6"/>
+          <rect x="210" y="88" width="180" height="20" fill="#BFE0B8"/>
+          <path d="M210 88 C240 68 268 74 292 88 Z" fill="#A9C99F"/>
+          <path d="M300 88 C322 66 356 70 390 88 Z" fill="#A9C99F"/>
+          <rect x="296" y="34" width="6" height="56" fill="#F1F5F9" stroke="#94A3B8" stroke-width="1.2"/>
+          <circle cx="299" cy="34" r="5" fill="#CBD5E1" stroke="#94A3B8" stroke-width="1.2"/>
+          <path d="M299 34 L294 4 L304 7 Z" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1.2"/>
+          <path d="M299 34 L332 44 L327 53 Z" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1.2"/>
+          <path d="M299 34 L267 52 L266 42 Z" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1.2"/>
+          <g opacity=".55" stroke="#FFFFFF" stroke-width="2.4" fill="none" stroke-linecap="round">
+            <path d="M228 30 h26 a5 5 0 1 0 -5 -7"/><path d="M224 44 h34 a5 5 0 1 1 -5 7"/>
+          </g>
+
+          <!-- tile 3 · recycling -->
+          <rect x="6" y="120" width="188" height="104" rx="12" fill="#DCEBFA" stroke="#93A9C4" stroke-width="1.6"/>
+          <rect x="10" y="202" width="180" height="20" fill="#BFE0B8"/>
+          <path d="M66 146 H134 L126 204 A5 5 0 0 1 121 208 H79 A5 5 0 0 1 74 204 Z" fill="#3FA34D" stroke="#276221" stroke-width="1.8"/>
+          <rect x="60" y="136" width="80" height="12" rx="5" fill="#276221"/>
+          <rect x="90" y="128" width="20" height="9" rx="4" fill="#276221"/>
+          <g fill="none" stroke="#FFFFFF" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M92 166 L100 154 L108 166"/>
+            <path d="M112 172 L118 184 L104 184"/>
+            <path d="M88 172 L82 184 L96 184"/>
+          </g>
+          <g fill="#FFFFFF">
+            <path d="M100 150 l5 6 h-10 Z"/><path d="M122 188 l-7 2 3 -6 Z"/><path d="M78 188 l7 2 -3 -6 Z"/>
+          </g>
+
+          <!-- tile 4 · electric vehicle -->
+          <rect x="206" y="120" width="188" height="104" rx="12" fill="#DCEBFA" stroke="#93A9C4" stroke-width="1.6"/>
+          <rect x="210" y="202" width="180" height="20" fill="#BFE0B8"/>
+          <rect x="228" y="146" width="30" height="56" rx="6" fill="#3FA34D" stroke="#276221" stroke-width="1.8"/>
+          <rect x="234" y="154" width="18" height="20" rx="3" fill="#0F172A"/>
+          <path d="M245 157 l-5 8 h4 l-3 7" fill="none" stroke="#FFD43B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M258 170 C272 170 276 176 276 182" fill="none" stroke="#64748B" stroke-width="3" stroke-linecap="round"/>
+          <path d="M282 170 L358 170 L372 186 V196 H278 V180 Z" fill="#F1F5F9" stroke="#7E9AB5" stroke-width="1.8"/>
+          <path d="M296 172 L354 172 L364 185 H296 Z" fill="#BFE3FA" stroke="#7E9AB5" stroke-width="1.4"/>
+          <line x1="326" y1="172" x2="326" y2="185" stroke="#7E9AB5" stroke-width="1.4"/>
+          <circle cx="300" cy="196" r="9" fill="#374151"/><circle cx="300" cy="196" r="4" fill="#9CA3AF"/>
+          <circle cx="352" cy="196" r="9" fill="#374151"/><circle cx="352" cy="196" r="4" fill="#9CA3AF"/>
+          <rect x="272" y="178" width="8" height="5" rx="2" fill="#3FA34D"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       Q3 — order the water cycle
+  ══════════════════════════════ -->
+  <div class="qrow" data-tint="purple">
+    <div class="qnum-col">3</div>
+    <div class="qbody">
+      <div class="qmain">
+        <div>
+          <div class="qtext">Water moves in a cycle. Put the steps in the correct order.</div>
+          <button class="audio-btn-mini" onclick="readQuestionAudio(3)">🔊 Read Aloud</button>
+        </div>
+        <p class="order-tip">Drag the cards — or use ▲ ▼ — to put them in order</p>
+        <div class="order-list" id="orderList">
+          <div class="order-item" data-key="cool">
+            <span class="order-num">1</span>
+            <span class="order-grip">⣿</span>
+            <span class="order-label">Water vapour cools and forms clouds.</span>
+            <span class="order-arrows">
+              <button type="button" onclick="moveItem(this,-1)" aria-label="Move up">▲</button>
+              <button type="button" onclick="moveItem(this,1)" aria-label="Move down">▼</button>
+            </span>
+          </div>
+          <div class="order-item" data-key="rain">
+            <span class="order-num">2</span>
+            <span class="order-grip">⣿</span>
+            <span class="order-label">Rain falls from the clouds.</span>
+            <span class="order-arrows">
+              <button type="button" onclick="moveItem(this,-1)" aria-label="Move up">▲</button>
+              <button type="button" onclick="moveItem(this,1)" aria-label="Move down">▼</button>
+            </span>
+          </div>
+          <div class="order-item" data-key="evap">
+            <span class="order-num">3</span>
+            <span class="order-grip">⣿</span>
+            <span class="order-label">Sun heats water and it evaporates.</span>
+            <span class="order-arrows">
+              <button type="button" onclick="moveItem(this,-1)" aria-label="Move up">▲</button>
+              <button type="button" onclick="moveItem(this,1)" aria-label="Move down">▼</button>
+            </span>
+          </div>
+        </div>
+        <div class="qanswer-row">
+          <button class="check-btn" onclick="checkQ(3)">Check</button>
+        </div>
+        <div class="feedback" id="fb3"></div>
+      </div>
+      <div class="illus-col">
+        <svg viewBox="0 0 400 170" role="img" aria-label="Three picture cards: A rain falling on green land, B the sun heating the sea with arrows rising, C a white cloud">
+          <!-- card A · rain -->
+          <rect x="6" y="6" width="118" height="118" rx="12" fill="#DCEBFA" stroke="#93A9C4" stroke-width="1.6"/>
+          <rect x="10" y="98" width="110" height="22" fill="#BFE0B8"/>
+          <path d="M10 98 C34 80 56 84 76 98 Z" fill="#A9C99F"/>
+          <ellipse cx="66" cy="42" rx="30" ry="16" fill="#E2E8F0"/>
+          <ellipse cx="46" cy="49" rx="19" ry="11" fill="#E2E8F0"/>
+          <ellipse cx="84" cy="49" rx="19" ry="11" fill="#E2E8F0"/>
+          <g stroke="#4DABF7" stroke-width="2.6" stroke-linecap="round">
+            <line x1="44" y1="64" x2="40" y2="76"/><line x1="58" y1="66" x2="54" y2="80"/>
+            <line x1="72" y1="64" x2="68" y2="76"/><line x1="86" y1="66" x2="82" y2="78"/>
+          </g>
+          <circle cx="65" cy="146" r="14" fill="#9775FA"/>
+          <text x="65" y="152" font-family="Fredoka One,cursive" font-size="16" fill="#fff" text-anchor="middle">A</text>
+
+          <!-- card B · evaporation -->
+          <rect x="141" y="6" width="118" height="118" rx="12" fill="#DCEBFA" stroke="#93A9C4" stroke-width="1.6"/>
+          <rect x="145" y="86" width="110" height="34" fill="#3EA8DE"/>
+          <path d="M145 86 q11 -5 22 0 t22 0 t22 0 t22 0 t22 0" fill="none" stroke="#BFE3FA" stroke-width="2"/>
+          <circle cx="228" cy="34" r="13" fill="#FFD43B"/>
+          <g stroke="#FFD43B" stroke-width="2.2" stroke-linecap="round">
+            <line x1="228" y1="14" x2="228" y2="9"/><line x1="247" y1="34" x2="252" y2="34"/><line x1="242" y1="21" x2="246" y2="17"/><line x1="242" y1="47" x2="246" y2="51"/>
+          </g>
+          <g stroke="#2563EB" stroke-width="3" fill="none" stroke-linecap="round">
+            <line x1="170" y1="84" x2="170" y2="46"/><line x1="190" y1="84" x2="190" y2="38"/><line x1="210" y1="84" x2="210" y2="50"/>
+          </g>
+          <g stroke="#2563EB" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M164 53 L170 45 L176 53"/><path d="M184 45 L190 37 L196 45"/><path d="M204 57 L210 49 L216 57"/>
+          </g>
+          <circle cx="200" cy="146" r="14" fill="#9775FA"/>
+          <text x="200" y="152" font-family="Fredoka One,cursive" font-size="16" fill="#fff" text-anchor="middle">B</text>
+
+          <!-- card C · cloud -->
+          <rect x="276" y="6" width="118" height="118" rx="12" fill="#DCEBFA" stroke="#93A9C4" stroke-width="1.6"/>
+          <ellipse cx="336" cy="62" rx="38" ry="20" fill="#F8FAFC"/>
+          <ellipse cx="310" cy="72" rx="24" ry="14" fill="#F8FAFC"/>
+          <ellipse cx="360" cy="72" rx="24" ry="14" fill="#F8FAFC"/>
+          <ellipse cx="336" cy="46" rx="20" ry="13" fill="#FFFFFF"/>
+          <circle cx="335" cy="146" r="14" fill="#9775FA"/>
+          <text x="335" y="152" font-family="Fredoka One,cursive" font-size="16" fill="#fff" text-anchor="middle">C</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       Q4 — which mixture is a solution?
+  ══════════════════════════════ -->
+  <div class="qrow" data-tint="orange">
+    <div class="qnum-col">4</div>
+    <div class="qbody">
+      <div class="qmain">
+        <div>
+          <div class="qtext">Which of these mixtures is a solution?</div>
+          <button class="audio-btn-mini" onclick="readQuestionAudio(4)">🔊 Read Aloud</button>
+        </div>
+        <div class="mcq" id="mcq4">
+          <button type="button" class="mcq-opt" data-opt="A" onclick="pickMcq(this)"><span class="mcq-let">A</span> Sand in water</button>
+          <button type="button" class="mcq-opt" data-opt="B" onclick="pickMcq(this)"><span class="mcq-let">B</span> Salt in water</button>
+          <button type="button" class="mcq-opt" data-opt="C" onclick="pickMcq(this)"><span class="mcq-let">C</span> Oil and water</button>
+        </div>
+        <div class="qanswer-row">
+          <button class="check-btn" onclick="checkQ(4)">Check</button>
+        </div>
+        <div class="feedback" id="fb4"></div>
+
+        <div class="subgroup">
+          <label class="subfield">
+            <span>Explain your choice in ONE line</span>
+            <input class="ans-input" id="q4x" type="text" placeholder="I chose it because…">
+          </label>
+          <div class="qanswer-row">
+            <button class="check-btn" onclick="checkExplain4()">Check My Explanation</button>
+            <span class="order-tip">Practice only — no bean</span>
+          </div>
+          <div class="feedback" id="fb4x"></div>
+        </div>
+      </div>
+      <div class="illus-col">
+        <svg viewBox="0 0 400 200" role="img" aria-label="Three glasses: sand settled at the bottom of water, salt water that looks clear, and oil floating in a layer on water">
+          <rect x="0" y="164" width="400" height="10" fill="#C99A5B"/>
+          <rect x="0" y="174" width="400" height="26" fill="#A9793C"/>
+
+          <!-- A · sand in water -->
+          <path d="M22 40 L32 156 A4 4 0 0 0 36 160 H94 A4 4 0 0 0 98 156 L108 40 Z" fill="#EAF4FC" stroke="#7E9AB5" stroke-width="2.2"/>
+          <path d="M28 64 L102 64 L94 152 A3 3 0 0 1 91 155 H39 A3 3 0 0 1 36 152 Z" fill="#B79B6B" opacity=".55"/>
+          <path d="M38 132 L92 132 L94 152 A3 3 0 0 1 91 155 H39 A3 3 0 0 1 36 152 Z" fill="#8B6B3D"/>
+          <g fill="#6E5228">
+            <circle cx="52" cy="126" r="2"/><circle cx="70" cy="120" r="2.4"/><circle cx="84" cy="128" r="1.8"/>
+          </g>
+          <path d="M28 64 q37 8 74 0" fill="none" stroke="#5FB4E5" stroke-width="2"/>
+          <text x="65" y="192" font-family="Nunito,sans-serif" font-size="14" font-weight="800" fill="#F4EFE6" text-anchor="middle">A · Sand in water</text>
+
+          <!-- B · salt in water -->
+          <path d="M156 40 L166 156 A4 4 0 0 0 170 160 H228 A4 4 0 0 0 232 156 L242 40 Z" fill="#EAF4FC" stroke="#7E9AB5" stroke-width="2.2"/>
+          <path d="M162 64 L236 64 L228 152 A3 3 0 0 1 225 155 H173 A3 3 0 0 1 170 152 Z" fill="#9FD3F2" opacity=".9"/>
+          <path d="M162 64 q37 8 74 0" fill="none" stroke="#5FB4E5" stroke-width="2"/>
+          <path d="M170 56 L176 140" stroke="#FFFFFF" stroke-width="4" opacity=".55" stroke-linecap="round"/>
+          <text x="199" y="192" font-family="Nunito,sans-serif" font-size="14" font-weight="800" fill="#F4EFE6" text-anchor="middle">B · Salt in water</text>
+
+          <!-- C · oil and water -->
+          <path d="M290 40 L300 156 A4 4 0 0 0 304 160 H362 A4 4 0 0 0 366 156 L376 40 Z" fill="#EAF4FC" stroke="#7E9AB5" stroke-width="2.2"/>
+          <path d="M296 64 L370 64 L366 106 H300 Z" fill="#F5C518" opacity=".92"/>
+          <path d="M300 106 H366 L362 152 A3 3 0 0 1 359 155 H307 A3 3 0 0 1 304 152 Z" fill="#9FD3F2" opacity=".9"/>
+          <line x1="300" y1="106" x2="366" y2="106" stroke="#B98A0A" stroke-width="2.4"/>
+          <path d="M296 64 q37 8 74 0" fill="none" stroke="#5FB4E5" stroke-width="2"/>
+          <text x="333" y="192" font-family="Nunito,sans-serif" font-size="14" font-weight="800" fill="#F4EFE6" text-anchor="middle">C · Oil and water</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       Q5 — observe & infer
+  ══════════════════════════════ -->
+  <div class="qrow" data-tint="teal">
+    <div class="qnum-col">5</div>
+    <div class="qbody">
+      <div class="qmain">
+        <div>
+          <div class="qtext">Observe something outdoors this week. Write what you saw and what it might mean.</div>
+          <button class="audio-btn-mini" onclick="readQuestionAudio(5)">🔊 Read Aloud</button>
+        </div>
+        <div class="subgroup">
+          <label class="subfield">
+            <span>I observed</span>
+            <input class="ans-input" id="q5a" type="text" placeholder="e.g. The ants were walking in a long line">
+          </label>
+          <label class="subfield">
+            <span>It might mean</span>
+            <input class="ans-input" id="q5b" type="text" placeholder="e.g. Rain is coming, so they are storing food">
+          </label>
+        </div>
+        <div class="qanswer-row">
+          <button class="check-btn" onclick="checkQ(5)">Check</button>
+        </div>
+        <div class="feedback open-reveal" id="fb5"></div>
+      </div>
+      <div class="illus-col">
+        <svg viewBox="0 0 400 230" role="img" aria-label="A student with a magnifying glass beside a tree where a bird perches, with a butterfly and flowers nearby">
+          <rect x="0" y="0" width="400" height="182" fill="#DCEBFA"/>
+          <rect x="0" y="182" width="400" height="48" fill="#BFE0B8"/>
+          <ellipse cx="66" cy="30" rx="28" ry="13" fill="#fff" opacity=".8"/>
+          <ellipse cx="88" cy="26" rx="19" ry="10" fill="#fff" opacity=".8"/>
+
+          <!-- tree -->
+          <path d="M64 186 C58 140 62 96 74 56 C86 96 90 140 84 186 Z" fill="#8B5A2B"/>
+          <path d="M70 100 C56 92 46 80 42 68 M78 84 C92 78 102 66 106 54 M72 132 C58 126 50 116 46 106" fill="none" stroke="#7A4A22" stroke-width="7" stroke-linecap="round"/>
+          <ellipse cx="74" cy="44" rx="52" ry="34" fill="#3C8A4A"/>
+          <ellipse cx="38" cy="60" rx="30" ry="21" fill="#4C9E5A"/>
+          <ellipse cx="112" cy="60" rx="30" ry="21" fill="#4C9E5A"/>
+          <ellipse cx="74" cy="30" rx="34" ry="20" fill="#5AB068"/>
+
+          <!-- bird on branch -->
+          <g transform="translate(122,74)">
+            <ellipse cx="0" cy="0" rx="18" ry="12" fill="#8D6E5A"/>
+            <circle cx="14" cy="-9" r="9" fill="#A38472"/>
+            <circle cx="17" cy="-11" r="1.8" fill="#1F2937"/>
+            <path d="M25 -9 L35 -7 L25 -4 Z" fill="#FFA94D"/>
+            <path d="M-3 2 C-11 -2 -18 0 -20 4 C-13 8 -6 8 -3 2 Z" fill="#6F5544"/>
+            <path d="M-16 2 C-25 -2 -32 2 -34 6 C-26 8 -19 6 -16 2 Z" fill="#6F5544"/>
+            <path d="M2 11 L0 19 M10 11 L9 19" stroke="#FFA94D" stroke-width="2.2" stroke-linecap="round"/>
+          </g>
+          <path d="M106 82 C124 80 138 78 150 74" fill="none" stroke="#7A4A22" stroke-width="6" stroke-linecap="round"/>
+
+          <!-- butterfly -->
+          <g transform="translate(190,52)">
+            <path d="M0 0 C-18 -18 -34 -12 -30 4 C-27 16 -12 16 0 6 Z" fill="#FF922B" stroke="#C2410C" stroke-width="1.4"/>
+            <path d="M0 0 C18 -18 34 -12 30 4 C27 16 12 16 0 6 Z" fill="#FFD43B" stroke="#C2410C" stroke-width="1.4"/>
+            <ellipse cx="0" cy="3" rx="3" ry="11" fill="#3D2B1F"/>
+            <path d="M-1 -8 C-5 -16 -10 -18 -12 -20 M1 -8 C5 -16 10 -18 12 -20" fill="none" stroke="#3D2B1F" stroke-width="1.6" stroke-linecap="round"/>
+          </g>
+
+          <!-- flowers -->
+          <g>
+            <path d="M170 186 C168 164 172 150 176 140" fill="none" stroke="#3C8A4A" stroke-width="4" stroke-linecap="round"/>
+            <path d="M174 168 C160 164 152 156 150 146 C162 148 170 156 174 168 Z" fill="#4C9E5A"/>
+            <circle cx="177" cy="132" r="7" fill="#FF6B6B"/><circle cx="169" cy="138" r="7" fill="#FF6B6B"/>
+            <circle cx="185" cy="138" r="7" fill="#FF6B6B"/><circle cx="177" cy="145" r="7" fill="#FF6B6B"/>
+            <circle cx="177" cy="138" r="5" fill="#FFD43B"/>
+          </g>
+          <g>
+            <path d="M212 186 C210 168 214 156 218 148" fill="none" stroke="#3C8A4A" stroke-width="3.4" stroke-linecap="round"/>
+            <path d="M216 172 C230 168 238 160 240 150 C228 152 220 160 216 172 Z" fill="#4C9E5A"/>
+            <circle cx="219" cy="142" r="6" fill="#F06595"/><circle cx="212" cy="147" r="6" fill="#F06595"/>
+            <circle cx="226" cy="147" r="6" fill="#F06595"/><circle cx="219" cy="152" r="6" fill="#F06595"/>
+            <circle cx="219" cy="147" r="4" fill="#FFD43B"/>
+          </g>
+
+          <!-- student with magnifier -->
+          <circle cx="322" cy="76" r="26" fill="#C98B5E"/>
+          <path d="M296 74 C296 50 348 50 348 74 L348 62 C348 62 322 48 296 60 Z" fill="#241A12"/>
+          <circle cx="313" cy="78" r="3" fill="#241A12"/>
+          <circle cx="331" cy="78" r="3" fill="#241A12"/>
+          <path d="M314 89 q8 7 16 0" fill="none" stroke="#241A12" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M288 186 C288 132 302 104 322 104 C342 104 356 132 356 186 Z" fill="#3FA34D"/>
+          <path d="M292 140 C276 136 262 130 252 124" fill="none" stroke="#C98B5E" stroke-width="12" stroke-linecap="round"/>
+          <circle cx="240" cy="116" r="24" fill="#DCEBFA" opacity=".6" stroke="#64748B" stroke-width="5"/>
+          <line x1="256" y1="133" x2="266" y2="144" stroke="#8B5A2B" stroke-width="8" stroke-linecap="round"/>
+          <path d="M230 106 q9 -7 18 -2" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="pu-controls">
+    <button class="save-btn" id="saveBtn" onclick="puSave()" disabled>🌱 Finish &amp; Save My Beans</button>
+    <button class="reset-btn" onclick="resetWorksheet()">🔄 Start Over</button>
+  </div>
+
+  <div class="pu-tagline">
+    <svg class="tl-icon" viewBox="0 0 24 24" fill="none" stroke="#FFD43B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21 H16 M12 17 V21 M7 4 H17 V10 A5 5 0 0 1 7 10 Z"/><path d="M7 5 H4 V7 A4 4 0 0 0 7 10 M17 5 H20 V7 A4 4 0 0 1 17 10"/></svg>
+    <div>
+      <p>Be curious! Ask questions! You are making a DIFFERENCE!</p>
+      <p class="tl-sub">Think · Learn · Share · Make a Difference</p>
+    </div>
+  </div>
+
+</div><!-- /wrapper -->
+
+<footer class="site-footer">
+  <div class="footer-logo">
+    <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+    <span>Mr. EdLo's Virtual Classroom</span>
+  </div>
+  <p class="footer-tagline">Explore, discover, and learn something new every day!</p>
+  <p class="footer-copy">© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize · All rights reserved.</p>
+</footer>
+
+<button id="back-to-top" title="Back to top" aria-label="Back to top">↑</button>
+
+<script>
+/* Stars */
+const sc = document.getElementById('stars');
+for (let i = 0; i < 60; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const sz = Math.random()*2.5+1;
+  s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*4+2).toFixed(1)}s;--delay:-${(Math.random()*6).toFixed(1)}s;--op:${(Math.random()*0.4+0.15).toFixed(2)};`;
+  sc.appendChild(s);
+}
+
+/* Theme */
+const THEMES = ['night','sunny','cloudy','nature'];
+function setTheme(theme, btn) {
+  THEMES.forEach(t=>document.body.classList.remove('theme-'+t));
+  document.body.classList.add('theme-'+theme);
+  document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  localStorage.setItem('vc-theme',theme);
+}
+(function(){
+  const saved=localStorage.getItem('vc-theme');
+  if(saved&&THEMES.includes(saved)){
+    THEMES.forEach(t=>document.body.classList.remove('theme-'+t));
+    document.body.classList.add('theme-'+saved);
+    document.querySelectorAll('.theme-btn').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase().includes(saved)));
+  }
+})();
+
+/* Back to top */
+const topBtn=document.getElementById('back-to-top');
+window.addEventListener('scroll',()=>{ topBtn.style.display=window.scrollY>300?'flex':'none'; });
+topBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+/* ── Text-to-speech (native, no dependency) ───────────────────── */
+function speakText(text){
+  if (!('speechSynthesis' in window)) { alert('Text-to-speech is not supported in your browser.'); return; }
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text.replace(/\bONE\b/g,'one'));
+  utter.rate = 0.95; utter.pitch = 1.0;
+  window.speechSynthesis.speak(utter);
+}
+function readInstructionsAudio(){
+  speakText("Welcome to Power-Up 2B! Please write your name and group at the top. Read each question carefully, or tap the Read Aloud buttons on any question to hear it. Question three is a drag-and-drop: move the cards until they are in the right order. Question four is a choice: tap A, B or C. Good luck!");
+}
+const QUESTION_AUDIO = {
+  1: "Question 1: What effect can climate change have on coral reefs in Belize?",
+  2: "Question 2: Give ONE example of green technology that can help the environment.",
+  3: "Question 3: Water moves in a cycle. Drag the three cards into the correct order. The three steps are: water vapour cools and forms clouds; rain falls from the clouds; and, the sun heats water and it evaporates.",
+  4: "Question 4: Which of these mixtures is a solution? A, sand in water. B, salt in water. Or C, oil and water. Then explain your choice in ONE line.",
+  5: "Question 5: Observe something outdoors this week. Write what you saw, and then write what it might mean."
+};
+function readQuestionAudio(id){ if (QUESTION_AUDIO[id]) speakText(QUESTION_AUDIO[id]); }
+
+/* ── Question bank ─────────────────────────────────────
+   2B is the first Power-Up with THREE answer types: free text
+   (Q1, Q2), drag-to-order (Q3), multiple choice (Q4) and a
+   two-line observe-and-infer (Q5). readAnswer() below hides that
+   difference so the two-attempt / one-bean machinery stays exactly
+   as it is in 1A, 1B and 2A — only the reading of the answer changes.
+
+   ⚠️ Text matching is BY SUBSTRING, so keys must be plural-tolerant
+   and must never be short strings that hide inside other words
+   ('no' hides in 'know'; 'ev' hides in 'every'). */
+const Q = {
+  1: { type:'text', mode:'any',
+       keys:['bleach','turn white','turns white','turned white','goes white','white','pale',
+             'lose colour','lose color','loses colour','loses color','losing colour','losing color',
+             'die','dies','dying','dead','death','kill','damage','destroy','harm','sick','ruin'],
+       good:'Coral bleaching — warmer sea water makes the coral lose its colour, turn white, and it can die',
+       hint:'compare the two halves of the picture. The reef on the right lost something. What colour has it gone, and what happens to coral that stays like that?',
+       reveal:'Coral bleaching — the coral turns white and can die' },
+
+  2: { type:'text', mode:'any',
+       keys:['solar','panel','wind','turbine','windmill','recycl','electric','hydro',
+             'bicycle','bike','led light','compost','rainwater','rain water','battery',
+             'renewable','clean energy','green energy','reuse'],
+       good:'Good example of green technology',
+       hint:'look at the four pictures — the roof, the tall spinning tower, the green bin, and the car plugged in. Name ANY one of them.',
+       reveal:'Solar panels, wind turbines, recycling, or electric vehicles' },
+
+  3: { type:'order', correct:['evap','cool','rain'],
+       good:'Sun heats the water → the vapour cools into clouds → rain falls',
+       hint:'which step needs the SUN? Nothing can rise until the sun heats it, no cloud can form until water has risen, and no rain can fall until there is a cloud.',
+       reveal:'1 · Sun heats water and it evaporates → 2 · Water vapour cools and forms clouds → 3 · Rain falls from the clouds' },
+
+  4: { type:'mcq', correct:'B',
+       good:'Salt in water — the salt dissolves completely, so the mixture looks like ONE clear liquid',
+       hint:'in a solution the two parts mix so completely that you cannot see them separately any more. Look at the glasses: one has grains sitting on the bottom, and one has two layers. Which glass looks like a single clear liquid?',
+       reveal:'B — salt in water' },
+
+  5: { type:'dual', open:true,
+       keysA:['leaf','leaves','flower','petal','stem','root','branch','trunk','seed','fruit',
+              'green','tree','plant','grass','vine','thorn','bark',
+              'bird','dog','cat','ant','bee','butterfl','lizard','iguana','gecko','frog',
+              'chicken','cow','horse','pig','goat','spider','insect','fish','snail','worm',
+              'wing','feather','fur','tail','beak','leg','colour','color','spot','stripe',
+              'cloud','rain','wind','sky','sea','river',
+              'small','big','tall','short','long','round','pointed','soft','rough','smooth',
+              'grow','climb','eating','sing','fly','jump','crawl','buzz','nest','shade'],
+       keysB:['because','mean','shows','show','maybe','might','probably','so ','so,','so.',
+              'food','hungry','eat','season','rain','wet','dry','weather','storm',
+              'nest','build','egg','baby','young','healthy','sick','pollut','safe',
+              'habitat','home','shelter','shade','sun','light','grow','cold','hot','warm',
+              'migrat','moving','change','looking for','searching','protect','hide','danger',
+              'clean','dirty','soil','pollen','flower','water','need'],
+       good:'You observed something AND said what it might mean — that is exactly what a scientist does',
+       hint:'the second line needs your THINKING, not another description. Why might it be like that? Use words such as "because", "it means", or "maybe" — for example, "the ants are carrying food, so maybe rain is coming."',
+       sample:'"I observed: the ants were walking in a long line carrying crumbs. It might mean: rain is coming, so they are storing food." Any real observation plus a sensible reason counts.' }
+};
+const solved = {1:false,2:false,3:false,4:false,5:false};
+const tries  = {1:0,2:0,3:0,4:0,5:0};
+
+/* ═════════════════════════════════════════════════════════════
+   🌱 POWER-UP BEANS — LIFT-OUT BLOCK
+   Self-contained on purpose (site rule: no external JS). When the
+   shared-JS refactor (IDEAS #10) happens, lift this whole block out
+   as-is; only the PU config below changes per worksheet.
+
+   Rules approved Aug 5, 2026:
+   • 1 🌱 per question ANSWERED CORRECTLY, max 5 — always equal to
+     the Score, because both now come from the same check.
+   • TWO attempts. Attempt 1 gets a hint, never the answer, so a
+     correct REVISION still earns its bean — that is the behaviour we
+     want. The answer only appears after attempt 2, once the bean is
+     gone, so the reveal can never be farmed.
+   • Typing something is NOT enough, on any question. The written
+     questions are matched against a generous accept list, and the
+     "Yes, mine works" button is reflection only — it pays nothing,
+     because nothing verifies it.
+   • 2B additions: on Q4 the bean rides on the CIRCLED CHOICE; the
+     one-line explanation is checked and given real feedback but pays
+     nothing, same doctrine. A wrong first pick is struck out so the
+     second attempt is a decision, not a re-guess of the same option.
+     On Q5 BOTH lines must pass — the inference is the science skill.
+   • ONE save per worksheet. vcSaveBeans sets the localStorage lock
+     vc-pts-<id>, so a reload or Start Over can never re-earn.
+   • Ungraded activity: no login gate, no test gate, no KV. Logged out,
+     the beans still show on screen — they are simply not banked.
+   • lesson_key is REQUIRED: a row without it is silently uncapped
+     server-side (PROJECT-DOCS.md, July 21 2026).
+══════════════════════════════════════════════════════════════ */
+var PU = {
+  id:      'std5-sci-pu-2b',      /* also the lesson_key — 'pu-' keeps it */
+  name:    'Power-Up 2B',         /* out of any real lesson's bean budget */
+  subject: 'Science',
+  lo:      '',                    /* mixed retrieval — no single outcome */
+  total:   5
+};
+
+var puBeans = 0, puAttempted = {}, puEarned = {}, puSaved = false;
+
+function puPill(){
+  document.getElementById('beanPill').textContent =
+    '🌱 ' + puBeans + ' bean' + (puBeans === 1 ? '' : 's');
+}
+function puNote(msg){
+  var n = document.getElementById('beanNote');
+  n.style.display = 'block';
+  n.textContent = msg;
+}
+function puTouch(id){
+  puAttempted[id] = true;
+  document.getElementById('saveBtn').disabled = puSaved;
+}
+/* One bean per QUESTION, ever — not per attempt. Survives Start Over,
+   so a replay of an unsaved sheet cannot pay a second time. */
+function puEarn(id){
+  if (puEarned[id] || puBeans >= PU.total) return;
+  puEarned[id] = true;
+  puBeans++;
+  puPill();
+}
+/* Auto-save once every question has been attempted. */
+function puMaybeSave(){
+  for (var i = 1; i <= PU.total; i++) { if (!puAttempted[i]) return; }
+  puSave();
+}
+function puSave(){
+  if (puSaved) return;
+  puSaved = true;
+  var btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+  btn.textContent = '🌱 Beans Saved ✓';
+
+  if (typeof vcSaveBeans !== 'function'){
+    puNote('🌱 ' + puBeans + ' beans earned — the classroom server could not be reached this time.');
+    return;
+  }
+  vcSaveBeans(PU.id, puBeans, PU.total, {
+    subject:       PU.subject,
+    lo_code:       PU.lo,
+    lesson_key:    PU.id,
+    activity_name: PU.name
+  }).then(function(res){
+    if (res && res.ok){
+      /* Trust the server — it decides what was actually banked. */
+      var granted = (res.granted != null) ? Number(res.granted) : puBeans;
+      puBeans = granted; puPill();
+      puNote('🌱 +' + granted + ' bean' + (granted === 1 ? '' : 's') + ' saved to your account!');
+    } else if (res && res.locked){
+      puNote('🌱 You already earned your beans for this Power-Up. Play again for practice!');
+    } else {
+      puNote('🌱 ' + puBeans + ' bean' + (puBeans === 1 ? '' : 's')
+           + ' earned — log in next time to save them to your account!');
+    }
+  });
+}
+/* On load: respect an existing lock, and greet a logged-in student. */
+(function puInit(){
+  try {
+    var raw = localStorage.getItem('vc-pts-' + PU.id);
+    if (raw){
+      puSaved = true;
+      var got = 0;
+      try { got = Number(JSON.parse(raw).b) || 0; } catch(e){}
+      puBeans = got;
+      var b = document.getElementById('saveBtn');
+      b.disabled = true; b.textContent = '🌱 Beans Saved ✓';
+      puNote('🌱 You already earned ' + got + ' bean' + (got === 1 ? '' : 's')
+           + ' for this Power-Up. Play again for practice — they are already in your account.');
+    }
+  } catch(e){}
+
+  if (typeof vcGetSession === 'function' && vcGetSession()){
+    var s = vcGetSession();
+    document.getElementById('loginHint').innerHTML =
+      '👋 Welcome back, <b>' + (s.first_name || s.full_name || 'student')
+      + '</b>! Your beans will be saved.';
+    var nm = document.getElementById('stuName');
+    if (nm && !nm.value) nm.value = s.full_name || s.first_name || '';
+  }
+  puPill();
+})();
+/* ────────── end LIFT-OUT BLOCK ────────── */
+
+/* ═══════════════════════════════════════════════════════
+   Q3 — DRAG TO ORDER
+   Pointer Events give one code path for mouse, finger and
+   stylus. The ▲▼ buttons stay live for anyone on a stubborn
+   touchpad, and both routes end in the same DOM order, so
+   the checker never has to know which was used.
+═══════════════════════════════════════════════════════ */
+var orderLocked = false, dragEl = null;
+var orderList = document.getElementById('orderList');
+
+function renumber(){
+  var items = orderList.querySelectorAll('.order-item');
+  for (var i = 0; i < items.length; i++){
+    items[i].querySelector('.order-num').textContent = i + 1;
+  }
+}
+function moveItem(btn, dir){
+  if (orderLocked) return;
+  var el = btn.closest('.order-item');
+  if (dir < 0 && el.previousElementSibling) orderList.insertBefore(el, el.previousElementSibling);
+  if (dir > 0 && el.nextElementSibling)     orderList.insertBefore(el.nextElementSibling, el);
+  renumber();
+}
+function orderInit(){
+  orderList.querySelectorAll('.order-item').forEach(function(el){
+    el.addEventListener('pointerdown', function(e){
+      if (orderLocked) return;
+      if (e.target.closest('.order-arrows')) return;   /* let the buttons work */
+      dragEl = el;
+      el.classList.add('dragging');
+      el.setPointerCapture(e.pointerId);
+    });
+    el.addEventListener('pointermove', function(e){
+      if (!dragEl || orderLocked) return;
+      e.preventDefault();
+      dragEl.style.pointerEvents = 'none';
+      var under = document.elementFromPoint(e.clientX, e.clientY);
+      dragEl.style.pointerEvents = '';
+      var target = under && under.closest ? under.closest('.order-item') : null;
+      if (!target || target === dragEl || target.parentNode !== orderList) return;
+      var kids = Array.prototype.slice.call(orderList.children);
+      if (kids.indexOf(dragEl) < kids.indexOf(target)) orderList.insertBefore(dragEl, target.nextSibling);
+      else orderList.insertBefore(dragEl, target);
+      renumber();
+    });
+    var end = function(){ if (dragEl){ dragEl.classList.remove('dragging'); dragEl = null; } };
+    el.addEventListener('pointerup', end);
+    el.addEventListener('pointercancel', end);
+  });
+  renumber();
+}
+orderInit();
+
+/* ═══════════════════════════════════════════════════════
+   Q4 — MULTIPLE CHOICE
+═══════════════════════════════════════════════════════ */
+var mcqPick = null;
+function pickMcq(btn){
+  if (solved[4] || tries[4] >= 2 || btn.disabled) return;
+  document.querySelectorAll('#mcq4 .mcq-opt').forEach(function(b){ b.classList.remove('sel'); });
+  btn.classList.add('sel');
+  mcqPick = btn.dataset.opt;
+}
+function lockMcq(){
+  document.querySelectorAll('#mcq4 .mcq-opt').forEach(function(b){ b.disabled = true; });
+}
+
+/* ── Shared substring matcher ──────────────────────────
+   Plural-tolerant: a Standard 5 student writes "factories", not
+   "factory", and the accept lists match by substring — so raw
+   matching failed a correct answer (caught live, Aug 5 2026). We
+   search the typed text PLUS two naive singular forms, so a key
+   never has to list every plural of itself. */
+function matchKeys(val, keys, mode){
+  var hay = val + ' | ' + val.replace(/ies\b/g,'y') + ' | ' + val.replace(/s\b/g,'');
+  if (mode === 'all') return keys.every(function(k){ return hay.indexOf(k) !== -1; });
+  return keys.some(function(k){ return hay.indexOf(k) !== -1; });
+}
+
+/* ── One reader for four answer types ──────────────────
+   Returns {empty, ok} so checkQ() below is identical to 1A/1B/2A. */
+function readAnswer(id){
+  var d = Q[id];
+
+  if (d.type === 'order'){
+    var cur = Array.prototype.slice.call(orderList.querySelectorAll('.order-item'))
+                   .map(function(el){ return el.dataset.key; });
+    return { empty:false, ok: cur.join(',') === d.correct.join(',') };
+  }
+  if (d.type === 'mcq'){
+    if (!mcqPick) return { empty:true, msg:'Tap A, B or C first!' };
+    return { empty:false, ok: mcqPick === d.correct };
+  }
+  if (d.type === 'dual'){
+    var a = document.getElementById('q5a').value.trim().toLowerCase();
+    var b = document.getElementById('q5b').value.trim().toLowerCase();
+    if (!a || !b) return { empty:true, msg:'Fill in BOTH lines first!' };
+    return { empty:false, ok: matchKeys(a, d.keysA) && matchKeys(b, d.keysB) };
+  }
+  var v = document.getElementById('q'+id).value.trim().toLowerCase();
+  if (!v) return { empty:true, msg:'Type an answer first!' };
+  return { empty:false, ok: matchKeys(v, d.keys, d.mode) };
+}
+
+function updateScore(){
+  const n = Object.values(solved).filter(Boolean).length;
+  document.getElementById('scoreVal').textContent = n + ' / 5';
+}
+
+/* ── ONE checker for all five questions ────────────────────────
+   Attempt 1 → hint only. Attempt 2 → answer (or samples) revealed.
+   A correct answer on EITHER attempt earns the bean; after that the
+   question is settled and further Checks change nothing. */
+function checkQ(id){
+  const d  = Q[id];
+  const fb = document.getElementById('fb'+id);
+  const r  = readAnswer(id);
+
+  if (r.empty){ fb.className='feedback bad show'; fb.textContent = r.msg; return; }
+  if (solved[id] || tries[id] >= 2) return;      /* settled — no third bite */
+
+  tries[id]++;
+  puTouch(id);
+
+  if (r.ok){
+    solved[id] = true;
+    puEarn(id);
+    fb.className = 'feedback ok show';
+    fb.textContent = (tries[id] === 1 ? '✓ Correct! ' : '✓ Yes — good revision! ') + d.good + '.';
+    if (d.type === 'order') orderLocked = true;
+    if (d.type === 'mcq')   lockMcq();
+  }
+  else if (tries[id] === 1){
+    /* HINT ONLY — revealing the answer here would make attempt 2 free.
+       On the MCQ we also strike out the option just tried, so attempt 2
+       is a real decision between the remaining two, not a re-guess. */
+    if (d.type === 'mcq'){
+      const bad = document.querySelector('#mcq4 .mcq-opt[data-opt="'+mcqPick+'"]');
+      if (bad){ bad.disabled = true; bad.classList.remove('sel'); }
+      mcqPick = null;
+    }
+    fb.className = 'feedback bad show';
+    fb.textContent = '✗ Not quite — ' + d.hint;
+  }
+  else if (d.open){
+    fb.className = 'feedback open-reveal show';
+    fb.innerHTML = '<strong>Sample answer:</strong> ' + d.sample +
+      '<div class="fb-actions">' +
+      '<button class="fb-mini-btn yes" onclick="markOpen('+id+',true)">✅ Mine says the same thing</button>' +
+      '<button class="fb-mini-btn" onclick="markOpen('+id+',false)">\u{1F501} I will fix mine</button>' +
+      '</div>';
+  }
+  else {
+    fb.className = 'feedback bad show';
+    fb.textContent = '✗ The answer is: ' + d.reveal + '. Mr. EdLo will go over this one in class.';
+    if (d.type === 'order') orderLocked = true;
+    if (d.type === 'mcq')   lockMcq();
+  }
+
+  updateScore();
+  puMaybeSave();
+}
+
+/* ── Q4's one-line explanation ─────────────────────────
+   Checked and given real feedback, but deliberately pays NO bean and
+   does not move the Score. The bean for Q4 rides on the circled
+   choice; this line is for the Wednesday discussion. */
+var EXPLAIN4 = ['dissolv','cannot see','can not see','can\'t see','cant see','disappear',
+                'vanish','mix','evenly','even','clear','one liquid','single liquid',
+                'invisible','spread','solute','solvent','no layer','not see it'];
+function checkExplain4(){
+  const fb = document.getElementById('fb4x');
+  const v  = document.getElementById('q4x').value.trim().toLowerCase();
+  if (!v){ fb.className='feedback bad show'; fb.textContent='Write your explanation first!'; return; }
+  if (matchKeys(v, EXPLAIN4)){
+    fb.className = 'feedback ok show';
+    fb.textContent = '✓ That is the idea — in a solution the solute dissolves so completely that you cannot see it any more. (No bean for this line — bring it to the discussion.)';
+  } else {
+    fb.className = 'feedback open-reveal show';
+    fb.innerHTML = '<strong>Compare yours with this:</strong> "The salt dissolves completely, so the mixture looks like one clear liquid — you cannot see the salt any more."' +
+      '<div class="fb-actions">' +
+      '<button class="fb-mini-btn yes" onclick="markExplain4(true)">✅ Mine says the same thing</button>' +
+      '<button class="fb-mini-btn" onclick="markExplain4(false)">\u{1F501} I will fix mine</button>' +
+      '</div>';
+  }
+}
+function markExplain4(yes){
+  const fb = document.getElementById('fb4x');
+  fb.className = 'feedback open-reveal show';
+  fb.textContent = yes
+    ? '\u{1F44D} Good — keep that line and bring it to the class discussion.'
+    : '\u{1F501} Fix it on your sheet, then bring your new line to the class discussion.';
+}
+
+/* Reflection only. Deliberately awards NO bean and does NOT move the
+   Score: nothing can verify a student marking their own work, and the
+   sheet is discussed in class anyway. */
+function markOpen(id, yes){
+  const fb = document.getElementById('fb'+id);
+  fb.className = 'feedback open-reveal show';
+  fb.textContent = yes
+    ? '\u{1F44D} Good — keep that answer and bring it to the class discussion.'
+    : '\u{1F501} Fix it on your sheet, then bring your new answer to the class discussion.';
+}
+
+function resetWorksheet(){
+  ['q1','q2','q4x','q5a','q5b'].forEach(function(fid){
+    var el = document.getElementById(fid);
+    if (el) el.value = '';
+  });
+  [1,2,3,4,5].forEach(function(id){
+    var fb = document.getElementById('fb'+id);
+    fb.className = 'feedback' + (Q[id].open ? ' open-reveal' : '');
+    fb.innerHTML = '';
+    solved[id] = false;
+    tries[id]  = 0;
+  });
+  var fb4x = document.getElementById('fb4x');
+  fb4x.className = 'feedback'; fb4x.innerHTML = '';
+
+  /* Q3 back to the printed (scrambled) order */
+  orderLocked = false;
+  ['cool','rain','evap'].forEach(function(k){
+    orderList.appendChild(orderList.querySelector('.order-item[data-key="'+k+'"]'));
+  });
+  orderList.querySelectorAll('.order-item').forEach(function(el){ el.classList.remove('locked'); });
+  renumber();
+
+  /* Q4 choices live again */
+  mcqPick = null;
+  document.querySelectorAll('#mcq4 .mcq-opt').forEach(function(b){
+    b.disabled = false; b.classList.remove('sel');
+  });
+
+  updateScore();
+  /* Beans deliberately SURVIVE a reset: puBeans, puEarned and puSaved are
+     not cleared, so Start Over is a practice replay, never a second payout. */
+  if (puBeans > 0){
+    puNote('\u{1F331} Your ' + puBeans + ' bean' + (puBeans === 1 ? '' : 's')
+         + ' are already earned — this replay is just for practice.');
+  }
+}
+</script>
+</body>
+</html>

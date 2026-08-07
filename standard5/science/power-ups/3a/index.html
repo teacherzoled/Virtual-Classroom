@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Power-Up 3A — Mr. EdLo's Virtual Classroom</title>
+<link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<script src="/edlo-utils.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ═══════════════════════════════════════════
+     THEME VARIABLES (matches the Std5 Science hub)
+  ═══════════════════════════════════════════ */
+
+  :root, body.theme-night {
+    --bg:            #0d1f1a;
+    --body-color:    #ffffff;
+    --card-bg:       rgba(255,255,255,0.06);
+    --card-border:   rgba(255,255,255,0.09);
+    --card-border-h: rgba(32,201,151,0.40);
+    --card-shadow:   rgba(0,0,0,0.45);
+    --card-desc:     rgba(255,255,255,0.48);
+    --section-lbl:   rgba(255,255,255,0.32);
+    --subtitle-c:    rgba(255,255,255,0.52);
+    --header-name:   rgba(255,255,255,0.55);
+    --badge-bg:      rgba(32,201,151,0.12);
+    --badge-border:  rgba(32,201,151,0.22);
+    --badge-color:   rgba(32,201,151,0.85);
+    --top-badge-bg:  #20C997;
+    --top-badge-c:   #0d1f1a;
+    --h1-grad:       linear-gradient(135deg,#fff 0%,#20C997 55%,#69DB7C 100%);
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.50) 100%);
+    --footer-border: rgba(255,255,255,0.07);
+    --footer-name:   rgba(255,255,255,0.38);
+    --footer-tag:    rgba(255,255,255,0.43);
+    --footer-copy:   rgba(255,255,255,0.18);
+    --back-top-bg:   #20C997;
+    --back-top-c:    #0d1f1a;
+    --back-color:    rgba(255,255,255,0.38);
+    --back-hover:    #20C997;
+    --radial1:       rgba(32,201,151,0.12);
+    --radial2:       rgba(105,219,124,0.08);
+    --star-show:     1;
+    --input-bg:      rgba(255,255,255,0.05);
+    --ok-bg:         rgba(105,219,124,0.14);
+    --ok-border:     rgba(105,219,124,0.40);
+    --ok-color:      #69DB7C;
+    --bad-bg:        rgba(255,107,107,0.14);
+    --bad-border:    rgba(255,107,107,0.42);
+    --bad-color:     #FF6B6B;
+    --grad-bar:      linear-gradient(90deg,#20C997,#69DB7C,#4DABF7,#9775FA);
+    --pu-b1: #1c3d8f; --pu-b2: #0b1f52; --pu-b3: #071438;
+  }
+
+  body.theme-sunny {
+    --bg:            #fffbea;
+    --body-color:    #2d2000;
+    --card-bg:       rgba(255,255,255,0.75);
+    --card-border:   rgba(200,150,0,0.18);
+    --card-border-h: rgba(200,120,0,0.45);
+    --card-shadow:   rgba(180,100,0,0.18);
+    --card-desc:     rgba(80,50,0,0.55);
+    --section-lbl:   rgba(120,80,0,0.50);
+    --subtitle-c:    rgba(100,60,0,0.65);
+    --header-name:   #b35c00;
+    --badge-bg:      rgba(255,180,0,0.15);
+    --badge-border:  rgba(255,160,0,0.30);
+    --badge-color:   #8a4800;
+    --top-badge-bg:  #FF922B;
+    --top-badge-c:   #fff;
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(255,200,50,0.18) 100%);
+    --footer-border: rgba(200,150,0,0.20);
+    --footer-name:   rgba(100,60,0,0.50);
+    --footer-tag:    rgba(100,60,0,0.55);
+    --footer-copy:   rgba(100,60,0,0.30);
+    --back-top-bg:   #FF922B;
+    --back-top-c:    #fff;
+    --back-color:    rgba(120,80,0,0.55);
+    --back-hover:    #b35c00;
+    --radial1:       rgba(255,220,80,0.25);
+    --radial2:       rgba(255,160,30,0.18);
+    --star-show:     0;
+    --input-bg:      rgba(45,32,0,0.05);
+    --ok-bg:         rgba(46,125,26,0.12);
+    --ok-border:     rgba(46,125,26,0.35);
+    --ok-color:      #2e7d1a;
+    --bad-bg:        rgba(198,40,40,0.10);
+    --bad-border:    rgba(198,40,40,0.32);
+    --bad-color:     #c62828;
+    --grad-bar:      linear-gradient(90deg,#FF922B,#f5a623,#0077cc,#7a3abf);
+    --pu-b1: #b35c00; --pu-b2: #7a3e00; --pu-b3: #3d1f00;
+  }
+
+  body.theme-cloudy {
+    --bg:            #e8edf2;
+    --body-color:    #1c2533;
+    --card-bg:       rgba(255,255,255,0.72);
+    --card-border:   rgba(100,130,160,0.18);
+    --card-border-h: rgba(80,110,150,0.40);
+    --card-shadow:   rgba(50,80,120,0.15);
+    --card-desc:     rgba(40,60,90,0.55);
+    --section-lbl:   rgba(60,90,130,0.50);
+    --subtitle-c:    rgba(40,65,100,0.65);
+    --header-name:   #2c5282;
+    --badge-bg:      rgba(100,140,200,0.12);
+    --badge-border:  rgba(80,120,180,0.25);
+    --badge-color:   #2c5282;
+    --top-badge-bg:  #4A90D9;
+    --top-badge-c:   #fff;
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(100,140,200,0.15) 100%);
+    --footer-border: rgba(80,120,180,0.18);
+    --footer-name:   rgba(30,60,100,0.50);
+    --footer-tag:    rgba(30,60,100,0.55);
+    --footer-copy:   rgba(30,60,100,0.30);
+    --back-top-bg:   #4A90D9;
+    --back-top-c:    #fff;
+    --back-color:    rgba(60,90,130,0.55);
+    --back-hover:    #2c5282;
+    --radial1:       rgba(150,190,240,0.30);
+    --radial2:       rgba(100,140,200,0.20);
+    --star-show:     0;
+    --input-bg:      rgba(28,37,51,0.05);
+    --ok-bg:         rgba(46,125,26,0.12);
+    --ok-border:     rgba(46,125,26,0.35);
+    --ok-color:      #2e7d1a;
+    --bad-bg:        rgba(198,40,40,0.10);
+    --bad-border:    rgba(198,40,40,0.32);
+    --bad-color:     #c62828;
+    --grad-bar:      linear-gradient(90deg,#4A90D9,#4299e1,#0d9488,#7c3aed);
+    --pu-b1: #1a365d; --pu-b2: #122540; --pu-b3: #081526;
+  }
+
+  body.theme-nature {
+    --bg:            #f0f7ee;
+    --body-color:    #1a2e10;
+    --card-bg:       rgba(255,255,255,0.72);
+    --card-border:   rgba(60,120,40,0.18);
+    --card-border-h: rgba(40,100,20,0.40);
+    --card-shadow:   rgba(20,80,10,0.15);
+    --card-desc:     rgba(30,70,15,0.55);
+    --section-lbl:   rgba(40,90,20,0.50);
+    --subtitle-c:    rgba(30,75,15,0.65);
+    --header-name:   #276221;
+    --badge-bg:      rgba(60,140,30,0.12);
+    --badge-border:  rgba(50,120,20,0.28);
+    --badge-color:   #276221;
+    --top-badge-bg:  #4CAF50;
+    --top-badge-c:   #fff;
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(60,140,30,0.12) 100%);
+    --footer-border: rgba(50,120,20,0.18);
+    --footer-name:   rgba(20,70,10,0.50);
+    --footer-tag:    rgba(20,70,10,0.55);
+    --footer-copy:   rgba(20,70,10,0.30);
+    --back-top-bg:   #4CAF50;
+    --back-top-c:    #fff;
+    --back-color:    rgba(40,90,20,0.55);
+    --back-hover:    #276221;
+    --radial1:       rgba(100,200,60,0.22);
+    --radial2:       rgba(60,160,30,0.16);
+    --star-show:     0;
+    --input-bg:      rgba(26,46,16,0.05);
+    --ok-bg:         rgba(46,125,26,0.12);
+    --ok-border:     rgba(46,125,26,0.35);
+    --ok-color:      #2e7d1a;
+    --bad-bg:        rgba(198,40,40,0.10);
+    --bad-border:    rgba(198,40,40,0.32);
+    --bad-color:     #c62828;
+    --grad-bar:      linear-gradient(90deg,#4CAF50,#66bb44,#1565c0,#4a148c);
+    --pu-b1: #1b4d0f; --pu-b2: #12330a; --pu-b3: #081a05;
+  }
+
+  /* ═══════════════════════════════════════════
+     BASE
+  ═══════════════════════════════════════════ */
+  html { overflow-x: hidden; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--body-color);
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.5s ease, color 0.5s ease;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, var(--radial1) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, var(--radial2) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+    transition: background 0.5s ease;
+  }
+  .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; opacity: var(--star-show,1); transition: opacity 0.5s ease; }
+  .star  { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--d,3s) ease-in-out infinite var(--delay,0s); opacity: 0; }
+  @keyframes twinkle { 0%,100% { opacity:0; transform:scale(1); } 50% { opacity:var(--op,0.5); transform:scale(1.3); } }
+
+  .wrapper { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 0 max(1rem, 4vw) 2rem; flex: 1; }
+
+  /* Theme bar */
+  .theme-bar { position: relative; z-index: 10; display: flex; justify-content: center; gap: 0.5rem; padding: 0.55rem 1rem; background: rgba(0,0,0,0.22); border-bottom: 1px solid rgba(0,0,0,0.12); flex-wrap: wrap; }
+  body.theme-sunny .theme-bar, body.theme-cloudy .theme-bar, body.theme-nature .theme-bar { background: rgba(0,0,0,0.05); }
+  .theme-btn { font-family: 'Fredoka One', cursive; font-size: 0.85rem; padding: 5px 18px; border-radius: 999px; border: 2px solid transparent; background: rgba(128,128,128,0.12); color: var(--body-color); cursor: pointer; opacity: 0.6; transition: all 0.22s ease; }
+  .theme-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .theme-btn.active { opacity:1; background:var(--top-badge-bg); color:var(--top-badge-c); box-shadow:0 3px 12px rgba(0,0,0,.20); }
+
+  .site-header { display:flex; align-items:center; justify-content:space-between; padding:1.2rem 0 0; animation:fadeDown 0.6s ease both; }
+  .site-header-logo { display:flex; align-items:center; gap:.75rem; text-decoration:none; }
+  .site-header-logo img { height:48px; width:auto; border-radius:10px; box-shadow:0 4px 14px rgba(0,0,0,.25); }
+  .site-header-logo span { font-family:'Fredoka One',cursive; font-size:1.15rem; color:var(--header-name); letter-spacing:.02em; transition:color .4s; }
+  .header-badge { display:inline-block; background:var(--badge-bg); border:1px solid var(--badge-border); color:var(--badge-color); font-size:.72rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:5px 14px; border-radius:999px; transition:all .4s; }
+
+  .back-link { display:inline-flex; align-items:center; gap:6px; margin-top:1.4rem; font-size:.8rem; font-weight:700; color:var(--back-color); text-decoration:none; transition:color .2s; letter-spacing:.04em; }
+  .back-link:hover { color:var(--back-hover); }
+
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-24px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes riseUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ═══════════════════════════════════════════
+     POWER-UP BANNER (series branding — stays
+     consistent across all Power-Up worksheets,
+     like the printed sheet's fixed logo band)
+  ═══════════════════════════════════════════ */
+  .pu-banner {
+    position: relative; overflow: hidden;
+    margin-top: 1.4rem; border-radius: 20px;
+    background: radial-gradient(ellipse at 15% 20%, var(--pu-b1) 0%, var(--pu-b2) 55%, var(--pu-b3) 100%);
+    padding: 1.4rem 1.6rem;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+    box-shadow: 0 14px 40px rgba(5,10,40,.35);
+    animation: riseUp .6s ease both;
+    transition: background 0.5s ease;
+  }
+  .pu-banner .pu-star { position:absolute; border-radius:50%; background:#FFD43B; animation: twinkle 2.6s ease-in-out infinite; }
+  .pu-logo { font-family:'Fredoka One',cursive; line-height:.95; transform: rotate(-3deg); flex-shrink:0; }
+  .pu-logo .l1 { font-size: clamp(1.6rem,4.2vw,2.3rem); color:#FFD43B; -webkit-text-stroke: 2px #071438; letter-spacing:.02em; display:block; }
+  .pu-logo .l2 { font-size: clamp(2.1rem,5.6vw,3rem); color:#fff; -webkit-text-stroke: 2px #071438; display:block; margin-top:.1rem; }
+  .pu-pills { display:flex; gap:.6rem; flex-wrap:wrap; }
+  .pu-pill { display:flex; align-items:center; gap:7px; background:rgba(255,255,255,0.92); color:#0b1f52; font-weight:800; font-size:.72rem; letter-spacing:.03em; padding:8px 14px; border-radius:999px; white-space:nowrap; }
+  .pu-pill svg { width:16px; height:16px; flex-shrink:0; }
+  .pu-rocket { width:46px; height:46px; flex-shrink:0; }
+
+  /* Instructions banner */
+  .pu-instructions { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin:1.1rem 0; padding:1rem 1.2rem; background:var(--card-bg); border:1.5px solid var(--card-border); border-radius:16px; animation:riseUp .5s ease .05s both; }
+  .pu-instructions .ii-text { display:flex; gap:.8rem; align-items:flex-start; }
+  .pu-instructions .ii-icon { font-size:1.6rem; flex-shrink:0; }
+  .pu-instructions h2 { font-family:'Fredoka One',cursive; font-size:.95rem; color:var(--header-name); margin-bottom:.2rem; }
+  .pu-instructions p { font-size:.8rem; color:var(--card-desc); font-weight:600; line-height:1.5; }
+  .audio-btn { font-family:'Fredoka One',cursive; font-size:.78rem; padding:8px 16px; border-radius:999px; border:none; background:var(--top-badge-bg); color:var(--top-badge-c); cursor:pointer; white-space:nowrap; transition:transform .15s, filter .15s; flex-shrink:0; }
+  .audio-btn:hover { filter:brightness(1.08); transform:translateY(-1px); }
+  .audio-btn-mini { font-family:'Nunito',sans-serif; font-size:.72rem; font-weight:800; padding:0; border:none; background:none; color:var(--section-lbl); cursor:pointer; display:inline-flex; align-items:center; gap:4px; margin-top:.3rem; transition:color .2s; }
+  .audio-btn-mini:hover { color:var(--top-badge-bg); }
+
+  /* Info bar: name / group / score */
+  .pu-info { display:flex; flex-wrap:wrap; align-items:center; gap:1rem 1.6rem; margin:1.1rem 0; padding: .9rem 1.1rem; background:var(--card-bg); border:1.5px solid var(--card-border); border-radius:16px; animation:riseUp .5s ease .1s both; }
+  .pu-field { display:flex; align-items:center; gap:.5rem; font-size:.82rem; font-weight:800; color:var(--subtitle-c); }
+  .pu-field input { font-family:'Nunito',sans-serif; font-weight:700; font-size:.85rem; color:var(--body-color); background:var(--input-bg); border:none; border-bottom:2px solid var(--card-border); padding:3px 4px; min-width:120px; }
+  .pu-field input:focus { outline:none; border-color:var(--top-badge-bg); }
+  .pu-score { margin-left:auto; display:flex; align-items:center; gap:.5rem; font-family:'Fredoka One',cursive; font-size:1rem; color:var(--header-name); }
+  .pu-score span { background:var(--top-badge-bg); color:var(--top-badge-c); padding:3px 12px; border-radius:999px; font-size:.95rem; }
+
+  /* Bean bar (see the LIFT-OUT BLOCK in the script) */
+  .pu-beanbar { display:flex; flex-wrap:wrap; align-items:center; gap:.6rem 1rem; margin:0 0 1.1rem; padding:.75rem 1.1rem; background:var(--card-bg); border:1.5px solid var(--card-border); border-radius:16px; animation:riseUp .5s ease .15s both; }
+  .pu-bean { font-family:'Fredoka One',cursive; font-size:.95rem; background:var(--badge-bg); border:1.5px solid var(--badge-border); color:var(--badge-color); padding:5px 14px; border-radius:999px; white-space:nowrap; }
+  .pu-hint { font-size:.78rem; font-weight:700; color:var(--card-desc); }
+  .pu-rule { font-size:.72rem; font-weight:800; letter-spacing:.03em; text-transform:uppercase; color:var(--section-lbl); }
+  .pu-hint a { color:var(--top-badge-bg); font-weight:800; }
+  .pu-note { display:none; width:100%; font-size:.8rem; font-weight:800; line-height:1.5; color:var(--ok-color); background:var(--ok-bg); border:1.5px solid var(--ok-border); border-radius:10px; padding:.55rem .75rem; }
+  .save-btn { font-family:'Fredoka One',cursive; font-size:.85rem; padding:9px 22px; border-radius:999px; border:none; background:var(--top-badge-bg); color:var(--top-badge-c); cursor:pointer; transition:filter .2s, transform .2s; }
+  .save-btn:hover:not(:disabled) { filter:brightness(1.08); transform:translateY(-1px); }
+  .save-btn:disabled { opacity:.45; cursor:not-allowed; }
+  .pu-controls .save-btn, .pu-controls .reset-btn { min-height:44px; }
+
+  /* Question rows */
+  .qrow { display:flex; align-items:stretch; border-radius:18px; overflow:hidden; border:1.5px solid var(--card-border); background:var(--card-bg); margin-bottom:1rem; animation:riseUp .5s ease both; transition:border-color .2s, box-shadow .2s; }
+  .qrow:hover { border-color:var(--card-border-h); box-shadow:0 8px 26px var(--card-shadow); }
+  .qnum-col { flex:0 0 58px; display:flex; align-items:center; justify-content:center; font-family:'Fredoka One',cursive; font-size:1.9rem; background:var(--rowtint); color:var(--rownum); }
+  .qbody { flex:1; min-width:0; display:flex; }
+  .qmain { flex:1 1 460px; min-width:0; padding:1.2rem 1.5rem; display:flex; flex-direction:column; gap:.6rem; }
+  .qtext { font-weight:800; font-size:1.08rem; line-height:1.45; }
+  .qanswer-row { display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; }
+  .ans-input { flex:1; min-width:160px; padding:8px 12px; border-radius:10px; border:1.5px solid var(--card-border); background:var(--input-bg); color:var(--body-color); font-family:'Nunito',sans-serif; font-weight:700; font-size:.88rem; }
+  .ans-input:focus { outline:none; border-color:var(--top-badge-bg); }
+  .check-btn { font-family:'Fredoka One',cursive; font-size:.82rem; padding:8px 16px; border-radius:999px; border:none; background:var(--top-badge-bg); color:var(--top-badge-c); cursor:pointer; transition:transform .15s, filter .15s; white-space:nowrap; }
+  .check-btn:hover { filter:brightness(1.08); transform:translateY(-1px); }
+  .feedback { display:none; font-size:.82rem; font-weight:700; line-height:1.5; padding:.6rem .8rem; border-radius:10px; }
+  .feedback.show { display:block; animation:riseUp .3s ease both; }
+  .feedback.ok  { background:var(--ok-bg);  border:1.5px solid var(--ok-border);  color:var(--ok-color); }
+  .feedback.bad { background:var(--bad-bg); border:1.5px solid var(--bad-border); color:var(--bad-color); }
+  .feedback.open-reveal { background:var(--input-bg); border:1.5px dashed var(--card-border-h); color:var(--card-desc); }
+  .feedback .fb-actions { display:flex; gap:.5rem; margin-top:.5rem; flex-wrap:wrap; }
+  .fb-mini-btn { font-family:'Fredoka One',cursive; font-size:.72rem; padding:5px 12px; border-radius:999px; border:1.5px solid var(--card-border-h); background:transparent; color:var(--body-color); cursor:pointer; }
+  .fb-mini-btn.yes { background:var(--top-badge-bg); border-color:var(--top-badge-bg); color:var(--top-badge-c); }
+
+  .illus-col { flex:0 1 400px; display:flex; align-items:center; justify-content:center; padding:1rem 1.4rem; }
+  .illus-col svg { width:100%; height:auto; max-width:560px; display:block; }
+  .illus-col img { width:100%; height:auto; max-width:400px; display:block; border-radius:14px;
+                   box-shadow:0 6px 20px var(--card-shadow); }
+  body.theme-night .illus-col img { filter:brightness(.92) saturate(.96); }
+
+  .qrow[data-tint="blue"]   { --rowtint: rgba(59,130,246,.14);  --rownum:#2563eb; }
+  .qrow[data-tint="purple"] { --rowtint: rgba(168,85,247,.14);  --rownum:#7e22ce; }
+  .qrow[data-tint="orange"] { --rowtint: rgba(249,115,22,.16);  --rownum:#c2410c; }
+  .qrow[data-tint="green"]  { --rowtint: rgba(34,197,94,.16);   --rownum:#15803d; }
+  .qrow[data-tint="pink"]   { --rowtint: rgba(244,114,182,.16); --rownum:#be185d; }
+  .qrow[data-tint="teal"]   { --rowtint: rgba(20,184,166,.16);  --rownum:#0f766e; }
+
+    /* Sub-labelled fields (the two-part answers, Q1 and Q5) */
+  .subfield { display:flex; flex-direction:column; gap:.25rem; }
+  .subfield > span { font-size:.72rem; font-weight:800; text-transform:uppercase; letter-spacing:.04em; color:var(--section-lbl); }
+  .subgroup { display:flex; flex-direction:column; gap:.5rem; padding:.7rem .8rem; border-radius:12px; border:1.5px dashed var(--card-border); background:var(--input-bg); }
+
+  /* Footer strip */
+  .pu-tagline { display:flex; align-items:center; justify-content:center; gap:.8rem; flex-wrap:wrap; text-align:center; background:var(--card-bg); border:1.5px solid var(--card-border); border-radius:16px; padding:1rem 1.2rem; margin:1.4rem 0; animation:riseUp .5s ease both; }
+  .pu-tagline .tl-icon { flex-shrink:0; width:30px; height:30px; }
+  .pu-tagline p { font-size:.85rem; font-weight:800; color:var(--header-name); }
+  .pu-tagline .tl-sub { color:var(--section-lbl); font-weight:700; text-transform:uppercase; letter-spacing:.06em; font-size:.7rem; }
+
+  .pu-controls { display:flex; justify-content:center; gap:.8rem; flex-wrap:wrap; margin-bottom:1.6rem; }
+  .reset-btn { font-family:'Fredoka One',cursive; font-size:.85rem; padding:9px 22px; border-radius:999px; border:2px solid var(--card-border-h); background:transparent; color:var(--body-color); cursor:pointer; transition:all .2s; }
+  .reset-btn:hover { background:var(--card-bg); }
+
+  /* Footer */
+  .site-footer { position:relative; z-index:1; background:var(--footer-bg); border-top:1px solid var(--footer-border); padding:2rem max(1rem, 4vw); margin-top:1.5rem; display:flex; flex-direction:column; align-items:center; gap:.5rem; transition:background .4s,border-color .4s; }
+  .site-footer::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--grad-bar); }
+  .footer-logo { display:flex; align-items:center; gap:.6rem; margin-bottom:.4rem; }
+  .footer-logo img { height:36px; width:auto; border-radius:8px; opacity:.75; }
+  .footer-logo span { font-family:'Fredoka One',cursive; font-size:1rem; color:var(--footer-name); transition:color .4s; }
+  .footer-tagline { font-size:.82rem; font-weight:700; color:var(--footer-tag); letter-spacing:.03em; font-style:italic; transition:color .4s; text-align:center; }
+  .footer-copy { font-size:.72rem; color:var(--footer-copy); font-weight:600; letter-spacing:.04em; margin-top:.2rem; transition:color .4s; text-align:center; }
+
+  #back-to-top { display:none; position:fixed; bottom:1.5rem; right:1.5rem; z-index:99; background:var(--back-top-bg); color:var(--back-top-c); border:none; border-radius:12px; width:42px; height:42px; font-size:1.2rem; font-weight:900; cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,.25); transition:background .2s,transform .2s,color .4s; align-items:center; justify-content:center; }
+  #back-to-top:hover { transform:translateY(-3px); filter:brightness(1.1); }
+
+  @media (max-width:640px) {
+    .wrapper { padding:0 1rem 2rem; }
+    .site-footer { padding:1.5rem 1rem; }
+    .site-header { flex-direction:column; align-items:flex-start; gap:.5rem; }
+    .qbody { flex-direction:column; }
+    .qmain { flex:0 0 auto; }
+    .illus-col { flex:0 0 auto; padding-top:0; }
+    .pu-banner { flex-direction:column; align-items:flex-start; }
+    .pu-score { margin-left:0; }
+    .pu-instructions { flex-direction:column; align-items:stretch; }
+  }
+</style>
+</head>
+<body class="theme-night">
+
+<div class="stars" id="stars"></div>
+
+<div class="theme-bar">
+  <button class="theme-btn active" onclick="setTheme('night',this)">🌙 Night</button>
+  <button class="theme-btn" onclick="setTheme('sunny',this)">☀️ Sunny</button>
+  <button class="theme-btn" onclick="setTheme('cloudy',this)">☁️ Cloudy</button>
+  <button class="theme-btn" onclick="setTheme('nature',this)">🌿 Nature</button>
+</div>
+
+<div class="wrapper">
+
+  <div class="site-header">
+    <a class="site-header-logo" href="/standard5/">
+      <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+      <span>Mr. EdLo's Virtual Classroom</span>
+    </a>
+    <span class="header-badge">Standard 5 &nbsp;·&nbsp; Belize</span>
+  </div>
+
+  <a class="back-link" href="/standard5/science/#powerups">← Back to Science · Power-Ups</a>
+
+  <!-- ══════════════════════════════
+       BANNER
+  ══════════════════════════════ -->
+  <div class="pu-banner">
+    <div class="pu-logo">
+      <span class="l1">⚡ POWER-UP</span>
+      <span class="l2">3A</span>
+    </div>
+    <div class="pu-pills">
+      <span class="pu-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0b1f52" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 L12 4 L20 11"/><path d="M6 10 V20 H18 V10"/></svg>
+        Goes Home: Monday
+      </span>
+      <span class="pu-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0b1f52" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5 H20 V16 H9 L5 19 V16 H4 Z"/><circle cx="9" cy="10.5" r="1" fill="#0b1f52" stroke="none"/><circle cx="12" cy="10.5" r="1" fill="#0b1f52" stroke="none"/><circle cx="15" cy="10.5" r="1" fill="#0b1f52" stroke="none"/></svg>
+        Discuss: Wednesday
+      </span>
+    </div>
+    <svg class="pu-rocket" viewBox="0 0 48 48">
+      <path d="M24 4 C30 10 32 20 30 30 L18 30 C16 20 18 10 24 4 Z" fill="#F1F5F9"/>
+      <path d="M24 4 C30 10 32 20 30 30 L24 30 Z" fill="#CBD5E1"/>
+      <circle cx="24" cy="18" r="4" fill="#4DABF7"/>
+      <path d="M18 26 L10 36 L18 32 Z" fill="#FF922B"/>
+      <path d="M30 26 L38 36 L30 32 Z" fill="#FF922B"/>
+      <path d="M20 30 L24 42 L28 30 Z" fill="#FFD43B"/>
+      <path d="M22 33 L24 40 L26 33 Z" fill="#FF6B6B"/>
+    </svg>
+    <div class="pu-star" style="width:5px;height:5px;top:14%;left:38%;--op:.9;"></div>
+    <div class="pu-star" style="width:3px;height:3px;top:60%;left:44%;--op:.7;animation-delay:-1s;"></div>
+    <div class="pu-star" style="width:4px;height:4px;top:78%;left:8%;--op:.8;animation-delay:-.6s;"></div>
+    <div class="pu-star" style="width:3px;height:3px;top:20%;left:70%;--op:.6;animation-delay:-1.4s;"></div>
+  </div>
+
+  <!-- ══════════════════════════════
+       INSTRUCTIONS
+  ══════════════════════════════ -->
+  <div class="pu-instructions">
+    <div class="ii-text">
+      <div class="ii-icon">📋</div>
+      <div>
+        <h2>Instructions</h2>
+        <p>Read each question carefully and fill in your answer based on what you have learned. Tap the speaker button to hear it read aloud!</p>
+      </div>
+    </div>
+    <button class="audio-btn" onclick="readInstructionsAudio()">🔊 Read Instructions</button>
+  </div>
+
+  <!-- ══════════════════════════════
+       NAME / GROUP / SCORE
+  ══════════════════════════════ -->
+  <div class="pu-info">
+    <label class="pu-field">Name: <input type="text" id="stuName" placeholder="type your name"></label>
+    <label class="pu-field">Group: <input type="text" id="stuGroup" placeholder="your group" style="min-width:70px;"></label>
+    <div class="pu-score">Score: <span id="scoreVal">0 / 5</span></div>
+  </div>
+
+  <div class="pu-beanbar">
+    <span class="pu-bean" id="beanPill">🌱 0 beans</span>
+    <span class="pu-rule">1 🌱 per correct answer · two tries each</span>
+    <span class="pu-hint" id="loginHint"><a href="/login/">Log in</a> to save your beans 🌱 to your account.</span>
+    <span class="pu-note" id="beanNote"></span>
+  </div>
+
+  <!-- ══════════════════════════════
+       Q1
+  ══════════════════════════════ -->
+  <div class="qrow" data-tint="green">
+    <div class="qnum-col">1</div>
+    <div class="qbody">
+      <div class="qmain">
+        <div>
+          <div class="qtext">What is the difference between weather and climate?</div>
+          <button class="audio-btn-mini" onclick="readQuestionAudio(1)">🔊 Read Aloud</button>
+        </div>
+        <div class="subgroup">
+          <label class="subfield">
+            <span>Weather is…</span>
+            <input class="ans-input" id="q1a" type="text" placeholder="type your answer…">
+          </label>
+          <label class="subfield">
+            <span>Climate is…</span>
+            <input class="ans-input" id="q1b" type="text" placeholder="type your answer…">
+          </label>
+        </div>
+        <div class="qanswer-row">
+          <button class="check-btn" onclick="checkQ(1)">Check</button>
+        </div>
+        <div class="feedback open-reveal" id="fb1"></div>
+      </div>
+      <div class="illus-col">
+        <img src="img/q1.webp" width="1200" height="675" loading="lazy" decoding="async"
+             alt="A Belizean street of colourful wooden houses raised on stilts. Bright sunshine and blue sky overhead, while far out over the sea a grey curtain of rain is falling.">
+      </div>
+    </div>
+  </div>
+  <!-- ══════════════════════════════
+       Q2
+  ══════════════════════════════ -->
+  <div class="qrow" data-tint="blue">
+    <div class="qnum-col">2</div>
+    <div class="qbody">
+      <div class="qmain">
+        <div>
+          <div class="qtext">Name ONE Belizean industry that climate change can damage.</div>
+          <button class="audio-btn-mini" onclick="readQuestionAudio(2)">🔊 Read Aloud</button>
+        </div>
+        <div class="qanswer-row" style="margin-bottom:-.2rem;">
+          <input class="ans-input" id="q2" type="text" placeholder="type your answer…">
+        </div>
+        <div class="qanswer-row">
+          <button class="check-btn" onclick="checkQ(2)">Check</button>
+        </div>
+        <div class="feedback" id="fb2"></div>
+      </div>
+      <div class="illus-col">
+        <img src="img/q2.webp" width="1200" height="675" loading="lazy" decoding="async"
+             alt="Belizean pine savanna at the end of a long dry season: pale clay soil broken into wide cracks, scorched straw-coloured grass and palmetto, tall Caribbean pines, and a creek shrunk to grey mud and stones under a hot sun.">
+      </div>
+    </div>
+  </div>
+  <!-- ══════════════════════════════
+       Q3
+  ══════════════════════════════ -->
+  <div class="qrow" data-tint="purple">
+    <div class="qnum-col">3</div>
+    <div class="qbody">
+      <div class="qmain">
+        <div>
+          <div class="qtext">Name the step where water turns from gas back to liquid.</div>
+          <button class="audio-btn-mini" onclick="readQuestionAudio(3)">🔊 Read Aloud</button>
+        </div>
+        <div class="qanswer-row" style="margin-bottom:-.2rem;">
+          <input class="ans-input" id="q3" type="text" placeholder="type your answer…">
+        </div>
+        <div class="qanswer-row">
+          <button class="check-btn" onclick="checkQ(3)">Check</button>
+        </div>
+        <div class="feedback" id="fb3"></div>
+      </div>
+      <div class="illus-col">
+        <img src="img/q3.webp" width="1200" height="675" loading="lazy" decoding="async"
+             alt="A very cold bottle of water on a wooden table, the outside of the glass covered in beads of water running down it, with a green tropical garden behind.">
+      </div>
+    </div>
+  </div>
+  <!-- ══════════════════════════════
+       Q4
+  ══════════════════════════════ -->
+  <div class="qrow" data-tint="orange">
+    <div class="qnum-col">4</div>
+    <div class="qbody">
+      <div class="qmain">
+        <div>
+          <div class="qtext">Which method separates sand from water?</div>
+          <button class="audio-btn-mini" onclick="readQuestionAudio(4)">🔊 Read Aloud</button>
+        </div>
+        <div class="qanswer-row" style="margin-bottom:-.2rem;">
+          <input class="ans-input" id="q4" type="text" placeholder="type your answer…">
+        </div>
+        <div class="qanswer-row">
+          <button class="check-btn" onclick="checkQ(4)">Check</button>
+        </div>
+        <div class="feedback" id="fb4"></div>
+      </div>
+      <div class="illus-col">
+        <img src="img/q4.webp" width="1200" height="675" loading="lazy" decoding="async"
+             alt="Cloudy sandy water being poured through filter paper in a funnel. The sand stays on the paper and clear water drips into a jar below, while two students watch.">
+      </div>
+    </div>
+  </div>
+  <!-- ══════════════════════════════
+       Q5
+  ══════════════════════════════ -->
+  <div class="qrow" data-tint="teal">
+    <div class="qnum-col">5</div>
+    <div class="qbody">
+      <div class="qmain">
+        <div>
+          <div class="qtext">Name ONE tool a scientist uses to measure, and what it measures.</div>
+          <button class="audio-btn-mini" onclick="readQuestionAudio(5)">🔊 Read Aloud</button>
+        </div>
+        <div class="subgroup">
+          <label class="subfield">
+            <span>The tool is…</span>
+            <input class="ans-input" id="q5a" type="text" placeholder="type your answer…">
+          </label>
+          <label class="subfield">
+            <span>It measures…</span>
+            <input class="ans-input" id="q5b" type="text" placeholder="type your answer…">
+          </label>
+        </div>
+        <div class="qanswer-row">
+          <button class="check-btn" onclick="checkQ(5)">Check</button>
+        </div>
+        <div class="feedback open-reveal" id="fb5"></div>
+      </div>
+      <div class="illus-col">
+        <img src="img/q5.webp" width="1200" height="675" loading="lazy" decoding="async"
+             alt="Measuring instruments laid out on a wooden table: a thermometer, a measuring cylinder of blue liquid, a ruler, a balance scale with weights, a stopwatch and a rain gauge.">
+      </div>
+    </div>
+  </div>
+
+  <div class="pu-controls">
+    <button class="save-btn" id="saveBtn" onclick="puSave()" disabled>🌱 Finish &amp; Save My Beans</button>
+    <button class="reset-btn" onclick="resetWorksheet()">🔄 Start Over</button>
+  </div>
+
+  <div class="pu-tagline">
+    <svg class="tl-icon" viewBox="0 0 24 24" fill="none" stroke="#FFD43B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21 H16 M12 17 V21 M7 4 H17 V10 A5 5 0 0 1 7 10 Z"/><path d="M7 5 H4 V7 A4 4 0 0 0 7 10 M17 5 H20 V7 A4 4 0 0 1 17 10"/></svg>
+    <div>
+      <p>Measure it. Watch it. Question it!</p>
+      <p class="tl-sub">Think · Learn · Share · Make a Difference</p>
+    </div>
+  </div>
+
+</div><!-- /wrapper -->
+
+<footer class="site-footer">
+  <div class="footer-logo">
+    <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+    <span>Mr. EdLo's Virtual Classroom</span>
+  </div>
+  <p class="footer-tagline">Explore, discover, and learn something new every day!</p>
+  <p class="footer-copy">© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize · All rights reserved.</p>
+</footer>
+
+<button id="back-to-top" title="Back to top" aria-label="Back to top">↑</button>
+
+<script>
+/* Stars */
+const sc = document.getElementById('stars');
+for (let i = 0; i < 60; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const sz = Math.random()*2.5+1;
+  s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*4+2).toFixed(1)}s;--delay:-${(Math.random()*6).toFixed(1)}s;--op:${(Math.random()*0.4+0.15).toFixed(2)};`;
+  sc.appendChild(s);
+}
+
+/* Theme */
+const THEMES = ['night','sunny','cloudy','nature'];
+function setTheme(theme, btn) {
+  THEMES.forEach(t=>document.body.classList.remove('theme-'+t));
+  document.body.classList.add('theme-'+theme);
+  document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  localStorage.setItem('vc-theme',theme);
+}
+(function(){
+  const saved=localStorage.getItem('vc-theme');
+  if(saved&&THEMES.includes(saved)){
+    THEMES.forEach(t=>document.body.classList.remove('theme-'+t));
+    document.body.classList.add('theme-'+saved);
+    document.querySelectorAll('.theme-btn').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase().includes(saved)));
+  }
+})();
+
+/* Back to top */
+const topBtn=document.getElementById('back-to-top');
+window.addEventListener('scroll',()=>{ topBtn.style.display=window.scrollY>300?'flex':'none'; });
+topBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+/* ── Text-to-speech (native, no dependency) ───────────────────── */
+function speakText(text){
+  if (!('speechSynthesis' in window)) { alert('Text-to-speech is not supported in your browser.'); return; }
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text.replace(/\bONE\b/g,'one'));
+  utter.rate = 0.95; utter.pitch = 1.0;
+  window.speechSynthesis.speak(utter);
+}
+function readInstructionsAudio(){
+  speakText("Welcome to Power-Up 3A! Please write your name and group at the top. Read each question carefully, or tap the Read Aloud buttons on any question to hear it. Questions one and five have two lines each — fill in both. Good luck!");
+}
+const QUESTION_AUDIO = {
+  1: "Question 1: What is the difference between weather and climate? Write one line for weather, and one line for climate.",
+  2: "Question 2: Name ONE Belizean industry that climate change can damage.",
+  3: "Question 3: Name the step where water turns from gas back to liquid.",
+  4: "Question 4: Which method separates sand from water?",
+  5: "Question 5: Name ONE tool a scientist uses to measure, and write what it measures."
+};
+function readQuestionAudio(id){ if (QUESTION_AUDIO[id]) speakText(QUESTION_AUDIO[id]); }
+
+/* ── Question bank ─────────────────────────────────────
+   3A uses two answer types: free text (Q2, Q3, Q4) and the two-line
+   form introduced in 2B (Q1, Q5), where BOTH lines must pass.
+   readAnswer() hides the difference, so the two-attempt / one-bean
+   machinery is untouched from 1A, 1B, 2A and 2B — only the reading
+   of the answer changes.
+
+   ⚠️ Text matching is BY SUBSTRING, so keys must be plural-tolerant
+   and must never be short strings that hide inside other words
+   ('no' hides in 'know'; 'ev' hides in 'every'). */
+const Q = {
+  1: { type:'dual', open:true,
+       /* Two lines, both must pass. A student who only knows one half has
+          not shown the DIFFERENCE, which is what the question asks for.
+          ⚠️ No bare 'now' key — "know" and "snow" both contain it. */
+       keysA:['right now','today','at the moment','moment','this minute','minute','hour',
+              'day','daily','short','quick','sudden','change','changes','changing',
+              'happening','outside now','this week','temporary'],
+       keysB:['year','many year','long','over time','usual','usually','average','normal',
+              'pattern','general','typical','always','decade','season','expect','same every'],
+       good:'Weather is what is happening now, over hours or days — climate is the usual pattern over many years',
+       hint:'think about HOW LONG each one covers. One is about right now or today; the other is about what is usual over many, many years. Try once more.',
+       sample:'"Weather is what the sky is doing today. Climate is the usual pattern of weather over many years." Any answer that contrasts a short time with a long time counts.' },
+
+  2: { type:'text', mode:'any',
+       /* Wider than 2A Q1 on purpose: that one asked for one of the TWO
+          BIGGEST earners, so fishing was excluded. This asks for any
+          industry, so fishing and forestry belong. */
+       keys:['tourism','tourist','tour','hotel','resort','cruise','dive','snorkel',
+             'agricultur','agri','farm','crop','harvest','banana','sugar','cane',
+             'citrus','orange','plantation','cacao','corn','rice',
+             'fish','fisher','lobster','conch','shrimp','forestry','timber','logging'],
+       good:'Tourism, agriculture (farming) and fishing are all hurt by a changing climate',
+       hint:'the picture shows what a long drought does to the land. Now think about the work people in Belize do that depends on the weather, the soil or the sea — name any one of those.',
+       reveal:'Tourism, agriculture (farming), or fishing' },
+
+  3: { type:'text', mode:'any', keys:['condens'],
+       good:'Condensation — the gas cools and turns back into liquid water',
+       hint:'look at the cold bottle: water in the warm air touched the cold glass and became droplets. That step is the opposite of evaporation, and it starts with C.',
+       reveal:'Condensation' },
+
+  4: { type:'text', mode:'any', keys:['filt','strain','siev','sift'],
+       good:'Filtration — the paper traps the sand and lets the water through',
+       hint:'look at the picture: the sandy water is poured through paper in a funnel, the sand stays on top, and clean water drips out below. That method starts with F.',
+       reveal:'Filtration (filtering)' },
+
+  5: { type:'dual', open:true,
+       /* Both halves required — naming a tool without knowing what it
+          measures is not the skill being practised. */
+       keysA:['thermometer','ruler','tape','metre stick','meter stick','yard',
+              'cylinder','beaker','measuring cup','jug','balance','scale','weigh',
+              'stopwatch','watch','clock','timer','rain gauge','gauge','barometer',
+              'anemometer','protractor','trundle','spring'],
+       keysB:['temperature','heat','hot','cold','degree','celsius',
+              'length','height','width','distance','long','size','tall',
+              'volume','capacity','millilit','litre','liter','how much liquid',
+              'mass','weight','gram','kilogram','heavy',
+              'time','second','minute','hour','how long',
+              'rain','rainfall','pressure','wind','speed','angle'],
+       good:'A real measuring tool and the quantity it measures',
+       hint:'you need BOTH lines — the name of the tool, AND what that tool measures. Look at the picture: what would you use the thermometer for? Or the ruler?',
+       sample:'"The tool is: a thermometer. It measures: temperature." Others from the picture — ruler → length, measuring cylinder → volume, balance → mass, stopwatch → time, rain gauge → rainfall.' }
+};
+const solved = {1:false,2:false,3:false,4:false,5:false};
+const tries  = {1:0,2:0,3:0,4:0,5:0};
+
+/* ═════════════════════════════════════════════════════════════
+   🌱 POWER-UP BEANS — LIFT-OUT BLOCK
+   Self-contained on purpose (site rule: no external JS). When the
+   shared-JS refactor (IDEAS #10) happens, lift this whole block out
+   as-is; only the PU config below changes per worksheet.
+
+   Rules approved Aug 5, 2026:
+   • 1 🌱 per question ANSWERED CORRECTLY, max 5 — always equal to
+     the Score, because both now come from the same check.
+   • TWO attempts. Attempt 1 gets a hint, never the answer, so a
+     correct REVISION still earns its bean — that is the behaviour we
+     want. The answer only appears after attempt 2, once the bean is
+     gone, so the reveal can never be farmed.
+   • Typing something is NOT enough, on any question. The written
+     questions are matched against a generous accept list, and the
+     "Yes, mine works" button is reflection only — it pays nothing,
+     because nothing verifies it.
+   • Two-line questions (3A Q1 and Q5) need BOTH lines to pass for the
+     single bean. Half an answer is not the answer: Q1 asks for a
+     DIFFERENCE, and naming a tool without knowing what it measures is
+     not the skill being practised.
+   • ONE save per worksheet. vcSaveBeans sets the localStorage lock
+     vc-pts-<id>, so a reload or Start Over can never re-earn.
+   • Ungraded activity: no login gate, no test gate, no KV. Logged out,
+     the beans still show on screen — they are simply not banked.
+   • lesson_key is REQUIRED: a row without it is silently uncapped
+     server-side (PROJECT-DOCS.md, July 21 2026).
+══════════════════════════════════════════════════════════════ */
+var PU = {
+  id:      'std5-sci-pu-3a',      /* also the lesson_key — 'pu-' keeps it */
+  name:    'Power-Up 3A',         /* out of any real lesson's bean budget */
+  subject: 'Science',
+  lo:      '',                    /* mixed retrieval — no single outcome */
+  total:   5
+};
+
+var puBeans = 0, puAttempted = {}, puEarned = {}, puSaved = false;
+
+function puPill(){
+  document.getElementById('beanPill').textContent =
+    '🌱 ' + puBeans + ' bean' + (puBeans === 1 ? '' : 's');
+}
+function puNote(msg){
+  var n = document.getElementById('beanNote');
+  n.style.display = 'block';
+  n.textContent = msg;
+}
+function puTouch(id){
+  puAttempted[id] = true;
+  document.getElementById('saveBtn').disabled = puSaved;
+}
+/* One bean per QUESTION, ever — not per attempt. Survives Start Over,
+   so a replay of an unsaved sheet cannot pay a second time. */
+function puEarn(id){
+  if (puEarned[id] || puBeans >= PU.total) return;
+  puEarned[id] = true;
+  puBeans++;
+  puPill();
+}
+/* Auto-save once every question has been attempted. */
+function puMaybeSave(){
+  for (var i = 1; i <= PU.total; i++) { if (!puAttempted[i]) return; }
+  puSave();
+}
+function puSave(){
+  if (puSaved) return;
+  puSaved = true;
+  var btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+  btn.textContent = '🌱 Beans Saved ✓';
+
+  if (typeof vcSaveBeans !== 'function'){
+    puNote('🌱 ' + puBeans + ' beans earned — the classroom server could not be reached this time.');
+    return;
+  }
+  vcSaveBeans(PU.id, puBeans, PU.total, {
+    subject:       PU.subject,
+    lo_code:       PU.lo,
+    lesson_key:    PU.id,
+    activity_name: PU.name
+  }).then(function(res){
+    if (res && res.ok){
+      /* Trust the server — it decides what was actually banked. */
+      var granted = (res.granted != null) ? Number(res.granted) : puBeans;
+      puBeans = granted; puPill();
+      puNote('🌱 +' + granted + ' bean' + (granted === 1 ? '' : 's') + ' saved to your account!');
+    } else if (res && res.locked){
+      puNote('🌱 You already earned your beans for this Power-Up. Play again for practice!');
+    } else {
+      puNote('🌱 ' + puBeans + ' bean' + (puBeans === 1 ? '' : 's')
+           + ' earned — log in next time to save them to your account!');
+    }
+  });
+}
+/* On load: respect an existing lock, and greet a logged-in student. */
+(function puInit(){
+  try {
+    var raw = localStorage.getItem('vc-pts-' + PU.id);
+    if (raw){
+      puSaved = true;
+      var got = 0;
+      try { got = Number(JSON.parse(raw).b) || 0; } catch(e){}
+      puBeans = got;
+      var b = document.getElementById('saveBtn');
+      b.disabled = true; b.textContent = '🌱 Beans Saved ✓';
+      puNote('🌱 You already earned ' + got + ' bean' + (got === 1 ? '' : 's')
+           + ' for this Power-Up. Play again for practice — they are already in your account.');
+    }
+  } catch(e){}
+
+  if (typeof vcGetSession === 'function' && vcGetSession()){
+    var s = vcGetSession();
+    document.getElementById('loginHint').innerHTML =
+      '👋 Welcome back, <b>' + (s.first_name || s.full_name || 'student')
+      + '</b>! Your beans will be saved.';
+    var nm = document.getElementById('stuName');
+    if (nm && !nm.value) nm.value = s.full_name || s.first_name || '';
+  }
+  puPill();
+})();
+/* ────────── end LIFT-OUT BLOCK ────────── */
+
+/* ── Shared substring matcher ──────────────────────────
+   Plural-tolerant: a Standard 5 student writes "factories", not
+   "factory", and the accept lists match by substring — so raw
+   matching failed a correct answer (caught live, Aug 5 2026). We
+   search the typed text PLUS two naive singular forms, so a key
+   never has to list every plural of itself. */
+function matchKeys(val, keys, mode){
+  var hay = val + ' | ' + val.replace(/ies\b/g,'y') + ' | ' + val.replace(/s\b/g,'');
+  if (mode === 'all') return keys.every(function(k){ return hay.indexOf(k) !== -1; });
+  return keys.some(function(k){ return hay.indexOf(k) !== -1; });
+}
+
+/* ── One reader for four answer types ──────────────────
+   Returns {empty, ok} so checkQ() below is identical to 1A/1B/2A. */
+function readAnswer(id){
+  var d = Q[id];
+
+  if (d.type === 'dual'){
+    /* Field ids are derived from the question number — NOT hardcoded.
+       2B only ever had one two-part question, so its readAnswer said
+       'q5a'/'q5b' literally; carried into 3A that made Q1 read Q5's
+       empty boxes and report "fill in BOTH lines" forever. */
+    var a = document.getElementById('q'+id+'a').value.trim().toLowerCase();
+    var b = document.getElementById('q'+id+'b').value.trim().toLowerCase();
+    if (!a || !b) return { empty:true, msg:'Fill in BOTH lines first!' };
+    return { empty:false, ok: matchKeys(a, d.keysA) && matchKeys(b, d.keysB) };
+  }
+  var v = document.getElementById('q'+id).value.trim().toLowerCase();
+  if (!v) return { empty:true, msg:'Type an answer first!' };
+  return { empty:false, ok: matchKeys(v, d.keys, d.mode) };
+}
+
+function updateScore(){
+  const n = Object.values(solved).filter(Boolean).length;
+  document.getElementById('scoreVal').textContent = n + ' / 5';
+}
+
+/* ── ONE checker for all five questions ────────────────────────
+   Attempt 1 → hint only. Attempt 2 → answer (or samples) revealed.
+   A correct answer on EITHER attempt earns the bean; after that the
+   question is settled and further Checks change nothing. */
+function checkQ(id){
+  const d  = Q[id];
+  const fb = document.getElementById('fb'+id);
+  const r  = readAnswer(id);
+
+  if (r.empty){ fb.className='feedback bad show'; fb.textContent = r.msg; return; }
+  if (solved[id] || tries[id] >= 2) return;      /* settled — no third bite */
+
+  tries[id]++;
+  puTouch(id);
+
+  if (r.ok){
+    solved[id] = true;
+    puEarn(id);
+    fb.className = 'feedback ok show';
+    fb.textContent = (tries[id] === 1 ? '✓ Correct! ' : '✓ Yes — good revision! ') + d.good + '.';
+  }
+  else if (tries[id] === 1){
+    /* HINT ONLY — revealing the answer here would make attempt 2 free. */
+    fb.className = 'feedback bad show';
+    fb.textContent = '✗ Not quite — ' + d.hint;
+  }
+  else if (d.open){
+    fb.className = 'feedback open-reveal show';
+    fb.innerHTML = '<strong>Sample answer:</strong> ' + d.sample +
+      '<div class="fb-actions">' +
+      '<button class="fb-mini-btn yes" onclick="markOpen('+id+',true)">✅ Mine says the same thing</button>' +
+      '<button class="fb-mini-btn" onclick="markOpen('+id+',false)">\u{1F501} I will fix mine</button>' +
+      '</div>';
+  }
+  else {
+    fb.className = 'feedback bad show';
+    fb.textContent = '✗ The answer is: ' + d.reveal + '. Mr. EdLo will go over this one in class.';
+  }
+
+  updateScore();
+  puMaybeSave();
+}
+
+/* Reflection only. Deliberately awards NO bean and does NOT move the
+   Score: nothing can verify a student marking their own work, and the
+   sheet is discussed in class anyway. */
+function markOpen(id, yes){
+  const fb = document.getElementById('fb'+id);
+  fb.className = 'feedback open-reveal show';
+  fb.textContent = yes
+    ? '\u{1F44D} Good — keep that answer and bring it to the class discussion.'
+    : '\u{1F501} Fix it on your sheet, then bring your new answer to the class discussion.';
+}
+
+function resetWorksheet(){
+  ['q1a','q1b','q2','q3','q4','q5a','q5b'].forEach(function(fid){
+    var el = document.getElementById(fid);
+    if (el) el.value = '';
+  });
+  [1,2,3,4,5].forEach(function(id){
+    var fb = document.getElementById('fb'+id);
+    fb.className = 'feedback' + (Q[id].open ? ' open-reveal' : '');
+    fb.innerHTML = '';
+    solved[id] = false;
+    tries[id]  = 0;
+  });
+
+  updateScore();
+  /* Beans deliberately SURVIVE a reset: puBeans, puEarned and puSaved are
+     not cleared, so Start Over is a practice replay, never a second payout. */
+  if (puBeans > 0){
+    puNote('\u{1F331} Your ' + puBeans + ' bean' + (puBeans === 1 ? '' : 's')
+         + ' are already earned — this replay is just for practice.');
+  }
+}
+</script>
+</body>
+</html>

@@ -5,6 +5,11 @@
 # assets/lesson-icons/science/<cycle>/_source/. A leading **/ matches at any depth.
 **/_source/
 
+# Power-Up image staging — the order-check contact sheet written by
+# tools/powerup-images.py --stage. It is a throwaway review artifact,
+# regenerated on demand, and lives in img/ where the real assets go.
+_STAGE-check-order.png
+
 # OS / editor cruft
 .DS_Store
 Thumbs.db
