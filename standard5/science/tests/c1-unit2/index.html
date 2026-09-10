@@ -944,10 +944,10 @@ function dismissBlur(){blurActive=false;document.getElementById('blurOverlay').c
 function attachIdleListeners(){['mousemove','mousedown','keydown','touchstart','scroll','click'].forEach(e=>document.addEventListener(e,resetIdleTimer,{passive:true}));resetIdleTimer();}
 // tab-switch warnings
 let tabWarnings=0; const MAX_WARNINGS=3;
-function handleVisibilityChange(){if(testSubmitted)return;if(document.hidden){tabWarnings++;document.getElementById('warnCount').textContent='Warning '+tabWarnings+' of '+MAX_WARNINGS;document.getElementById('warnOverlay').classList.add('show');showBlur();}}
+function handleVisibilityChange(){if(testSubmitted||!ITEMS.length)return;if(document.hidden){tabWarnings++;document.getElementById('warnCount').textContent='Warning '+tabWarnings+' of '+MAX_WARNINGS;document.getElementById('warnOverlay').classList.add('show');showBlur();}}
 function dismissWarning(){document.getElementById('warnOverlay').classList.remove('show');dismissBlur();}
 document.addEventListener('visibilitychange',handleVisibilityChange);
-window.addEventListener('blur',()=>{if(!testSubmitted&&!document.hidden){setTimeout(()=>{if(!document.hasFocus()&&!testSubmitted){tabWarnings++;document.getElementById('warnCount').textContent='Warning '+tabWarnings+' of '+MAX_WARNINGS;document.getElementById('warnOverlay').classList.add('show');showBlur();}},300);}});
+window.addEventListener('blur',()=>{if(!testSubmitted&&ITEMS.length&&!document.hidden){setTimeout(()=>{if(!document.hasFocus()&&!testSubmitted&&ITEMS.length){tabWarnings++;document.getElementById('warnCount').textContent='Warning '+tabWarnings+' of '+MAX_WARNINGS;document.getElementById('warnOverlay').classList.add('show');showBlur();}},300);}});
 
 /* Student build: developer autofill and all answer data have been removed. */
 

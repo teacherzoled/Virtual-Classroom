@@ -8,10 +8,12 @@ actually lives in Cloudflare and Google, kept here so future edits start from a 
 |---|---|---|
 | `VC-LMS-Backend.gs` | The **VC-LMS Backend** Apps Script | Google Apps Script, attached to the `VC-LMS` Google Sheet (Extensions → Apps Script) |
 | `edlo-lms-worker.js` | The **edlo-lms** Cloudflare Worker | dash.cloudflare.com → Workers → edlo-lms |
+| `edlo-gemini.js` | The **edlo-gemini** Cloudflare Worker (test grading + AI relay) | dash.cloudflare.com → Workers → edlo-gemini |
 
 **Rule:** whenever the live Apps Script or Worker changes, update the matching file here in the same
 session, and note the date at the top. When you next need to touch either one, Claude reads the local
 file and returns a complete updated version to paste over the live editor.
 
-> The AI proxy Worker `edlo-gemini` (test grading + OpenAI relay) is a separate Worker and is **not**
-> mirrored here yet — add it if you ever want the same workflow for it.
+> ⚠️ **`edlo-gemini` is the SHARED grading Worker** — every test and quiz on the site grades
+> through it, so any change hits ALL live assessments at once. Test against a single `testId`
+> before deploying. Mirrored here since September 10, 2026.
