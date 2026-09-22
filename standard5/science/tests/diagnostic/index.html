@@ -446,7 +446,7 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
       Answer every question. For the multiple-choice items pick the best answer. For the ordering items choose what goes in each position. Write your own words for the questions with a box. You have about <b>30 minutes</b>. This is not for marks — a wrong answer still helps Mr. EdLo, so never leave one blank.
     </div>
 
-    <main id="testForm"><!-- sections + questions injected here --></main>
+    <main id="testForm"><div id="loadingNote" style="text-align:center;padding:2.2rem 1rem;font-weight:800;font-size:1.05rem;color:var(--body-color);opacity:.85;">Loading your check-up… please wait.</div></main>
 
     <!-- RESULTS -->
     <div class="results-section" id="resultsSection">
@@ -456,7 +456,7 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
       <div class="score-grid">
         <div class="score-box"><div class="sb-label">Selected-Answer</div><div class="sb-val" id="s-auto">—</div><div class="sb-sub">multiple choice, T/F, blanks, matching &amp; labels</div></div>
         <div class="score-box"><div class="sb-label">Written</div><div class="sb-val" id="s-written">—</div><div class="sb-sub">short answer &amp; open-ended</div></div>
-        <div class="score-box hl"><div class="sb-label">Total Score</div><div class="sb-val" id="s-total">—</div><div class="sb-sub">out of 83 marks</div></div>
+        <div class="score-box hl"><div class="sb-label">Total Score</div><div class="sb-val" id="s-total">—</div><div class="sb-sub" id="s-total-sub">out of 20 marks</div></div>
         <div class="score-box hl"><div class="sb-label">Percentage</div><div class="sb-val" id="s-pct">—</div><div class="sb-sub" id="s-band">—</div></div>
       </div>
       <div class="section-strip" id="sectionStrip"></div>
@@ -672,6 +672,7 @@ function isAnswered(it){
 }
 
 function updateQuestionProgress(){
+  saveDraft();
   const answered=ITEMS.filter(isAnswered).length;
   const pct=Math.round((answered/TOTAL_Q)*100);
   document.getElementById('qProgressCount').textContent=answered+' / '+TOTAL_Q;
@@ -756,19 +757,27 @@ async function runSubmit(passkey){
   // ---- ONE call: Worker grades the WHOLE test (fixed + written) ----
   // The upgraded Worker scores fixed items against KV and AI-grades the
   // written items against the rubrics stored in KV, all server-side.
-  let grade=null;
+  // Retried with a timeout. If grading still cannot be reached, record NOTHING:
+  // no zero, no lock, no Sheet row. The answers stay on screen and in the draft.
+  const h0=document.getElementById('submitHint'); h0.style.color=''; h0.style.fontWeight='';
+  setSpinnerText('Grading your test… a few seconds.');
+  let out;
   try{
-    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({passkey,mode:'grade',testId:TEST_ID,answers})});
-    if(res.status===403){ badPasskey(); return; }
-    grade=await res.json();
-    if(!grade.ok) throw new Error(grade.error||'grade failed');
+    out=await postJSON({passkey,mode:'grade',testId:TEST_ID,answers},[0,2500,6000],60000,
+      (n,of)=>setSpinnerText('The internet is slow - trying again ('+n+' of '+of+')… keep this page open.'));
   }catch(e){
     console.error('grade error',e);
-    grade={ok:false,results:{}};   // everything falls back to pending in mergeAndShow
+    gradeUnreachable(); return;
+  }
+  if(out.status===403){ badPasskey(); return; }
+  const grade=out.body;
+  if(!grade || !grade.ok){
+    console.error('grade error',grade);
+    gradeUnreachable(); return;
   }
 
   savePasskey(passkey);
+  clearDraft();
   mergeAndShow(grade,answers);
   document.getElementById('spinnerWrap').classList.remove('show');
 }
@@ -820,6 +829,7 @@ function mergeAndShow(grade,answers){
   document.getElementById('s-auto').textContent=autoEarned+'/'+autoTotal;
   document.getElementById('s-written').textContent=writtenEarned+'/'+writtenTotal;
   document.getElementById('s-total').textContent=total+'/'+MAX_MARKS;
+  const sub=document.getElementById('s-total-sub'); if(sub)sub.textContent='out of '+MAX_MARKS+' marks';
   document.getElementById('s-pct').textContent=pct+'%';
   document.getElementById('s-band').textContent=band.label;
   document.getElementById('s-band').style.color=band.color;
@@ -962,6 +972,86 @@ function teacherReset(){
 }
 
 
+/* ---------------- RESILIENCE: autosave + retry ----------------
+   The computer room's internet drops out mid-sitting. Two protections:
+   1) Every answer is saved to THIS computer as the student works, keyed to his
+      username, so a crash, a reload or a closed tab loses nothing.
+   2) Calls to the Worker are retried with a timeout. If grading still cannot be
+      reached, NOTHING is recorded - no zero, no lock, no Sheet row. The paper
+      stays on screen and the student presses "Try Submitting Again".
+   Grading writes nothing on the server, so a retry can never double-count. */
+const DRAFT_KEY = 'vc-draft-std5-diag-science';
+let draftReady = false;               // no saving until the old draft has been put back
+function draftKey(){ return DRAFT_KEY + (LMS&&LMS.username ? '::'+LMS.username : '::guest'); }
+function saveDraft(){
+  if(!draftReady || testSubmitted) return;
+  try{ localStorage.setItem(draftKey(), JSON.stringify({t:Date.now(), a:collectAnswers()})); }catch(e){}
+}
+function clearDraft(){ draftReady=false; try{ localStorage.removeItem(draftKey()); }catch(e){} }
+function restoreDraft(){
+  let d=null, n=0;
+  try{ d=JSON.parse(localStorage.getItem(draftKey())); }catch(e){}
+  if(d && d.a){
+    ITEMS.forEach(it=>{
+      const v=d.a[it.qid];
+      if(v==null || v==='') return;
+      if(it.type==='mc' || it.type==='tf'){
+        const inp=document.querySelector(`input[name="${it.qid}"][value="${v}"]`);
+        if(inp){ inp.checked=true; const lab=inp.closest('.opt'); if(lab) lab.classList.add('selected'); n++; }
+      }else if(it.type==='match' || it.type==='label'){
+        if(Array.isArray(v)){
+          let any=false;
+          v.forEach((x,i)=>{ const el=document.querySelector(`[name="${it.qid}_${i}"]`); if(el && x!==''){ el.value=x; any=true; } });
+          if(any) n++;
+        }
+      }else{
+        const el=document.querySelector(`[name="${it.qid}"]`);
+        if(el){ el.value=v; n++; }
+      }
+    });
+  }
+  draftReady=true;
+  if(n) showDraftBanner(n);
+}
+function showDraftBanner(n){
+  const f=document.getElementById('testForm'); if(!f) return;
+  const b=document.createElement('div');
+  b.className='draft-banner';
+  b.style.cssText='margin:0 0 1.2rem;padding:.85rem 1.1rem;border-radius:14px;border:1.5px solid #20C997;background:rgba(32,201,151,.13);font-weight:700;color:var(--body-color);';
+  b.textContent='Welcome back! Your '+n+' saved answer'+(n===1?' has':'s have')+' been put back. Carry on from where you stopped.';
+  f.insertBefore(b, f.firstChild);
+}
+
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+/* POST to the Worker with retries. Retries on no network, timeout or a 5xx.
+   Returns {status, body} for any other response; throws after the last try. */
+async function postJSON(payload, waits, timeoutMs, onRetry){
+  let lastErr=null;
+  for(let i=0;i<waits.length;i++){
+    if(waits[i]){ if(onRetry) onRetry(i+1, waits.length); await sleep(waits[i]); }
+    const ctl=(typeof AbortController!=='undefined') ? new AbortController() : null;
+    const timer=ctl ? setTimeout(()=>ctl.abort(), timeoutMs) : null;
+    try{
+      const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(payload), signal: ctl ? ctl.signal : undefined});
+      if(res.status>=500){ lastErr=new Error('server '+res.status); continue; }
+      const body=await res.json().catch(()=>null);
+      return {status:res.status, body};
+    }catch(e){ lastErr=e; }
+    finally{ if(timer) clearTimeout(timer); }
+  }
+  throw lastErr || new Error('network');
+}
+function setSpinnerText(msg){ const s=document.querySelector('#spinnerWrap span'); if(s) s.textContent=msg; }
+function gradeUnreachable(){
+  document.getElementById('spinnerWrap').classList.remove('show');
+  setSpinnerText('Grading your test… a few seconds.');
+  const btn=document.getElementById('submitBtn'); btn.disabled=false; btn.textContent='Try Submitting Again';
+  const h=document.getElementById('submitHint'); h.style.display='block'; h.classList.remove('ready');
+  h.style.color='#e03131'; h.style.fontWeight='800';
+  h.textContent='The internet dropped before your check-up could be marked. Your answers are saved on this computer - nothing is lost. Press "Try Submitting Again". If it keeps failing, raise your hand.';
+}
+
 /* ---------------- SECURE TEST GATE ---------------- */
 /* One screen serves every gate state; #closedScreen already exists and is styled. */
 function gateScreen(icon,title,msg){
@@ -1006,9 +1096,9 @@ async function loadTest(){
   /* 2) Ask the Worker's gate whether this check-up is open, and for its questions. */
   let data;
   try{
-    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({mode:'questions',testId:TEST_ID})});
-    data=await res.json();
+    data=(await postJSON({mode:'questions',testId:TEST_ID},[0,1500,4000],20000,
+      (n,of)=>{ const l=document.getElementById('loadingNote');
+                if(l) l.textContent='The internet is slow - still trying ('+n+' of '+of+')… please wait.'; })).body;
   }catch(e){
     console.error('load error',e);
     showGateError('This computer could not reach the check-up server, so the check-up is staying closed. Check the connection and reload, or tell Mr. EdLo.');
@@ -1024,7 +1114,7 @@ async function loadTest(){
 
   /* 4) Cleared to sit it. */
   hydrate(data.questions);
-  render(); updateQuestionProgress(); attachIdleListeners();
+  render(); restoreDraft(); updateQuestionProgress(); attachIdleListeners();
 }
 
 /* ---------------- IDENTITY ---------------- */
