@@ -1,0 +1,2164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mathematics — Standard 5 · Mr. EdLo's Virtual Classroom</title>
+<link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { overflow-x: hidden; }
+
+  /* ═══════════════════════════════════════════
+     THEME VARIABLES — Mathematics (accent #4DABF7)
+  ═══════════════════════════════════════════ */
+
+  :root, body.theme-night {
+    --bg:            #1a1a2e;
+    --body-color:    #ffffff;
+    --card-bg:       rgba(255,255,255,0.07);
+    --card-border:   rgba(255,255,255,0.10);
+    --card-border-h: rgba(77,171,247,0.40);
+    --card-shadow:   rgba(0,0,0,0.40);
+    --card-desc:     rgba(255,255,255,0.50);
+    --section-lbl:   rgba(255,255,255,0.35);
+    --subtitle-c:    rgba(255,255,255,0.55);
+    --welcome-bg:    linear-gradient(135deg,#20293d,#1e2d45);
+    --welcome-border:rgba(255,255,255,0.08);
+    --welcome-text:  rgba(255,255,255,0.65);
+    --header-name:   rgba(255,255,255,0.55);
+    --badge-bg:      rgba(77,171,247,0.12);
+    --badge-border:  rgba(77,171,247,0.22);
+    --badge-color:   rgba(77,171,247,0.85);
+    --top-badge-bg:  #4DABF7;
+    --top-badge-c:   #1a1a2e;
+    --h1-grad:       linear-gradient(135deg,#fff 0%,#4DABF7 55%,#74C0FC 100%);
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.45) 100%);
+    --footer-border: rgba(255,255,255,0.07);
+    --footer-name:   rgba(255,255,255,0.40);
+    --footer-tag:    rgba(255,255,255,0.45);
+    --footer-copy:   rgba(255,255,255,0.20);
+    --back-top-bg:   #4DABF7;
+    --back-top-c:    #1a1a2e;
+    --back-color:    rgba(255,255,255,0.40);
+    --back-hover:    #4DABF7;
+    --radial1:       #1e3a5f55;
+    --radial2:       #2d1b6955;
+    --star-show:     1;
+    --tab-border:    rgba(255,255,255,0.12);
+    --tab-color:     rgba(255,255,255,0.40);
+    --tab-hover-b:   rgba(77,171,247,0.35);
+    --tab-hover-c:   #4DABF7;
+    --tab-active-bg: #4DABF7;
+    --tab-active-c:  #1a1a2e;
+    --tab-shadow:    rgba(77,171,247,0.30);
+    --cycle-bg:      rgba(77,171,247,0.07);
+    --cycle-border:  rgba(77,171,247,0.18);
+    --cycle-color:   #4DABF7;
+    --mol-color:     rgba(77,171,247,0.25);
+    --graded-bg:     rgba(255,215,59,0.12);
+    --graded-border: rgba(255,215,59,0.28);
+    --graded-color:  #FFD43B;
+    --grad-bar:      linear-gradient(90deg,#4DABF7,#74C0FC,#9775FA,#20C997);
+  }
+
+  body.theme-sunny {
+    --bg:            #fffbea;
+    --body-color:    #2d2000;
+    --card-bg:       rgba(255,255,255,0.75);
+    --card-border:   rgba(200,150,0,0.18);
+    --card-border-h: rgba(0,119,204,0.45);
+    --card-shadow:   rgba(180,100,0,0.18);
+    --card-desc:     rgba(80,50,0,0.55);
+    --section-lbl:   rgba(120,80,0,0.50);
+    --subtitle-c:    rgba(100,60,0,0.65);
+    --welcome-bg:    linear-gradient(135deg,#fff8d6,#ffeea0);
+    --welcome-border:rgba(200,150,0,0.25);
+    --welcome-text:  rgba(80,50,0,0.70);
+    --header-name:   #005fa3;
+    --badge-bg:      rgba(0,119,204,0.12);
+    --badge-border:  rgba(0,119,204,0.28);
+    --badge-color:   #005fa3;
+    --top-badge-bg:  #0077cc;
+    --top-badge-c:   #fff;
+    --h1-grad:       linear-gradient(135deg,#042C53 0%,#0077cc 55%,#378ADD 100%);
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(255,200,50,0.18) 100%);
+    --footer-border: rgba(200,150,0,0.20);
+    --footer-name:   rgba(100,60,0,0.50);
+    --footer-tag:    rgba(100,60,0,0.55);
+    --footer-copy:   rgba(100,60,0,0.30);
+    --back-top-bg:   #0077cc;
+    --back-top-c:    #fff;
+    --back-color:    rgba(120,80,0,0.50);
+    --back-hover:    #005fa3;
+    --radial1:       rgba(255,220,80,0.25);
+    --radial2:       rgba(255,160,30,0.18);
+    --star-show:     0;
+    --tab-border:    rgba(200,150,0,0.22);
+    --tab-color:     rgba(120,80,0,0.55);
+    --tab-hover-b:   rgba(0,119,204,0.40);
+    --tab-hover-c:   #005fa3;
+    --tab-active-bg: #0077cc;
+    --tab-active-c:  #fff;
+    --tab-shadow:    rgba(0,119,204,0.30);
+    --cycle-bg:      rgba(0,119,204,0.07);
+    --cycle-border:  rgba(0,119,204,0.20);
+    --cycle-color:   #005fa3;
+    --mol-color:     rgba(0,119,204,0.20);
+    --graded-bg:     rgba(180,100,0,0.10);
+    --graded-border: rgba(180,100,0,0.28);
+    --graded-color:  #a05c00;
+    --grad-bar:      linear-gradient(90deg,#0077cc,#378ADD,#7c3aed,#0d9488);
+  }
+
+  body.theme-cloudy {
+    --bg:            #e8edf2;
+    --body-color:    #1c2533;
+    --card-bg:       rgba(255,255,255,0.72);
+    --card-border:   rgba(100,130,160,0.18);
+    --card-border-h: rgba(37,99,235,0.40);
+    --card-shadow:   rgba(50,80,120,0.15);
+    --card-desc:     rgba(40,60,90,0.55);
+    --section-lbl:   rgba(60,90,130,0.50);
+    --subtitle-c:    rgba(40,65,100,0.65);
+    --welcome-bg:    linear-gradient(135deg,#dce6f0,#c8d8e8);
+    --welcome-border:rgba(100,140,180,0.22);
+    --welcome-text:  rgba(30,55,85,0.70);
+    --header-name:   #1e40af;
+    --badge-bg:      rgba(37,99,235,0.12);
+    --badge-border:  rgba(37,99,235,0.25);
+    --badge-color:   #1e40af;
+    --top-badge-bg:  #2563eb;
+    --top-badge-c:   #fff;
+    --h1-grad:       linear-gradient(135deg,#042C53 0%,#1e40af 50%,#2563eb 100%);
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(100,140,200,0.15) 100%);
+    --footer-border: rgba(80,120,180,0.18);
+    --footer-name:   rgba(30,60,100,0.50);
+    --footer-tag:    rgba(30,60,100,0.55);
+    --footer-copy:   rgba(30,60,100,0.30);
+    --back-top-bg:   #2563eb;
+    --back-top-c:    #fff;
+    --back-color:    rgba(60,90,130,0.50);
+    --back-hover:    #1e40af;
+    --radial1:       rgba(150,190,240,0.30);
+    --radial2:       rgba(100,140,200,0.20);
+    --star-show:     0;
+    --tab-border:    rgba(100,130,160,0.22);
+    --tab-color:     rgba(60,90,130,0.55);
+    --tab-hover-b:   rgba(37,99,235,0.40);
+    --tab-hover-c:   #1e40af;
+    --tab-active-bg: #2563eb;
+    --tab-active-c:  #fff;
+    --tab-shadow:    rgba(37,99,235,0.28);
+    --cycle-bg:      rgba(37,99,235,0.07);
+    --cycle-border:  rgba(37,99,235,0.20);
+    --cycle-color:   #1e40af;
+    --mol-color:     rgba(37,99,235,0.20);
+    --graded-bg:     rgba(100,70,0,0.08);
+    --graded-border: rgba(120,80,0,0.25);
+    --graded-color:  #7a5000;
+    --grad-bar:      linear-gradient(90deg,#2563eb,#4299e1,#7c3aed,#0d9488);
+  }
+
+  body.theme-nature {
+    --bg:            #f0f7ee;
+    --body-color:    #1a2e10;
+    --card-bg:       rgba(255,255,255,0.72);
+    --card-border:   rgba(60,120,40,0.18);
+    --card-border-h: rgba(21,101,192,0.40);
+    --card-shadow:   rgba(20,80,10,0.15);
+    --card-desc:     rgba(30,70,15,0.55);
+    --section-lbl:   rgba(40,90,20,0.50);
+    --subtitle-c:    rgba(30,75,15,0.65);
+    --welcome-bg:    linear-gradient(135deg,#d8f0ce,#c4e8b8);
+    --welcome-border:rgba(60,140,30,0.22);
+    --welcome-text:  rgba(20,65,10,0.70);
+    --header-name:   #0d47a1;
+    --badge-bg:      rgba(21,101,192,0.12);
+    --badge-border:  rgba(21,101,192,0.28);
+    --badge-color:   #0d47a1;
+    --top-badge-bg:  #1565c0;
+    --top-badge-c:   #fff;
+    --h1-grad:       linear-gradient(135deg,#042C53 0%,#0d47a1 50%,#1565c0 100%);
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(60,140,30,0.12) 100%);
+    --footer-border: rgba(50,120,20,0.18);
+    --footer-name:   rgba(20,70,10,0.50);
+    --footer-tag:    rgba(20,70,10,0.55);
+    --footer-copy:   rgba(20,70,10,0.30);
+    --back-top-bg:   #1565c0;
+    --back-top-c:    #fff;
+    --back-color:    rgba(40,90,20,0.50);
+    --back-hover:    #0d47a1;
+    --radial1:       rgba(100,200,60,0.22);
+    --radial2:       rgba(60,160,30,0.16);
+    --star-show:     0;
+    --tab-border:    rgba(60,120,40,0.22);
+    --tab-color:     rgba(40,90,20,0.55);
+    --tab-hover-b:   rgba(21,101,192,0.40);
+    --tab-hover-c:   #0d47a1;
+    --tab-active-bg: #1565c0;
+    --tab-active-c:  #fff;
+    --tab-shadow:    rgba(21,101,192,0.28);
+    --cycle-bg:      rgba(21,101,192,0.07);
+    --cycle-border:  rgba(21,101,192,0.20);
+    --cycle-color:   #0d47a1;
+    --mol-color:     rgba(21,101,192,0.20);
+    --graded-bg:     rgba(80,50,0,0.08);
+    --graded-border: rgba(100,60,0,0.22);
+    --graded-color:  #6b3f00;
+    --grad-bar:      linear-gradient(90deg,#1565c0,#42a5f5,#4a148c,#1b5e20);
+  }
+
+  /* ═══════════════════════════════════════════
+     BASE
+  ═══════════════════════════════════════════ */
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--body-color);
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.5s ease, color 0.5s ease;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, var(--radial1) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, var(--radial2) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+    transition: background 0.5s ease;
+  }
+
+  .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; opacity: var(--star-show,1); transition: opacity 0.5s ease; }
+  .star  { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--d,3s) ease-in-out infinite var(--delay,0s); opacity: 0; }
+  @keyframes twinkle {
+    0%,100% { opacity:0; transform:scale(1); }
+    50%      { opacity:var(--op,0.5); transform:scale(1.3); }
+  }
+
+  #num-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.55; transition: opacity 0.5s; }
+
+  .wrapper { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 0 max(1rem, 4vw) 2rem; flex: 1; overflow-x: hidden; width: 100%; }
+
+  /* Theme bar */
+  .theme-bar {
+    position: relative; z-index: 10;
+    display: flex; justify-content: center; gap: 0.5rem;
+    padding: 0.55rem max(1rem, 4vw);
+    background: rgba(0,0,0,0.22);
+    border-bottom: 1px solid rgba(0,0,0,0.12);
+    flex-wrap: wrap;
+  }
+  body.theme-sunny  .theme-bar,
+  body.theme-cloudy .theme-bar,
+  body.theme-nature .theme-bar { background: rgba(0,0,0,0.05); }
+  .theme-btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.85rem; padding: 5px 18px; border-radius: 999px;
+    min-height: 44px; min-width: 44px;
+    border: 2px solid transparent;
+    background: rgba(128,128,128,0.12);
+    color: var(--body-color); cursor: pointer; opacity: 0.6;
+    transition: all 0.22s ease;
+  }
+  .theme-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .theme-btn.active { opacity:1; background:var(--top-badge-bg); color:var(--top-badge-c); box-shadow:0 3px 12px rgba(0,0,0,.20); }
+
+  /* Site header */
+  .site-header { display:flex; align-items:center; justify-content:space-between; padding:1.2rem 0 0; gap:.75rem; flex-wrap:wrap; animation:fadeDown 0.6s ease both; }
+  .site-header-logo { display:flex; align-items:center; gap:.75rem; text-decoration:none; min-width:0; }
+  .site-header-logo img { height:48px; width:auto; border-radius:10px; box-shadow:0 4px 14px rgba(0,0,0,.25); }
+  .site-header-logo span { font-family:'Fredoka One',cursive; font-size:1.15rem; color:var(--header-name); letter-spacing:.02em; transition:color .4s; }
+  .header-badge { display:inline-block; background:var(--badge-bg); border:1px solid var(--badge-border); color:var(--badge-color); font-size:.72rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:5px 14px; border-radius:999px; transition:all .4s; }
+
+  .back-link { display:inline-flex; align-items:center; gap:6px; margin-top:1.4rem; min-height:44px; font-size:.8rem; font-weight:700; color:var(--back-color); text-decoration:none; transition:color .2s; letter-spacing:.04em; }
+  .back-link:hover { color:var(--back-hover); }
+
+  /* Header */
+  header { text-align:center; padding:2rem 0 1.5rem; animation:fadeDown .7s ease both; }
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-24px)} to{opacity:1;transform:translateY(0)} }
+  .badge { display:inline-block; background:var(--top-badge-bg); color:var(--top-badge-c); font-size:.75rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:4px 14px; border-radius:999px; margin-bottom:1rem; animation:pop .5s cubic-bezier(.36,1.5,.6,1) .3s both; }
+  @keyframes pop { from{opacity:0;transform:scale(.7)} to{opacity:1;transform:scale(1)} }
+  h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.8rem,8vw,3.8rem); line-height:1.1; margin-bottom:.5rem; background:var(--h1-grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .subtitle { font-size:1.05rem; font-weight:600; color:var(--subtitle-c); transition:color .4s; }
+
+  .section-label { font-size:.72rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--section-lbl); margin:2.5rem 0 1rem; transition:color .4s; }
+
+  /* Welcome */
+  .welcome { background:var(--welcome-bg); border:1.5px solid var(--welcome-border); border-radius:18px; padding:1.25rem 1.5rem; display:flex; align-items:center; gap:1rem; margin-bottom:.5rem; animation:fadeDown .7s ease .2s both; transition:background .4s,border-color .4s; }
+  .welcome-icon { font-size:2rem; flex-shrink:0; }
+  .welcome-text { font-size:.9rem; color:var(--welcome-text); line-height:1.6; transition:color .4s; min-width:0; word-break:break-word; }
+  .welcome-text strong { color:var(--body-color); }
+
+  /* Tabs */
+  .tabs-wrap { display:flex; justify-content:center; gap:.5rem; margin:2rem 0 0; animation:fadeDown .6s ease .25s both; flex-wrap:wrap; }
+  .tab-btn { font-family:'Fredoka One',cursive; font-size:1rem; padding:8px 22px; min-height:44px; border-radius:999px; border:2px solid var(--tab-border); background:transparent; color:var(--tab-color); cursor:pointer; transition:all .22s ease; letter-spacing:.02em; }
+  .tab-btn:hover { border-color:var(--tab-hover-b); color:var(--tab-hover-c); }
+  .tab-btn.active { background:var(--tab-active-bg); border-color:var(--tab-active-bg); color:var(--tab-active-c); box-shadow:0 4px 18px var(--tab-shadow); }
+  .tab-panel { display:none; animation:riseUp .4s ease both; }
+  .tab-panel.active { display:block; }
+  @keyframes riseUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+  /* Cycle divider */
+  .cycle-divider { display:flex; align-items:center; gap:.75rem; margin:2.2rem 0 1rem; animation:riseUp .4s ease both; }
+  .cycle-divider-label { font-family:'Fredoka One',cursive; font-size:.78rem; letter-spacing:.07em; text-transform:uppercase; background:var(--cycle-bg); border:1px solid var(--cycle-border); color:var(--cycle-color); padding:5px 14px; border-radius:999px; white-space:normal; text-align:center; flex-shrink:0; transition:all .4s; }
+  .cycle-divider-line  { flex:1; height:1px; background:var(--cycle-border); transition:background .4s; }
+
+  /* Note strip */
+  .note-strip { display:flex; align-items:flex-start; gap:.85rem; background:var(--cycle-bg); border:1.5px solid var(--cycle-border); border-radius:16px; padding:1rem 1.15rem; margin:1.5rem 0 .5rem; transition:all .4s; }
+  .note-icon { font-size:1.5rem; flex-shrink:0; line-height:1; }
+  .note-text { font-size:.82rem; color:var(--card-desc); line-height:1.55; min-width:0; word-break:break-word; }
+  .note-text strong { color:var(--body-color); }
+
+  /* Slot legend */
+  .slot-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:.6rem; margin:1.2rem 0 .5rem; }
+  .slot { flex:0 1 150px; background:var(--card-bg); border:1.5px solid var(--card-border); border-radius:14px; padding:.75rem .85rem; transition:background .4s,border-color .4s; }
+  .slot-q { font-family:'Fredoka One',cursive; font-size:.9rem; color:var(--accent,#4DABF7); margin-bottom:.2rem; }
+  .slot-d { font-size:.7rem; font-weight:700; color:var(--card-desc); line-height:1.35; }
+
+  /* Cards */
+  .grid { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; }
+  .grid .card { flex:0 1 260px; }
+
+  .card {
+    position:relative; display:flex; flex-direction:column; align-items:flex-start;
+    padding:1.4rem 1.3rem 1.2rem; border-radius:18px;
+    background:var(--card-bg); border:1.5px solid var(--card-border);
+    text-decoration:none; color:var(--body-color); overflow:hidden;
+    transition:transform .22s cubic-bezier(.22,.68,0,1.2),border-color .2s,box-shadow .2s,background .4s;
+    animation:riseUp .5s ease both; cursor:pointer;
+  }
+  .card:hover { transform:translateY(-6px) scale(1.02); border-color:var(--card-border-h); box-shadow:0 12px 40px var(--card-shadow); }
+  .card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; border-radius:18px 18px 0 0; background:var(--accent,#4DABF7); }
+  .card-num   { font-size:.68rem; font-weight:800; letter-spacing:.08em; color:var(--section-lbl); margin-bottom:.35rem; text-transform:uppercase; }
+  .card-icon  { font-size:2.2rem; margin-bottom:.7rem; line-height:1; }
+  .card-title { font-family:'Fredoka One',cursive; font-size:1.15rem; margin-bottom:.25rem; color:var(--accent,#4DABF7); line-height:1.2; }
+  .card-desc  { font-size:.78rem; color:var(--card-desc); font-weight:600; line-height:1.4; transition:color .4s; }
+  .card-tags  { display:flex; gap:5px; flex-wrap:wrap; margin-top:.55rem; }
+  .tag { font-size:.6rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:999px; background:var(--cycle-bg); color:var(--section-lbl); border:1px solid var(--card-border); }
+
+  .graded-badge { font-size:.6rem; font-weight:800; letter-spacing:.07em; text-transform:uppercase; padding:2px 9px; border-radius:999px; background:var(--graded-bg); color:var(--graded-color); border:1px solid var(--graded-border); transition:all .4s; }
+  .practice-badge { font-size:.6rem; font-weight:800; letter-spacing:.07em; text-transform:uppercase; padding:2px 9px; border-radius:999px; background:var(--badge-bg); color:var(--badge-color); border:1px solid var(--badge-border); transition:all .4s; }
+
+  .card-arrow { position:absolute; bottom:1rem; right:1.1rem; font-size:1rem; opacity:0; transform:translateX(-6px); transition:opacity .2s,transform .2s; color:var(--accent,#4DABF7); }
+  .card:hover .card-arrow { opacity:1; transform:translateX(0); }
+
+  /* Coming-soon */
+  .card.soon, .wide-card.soon, .lab-card.soon, .week-card.soon { opacity:.46; pointer-events:none; cursor:default; }
+  .card.soon::after, .wide-card.soon::after, .lab-card.soon::after, .week-card.soon::after {
+    content:'Coming Soon'; position:absolute; top:.65rem; right:.8rem;
+    font-size:.58rem; font-weight:800; letter-spacing:.07em; text-transform:uppercase;
+    background:var(--badge-bg); border:1px solid var(--badge-border); border-radius:999px;
+    padding:2px 8px; color:var(--badge-color);
+  }
+
+  /* Animation delays */
+  .card:nth-child(1){animation-delay:.05s}.card:nth-child(2){animation-delay:.10s}.card:nth-child(3){animation-delay:.15s}
+  .card:nth-child(4){animation-delay:.20s}.card:nth-child(5){animation-delay:.25s}.card:nth-child(6){animation-delay:.30s}
+  .card:nth-child(7){animation-delay:.35s}.card:nth-child(8){animation-delay:.40s}.card:nth-child(9){animation-delay:.45s}
+  .card:nth-child(n+10){animation-delay:.50s}
+
+  /* Wide cards (assessments) */
+  .wide-card {
+    flex:0 1 340px;
+    position:relative; display:flex; align-items:center; gap:1rem;
+    padding:1.1rem 1.3rem; border-radius:18px;
+    background:var(--card-bg); border:1.5px solid var(--card-border);
+    text-decoration:none; color:var(--body-color); overflow:hidden;
+    transition:transform .22s cubic-bezier(.22,.68,0,1.2),border-color .2s,box-shadow .2s,background .4s;
+    animation:riseUp .5s ease both; cursor:pointer;
+  }
+  .wide-card:hover { transform:translateY(-5px) scale(1.015); border-color:var(--card-border-h); box-shadow:0 10px 32px var(--card-shadow); }
+  .wide-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; border-radius:18px 18px 0 0; background:var(--accent,#4DABF7); }
+  .wide-icon  { font-size:2.1rem; flex-shrink:0; line-height:1; }
+  .wide-body  { flex:1; min-width:0; }
+  .wide-title { font-family:'Fredoka One',cursive; font-size:1.02rem; color:var(--accent,#4DABF7); line-height:1.2; margin-bottom:3px; }
+  .wide-desc  { font-size:.75rem; color:var(--card-desc); font-weight:600; line-height:1.4; word-break:break-word; }
+  .wide-foot  { display:flex; gap:6px; align-items:center; margin-top:.45rem; flex-wrap:wrap; }
+  .wide-badge { font-size:.6rem; font-weight:800; letter-spacing:.07em; text-transform:uppercase; padding:3px 10px; border-radius:999px; background:var(--badge-bg); color:var(--badge-color); border:1px solid var(--badge-border); flex-shrink:0; white-space:nowrap; transition:all .4s; }
+
+  /* Assessment category colours */
+  .cat-classwork { --accent:#20C997; }
+  .cat-homework  { --accent:#F783AC; }
+  .cat-project   { --accent:#9775FA; }
+  .cat-test      { --accent:#FFA94D; }
+  /* Darker category accents on light themes for readability (same approach as Std 5 Science) */
+  body.theme-sunny .cat-classwork, body.theme-cloudy .cat-classwork, body.theme-nature .cat-classwork { --accent:#0f766e; }
+  body.theme-sunny .cat-homework,  body.theme-cloudy .cat-homework,  body.theme-nature .cat-homework  { --accent:#be185d; }
+  body.theme-sunny .cat-project,   body.theme-cloudy .cat-project,   body.theme-nature .cat-project   { --accent:#6d28d9; }
+  body.theme-sunny .cat-test,      body.theme-cloudy .cat-test,      body.theme-nature .cat-test      { --accent:#c2410c; }
+  .legend-chip { color:var(--accent); border-color:var(--accent); background:transparent; }
+
+  /* Room for the Coming Soon tag so it never covers a title */
+  .card.soon, .week-card.soon { padding-top:2.1rem; }
+  .wide-card.soon, .lab-card.soon { padding-top:2rem; }
+
+  /* Week cards (Power-ups) — expand to five day chips */
+  .week-card {
+    flex:0 1 420px;
+    position:relative; display:block;
+    padding:1.25rem 1.3rem 1.15rem; border-radius:18px;
+    background:var(--card-bg); border:1.5px solid var(--card-border);
+    color:var(--body-color); overflow:hidden;
+    transition:border-color .2s,box-shadow .2s,background .4s;
+    animation:riseUp .5s ease both;
+  }
+  .week-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; border-radius:18px 18px 0 0; background:var(--accent,#4DABF7); }
+  .week-card:hover { border-color:var(--card-border-h); box-shadow:0 10px 32px var(--card-shadow); }
+  .week-head { display:flex; justify-content:space-between; align-items:baseline; gap:.6rem; flex-wrap:wrap; margin-bottom:.3rem; }
+  .week-title { font-family:'Fredoka One',cursive; font-size:1.05rem; color:var(--accent,#4DABF7); line-height:1.2; }
+  .week-count { font-size:.65rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--section-lbl); }
+  .week-outcomes { font-size:.75rem; color:var(--card-desc); font-weight:600; line-height:1.45; margin-bottom:.85rem; word-break:break-word; }
+  .day-row { display:flex; flex-wrap:wrap; gap:.45rem; }
+  .day-chip {
+    flex:1 1 72px; min-height:44px;
+    display:flex; flex-direction:column; justify-content:center;
+    background:var(--cycle-bg); border:1px solid var(--cycle-border); border-radius:11px;
+    padding:.45rem .55rem; text-decoration:none; color:var(--body-color);
+    transition:background .2s,border-color .2s,transform .18s;
+  }
+  .day-chip:hover { transform:translateY(-2px); border-color:var(--card-border-h); }
+  .day-chip.soon { opacity:.5; pointer-events:none; }
+  .day-n { font-family:'Fredoka One',cursive; font-size:.8rem; color:var(--accent,#4DABF7); line-height:1.1; }
+  .day-l { font-size:.6rem; font-weight:800; letter-spacing:.04em; text-transform:uppercase; color:var(--section-lbl); margin-top:1px; }
+
+  /* Lab / tool cards */
+  .lab-card {
+    flex:0 1 420px;
+    position:relative; display:flex; align-items:flex-start; gap:1.1rem;
+    padding:1.3rem 1.4rem 1.2rem; border-radius:18px;
+    background:var(--card-bg); border:1.5px solid var(--card-border);
+    text-decoration:none; color:var(--body-color); overflow:hidden;
+    transition:transform .22s cubic-bezier(.22,.68,0,1.2),border-color .2s,box-shadow .2s,background .4s;
+    animation:riseUp .5s ease both; cursor:pointer;
+  }
+  .lab-card:hover { transform:translateY(-5px) scale(1.015); border-color:var(--card-border-h); box-shadow:0 10px 32px var(--card-shadow); }
+  .lab-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; border-radius:18px 18px 0 0; background:var(--accent,#4DABF7); }
+  .lab-icon  { font-size:2.4rem; flex-shrink:0; line-height:1; margin-top:2px; }
+  .lab-body  { flex:1; min-width:0; }
+  .lab-title { font-family:'Fredoka One',cursive; font-size:1.15rem; color:var(--accent,#4DABF7); line-height:1.2; margin-bottom:4px; }
+  .lab-desc  { font-size:.78rem; color:var(--card-desc); font-weight:600; line-height:1.45; word-break:break-word; }
+  .lab-meta  { display:flex; gap:6px; flex-wrap:wrap; margin-top:.55rem; }
+  .lab-tag   { font-size:.6rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:2px 9px; border-radius:999px; background:var(--badge-bg); color:var(--badge-color); border:1px solid var(--badge-border); }
+
+  /* Footer */
+  .site-footer { position:relative; z-index:1; background:var(--footer-bg); border-top:1px solid var(--footer-border); padding:2rem max(1rem, 4vw); margin-top:3rem; display:flex; flex-direction:column; align-items:center; gap:.5rem; transition:background .4s,border-color .4s; }
+  .site-footer::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--grad-bar); }
+  .footer-logo { display:flex; align-items:center; gap:.6rem; margin-bottom:.4rem; }
+  .footer-logo img { height:36px; width:auto; border-radius:8px; opacity:.75; }
+  .footer-logo span { font-family:'Fredoka One',cursive; font-size:1rem; color:var(--footer-name); transition:color .4s; }
+  .footer-tagline { font-size:.82rem; font-weight:700; color:var(--footer-tag); letter-spacing:.03em; font-style:italic; text-align:center; transition:color .4s; }
+  .footer-copy    { font-size:.72rem; color:var(--footer-copy); font-weight:600; letter-spacing:.04em; margin-top:.2rem; text-align:center; transition:color .4s; }
+
+  #back-to-top { display:none; position:fixed; bottom:1.5rem; right:1.5rem; z-index:99; background:var(--back-top-bg); color:var(--back-top-c); border:none; border-radius:12px; width:44px; height:44px; font-size:1.2rem; font-weight:900; cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,.25); transition:background .2s,transform .2s,color .4s; align-items:center; justify-content:center; }
+  #back-to-top:hover { transform:translateY(-3px); filter:brightness(1.1); }
+
+  /* Zoom control */
+  #zoom-btn { position:fixed; bottom:1.5rem; left:1.5rem; z-index:99; background:var(--back-top-bg); color:var(--back-top-c); border:none; border-radius:12px; min-width:44px; height:44px; padding:0 12px; font-family:'Fredoka One',cursive; font-size:.95rem; cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,.25); display:flex; align-items:center; gap:7px; transition:background .2s,transform .2s,color .4s; }
+  #zoom-btn:hover { transform:translateY(-3px); filter:brightness(1.1); }
+  .zoom-dots { display:flex; gap:3px; }
+  .zoom-dot { width:5px; height:5px; border-radius:50%; background:currentColor; opacity:.32; }
+  .zoom-dot.on { opacity:1; }
+  html.zoom-1 { font-size:115%; }
+  html.zoom-2 { font-size:130%; }
+  html.zoom-3 { font-size:150%; }
+
+  @media (max-width:700px) {
+    .grid .card, .wide-card, .lab-card, .week-card { flex:0 1 100%; }
+  }
+  @media (max-width:640px) {
+    .cycle-divider { flex-wrap:wrap; justify-content:center; }
+    .cycle-divider-label { width:100%; text-align:center; }
+    .cycle-divider-line { display:none; }
+    .site-header { flex-direction:column; align-items:flex-start; gap:.5rem; }
+    .welcome { flex-direction:column; align-items:flex-start; }
+    #zoom-btn, #back-to-top { bottom:1rem; }
+    #zoom-btn { left:1rem; }
+    #back-to-top { right:1rem; }
+  }
+</style>
+</head>
+<body class="theme-night">
+
+<div class="stars" id="stars"></div>
+<canvas id="num-canvas"></canvas>
+
+<div class="theme-bar">
+  <button class="theme-btn active" onclick="setTheme('night',this)">🌙 Night</button>
+  <button class="theme-btn" onclick="setTheme('sunny',this)">☀️ Sunny</button>
+  <button class="theme-btn" onclick="setTheme('cloudy',this)">☁️ Cloudy</button>
+  <button class="theme-btn" onclick="setTheme('nature',this)">🌿 Nature</button>
+</div>
+
+<div class="wrapper">
+
+  <div class="site-header">
+    <a class="site-header-logo" href="/standard5/">
+      <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+      <span>Mr. EdLo's Virtual Classroom</span>
+    </a>
+    <span class="header-badge">Standard 5 &nbsp;·&nbsp; Belize</span>
+  </div>
+
+  <a class="back-link" href="/standard5/">← Back to Virtual Classroom</a>
+
+  <header>
+    <div class="badge">Standard 5 &nbsp;·&nbsp; Mathematics</div>
+    <h1>📐 Mathematics</h1>
+    <p class="subtitle">30 teaching weeks &nbsp;·&nbsp; 4 cycles &nbsp;·&nbsp; school weeks 4–33</p>
+  </header>
+
+  <div class="welcome">
+    <div class="welcome-icon">🔢</div>
+    <div class="welcome-text">
+      <strong>Welcome, Standard 5!</strong> Standard 5 is the bridge year — it takes what you learned in
+      Standard 4 and gets you ready for Standard 6. Everything you need is here: your weekly lessons,
+      your daily Power-Ups, every graded assessment, and the tools you can reach for whenever you get stuck.
+    </div>
+  </div>
+
+  <div class="tabs-wrap">
+    <button class="tab-btn active" onclick="showTab('lessons',this)">📖 Lessons</button>
+    <button class="tab-btn"        onclick="showTab('assessments',this)">📝 Assessments</button>
+    <button class="tab-btn"        onclick="showTab('powerups',this)">⚡ Power-Ups</button>
+    <button class="tab-btn"        onclick="showTab('tools',this)">🧮 Tools &amp; Simulations</button>
+  </div>
+
+  <!-- ══════════════════════════════
+       LESSONS TAB
+  ══════════════════════════════ -->
+  <div class="tab-panel active" id="tab-lessons">
+
+    <div class="note-strip">
+      <div class="note-icon">🧭</div>
+      <div class="note-text">
+        <strong>How the year is built.</strong> School weeks 1–3 are the Diagnostic and Repair block.
+        Teaching runs from week 4 to week 33 across four cycles — 150 lessons in all. Weeks 34–36 are
+        buffer for national assessments and school activities. Each card below opens one teaching week.
+      </div>
+    </div>
+
+    <!-- CYCLE 1 -->
+    <div class="cycle-divider">
+      <span class="cycle-divider-label">🔢 Cycle 1 · Numbers All Around Us · School Weeks 4–10</span>
+      <div class="cycle-divider-line"></div>
+    </div>
+    <div class="grid">
+
+      <a class="card soon" style="--accent:#4DABF7;">
+        <div class="card-num">Week 1 · School Wk 4</div>
+        <div class="card-icon">🔭</div>
+        <div class="card-title">Very Large Numbers &amp; Scientific Notation</div>
+        <div class="card-desc">Standard, expanded and scientific form; rounding to significant figures</div>
+        <div class="card-tags"><span class="tag">MA 1.34</span><span class="tag">MA 1.35</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#4DABF7;">
+        <div class="card-num">Week 2 · School Wk 5</div>
+        <div class="card-icon">🔬</div>
+        <div class="card-title">Decimals &amp; Number Types</div>
+        <div class="card-desc">Three or more decimal places; odd, even, prime and composite numbers</div>
+        <div class="card-tags"><span class="tag">MA 1.36</span><span class="tag">MA 1.37</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#74C0FC;">
+        <div class="card-num">Week 3 · School Wk 6</div>
+        <div class="card-icon">⬛</div>
+        <div class="card-title">Squares &amp; Cube Numbers</div>
+        <div class="card-desc">Squares of 1–20 plus 25 and 100; cube numbers built concretely</div>
+        <div class="card-tags"><span class="tag">MA 1.38</span><span class="tag">MA 1.39</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#9775FA;">
+        <div class="card-num">Week 4 · School Wk 7</div>
+        <div class="card-icon">📈</div>
+        <div class="card-title">Patterns &amp; Arithmetic Progressions</div>
+        <div class="card-desc">Patterns in real data using tables, graphs and diagrams; first progressions</div>
+        <div class="card-tags"><span class="tag">MA 2.16</span><span class="tag">MA 2.17</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#9775FA;">
+        <div class="card-num">Week 5 · School Wk 8</div>
+        <div class="card-icon">🌀</div>
+        <div class="card-title">Geometric Progressions &amp; Mental Operations</div>
+        <div class="card-desc">Geometric progressions; mental addition and subtraction to three digits</div>
+        <div class="card-tags"><span class="tag">MA 2.17</span><span class="tag">MA 3.25</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#20C997;">
+        <div class="card-num">Week 6 · School Wk 9</div>
+        <div class="card-icon">➕</div>
+        <div class="card-title">Integer Operations</div>
+        <div class="card-desc">Adding and subtracting integers with like and unlike signs</div>
+        <div class="card-tags"><span class="tag">MA 3.26</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#20C997;">
+        <div class="card-num">Week 7 · School Wk 10</div>
+        <div class="card-icon">💵</div>
+        <div class="card-title">Decimal Operations &amp; Revision</div>
+        <div class="card-desc">Adding and subtracting decimals in real-world problems, then cycle revision</div>
+        <div class="card-tags"><span class="tag">MA 3.27</span><span class="tag">Revision</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+    </div>
+
+    <!-- CYCLE 2 -->
+    <div class="cycle-divider">
+      <span class="cycle-divider-label">➗ Cycle 2 · Parts, Products &amp; Proportions · School Weeks 11–19</span>
+      <div class="cycle-divider-line"></div>
+    </div>
+    <div class="grid">
+
+      <a class="card soon" style="--accent:#4DABF7;">
+        <div class="card-num">Week 1 · School Wk 11</div>
+        <div class="card-icon">✖️</div>
+        <div class="card-title">Multiply &amp; Divide Strategies</div>
+        <div class="card-desc">Efficient strategies, then positive × negative</div>
+        <div class="card-tags"><span class="tag">MA 4.37</span><span class="tag">MA 4.38</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#4DABF7;">
+        <div class="card-num">Week 2 · School Wk 12</div>
+        <div class="card-icon">🌳</div>
+        <div class="card-title">LCM, GCF &amp; Factor Trees</div>
+        <div class="card-desc">Lowest common multiple, greatest common factor and factor trees</div>
+        <div class="card-tags"><span class="tag">MA 4.39</span><span class="tag">MA 4.40</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#74C0FC;">
+        <div class="card-num">Week 3 · School Wk 13</div>
+        <div class="card-icon">🔑</div>
+        <div class="card-title">Prime Factors &amp; Mixed Numbers</div>
+        <div class="card-desc">Prime factorisation, then adding and subtracting mixed numbers</div>
+        <div class="card-tags"><span class="tag">MA 4.40</span><span class="tag">MA 5.40</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#74C0FC;">
+        <div class="card-num">Week 4 · School Wk 14</div>
+        <div class="card-icon">🍰</div>
+        <div class="card-title">Multiply &amp; Divide Mixed Numbers</div>
+        <div class="card-desc">Multiplying and dividing mixed numbers, plus flex time</div>
+        <div class="card-tags"><span class="tag">MA 5.41</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#9775FA;">
+        <div class="card-num">Week 5 · School Wk 15</div>
+        <div class="card-icon">🧩</div>
+        <div class="card-title">Multi-Operation Problems</div>
+        <div class="card-desc">Problems that need more than one operation, plus flex time</div>
+        <div class="card-tags"><span class="tag">MA 5.42</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#9775FA;">
+        <div class="card-num">Week 6 · School Wk 16</div>
+        <div class="card-icon">🔄</div>
+        <div class="card-title">Fractions, Decimals &amp; Percents</div>
+        <div class="card-desc">Converting between all three forms and comparing them</div>
+        <div class="card-tags"><span class="tag">MA 5.43</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#FFA94D;">
+        <div class="card-num">Week 7 · School Wk 17</div>
+        <div class="card-icon">📊</div>
+        <div class="card-title">Percentage Change &amp; Ratio</div>
+        <div class="card-desc">Percentage increase and decrease, then an introduction to ratio</div>
+        <div class="card-tags"><span class="tag">MA 5.43</span><span class="tag">MA 5.49</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#FFA94D;">
+        <div class="card-num">Week 8 · School Wk 18</div>
+        <div class="card-icon">⚖️</div>
+        <div class="card-title">Sharing in a Ratio · Rates</div>
+        <div class="card-desc">Sharing quantities in a given ratio; how rates differ from ratios</div>
+        <div class="card-tags"><span class="tag">MA 5.49</span><span class="tag">MA 5.50</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#20C997;">
+        <div class="card-num">Week 9 · School Wk 19</div>
+        <div class="card-icon">🏁</div>
+        <div class="card-title">Average Speed, Best Value &amp; Revision</div>
+        <div class="card-desc">Average speed and best-value comparisons, then cycle revision</div>
+        <div class="card-tags"><span class="tag">MA 5.50</span><span class="tag">Revision</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+    </div>
+
+    <!-- CYCLE 3 -->
+    <div class="cycle-divider">
+      <span class="cycle-divider-label">📐 Cycle 3 · Shapes &amp; Measures of Our World · School Weeks 20–27</span>
+      <div class="cycle-divider-line"></div>
+    </div>
+    <div class="grid">
+
+      <a class="card soon" style="--accent:#4DABF7;">
+        <div class="card-num">Week 1 · School Wk 20</div>
+        <div class="card-icon">🔺</div>
+        <div class="card-title">Perimeter &amp; Area</div>
+        <div class="card-desc">Perimeter and area of triangles and quadrilaterals</div>
+        <div class="card-tags"><span class="tag">MA 6.34</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#4DABF7;">
+        <div class="card-num">Week 2 · School Wk 21</div>
+        <div class="card-icon">🧱</div>
+        <div class="card-title">Compound Shapes &amp; Circle Parts</div>
+        <div class="card-desc">Breaking compound shapes apart; naming circle parts and discovering π</div>
+        <div class="card-tags"><span class="tag">MA 6.34</span><span class="tag">MA 6.35</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#74C0FC;">
+        <div class="card-num">Week 3 · School Wk 22</div>
+        <div class="card-icon">⭕</div>
+        <div class="card-title">Circumference, Area &amp; Nets</div>
+        <div class="card-desc">Circumference and area of circles; 3D objects and their nets</div>
+        <div class="card-tags"><span class="tag">MA 6.35</span><span class="tag">MA 6.36</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#74C0FC;">
+        <div class="card-num">Week 4 · School Wk 23</div>
+        <div class="card-icon">📦</div>
+        <div class="card-title">Volume of Cuboids &amp; Surface Area</div>
+        <div class="card-desc">Volume of cuboids and an introduction to surface area</div>
+        <div class="card-tags"><span class="tag">MA 6.37</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#9775FA;">
+        <div class="card-num">Week 5 · School Wk 24</div>
+        <div class="card-icon">📍</div>
+        <div class="card-title">Surface Area vs Volume · Coordinates</div>
+        <div class="card-desc">Choosing between SA and V; first-quadrant coordinates and reflecting in the y-axis</div>
+        <div class="card-tags"><span class="tag">MA 6.37</span><span class="tag">MA 6.38</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#9775FA;">
+        <div class="card-num">Week 6 · School Wk 25</div>
+        <div class="card-icon">🪞</div>
+        <div class="card-title">Reflections &amp; Tessellations</div>
+        <div class="card-desc">Reflecting in the x-axis and combined reflections; tessellating shapes</div>
+        <div class="card-tags"><span class="tag">MA 6.38</span><span class="tag">MA 6.39</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#FFA94D;">
+        <div class="card-num">Week 7 · School Wk 26</div>
+        <div class="card-icon">🌡️</div>
+        <div class="card-title">Unit Conversions, Negatives &amp; Speed</div>
+        <div class="card-desc">Converting units; negative temperatures and BCE dates; introducing speed</div>
+        <div class="card-tags"><span class="tag">MA 7.32</span><span class="tag">MA 7.34</span><span class="tag">MA 7.35</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#20C997;">
+        <div class="card-num">Week 8 · School Wk 27</div>
+        <div class="card-icon">⏱️</div>
+        <div class="card-title">Average Speed, Elapsed Time &amp; Revision</div>
+        <div class="card-desc">Average speed with unit conversion, elapsed time, then cycle revision</div>
+        <div class="card-tags"><span class="tag">MA 7.35</span><span class="tag">MA 7.36</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+    </div>
+
+    <!-- CYCLE 4 -->
+    <div class="cycle-divider">
+      <span class="cycle-divider-label">🎲 Cycle 4 · Data, Sets &amp; Chance · School Weeks 28–33</span>
+      <div class="cycle-divider-line"></div>
+    </div>
+    <div class="grid">
+
+      <a class="card soon" style="--accent:#4DABF7;">
+        <div class="card-num">Week 1 · School Wk 28</div>
+        <div class="card-icon">🥧</div>
+        <div class="card-title">Frequency Tables &amp; Circle Graphs</div>
+        <div class="card-desc">Building frequency tables and constructing circle graphs</div>
+        <div class="card-tags"><span class="tag">MA 9.19</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#4DABF7;">
+        <div class="card-num">Week 2 · School Wk 29</div>
+        <div class="card-icon">📉</div>
+        <div class="card-title">Line Graphs &amp; the Mean</div>
+        <div class="card-desc">Constructing line graphs, comparing graph types, mean of large data sets</div>
+        <div class="card-tags"><span class="tag">MA 9.19</span><span class="tag">MA 9.20</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#74C0FC;">
+        <div class="card-num">Week 3 · School Wk 30</div>
+        <div class="card-icon">🎯</div>
+        <div class="card-title">Median, Which Average &amp; Set Notation</div>
+        <div class="card-desc">Finding the median, choosing the right average, set notation and intersection</div>
+        <div class="card-tags"><span class="tag">MA 9.20</span><span class="tag">MA 8.07</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#9775FA;">
+        <div class="card-num">Week 4 · School Wk 31</div>
+        <div class="card-icon">🔗</div>
+        <div class="card-title">Union, Subsets &amp; First Probability</div>
+        <div class="card-desc">The union formula, subsets, the probability scale and the P formula</div>
+        <div class="card-tags"><span class="tag">MA 8.07</span><span class="tag">MA 8.08</span><span class="tag">MA 9.21</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#9775FA;">
+        <div class="card-num">Week 5 · School Wk 32</div>
+        <div class="card-icon">🎲</div>
+        <div class="card-title">Theoretical vs Experimental Probability</div>
+        <div class="card-desc">Probability in three forms; recording outcomes in tables and bar graphs</div>
+        <div class="card-tags"><span class="tag">MA 9.21</span><span class="tag">MA 9.22</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card soon" style="--accent:#20C997;">
+        <div class="card-num">Week 6 · School Wk 33</div>
+        <div class="card-icon">🏆</div>
+        <div class="card-title">Probability from Graphs &amp; Year-End Review</div>
+        <div class="card-desc">Reading probability from bar graphs, pictographs and circle graphs, then review</div>
+        <div class="card-tags"><span class="tag">MA 9.23</span><span class="tag">Revision</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+    </div>
+  </div><!-- /tab-lessons -->
+
+  <!-- ══════════════════════════════
+       ASSESSMENTS TAB
+  ══════════════════════════════ -->
+  <div class="tab-panel" id="tab-assessments">
+
+    <!-- ═══ HOW TO PUT AN ASSESSMENT LIVE (Mr. EdLo) ═══
+         1. Put the student page in the repo at the address shown in the card's href,
+            e.g. standard5/math/classwork/c1-classwork1/index.html
+         2. On that card, delete the word  soon  from the class:
+               class="wide-card soon cat-classwork"  →  class="wide-card cat-classwork"
+         That's it — the card lights up and becomes clickable.
+         Folders: classwork/  homework/  projects/  tests/   ·   c1 = Cycle 1
+    ════════════════════════════════════════════════ -->
+
+    <div class="note-strip">
+      <div class="note-icon">📋</div>
+      <div class="note-text">
+        <strong>Twelve graded items every cycle.</strong> Three classwork checks, three take-home problem sets,
+        three projects and three tests — forty-eight in all across the year. Tests and marked quizzes run in
+        two parts: an online part and a paper part where you show your working. Both parts count as one grade.
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:1rem;">
+      <span class="wide-badge legend-chip cat-classwork">Classwork &amp; Quizzes · 35%</span>
+      <span class="wide-badge legend-chip cat-homework">Homework · 5%</span>
+      <span class="wide-badge legend-chip cat-project">Projects &amp; Presentations · 30%</span>
+      <span class="wide-badge legend-chip cat-test">Tests · 30%</span>
+    </div>
+
+    <!-- CYCLE 1 -->
+    <div class="cycle-divider">
+      <span class="cycle-divider-label">🔢 Cycle 1 Assessments · School Weeks 4–10</span>
+      <div class="cycle-divider-line"></div>
+    </div>
+    <div class="grid">
+
+      <a class="wide-card soon cat-classwork" href="/standard5/math/classwork/c1-classwork1/">
+        <div class="wide-icon">✏️</div>
+        <div class="wide-body">
+          <div class="wide-title">Scientific Notation &amp; Rounding Check</div>
+          <div class="wide-desc">In-class worksheet with a worked-example scaffold · standard and scientific form, significant figures, decimals</div>
+          <div class="wide-foot"><span class="wide-badge">Classwork · Wk 5</span><span class="wide-badge">MA 1.34–1.36</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-homework" href="/standard5/math/homework/c1-set1/">
+        <div class="wide-icon">🏠</div>
+        <div class="wide-body">
+          <div class="wide-title">Problem Set 1 — Big Numbers &amp; Rounding</div>
+          <div class="wide-desc">Take-home problem set · 8–10 items including word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Homework · Wk 5</span><span class="wide-badge">MA 1.34–1.36</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-project" href="/standard5/math/projects/c1-project1/">
+        <div class="wide-icon">🖼️</div>
+        <div class="wide-body">
+          <div class="wide-title">Big Numbers of Belize Poster</div>
+          <div class="wide-desc">Group poster · real Belize facts written in standard, expanded and scientific form — population, reef length, district distances</div>
+          <div class="wide-foot"><span class="wide-badge">Project · Wk 6</span><span class="wide-badge">MA 1.34</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-test" href="/standard5/math/tests/c1-unit1/">
+        <div class="wide-icon">📋</div>
+        <div class="wide-body">
+          <div class="wide-title">Unit Test 1 — Big Numbers &amp; Number Types</div>
+          <div class="wide-desc">Two-part test · online fixed items plus paper word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Test · End Wk 6</span><span class="wide-badge">MA 1.34–1.37</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-classwork" href="/standard5/math/classwork/c1-classwork2/">
+        <div class="wide-icon">🃏</div>
+        <div class="wide-body">
+          <div class="wide-title">Prime, Square &amp; Cube Sort</div>
+          <div class="wide-desc">Card sort plus a short written task · odd, even, prime and composite; squares 1–20; cubes</div>
+          <div class="wide-foot"><span class="wide-badge">Classwork · Wk 7</span><span class="wide-badge">MA 1.37–1.39</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-homework" href="/standard5/math/homework/c1-set2/">
+        <div class="wide-icon">🏠</div>
+        <div class="wide-body">
+          <div class="wide-title">Problem Set 2 — Number Types, Squares &amp; Cubes</div>
+          <div class="wide-desc">Take-home problem set · 8–10 items including word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Homework · Wk 7</span><span class="wide-badge">MA 1.37–1.39</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-project" href="/standard5/math/projects/c1-project2/">
+        <div class="wide-icon">🔍</div>
+        <div class="wide-body">
+          <div class="wide-title">Pattern Hunters Gallery</div>
+          <div class="wide-desc">Group display and share-out · progressions found in real data — bus fares, savings plans, growth tables</div>
+          <div class="wide-foot"><span class="wide-badge">Project · Wk 8</span><span class="wide-badge">MA 2.16–2.17</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-test" href="/standard5/math/tests/c1-unit2/">
+        <div class="wide-icon">📋</div>
+        <div class="wide-body">
+          <div class="wide-title">Unit Test 2 — Squares, Cubes &amp; Patterns</div>
+          <div class="wide-desc">Two-part test · online fixed items plus paper word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Test · End Wk 8</span><span class="wide-badge">MA 1.38–1.39, 2.16–2.17</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-classwork" href="/standard5/math/classwork/c1-classwork3/">
+        <div class="wide-icon">➖</div>
+        <div class="wide-body">
+          <div class="wide-title">Integer Operations Quiz</div>
+          <div class="wide-desc">Two-part · 10-item online quiz plus paper word problems · like and unlike signs</div>
+          <div class="wide-foot"><span class="wide-badge">Classwork · Wk 9</span><span class="wide-badge">MA 3.26</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-homework" href="/standard5/math/homework/c1-set3/">
+        <div class="wide-icon">🏠</div>
+        <div class="wide-body">
+          <div class="wide-title">Problem Set 3 — Integers &amp; Decimals</div>
+          <div class="wide-desc">Take-home problem set · 8–10 items including word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Homework · Wk 9</span><span class="wide-badge">MA 3.25–3.27</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-project" href="/standard5/math/projects/c1-project3/">
+        <div class="wide-icon">🧺</div>
+        <div class="wide-body">
+          <div class="wide-title">Market Day Money Trail</div>
+          <div class="wide-desc">Group presentation · integer and decimal number stories from receipts, temperature and sea level</div>
+          <div class="wide-foot"><span class="wide-badge">Project · Wk 10</span><span class="wide-badge">MA 3.26–3.27</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-test" href="/standard5/math/tests/c1-review/">
+        <div class="wide-icon">🏁</div>
+        <div class="wide-body">
+          <div class="wide-title">Cycle 1 Review Test</div>
+          <div class="wide-desc">Cumulative two-part test covering all of Cycle 1 · sat before report cards</div>
+          <div class="wide-foot"><span class="wide-badge">Test · Wk 10</span><span class="wide-badge">All Cycle 1</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- CYCLE 2 -->
+    <div class="cycle-divider">
+      <span class="cycle-divider-label">➗ Cycle 2 Assessments · School Weeks 11–19</span>
+      <div class="cycle-divider-line"></div>
+    </div>
+    <div class="grid">
+
+      <a class="wide-card soon cat-homework" href="/standard5/math/homework/c2-set1/">
+        <div class="wide-icon">🏠</div>
+        <div class="wide-body">
+          <div class="wide-title">Problem Set 1 — Multiplying &amp; Dividing</div>
+          <div class="wide-desc">Take-home problem set including negatives · 8–10 items with word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Homework · Wk 12</span><span class="wide-badge">MA 4.37–4.38</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-classwork" href="/standard5/math/classwork/c2-classwork1/">
+        <div class="wide-icon">🌳</div>
+        <div class="wide-body">
+          <div class="wide-title">Prime Factor Trees Task</div>
+          <div class="wide-desc">In-class worksheet · factor trees, lowest common multiple and greatest common factor</div>
+          <div class="wide-foot"><span class="wide-badge">Classwork · Wk 13</span><span class="wide-badge">MA 4.39–4.40</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-project" href="/standard5/math/projects/c2-project1/">
+        <div class="wide-icon">📦</div>
+        <div class="wide-body">
+          <div class="wide-title">Market Bundles — LCM &amp; GCF in Action</div>
+          <div class="wide-desc">Group task · packaging and bundling problems solved with prime factors</div>
+          <div class="wide-foot"><span class="wide-badge">Project · Wk 13</span><span class="wide-badge">MA 4.39–4.40</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-test" href="/standard5/math/tests/c2-unit1/">
+        <div class="wide-icon">📋</div>
+        <div class="wide-body">
+          <div class="wide-title">Unit Test 1 — Multiplication, Division &amp; Prime Factors</div>
+          <div class="wide-desc">Two-part test · online fixed items plus paper word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Test · End Wk 13</span><span class="wide-badge">MA 4.37–4.40</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-classwork" href="/standard5/math/classwork/c2-classwork2/">
+        <div class="wide-icon">🍰</div>
+        <div class="wide-body">
+          <div class="wide-title">Mixed-Number Operations Quiz</div>
+          <div class="wide-desc">Two-part · 10-item online quiz plus paper word problems · add, subtract, multiply and divide</div>
+          <div class="wide-foot"><span class="wide-badge">Classwork · Wk 15</span><span class="wide-badge">MA 5.40–5.41</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-homework" href="/standard5/math/homework/c2-set2/">
+        <div class="wide-icon">🏠</div>
+        <div class="wide-body">
+          <div class="wide-title">Problem Set 2 — Mixed Numbers &amp; Multi-Operation</div>
+          <div class="wide-desc">Take-home problem set · 8–10 items including word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Homework · Wk 15</span><span class="wide-badge">MA 5.40–5.42</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-project" href="/standard5/math/projects/c2-project2/">
+        <div class="wide-icon">🍲</div>
+        <div class="wide-body">
+          <div class="wide-title">Recipe Rescale — Cooking for the Class</div>
+          <div class="wide-desc">Group project · scale a Belizean recipe using mixed numbers — rice and beans, fry jacks</div>
+          <div class="wide-foot"><span class="wide-badge">Project · Wk 16</span><span class="wide-badge">MA 5.40–5.42</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-test" href="/standard5/math/tests/c2-unit2/">
+        <div class="wide-icon">📋</div>
+        <div class="wide-body">
+          <div class="wide-title">Unit Test 2 — Fractions, Mixed Numbers &amp; Percents</div>
+          <div class="wide-desc">Two-part test · online fixed items plus paper word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Test · End Wk 16</span><span class="wide-badge">MA 5.40–5.43</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-classwork" href="/standard5/math/classwork/c2-classwork3/">
+        <div class="wide-icon">🔄</div>
+        <div class="wide-body">
+          <div class="wide-title">Percent &amp; Ratio Conversion Check</div>
+          <div class="wide-desc">In-class task · fraction, decimal and percent table plus percentage increase and decrease</div>
+          <div class="wide-foot"><span class="wide-badge">Classwork · Wk 17</span><span class="wide-badge">MA 5.43, 5.49</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-homework" href="/standard5/math/homework/c2-set3/">
+        <div class="wide-icon">🏠</div>
+        <div class="wide-body">
+          <div class="wide-title">Problem Set 3 — Ratios &amp; Rates</div>
+          <div class="wide-desc">Take-home problem set · 8–10 items including word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Homework · Wk 18</span><span class="wide-badge">MA 5.49–5.50</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-project" href="/standard5/math/projects/c2-project3/">
+        <div class="wide-icon">🛒</div>
+        <div class="wide-body">
+          <div class="wide-title">Best Buy Belize</div>
+          <div class="wide-desc">Group presentation · compare shop prices using ratios and rates</div>
+          <div class="wide-foot"><span class="wide-badge">Project · Wk 18</span><span class="wide-badge">MA 5.43, 5.49–5.50</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-test" href="/standard5/math/tests/c2-review/">
+        <div class="wide-icon">🏁</div>
+        <div class="wide-body">
+          <div class="wide-title">Cycle 2 Review Test</div>
+          <div class="wide-desc">Cumulative two-part test covering all of Cycle 2 · sat before report cards</div>
+          <div class="wide-foot"><span class="wide-badge">Test · Wk 19</span><span class="wide-badge">All Cycle 2</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- CYCLE 3 -->
+    <div class="cycle-divider">
+      <span class="cycle-divider-label">📐 Cycle 3 Assessments · School Weeks 20–27</span>
+      <div class="cycle-divider-line"></div>
+    </div>
+    <div class="grid">
+
+      <a class="wide-card soon cat-classwork" href="/standard5/math/classwork/c3-classwork1/">
+        <div class="wide-icon">⭕</div>
+        <div class="wide-body">
+          <div class="wide-title">Perimeter, Area &amp; Circles Check</div>
+          <div class="wide-desc">In-class worksheet with a formula bank</div>
+          <div class="wide-foot"><span class="wide-badge">Classwork · Wk 21</span><span class="wide-badge">MA 6.34–6.35</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-homework" href="/standard5/math/homework/c3-set1/">
+        <div class="wide-icon">🏠</div>
+        <div class="wide-body">
+          <div class="wide-title">Problem Set 1 — Perimeter, Area &amp; Circles</div>
+          <div class="wide-desc">Take-home problem set · 8–10 items including word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Homework · Wk 21</span><span class="wide-badge">MA 6.34–6.35</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-test" href="/standard5/math/tests/c3-unit1/">
+        <div class="wide-icon">📋</div>
+        <div class="wide-body">
+          <div class="wide-title">Unit Test 1 — Perimeter, Area, Circles &amp; Nets</div>
+          <div class="wide-desc">Two-part test · online fixed items plus paper word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Test · End Wk 22</span><span class="wide-badge">MA 6.34–6.36</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-classwork" href="/standard5/math/classwork/c3-classwork2/">
+        <div class="wide-icon">📦</div>
+        <div class="wide-body">
+          <div class="wide-title">Surface Area &amp; Volume Quiz</div>
+          <div class="wide-desc">Two-part · 10-item online quiz plus paper word problems · cuboids</div>
+          <div class="wide-foot"><span class="wide-badge">Classwork · Wk 23</span><span class="wide-badge">MA 6.37</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-project" href="/standard5/math/projects/c3-project1/">
+        <div class="wide-icon">🧊</div>
+        <div class="wide-body">
+          <div class="wide-title">Design-a-Box</div>
+          <div class="wide-desc">Group build · draw a net, construct the cuboid, calculate surface area and volume</div>
+          <div class="wide-foot"><span class="wide-badge">Project · Wk 23</span><span class="wide-badge">MA 6.36–6.37</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-homework" href="/standard5/math/homework/c3-set2/">
+        <div class="wide-icon">🏠</div>
+        <div class="wide-body">
+          <div class="wide-title">Problem Set 2 — Nets, Volume &amp; Coordinates</div>
+          <div class="wide-desc">Take-home problem set · 8–10 items including word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Homework · Wk 24</span><span class="wide-badge">MA 6.36–6.38</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-project" href="/standard5/math/projects/c3-project2/">
+        <div class="wide-icon">🎨</div>
+        <div class="wide-body">
+          <div class="wide-title">Reflection Art on the Grid</div>
+          <div class="wide-desc">Group coordinate-art and tessellation display · first-quadrant coordinates and reflections</div>
+          <div class="wide-foot"><span class="wide-badge">Project · Wk 24</span><span class="wide-badge">MA 6.38–6.39</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-test" href="/standard5/math/tests/c3-unit2/">
+        <div class="wide-icon">📋</div>
+        <div class="wide-body">
+          <div class="wide-title">Unit Test 2 — Volume, Coordinates &amp; Units</div>
+          <div class="wide-desc">Two-part test · online fixed items plus paper word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Test · End Wk 25</span><span class="wide-badge">MA 6.37–6.39, 7.32, 7.34</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-classwork" href="/standard5/math/classwork/c3-classwork3/">
+        <div class="wide-icon">⏱️</div>
+        <div class="wide-body">
+          <div class="wide-title">Speed &amp; Elapsed-Time Task</div>
+          <div class="wide-desc">In-class problem set · show your working</div>
+          <div class="wide-foot"><span class="wide-badge">Classwork · Wk 26</span><span class="wide-badge">MA 7.35–7.36</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-homework" href="/standard5/math/homework/c3-set3/">
+        <div class="wide-icon">🏠</div>
+        <div class="wide-body">
+          <div class="wide-title">Problem Set 3 — Units, Negatives &amp; Speed</div>
+          <div class="wide-desc">Take-home problem set · 8–10 items including word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Homework · Wk 26</span><span class="wide-badge">MA 7.32, 7.34–7.35</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-project" href="/standard5/math/projects/c3-project3/">
+        <div class="wide-icon">🗺️</div>
+        <div class="wide-body">
+          <div class="wide-title">Journey Across Belize</div>
+          <div class="wide-desc">Group travel plan · distances, speeds, start and end times</div>
+          <div class="wide-foot"><span class="wide-badge">Project · Wk 26–27</span><span class="wide-badge">MA 7.32, 7.35–7.36</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-test" href="/standard5/math/tests/c3-review/">
+        <div class="wide-icon">🏁</div>
+        <div class="wide-body">
+          <div class="wide-title">Cycle 3 Review Test</div>
+          <div class="wide-desc">Cumulative two-part test covering all of Cycle 3 · sat before report cards</div>
+          <div class="wide-foot"><span class="wide-badge">Test · Wk 27</span><span class="wide-badge">All Cycle 3</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- CYCLE 4 -->
+    <div class="cycle-divider">
+      <span class="cycle-divider-label">🎲 Cycle 4 Assessments · School Weeks 28–33</span>
+      <div class="cycle-divider-line"></div>
+    </div>
+    <div class="grid">
+
+      <a class="wide-card soon cat-classwork" href="/standard5/math/classwork/c4-classwork1/">
+        <div class="wide-icon">📊</div>
+        <div class="wide-body">
+          <div class="wide-title">Graph Builders Task</div>
+          <div class="wide-desc">In-class task · circle and line graphs built from frequency tables</div>
+          <div class="wide-foot"><span class="wide-badge">Classwork · Wk 28</span><span class="wide-badge">MA 9.19</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-classwork" href="/standard5/math/classwork/c4-classwork2/">
+        <div class="wide-icon">🎯</div>
+        <div class="wide-body">
+          <div class="wide-title">Averages Quiz — Mean, Median, Mode &amp; Range</div>
+          <div class="wide-desc">Two-part · 10-item online quiz plus paper word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Classwork · Wk 29</span><span class="wide-badge">MA 9.20</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-homework" href="/standard5/math/homework/c4-set1/">
+        <div class="wide-icon">🏠</div>
+        <div class="wide-body">
+          <div class="wide-title">Problem Set 1 — Graphs &amp; Averages</div>
+          <div class="wide-desc">Take-home problem set · 8–10 items including word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Homework · Wk 29</span><span class="wide-badge">MA 9.19–9.20</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-project" href="/standard5/math/projects/c4-project1/">
+        <div class="wide-icon">👥</div>
+        <div class="wide-body">
+          <div class="wide-title">Our Class in Numbers</div>
+          <div class="wide-desc">Group survey → frequency table → graphs and averages presented to the class</div>
+          <div class="wide-foot"><span class="wide-badge">Project · Wk 29–30</span><span class="wide-badge">MA 9.19–9.20</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-test" href="/standard5/math/tests/c4-unit1/">
+        <div class="wide-icon">📋</div>
+        <div class="wide-body">
+          <div class="wide-title">Unit Test 1 — Graphs, Averages &amp; Sets</div>
+          <div class="wide-desc">Two-part test · online fixed items plus paper word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Test · End Wk 30</span><span class="wide-badge">MA 9.19–9.20, 8.07–8.08</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-homework" href="/standard5/math/homework/c4-set2/">
+        <div class="wide-icon">🏠</div>
+        <div class="wide-body">
+          <div class="wide-title">Problem Set 2 — Sets &amp; Probability</div>
+          <div class="wide-desc">Take-home problem set · 8–10 items including word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Homework · Wk 31</span><span class="wide-badge">MA 8.07–8.08, 9.21</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-project" href="/standard5/math/projects/c4-project2/">
+        <div class="wide-icon">🔵</div>
+        <div class="wide-body">
+          <div class="wide-title">Venn Diagram Belize</div>
+          <div class="wide-desc">Group poster · sort Belizean animals or foods using set notation</div>
+          <div class="wide-foot"><span class="wide-badge">Project · Wk 31</span><span class="wide-badge">MA 8.07–8.08</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-classwork" href="/standard5/math/classwork/c4-classwork3/">
+        <div class="wide-icon">🎲</div>
+        <div class="wide-body">
+          <div class="wide-title">Probability Check</div>
+          <div class="wide-desc">In-class task · probability written as fractions and percentages</div>
+          <div class="wide-foot"><span class="wide-badge">Classwork · Wk 32</span><span class="wide-badge">MA 9.21–9.22</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-test" href="/standard5/math/tests/c4-unit2/">
+        <div class="wide-icon">📋</div>
+        <div class="wide-body">
+          <div class="wide-title">Unit Test 2 — Probability</div>
+          <div class="wide-desc">Two-part test · online fixed items plus paper word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Test · End Wk 32</span><span class="wide-badge">MA 9.21–9.22</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-project" href="/standard5/math/projects/c4-project3/">
+        <div class="wide-icon">🎰</div>
+        <div class="wide-body">
+          <div class="wide-title">Fair or Unfair? Game Lab</div>
+          <div class="wide-desc">Group presentation · test whether a game is fair using probability</div>
+          <div class="wide-foot"><span class="wide-badge">Project · Wk 32–33</span><span class="wide-badge">MA 9.21–9.23</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-homework" href="/standard5/math/homework/c4-set3/">
+        <div class="wide-icon">🏠</div>
+        <div class="wide-body">
+          <div class="wide-title">Problem Set 3 — Probability from Graphs</div>
+          <div class="wide-desc">Take-home problem set · 8–10 items including word problems</div>
+          <div class="wide-foot"><span class="wide-badge">Homework · Wk 33</span><span class="wide-badge">MA 9.22–9.23</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+      <a class="wide-card soon cat-test" href="/standard5/math/tests/c4-review/">
+        <div class="wide-icon">🏆</div>
+        <div class="wide-body">
+          <div class="wide-title">Cycle 4 / Year-End Review Test</div>
+          <div class="wide-desc">Cumulative two-part test covering all of Cycle 4 · sat before report cards</div>
+          <div class="wide-foot"><span class="wide-badge">Test · Wk 33</span><span class="wide-badge">All Cycle 4</span><span class="graded-badge">⭐ Graded</span></div>
+        </div>
+      </a>
+
+    </div>
+  </div><!-- /tab-assessments -->
+
+  <!-- ══════════════════════════════
+       POWER-UPS TAB
+  ══════════════════════════════ -->
+  <div class="tab-panel" id="tab-powerups">
+
+    <div class="note-strip">
+      <div class="note-icon">⚡</div>
+      <div class="note-text">
+        <strong>Five questions. Ten minutes. Every day.</strong> Five minutes working on your own, then five
+        minutes reviewing together. Power-Ups are practice only — they are <strong>never graded and never
+        homework</strong>. Their job is to keep everything you have learned within reach.
+      </div>
+    </div>
+
+    <p class="section-label">The five slots &nbsp;·&nbsp; every session, in this order</p>
+    <div class="slot-grid">
+      <div class="slot" style="--accent:#4DABF7;">
+        <div class="slot-q">Q1</div>
+        <div class="slot-d">A Standard 4 skill you still need</div>
+      </div>
+      <div class="slot" style="--accent:#9775FA;">
+        <div class="slot-q">Q2</div>
+        <div class="slot-d">A strand you are not studying right now</div>
+      </div>
+      <div class="slot" style="--accent:#FFA94D;">
+        <div class="slot-q">Q3</div>
+        <div class="slot-d">Something taught eight weeks ago</div>
+      </div>
+      <div class="slot" style="--accent:#20C997;">
+        <div class="slot-q">Q4</div>
+        <div class="slot-d">Something taught three weeks ago</div>
+      </div>
+      <div class="slot" style="--accent:#F783AC;">
+        <div class="slot-q">Q5</div>
+        <div class="slot-d">Something taught last week</div>
+      </div>
+    </div>
+
+    <!-- CYCLE 1 -->
+    <div class="cycle-divider">
+      <span class="cycle-divider-label">🔢 Cycle 1 · 35 sessions · 175 questions · School Weeks 4–10</span>
+      <div class="cycle-divider-line"></div>
+    </div>
+    <div class="grid">
+
+      <div class="week-card soon" style="--accent:#4DABF7;">
+        <div class="week-head">
+          <div class="week-title">Week 1 · School Wk 4</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 1.34 Scientific Notation &nbsp;·&nbsp; MA 1.35 Significant Figures</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#4DABF7;">
+        <div class="week-head">
+          <div class="week-title">Week 2 · School Wk 5</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 1.36 Three or More Decimal Places &nbsp;·&nbsp; MA 1.37 Odd, Even, Prime, Composite</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#74C0FC;">
+        <div class="week-head">
+          <div class="week-title">Week 3 · School Wk 6</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 1.38 Squares 1–20, 25, 100 &nbsp;·&nbsp; MA 1.39 Cube Numbers</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#9775FA;">
+        <div class="week-head">
+          <div class="week-title">Week 4 · School Wk 7</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 2.16 Patterns in Real Data &nbsp;·&nbsp; MA 2.17 Arithmetic Progressions</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#9775FA;">
+        <div class="week-head">
+          <div class="week-title">Week 5 · School Wk 8</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 2.17 Geometric Progressions &nbsp;·&nbsp; MA 3.25 Mental Operations</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#20C997;">
+        <div class="week-head">
+          <div class="week-title">Week 6 · School Wk 9</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 3.26 Integer Operations — Like and Unlike Signs</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#20C997;">
+        <div class="week-head">
+          <div class="week-title">Week 7 · School Wk 10</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 3.27 Decimal Operations &nbsp;·&nbsp; Revision</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CYCLE 2 -->
+    <div class="cycle-divider">
+      <span class="cycle-divider-label">➗ Cycle 2 · 45 sessions · 225 questions · School Weeks 11–19</span>
+      <div class="cycle-divider-line"></div>
+    </div>
+    <div class="grid">
+
+      <div class="week-card soon" style="--accent:#4DABF7;">
+        <div class="week-head">
+          <div class="week-title">Week 1 · School Wk 11</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 4.37 Multiply / Divide Strategies &nbsp;·&nbsp; MA 4.38 Positive × Negative</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#4DABF7;">
+        <div class="week-head">
+          <div class="week-title">Week 2 · School Wk 12</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 4.38 L3 &nbsp;·&nbsp; MA 4.39 LCM &amp; GCF &nbsp;·&nbsp; MA 4.40 Factor Trees</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#74C0FC;">
+        <div class="week-head">
+          <div class="week-title">Week 3 · School Wk 13</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 4.40 Prime Factors &nbsp;·&nbsp; MA 5.40 Add &amp; Subtract Mixed Numbers</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#74C0FC;">
+        <div class="week-head">
+          <div class="week-title">Week 4 · School Wk 14</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 5.41 Multiply &amp; Divide Mixed Numbers &nbsp;·&nbsp; Flex</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#9775FA;">
+        <div class="week-head">
+          <div class="week-title">Week 5 · School Wk 15</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 5.42 Multi-Operation Problems &nbsp;·&nbsp; Flex</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#9775FA;">
+        <div class="week-head">
+          <div class="week-title">Week 6 · School Wk 16</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 5.43 Convert Fractions, Decimals &amp; Percents; Compare</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#FFA94D;">
+        <div class="week-head">
+          <div class="week-title">Week 7 · School Wk 17</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 5.43 Percentage Increase &amp; Decrease &nbsp;·&nbsp; MA 5.49 Ratio Intro</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#FFA94D;">
+        <div class="week-head">
+          <div class="week-title">Week 8 · School Wk 18</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 5.49 Share in Ratio &nbsp;·&nbsp; MA 5.50 Rates vs Ratios</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#20C997;">
+        <div class="week-head">
+          <div class="week-title">Week 9 · School Wk 19</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 5.50 Average Speed &amp; Best Value &nbsp;·&nbsp; Revision + Assessment</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CYCLE 3 -->
+    <div class="cycle-divider">
+      <span class="cycle-divider-label">📐 Cycle 3 · 40 sessions · 200 questions · School Weeks 20–27</span>
+      <div class="cycle-divider-line"></div>
+    </div>
+    <div class="grid">
+
+      <div class="week-card soon" style="--accent:#4DABF7;">
+        <div class="week-head">
+          <div class="week-title">Week 1 · School Wk 20</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 6.34 Perimeter and Area of Triangles and Quadrilaterals</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#4DABF7;">
+        <div class="week-head">
+          <div class="week-title">Week 2 · School Wk 21</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 6.34 Compound Shapes &nbsp;·&nbsp; MA 6.35 Circle Parts and π Discovery</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#74C0FC;">
+        <div class="week-head">
+          <div class="week-title">Week 3 · School Wk 22</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 6.35 Circumference and Area &nbsp;·&nbsp; MA 6.36 3D Objects and Nets</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#74C0FC;">
+        <div class="week-head">
+          <div class="week-title">Week 4 · School Wk 23</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 6.37 Volume of Cuboids and Surface Area Introduction</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#9775FA;">
+        <div class="week-head">
+          <div class="week-title">Week 5 · School Wk 24</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 6.37 SA vs V &amp; Missing Dimension &nbsp;·&nbsp; MA 6.38 Coordinates, Reflect in y-axis</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#9775FA;">
+        <div class="week-head">
+          <div class="week-title">Week 6 · School Wk 25</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 6.38 Reflect in x-axis &amp; Combined &nbsp;·&nbsp; MA 6.39 Tessellations</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#FFA94D;">
+        <div class="week-head">
+          <div class="week-title">Week 7 · School Wk 26</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 7.32 Unit Conversions &nbsp;·&nbsp; MA 7.34 Negative Temps &amp; BCE &nbsp;·&nbsp; MA 7.35 Speed</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#20C997;">
+        <div class="week-head">
+          <div class="week-title">Week 8 · School Wk 27</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 7.35 Unit Conversion &amp; Average Speed &nbsp;·&nbsp; MA 7.36 Elapsed Time &nbsp;·&nbsp; Revision</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CYCLE 4 -->
+    <div class="cycle-divider">
+      <span class="cycle-divider-label">🎲 Cycle 4 · 30 sessions · 150 questions · School Weeks 28–33</span>
+      <div class="cycle-divider-line"></div>
+    </div>
+    <div class="grid">
+
+      <div class="week-card soon" style="--accent:#4DABF7;">
+        <div class="week-head">
+          <div class="week-title">Week 1 · School Wk 28</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 9.19 Frequency Tables and Construct Circle Graphs</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#4DABF7;">
+        <div class="week-head">
+          <div class="week-title">Week 2 · School Wk 29</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 9.19 Line Graphs &amp; Compare Types &nbsp;·&nbsp; MA 9.20 Mean of Large Data Sets</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#74C0FC;">
+        <div class="week-head">
+          <div class="week-title">Week 3 · School Wk 30</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 9.20 Median &amp; Which Average &nbsp;·&nbsp; MA 8.07 Set Notation, Intersection</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#9775FA;">
+        <div class="week-head">
+          <div class="week-title">Week 4 · School Wk 31</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 8.07 Union Formula &nbsp;·&nbsp; MA 8.08 Subsets &nbsp;·&nbsp; MA 9.21 Probability Scale &amp; P Formula</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#9775FA;">
+        <div class="week-head">
+          <div class="week-title">Week 5 · School Wk 32</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 9.21 Three Forms, Theoretical vs Experimental &nbsp;·&nbsp; MA 9.22 Outcomes in Tables and Bar Graphs</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+      <div class="week-card soon" style="--accent:#20C997;">
+        <div class="week-head">
+          <div class="week-title">Week 6 · School Wk 33</div>
+          <div class="week-count">5 sessions · 25 questions</div>
+        </div>
+        <div class="week-outcomes">MA 9.23 P from Bar Graphs, Pictographs, Circle Graphs &nbsp;·&nbsp; Revision &nbsp;·&nbsp; End-of-Year Assessment</div>
+        <div class="day-row">
+          <a class="day-chip soon" href="#"><span class="day-n">Day 1</span><span class="day-l">Monday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 2</span><span class="day-l">Tuesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 3</span><span class="day-l">Wednesday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 4</span><span class="day-l">Thursday</span></a>
+          <a class="day-chip soon" href="#"><span class="day-n">Day 5</span><span class="day-l">Friday</span></a>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /tab-powerups -->
+
+  <!-- ══════════════════════════════
+       TOOLS & SIMULATIONS TAB
+  ══════════════════════════════ -->
+  <div class="tab-panel" id="tab-tools">
+
+    <div class="note-strip">
+      <div class="note-icon">🧮</div>
+      <div class="note-text">
+        <strong>Reach for these whenever you need them.</strong> Nothing here is graded and nothing is timed.
+        Some are reference tools you check mid-problem; others are simulations you play with until the idea clicks.
+        Use them in class, at home, or while revising for a test.
+      </div>
+    </div>
+
+    <p class="section-label">Reference tools &nbsp;·&nbsp; check these mid-problem</p>
+    <div class="grid">
+
+      <a class="lab-card soon" href="#" style="--accent:#4DABF7;">
+        <div class="lab-icon">🏛️</div>
+        <div class="lab-body">
+          <div class="lab-title">Place Value Chart</div>
+          <div class="lab-desc">Millions down to ten-thousandths. Type any number and see every digit land in its column — the tool behind scientific notation, rounding and decimal comparison</div>
+          <div class="lab-meta">
+            <span class="lab-tag">MA 1.34–1.36</span>
+            <span class="practice-badge">Practice only</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="lab-card soon" href="#" style="--accent:#9775FA;">
+        <div class="lab-icon">🍕</div>
+        <div class="lab-body">
+          <div class="lab-title">Fraction, Decimal &amp; Percent Wall</div>
+          <div class="lab-desc">Compare fractions by sight, find equivalents, and read the same amount three ways. Backs everything in Cycle 2 from mixed numbers to percentage change</div>
+          <div class="lab-meta">
+            <span class="lab-tag">MA 5.40–5.43</span>
+            <span class="practice-badge">Practice only</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="lab-card soon" href="#" style="--accent:#FFA94D;">
+        <div class="lab-icon">📏</div>
+        <div class="lab-body">
+          <div class="lab-title">Formula &amp; Unit Card</div>
+          <div class="lab-desc">Every Standard 5 formula in one place — perimeter, area, circumference, volume, surface area, speed — with a unit converter beside it</div>
+          <div class="lab-meta">
+            <span class="lab-tag">MA 6.34–6.37</span>
+            <span class="lab-tag">MA 7.32</span>
+            <span class="practice-badge">Practice only</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="lab-card soon" href="#" style="--accent:#20C997;">
+        <div class="lab-icon">📖</div>
+        <div class="lab-body">
+          <div class="lab-title">Maths Word Bank</div>
+          <div class="lab-desc">Every vocabulary term from the year's anchor strips, explained in plain language with one worked example each</div>
+          <div class="lab-meta">
+            <span class="lab-tag">All cycles</span>
+            <span class="practice-badge">Practice only</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <p class="section-label">Simulations &nbsp;·&nbsp; play until the idea clicks</p>
+    <div class="grid">
+
+      <a class="lab-card soon" href="#" style="--accent:#4DABF7;">
+        <div class="lab-icon">⭕</div>
+        <div class="lab-body">
+          <div class="lab-title">Pi Discovery Lab</div>
+          <div class="lab-desc">Measure the circumference and diameter of circle after circle, record the ratio, and watch every answer settle near the same number — π before it is ever given to you</div>
+          <div class="lab-meta">
+            <span class="lab-tag">MA 6.35</span>
+            <span class="lab-tag">Discovery</span>
+            <span class="practice-badge">Practice only</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="lab-card soon" href="#" style="--accent:#74C0FC;">
+        <div class="lab-icon">📦</div>
+        <div class="lab-body">
+          <div class="lab-title">Net Folding Lab</div>
+          <div class="lab-desc">Fold a flat net into a solid and unfold it again. Test which nets actually close, then compare the surface area you can see with the volume you cannot</div>
+          <div class="lab-meta">
+            <span class="lab-tag">MA 6.36–6.37</span>
+            <span class="lab-tag">3D</span>
+            <span class="practice-badge">Practice only</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="lab-card soon" href="#" style="--accent:#9775FA;">
+        <div class="lab-icon">🪞</div>
+        <div class="lab-body">
+          <div class="lab-title">Coordinate Reflection Grid</div>
+          <div class="lab-desc">Plot a shape, reflect it in the x-axis or y-axis, and read what happens to each coordinate. Then build a tessellation from the result</div>
+          <div class="lab-meta">
+            <span class="lab-tag">MA 6.38–6.39</span>
+            <span class="lab-tag">Geometry</span>
+            <span class="practice-badge">Practice only</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="lab-card soon" href="#" style="--accent:#F783AC;">
+        <div class="lab-icon">🎲</div>
+        <div class="lab-body">
+          <div class="lab-title">Probability Simulator</div>
+          <div class="lab-desc">Roll, spin or draw a hundred times, a thousand times, ten thousand times — and watch the experimental result close in on the theoretical one</div>
+          <div class="lab-meta">
+            <span class="lab-tag">MA 9.21–9.22</span>
+            <span class="lab-tag">Discovery</span>
+            <span class="practice-badge">Practice only</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="lab-card soon" href="#" style="--accent:#20C997;">
+        <div class="lab-icon">📊</div>
+        <div class="lab-body">
+          <div class="lab-title">Graph Builder</div>
+          <div class="lab-desc">Enter your own data and build a bar graph, line graph or circle graph from it — then see which graph tells the story best</div>
+          <div class="lab-meta">
+            <span class="lab-tag">MA 9.19–9.20</span>
+            <span class="lab-tag">Data</span>
+            <span class="practice-badge">Practice only</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="lab-card soon" href="#" style="--accent:#FFA94D;">
+        <div class="lab-icon">🌳</div>
+        <div class="lab-body">
+          <div class="lab-title">Factor Tree Builder</div>
+          <div class="lab-desc">Break any number down branch by branch until only primes are left, then use the result to find the LCM and GCF of a pair</div>
+          <div class="lab-meta">
+            <span class="lab-tag">MA 4.39–4.40</span>
+            <span class="lab-tag">Number</span>
+            <span class="practice-badge">Practice only</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div><!-- /tab-tools -->
+
+</div><!-- /wrapper -->
+
+<footer class="site-footer">
+  <div class="footer-logo">
+    <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+    <span>Mr. EdLo's Virtual Classroom</span>
+  </div>
+  <p class="footer-tagline">Explore, discover, and learn something new every day!</p>
+  <p class="footer-copy">© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize · All rights reserved.</p>
+</footer>
+
+<button id="zoom-btn" title="Change text size" aria-label="Change text size">
+  <span id="zoom-label">A</span>
+  <span class="zoom-dots">
+    <span class="zoom-dot on"></span><span class="zoom-dot"></span><span class="zoom-dot"></span><span class="zoom-dot"></span>
+  </span>
+</button>
+
+<button id="back-to-top" title="Back to top" aria-label="Back to top">↑</button>
+
+<script>
+/* Stars */
+const sc = document.getElementById('stars');
+for (let i = 0; i < 80; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const sz = Math.random()*2.5+1;
+  s.style.cssText = 'width:'+sz+'px;height:'+sz+'px;top:'+(Math.random()*100)+'%;left:'+(Math.random()*100)+'%;--d:'+(Math.random()*4+2).toFixed(1)+'s;--delay:-'+(Math.random()*6).toFixed(1)+'s;--op:'+(Math.random()*0.4+0.15).toFixed(2)+';';
+  sc.appendChild(s);
+}
+
+/* Floating number field */
+const canvas = document.getElementById('num-canvas');
+const ctx    = canvas.getContext('2d');
+const GLYPHS = ['+','−','×','÷','=','%','π','√','∑','<','>','1','2','3','4','5','7','8','9','0'];
+let W, H, bits;
+
+function getNumColor() {
+  return getComputedStyle(document.body).getPropertyValue('--mol-color').trim() || 'rgba(77,171,247,0.25)';
+}
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+function initBits(n) {
+  bits = [];
+  for (let i=0;i<n;i++) bits.push({
+    x: Math.random()*W,
+    y: Math.random()*H,
+    vx: (Math.random()-.5)*.22,
+    vy: (Math.random()-.5)*.22,
+    size: Math.random()*16+11,
+    g: GLYPHS[Math.floor(Math.random()*GLYPHS.length)],
+    a: Math.random()*0.5+0.3
+  });
+}
+function drawBits() {
+  ctx.clearRect(0,0,W,H);
+  const col = getNumColor();
+  ctx.fillStyle = col;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  bits.forEach(b => {
+    ctx.globalAlpha = b.a;
+    ctx.font = '600 ' + b.size + "px 'Nunito', sans-serif";
+    ctx.fillText(b.g, b.x, b.y);
+  });
+  ctx.globalAlpha = 1;
+}
+function updateBits() {
+  bits.forEach(b => {
+    b.x += b.vx; b.y += b.vy;
+    if (b.x < -20) b.x = W+20; if (b.x > W+20) b.x = -20;
+    if (b.y < -20) b.y = H+20; if (b.y > H+20) b.y = -20;
+  });
+}
+function loop() { updateBits(); drawBits(); requestAnimationFrame(loop); }
+
+resize(); initBits(42); loop();
+window.addEventListener('resize', () => { resize(); initBits(42); });
+
+/* Theme */
+const THEMES = ['night','sunny','cloudy','nature'];
+function setTheme(theme, btn) {
+  THEMES.forEach(t => document.body.classList.remove('theme-'+t));
+  document.body.classList.add('theme-'+theme);
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  try { localStorage.setItem('vc-theme', theme); } catch(e) {}
+}
+(function(){
+  let saved = null;
+  try { saved = localStorage.getItem('vc-theme'); } catch(e) {}
+  if (saved && THEMES.includes(saved)) {
+    THEMES.forEach(t => document.body.classList.remove('theme-'+t));
+    document.body.classList.add('theme-'+saved);
+    document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase().includes(saved)));
+  }
+})();
+
+/* Tabs */
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+(function(){
+  const hash = location.hash.replace('#','');
+  if (!hash) return;
+  const btn = document.querySelector('.tab-btn[onclick*="\'' + hash + '\'"]');
+  if (btn) showTab(hash, btn);
+})();
+
+/* Zoom */
+const ZOOM_LABELS = ['A','A+','A++','A+++'];
+let zoomLevel = 0;
+function applyZoom(level) {
+  zoomLevel = level;
+  document.documentElement.classList.remove('zoom-1','zoom-2','zoom-3');
+  if (level > 0) document.documentElement.classList.add('zoom-'+level);
+  document.getElementById('zoom-label').textContent = ZOOM_LABELS[level];
+  document.querySelectorAll('.zoom-dot').forEach((d,i) => d.classList.toggle('on', i <= level));
+  try { localStorage.setItem('vc-zoom', String(level)); } catch(e) {}
+}
+document.getElementById('zoom-btn').addEventListener('click', () => applyZoom((zoomLevel+1) % 4));
+(function(){
+  let z = 0;
+  try { z = parseInt(localStorage.getItem('vc-zoom') || '0', 10); } catch(e) {}
+  if (isNaN(z) || z < 0 || z > 3) z = 0;
+  applyZoom(z);
+})();
+
+/* Back to top */
+const topBtn = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => { topBtn.style.display = window.scrollY > 300 ? 'flex' : 'none'; });
+topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+</script>
+</body>
+</html>

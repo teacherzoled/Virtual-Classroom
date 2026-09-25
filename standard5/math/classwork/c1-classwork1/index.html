@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Classwork Check — Scientific Notation · Mr. EdLo</title>
+<link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════
+   THEME VARIABLES
+═══════════════════════════════════════════ */
+:root, body.theme-night {
+  --bg:            #0f1b2d;
+  --body-color:    #ffffff;
+  --card-bg:       rgba(255,255,255,0.07);
+  --card-border:   rgba(255,255,255,0.10);
+  --card-border-h: rgba(255,255,255,0.28);
+  --card-shadow:   rgba(0,0,0,0.40);
+  --card-desc:     rgba(255,255,255,0.50);
+  --section-lbl:   rgba(255,255,255,0.35);
+  --subtitle-c:    rgba(255,255,255,0.55);
+  --info-bg:       linear-gradient(135deg,#162038,#0d2a45);
+  --info-border:   rgba(77,171,247,0.20);
+  --header-name:   rgba(255,255,255,0.55);
+  --badge-bg:      rgba(255,255,255,0.08);
+  --badge-border:  rgba(255,255,255,0.12);
+  --badge-color:   rgba(255,255,255,0.45);
+  --top-badge-bg:  #4DABF7;
+  --top-badge-c:   #0f1b2d;
+  --h1-grad:       linear-gradient(135deg,#fff 0%,#4DABF7 50%,#9775FA 100%);
+  --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.45) 100%);
+  --footer-border: rgba(255,255,255,0.07);
+  --footer-name:   rgba(255,255,255,0.40);
+  --footer-tag:    rgba(255,255,255,0.45);
+  --footer-copy:   rgba(255,255,255,0.20);
+  --back-color:    rgba(255,255,255,0.40);
+  --back-hover:    rgba(255,255,255,0.80);
+  --radial1:       #1e3a5f55;
+  --radial2:       #2d1b6955;
+  --star-show:     1;
+  --input-bg:      rgba(255,255,255,0.05);
+  --input-border:  rgba(255,255,255,0.15);
+  --input-focus:   #4DABF7;
+  --input-text:    #ffffff;
+  --opt-bg:        rgba(255,255,255,0.05);
+  --opt-border:    rgba(255,255,255,0.12);
+  --opt-hover:     rgba(77,171,247,0.12);
+  --opt-sel-bg:    rgba(77,171,247,0.15);
+  --opt-sel-b:     #4DABF7;
+  --opt-correct:   rgba(105,219,124,0.18);
+  --opt-correct-b: #69DB7C;
+  --opt-wrong:     rgba(255,107,107,0.18);
+  --opt-wrong-b:   #FF6B6B;
+  --score-bg:      rgba(77,171,247,0.08);
+  --score-border:  rgba(77,171,247,0.25);
+  --progress-bg:   rgba(255,255,255,0.10);
+  --modal-bg:      rgba(0,0,0,0.75);
+  --modal-card:    #1a2639;
+  --modal-border:  rgba(77,171,247,0.30);
+  --lock-bg:       linear-gradient(135deg,#162038,#0f1b2d);
+  --lock-border:   rgba(77,171,247,0.22);
+  --fb-bg:         rgba(77,171,247,0.06);
+  --fb-border:     rgba(77,171,247,0.22);
+  --grad-bar:      linear-gradient(90deg,#4DABF7,#9775FA,#20C997,#F783AC);
+  --formula-bg:    rgba(77,171,247,0.08);
+  --formula-border:rgba(77,171,247,0.25);
+  --adj-bg:        rgba(255,212,59,0.08);
+  --adj-border:    rgba(255,212,59,0.30);
+}
+
+body.theme-sunny {
+  --bg:            #fffbf0;
+  --body-color:    #1a1a3e;
+  --card-bg:       rgba(255,255,255,0.80);
+  --card-border:   rgba(30,80,200,0.15);
+  --card-border-h: rgba(30,80,200,0.35);
+  --card-shadow:   rgba(30,60,150,0.12);
+  --card-desc:     rgba(20,50,150,0.55);
+  --section-lbl:   rgba(30,80,200,0.50);
+  --subtitle-c:    rgba(20,50,150,0.65);
+  --info-bg:       linear-gradient(135deg,#dce8ff,#ccd9ff);
+  --info-border:   rgba(30,80,200,0.20);
+  --header-name:   #0033aa;
+  --badge-bg:      rgba(30,80,200,0.10);
+  --badge-border:  rgba(30,80,200,0.20);
+  --badge-color:   #00228a;
+  --top-badge-bg:  #4DABF7;
+  --top-badge-c:   #fff;
+  --h1-grad:       linear-gradient(135deg,#001a80 0%,#0055cc 50%,#4DABF7 100%);
+  --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(30,80,200,0.08) 100%);
+  --footer-border: rgba(30,80,200,0.15);
+  --footer-name:   rgba(10,40,130,0.50);
+  --footer-tag:    rgba(10,40,130,0.55);
+  --footer-copy:   rgba(10,40,130,0.30);
+  --back-color:    rgba(20,60,180,0.50);
+  --back-hover:    #00228a;
+  --radial1:       rgba(77,171,247,0.18);
+  --radial2:       rgba(151,117,250,0.12);
+  --star-show:     0;
+  --input-bg:      rgba(30,80,200,0.05);
+  --input-border:  rgba(30,80,200,0.20);
+  --input-focus:   #4DABF7;
+  --input-text:    #1a1a3e;
+  --opt-bg:        rgba(30,80,200,0.04);
+  --opt-border:    rgba(30,80,200,0.15);
+  --opt-hover:     rgba(77,171,247,0.10);
+  --opt-sel-bg:    rgba(77,171,247,0.14);
+  --opt-sel-b:     #4DABF7;
+  --opt-correct:   rgba(0,150,80,0.10);
+  --opt-correct-b: #2e7d32;
+  --opt-wrong:     rgba(200,0,0,0.08);
+  --opt-wrong-b:   #c62828;
+  --score-bg:      rgba(30,80,200,0.06);
+  --score-border:  rgba(30,80,200,0.20);
+  --progress-bg:   rgba(30,80,200,0.10);
+  --modal-bg:      rgba(0,0,0,0.50);
+  --modal-card:    #eef4ff;
+  --modal-border:  rgba(30,80,200,0.28);
+  --lock-bg:       linear-gradient(135deg,#dce8ff,#fffbf0);
+  --lock-border:   rgba(30,80,200,0.20);
+  --fb-bg:         rgba(30,80,200,0.05);
+  --fb-border:     rgba(30,80,200,0.18);
+  --grad-bar:      linear-gradient(90deg,#4DABF7,#9775FA,#20C997,#F783AC);
+  --formula-bg:    rgba(30,80,200,0.06);
+  --formula-border:rgba(30,80,200,0.22);
+  --adj-bg:        rgba(255,180,0,0.08);
+  --adj-border:    rgba(200,130,0,0.28);
+}
+
+body.theme-cloudy {
+  --bg:            #e4eaf2;
+  --body-color:    #1a1a3e;
+  --card-bg:       rgba(255,255,255,0.75);
+  --card-border:   rgba(60,80,180,0.18);
+  --card-border-h: rgba(60,80,180,0.38);
+  --card-shadow:   rgba(30,50,150,0.12);
+  --card-desc:     rgba(30,50,150,0.55);
+  --section-lbl:   rgba(60,80,180,0.50);
+  --subtitle-c:    rgba(30,50,150,0.65);
+  --info-bg:       linear-gradient(135deg,#c8d8f0,#b8cae8);
+  --info-border:   rgba(60,80,180,0.22);
+  --header-name:   #1a2e80;
+  --badge-bg:      rgba(60,80,180,0.10);
+  --badge-border:  rgba(60,80,180,0.20);
+  --badge-color:   #1a2e80;
+  --top-badge-bg:  #3b5bdb;
+  --top-badge-c:   #fff;
+  --h1-grad:       linear-gradient(135deg,#0d1a6e 0%,#3b5bdb 50%,#74c0fc 100%);
+  --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(60,80,180,0.10) 100%);
+  --footer-border: rgba(60,80,180,0.18);
+  --footer-name:   rgba(20,40,120,0.50);
+  --footer-tag:    rgba(20,40,120,0.55);
+  --footer-copy:   rgba(20,40,120,0.28);
+  --back-color:    rgba(40,60,170,0.50);
+  --back-hover:    #1a2e80;
+  --radial1:       rgba(100,140,240,0.20);
+  --radial2:       rgba(151,117,250,0.15);
+  --star-show:     0;
+  --input-bg:      rgba(60,80,180,0.06);
+  --input-border:  rgba(60,80,180,0.22);
+  --input-focus:   #3b5bdb;
+  --input-text:    #1a1a3e;
+  --opt-bg:        rgba(60,80,180,0.05);
+  --opt-border:    rgba(60,80,180,0.18);
+  --opt-hover:     rgba(77,171,247,0.10);
+  --opt-sel-bg:    rgba(77,171,247,0.14);
+  --opt-sel-b:     #3b5bdb;
+  --opt-correct:   rgba(0,120,60,0.10);
+  --opt-correct-b: #2e7d32;
+  --opt-wrong:     rgba(180,0,0,0.08);
+  --opt-wrong-b:   #dc2626;
+  --score-bg:      rgba(60,80,180,0.06);
+  --score-border:  rgba(60,80,180,0.22);
+  --progress-bg:   rgba(60,80,180,0.12);
+  --modal-bg:      rgba(0,0,0,0.45);
+  --modal-card:    #eaeffb;
+  --modal-border:  rgba(60,80,180,0.28);
+  --lock-bg:       linear-gradient(135deg,#c8d8f0,#e4eaf2);
+  --lock-border:   rgba(60,80,180,0.22);
+  --fb-bg:         rgba(60,80,180,0.05);
+  --fb-border:     rgba(60,80,180,0.18);
+  --grad-bar:      linear-gradient(90deg,#3b5bdb,#4DABF7,#9775FA,#F783AC);
+  --formula-bg:    rgba(60,80,180,0.06);
+  --formula-border:rgba(60,80,180,0.22);
+  --adj-bg:        rgba(255,200,0,0.08);
+  --adj-border:    rgba(180,130,0,0.28);
+}
+
+body.theme-nature {
+  --bg:            #f0f5e8;
+  --body-color:    #1a2e10;
+  --card-bg:       rgba(255,255,255,0.72);
+  --card-border:   rgba(60,120,40,0.18);
+  --card-border-h: rgba(40,100,20,0.38);
+  --card-shadow:   rgba(20,80,10,0.15);
+  --card-desc:     rgba(30,70,15,0.55);
+  --section-lbl:   rgba(40,90,20,0.50);
+  --subtitle-c:    rgba(30,75,15,0.65);
+  --info-bg:       linear-gradient(135deg,#d8efc8,#c8e0b8);
+  --info-border:   rgba(50,120,20,0.22);
+  --header-name:   #276221;
+  --badge-bg:      rgba(60,140,30,0.12);
+  --badge-border:  rgba(50,120,20,0.22);
+  --badge-color:   #1b4d0f;
+  --top-badge-bg:  #4CAF50;
+  --top-badge-c:   #fff;
+  --h1-grad:       linear-gradient(135deg,#1b4d0f 0%,#2e7d1a 50%,#4DABF7 100%);
+  --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(60,140,30,0.10) 100%);
+  --footer-border: rgba(50,120,20,0.18);
+  --footer-name:   rgba(20,70,10,0.50);
+  --footer-tag:    rgba(20,70,10,0.55);
+  --footer-copy:   rgba(20,70,10,0.28);
+  --back-color:    rgba(39,98,33,0.55);
+  --back-hover:    #276221;
+  --radial1:       rgba(100,200,60,0.20);
+  --radial2:       rgba(77,171,247,0.12);
+  --star-show:     0;
+  --input-bg:      rgba(60,140,30,0.06);
+  --input-border:  rgba(50,120,20,0.20);
+  --input-focus:   #4CAF50;
+  --input-text:    #1a2e10;
+  --opt-bg:        rgba(60,140,30,0.05);
+  --opt-border:    rgba(50,120,20,0.18);
+  --opt-hover:     rgba(76,175,80,0.10);
+  --opt-sel-bg:    rgba(76,175,80,0.15);
+  --opt-sel-b:     #4CAF50;
+  --opt-correct:   rgba(46,125,50,0.12);
+  --opt-correct-b: #2e7d32;
+  --opt-wrong:     rgba(180,0,0,0.08);
+  --opt-wrong-b:   #b71c1c;
+  --score-bg:      rgba(60,140,30,0.07);
+  --score-border:  rgba(50,120,20,0.22);
+  --progress-bg:   rgba(60,140,30,0.12);
+  --modal-bg:      rgba(0,0,0,0.45);
+  --modal-card:    #eef6ec;
+  --modal-border:  rgba(60,140,30,0.28);
+  --lock-bg:       linear-gradient(135deg,#c8e8c0,#eef6ec);
+  --lock-border:   rgba(60,140,30,0.22);
+  --fb-bg:         rgba(46,125,50,0.06);
+  --fb-border:     rgba(40,110,20,0.20);
+  --grad-bar:      linear-gradient(90deg,#4CAF50,#4DABF7,#9775FA,#F783AC);
+  --formula-bg:    rgba(46,125,50,0.06);
+  --formula-border:rgba(40,110,20,0.22);
+  --adj-bg:        rgba(255,200,0,0.08);
+  --adj-border:    rgba(160,120,0,0.26);
+}
+
+/* ═══════════════════════════════════════════
+   BASE
+═══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--body-color); min-height:100vh; overflow-x:hidden; display:flex; flex-direction:column; transition:background .5s, color .5s; }
+body::before { content:''; position:fixed; inset:0; background: radial-gradient(ellipse at 15% 20%, var(--radial1) 0%, transparent 60%), radial-gradient(ellipse at 85% 80%, var(--radial2) 0%, transparent 60%); pointer-events:none; z-index:0; transition:background .5s; }
+.stars { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; opacity:var(--star-show,1); transition:opacity .5s; }
+.star  { position:absolute; border-radius:50%; background:#fff; animation:twinkle var(--d,3s) ease-in-out infinite var(--delay,0s); opacity:0; }
+@keyframes twinkle { 0%,100%{opacity:0;transform:scale(1)} 50%{opacity:var(--op,.6);transform:scale(1.3)} }
+
+.theme-bar { position:relative; z-index:10; display:flex; justify-content:center; gap:.5rem; padding:.55rem 1rem; background:rgba(0,0,0,.18); border-bottom:1px solid rgba(0,0,0,.10); flex-wrap:wrap; }
+body.theme-sunny .theme-bar, body.theme-cloudy .theme-bar, body.theme-nature .theme-bar { background:rgba(0,0,0,.06); }
+.theme-btn { font-family:'Fredoka One',cursive; font-size:.85rem; padding:5px 18px; border-radius:999px; border:2px solid transparent; background:rgba(128,128,128,.12); color:var(--body-color); cursor:pointer; opacity:.6; transition:all .22s; }
+.theme-btn:hover { opacity:.9; transform:translateY(-1px); }
+.theme-btn.active { opacity:1; background:var(--top-badge-bg); color:var(--top-badge-c); box-shadow:0 3px 12px rgba(0,0,0,.20); }
+
+.wrapper { position:relative; z-index:1; max-width:1400px; margin:0 auto; padding:0 max(1rem,4vw) 2rem; flex:1; }
+.site-header { display:flex; align-items:center; justify-content:space-between; padding:1.2rem 0 0; animation:fadeDown .6s ease both; }
+.site-header-logo { display:flex; align-items:center; gap:.75rem; text-decoration:none; }
+.site-header-logo img { height:48px; width:auto; border-radius:10px; box-shadow:0 4px 14px rgba(0,0,0,.25); }
+.site-header-logo span { font-family:'Fredoka One',cursive; font-size:1.15rem; color:var(--header-name); letter-spacing:.02em; transition:color .4s; }
+.header-badge { display:inline-block; background:var(--badge-bg); border:1px solid var(--badge-border); color:var(--badge-color); font-size:.72rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:5px 14px; border-radius:999px; }
+.back-link { display:inline-flex; align-items:center; gap:6px; margin-top:1.4rem; font-size:.8rem; font-weight:700; color:var(--back-color); text-decoration:none; transition:color .2s; letter-spacing:.04em; }
+.back-link:hover { color:var(--back-hover); }
+header { text-align:center; padding:2rem 1rem 1.5rem; animation:fadeDown .7s ease both; }
+@keyframes fadeDown { from{opacity:0;transform:translateY(-22px)} to{opacity:1;transform:translateY(0)} }
+.badge { display:inline-block; background:var(--top-badge-bg); color:var(--top-badge-c); font-size:.75rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:4px 14px; border-radius:999px; margin-bottom:1rem; animation:pop .5s cubic-bezier(.36,1.5,.6,1) .3s both; }
+@keyframes pop { from{opacity:0;transform:scale(.7)} to{opacity:1;transform:scale(1)} }
+h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.9rem,5vw,3.1rem); line-height:1.1; margin-bottom:.4rem; background:var(--h1-grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.subtitle { font-size:.95rem; font-weight:600; color:var(--subtitle-c); transition:color .4s; }
+.section-label { font-size:.72rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--section-lbl); margin:2rem 0 .8rem; }
+
+/* ═══════════════════════════════════════════
+   LOCK SCREEN
+═══════════════════════════════════════════ */
+.lock-screen { max-width:600px; margin:2rem auto; background:var(--lock-bg); border:1.5px solid var(--lock-border); border-radius:24px; padding:3rem 2.5rem; text-align:center; animation:riseUp .5s ease both; display:none; }
+.lock-screen.show { display:block; }
+@keyframes riseUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.lock-icon { font-size:4rem; margin-bottom:1rem; }
+.lock-title { font-family:'Fredoka One',cursive; font-size:1.8rem; margin-bottom:.6rem; color:var(--body-color); }
+.lock-msg { font-size:.9rem; font-weight:600; color:var(--card-desc); line-height:1.65; margin-bottom:1.5rem; }
+.lock-scores { display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; margin-bottom:1.5rem; }
+.lock-score-pill { background:var(--card-bg); border:1.5px solid var(--card-border); border-radius:14px; padding:.9rem 1.4rem; text-align:center; min-width:100px; }
+.lock-score-pill .lsp-label { font-size:.62rem; font-weight:800; letter-spacing:.10em; text-transform:uppercase; color:var(--section-lbl); margin-bottom:4px; }
+.lock-score-pill .lsp-val   { font-family:'Fredoka One',cursive; font-size:1.7rem; color:var(--top-badge-bg); }
+
+/* ═══════════════════════════════════════════
+   TEST LAYOUT
+═══════════════════════════════════════════ */
+.test-container { max-width:900px; margin:0 auto; }
+.student-card { background:var(--info-bg); border:1.5px solid var(--info-border); border-radius:18px; padding:1.3rem 1.5rem; display:flex; align-items:center; gap:1rem; margin-bottom:1.4rem; animation:fadeDown .6s ease .1s both; transition:background .4s, border-color .4s; }
+.student-card .sc-icon { font-size:2rem; flex-shrink:0; }
+.sc-fields { flex:1; display:flex; gap:.9rem; flex-wrap:wrap; }
+.sc-group { display:flex; flex-direction:column; gap:4px; flex:1; min-width:150px; }
+.sc-group label { font-size:.65rem; font-weight:800; letter-spacing:.10em; text-transform:uppercase; color:var(--section-lbl); }
+.sc-group input { background:var(--input-bg); border:1.5px solid var(--input-border); border-radius:10px; padding:8px 12px; font-family:'Nunito',sans-serif; font-size:.85rem; font-weight:700; color:var(--input-text); outline:none; transition:border-color .2s, background .4s; }
+.sc-group input:focus { border-color:var(--input-focus); }
+
+/* ═══════════════════════════════════════════
+   SECTION CARDS
+═══════════════════════════════════════════ */
+.sec-card { background:var(--card-bg); border:1.5px solid var(--card-border); border-radius:20px; padding:1.6rem 1.8rem; margin-bottom:1.4rem; transition:border-color .3s, background .4s; box-shadow:0 4px 20px var(--card-shadow); animation:riseUp .5s ease both; }
+.sec-card:hover { border-color:var(--card-border-h); }
+.sec-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.2rem; padding-bottom:.8rem; border-bottom:1px solid var(--card-border); }
+.sec-title { font-family:'Fredoka One',cursive; font-size:1.15rem; }
+.sec-pts { font-size:.75rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--top-badge-bg); background:var(--score-bg); border:1px solid var(--score-border); padding:4px 12px; border-radius:999px; }
+
+/* ═══════════════════════════════════════════
+   QUESTIONS
+═══════════════════════════════════════════ */
+.question { border-radius:12px; padding:4px 6px; margin-left:-6px; margin-right:-6px; margin-bottom:1.4rem; transition:opacity .5s ease, filter .5s ease; }
+.question.answered-fade { opacity:0.18; filter:blur(2.5px); transition:opacity .5s ease, filter .5s ease; }
+.question.answered-fade:hover { opacity:1; filter:blur(0px); transition:opacity .2s ease, filter .2s ease; }
+.test-locked .question.answered-fade, .test-locked .question.answered-fade:hover { opacity:1 !important; filter:blur(0px) !important; }
+.q-label { display:flex; align-items:flex-start; gap:.6rem; margin-bottom:.85rem; font-size:.95rem; font-weight:700; line-height:1.5; }
+.q-num { font-family:'Fredoka One',cursive; font-size:1.05rem; color:var(--top-badge-bg); flex-shrink:0; min-width:1.5rem; }
+.q-pts { margin-left:auto; font-size:.7rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--section-lbl); white-space:nowrap; padding-left:.8rem; padding-top:3px; }
+
+/* Formula display box */
+.formula-box { background:var(--formula-bg); border:1px solid var(--formula-border); border-left:3px solid var(--top-badge-bg); border-radius:0 10px 10px 0; padding:.6rem 1rem; margin-bottom:.9rem; font-size:.88rem; font-weight:700; font-family:'Nunito',sans-serif; color:var(--body-color); }
+.formula-label { font-size:.62rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--section-lbl); margin-bottom:3px; }
+
+/* Options */
+.options { display:flex; flex-direction:column; gap:.55rem; }
+.opt { display:flex; align-items:center; gap:.75rem; background:var(--opt-bg); border:1.5px solid var(--opt-border); border-radius:12px; padding:.65rem 1rem; cursor:pointer; transition:all .18s; font-size:.9rem; font-weight:600; position:relative; }
+.opt:hover:not(.locked-opt) { background:var(--opt-hover); border-color:var(--opt-sel-b); }
+.opt.selected { background:var(--opt-sel-bg); border-color:var(--opt-sel-b); }
+.opt.correct  { background:var(--opt-correct); border-color:var(--opt-correct-b); }
+.opt.wrong    { background:var(--opt-wrong);   border-color:var(--opt-wrong-b); }
+.opt input    { width:16px; height:16px; flex-shrink:0; accent-color:var(--input-focus); }
+.opt-tick     { margin-left:auto; font-size:.85rem; min-width:1.2rem; text-align:right; }
+.locked-opt   { cursor:default; }
+
+/* Textarea working space */
+.working-area { width:100%; background:var(--input-bg); border:1.5px solid var(--input-border); border-radius:12px; padding:.75rem 1rem; font-family:'Nunito',sans-serif; font-size:.88rem; font-weight:600; color:var(--input-text); resize:vertical; min-height:110px; outline:none; transition:border-color .2s, background .4s; margin-bottom:.6rem; }
+.working-area:focus { border-color:var(--input-focus); }
+.answer-input { width:100%; background:var(--input-bg); border:1.5px solid var(--input-border); border-radius:12px; padding:.65rem 1rem; font-family:'Nunito',sans-serif; font-size:.9rem; font-weight:700; color:var(--input-text); outline:none; transition:border-color .2s, background .4s; }
+.answer-input:focus { border-color:var(--input-focus); }
+.field-label { font-size:.65rem; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--section-lbl); margin-bottom:.35rem; display:block; margin-top:.5rem; }
+
+/* Feedback box */
+.fb-box { display:none; margin-top:.9rem; background:var(--fb-bg); border:1px solid var(--fb-border); border-radius:12px; padding:.85rem 1.1rem; font-size:.88rem; font-weight:600; color:var(--body-color); line-height:1.6; }
+.fb-box.show { display:block; }
+.fb-score { font-family:'Fredoka One',cursive; font-size:1.35rem; color:var(--top-badge-bg); margin-bottom:.35rem; }
+
+/* Teacher adjustment panel */
+.adj-panel { margin-top:.8rem; background:var(--adj-bg); border:1px dashed var(--adj-border); border-radius:12px; padding:.75rem 1rem; display:none; }
+.adj-panel.show { display:block; }
+.adj-label { font-size:.62rem; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--section-lbl); margin-bottom:.5rem; }
+.adj-btns  { display:flex; gap:.4rem; flex-wrap:wrap; align-items:center; }
+.adj-btn   { font-family:'Fredoka One',cursive; font-size:.88rem; padding:4px 14px; border-radius:999px; border:1.5px solid var(--card-border); background:var(--card-bg); color:var(--body-color); cursor:pointer; transition:all .15s; }
+.adj-btn:hover { border-color:var(--top-badge-bg); }
+.adj-btn.sel   { background:var(--top-badge-bg); color:var(--top-badge-c); border-color:var(--top-badge-bg); }
+
+/* ═══════════════════════════════════════════
+   PROGRESS, SUBMIT, RESULTS
+═══════════════════════════════════════════ */
+.q-progress-wrap { position:sticky; top:0; z-index:50; background:var(--bg); border-bottom:1px solid var(--card-border); padding:.7rem 0 .6rem; margin-bottom:1.2rem; transition:background .5s; }
+.q-progress-inner { max-width:900px; margin:0 auto; padding:0 max(1rem,4vw); }
+.q-progress-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:.45rem; gap:.5rem; }
+.q-progress-label { font-size:.7rem; font-weight:800; letter-spacing:.10em; text-transform:uppercase; color:var(--section-lbl); }
+.q-progress-count { font-family:'Fredoka One',cursive; font-size:.95rem; color:var(--body-color); }
+.q-progress-bg   { height:8px; background:var(--progress-bg); border-radius:999px; overflow:hidden; }
+.q-progress-fill { height:100%; border-radius:999px; background:var(--top-badge-bg); transition:width .4s cubic-bezier(.22,.68,0,1.2), background .4s; }
+.q-progress-fill.done { background:#69DB7C; }
+.submit-hint { font-size:.72rem; font-weight:700; color:var(--section-lbl); margin-top:.5rem; text-align:center; transition:color .3s; }
+.submit-hint.ready { color:var(--top-badge-bg); }
+
+.submit-area { text-align:center; padding:2rem 0; }
+.btn-primary   { font-family:'Fredoka One',cursive; font-size:1rem; padding:.7rem 2rem; border-radius:14px; border:none; background:var(--top-badge-bg); color:var(--top-badge-c); cursor:pointer; transition:all .2s; box-shadow:0 4px 16px rgba(0,0,0,.20); }
+.btn-primary:hover:not(:disabled) { transform:translateY(-2px); filter:brightness(1.08); box-shadow:0 6px 20px rgba(0,0,0,.25); }
+.btn-primary:disabled { opacity:.4; cursor:not-allowed; }
+.btn-secondary { font-family:'Fredoka One',cursive; font-size:.9rem; padding:.6rem 1.5rem; border-radius:12px; border:1.5px solid var(--card-border); background:var(--card-bg); color:var(--body-color); cursor:pointer; transition:all .2s; }
+.btn-secondary:hover { border-color:var(--card-border-h); }
+.spinner-wrap { display:none; justify-content:center; margin-top:1rem; }
+.spinner-wrap.show { display:flex; }
+.spinner { width:36px; height:36px; border:3px solid var(--progress-bg); border-top-color:var(--top-badge-bg); border-radius:50%; animation:spin .7s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+.results-section { display:none; background:var(--card-bg); border:1.5px solid var(--score-border); border-radius:20px; padding:2rem; margin-top:1.5rem; animation:riseUp .5s ease both; }
+.results-section.show { display:block; }
+.res-title { font-family:'Fredoka One',cursive; font-size:1.6rem; text-align:center; margin-bottom:1.2rem; }
+.score-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:.9rem; margin-bottom:1.2rem; }
+.score-box { background:var(--score-bg); border:1.5px solid var(--score-border); border-radius:14px; padding:1rem; text-align:center; }
+.score-box.hl { background:var(--top-badge-bg); border-color:var(--top-badge-bg); }
+.score-box.hl .sb-label, .score-box.hl .sb-sub { color:rgba(0,0,0,.55); }
+.score-box.hl .sb-val { color:var(--top-badge-c); }
+.sb-label { font-size:.62rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--section-lbl); margin-bottom:4px; }
+.sb-val   { font-family:'Fredoka One',cursive; font-size:2rem; color:var(--top-badge-bg); }
+.sb-sub   { font-size:.68rem; font-weight:700; color:var(--section-lbl); }
+.prog-wrap { margin:1rem 0; }
+.prog-row  { display:flex; justify-content:space-between; margin-bottom:.4rem; }
+.prog-lbl  { font-size:.72rem; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:var(--section-lbl); }
+.prog-pct  { font-family:'Fredoka One',cursive; font-size:.9rem; color:var(--top-badge-bg); }
+.prog-bg   { height:10px; background:var(--progress-bg); border-radius:999px; overflow:hidden; }
+.prog-fill { height:100%; border-radius:999px; transition:width .8s cubic-bezier(.22,.68,0,1.2), background .4s; }
+.perf-badge { text-align:center; font-size:.95rem; font-weight:800; padding:1rem; background:var(--score-bg); border-radius:12px; margin:.8rem 0; }
+.pdf-row { display:flex; justify-content:center; gap:1rem; margin-top:1.2rem; flex-wrap:wrap; }
+
+/* Teacher toggle */
+.teacher-toggle { text-align:center; margin-top:.8rem; }
+.teacher-toggle button { font-size:.75rem; font-weight:700; padding:5px 16px; border-radius:999px; border:1px solid var(--card-border); background:transparent; color:var(--section-lbl); cursor:pointer; }
+.teacher-toggle button:hover { color:var(--body-color); border-color:var(--card-border-h); }
+
+/* ═══════════════════════════════════════════
+   MATH SYMBOL TOOLBAR
+═══════════════════════════════════════════ */
+.math-toolbar {
+  display:flex; flex-wrap:wrap; gap:5px;
+  margin-bottom:.5rem;
+  padding:.5rem .6rem;
+  background:var(--formula-bg);
+  border:1px solid var(--formula-border);
+  border-radius:10px;
+}
+.math-toolbar-label {
+  width:100%; font-size:.6rem; font-weight:800;
+  letter-spacing:.09em; text-transform:uppercase;
+  color:var(--section-lbl); margin-bottom:3px;
+}
+.msym {
+  font-family:'Nunito',sans-serif;
+  font-size:.88rem; font-weight:700;
+  padding:5px 10px; border-radius:8px;
+  border:1.5px solid var(--card-border);
+  background:var(--card-bg); color:var(--body-color);
+  cursor:pointer; transition:all .14s;
+  line-height:1; min-width:36px; text-align:center;
+}
+.msym:hover { background:var(--opt-sel-bg); border-color:var(--opt-sel-b); transform:translateY(-1px); }
+.msym:active { transform:translateY(0); }
+
+/* ═══════════════════════════════════════════
+   SCAFFOLDING AIDS
+═══════════════════════════════════════════ */
+.scaffold-box {
+  background:var(--formula-bg);
+  border:1px solid var(--formula-border);
+  border-radius:12px;
+  padding:.8rem 1rem;
+  margin-bottom:.9rem;
+}
+.scaffold-title {
+  font-size:.65rem; font-weight:800;
+  letter-spacing:.09em; text-transform:uppercase;
+  color:var(--top-badge-bg); margin-bottom:.6rem;
+  display:flex; align-items:center; gap:6px;
+}
+.scaffold-step {
+  display:flex; align-items:flex-start; gap:.6rem;
+  margin-bottom:.55rem;
+}
+.scaffold-step:last-child { margin-bottom:0; }
+.scaffold-num {
+  font-family:'Fredoka One',cursive; font-size:.9rem;
+  color:var(--top-badge-bg); flex-shrink:0;
+  width:1.4rem; text-align:center; padding-top:1px;
+}
+.scaffold-input {
+  flex:1; background:var(--input-bg);
+  border:1.5px solid var(--input-border);
+  border-radius:8px; padding:7px 10px;
+  font-family:'Nunito',sans-serif; font-size:.88rem;
+  font-weight:600; color:var(--input-text);
+  outline:none; transition:border-color .2s;
+  width:100%;
+}
+.scaffold-input:focus { border-color:var(--input-focus); }
+.scaffold-hint {
+  font-size:.72rem; font-weight:700;
+  color:var(--section-lbl); padding-top:9px;
+  flex-shrink:0; white-space:nowrap;
+}
+.sentence-starter {
+  display:flex; align-items:center; gap:.5rem;
+  margin-bottom:.5rem;
+}
+.starter-pill {
+  background:var(--opt-sel-bg);
+  border:1px solid var(--opt-sel-b);
+  border-radius:6px; padding:4px 10px;
+  font-size:.82rem; font-weight:700;
+  color:var(--body-color); cursor:pointer;
+  transition:all .14s; white-space:nowrap;
+}
+.starter-pill:hover { filter:brightness(1.15); transform:translateY(-1px); }
+.starter-label {
+  font-size:.65rem; font-weight:800;
+  letter-spacing:.07em; text-transform:uppercase;
+  color:var(--section-lbl);
+}
+
+/* ═══════════════════════════════════════════
+   MODAL & OVERLAYS
+═══════════════════════════════════════════ */
+.modal-overlay { position:fixed; inset:0; z-index:200; background:var(--modal-bg); display:flex; align-items:center; justify-content:center; padding:1.5rem; }
+.modal-overlay.hidden { display:none; }
+.modal-card { background:var(--modal-card); border:2px solid var(--modal-border); border-radius:22px; padding:2rem 2.2rem; max-width:400px; width:100%; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.35); animation:popIn .3s cubic-bezier(.36,1.5,.6,1) both; }
+@keyframes popIn { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.modal-icon  { font-size:2.5rem; margin-bottom:.8rem; }
+.modal-title { font-family:'Fredoka One',cursive; font-size:1.4rem; margin-bottom:.4rem; color:var(--body-color); }
+.modal-desc  { font-size:.83rem; font-weight:600; color:var(--card-desc); margin-bottom:1.2rem; line-height:1.6; }
+.modal-input { width:100%; background:var(--input-bg); border:1.5px solid var(--input-border); border-radius:12px; padding:11px 16px; margin-bottom:.8rem; font-family:'Fredoka One',cursive; font-size:1.1rem; text-align:center; color:var(--input-text); letter-spacing:.12em; outline:none; transition:border-color .2s; }
+.modal-input:focus { border-color:var(--input-focus); }
+.modal-err { font-size:.78rem; font-weight:800; color:var(--opt-wrong-b); margin-top:.4rem; display:none; }
+.modal-err.show { display:block; }
+
+.blur-overlay { position:fixed; inset:0; z-index:150; backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; flex-direction:column; gap:1rem; cursor:pointer; animation:fadeIn .25s ease both; }
+.blur-overlay.show { display:flex; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.blur-icon  { font-size:3.5rem; }
+.blur-title { font-family:'Fredoka One',cursive; font-size:1.5rem; color:#fff; text-align:center; }
+.blur-sub   { font-size:.85rem; font-weight:700; color:rgba(255,255,255,.65); text-align:center; }
+.warn-overlay { position:fixed; inset:0; z-index:160; background:rgba(0,0,0,.82); display:none; align-items:center; justify-content:center; padding:1.5rem; }
+.warn-overlay.show { display:flex; animation:fadeIn .2s ease both; }
+.warn-card { background:var(--modal-card); border:2px solid var(--opt-wrong-b); border-radius:22px; padding:2rem 2.2rem; max-width:420px; width:100%; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.4); animation:popIn .3s cubic-bezier(.36,1.5,.6,1) both; }
+.warn-icon  { font-size:2.8rem; margin-bottom:.7rem; }
+.warn-title { font-family:'Fredoka One',cursive; font-size:1.4rem; color:var(--opt-wrong-b); margin-bottom:.5rem; }
+.warn-msg   { font-size:.85rem; font-weight:600; color:var(--card-desc); line-height:1.6; margin-bottom:1.2rem; }
+.warn-count { font-size:.75rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--section-lbl); margin-bottom:1rem; }
+
+/* Footer */
+.site-footer { position:relative; z-index:1; background:var(--footer-bg); border-top:1px solid var(--footer-border); padding:2rem max(1rem,4vw); margin-top:3rem; display:flex; flex-direction:column; align-items:center; gap:.5rem; transition:background .4s, border-color .4s; }
+.site-footer::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--grad-bar); }
+.footer-logo { display:flex; align-items:center; gap:.6rem; margin-bottom:.4rem; }
+.footer-logo img { height:36px; width:auto; border-radius:8px; opacity:.75; }
+.footer-logo span { font-family:'Fredoka One',cursive; font-size:1rem; color:var(--footer-name); transition:color .4s; }
+.footer-tagline { font-size:.82rem; font-weight:700; color:var(--footer-tag); letter-spacing:.03em; font-style:italic; }
+.footer-copy    { font-size:.72rem; color:var(--footer-copy); font-weight:600; letter-spacing:.04em; margin-top:.2rem; }
+#back-to-top { display:none; position:fixed; bottom:1.5rem; right:1.5rem; z-index:99; background:var(--top-badge-bg); color:var(--top-badge-c); border:none; border-radius:12px; width:42px; height:42px; font-size:1.2rem; font-weight:900; cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,.25); transition:all .2s; align-items:center; justify-content:center; }
+#back-to-top:hover { transform:translateY(-3px); filter:brightness(1.1); }
+
+/* ═══════════════════════════════════════════
+   FLOATING CALCULATOR
+═══════════════════════════════════════════ */
+#calc-fab {
+  position:fixed; bottom:1.5rem; left:1.5rem; z-index:99;
+  background:var(--top-badge-bg); color:var(--top-badge-c);
+  border:none; border-radius:14px;
+  width:52px; height:52px; font-size:1.4rem;
+  cursor:pointer; box-shadow:0 4px 18px rgba(0,0,0,.30);
+  transition:all .2s; display:flex; align-items:center; justify-content:center;
+}
+#calc-fab:hover { transform:translateY(-3px) scale(1.07); filter:brightness(1.1); }
+
+#calc-panel {
+  position:fixed; bottom:5rem; left:1.5rem; z-index:100;
+  background:var(--modal-card); border:2px solid var(--modal-border);
+  border-radius:20px; padding:1rem; width:300px;
+  box-shadow:0 12px 40px rgba(0,0,0,.40);
+  display:none; flex-direction:column; gap:.6rem;
+  animation:popIn .25s cubic-bezier(.36,1.5,.6,1) both;
+}
+#calc-panel.open { display:flex; }
+
+.calc-screen {
+  background:var(--input-bg); border:1.5px solid var(--input-border);
+  border-radius:12px; padding:.6rem 1rem;
+  text-align:right; min-height:64px;
+}
+.calc-expr {
+  font-size:.72rem; color:var(--section-lbl);
+  font-family:'DM Mono','Courier New',monospace;
+  min-height:1rem; word-break:break-all;
+  margin-bottom:3px;
+}
+.calc-display {
+  font-family:'Fredoka One',cursive; font-size:1.7rem;
+  color:var(--body-color); word-break:break-all;
+}
+
+.calc-grid {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:6px;
+}
+.calc-btn {
+  font-family:'Nunito',sans-serif; font-weight:700; font-size:.88rem;
+  padding:10px 4px; border-radius:10px; border:1.5px solid var(--card-border);
+  background:var(--card-bg); color:var(--body-color); cursor:pointer;
+  transition:all .12s; text-align:center;
+}
+.calc-btn:hover  { background:var(--opt-hover); border-color:var(--opt-sel-b); transform:scale(1.05); }
+.calc-btn:active { transform:scale(.96); }
+.calc-btn.op     { background:var(--formula-bg); border-color:var(--formula-border); color:var(--top-badge-bg); }
+.calc-btn.eq     { background:var(--top-badge-bg); color:var(--top-badge-c); border-color:var(--top-badge-bg); font-size:1.1rem; }
+.calc-btn.eq:hover { filter:brightness(1.1); }
+.calc-btn.clr    { background:var(--danger-bg,rgba(255,100,100,.12)); color:#ff6b6b; border-color:rgba(255,100,100,.25); }
+.calc-btn.span2  { grid-column:span 2; }
+.calc-btn.pi     { font-style:italic; }
+.calc-memory-row { display:flex; gap:5px; }
+.calc-memory-row .calc-btn { flex:1; font-size:.75rem; padding:7px 2px; }
+.calc-label {
+  font-size:.6rem; font-weight:800; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--section-lbl); text-align:center; margin-bottom:2px;
+}
+.calc-mem-display {
+  font-size:.7rem; color:var(--section-lbl); text-align:right;
+  font-family:'Nunito',sans-serif; min-height:.9rem;
+}
+
+.test-locked .opt, .test-locked .match-sel, .test-locked .answer-input, .test-locked .working-area { pointer-events:none; }
+.test-locked .opt { cursor:default; }
+
+/* ═══════════════════════════════════════════
+   QUESTION DIAGRAMS
+═══════════════════════════════════════════ */
+.q-diagram {
+  display:block;
+  max-width:300px;
+  width:100%;
+  border-radius:14px;
+  margin:0 0 1rem 0;
+  border:1.5px solid var(--card-border);
+  background:rgba(255,255,255,0.03);
+}
+.q-diagram-pair {
+  display:flex;
+  gap:1rem;
+  flex-wrap:wrap;
+  margin-bottom:1rem;
+}
+.q-diagram-pair .q-diagram {
+  flex:1;
+  min-width:140px;
+  max-width:220px;
+  margin:0;
+}
+.q-diagram-pair .q-diagram-label {
+  font-size:.65rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--section-lbl);
+  text-align:center;
+  margin-top:.35rem;
+}
+.q-diagram-wrap { text-align:left; }
+</style>
+
+<style>
+/* ── classwork-check additions (use theme vars) ── */
+.res-line{ display:none; margin-top:.6rem; font-size:.82rem; font-weight:700; line-height:1.4; padding:.55rem .8rem; border-radius:10px; }
+.res-line.show{ display:block; }
+.res-line.ok{ background:var(--opt-correct); border:1.5px solid var(--opt-correct-b); }
+.res-line.no{ background:var(--opt-wrong); border:1.5px solid var(--opt-wrong-b); }
+.res-line .rl-mark{ font-family:'Fredoka One',cursive; }
+.res-line .rl-exp{ display:block; margin-top:.25rem; font-weight:600; opacity:.9; }
+.results-summary{ background:var(--score-bg); border:1.5px solid var(--score-border); border-radius:16px; padding:1.4rem; margin:1.5rem 0; text-align:center; }
+.results-summary .rs-total{ font-family:'Fredoka One',cursive; font-size:2.2rem; }
+.results-summary .rs-pct{ font-size:1rem; font-weight:800; color:var(--card-desc); margin-top:.3rem; }
+.locked-opt{ pointer-events:none; }
+</style>
+</head>
+<body class="theme-night">
+
+<div class="stars" id="stars"></div>
+
+<!-- PASSKEY MODAL -->
+<div class="modal-overlay hidden" id="passkeyModal">
+  <div class="modal-card">
+    <div class="modal-icon">🔑</div>
+    <div class="modal-title">Enter Class Code</div>
+    <div class="modal-desc">Ask Mr. EdLo for today's class code to submit your answers and see your feedback.</div>
+    <input class="modal-input" type="text" id="passkeyInput" placeholder="" autocomplete="off" spellcheck="false">
+    <button class="btn-primary" style="width:100%;margin-bottom:.5rem" onclick="validatePasskey()">Submit →</button>
+    <div class="modal-err" id="passkeyErr">❌ Wrong code — ask Mr. EdLo for the correct code.</div>
+  </div>
+</div>
+
+<!-- Blur overlay -->
+<div class="blur-overlay" id="blurOverlay" onclick="dismissBlur()">
+  <div class="blur-icon">🙈</div>
+  <div class="blur-title">Screen Hidden</div>
+  <div class="blur-sub">Click anywhere to continue your check</div>
+</div>
+
+<!-- Tab-switch warning -->
+<div class="warn-overlay" id="warnOverlay">
+  <div class="warn-card">
+    <div class="warn-icon">⚠️</div>
+    <div class="warn-title">Focus Warning</div>
+    <div class="warn-msg">You left this page. This has been noted.<br>Please stay on this page until you submit.</div>
+    <div class="warn-count" id="warnCount">Warning 1 of 3</div>
+    <button class="btn-primary" style="width:100%" onclick="dismissWarning()">I Understand — Return</button>
+  </div>
+</div>
+
+<!-- Theme bar -->
+<div class="theme-bar">
+  <button class="theme-btn active" onclick="setTheme('night',this)">🌙 Night</button>
+  <button class="theme-btn" onclick="setTheme('sunny',this)">☀️ Sunny</button>
+  <button class="theme-btn" onclick="setTheme('cloudy',this)">☁️ Cloudy</button>
+  <button class="theme-btn" onclick="setTheme('nature',this)">🌿 Nature</button>
+</div>
+
+<!-- Question progress bar -->
+<div class="q-progress-wrap" id="qProgressWrap">
+  <div class="q-progress-inner">
+    <div class="q-progress-row">
+      <span class="q-progress-label">Questions answered</span>
+      <span class="q-progress-count" id="qProgressCount">0 / 12</span>
+    </div>
+    <div class="q-progress-bg"><div class="q-progress-fill" id="qProgressFill" style="width:0%"></div></div>
+  </div>
+</div>
+
+<div class="wrapper">
+  <div class="site-header">
+    <a class="site-header-logo" href="https://edlovirtualclassroom.com/">
+      <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+      <span>Mr. EdLo's Virtual Classroom</span>
+    </a>
+    <span class="header-badge">Standard 5 &nbsp;·&nbsp; Belize</span>
+  </div>
+
+  <a class="back-link" href="/standard5/math/#assessments">← Back to Mathematics</a>
+
+  <header>
+    <div class="badge">Standard 5 &nbsp;·&nbsp; Mathematics · Cycle 1</div>
+    <h1>🔢 Classwork Check — Scientific Notation</h1>
+    <p class="subtitle">MA 1.34–1.36 · 42 marks · Answer all 12 questions</p>
+  </header>
+
+  <!-- LOCK SCREEN -->
+  <div class="lock-screen" id="lockScreen">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">Check Already Submitted</div>
+    <div class="lock-msg">You have already completed this check. Your results are saved below. Download your report or return to Mathematics.</div>
+    <div class="lock-scores" id="lockScores"></div>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <button class="btn-primary" onclick="downloadPDF()">📄 Download PDF Report</button>
+      <a class="btn-secondary" href="/standard5/math/#assessments" style="display:inline-flex;align-items:center;text-decoration:none;">← Back to Mathematics</a>
+    </div>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px dashed var(--card-border);">
+      <p style="font-size:.7rem;font-weight:700;color:var(--section-lbl);margin-bottom:.6rem;letter-spacing:.06em;text-transform:uppercase;">Teacher Access</p>
+      <button class="btn-secondary" style="font-size:.8rem;padding:7px 20px;" onclick="teacherReset()">🔑 Reset for Testing</button>
+    </div>
+  </div>
+
+  <div class="test-container" id="testContainer">
+    <div class="student-card">
+      <div class="sc-icon">🎓</div>
+      <div class="sc-fields">
+        <div class="sc-group"><label>Your Name</label><input type="text" id="studentName" placeholder="Enter your full name" autocomplete="off"></div>
+        <div class="sc-group"><label>Date</label><input type="text" id="testDate" readonly></div>
+        <div class="sc-group"><label>Teacher</label><input type="text" value="Mr. Edwin D. Lopez" readonly></div>
+      </div>
+    </div>
+
+    <div class="sec-card" style="--sec-accent:#4DABF7;">
+      <div class="sec-head">
+        <div class="sec-title">📘 Section A — Scientific Notation & Very Large Numbers</div>
+        <div class="sec-pts">13 marks</div>
+      </div>
+      <p style="font-size:.82rem;font-weight:700;color:var(--card-desc);margin-bottom:1.2rem;">MA 1.34 · Standard form, expanded form and scientific notation (a × 10ⁿ, where 1 ≤ a &lt; 10).</p>
+      <div class="question" data-q="q1">
+        <div class="q-label"><span class="q-num">1.</span><span>Which of these shows 3,240,000 in expanded form?</span><span class="q-pts">3 marks</span></div>
+        <div class="options">
+        <label class="opt"><input type="radio" name="q1" value="0"><span>A. 3,000,000 + 240,000</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q1" value="1"><span>B. 3,000,000 + 200,000 + 40,000</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q1" value="2"><span>C. 3,000,000 + 200,000 + 4,000</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q1" value="3"><span>D. 32,000 + 40,000</span><span class="opt-tick"></span></label>
+        </div>
+        <div class="res-line" id="q1_res"></div>
+      </div>
+      <div class="question" data-q="q2">
+        <div class="q-label"><span class="q-num">2.</span><span>Belize's land area is about 3,400,000 acres. Which is 3,400,000 written in scientific notation?</span><span class="q-pts">3 marks</span></div>
+        <div class="options">
+        <label class="opt"><input type="radio" name="q2" value="0"><span>A. 3.4 × 10⁶</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q2" value="1"><span>B. 34 × 10⁵</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q2" value="2"><span>C. 3.4 × 10⁵</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q2" value="3"><span>D. 0.34 × 10⁷</span><span class="opt-tick"></span></label>
+        </div>
+        <div class="res-line" id="q2_res"></div>
+      </div>
+      <div class="question" data-q="q3">
+        <div class="q-label"><span class="q-num">3.</span><span>Which of these is the CORRECT scientific notation for 47,000?</span><span class="q-pts">3 marks</span></div>
+        <div class="options">
+        <label class="opt"><input type="radio" name="q3" value="0"><span>A. 47 × 10³</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q3" value="1"><span>B. 4.7 × 10⁴</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q3" value="2"><span>C. 0.47 × 10⁵</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q3" value="3"><span>D. 4.7 × 10³</span><span class="opt-tick"></span></label>
+        </div>
+        <div class="res-line" id="q3_res"></div>
+      </div>
+      <div class="question" data-q="q4">
+        <div class="q-label"><span class="q-num">4.</span><span>About 20,300 visitors came to the Belize Barrier Reef one month, written 2.03 × 10⁴. Convert 2.03 × 10⁴ back to standard form.</span><span class="q-pts">4 marks</span></div>
+        <input class="answer-input" id="q4_in" type="text" autocomplete="off" spellcheck="false" placeholder="your answer">
+        <div class="res-line" id="q4_res"></div>
+      </div>
+    </div>
+    <div class="sec-card" style="--sec-accent:#9775FA;">
+      <div class="sec-head">
+        <div class="sec-title">📗 Section B — Rounding to Significant Figures</div>
+        <div class="sec-pts">15 marks</div>
+      </div>
+      <p style="font-size:.82rem;font-weight:700;color:var(--card-desc);margin-bottom:1.2rem;">MA 1.35 · Round whole numbers and decimals to a given number of significant figures.</p>
+      <div class="question" data-q="q5">
+        <div class="q-label"><span class="q-num">5.</span><span>Round 68,431 to 1 significant figure.</span><span class="q-pts">4 marks</span></div>
+        <input class="answer-input" id="q5_in" type="text" autocomplete="off" spellcheck="false" placeholder="your answer">
+        <div class="res-line" id="q5_res"></div>
+      </div>
+      <div class="question" data-q="q6">
+        <div class="q-label"><span class="q-num">6.</span><span>Round 53,268 to 2 significant figures.</span><span class="q-pts">4 marks</span></div>
+        <input class="answer-input" id="q6_in" type="text" autocomplete="off" spellcheck="false" placeholder="your answer">
+        <div class="res-line" id="q6_res"></div>
+      </div>
+      <div class="question" data-q="q7">
+        <div class="q-label"><span class="q-num">7.</span><span>Round 0.003847 to 2 significant figures.</span><span class="q-pts">4 marks</span></div>
+        <input class="answer-input" id="q7_in" type="text" autocomplete="off" spellcheck="false" placeholder="your answer">
+        <div class="res-line" id="q7_res"></div>
+      </div>
+      <div class="question" data-q="q8">
+        <div class="q-label"><span class="q-num">8.</span><span>How many significant figures does the number 0.00407 have?</span><span class="q-pts">3 marks</span></div>
+        <div class="options">
+        <label class="opt"><input type="radio" name="q8" value="0"><span>A. 2</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q8" value="1"><span>B. 3</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q8" value="2"><span>C. 4</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q8" value="3"><span>D. 5</span><span class="opt-tick"></span></label>
+        </div>
+        <div class="res-line" id="q8_res"></div>
+      </div>
+    </div>
+    <div class="sec-card" style="--sec-accent:#69DB7C;">
+      <div class="sec-head">
+        <div class="sec-title">📙 Section C — Numbers with Three or More Decimal Places</div>
+        <div class="sec-pts">14 marks</div>
+      </div>
+      <p style="font-size:.82rem;font-weight:700;color:var(--card-desc);margin-bottom:1.2rem;">MA 1.36 · Read, write, expand and compare numbers with three and four decimal places.</p>
+      <div class="question" data-q="q9">
+        <div class="q-label"><span class="q-num">9.</span><span>In the number 0.4073, what is the value of the digit 7?</span><span class="q-pts">3 marks</span></div>
+        <div class="options">
+        <label class="opt"><input type="radio" name="q9" value="0"><span>A. 7 tenths</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q9" value="1"><span>B. 7 hundredths</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q9" value="2"><span>C. 7 thousandths</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q9" value="3"><span>D. 7 ten-thousandths</span><span class="opt-tick"></span></label>
+        </div>
+        <div class="res-line" id="q9_res"></div>
+      </div>
+      <div class="question" data-q="q10">
+        <div class="q-label"><span class="q-num">10.</span><span>Which of these shows 0.4073 in expanded form?</span><span class="q-pts">3 marks</span></div>
+        <div class="options">
+        <label class="opt"><input type="radio" name="q10" value="0"><span>A. 4 tenths + 7 hundredths + 3 thousandths</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q10" value="1"><span>B. 4 tenths + 0 hundredths + 7 thousandths + 3 ten-thousandths</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q10" value="2"><span>C. 4 tenths + 7 thousandths + 3 hundredths</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q10" value="3"><span>D. 40 + 7 + 3</span><span class="opt-tick"></span></label>
+        </div>
+        <div class="res-line" id="q10_res"></div>
+      </div>
+      <div class="question" data-q="q11">
+        <div class="q-label"><span class="q-num">11.</span><span>Which number is greater: 0.4073 or 0.408?</span><span class="q-pts">4 marks</span></div>
+        <div class="options">
+        <label class="opt"><input type="radio" name="q11" value="0"><span>A. 0.4073</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q11" value="1"><span>B. 0.408</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q11" value="2"><span>C. They are equal</span><span class="opt-tick"></span></label>
+        <label class="opt"><input type="radio" name="q11" value="3"><span>D. Cannot tell</span><span class="opt-tick"></span></label>
+        </div>
+        <div class="res-line" id="q11_res"></div>
+      </div>
+      <div class="question" data-q="q12">
+        <div class="q-label"><span class="q-num">12.</span><span>Write this number in decimal form: 3 tenths, 5 thousandths and 8 ten-thousandths.</span><span class="q-pts">4 marks</span></div>
+        <input class="answer-input" id="q12_in" type="text" autocomplete="off" spellcheck="false" placeholder="your answer">
+        <div class="res-line" id="q12_res"></div>
+      </div>
+    </div>
+
+    <div id="resultsSummary" class="results-summary" style="display:none;"></div>
+
+    <div style="text-align:center;margin:1.5rem 0;">
+      <button class="btn-primary" id="submitBtn" onclick="handleSubmit()" disabled>Submit Check →</button>
+      <p class="submit-hint" id="submitHint" style="margin-top:.6rem;font-size:.8rem;font-weight:700;color:var(--card-desc);">Answer all 12 questions to submit</p>
+    </div>
+
+    <div style="text-align:center;margin-top:1rem;display:none;" id="pdfWrap">
+      <button class="btn-primary" onclick="downloadPDF()">📄 Download PDF Report</button>
+    </div>
+  </div>
+</div>
+
+<button id="back-to-top" title="Back to top" style="position:fixed;bottom:20px;right:20px;display:none;width:44px;height:44px;border-radius:50%;border:0;background:var(--top-badge-bg);color:var(--top-badge-c);font-size:1.2rem;cursor:pointer;z-index:300;align-items:center;justify-content:center;">↑</button>
+
+<div class="spinner-wrap" id="spinnerWrap"><div class="spinner"></div><p id="spinnerText" style="margin-top:1rem;font-weight:800;color:#fff;">Grading your check…</p></div>
+
+
+<script>
+/* ═══════════════════════════════════════════ CONFIG ═══════════════════════════════════════════ */
+const TEST_ID    = "sy2627-std5-c1-classwork1-math";
+const QUIZ_KEY   = "vc-quiz-std5-c1-classwork1-math-v1";
+const PK_KEY     = 'vc-passkey';
+const WORKER_URL = 'https://edlo-gemini.smartstandardsix.workers.dev/';
+const IDLE_SECONDS = 90;   /* idle-blur; 90s minimum for a maths check so thinking time never blurs */
+const TOTAL_POINTS = 42;
+const ITEMS = [{"id":"q1","type":"mc","marks":3,"options":["3,000,000 + 240,000","3,000,000 + 200,000 + 40,000","3,000,000 + 200,000 + 4,000","32,000 + 40,000"]},{"id":"q2","type":"mc","marks":3,"options":["3.4 × 10⁶","34 × 10⁵","3.4 × 10⁵","0.34 × 10⁷"]},{"id":"q3","type":"mc","marks":3,"options":["47 × 10³","4.7 × 10⁴","0.47 × 10⁵","4.7 × 10³"]},{"id":"q4","type":"fib","marks":4},{"id":"q5","type":"fib","marks":4},{"id":"q6","type":"fib","marks":4},{"id":"q7","type":"fib","marks":4},{"id":"q8","type":"mc","marks":3,"options":["2","3","4","5"]},{"id":"q9","type":"mc","marks":3,"options":["7 tenths","7 hundredths","7 thousandths","7 ten-thousandths"]},{"id":"q10","type":"mc","marks":3,"options":["4 tenths + 7 hundredths + 3 thousandths","4 tenths + 0 hundredths + 7 thousandths + 3 ten-thousandths","4 tenths + 7 thousandths + 3 hundredths","40 + 7 + 3"]},{"id":"q11","type":"mc","marks":4,"options":["0.4073","0.408","They are equal","Cannot tell"]},{"id":"q12","type":"fib","marks":4}];
+
+/* ═══ THEME ═══ */
+const THEMES=['night','sunny','cloudy','nature'];
+function setTheme(t,btn){ THEMES.forEach(x=>document.body.classList.remove('theme-'+x)); document.body.classList.add('theme-'+t);
+  document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active')); if(btn)btn.classList.add('active'); localStorage.setItem('vc-theme',t); }
+(function(){ const s=localStorage.getItem('vc-theme'); if(s&&THEMES.includes(s)){ THEMES.forEach(x=>document.body.classList.remove('theme-'+x)); document.body.classList.add('theme-'+s);
+  document.querySelectorAll('.theme-btn').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase().includes(s))); } })();
+
+/* ═══ STARS ═══ */
+(function(){ const sc=document.getElementById('stars'); for(let i=0;i<80;i++){ const s=document.createElement('div'); s.className='star';
+  const sz=Math.random()*2.5+1; s.style.cssText='width:'+sz+'px;height:'+sz+'px;top:'+(Math.random()*100)+'%;left:'+(Math.random()*100)+'%;--d:'+(Math.random()*4+2).toFixed(1)+'s;--delay:-'+(Math.random()*6).toFixed(1)+'s;--op:'+(Math.random()*0.5+0.2).toFixed(2)+';'; sc.appendChild(s); } })();
+
+document.getElementById('testDate').value = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+const topBtn=document.getElementById('back-to-top');
+window.addEventListener('scroll',()=>{ topBtn.style.display = window.scrollY>300?'flex':'none'; });
+topBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+/* ═══ SELECTION + PROGRESS ═══ */
+function syncOptSelected(){ document.querySelectorAll('.question[data-q]').forEach(q=>{
+  q.querySelectorAll('.opt').forEach(o=>{ const inp=o.querySelector('input'); o.classList.toggle('selected', !!(inp&&inp.checked)); }); }); }
+function isAnswered(it){ if(it.type==='mc'){ return !!document.querySelector('input[name="'+it.id+'"]:checked'); }
+  const el=document.getElementById(it.id+'_in'); return !!(el&&el.value.trim().length); }
+function updateProgress(){ saveDraft(); const done=ITEMS.filter(isAnswered).length; const pct=Math.round(done/ITEMS.length*100);
+  document.getElementById('qProgressCount').textContent=done+' / '+ITEMS.length;
+  const fill=document.getElementById('qProgressFill'); fill.style.width=pct+'%'; fill.classList.toggle('done',done===ITEMS.length);
+  const btn=document.getElementById('submitBtn'), hint=document.getElementById('submitHint'); const ready=done===ITEMS.length;
+  if(!testSubmitted){ btn.disabled=!ready; hint.textContent=ready?'✅ All answered — ready to submit!':('Answer all '+ITEMS.length+' questions to submit ('+(ITEMS.length-done)+' left)'); } }
+document.addEventListener('input',e=>{ if(e.target.matches('.answer-input')){ updateProgress(); } });
+document.addEventListener('change',e=>{ if(e.target.matches('.opt input')){ syncOptSelected(); updateProgress(); } });
+
+/* ═══ IDLE BLUR ═══ */
+let idleTimer=null, blurActive=false, testSubmitted=false;
+function resetIdleTimer(){ clearTimeout(idleTimer); if(blurActive||testSubmitted)return; idleTimer=setTimeout(showBlur,IDLE_SECONDS*1000); }
+function showBlur(){ if(testSubmitted)return; blurActive=true; document.getElementById('blurOverlay').classList.add('show'); }
+function dismissBlur(){ blurActive=false; document.getElementById('blurOverlay').classList.remove('show'); resetIdleTimer(); }
+function dismissWarning(){ document.getElementById('warnOverlay').classList.remove('show'); dismissBlur(); }
+['mousemove','keydown','click','scroll','touchstart'].forEach(ev=>document.addEventListener(ev,resetIdleTimer,{passive:true}));
+resetIdleTimer();
+
+/* ═══ TAB-SWITCH STRIKES ═══ */
+let warnCount=0;
+function handleVisibilityChange(){ if(document.hidden && !testSubmitted){ warnCount++; if(warnCount<=3){ document.getElementById('warnCount').textContent='Warning '+warnCount+' of 3';
+  document.getElementById('warnOverlay').classList.add('show'); } } }
+document.addEventListener('visibilitychange',handleVisibilityChange);
+
+/* ═══ SUBMIT-LOCK ═══ */
+function getSavedResult(){ try{ return JSON.parse(localStorage.getItem(QUIZ_KEY)); }catch(e){ return null; } }
+function saveResult(d){ localStorage.setItem(QUIZ_KEY,JSON.stringify(d)); }
+function teacherReset(){ if(confirm('Reset this check on THIS device? The saved result will be cleared.')){ localStorage.removeItem(QUIZ_KEY); location.reload(); } }
+window._savedData=null;
+
+/* ═══ COLLECT ANSWERS ═══ */
+function collectAnswers(){ const a={}; ITEMS.forEach(it=>{ if(it.type==='mc'){ const sel=document.querySelector('input[name="'+it.id+'"]:checked'); a[it.id]=sel?sel.value:''; }
+  else { const el=document.getElementById(it.id+'_in'); a[it.id]=el?el.value.trim():''; } }); return a; }
+function answerDisplay(it,raw){ if(it.type==='mc'){ const i=Number(raw); return (it.options&&it.options[i]!=null)?it.options[i]:'(blank)'; } return (raw&&raw.length)?raw:'(blank)'; }
+
+/* ═══ SUBMIT → PASSKEY → GRADE (server-side, KV) ═══ */
+function handleSubmit(){ if(testSubmitted)return; if(ITEMS.filter(isAnswered).length<ITEMS.length)return; clearTimeout(idleTimer);
+  if(retryPasskey){ gradeSubmit(retryPasskey); return; }
+  document.getElementById('passkeyInput').value=''; document.getElementById('passkeyErr').classList.remove('show');
+  document.getElementById('passkeyModal').classList.remove('hidden'); setTimeout(()=>document.getElementById('passkeyInput').focus(),100); }
+document.getElementById('passkeyInput').addEventListener('keydown',e=>{ if(e.key==='Enter')validatePasskey(); });
+async function validatePasskey(){ const pk=document.getElementById('passkeyInput').value.trim().toUpperCase(); if(!pk){ return; }
+  document.getElementById('passkeyModal').classList.add('hidden'); await gradeSubmit(pk); }
+
+async function gradeSubmit(passkey){
+  document.getElementById('spinnerWrap').classList.add('show');
+  setSpinnerText('Grading your check…');
+  const h0=document.getElementById('submitHint'); h0.style.color=''; h0.style.fontWeight='';
+  const answers=collectAnswers();
+  let out;
+  try{
+    out=await postJSON({ passkey, mode:'grade', testId:TEST_ID, answers },[0,2500,6000],25000,
+      (n,of)=>setSpinnerText('The internet is slow — trying again ('+n+' of '+of+')… keep this page open.'));
+  }catch(e){ console.error('grade error',e); gradeUnreachable(passkey); return; }
+  document.getElementById('spinnerWrap').classList.remove('show');
+  const data=out.body||{};
+  if(data.error==='INVALID_KEY' || out.status===403){
+    retryPasskey=null;
+    document.getElementById('passkeyErr').classList.add('show'); document.getElementById('passkeyModal').classList.remove('hidden'); return; }
+  if(!data.ok){ console.error('grade error',data); gradeUnreachable(passkey); return; }
+  retryPasskey=null;
+  clearDraft();
+  renderResults(data, answers);
+}
+
+/* ═══ RENDER RESULTS ═══ */
+function renderResults(data, answers){
+  testSubmitted=true; blurActive=false; document.getElementById('blurOverlay').classList.remove('show');
+  const results=data.results||{};
+  ITEMS.forEach(it=>{
+    const r=results[it.id]||{}; const q=document.querySelector('.question[data-q="'+it.id+'"]');
+    const correctText=(r.correctAnswer!=null)?String(r.correctAnswer):'';
+    if(it.type==='mc'){
+      q.querySelectorAll('.opt').forEach(o=>{ o.classList.add('locked-opt'); const inp=o.querySelector('input');
+        const label=o.querySelector('span').textContent.replace(/^[A-D].s*/,'').trim();
+        if(label===correctText.trim()){ o.classList.add('correct'); o.querySelector('.opt-tick').textContent='✓'; }
+        if(inp&&inp.checked && !r.correct){ o.classList.add('wrong'); o.querySelector('.opt-tick').textContent='✗'; }
+        if(inp)inp.disabled=true; });
+    } else {
+      const el=document.getElementById(it.id+'_in'); if(el){ el.disabled=true; }
+    }
+    const rl=document.getElementById(it.id+'_res'); rl.classList.add('show', r.correct?'ok':'no');
+    let msg='<span class="rl-mark">'+(r.correct?'✓ ':'✗ ')+(r.earned||0)+'/'+(r.points||it.marks)+'</span>';
+    if(!r.correct && correctText){ msg+=' &nbsp; Correct answer: '+correctText; }
+    if(r.explain){ msg+='<span class="rl-exp">'+r.explain+'</span>'; }
+    rl.innerHTML=msg;
+  });
+  const earned=data.totalEarned!=null?data.totalEarned:0; const total=data.totalPoints!=null?data.totalPoints:TOTAL_POINTS;
+  const pct=Math.round(earned/total*100);
+  const sum=document.getElementById('resultsSummary'); sum.style.display='block';
+  sum.innerHTML='<div class="rs-total">'+earned+' / '+total+'</div><div class="rs-pct">'+pct+'%  ·  Teacher Feedback shown on each question</div>';
+  document.getElementById('submitBtn').style.display='none'; document.getElementById('submitHint').style.display='none';
+  document.getElementById('pdfWrap').style.display='block';
+  const name=document.getElementById('studentName').value||'Student';
+  const disp={}; ITEMS.forEach(it=>{ disp[it.id]=answerDisplay(it, answers[it.id]); });
+  window._savedData={ name, date:document.getElementById('testDate').value, earned, total, pct, results, disp };
+  saveResult(window._savedData);
+  sum.scrollIntoView({behavior:'smooth'});
+}
+
+/* ═══ LOCK SCREEN ON RELOAD ═══ */
+(function(){ const d=getSavedResult(); if(d){ window._savedData=d; testSubmitted=true;
+  document.getElementById('testContainer').style.display='none'; document.getElementById('qProgressWrap').style.display='none';
+  const ls=document.getElementById('lockScreen'); ls.classList.add('show');
+  document.getElementById('lockScores').innerHTML='<div class="results-summary" style="margin:0;"><div class="rs-total">'+d.earned+' / '+d.total+'</div><div class="rs-pct">'+d.pct+'%</div></div>'; } })();
+
+/* ═══ RESILIENCE: autosave + retry (added Sept 2026) ═══
+   The computer room's internet drops out mid-sitting. Two protections:
+   1) Every answer (and the name) is saved to THIS computer as the student works,
+      so a crash, a reload or a closed tab loses nothing. The "Not you? Start fresh"
+      button clears it if a different student sits down at the same computer.
+   2) Grading calls are retried with a timeout. If grading still cannot be reached,
+      nothing is recorded and nothing is locked: the answers stay on screen and the
+      student presses "Try Submitting Again" (no need to re-type the code).
+   Grading writes nothing on the server, so a retry can never double-count. */
+const DRAFT_KEY = 'vc-draft-' + TEST_ID;
+const DRAFT_MAX_AGE = 7*24*60*60*1000;   /* drafts older than a week are thrown away */
+let draftReady = false;                  /* no saving until the old draft has been put back */
+let retryPasskey = null;                 /* code from a failed-by-network attempt, reused on retry */
+function saveDraft(){
+  if(!draftReady || testSubmitted) return;
+  try{ const nm=document.getElementById('studentName');
+    localStorage.setItem(DRAFT_KEY, JSON.stringify({t:Date.now(), name:nm?nm.value:'', a:collectAnswers()})); }catch(e){}
+}
+function clearDraft(){ draftReady=false; try{ localStorage.removeItem(DRAFT_KEY); }catch(e){} }
+function restoreDraft(){
+  if(testSubmitted) return;
+  let d=null, n=0;
+  try{ d=JSON.parse(localStorage.getItem(DRAFT_KEY)); }catch(e){}
+  if(d && d.a && (Date.now()-(d.t||0)) < DRAFT_MAX_AGE){
+    ITEMS.forEach(it=>{
+      const v=d.a[it.id];
+      if(v==null || v==='') return;
+      if(it.type==='mc'){
+        const inp=document.querySelector('input[name="'+it.id+'"][value="'+v+'"]'); if(inp){ inp.checked=true; n++; }
+      }else if(it.type==='match'){
+        if(Array.isArray(v)){ let any=false;
+          v.forEach((x,i)=>{ const el=document.querySelector('[name="'+it.id+'_'+i+'"]'); if(el && x!=null && x!==''){ el.value=x; any=true; } });
+          if(any) n++; }
+      }else{
+        const el=document.getElementById(it.id+'_in'); if(el){ el.value=v; n++; }
+      }
+    });
+    const nm=document.getElementById('studentName'); if(nm && d.name && !nm.value) nm.value=d.name;
+    syncOptSelected(); updateProgress();
+  }else if(d){ try{ localStorage.removeItem(DRAFT_KEY); }catch(e){} }
+  draftReady=true;
+  if(n) showDraftBanner(n, d && d.name);
+}
+function showDraftBanner(n, who){
+  const box=document.getElementById('testContainer'); if(!box) return;
+  const b=document.createElement('div');
+  b.className='draft-banner';
+  b.style.cssText='margin:0 0 1.2rem;padding:.85rem 1.1rem;border-radius:14px;border:1.5px solid #20C997;background:rgba(32,201,151,.13);font-weight:700;color:var(--body-color);display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;justify-content:space-between;';
+  const t=document.createElement('span');
+  t.textContent='Welcome back'+(who?', '+who:'')+'! Your '+n+' saved answer'+(n===1?' has':'s have')+' been put back. Carry on from where you stopped.';
+  const btn=document.createElement('button');
+  btn.type='button'; btn.textContent='Not you? Start fresh';
+  btn.style.cssText='min-height:44px;padding:0 16px;border-radius:12px;border:1.5px solid currentColor;background:transparent;color:inherit;font:inherit;font-weight:800;cursor:pointer;';
+  btn.onclick=()=>{ clearDraft(); location.reload(); };
+  b.appendChild(t); b.appendChild(btn);
+  box.insertBefore(b, box.firstChild);
+}
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+/* POST to the Worker with retries. Retries on no network, timeout or a 5xx.
+   Returns {status, body} for any other response; throws after the last try. */
+async function postJSON(payload, waits, timeoutMs, onRetry){
+  let lastErr=null;
+  for(let i=0;i<waits.length;i++){
+    if(waits[i]){ if(onRetry) onRetry(i+1, waits.length); await sleep(waits[i]); }
+    const ctl=(typeof AbortController!=='undefined') ? new AbortController() : null;
+    const timer=ctl ? setTimeout(()=>ctl.abort(), timeoutMs) : null;
+    try{
+      const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(payload), signal: ctl ? ctl.signal : undefined});
+      if(res.status>=500){ lastErr=new Error('server '+res.status); continue; }
+      const body=await res.json().catch(()=>null);
+      return {status:res.status, body};
+    }catch(e){ lastErr=e; }
+    finally{ if(timer) clearTimeout(timer); }
+  }
+  throw lastErr || new Error('network');
+}
+function setSpinnerText(msg){ const s=document.getElementById('spinnerText'); if(s) s.textContent=msg; }
+function gradeUnreachable(passkey){
+  retryPasskey=passkey||null;
+  document.getElementById('spinnerWrap').classList.remove('show');
+  setSpinnerText('Grading your check…');
+  const btn=document.getElementById('submitBtn'); btn.disabled=false; btn.textContent='Try Submitting Again';
+  const h=document.getElementById('submitHint'); h.style.display='block';
+  h.style.color='#e03131'; h.style.fontWeight='800';
+  h.textContent='Your check could not be marked just now — usually the internet dropped. Your answers are saved on this computer, so nothing is lost. Press "Try Submitting Again". If it keeps failing, raise your hand.';
+  resetIdleTimer();
+}
+(function(){ const nm=document.getElementById('studentName'); if(nm) nm.addEventListener('input', saveDraft); })();
+restoreDraft();
+
+/* ═══ PDF REPORT ═══ */
+function pdfText(s){ if(s==null)return''; s=String(s);
+  s=s.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&nbsp;/g,' ');
+  const map={ '×':'x','÷':'/','−':'-','–':'-','—':'-','’':"'",'‘':"'",'“':'"','”':'"','…':'...','·':'-','→':'->','≤':'<=','≥':'>=','²':'2','³':'3','⁰':'0','¹':'1','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','√':'sqrt','π':'pi' };
+  for(const k in map){ s=s.split(k).join(map[k]); }
+  s=Array.from(s).map(function(ch){ return ch.codePointAt(0)>255 ? '' : ch; }).join('');
+  return s; }
+
+function downloadPDF(){
+  const { jsPDF }=window.jspdf; const doc=new jsPDF({orientation:'p',unit:'mm',format:'a4'});
+  const d=window._savedData||{}; const margin=20,pageW=210,colW=pageW-margin*2; let y=0;
+  doc.setFillColor(77,171,247); doc.rect(0,0,210,8,'F'); y=18;
+  doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(110,110,110);
+  doc.text(pdfText('Howard Smith Nazarene School  |  Standard 5  |  Belize'),pageW/2,y,{align:'center'}); y+=7;
+  doc.setFont('helvetica','bold'); doc.setFontSize(16); doc.setTextColor(20,20,40);
+  doc.text(pdfText('Classwork Check — Scientific Notation'),pageW/2,y,{align:'center'}); y+=5;
+  doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(80,80,100);
+  doc.text(pdfText("Mr. EdLo's Virtual Classroom  |  MA 1.34-1.36  |  Standard 5"),pageW/2,y,{align:'center'}); y+=9;
+  doc.setDrawColor(77,171,247); doc.setLineWidth(0.5); doc.line(margin,y,pageW-margin,y); y+=8;
+  doc.setFillColor(240,246,255); doc.setDrawColor(77,171,247); doc.setLineWidth(0.4); doc.roundedRect(margin,y,colW,22,3,3,'FD');
+  doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(40,40,60);
+  doc.text('STUDENT:',margin+5,y+8); doc.setFont('helvetica','normal'); doc.text(pdfText(d.name||'Not entered'),margin+25,y+8);
+  doc.setFont('helvetica','bold'); doc.text('DATE:',margin+5,y+16); doc.setFont('helvetica','normal'); doc.text(pdfText(d.date||''),margin+18,y+16);
+  doc.setFont('helvetica','bold'); doc.text('TEACHER:',pageW/2,y+8); doc.setFont('helvetica','normal'); doc.text(pdfText('Mr. Edwin D. Lopez'),pageW/2+23,y+8);
+  doc.setFont('helvetica','bold'); doc.text('SCHOOL:',pageW/2,y+16); doc.setFont('helvetica','normal'); doc.text(pdfText('Howard Smith Nazarene'),pageW/2+20,y+16);
+  y+=28;
+  doc.setFillColor(240,246,255); doc.setDrawColor(180,210,240); doc.roundedRect(margin,y,colW,14,3,3,'FD');
+  doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(30,70,130);
+  doc.text(pdfText('SCORE: '+(d.earned!=null?d.earned:'-')+' / '+(d.total!=null?d.total:42)+'   ('+(d.pct!=null?d.pct:'-')+'%)'),margin+5,y+9); y+=20;
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(77,171,247); doc.text('YOUR ANSWERS & TEACHER FEEDBACK',margin,y); y+=6;
+  const res=d.results||{}, disp=d.disp||{}; const lh=4.6; doc.setFontSize(8);
+  ITEMS.forEach(it=>{ const r=res[it.id]||{}; if(y>262){doc.addPage();y=20;}
+    doc.setFont('helvetica','bold'); doc.setTextColor(50,50,80);
+    doc.text(pdfText(it.id.slice(1)+'.  ['+(r.earned||0)+'/'+(r.points||it.marks)+']  '+(r.correct?'Correct':'Review')),margin,y); y+=lh;
+    doc.setFont('helvetica','normal'); doc.setTextColor(80,80,80);
+    doc.splitTextToSize(pdfText('Your answer: '+(disp[it.id]||'(blank)')),colW-4).forEach(l=>{ if(y>272){doc.addPage();y=20;} doc.text(l,margin+3,y); y+=lh; });
+    if(!r.correct && r.correctAnswer){ doc.splitTextToSize(pdfText('Correct answer: '+r.correctAnswer),colW-4).forEach(l=>{ if(y>272){doc.addPage();y=20;} doc.text(l,margin+3,y); y+=lh; }); }
+    if(r.explain){ doc.setFont('helvetica','italic'); doc.setTextColor(80,50,150);
+      doc.splitTextToSize(pdfText('Feedback: '+r.explain),colW-4).forEach(l=>{ if(y>272){doc.addPage();y=20;} doc.text(l,margin+3,y); y+=lh; }); doc.setTextColor(80,80,80); }
+    y+=2; });
+  const pc=doc.getNumberOfPages(); for(let p=1;p<=pc;p++){ doc.setPage(p); doc.setFillColor(77,171,247); doc.rect(0,290,210,7,'F');
+    doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(255,255,255);
+    doc.text(pdfText('edlovirtualclassroom.com  ·  Standard 5 Mathematics · Scientific Notation Check  ·  Page '+p+' of '+pc),pageW/2,294.5,{align:'center'}); }
+  const safe=(d.name||'Student').replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
+  doc.save('SciNotation_Check_'+safe+'.pdf');
+}
+
+updateProgress(); syncOptSelected();
+
+</script>
+</body>
+</html>
