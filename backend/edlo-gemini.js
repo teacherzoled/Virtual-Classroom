@@ -7,7 +7,15 @@
    truth so future edits start from here and produce a complete file
    to paste back. When you change the live Worker, update this file
    too (and vice versa).
-   Last synced: September 10, 2026 (first mirror, plus two fixes:
+   Last synced: September 29, 2026 - fib items tagged "exact": true must match an
+   accepted answer in full (part-matching gave full marks for 7.246 when the answer
+   was 7.2). Untagged items grade exactly as before.
+
+   Previously synced: September 24, 2026 - class passkeys moved OUT of this file into
+   the Worker secret CLASS_KEYS. This file is mirrored in a PUBLIC repo, so it
+   must never contain a code again.
+
+   Previously synced: September 10, 2026 (first mirror, plus two fixes:
      • match/label items worth 1 mark are now all-or-nothing — Math.round
        was awarding the full mark for a half-right answer. Items worth 2+
        marks are bit-identical to before; only the Std 5 diagnostic uses
@@ -53,7 +61,8 @@
      title     → string (optional; shown while loading)
      questions → { items:[ display objects, NO answers ], sections:{...}, figs:{...} }
      items     → per-item answer key (unchanged):
-       fixed  → { type:"mc|tf|fib|match|label", points, answer, accept?, answerText?, explain? }
+       fixed  → { type:"mc|tf|fib|match|label", points, answer, accept?, answerText?, explain?, exact? }
+                exact:true (fib only) → the typed answer must equal one accepted form
        written→ { type:"sa|open", points, rubric }      ← rubric graded by AI
    ============================================================ */
 
@@ -70,21 +79,22 @@ function json(obj, status = 200) {
   });
 }
 
-// Monthly-rotating class passkey (unchanged from your original).
-function getCurrentValidKey() {
+/* Monthly-rotating class passkey.
+   The codes are NOT in this file. They live in the Worker secret CLASS_KEYS
+   (Settings > Variables and Secrets), as JSON:
+       {"default":"...","2026-10":"...","2026-11":"..."}
+   Returns the month's code, else "default", else null when the secret is
+   missing or unreadable - in which case grading is refused with a distinct
+   error rather than a wrong-code message, so the cause is obvious. */
+function getCurrentValidKey(env) {
+  let schedule;
+  try { schedule = JSON.parse((env && env.CLASS_KEYS) || ''); }
+  catch (e) { return null; }
+  if (!schedule || typeof schedule !== 'object') return null;
   const now = new Date();
-  const schedule = {
-    "2026-05": "JAGUAR-77",
-    "2026-06": "REEF-STAR4",
-    "2026-07": "TAPIR-X9",
-    "2026-08": "COPAL-33",
-    "2026-09": "HOWLER-51",
-    "2026-10": "CEIBA-28",
-    "2026-11": "TOUCAN-6K",
-    "2026-12": "XMAS-EDLO",
-  };
-  const key = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-  return schedule[key] || "EDLO-STD6";
+  const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  const key = schedule[month] || schedule.default;
+  return (typeof key === 'string' && key.length) ? key : null;
 }
 
 export default {
@@ -93,7 +103,7 @@ export default {
       return new Response(null, { status: 204, headers: CORS });
     }
 
-    const VALID_KEY = getCurrentValidKey();
+    const VALID_KEY = getCurrentValidKey(env);
 
     try {
       const body = await request.json();
@@ -132,6 +142,15 @@ export default {
       }
 
       // ── Passkey gate (applies to GRADE + AI RELAY modes) ──
+      // No code configured: refuse, but say so plainly. This is a server
+      // misconfiguration, not a student typing the code wrong.
+      if (VALID_KEY === null) {
+        return json({
+          error: 'KEY_NOT_CONFIGURED',
+          message: 'The class code is not set on the server. Please tell Mr. EdLo.',
+        }, 503);
+      }
+
       const passkey = body.passkey || '';
       if (passkey !== VALID_KEY) {
         return json({
@@ -183,7 +202,12 @@ export default {
           else if (it.type === 'fib') {
             const accept = (it.accept || [it.answer]).map(normalize);
             const g = normalize(given);
-            const correct = accept.some(a => g === a || (a.length > 2 && g.includes(a)));
+            /* Sept 2026: an item tagged "exact": true must match one accepted form
+               in full. Untagged items keep the old part-match, so every existing
+               test grades exactly as before. (Part-matching gave full marks for
+               7.246 when the answer was 7.2.) */
+            const exact = it.exact === true;
+            const correct = accept.some(a => g === a || (!exact && a.length > 2 && g.includes(a)));
             const earned = correct ? pts : 0;
             autoTotal += pts; autoEarned += earned;
             results[qid] = { kind:'auto', correct, earned, points: pts,

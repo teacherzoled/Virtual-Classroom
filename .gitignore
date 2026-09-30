@@ -13,3 +13,8 @@ _STAGE-check-order.png
 # OS / editor cruft
 .DS_Store
 Thumbs.db
+
+# Claude working outputs — may hold student logins/credentials.
+# This repo is PUBLIC: never commit them. Keep such files in
+# ../Virtual-Classroom-private/ instead.
+Claude outputs/

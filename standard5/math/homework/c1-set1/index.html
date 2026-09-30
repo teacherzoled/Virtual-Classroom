@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Classwork Check — Scientific Notation &amp; Rounding · Mr. EdLo</title>
+<title>Problem Set 1 — Big Numbers &amp; Rounding · Mr. EdLo</title>
 <link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -655,6 +655,17 @@ h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.9rem,5vw,3.1rem); line
 .money-sign { font-family:'Fredoka One',cursive; font-size:1.2rem; }
 
 
+/* ═══ HOMEWORK — multi-part answers, units, written answer (Sept 2026) ═══ */
+.parts { display:flex; flex-direction:column; gap:.55rem; }
+.part { display:flex; align-items:center; gap:.75rem; flex-wrap:wrap; }
+.part-lab { flex:0 0 220px; font-size:.88rem; font-weight:700; color:var(--card-desc); }
+.part-box { flex:1 1 200px; display:flex; align-items:center; gap:.5rem; min-width:0; }
+.unit { font-weight:800; font-size:1rem; }
+.sub-lab { font-weight:800; font-size:.9rem; margin:.2rem 0 .5rem; }
+.answer-text { resize:vertical; min-height:88px; line-height:1.5; }
+.hold-note { display:block; margin-top:.25rem; font-weight:600; opacity:.9; }
+@media (max-width:640px){ .part-lab { flex:1 1 100%; } }
+
 /* ═══ SECURE TEST GATE (same switch as the Science tests · Sept 2026) ═══ */
 .gate-closed{display:none;max-width:640px;margin:2.5rem auto;padding:2.4rem 1.6rem;text-align:center;background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:20px;}
 .gate-closed.show{display:block;}
@@ -758,16 +769,16 @@ h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.9rem,5vw,3.1rem); line
   <a class="back-link" href="/standard5/math/#assessments">← Back to Mathematics</a>
 
   <header>
-    <div class="badge">Standard 5 &nbsp;·&nbsp; Mathematics · Cycle 1</div>
-    <h1>🔢 Classwork Check — Scientific Notation &amp; Rounding</h1>
-    <p class="subtitle">Standard 5 Mathematics · Cycle 1 · Classwork · MA 1.34–1.35 · 42 marks · Answer all 12 questions</p>
+    <div class="badge">Standard 5 &nbsp;·&nbsp; Mathematics · Cycle 1 · Homework</div>
+    <h1>🏠 Problem Set 1 — Big Numbers &amp; Rounding</h1>
+    <p class="subtitle">Standard 5 Mathematics · Cycle 1 · Homework · MA 1.34–1.35 · 38 marks · 10 questions · Due Monday, October 5</p>
   </header>
 
   <!-- LOCK SCREEN -->
   <div class="lock-screen" id="lockScreen">
     <div class="lock-icon">🔒</div>
-    <div class="lock-title">Check Already Submitted</div>
-    <div class="lock-msg">You have already completed this check. Your results are saved below. Download your report or return to Mathematics.</div>
+    <div class="lock-title">Problem Set Already Submitted</div>
+    <div class="lock-msg">You have already submitted this problem set. Your score is saved below. Download your report or return to Mathematics.</div>
     <div class="lock-scores" id="lockScores"></div>
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
       <button class="btn-primary" onclick="downloadPDF()">📄 Download PDF Report</button>
@@ -783,7 +794,7 @@ h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.9rem,5vw,3.1rem); line
   <div class="gate-closed show" id="gateClosed">
     <div class="gate-icon" id="gateIcon">⏳</div>
     <div class="gate-title" id="gateTitle">Loading…</div>
-    <p class="gate-msg" id="gateMsg">Getting your check ready.</p>
+    <p class="gate-msg" id="gateMsg">Getting your problem set ready.</p>
     <div class="gate-actions" id="gateActions" style="display:none;">
       <button class="btn-primary" onclick="location.reload()">🔄 Reload</button>
       <a class="btn-secondary" href="/standard5/math/#assessments" style="display:inline-flex;align-items:center;text-decoration:none;">← Back to Mathematics</a>
@@ -805,7 +816,7 @@ h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.9rem,5vw,3.1rem); line
     <div id="resultsSummary" class="results-summary" style="display:none;"></div>
 
     <div style="text-align:center;margin:1.5rem 0;">
-      <button class="btn-primary" id="submitBtn" onclick="handleSubmit()" disabled>Submit Check →</button>
+      <button class="btn-primary" id="submitBtn" onclick="handleSubmit()" disabled>Submit Problem Set →</button>
       <p class="submit-hint" id="submitHint" style="margin-top:.6rem;font-size:.8rem;font-weight:700;color:var(--card-desc);">Answer all 12 questions to submit</p>
     </div>
 
@@ -817,18 +828,20 @@ h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.9rem,5vw,3.1rem); line
 
 <button id="back-to-top" title="Back to top" style="position:fixed;bottom:20px;right:20px;display:none;width:44px;height:44px;border-radius:50%;border:0;background:var(--top-badge-bg);color:var(--top-badge-c);font-size:1.2rem;cursor:pointer;z-index:300;align-items:center;justify-content:center;">↑</button>
 
-<div class="spinner-wrap" id="spinnerWrap"><div class="spinner"></div><p id="spinnerText" style="margin-top:1rem;font-weight:800;color:#fff;">Grading your check…</p></div>
+<div class="spinner-wrap" id="spinnerWrap"><div class="spinner"></div><p id="spinnerText" style="margin-top:1rem;font-weight:800;color:#fff;">Marking your problem set…</p></div>
 
 
 <script>
 /* ═══════════════════════════════════════════ CONFIG ═══════════════════════════════════════════ */
-const TEST_ID    = "sy2627-std5-c1-classwork1-math";
-const QUIZ_KEY   = "vc-quiz-std5-c1-classwork1-math-v2";   /* v2 = Sept 2026 items; a v1 test lock cannot block the new check */
+const TEST_ID    = "sy2627-std5-c1-homework1-math";
+const QUIZ_KEY   = "vc-quiz-std5-c1-homework1-math-v1";
 const PK_KEY     = 'vc-passkey';
 const WORKER_URL = 'https://edlo-gemini.smartstandardsix.workers.dev/';
 const IDLE_SECONDS = 90;   /* idle-blur; 90s minimum for a maths check so thinking time never blurs */
-const TOTAL_POINTS = 42;
+const TOTAL_POINTS = 38;
+const REVEAL_FROM = "2026-10-06";   /* answers + explanations show from this date (device clock; homework only) */
 let ITEMS = [];   /* filled from the Worker gate (mode:'questions') — see SECURE TEST GATE */
+let QNUMS = [];   /* progress counts QUESTIONS (10), not parts */
 
 /* ═══ THEME ═══ */
 const THEMES=['night','sunny','cloudy','nature'];
@@ -849,44 +862,67 @@ topBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 /* ═══ SELECTION + PROGRESS ═══ */
 function syncOptSelected(){ document.querySelectorAll('.question[data-q]').forEach(q=>{
   q.querySelectorAll('.opt').forEach(o=>{ const inp=o.querySelector('input'); o.classList.toggle('selected', !!(inp&&inp.checked)); }); }); }
-function isAnswered(it){ if(it.type==='mc'){ return !!document.querySelector('input[name="'+it.id+'"]:checked'); }
-  const el=document.getElementById(it.id+'_in'); return !!(el&&el.value.trim().length); }
-function updateProgress(){ saveDraft(); const done=ITEMS.filter(isAnswered).length; const pct=Math.round(done/ITEMS.length*100);
-  document.getElementById('qProgressCount').textContent=done+' / '+ITEMS.length;
-  const fill=document.getElementById('qProgressFill'); fill.style.width=pct+'%'; fill.classList.toggle('done',done===ITEMS.length);
-  const btn=document.getElementById('submitBtn'), hint=document.getElementById('submitHint'); const ready=done===ITEMS.length;
-  if(!testSubmitted){ btn.disabled=!ready; hint.textContent=ready?'✅ All answered — ready to submit!':('Answer all '+ITEMS.length+' questions to submit ('+(ITEMS.length-done)+' left)'); } }
+function tidy(kind, v){ v=String(v==null?'':v).trim();
+  if(kind==='sci')   return mathCanon(v);
+  if(kind==='num')   return v.replace(/\s*km$/i,'').trim();
+  if(kind==='words') return v.toLowerCase().replace(/[-,.]/g,' ').replace(/\s+/g,' ').trim();
+  if(kind==='money') return v.replace(/\$/g,'').replace(/\s+/g,'').replace(/\.0+$/,'');
+  if(kind==='num-strip') return v.replace(/[,\s]/g,'');
+  return v; }
+function partKind(p){ return p.kind==='num' ? 'num-strip' : p.kind; }
+function fibEl(it){ return document.getElementById(it.id+'_in'); }
+function isAnswered(it){
+  if(it.type==='mc') return !!document.querySelector('input[name="'+it.id+'"]:checked');
+  if(it.type==='match') return it.parts.every((p,i)=>{ const el=document.getElementById(it.id+'_'+i); return !!(el&&el.value.trim()); });
+  const el=fibEl(it); return !!(el&&el.value.trim().length); }
+function qnAnswered(qn){ return ITEMS.filter(it=>it.qn===qn).every(isAnswered); }
+function updateProgress(){ saveDraft(); const done=QNUMS.filter(qnAnswered).length; const pct=Math.round(done/QNUMS.length*100);
+  document.getElementById('qProgressCount').textContent=done+' / '+QNUMS.length;
+  const fill=document.getElementById('qProgressFill'); fill.style.width=pct+'%'; fill.classList.toggle('done',done===QNUMS.length);
+  const btn=document.getElementById('submitBtn'), hint=document.getElementById('submitHint'); const ready=done===QNUMS.length;
+  if(!testSubmitted){ btn.disabled=!ready; hint.textContent=ready?'✅ All answered — ready to submit!':('Answer all '+QNUMS.length+' questions to submit ('+(QNUMS.length-done)+' left)'); } }
 document.addEventListener('input',e=>{ if(e.target.matches('.answer-input')){ updateProgress(); } });
 document.addEventListener('change',e=>{ if(e.target.matches('.opt input')){ syncOptSelected(); updateProgress(); } });
 
 /* ═══ IDLE BLUR ═══ */
 let idleTimer=null, blurActive=false, testSubmitted=false;
-function resetIdleTimer(){ clearTimeout(idleTimer); if(blurActive||testSubmitted)return; idleTimer=setTimeout(showBlur,IDLE_SECONDS*1000); }
+function resetIdleTimer(){ /* homework: no idle blur */ }
 function showBlur(){ if(testSubmitted)return; blurActive=true; document.getElementById('blurOverlay').classList.add('show'); }
 function dismissBlur(){ blurActive=false; document.getElementById('blurOverlay').classList.remove('show'); resetIdleTimer(); }
 function dismissWarning(){ document.getElementById('warnOverlay').classList.remove('show'); dismissBlur(); }
-['mousemove','keydown','click','scroll','touchstart'].forEach(ev=>document.addEventListener(ev,resetIdleTimer,{passive:true}));
-resetIdleTimer();
+/* HOMEWORK: idle-blur is OFF — done at home, thinking time is unlimited. */
+
 
 /* ═══ TAB-SWITCH STRIKES ═══ */
 let warnCount=0;
 function handleVisibilityChange(){ if(document.hidden && !testSubmitted){ warnCount++; if(warnCount<=3){ document.getElementById('warnCount').textContent='Warning '+warnCount+' of 3';
   document.getElementById('warnOverlay').classList.add('show'); } } }
-document.addEventListener('visibilitychange',handleVisibilityChange);
+/* HOMEWORK: tab-switch warnings are OFF (students may look at class notes). */
 
 /* ═══ SUBMIT-LOCK ═══ */
 function getSavedResult(){ try{ return JSON.parse(localStorage.getItem(QUIZ_KEY)); }catch(e){ return null; } }
 function saveResult(d){ localStorage.setItem(QUIZ_KEY,JSON.stringify(d)); }
-function teacherReset(){ if(confirm('Reset this check on THIS device? The saved result will be cleared.')){ localStorage.removeItem(QUIZ_KEY); location.reload(); } }
+function teacherReset(){ if(confirm('Reset this problem set on THIS device? The saved result will be cleared.')){ localStorage.removeItem(QUIZ_KEY); location.reload(); } }
 window._savedData=null;
 
 /* ═══ COLLECT ANSWERS ═══ */
-function collectAnswers(){ const a={}; ITEMS.forEach(it=>{ if(it.type==='mc'){ const sel=document.querySelector('input[name="'+it.id+'"]:checked'); a[it.id]=sel?sel.value:''; }
-  else { const el=document.getElementById(it.id+'_in'); a[it.id]=el?mathCanon(el.value):''; } }); return a; }
-function answerDisplay(it,raw){ if(it.type==='mc'){ const i=Number(raw); return (it.options&&it.options[i]!=null)?it.options[i]:'(blank)'; } return (raw&&raw.length)?raw:'(blank)'; }
+function collectAnswers(){ const a={}; ITEMS.forEach(it=>{
+    if(it.type==='mc'){ const sel=document.querySelector('input[name="'+it.id+'"]:checked'); a[it.id]=sel?sel.value:''; }
+    else if(it.type==='match'){ a[it.id]=it.parts.map((p,i)=>{ const el=document.getElementById(it.id+'_'+i); return el?tidy(partKind(p),el.value):''; }); }
+    else { const el=fibEl(it); a[it.id]=el?tidy(el.dataset.kind||'',el.value):''; } }); return a; }
+/* what the student typed, for the results + PDF (not the tidied form) */
+function rawAnswers(){ const a={}; ITEMS.forEach(it=>{
+    if(it.type==='match') a[it.id]=it.parts.map((p,i)=>{ const el=document.getElementById(it.id+'_'+i); return el?el.value.trim():''; });
+    else if(it.type!=='mc'){ const el=fibEl(it); a[it.id]=el?(el.dataset.kind==='sci'?mathCanon(el.value):el.value.trim()):''; } }); return a; }
+function answerDisplay(it,raw){
+  if(it.type==='mc'){ const i=Number(raw); return (it.options&&it.options[i]!=null)?it.options[i]:'(blank)'; }
+  if(it.type==='match'){ const r=Array.isArray(raw)?raw:[]; return it.parts.map((p,i)=>p.label+': '+(p.kind==='money'?'$':'')+(r[i]||'(blank)')).join('  ·  '); }
+  return (raw&&raw.length)?raw:'(blank)'; }
+function revealed(){ const d=new Date(); const t=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); return t>=REVEAL_FROM; }
+const REVEAL_TEXT='Answers and explanations open on Tuesday, October 6 — after everyone has handed in.';
 
 /* ═══ SUBMIT → PASSKEY → GRADE (server-side, KV) ═══ */
-function handleSubmit(){ if(testSubmitted)return; if(ITEMS.filter(isAnswered).length<ITEMS.length)return; clearTimeout(idleTimer);
+function handleSubmit(){ if(testSubmitted)return; if(QNUMS.filter(qnAnswered).length<QNUMS.length)return; clearTimeout(idleTimer);
   if(retryPasskey){ gradeSubmit(retryPasskey); return; }
   document.getElementById('passkeyInput').value=''; document.getElementById('passkeyErr').classList.remove('show');
   document.getElementById('passkeyModal').classList.remove('hidden'); setTimeout(()=>document.getElementById('passkeyInput').focus(),100); }
@@ -896,7 +932,7 @@ async function validatePasskey(){ const pk=document.getElementById('passkeyInput
 
 async function gradeSubmit(passkey){
   document.getElementById('spinnerWrap').classList.add('show');
-  setSpinnerText('Grading your check…');
+  setSpinnerText('Marking your problem set…');
   const h0=document.getElementById('submitHint'); h0.style.color=''; h0.style.fontWeight='';
   const answers=collectAnswers();
   let out;
@@ -920,42 +956,60 @@ function renderResults(data, answers){
   mkCloseAll();
   testSubmitted=true; blurActive=false; document.getElementById('blurOverlay').classList.remove('show');
   const results=data.results||{};
-  ITEMS.forEach(it=>{
-    const r=results[it.id]||{}; const q=document.querySelector('.question[data-q="'+it.id+'"]');
-    const correctText=(r.correctAnswer!=null)?String(r.correctAnswer):'';
-    if(it.type==='mc'){
-      q.querySelectorAll('.opt').forEach(o=>{ o.classList.add('locked-opt'); const inp=o.querySelector('input');
-        const label=o.querySelector('span').textContent.replace(/^[A-D].s*/,'').trim();
-        if(label===correctText.trim()){ o.classList.add('correct'); o.querySelector('.opt-tick').textContent='✓'; }
-        if(inp&&inp.checked && !r.correct){ o.classList.add('wrong'); o.querySelector('.opt-tick').textContent='✗'; }
-        if(inp)inp.disabled=true; });
-    } else {
-      const el=document.getElementById(it.id+'_in'); if(el){ el.disabled=true; }
-    }
-    const rl=document.getElementById(it.id+'_res'); rl.classList.add('show', r.correct?'ok':'no');
-    let msg='<span class="rl-mark">'+(r.correct?'✓ ':'✗ ')+(r.earned||0)+'/'+(r.points||it.marks)+'</span>';
-    if(!r.correct && correctText){ msg+=' &nbsp; Correct answer: '+correctText; }
-    if(r.explain){ msg+='<span class="rl-exp">'+r.explain+'</span>'; }
-    rl.innerHTML=msg;
-  });
+  const raw=rawAnswers();
+  const name=document.getElementById('studentName').value||'Student';
+  const disp={}; ITEMS.forEach(it=>{ disp[it.id]=answerDisplay(it, it.type==='mc'?answers[it.id]:raw[it.id]); });
   const earned=data.totalEarned!=null?data.totalEarned:0; const total=data.totalPoints!=null?data.totalPoints:TOTAL_POINTS;
   const pct=Math.round(earned/total*100);
-  const sum=document.getElementById('resultsSummary'); sum.style.display='block';
-  sum.innerHTML='<div class="rs-total">'+earned+' / '+total+'</div><div class="rs-pct">'+pct+'%  ·  Teacher Feedback shown on each question</div>';
+  window._savedData={ items:ITEMS, name, date:document.getElementById('testDate').value, earned, total, pct, results, disp, anyPending:!!data.anyPending };
+  saveResult(window._savedData);
+  paintResults(window._savedData);
   document.getElementById('submitBtn').style.display='none'; document.getElementById('submitHint').style.display='none';
   document.getElementById('pdfWrap').style.display='block';
-  const name=document.getElementById('studentName').value||'Student';
-  const disp={}; ITEMS.forEach(it=>{ disp[it.id]=answerDisplay(it, answers[it.id]); });
-  window._savedData={ items:ITEMS, name, date:document.getElementById('testDate').value, earned, total, pct, results, disp };
-  saveResult(window._savedData);
-  sum.scrollIntoView({behavior:'smooth'});
+  document.getElementById('resultsSummary').scrollIntoView({behavior:'smooth'});
+}
+function paintResults(d){
+  const show=revealed(); const results=d.results||{};
+  ITEMS.forEach(it=>{
+    const r=results[it.id]||{}; const q=document.querySelector('.question[data-qn="'+it.qn+'"]');
+    const correctText=(r.correctAnswer!=null)?String(r.correctAnswer):'';
+    if(it.type==='mc'){
+      q.querySelectorAll('input[name="'+it.id+'"]').forEach(inp=>{ const o=inp.closest('.opt'); o.classList.add('locked-opt');
+        if(show){ const label=o.querySelector('span').textContent.replace(/^[A-D]\.\s*/,'').trim();
+          if(label===correctText.trim()){ o.classList.add('correct'); o.querySelector('.opt-tick').textContent='✓'; } }
+        if(inp.checked && !r.correct){ o.classList.add('wrong'); o.querySelector('.opt-tick').textContent='✗'; }
+        inp.disabled=true; });
+    } else if(it.type==='match'){ it.parts.forEach((p,i)=>{ const el=document.getElementById(it.id+'_'+i); if(el) el.disabled=true; }); }
+    else { const el=fibEl(it); if(el) el.disabled=true; }
+    const rl=document.getElementById(it.id+'_res'); rl.classList.remove('ok','no'); rl.classList.add('show', r.pending?'ok':(r.correct?'ok':'no'));
+    let msg='<span class="rl-mark">'+(r.pending?'⏳ ':(r.correct?'✓ ':'✗ '))+(r.earned||0)+'/'+(r.points||it.marks)+'</span>';
+    if(r.pending){ msg+=' &nbsp; Mr. EdLo will mark this written answer.'; }
+    else if(show){
+      if(!r.correct && correctText){ msg+=' &nbsp; Correct answer: '+correctText; }
+      if(r.explain){ const s=document.createElement('span'); s.className='rl-exp'; s.textContent=r.explain; msg+=s.outerHTML; }
+    } else if(!r.correct){ msg+='<span class="hold-note">'+REVEAL_TEXT+'</span>'; }
+    rl.innerHTML=msg;
+  });
+  const sum=document.getElementById('resultsSummary'); sum.style.display='block';
+  sum.innerHTML='<div class="rs-total">'+d.earned+' / '+d.total+'</div><div class="rs-pct">'+d.pct+'%  ·  '+(show?'Feedback shown on each question':REVEAL_TEXT)+(d.anyPending?'<br>⏳ Your written answer (question 10a) will be marked by Mr. EdLo — your score may go up.':'')+'</div>';
 }
 
 /* ═══ LOCK SCREEN ON RELOAD ═══ */
 (function(){ const d=getSavedResult(); if(d){ window._savedData=d; testSubmitted=true;
   document.getElementById('testContainer').style.display='none'; document.getElementById('qProgressWrap').style.display='none';
   const ls=document.getElementById('lockScreen'); ls.classList.add('show');
-  document.getElementById('lockScores').innerHTML='<div class="results-summary" style="margin:0;"><div class="rs-total">'+d.earned+' / '+d.total+'</div><div class="rs-pct">'+d.pct+'%</div></div>'; } })();
+  document.getElementById('lockScores').innerHTML='<div class="results-summary" style="margin:0;"><div class="rs-total">'+d.earned+' / '+d.total+'</div><div class="rs-pct">'+d.pct+'%</div></div>';
+  if(revealed()){ const b=document.createElement('button'); b.className='btn-primary'; b.textContent='👀 See answers & feedback'; b.style.marginTop='1rem';
+    b.onclick=showReview; document.getElementById('lockScores').appendChild(b);
+    const rb=document.createElement('div'); rb.id='reviewBox'; rb.style.cssText='display:none;margin-top:1.2rem;text-align:left;display:none;flex-direction:column;gap:.6rem;'; document.getElementById('lockScores').appendChild(rb); } } })();
+function showReview(){ const d=window._savedData; if(!d) return; const box=document.getElementById('reviewBox'); if(box.childElementCount){ box.style.display='block'; return; }
+  (d.items||[]).forEach(it=>{ const r=(d.results||{})[it.id]||{}; const row=document.createElement('div'); row.className='res-line show '+(r.pending||r.correct?'ok':'no'); row.style.textAlign='left';
+    const h=document.createElement('span'); h.className='rl-mark'; h.textContent='Question '+it.id.slice(1)+'  ·  '+(r.pending?'⏳ ':(r.correct?'✓ ':'✗ '))+(r.earned||0)+'/'+(r.points||it.marks); row.appendChild(h);
+    const add=(t)=>{ const x=document.createElement('span'); x.className='rl-exp'; x.textContent=t; row.appendChild(x); };
+    add('Your answer: '+((d.disp||{})[it.id]||'(blank)'));
+    if(r.pending) add('Mr. EdLo will mark this written answer.'); else { if(!r.correct && r.correctAnswer) add('Correct answer: '+r.correctAnswer); if(r.explain) add(r.explain); }
+    box.appendChild(row); });
+  box.style.display='block'; }
 
 /* ═══ RESILIENCE: autosave + retry (added Sept 2026) ═══
    The computer room's internet drops out mid-sitting. Two protections:
@@ -966,14 +1020,15 @@ function renderResults(data, answers){
       nothing is recorded and nothing is locked: the answers stay on screen and the
       student presses "Try Submitting Again" (no need to re-type the code).
    Grading writes nothing on the server, so a retry can never double-count. */
-const DRAFT_KEY = 'vc-draft-' + TEST_ID + '-v2';   /* v2: a draft of the old July items is never put back into the new questions */
+const DRAFT_KEY = 'vc-draft-' + TEST_ID;
 const DRAFT_MAX_AGE = 7*24*60*60*1000;   /* drafts older than a week are thrown away */
 let draftReady = false;                  /* no saving until the old draft has been put back */
 let retryPasskey = null;                 /* code from a failed-by-network attempt, reused on retry */
 function saveDraft(){
   if(!draftReady || testSubmitted) return;
   try{ const nm=document.getElementById('studentName');
-    localStorage.setItem(DRAFT_KEY, JSON.stringify({t:Date.now(), name:nm?nm.value:'', a:collectAnswers()})); }catch(e){}
+    const a=collectAnswers(), r=rawAnswers(); Object.keys(r).forEach(k=>{ a[k]=r[k]; });
+    localStorage.setItem(DRAFT_KEY, JSON.stringify({t:Date.now(), name:nm?nm.value:'', a})); }catch(e){}
 }
 function clearDraft(){ draftReady=false; try{ localStorage.removeItem(DRAFT_KEY); }catch(e){} }
 function restoreDraft(){
@@ -1038,11 +1093,11 @@ function setSpinnerText(msg){ const s=document.getElementById('spinnerText'); if
 function gradeUnreachable(passkey){
   retryPasskey=passkey||null;
   document.getElementById('spinnerWrap').classList.remove('show');
-  setSpinnerText('Grading your check…');
+  setSpinnerText('Marking your problem set…');
   const btn=document.getElementById('submitBtn'); btn.disabled=false; btn.textContent='Try Submitting Again';
   const h=document.getElementById('submitHint'); h.style.display='block';
   h.style.color='#e03131'; h.style.fontWeight='800';
-  h.textContent='Your check could not be marked just now — usually the internet dropped. Your answers are saved on this computer, so nothing is lost. Press "Try Submitting Again". If it keeps failing, raise your hand.';
+  h.textContent='Your problem set could not be marked just now — usually the internet dropped. Your answers are saved on this device, so nothing is lost. Press "Try Submitting Again". If it keeps failing, try again later or tell Mr. EdLo on Monday.';
   resetIdleTimer();
 }
 (function(){ const nm=document.getElementById('studentName'); if(nm) nm.addEventListener('input', saveDraft); })();
@@ -1064,9 +1119,9 @@ function downloadPDF(){
   doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(110,110,110);
   doc.text(pdfText('Howard Smith Nazarene School  |  Standard 5  |  Belize'),pageW/2,y,{align:'center'}); y+=7;
   doc.setFont('helvetica','bold'); doc.setFontSize(16); doc.setTextColor(20,20,40);
-  doc.text(pdfText('Classwork Check — Scientific Notation & Rounding'),pageW/2,y,{align:'center'}); y+=5;
+  doc.text(pdfText('Problem Set 1 — Big Numbers & Rounding'),pageW/2,y,{align:'center'}); y+=5;
   doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(80,80,100);
-  doc.text(pdfText("Mr. EdLo's Virtual Classroom  |  MA 1.34-1.35  |  Standard 5"),pageW/2,y,{align:'center'}); y+=9;
+  doc.text(pdfText("Mr. EdLo's Virtual Classroom  |  Homework  |  MA 1.34-1.35  |  Standard 5"),pageW/2,y,{align:'center'}); y+=9;
   doc.setDrawColor(77,171,247); doc.setLineWidth(0.5); doc.line(margin,y,pageW-margin,y); y+=8;
   doc.setFillColor(240,246,255); doc.setDrawColor(77,171,247); doc.setLineWidth(0.4); doc.roundedRect(margin,y,colW,22,3,3,'FD');
   doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(40,40,60);
@@ -1077,23 +1132,24 @@ function downloadPDF(){
   y+=28;
   doc.setFillColor(240,246,255); doc.setDrawColor(180,210,240); doc.roundedRect(margin,y,colW,14,3,3,'FD');
   doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(30,70,130);
-  doc.text(pdfText('SCORE: '+(d.earned!=null?d.earned:'-')+' / '+(d.total!=null?d.total:42)+'   ('+(d.pct!=null?d.pct:'-')+'%)'),margin+5,y+9); y+=20;
-  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(77,171,247); doc.text('YOUR ANSWERS & TEACHER FEEDBACK',margin,y); y+=6;
+  doc.text(pdfText('SCORE: '+(d.earned!=null?d.earned:'-')+' / '+(d.total!=null?d.total:38)+'   ('+(d.pct!=null?d.pct:'-')+'%)'),margin+5,y+9); y+=20;
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(77,171,247); doc.text(revealed()?'YOUR ANSWERS & TEACHER FEEDBACK':'YOUR ANSWERS',margin,y); y+=6;
+  if(!revealed()){ doc.setFont('helvetica','italic'); doc.setFontSize(8); doc.setTextColor(110,110,110); doc.text(pdfText(REVEAL_TEXT),margin,y); y+=6; }
   const res=d.results||{}, disp=d.disp||{}; const lh=4.6; doc.setFontSize(8);
   (d.items||ITEMS).forEach(it=>{ const r=res[it.id]||{}; if(y>262){doc.addPage();y=20;}
     doc.setFont('helvetica','bold'); doc.setTextColor(50,50,80);
-    doc.text(pdfText(it.id.slice(1)+'.  ['+(r.earned||0)+'/'+(r.points||it.marks)+']  '+(r.correct?'Correct':'Review')),margin,y); y+=lh;
+    doc.text(pdfText(it.id.slice(1)+'.  ['+(r.earned||0)+'/'+(r.points||it.marks)+']  '+(r.pending?'Mr. EdLo will mark this':(r.correct?'Correct':'Review'))),margin,y); y+=lh;
     doc.setFont('helvetica','normal'); doc.setTextColor(80,80,80);
     doc.splitTextToSize(pdfText('Your answer: '+(disp[it.id]||'(blank)')),colW-4).forEach(l=>{ if(y>272){doc.addPage();y=20;} doc.text(l,margin+3,y); y+=lh; });
-    if(!r.correct && r.correctAnswer){ doc.splitTextToSize(pdfText('Correct answer: '+r.correctAnswer),colW-4).forEach(l=>{ if(y>272){doc.addPage();y=20;} doc.text(l,margin+3,y); y+=lh; }); }
-    if(r.explain){ doc.setFont('helvetica','italic'); doc.setTextColor(80,50,150);
+    const SHOW=revealed(); if(SHOW && !r.correct && r.correctAnswer){ doc.splitTextToSize(pdfText('Correct answer: '+r.correctAnswer),colW-4).forEach(l=>{ if(y>272){doc.addPage();y=20;} doc.text(l,margin+3,y); y+=lh; }); }
+    if(SHOW && r.explain && !r.pending){ doc.setFont('helvetica','italic'); doc.setTextColor(80,50,150);
       doc.splitTextToSize(pdfText('Feedback: '+r.explain),colW-4).forEach(l=>{ if(y>272){doc.addPage();y=20;} doc.text(l,margin+3,y); y+=lh; }); doc.setTextColor(80,80,80); }
     y+=2; });
   const pc=doc.getNumberOfPages(); for(let p=1;p<=pc;p++){ doc.setPage(p); doc.setFillColor(77,171,247); doc.rect(0,290,210,7,'F');
     doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(255,255,255);
-    doc.text(pdfText('edlovirtualclassroom.com  ·  Standard 5 Mathematics · Scientific Notation & Rounding Check  ·  Page '+p+' of '+pc),pageW/2,294.5,{align:'center'}); }
+    doc.text(pdfText('edlovirtualclassroom.com  ·  Standard 5 Mathematics · Problem Set 1 (Homework)  ·  Page '+p+' of '+pc),pageW/2,294.5,{align:'center'}); }
   const safe=(d.name||'Student').replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
-  doc.save('SciNotation_Rounding_Check_'+safe+'.pdf');
+  doc.save('ProblemSet1_BigNumbers_Rounding_'+safe+'.pdf');
 }
 
 
@@ -1169,8 +1225,8 @@ function mkCloseAll(){ document.querySelectorAll('.mk-pad').forEach(p=>p.classLi
    2) Otherwise ask the Worker (mode:'questions', retried with a timeout). Open → install the questions.
       Closed → "not open yet" panel. Unreachable → "could not connect" panel with Reload.
    Nothing about grading changes: grade mode still reads the answer key from the same KV entry. */
-const GATE_CLOSED_TITLE = "This check is not open yet";
-const GATE_CLOSED_MSG   = "Mr. EdLo has not opened this check. It will appear here the moment he opens it — please wait, and reload when he tells the class to begin.";
+const GATE_CLOSED_TITLE = "This homework is not open yet";
+const GATE_CLOSED_MSG   = "Mr. EdLo has not opened Problem Set 1 yet. It will appear here as soon as he opens it — check back later, or ask him in class.";
 function gateShow(icon, title, msg, actions){
   const g=document.getElementById('gateClosed'); g.classList.add('show');
   document.getElementById('gateIcon').textContent=icon; document.getElementById('gateTitle').textContent=title;

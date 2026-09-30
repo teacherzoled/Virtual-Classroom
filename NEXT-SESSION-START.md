@@ -4,45 +4,38 @@ Copy the block below into a new chat (with the `Virtual-Classroom` folder connec
 
 ---
 
-Read `PROJECT-DOCS.md` first — the **📌 Standing Rule** and the **▶️ Take-off Point** — for the full
-as-built state. The **🏪 Bean Store is SHIPPED and verified live** (July 18, 2026); do NOT rebuild it.
+Read `PROJECT-DOCS.md` first — the **📌 Standing Rule** and the **▶️ Take-off Point (as of September 24,
+2026)** — for the full as-built state. Then ask me which item or instrument is next. Do not pick one
+yourself, and do not create or modify files until I approve a plan.
 
-## What's already done (do not redo)
+## Where things stand (Sept 24, 2026)
 
-- **🏪 Bean Store — live & tested end-to-end.** `/dashboard/` has a browse-only Store panel with
-  spendable balance (earned − spent); `/teacher/` has a Redeem panel (teacher-initiated, hard block
-  on cost>balance or stock=0, enforced server-side too). `redeem` rows never touch the team race or
-  class goal (Group Totals formula filters lesson+bonus only — verified). `Prizes` tab (9 rows) +
-  `prizes`/`redeem-prize` Apps Script actions + `/prizes`/`/redeem-prize` Worker routes all deployed.
-- **Local backend mirrors:** `backend/VC-LMS-Backend.gs` and `backend/edlo-lms-worker.js` mirror the
-  deployed Apps Script + Worker. **Standing rule:** edit the mirror whenever the live code changes,
-  and hand Edwin a COMPLETE paste-over file (not snippets).
-- **Secure test gate** (16 Std5 Science tests/quizzes) and **Layer 1 dashboards** — live, per prior
-  sessions.
+- **Standard 5 is live and in daily use** (school week 4 = week of Sept 21). `main` matches GitHub.
+- **Built since August:** lesson icon library; Power-Ups 2A/2B/3A; the online Beginning-of-Year
+  Check-up with autosave + retry; the Std 5 **Maths hub** with Classwork Checks 1–2.
+- **Class passkeys** live in the `edlo-gemini` Worker secret `CLASS_KEYS`, not in code.
 
-## ➡️ NEXT BUILD (queued): 🔓 Progressive lesson unlock — `IDEAS.md` #8
+## Rules that bite if forgotten
 
-Students must NOT see the whole year's lesson catalogue at once.
-- **Rule:** only the current / first week's lesson is active; all later weeks are **LOCKED** — and
-  this holds **even when logged OUT**, so the general public gets a "taste" of Week 1 only, with the
-  rest shown locked.
-- **Open design decision to make first:** what unlocks each later week?
-  ① a teacher toggle (like the Test Control idea #7), ② a date/schedule, or ③ completion of the
-  prior week. Decide this before building.
-- **Scope:** the Std5 Science lessons hub first (`/standard5/science/` Lessons tab), then any future
-  subject. Distinct from the test gate — lessons are public pages, so this is likely a lighter
-  per-lesson "unlocked" flag rather than KV/Worker work.
-- **How to start:** read `IDEAS.md` #8 and the Std5 Science hub, run the planning skill, present a
-  plan, and wait for Edwin's approval before creating or modifying files.
+1. **The repo is PUBLIC.** Passwords, logins, class codes and answer keys never go in a committed path.
+   They go in `..\Virtual-Classroom-private\` (beside the repo) or a gitignored `_source/` folder.
+2. **Assessment resilience:** whenever a test/quiz page is touched, add autosave + retry + "record
+   nothing if grading is unreachable" in the same update. The 16 Std5 Science tests/quizzes don't
+   have it yet.
+3. **`edlo-gemini` is the shared grading Worker.** Every assessment grades through it. Test one
+   `testId` before deploying. Its mirror in `backend/` is currently BEHIND live (see open item 1).
+4. **Plan first, one subject at a time.** Decisions made for one subject don't carry over to another
+   until I say so.
+5. **Git from the connected-folder shell:** use `GIT_OPTIONAL_LOCKS=0` for read-only commands. That
+   shell can't delete `.git/index.lock`, and a stale lock blocks GitHub Desktop.
 
-## Other parked items (Edwin decides when)
+## Open items (from PROJECT-DOCS Take-off Point)
 
-- More Std5 Science lessons — Week 4+ (clone the Week 1 engine)
-- Revise the 3 Wk1–3 sample lessons — content + activities (`IDEAS.md` #9)
-- Test Control panel on `/teacher/` — open/close tests without hand-editing KV (`IDEAS.md` #7;
-  ⚠️ touches the shared `edlo-gemini` Worker)
-- Layer 2 ecosystem journey map + weekly quest (`DASHBOARD-GAMIFICATION-PLAN.md`)
+1. Copy the live `edlo-gemini` code into `backend/edlo-gemini.js` (the mirror still has the old
+   hardcoded codes).
+2. Resilience fix on the 16 Std5 Science tests/quizzes as each is next updated.
+3. Settle the design-rule conflict: link `/vc-theme.css` on new pages, or keep pages self-contained?
+4. Lessons: only Weeks 1–3 exist; the July daily lesson-build task no longer exists.
+5. Fix the claude.ai Project instructions (they still say Standard 6 and `padding: 0 1in`).
 
-When done, update `PROJECT-DOCS.md` (Standing Rule) and remind Edwin to `git add -A → commit → push`.
-
----
+When done: update `PROJECT-DOCS.md` (Standing Rule) and remind me to commit → push in GitHub Desktop.

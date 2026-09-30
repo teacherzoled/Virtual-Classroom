@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** July 19, 2026 (🔓 PROGRESSIVE LESSON UNLOCK SHIPPED & verified live — backend actions, hub card locking, lesson-page guard, teacher release panel; next session queued: shared CSS/JS refactor, IDEAS #10)
+**Last updated:** September 25, 2026 (Maths Classwork 1 rebuilt for the Oct 2 check + Problem Set 1 online + Maths keys + Worker `exact` patch) · previous: September 24, 2026 (handover refresh — Aug 5 → Sept 24 work recorded: Std 5 Maths hub + Classwork 1–2, online Check-up + resilience fix, `CLASS_KEYS` passkeys, private-files rule)
 
 ---
 
@@ -20,9 +20,105 @@ If the docs are not updated, the task is **not** finished.
 
 ---
 
-## ▶️ Take-off Point — Next Session (as of August 5, 2026)
+## ▶️ Take-off Point — Next Session (as of September 24, 2026)
 
-**Newest work (August 5, 2026): ⚡ POWER-UPS NOW PAY BEANS — LIVE & VERIFIED.**
+**State in one line:** Standard 5 is live and in daily use (school week 4 = week of Sept 21). `main` is
+clean and matches GitHub (last code commit `433fca1`, Sept 24). The only pending change is this docs
+refresh + the `.gitignore` guard — Edwin commits and pushes them.
+
+**What shipped since August 5, 2026 (all committed and pushed):**
+- **Aug 5 — Lesson icon library:** 71 base64-embedded SVG glyphs for Cycle 1 Science in
+  `assets/lesson-icons/` (+ `manifest.json`). Raw source PNGs stay local under `_source/`.
+- **Aug 7 — Power-Ups 2A, 2B, 3A** added to the Science hub's Power-Ups tab. 3A is the first with
+  photo illustrations, made with `tools/powerup-images.py` (spec: `standard5/science/power-ups/POWERUP-IMAGE-SPEC.md`).
+- **Sept 10 — Beginning-of-Year Check-up online** (`standard5/science/tests/diagnostic/`): secure-gate
+  fetch-render shell (questions come from KV through the Worker's `mode:'questions'` gate), account-based
+  retake lock. Same commit: focus-warning fix on all 16 Std5 tests/quizzes (blur/visibility handlers now
+  also require `ITEMS.length`), and `edlo-gemini` mirrored into `backend/` for the first time with two
+  grading fixes (1-mark match/label items all-or-nothing; `max_completion_tokens` 2000 → 4000).
+- **Sept 16 — first live sitting** of the Check-up in the computer room. The connection is intermittent;
+  2 papers came back graded zero/pending because the connection dropped at submit.
+- **Sept 21 — Check-up resilience fix** (see standing rule below). Mark caption corrected to "out of 20".
+- **Sept 24 — Standard 5 Mathematics hub** (`/standard5/math/`) + **Classwork Check 1** (Scientific
+  Notation, `sy2627-std5-c1-classwork1-math`) and **Classwork Check 2** (Prime, Square & Cube Sort,
+  `sy2627-std5-c1-classwork2-math`). Both grade through `edlo-gemini` and carry autosave + retry.
+  The Std 5 hub's Maths card now links the hub.
+- **September — passkeys moved to a Worker secret.** Class codes now live in the `edlo-gemini` secret
+  `CLASS_KEYS` (JSON: `"YYYY-MM"` → code, plus `"default"`), not in Worker code. The old hardcoded
+  codes were retired because they had been exposed in this public repo. Std 5 student login
+  credential cards were produced (kept privately — see below).
+- **Sept 25 — Maths week 5 online (NOT yet committed — Edwin commits/pushes):**
+  - **Classwork Check 1 rebuilt** (`standard5/math/classwork/c1-classwork1/`) to the narrowed Sept 23 paper
+    worksheet: 12 items / 42 marks, three worked-example sections, MA 1.34–1.35 only. **q2 is now TYPED**
+    (2.8 × 10⁶), same as paper, because of the new Maths keys. Lock key bumped to `…-v2` and draft key to
+    `vc-draft-<testId>-v2` so a test lock or draft from the old July items can't block or pollute the real sitting.
+  - **Problem Set 1 online** (`standard5/math/homework/c1-set1/`, KV `sy2627-std5-c1-homework1-math`, 10 questions /
+    38 marks, due Mon Oct 5). Homework-only behaviour: idle-blur + tab-switch warnings OFF; score and ✓/✗ at once,
+    answers + explanations hidden until **Tue Oct 6** (`REVEAL_FROM`, device clock), then a "See answers & feedback"
+    button on the lock screen. Q6–Q8 are multi-box `match` items (2+2, 2+2, 1+1+1+1). Q10a (explain Leo's mistake,
+    3 marks) is the **first AI-marked Maths item** (`sa` + rubric); Q10b (the answer, 2 marks) is auto-marked.
+  - **🧮 Maths keys** (both pages, marked LIFT-OUT BLOCK): keypad with × and 10¹…10¹² under any answer box tagged
+    `data-mk="on"` (only boxes that need a power). `mathCanon()` tidies 2.8x10^6 / 2.8 X 10⁶ / 2.8*10^6 into
+    "2.8 × 10⁶" before grading; KV accept lists also hold the common typed forms.
+  - **PDF fix:** `pdfText()` now prints powers as `10^6` (jsPDF's core font has no ⁴–⁹; the old map printed
+    2.8 × 10⁶ as "2.8 x 106") and keeps ×.
+  - **Worker patch approved (Edwin, Sept 25):** `"exact": true` on a `fib` item turns off the part-match rule
+    (7.246 was scoring full marks for 7.2). Paste-ready steps: `WORKER-PATCH_exact-match_2026-09-25.md` in the
+    Maths `Assessment/Cycle One/classwork/Check 1/` folder (kept out of this public repo — it quotes answers).
+    Both new KV entries carry the tag; it is harmless until the Worker change is deployed.
+  - **Both pages now use the SECURE TEST GATE — the same switch as the Science tests.** The questions are NOT in
+    the page: they sit in the KV entry as `questions: {html, items}` and arrive through the Worker's
+    `mode:'questions'` call only while the entry has `"open": true` (retried with a timeout, per the resilience
+    rule). Closed → "🔒 This check / homework is not open yet" panel with Reload. Both KV entries ship with
+    `"open": false`. The ADMIN copies keep a local question copy used ONLY at `?dev=1` while closed (yellow DEV
+    note), so testing never needs the entry opened. The lock screen and PDF work without the questions (the item
+    list is saved with the result). Maths Classwork Check 2 is NOT gated yet (questions still in its page).
+  - **Hub cards lit** (no `soon`) with "🔒 Not available until Mr. EdLo opens it." in the description; the hub's
+    HOW-TO comment now explains gated pages.
+  - Answer keys (KV JSON) and ADMIN pages: master copies in the Maths curriculum folder; working copies in each
+    page's gitignored `_source/` folder (same pattern as the Science diagnostic) so they show in VS Code but are
+    never committed. If you edit one, copy it back to the Maths folder.
+- **Sept 24 — housekeeping:** `Claude outputs/` (student credential files) moved OUT of the repo to
+  `..\Virtual-Classroom-private\` — confirmed never committed. `.gitignore` now blocks `Claude outputs/`.
+
+**🛡️ STANDING RULE — assessment resilience (Edwin, Sept 2026).** Whenever a test or quiz page is
+updated for any reason, apply the resilience fix in that same update — do not batch-patch pages:
+(1) autosave answers to the device as the student works, draft key derived from that page's own test ID,
+per signed-in username; (2) retry the questions-gate and grade calls with a timeout; (3) if grading still
+cannot be reached, record NOTHING — no zero, no submit lock, no Sheet row — and show **Try Submitting
+Again**. Done on: Check-up, Maths Classwork 1–2, Maths Problem Set 1. **Still old behaviour:** the 16 Std5 Science tests/quizzes.
+
+**🔒 STANDING RULE — private files.** This repo is PUBLIC. Anything with a password, login, class code or
+answer key goes in `..\Virtual-Classroom-private\` (beside the repo, not inside it) or under a
+gitignored `_source/` folder — never in a committed path, `backend/` mirrors included.
+
+**⚠️ Open items (Edwin chooses the order):**
+1. ✅ **DONE Sept 29 — `backend/edlo-gemini.js` now matches the live Worker** (Edwin pasted the live code; it
+   reads `CLASS_KEYS` and holds no codes) **plus the `exact` change**, ready to paste into Cloudflare. The retired
+   codes remain in git history only — never reuse them. From now on: change the mirror first, paste the whole
+   file into Cloudflare, Deploy.
+2. **Resilience fix outstanding** on the 16 Std5 Science tests/quizzes — apply as each is next touched.
+3. **Design-rule conflict to settle.** The Design System section below says every NEW page links
+   `/vc-theme.css`; the pages built since (Check-up, Power-Ups, Maths hub, Classwork 1–2) are fully
+   self-contained and link nothing. Edwin decides which rule stands; then fix the losing rule here.
+4. **Lessons:** only Weeks 1–3 exist. The July `std5-science-daily-lesson-build` scheduled task no longer
+   exists — treat it as stopped.
+5. **claude.ai Project instructions are out of date** (say Standard 6, `padding: 0 1in`, one repo per
+   subject). Correct them in the Project settings.
+6. **Weekly build list:** the Friday scheduled task "Assessment reminder — Standard 5 (all subjects)"
+   says what each weekend must produce. School week 4 = week of Sept 21; Science/Spanish/Scriptures ATP
+   weeks = school week − 3; Maths ATP already uses school weeks.
+7. **Deploy Maths week 5 (Edwin)** — ✅ Sept 29: KV entries pasted, both ADMIN pages score full marks on the live Worker (incl. the AI item). Remaining: confirm the `exact` patch (q8 = 7.246 → 0/4), commit/push, open with the switch on the day. Original list: (a) paste the full `backend/edlo-gemini.js` into Cloudflare → Deploy (it carries the `exact` change); (b) paste both KV entries
+   (`sy2627-std5-c1-classwork1-math` replaced, `sy2627-std5-c1-homework1-math` new); (c) `?dev=1` test both ADMIN
+   pages on the live Worker (they work while closed); (d) open with the KV switch — set `"open": true` on
+   `sy2627-std5-c1-homework1-math` on Thu Oct 1 (close it after Mon Oct 5) and on `…-classwork1-math` when Friday's
+   check begins (close it after). Cards are already lit; the pages show "not open yet" until then.
+8. **Classwork Check 2 PDF still uses the OLD `pdfText` map** — squares/cubes print wrongly (5² → "52"). Apply the
+   Sept 25 powers fix when Check 2 is next touched (before Wk 7), with the resilience rule.
+
+---
+
+**Previous work (August 5, 2026): ⚡ POWER-UPS NOW PAY BEANS — LIVE & VERIFIED.**
 
 - **Both Cycle 1 Power-Up worksheets earn cacao beans**: `/standard5/science/power-ups/1a/` and
   `1b/`. Each pays **1 🌱 per question answered correctly, max 5** — the same number the Score shows.
@@ -516,6 +612,7 @@ previously-visited URLs may cache for up to ~10 min.
 | Student Login (both grades) | https://edlovirtualclassroom.com/login/ |
 | Standard 5 Hub | https://edlovirtualclassroom.com/standard5/ |
 | Standard 5 Science Hub | https://edlovirtualclassroom.com/standard5/science/ |
+| Standard 5 Mathematics Hub | https://edlovirtualclassroom.com/standard5/math/ |
 | Standard 6 Hub | https://edlovirtualclassroom.com/standard6/ |
 | Spanish Subject Hub (Std6) | https://edlovirtualclassroom.com/standard6/spanish/ |
 | Science Subject Hub (Std6) | https://edlovirtualclassroom.com/standard6/science/ |
@@ -570,18 +667,23 @@ Virtual-Classroom/
 ├── edlo-utils.js                       ← Shared LMS utilities — ROOT (✅ LIVE July 16, 2026)
 │
 ├── standard5/
-│   ├── index.html                      ← Standard 5 hub (Science card LIVE, others coming soon)
-│   └── science/
-│       ├── index.html                  ← Std5 Science hub (30 wks, 4 tabs, 16 live assessments,
-│       │                                  Wk 1–3 lesson cards LIVE)
-│       ├── images/hero/                ← science-banner.png goes here (Edwin to add)
-│       ├── lessons/                    ← Interactive lessons (✅ July 16, 2026)
-│       │   ├── week01-technology-climate/   ← Wk 1 · SC 1.09 · 🌱 beans wired
-│       │   ├── week02-climate-economy/      ← Wk 2 · SC 1.10 · 🌱 beans wired
-│       │   └── week03-weather-vs-climate/   ← Wk 3 · SC 1.11 · 🌱 beans wired
-│       ├── tests/                      ← 12 STUDENT test pages (c1–c4: unit1, unit2, review)
-│       └── quizzes/                    ← 4 STUDENT quiz pages (adaptation, solar-system,
-│                                          reflection-refraction, digital-citizenship)
+│   ├── index.html                      ← Standard 5 hub (Science + Maths cards LIVE)
+│   ├── science/
+│   │   ├── index.html                  ← Std5 Science hub (30 wks, 4 tabs, 16 live assessments,
+│   │   │                                  Wk 1–3 lesson cards LIVE)
+│   │   ├── images/hero/                ← science-banner.png goes here (Edwin to add)
+│   │   ├── lessons/                    ← Interactive lessons (✅ July 16, 2026)
+│   │   │   ├── week01-technology-climate/   ← Wk 1 · SC 1.09 · 🌱 beans wired
+│   │   │   ├── week02-climate-economy/      ← Wk 2 · SC 1.10 · 🌱 beans wired
+│   │   │   └── week03-weather-vs-climate/   ← Wk 3 · SC 1.11 · 🌱 beans wired
+│   │   ├── tests/                      ← 12 STUDENT test pages (c1–c4: unit1, unit2, review)
+│   │   │   └── diagnostic/             ← Beginning-of-Year Check-up (Sept 10; resilience fix Sept 21)
+│   │   ├── quizzes/                    ← 4 STUDENT quiz pages (adaptation, solar-system,
+│   │   │                                  reflection-refraction, digital-citizenship)
+│   │   └── power-ups/                  ← 1A, 1B, 2A, 2B, 3A self-check worksheets (🌱 beans)
+│   └── math/
+│       ├── index.html                  ← Std5 Maths hub (Sept 24, 2026)
+│       └── classwork/                  ← c1-classwork1/, c1-classwork2/ (autosave + retry)
 │
 ├── standard6/
 │   ├── index.html                      ← Standard 6 hub (subject cards)
@@ -604,8 +706,11 @@ Virtual-Classroom/
 │
 ├── login/
 │   └── index.html                      ← Student login page — ROOT (✅ LIVE July 16, 2026)
-├── dashboard/ (planned)                ← Student dashboard — ROOT
-└── teacher/   (planned)                ← Teacher dashboard — ROOT
+├── dashboard/                          ← Student dashboard — ROOT (live)
+├── teacher/                            ← Teacher dashboard — ROOT (live)
+├── backend/                            ← Mirrors of Apps Script + Workers (NOT served; no secrets)
+├── assets/lesson-icons/                ← SVG glyph library (Aug 5, 2026)
+└── tools/                              ← Python helpers (powerup-images.py, new-week-from-bank.py)
 ```
 
 ---
@@ -644,6 +749,10 @@ C:\Users\Dell Latitude 3520\OneDrive\Shared with me\Code Projects\Python Project
 ```
 > ⚠️ Corrected July 19, 2026 — the old path used the `zoloe` user folder, which does not exist on
 > this machine. If a session reports "path not found," check the Windows user folder name first.
+
+> 🔒 **Private folder (Sept 24, 2026):** `Python Projects\Virtual-Classroom-private\` sits BESIDE the repo,
+> outside Git. Student credential files, login lists and any Claude working outputs that hold
+> passwords or codes live there — never inside `Virtual-Classroom\`.
 
 ---
 
@@ -750,12 +859,12 @@ out (no lock set, so beans can still be earned after a later login). No quest mu
 - Code is saved to `localStorage` key: `vc-passkey` — persists across ALL lessons and ALL subjects on the domain
 - The passkey is validated server-side inside the Cloudflare Worker — never exposed in browser code
 - Wrong code → Worker returns 403, key is cleared, modal reappears
-- New school year → change `VALID_KEY` in the Worker once → applies everywhere instantly
+- Codes live in the `edlo-gemini` Worker **secret `CLASS_KEYS`** (since Sept 2026) — change them in Cloudflare, never in code
 
 ### Current passkey
 | Item | Value |
 |---|---|
-| Current code | `EDLO-STD6` |
+| Current code | Stored in Worker secret `CLASS_KEYS` (JSON: `"YYYY-MM"` → code, plus `"default"`). **Values are never written in this file — the repo is public.** |
 | localStorage key | `vc-passkey` |
 | Validation location | Cloudflare Worker (server-side, secure) |
 | Scope | Site-wide — works across all subjects automatically |
@@ -767,11 +876,11 @@ out (no lock set, so beans can still be earned after a later login). No quest mu
 | How to use | On the "Test Already Submitted" lock screen, click **🔑 Reset Quiz for Testing** → enter `RESET-QUIZ` → page reloads fresh |
 | Effect | Clears only the current browser/device — does not affect any student's lock |
 
-### Changing the passkey (new school year)
-1. Go to `dash.cloudflare.com` → Workers → `edlo-gemini`
-2. Find line: `const VALID_KEY = 'EDLO-STD6';`
-3. Change to new code e.g. `EDLO-STD7`
-4. Click Deploy — updates everywhere instantly
+### Changing the passkeys
+1. Go to `dash.cloudflare.com` → Workers → `edlo-gemini` → Settings → Variables and Secrets
+2. Edit the secret `CLASS_KEYS` (one entry per month, plus `"default"`)
+3. Save/Deploy — applies to every page instantly
+4. ⚠️ The codes that used to be hardcoded (visible in git history) are RETIRED — never reuse them
 
 ---
 
@@ -1031,10 +1140,14 @@ cd "C:\Users\Dell Latitude 3520\OneDrive\Shared with me\Code Projects\Python Pro
 | Grade Picker (home) | edlovirtualclassroom.com | ✅ Live |
 | Standard 5 Hub | edlovirtualclassroom.com/standard5/ | ✅ Live (Science card now links to its hub) |
 | Standard 5 Science Hub | edlovirtualclassroom.com/standard5/science/ | ✅ Live (July 15 — phone-verified, themes fixed) |
-| Std5 Science tests & quizzes (16) | edlovirtualclassroom.com/standard5/science/tests/… &amp; /quizzes/… | ✅ Live (July 15) |
-| Std5 Science Lesson Wk 1 | edlovirtualclassroom.com/standard5/science/lessons/week01-technology-climate/ | ✅ Built July 16 — live after next push |
-| Std5 Science Lesson Wk 2 | edlovirtualclassroom.com/standard5/science/lessons/week02-climate-economy/ | ✅ Built July 16 — live after next push |
-| Std5 Science Lesson Wk 3 | edlovirtualclassroom.com/standard5/science/lessons/week03-weather-vs-climate/ | ✅ Built July 16 — live after next push |
+| Std5 Science tests & quizzes (16) | edlovirtualclassroom.com/standard5/science/tests/… &amp; /quizzes/… | ✅ Live (July 15) — resilience fix still to apply |
+| Std5 Beginning-of-Year Check-up | edlovirtualclassroom.com/standard5/science/tests/diagnostic/ | ✅ Live (Sept 10; resilience fix Sept 21) |
+| Std5 Science Power-Ups 1A–3A | edlovirtualclassroom.com/standard5/science/power-ups/… | ✅ Live (Aug 5–7) |
+| Standard 5 Maths Hub | edlovirtualclassroom.com/standard5/math/ | ✅ Live (Sept 24) |
+| Std5 Maths Classwork Checks 1–2 | edlovirtualclassroom.com/standard5/math/classwork/… | ✅ Live (Sept 24, autosave + retry) |
+| Std5 Science Lesson Wk 1 | edlovirtualclassroom.com/standard5/science/lessons/week01-technology-climate/ | ✅ Live (built July 16) |
+| Std5 Science Lesson Wk 2 | edlovirtualclassroom.com/standard5/science/lessons/week02-climate-economy/ | ✅ Live (built July 16) |
+| Std5 Science Lesson Wk 3 | edlovirtualclassroom.com/standard5/science/lessons/week03-weather-vs-climate/ | ✅ Live (built July 16) |
 | Standard 6 Hub | edlovirtualclassroom.com/standard6/ | ✅ Live |
 | Spanish Hub (Std6) | edlovirtualclassroom.com/standard6/spanish/ | ✅ Live |
 | Science Hub (Std6) | edlovirtualclassroom.com/standard6/science/ | ✅ Live |
@@ -1043,10 +1156,10 @@ cd "C:\Users\Dell Latitude 3520\OneDrive\Shared with me\Code Projects\Python Pro
 | Scriptures Hub (Std6) | edlovirtualclassroom.com/standard6/scriptures/ | ❌ Not built yet |
 | Computer Science Hub (Std6) | edlovirtualclassroom.com/standard6/computersc/ | ❌ Not built yet |
 | PE Hub (Std6) | edlovirtualclassroom.com/standard6/pe/ | ❌ Not built yet |
-| Other Standard 5 subject hubs | edlovirtualclassroom.com/standard5/&lt;subject&gt;/ | ❌ Not built yet (Science done first) |
+| Other Standard 5 subject hubs | edlovirtualclassroom.com/standard5/&lt;subject&gt;/ | ❌ Not built yet (Science and Maths done) |
 | Login Page | edlovirtualclassroom.com/login/ | ✅ Live (July 16, 2026) |
-| Student Dashboard | edlovirtualclassroom.com/dashboard/ | ✅ Built July 17, 2026 — live after next push |
-| Teacher Dashboard | edlovirtualclassroom.com/teacher/ | ✅ Built July 17, 2026 — live after next push |
+| Student Dashboard | edlovirtualclassroom.com/dashboard/ | ✅ Live (built July 17) |
+| Teacher Dashboard | edlovirtualclassroom.com/teacher/ | ✅ Live (built July 17) |
 
 ---
 
