@@ -7,7 +7,13 @@
    truth so future edits start from here and produce a complete file
    to paste back. When you change the live Worker, update this file
    too (and vice versa).
-   Last synced: September 29, 2026 - fib items tagged "exact": true must match an
+   Last synced: September 29, 2026 (evening) - TEACHER TEST SWITCH. Two new modes,
+   "tests" and "setGate", let the teacher dashboard list every test and open, close
+   or schedule it — no more hand-editing JSON in the KV dashboard. Both need the
+   teacher code, stored in the NEW Worker secret TEACHER_CODE. The questions gate
+   now honours a schedule. Grading and the AI relay are unchanged.
+
+   Earlier on September 29, 2026 - fib items tagged "exact": true must match an
    accepted answer in full (part-matching gave full marks for 7.246 when the answer
    was 7.2). Untagged items grade exactly as before.
 
@@ -56,8 +62,17 @@
    one entry per test, keyed by testId (e.g. "sy2627-std5-c1-science").
    Adding a new test = adding a new KV entry. No code change needed.
 
+   4) TEACHER SWITCH  (September 29, 2026) — needs env.TEACHER_CODE, not the class code
+      mode:"tests"   {teacherCode}                         → every KV entry: title, subject, open state
+      mode:"setGate" {teacherCode, testId, action:"open"}   → open now (turns any schedule off)
+                     {teacherCode, testId, action:"close"}  → close now (turns any schedule off)
+                     {teacherCode, testId, action:"schedule", from, until}
+                                                            → open automatically from..until (ISO times)
+      Writes only the entry's `open` / `schedule` / `gateUpdated` fields; answers are untouched.
+
    KV entry shape:
-     open      → boolean (test gate; absent = closed)
+     open      → boolean (manual switch; absent = closed)
+     schedule  → { enabled, from, until } (optional; when enabled it decides instead of `open`)
      title     → string (optional; shown while loading)
      questions → { items:[ display objects, NO answers ], sections:{...}, figs:{...} }
      items     → per-item answer key (unchanged):
@@ -125,9 +140,14 @@ export default {
         try { key = JSON.parse(raw); }
         catch (e) { return json({ error: 'BAD_KEY_JSON', testId }, 500); }
 
-        // The gate. Absent/false → closed → return nothing but the flag.
-        if (key.open !== true) {
-          return json({ ok: true, open: false, testId });
+        // The gate. Closed (manual switch off, or outside its schedule) →
+        // return nothing but the flag — plus, if a schedule will open it
+        // later, WHEN, so the page can tell students. No questions leak.
+        const nowMs = Date.now();
+        if (!isOpenNow(key, nowMs)) {
+          const s = key.schedule;
+          const opensAt = (s && s.enabled === true && Date.parse(s.from) > nowMs) ? s.from : null;
+          return json({ ok: true, open: false, testId, opensAt });
         }
 
         // Open → return display questions only. Never include the
@@ -139,6 +159,67 @@ export default {
           title: key.title || '',
           questions: key.questions || null,
         });
+      }
+
+      // ════════════════════════════════════════════════
+      //  MODE 4 — TEACHER SWITCH (list / open / close / schedule)
+      //  Uses the TEACHER code (secret TEACHER_CODE), never the
+      //  class code. Runs before the class-passkey gate.
+      // ════════════════════════════════════════════════
+      if (body.mode === 'tests' || body.mode === 'setGate') {
+        const auth = teacherCodeOk(env, body.teacherCode);
+        if (auth === null) {
+          return json({ ok: false, error: 'TEACHER_CODE_NOT_SET',
+            message: 'The teacher code is not saved on the edlo-gemini Worker yet (secret TEACHER_CODE).' }, 503);
+        }
+        if (!auth) {
+          await new Promise(r => setTimeout(r, 800));   // slows down guessing
+          return json({ ok: false, error: 'BAD_TEACHER_CODE', message: 'Wrong teacher code.' }, 403);
+        }
+        const nowMs = Date.now();
+
+        if (body.mode === 'tests') {
+          const tests = [];
+          let cursor = null;
+          do {
+            const page = await env.ANSWER_KEYS.list(cursor ? { cursor } : {});
+            for (const k of page.keys) {
+              const raw = await env.ANSWER_KEYS.get(k.name);
+              let key = null;
+              try { key = JSON.parse(raw); } catch (e) { key = null; }
+              tests.push(key ? gateSummary(k.name, key, nowMs) : { testId: k.name, bad: true });
+            }
+            cursor = page.list_complete ? null : page.cursor;
+          } while (cursor);
+          return json({ ok: true, now: new Date(nowMs).toISOString(), tests });
+        }
+
+        // setGate
+        const testId = body.testId;
+        if (!testId) return json({ ok: false, error: 'NO_TEST_ID' }, 400);
+        const raw = await env.ANSWER_KEYS.get(testId);
+        if (!raw) return json({ ok: false, error: 'NO_KEY_FOR_TEST', testId }, 404);
+        let key;
+        try { key = JSON.parse(raw); }
+        catch (e) { return json({ ok: false, error: 'BAD_KEY_JSON', testId }, 500); }
+
+        const action = body.action;
+        if (action === 'open' || action === 'close') {
+          key.open = (action === 'open');
+          if (key.schedule) key.schedule.enabled = false;     // manual always wins
+        } else if (action === 'schedule') {
+          const from = Date.parse(body.from), until = Date.parse(body.until);
+          if (isNaN(from) || isNaN(until)) return json({ ok: false, error: 'BAD_TIME', message: 'Both times are needed.' }, 400);
+          if (until <= from) return json({ ok: false, error: 'BAD_TIME', message: 'The closing time must be after the opening time.' }, 400);
+          if (until <= nowMs) return json({ ok: false, error: 'BAD_TIME', message: 'The closing time is already in the past.' }, 400);
+          key.schedule = { enabled: true, from: String(body.from), until: String(body.until) };
+          key.open = false;
+        } else {
+          return json({ ok: false, error: 'BAD_ACTION' }, 400);
+        }
+        key.gateUpdated = new Date(nowMs).toISOString();
+        await env.ANSWER_KEYS.put(testId, JSON.stringify(key, null, 2));
+        return json({ ok: true, test: gateSummary(testId, key, nowMs) });
       }
 
       // ── Passkey gate (applies to GRADE + AI RELAY modes) ──
@@ -390,6 +471,46 @@ async function gradeWritten(queue, apiKey) {
     parsed = JSON.parse(m[0]);
   }
   return parsed;
+}
+
+/* ============================================================
+   TEST GATE HELPERS (September 29, 2026)
+   ============================================================ */
+// Open right now? A schedule that is switched on decides; otherwise the manual switch.
+function isOpenNow(key, nowMs) {
+  const s = key && key.schedule;
+  if (s && s.enabled === true) {
+    const from = Date.parse(s.from), until = Date.parse(s.until);
+    if (isNaN(from) || isNaN(until)) return false;      // a broken schedule stays closed
+    return nowMs >= from && nowMs < until;
+  }
+  return !!key && key.open === true;
+}
+
+// What the teacher dashboard shows for one test. Never includes answers or questions.
+function gateSummary(testId, key, nowMs) {
+  return {
+    testId,
+    title: key.title || '',
+    subject: key.subject || '',
+    grade: key.grade || '',
+    cycle: key.cycle || '',
+    gated: !!key.questions,            // false → the page keeps its questions itself; the switch cannot hide them
+    open: key.open === true,
+    schedule: key.schedule || null,
+    openNow: isOpenNow(key, nowMs),
+    gateUpdated: key.gateUpdated || '',
+  };
+}
+
+// Teacher code check. null = secret not set; true/false = match or not (same-time compare).
+function teacherCodeOk(env, given) {
+  const want = env && env.TEACHER_CODE;
+  if (typeof want !== 'string' || !want.length) return null;
+  const g = String(given == null ? '' : given);
+  let diff = g.length ^ want.length;
+  for (let i = 0; i < want.length; i++) diff |= (g.charCodeAt(i) || 0) ^ want.charCodeAt(i);
+  return diff === 0;
 }
 
 // case/space-insensitive compare helper

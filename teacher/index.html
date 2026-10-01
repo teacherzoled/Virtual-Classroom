@@ -81,6 +81,31 @@
   .load-note { text-align:center; color:var(--muted); font-weight:800; padding:2rem 0; }
   .site-footer { text-align:center; color:var(--muted); font-size:.82rem; padding:2.2rem max(1rem,4vw) 1.4rem; position:relative; z-index:1; }
 
+
+  /* ═══ Open & Close Tests (Sept 2026) ═══ */
+  .gt-group { font-family:'Fredoka One',cursive; font-size:1.05rem; margin:1.2rem 0 .4rem; color:var(--accent); }
+  .gt-row { display:flex; flex-wrap:wrap; gap:.6rem 1rem; align-items:center; padding:.8rem .2rem; border-bottom:1px dashed var(--line); }
+  .gt-name { flex:1 1 300px; min-width:0; }
+  .gt-name b { display:block; font-size:.98rem; }
+  .gt-kind { display:block; color:var(--muted); font-size:.8rem; font-weight:800; }
+  .gt-id { display:block; color:var(--muted); font-size:.7rem; font-family:monospace; opacity:.8; word-break:break-all; }
+  .gt-state { flex:0 1 250px; }
+  .pill { display:inline-block; font-weight:800; font-size:.78rem; letter-spacing:.04em; padding:.3rem .7rem; border-radius:999px; border:2px solid var(--line); background:var(--chip); }
+  .pill.open { border-color:var(--good); color:var(--good); }
+  .pill.sched { border-color:var(--warn); color:var(--warn); }
+  .pill.closed { color:var(--muted); }
+  .gt-when { font-size:.76rem; color:var(--muted); font-weight:700; margin-top:.3rem; line-height:1.4; }
+  .gt-actions { display:flex; flex-wrap:wrap; gap:.4rem; }
+  .gt-actions .btn, .gt-form .btn { margin-top:0; padding:.5rem .9rem; font-size:.88rem; box-shadow:none; }
+  .btn.gt-close { background:#FF8787; color:#3b0a0a; }
+  .btn.gt-sched { background:var(--chip); color:var(--text); border:2px solid var(--line); }
+  .gt-form { flex:1 1 100%; display:none; flex-wrap:wrap; gap:.6rem; align-items:flex-end; background:var(--chip); border:1px solid var(--line); border-radius:12px; padding:.8rem; }
+  .gt-form.show { display:flex; }
+  .gt-form label { display:block; font-size:.72rem; font-weight:800; color:var(--muted); margin-bottom:.2rem; }
+  .gt-form input { font-family:'Nunito',sans-serif; font-size:.92rem; font-weight:700; padding:.5rem .6rem; border-radius:10px; border:2px solid var(--line); background:var(--card); color:var(--text); min-height:44px; max-width:100%; }
+  .gt-note { font-weight:800; margin-top:.8rem; display:none; }
+  @media (max-width:640px) { .gt-state { flex:1 1 100%; } .gt-form > div { flex:1 1 100%; } .gt-form input { width:100%; } }
+
   @media (max-width:640px) {
     .bonus-form > div { flex:1 1 100%; }
     .bonus-form select, .bonus-form input { width:100%; }
@@ -188,6 +213,21 @@
       </div>
       <p class="bonus-note" id="unlockNote"></p>
     </section>
+
+    <p class="section-divider" id="divD" style="display:none;">— 🔐 TESTS · WHAT STUDENTS CAN SIT —</p>
+
+    <section class="panel" id="testsPanel" style="display:none;">
+      <h2>🔐 Open &amp; Close Tests</h2>
+      <p class="sub">Open or close any online test, quiz, classwork check or homework — or set it to open and close by itself.
+        Times are Belize time. Students see a change within about a minute (they reload the page).
+        Opening or closing by hand always turns that test's schedule off.</p>
+      <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;">
+        <button class="btn gt-sched" id="testsRefresh" style="margin-top:0;">🔄 Refresh list</button>
+        <span class="muted" style="font-size:.8rem;font-weight:700;" id="testsStamp"></span>
+      </div>
+      <p class="gt-note" id="testsNote"></p>
+      <div id="testsRows"></div>
+    </section>
   </div>
 
   <footer class="site-footer">© 2026 Mr. EdLo's Virtual Classroom — Belize · All rights reserved.</footer>
@@ -271,6 +311,7 @@ function tryOpen() {
     DATA = res;
     render(res);
     loadLocks();
+    loadTests();
   }).catch(function () {
     $('#gateBtn').disabled = false;
     $('#gateErr').textContent = 'Network problem — try again.';
@@ -659,6 +700,188 @@ $('#unlockResetBtn').addEventListener('click', function () {
     })
     .catch(function () { b.disabled = false; unlockMsg('Network problem — try again.', false); });
 });
+
+/* ══════════════════════════════════════════════════════════════
+   OPEN & CLOSE TESTS — teacher switch (Sept 29, 2026)
+   Talks to the edlo-gemini Worker (the one that holds the tests),
+   mode:'tests' to list and mode:'setGate' to open / close / schedule.
+   Both need the teacher code, which that Worker keeps as the secret
+   TEACHER_CODE. Nothing here ever sees an answer or a question.
+   ══════════════════════════════════════════════════════════════ */
+var GEMINI = 'https://edlo-gemini.smartstandardsix.workers.dev/';
+var BZ_OFFSET = '-06:00';   /* Belize has no daylight saving */
+var TESTS = [];
+
+function gemini(body) {
+  return fetch(GEMINI, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+    .then(function (r) { return r.json(); });
+}
+function bzText(iso) {
+  var d = new Date(iso); if (isNaN(d)) return '?';
+  return d.toLocaleString('en-US', { timeZone: 'America/Belize', weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' });
+}
+function bzInputValue(iso) {           /* ISO → value for <input type="datetime-local"> in Belize time */
+  var ms = Date.parse(iso); if (isNaN(ms)) return '';
+  return new Date(ms - 6 * 3600 * 1000).toISOString().slice(0, 16);
+}
+function inputToIso(v) { return v ? v + ':00' + BZ_OFFSET : ''; }
+
+var KIND_NAMES = { diag: 'Beginning-of-Year Check-up', quiz: 'Quiz', adaptquiz: 'Adaptation Quiz' };
+var SUBJ_ICONS = { science: '🔬', math: '🔢', mathematics: '🔢', spanish: '🇪🇸', scriptures: '📖', computersc: '💻', pe: '⚽' };
+function describe(t) {
+  /* sy2627-std5-c1-homework1-math → { subject:'math', cycle:'1', kind:'Homework · Problem Set 1' } */
+  var m = /^sy(\d{4})-std(\d+)-(?:c(\d+)-)?(?:([a-z]+?)(\d*)-)?([a-z]+)$/.exec(t.testId) || [];
+  var subj = (m[6] || t.subject || 'other').toLowerCase();
+  if (subj === 'mathematics') subj = 'math';
+  var word = m[4] || '', num = m[5] || '';
+  var kind = word === 'unit' ? 'Unit Test ' + num
+           : word === 'classwork' ? 'Classwork Check ' + num
+           : word === 'homework' ? 'Homework · Problem Set ' + num
+           : KIND_NAMES[word] ? KIND_NAMES[word]
+           : (m[3] && !word) ? 'Cycle Review Test' : (word || 'Test');
+  return { subject: subj, grade: m[2] ? 'Standard ' + m[2] : (t.grade || ''), cycle: m[3] || String(t.cycle || ''), kind: kind };
+}
+function subjectTitle(key) {
+  var names = { science: 'Science', math: 'Mathematics', spanish: 'Spanish', scriptures: 'Scriptures', computersc: 'Computer Science', pe: 'Physical Education' };
+  return (SUBJ_ICONS[key] || '📝') + ' ' + (names[key] || key);
+}
+function fullName(t) {
+  var d = describe(t);
+  return (t.title || d.kind) + '  (' + subjectTitle(d.subject).replace(/^\S+\s/, '') + ' · ' + d.kind + (d.cycle ? ' · Cycle ' + d.cycle : '') + ')';
+}
+function stateOf(t) {
+  if (t.bad) return { cls: 'closed', text: '⚠️ CANNOT READ', when: 'This KV entry is not valid JSON — re-paste it from its file.' };
+  if (!t.gated) return { cls: 'closed', text: 'ℹ️ NOT SWITCHABLE', when: 'This page keeps its questions in the page itself, so the switch cannot hide them.' };
+  var s = t.schedule;
+  if (s && s.enabled) {
+    var when = 'Opens ' + bzText(s.from) + ' · closes ' + bzText(s.until);
+    if (t.openNow) return { cls: 'open', text: '🟢 OPEN · ON SCHEDULE', when: when };
+    if (Date.now() < Date.parse(s.from)) return { cls: 'sched', text: '⏰ SCHEDULED', when: when };
+    return { cls: 'closed', text: '🔒 CLOSED · SCHEDULE ENDED', when: when };
+  }
+  return t.open ? { cls: 'open', text: '🟢 OPEN', when: 'Opened by hand — stays open until you close it.' }
+                : { cls: 'closed', text: '🔒 CLOSED', when: '' };
+}
+function testsMsg(text, ok) {
+  var n = $('#testsNote'); n.textContent = text; n.style.color = ok ? 'var(--good)' : 'var(--bad)'; n.style.display = 'block';
+}
+
+function loadTests() {
+  $('#divD').style.display = 'block';
+  $('#testsPanel').style.display = 'block';
+  $('#testsStamp').textContent = 'Loading tests…';
+  gemini({ mode: 'tests', teacherCode: teacherCode }).then(function (res) {
+    if (!res.ok) {
+      $('#testsStamp').textContent = '';
+      if (res.error === 'TEACHER_CODE_NOT_SET' || res.error === 'BAD_TEACHER_CODE') {
+        testsMsg('❌ The test switch needs your teacher code saved on the edlo-gemini Worker too (Cloudflare → Workers → edlo-gemini → Settings → Variables and Secrets → add secret TEACHER_CODE with the same code you use here).', false);
+      } else { testsMsg('❌ ' + (res.message || res.error || 'Could not load the tests.'), false); }
+      return;
+    }
+    TESTS = res.tests || [];
+    $('#testsNote').style.display = 'none';
+    $('#testsStamp').textContent = TESTS.length + ' tests · loaded ' + bzText(new Date().toISOString());
+    renderTests();
+  }).catch(function () { $('#testsStamp').textContent = ''; testsMsg('❌ Network problem — press Refresh.', false); });
+}
+$('#testsRefresh').addEventListener('click', loadTests);
+
+function renderTests() {
+  var wrap = $('#testsRows'); wrap.textContent = '';
+  var groups = {};
+  TESTS.forEach(function (t) { var d = describe(t); (groups[d.subject] = groups[d.subject] || []).push(t); });
+  Object.keys(groups).sort().forEach(function (g) {
+    var h = document.createElement('div'); h.className = 'gt-group'; h.textContent = subjectTitle(g); wrap.appendChild(h);
+    groups[g].sort(function (a, b) {
+      var da = describe(a), db = describe(b);
+      return (Number(da.cycle) || 0) - (Number(db.cycle) || 0) || a.testId.localeCompare(b.testId);
+    }).forEach(function (t) { wrap.appendChild(testRow(t)); });
+  });
+}
+
+function testRow(t) {
+  var d = describe(t), st = stateOf(t);
+  var row = document.createElement('div'); row.className = 'gt-row';
+
+  var name = document.createElement('div'); name.className = 'gt-name';
+  var b = document.createElement('b'); b.textContent = t.title || d.kind;
+  var k = document.createElement('span'); k.className = 'gt-kind'; k.textContent = [d.kind, d.cycle ? 'Cycle ' + d.cycle : '', d.grade].filter(Boolean).join(' · ');
+  var id = document.createElement('span'); id.className = 'gt-id'; id.textContent = t.testId;
+  name.appendChild(b); name.appendChild(k); name.appendChild(id);
+
+  var state = document.createElement('div'); state.className = 'gt-state';
+  var pill = document.createElement('span'); pill.className = 'pill ' + st.cls; pill.textContent = st.text;
+  var when = document.createElement('div'); when.className = 'gt-when'; when.textContent = st.when;
+  state.appendChild(pill); state.appendChild(when);
+
+  row.appendChild(name); row.appendChild(state);
+  if (t.bad || !t.gated) return row;
+
+  var acts = document.createElement('div'); acts.className = 'gt-actions';
+  var bOpen = document.createElement('button'); bOpen.className = 'btn'; bOpen.textContent = '🟢 Open now';
+  var bClose = document.createElement('button'); bClose.className = 'btn gt-close'; bClose.textContent = '🔒 Close now';
+  var bSched = document.createElement('button'); bSched.className = 'btn gt-sched'; bSched.textContent = '⏰ Schedule…';
+  acts.appendChild(bOpen); acts.appendChild(bClose); acts.appendChild(bSched);
+  row.appendChild(acts);
+
+  /* schedule form */
+  var form = document.createElement('div'); form.className = 'gt-form';
+  var s = t.schedule || {};
+  var f1 = document.createElement('div'), l1 = document.createElement('label'), i1 = document.createElement('input');
+  l1.textContent = 'Opens (Belize time)'; i1.type = 'datetime-local'; f1.appendChild(l1); f1.appendChild(i1);
+  var f2 = document.createElement('div'), l2 = document.createElement('label'), i2 = document.createElement('input');
+  l2.textContent = 'Closes (Belize time)'; i2.type = 'datetime-local'; f2.appendChild(l2); f2.appendChild(i2);
+  var f3 = document.createElement('div');
+  var bSave = document.createElement('button'); bSave.className = 'btn'; bSave.textContent = 'Save schedule';
+  var bCancel = document.createElement('button'); bCancel.className = 'btn gt-sched'; bCancel.textContent = 'Cancel'; bCancel.style.marginLeft = '.4rem';
+  f3.appendChild(bSave); f3.appendChild(bCancel);
+  form.appendChild(f1); form.appendChild(f2); form.appendChild(f3);
+  row.appendChild(form);
+
+  var label = fullName(t) + '\n' + t.testId;
+  bOpen.addEventListener('click', function () {
+    if (!confirm('OPEN this for students now?\n\n' + label + '\n\nAny schedule on this test is turned off.')) return;
+    setGate(t, { action: 'open' }, row, 'is now OPEN');
+  });
+  bClose.addEventListener('click', function () {
+    if (!confirm('CLOSE this now?\n\n' + label + '\n\nStudents who already have it on screen can still finish and submit. Any schedule on this test is turned off.')) return;
+    setGate(t, { action: 'close' }, row, 'is now CLOSED');
+  });
+  bSched.addEventListener('click', function () {
+    i1.value = s.from ? bzInputValue(s.from) : '';
+    i2.value = s.until ? bzInputValue(s.until) : '';
+    form.classList.add('show');
+  });
+  bCancel.addEventListener('click', function () { form.classList.remove('show'); });
+  bSave.addEventListener('click', function () {
+    if (!i1.value || !i2.value) { testsMsg('❌ Fill in both the opening and the closing time.', false); return; }
+    var from = inputToIso(i1.value), until = inputToIso(i2.value);
+    if (Date.parse(until) <= Date.parse(from)) { testsMsg('❌ The closing time must be after the opening time.', false); return; }
+    if (!confirm('SCHEDULE this?\n\n' + label + '\n\nOpens:  ' + bzText(from) + '\nCloses: ' + bzText(until) + '\n(Belize time)')) return;
+    setGate(t, { action: 'schedule', from: from, until: until }, row, 'is scheduled');
+  });
+  return row;
+}
+
+function setGate(t, extra, row, doneText) {
+  Array.prototype.forEach.call(row.querySelectorAll('button'), function (x) { x.disabled = true; });
+  var body = { mode: 'setGate', teacherCode: teacherCode, testId: t.testId };
+  Object.keys(extra).forEach(function (k) { body[k] = extra[k]; });
+  gemini(body).then(function (res) {
+    if (!res.ok) {
+      Array.prototype.forEach.call(row.querySelectorAll('button'), function (x) { x.disabled = false; });
+      testsMsg('❌ ' + (res.message || res.error || 'Could not save.'), false); return;
+    }
+    for (var i = 0; i < TESTS.length; i++) if (TESTS[i].testId === t.testId) TESTS[i] = res.test;
+    renderTests();
+    var st = stateOf(res.test);
+    testsMsg('✅ ' + (res.test.title || describe(res.test).kind) + ' ' + doneText + (st.when && extra.action === 'schedule' ? ' — ' + st.when : '') +
+             '. Students see this within about a minute.', true);
+  }).catch(function () {
+    Array.prototype.forEach.call(row.querySelectorAll('button'), function (x) { x.disabled = false; });
+    testsMsg('❌ Network problem — nothing was changed. Try again.', false);
+  });
+}
 </script>
 </body>
 </html>

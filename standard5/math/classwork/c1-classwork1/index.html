@@ -1195,7 +1195,10 @@ async function loadQuestions(){
   if(data.ok && data.open && data.questions && data.questions.html){ installQuestions(data.questions); return; }
   if(typeof DEV_QUESTIONS!=='undefined' && new URLSearchParams(location.search).get('dev')==='1'){
     installQuestions(DEV_QUESTIONS, '🛠️ DEV: this entry is CLOSED (or not in KV yet) — showing the local copy. Students see the "not open yet" panel.'); return; }
-  if(data.ok && !data.open){ gateShow('🔒', GATE_CLOSED_TITLE, GATE_CLOSED_MSG, true); return; }
+  if(data.ok && !data.open){
+    let msg=GATE_CLOSED_MSG;
+    if(data.opensAt){ const d=new Date(data.opensAt); if(!isNaN(d)) msg='It opens '+d.toLocaleString('en-US',{timeZone:'America/Belize',weekday:'long',month:'long',day:'numeric',hour:'numeric',minute:'2-digit'})+' (Belize time). Come back then and reload this page.'; }
+    gateShow('🔒', GATE_CLOSED_TITLE, msg, true); return; }
   gateShow('⚠️','Not available', 'This page is not set up on the class server yet. Please tell Mr. EdLo.', true);
 }
 loadQuestions();

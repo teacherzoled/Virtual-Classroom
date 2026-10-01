@@ -78,6 +78,21 @@ refresh + the `.gitignore` guard — Edwin commits and pushes them.
   - Answer keys (KV JSON) and ADMIN pages: master copies in the Maths curriculum folder; working copies in each
     page's gitignored `_source/` folder (same pattern as the Science diagnostic) so they show in VS Code but are
     never committed. If you edit one, copy it back to the Maths folder.
+- **Sept 29 — 🔐 TEACHER TEST SWITCH (Teacher Dashboard → "Open & Close Tests").** Edwin closed the wrong
+  KV entry by hand (classwork1 vs homework1), so opening/closing moved onto the site:
+  - **Worker `edlo-gemini`:** new `mode:"tests"` (list every KV entry: title, subject, open state — never
+    answers/questions) and `mode:"setGate"` (`action:"open" | "close" | "schedule"` + `from`/`until` ISO times).
+    Both need the teacher code in the NEW Worker secret **`TEACHER_CODE`** (same value as the Apps Script
+    `TEACHER_CODE`). The questions gate now honours `schedule:{enabled,from,until}`; when closed it also
+    returns `opensAt`. Manual Open/Close always switches the schedule off. Grading/relay unchanged.
+    Tested on the real Worker code: 21/21 checks (answers byte-identical after switching, 42/42, 7.246 → 0).
+  - **`teacher/index.html`:** new section after Release Lessons, grouped by subject, real test names,
+    status pill (🟢 OPEN / ⏰ SCHEDULED / 🔒 CLOSED / ℹ️ NOT SWITCHABLE for pages whose questions are
+    still in the page), confirm dialogs that name the test in full, Belize-time schedule form.
+  - **Maths Classwork 1 + Problem Set 1 pages** show "It opens Thursday, October 1 at 7:00 AM" when scheduled.
+  - **From now on, never hand-edit `open` in the KV dashboard** — use the Teacher Dashboard.
+  - **No Apps Script / Sheet change.** The teacher code now lives in TWO places — Apps Script Script Property
+    `TEACHER_CODE` (dashboard login) and the `edlo-gemini` secret `TEACHER_CODE` (test switch). Change one → change both.
 - **Sept 24 — housekeeping:** `Claude outputs/` (student credential files) moved OUT of the repo to
   `..\Virtual-Classroom-private\` — confirmed never committed. `.gitignore` now blocks `Claude outputs/`.
 
@@ -110,7 +125,9 @@ gitignored `_source/` folder — never in a committed path, `backend/` mirrors i
    weeks = school week − 3; Maths ATP already uses school weeks.
 7. **Deploy Maths week 5 (Edwin)** — ✅ Sept 29: KV entries pasted, both ADMIN pages score full marks on the live Worker (incl. the AI item). Remaining: confirm the `exact` patch (q8 = 7.246 → 0/4), commit/push, open with the switch on the day. Original list: (a) paste the full `backend/edlo-gemini.js` into Cloudflare → Deploy (it carries the `exact` change); (b) paste both KV entries
    (`sy2627-std5-c1-classwork1-math` replaced, `sy2627-std5-c1-homework1-math` new); (c) `?dev=1` test both ADMIN
-   pages on the live Worker (they work while closed); (d) open with the KV switch — set `"open": true` on
+   pages on the live Worker (they work while closed); (d) Sept 29: paste the NEW `backend/edlo-gemini.js`
+   (teacher switch), add Worker secret `TEACHER_CODE`, push, then schedule both tests from the Teacher
+   Dashboard (this replaces the old step: open with the KV switch — set `"open": true` on
    `sy2627-std5-c1-homework1-math` on Thu Oct 1 (close it after Mon Oct 5) and on `…-classwork1-math` when Friday's
    check begins (close it after). Cards are already lit; the pages show "not open yet" until then.
 8. **Classwork Check 2 PDF still uses the OLD `pdfText` map** — squares/cubes print wrongly (5² → "52"). Apply the
