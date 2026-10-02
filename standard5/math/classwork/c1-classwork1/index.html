@@ -7,6 +7,7 @@
 <link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="/edlo-utils.js"></script>   <!-- site login (vcRequireLogin / vcSaveProgress / vcGetProgress) -->
 <style>
 /* ═══════════════════════════════════════════
    THEME VARIABLES
@@ -663,6 +664,16 @@ h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.9rem,5vw,3.1rem); line
 .gate-msg{color:var(--body-color);opacity:.85;font-size:1rem;font-weight:600;line-height:1.55;margin:0 auto 1.4rem;max-width:30rem;}
 .gate-actions{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;}
 .dev-closed-note{margin:0 0 1rem;padding:.7rem 1rem;border-radius:12px;background:#111;color:#FFD43B;font-weight:800;font-size:.85rem;}
+
+/* ═══ SIGNED-IN STRIP + SAVE BADGE (same as the Science tests · Oct 2026) ═══ */
+.lms-who{display:none;align-items:center;gap:.5rem;justify-content:center;font-size:.82rem;font-weight:700;color:var(--card-desc);margin:0 0 1rem;text-align:center;}
+.lms-who.show{display:flex;}
+.lms-badge{display:none;margin:.9rem auto 0;max-width:640px;padding:11px 15px;border-radius:12px;font-size:.85rem;font-weight:600;text-align:center;line-height:1.45;}
+.lms-badge.show{display:block;}
+.lms-badge.ok{background:rgba(105,219,124,.14);border:1px solid rgba(105,219,124,.45);color:#2f9e44;}
+.lms-badge.warn{background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.45);color:#e03131;}
+body.theme-night .lms-badge.ok{color:#69DB7C;} body.theme-night .lms-badge.warn{color:#FF6B6B;}
+.lms-badge button{margin-left:.6rem;font:inherit;padding:4px 12px;border-radius:8px;border:1px solid currentColor;background:none;color:inherit;cursor:pointer;min-height:36px;}
 /* ═══ MATH KEYS — on-screen keypad for powers (Sept 2026) ═══ */
 .mk-pad { display:none; margin-top:.5rem; padding:.6rem .7rem .7rem; border-radius:14px; background:var(--info-bg); border:1.5px solid var(--info-border); }
 .mk-pad.show { display:block; }
@@ -771,6 +782,7 @@ h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.9rem,5vw,3.1rem); line
     <div class="lock-scores" id="lockScores"></div>
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
       <button class="btn-primary" onclick="downloadPDF()">📄 Download PDF Report</button>
+      <button class="btn-secondary" onclick="nextStudent()" style="min-height:44px;">👤 Next student</button>
       <a class="btn-secondary" href="/standard5/math/#assessments" style="display:inline-flex;align-items:center;text-decoration:none;">← Back to Mathematics</a>
     </div>
     <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px dashed var(--card-border);">
@@ -791,6 +803,7 @@ h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.9rem,5vw,3.1rem); line
   </div>
 
   <div class="test-container" id="testContainer" style="display:none;">
+    <div class="lms-who" id="lmsWho"></div>
     <div class="student-card">
       <div class="sc-icon">🎓</div>
       <div class="sc-fields">
@@ -803,6 +816,7 @@ h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.9rem,5vw,3.1rem); line
     <div id="qMount"></div>
 
     <div id="resultsSummary" class="results-summary" style="display:none;"></div>
+    <div class="lms-badge" id="lmsSaveBadge"></div>
 
     <div style="text-align:center;margin:1.5rem 0;">
       <button class="btn-primary" id="submitBtn" onclick="handleSubmit()" disabled>Submit Check →</button>
@@ -811,6 +825,7 @@ h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.9rem,5vw,3.1rem); line
 
     <div style="text-align:center;margin-top:1rem;display:none;" id="pdfWrap">
       <button class="btn-primary" onclick="downloadPDF()">📄 Download PDF Report</button>
+      <button class="btn-secondary" onclick="nextStudent()" style="min-height:44px;">👤 Next student</button>
     </div>
   </div>
 </div>
@@ -828,6 +843,21 @@ const PK_KEY     = 'vc-passkey';
 const WORKER_URL = 'https://edlo-gemini.smartstandardsix.workers.dev/';
 const IDLE_SECONDS = 90;   /* idle-blur; 90s minimum for a maths check so thinking time never blurs */
 const TOTAL_POINTS = 42;
+
+/* ═══ SITE SESSION (from /edlo-utils.js — the same sign-in every Science test uses) ═══ */
+const SUBJECT       = "Mathematics";
+const LO_CODE       = "MA1.34-1.35";
+const ACTIVITY_TYPE = "quiz";
+const ACTIVITY_NAME = "Std 5 Maths · Classwork Check 1 — Scientific Notation & Rounding";   /* unique — the account lock matches on it */
+const LMS_PEND_KEY  = "vc-lms-pending-std5-c1-classwork1-math";
+let LMS = null, LMS_REDIRECT = false;
+if (typeof vcRequireLogin === 'function') {
+  LMS = vcRequireLogin();                 /* returns the session, or sends the student to /login/?next=<here> */
+  if (!LMS) LMS_REDIRECT = true;
+}
+/* Device lock + autosave are keyed to the SIGNED-IN STUDENT, so a second student on the same
+   computer gets a clean paper and nobody needs a reset code. */
+function quizKey(){ return QUIZ_KEY + (LMS && LMS.username ? '::' + LMS.username : '::guest'); }
 let ITEMS = [];   /* filled from the Worker gate (mode:'questions') — see SECURE TEST GATE */
 
 /* ═══ THEME ═══ */
@@ -875,9 +905,10 @@ function handleVisibilityChange(){ if(document.hidden && !testSubmitted){ warnCo
 document.addEventListener('visibilitychange',handleVisibilityChange);
 
 /* ═══ SUBMIT-LOCK ═══ */
-function getSavedResult(){ try{ return JSON.parse(localStorage.getItem(QUIZ_KEY)); }catch(e){ return null; } }
-function saveResult(d){ localStorage.setItem(QUIZ_KEY,JSON.stringify(d)); }
-function teacherReset(){ if(confirm('Reset this check on THIS device? The saved result will be cleared.')){ localStorage.removeItem(QUIZ_KEY); location.reload(); } }
+function getSavedResult(){ try{ return JSON.parse(localStorage.getItem(quizKey())); }catch(e){ return null; } }
+function saveResult(d){ try{ localStorage.setItem(quizKey(),JSON.stringify(d)); }catch(e){} }
+function teacherReset(){ const k=prompt('Teacher reset — enter reset code:'); if(k===null) return;
+  if(k.trim().toUpperCase()==='RESET-EDLO'){ try{ localStorage.removeItem(quizKey()); }catch(e){} location.reload(); } else alert('Incorrect reset code.'); }
 window._savedData=null;
 
 /* ═══ COLLECT ANSWERS ═══ */
@@ -948,11 +979,12 @@ function renderResults(data, answers){
   const disp={}; ITEMS.forEach(it=>{ disp[it.id]=answerDisplay(it, answers[it.id]); });
   window._savedData={ items:ITEMS, name, date:document.getElementById('testDate').value, earned, total, pct, results, disp };
   saveResult(window._savedData);
+  lmsSave(window._savedData);          /* -> 'All Results' row keyed to the signed-in username */
   sum.scrollIntoView({behavior:'smooth'});
 }
 
 /* ═══ LOCK SCREEN ON RELOAD ═══ */
-(function(){ const d=getSavedResult(); if(d){ window._savedData=d; testSubmitted=true;
+(function(){ if(LMS_REDIRECT) return; const d=getSavedResult(); if(d){ window._savedData=d; testSubmitted=true;
   document.getElementById('testContainer').style.display='none'; document.getElementById('qProgressWrap').style.display='none';
   const ls=document.getElementById('lockScreen'); ls.classList.add('show');
   document.getElementById('lockScores').innerHTML='<div class="results-summary" style="margin:0;"><div class="rs-total">'+d.earned+' / '+d.total+'</div><div class="rs-pct">'+d.pct+'%</div></div>'; } })();
@@ -966,20 +998,21 @@ function renderResults(data, answers){
       nothing is recorded and nothing is locked: the answers stay on screen and the
       student presses "Try Submitting Again" (no need to re-type the code).
    Grading writes nothing on the server, so a retry can never double-count. */
-const DRAFT_KEY = 'vc-draft-' + TEST_ID + '-v2';   /* v2: a draft of the old July items is never put back into the new questions */
+const DRAFT_BASE = 'vc-draft-' + TEST_ID + '-v2';   /* v2: a draft of the old July items is never put back into the new questions */
+function draftKey(){ return DRAFT_BASE + (LMS && LMS.username ? '::' + LMS.username : '::guest'); }
 const DRAFT_MAX_AGE = 7*24*60*60*1000;   /* drafts older than a week are thrown away */
 let draftReady = false;                  /* no saving until the old draft has been put back */
 let retryPasskey = null;                 /* code from a failed-by-network attempt, reused on retry */
 function saveDraft(){
   if(!draftReady || testSubmitted) return;
   try{ const nm=document.getElementById('studentName');
-    localStorage.setItem(DRAFT_KEY, JSON.stringify({t:Date.now(), name:nm?nm.value:'', a:collectAnswers()})); }catch(e){}
+    localStorage.setItem(draftKey(), JSON.stringify({t:Date.now(), name:nm?nm.value:'', a:collectAnswers()})); }catch(e){}
 }
-function clearDraft(){ draftReady=false; try{ localStorage.removeItem(DRAFT_KEY); }catch(e){} }
+function clearDraft(){ draftReady=false; try{ localStorage.removeItem(draftKey()); }catch(e){} }
 function restoreDraft(){
   if(testSubmitted) return;
   let d=null, n=0;
-  try{ d=JSON.parse(localStorage.getItem(DRAFT_KEY)); }catch(e){}
+  try{ d=JSON.parse(localStorage.getItem(draftKey())); }catch(e){}
   if(d && d.a && (Date.now()-(d.t||0)) < DRAFT_MAX_AGE){
     ITEMS.forEach(it=>{
       const v=d.a[it.id];
@@ -996,7 +1029,7 @@ function restoreDraft(){
     });
     const nm=document.getElementById('studentName'); if(nm && d.name && !nm.value) nm.value=d.name;
     syncOptSelected(); updateProgress();
-  }else if(d){ try{ localStorage.removeItem(DRAFT_KEY); }catch(e){} }
+  }else if(d){ try{ localStorage.removeItem(draftKey()); }catch(e){} }
   draftReady=true;
   if(n) showDraftBanner(n, d && d.name);
 }
@@ -1185,14 +1218,81 @@ function installQuestions(q, devNote){
   document.getElementById('qProgressWrap').style.display='';
   mkAttach(); restoreDraft(); updateProgress(); syncOptSelected();
 }
+
+/* ═══ ACCOUNT LOCK · IDENTITY · NEXT STUDENT · SHEET ROW  (Science pattern, Oct 2026) ═══ */
+async function alreadySubmittedOnAccount(){
+  if(!LMS || typeof vcGetProgress!=='function') return null;
+  let rows;
+  try{ rows=await vcGetProgress(); }catch(e){ console.warn('account-lock check skipped:',e); return null; }
+  if(!Array.isArray(rows)) return null;
+  return rows.find(r=> r && Object.keys(r).some(k=>String(r[k]).trim()===ACTIVITY_NAME)) || null;
+}
+function showAccountLock(row){
+  let msg='Our records show you have already submitted this check, so it cannot be done again. Mr. EdLo already has your result.';
+  try{ if(row.score!=null && row.max_score!=null) msg+=' Your score: '+row.score+'/'+row.max_score+'.'; }catch(e){}
+  gateShow('✅','You already did this', msg, true);
+}
+function lmsFillIdentity(){
+  const nm=document.getElementById('studentName'), who=document.getElementById('lmsWho');
+  if(LMS){
+    if(nm){ nm.value=LMS.full_name||LMS.username||''; nm.readOnly=true; }
+    who.textContent='✓ Signed in as '+(LMS.full_name||LMS.username)+'  ·  your result saves to your record';
+  }else{
+    who.textContent='⚠ Preview mode — not signed in. Nothing will be saved.';
+  }
+  who.classList.add('show');
+}
+function nextStudent(){
+  if(!confirm('Hand this computer to the next student?\n\nYour work stays saved under your own name. The next student signs in with his or her own username.')) return;
+  try{ localStorage.removeItem('vc-session'); }catch(e){}
+  location.href='/login/?next='+encodeURIComponent(location.pathname);
+}
+function lmsBadge(kind,html){ const b=document.getElementById('lmsSaveBadge'); if(!b) return; b.className='lms-badge show '+kind; b.innerHTML=html; }
+function lmsPayload(d){
+  const res=d.results||{}; const parts=[];
+  (d.items||ITEMS).forEach(it=>{ const r=res[it.id]||{}; parts.push(it.id+' '+(r.pending?'pending':(r.earned||0)+'/'+(r.points||it.marks))); });
+  return { subject:SUBJECT, lo_code:LO_CODE, activity_type:ACTIVITY_TYPE, activity_name:ACTIVITY_NAME,
+           score:d.earned, max_score:d.total, ai_feedback:parts.join(' · ')+(d.anyPending?' | written answer pending — check by hand':'') };
+}
+async function lmsSend(payload){
+  if(typeof vcSaveProgress!=='function') throw new Error('sign-in helper not loaded');
+  const r=await vcSaveProgress(payload);
+  if(!r||!r.ok) throw new Error((r&&r.error)||'save failed');
+  return r;
+}
+async function lmsSave(d){
+  if(!LMS){ lmsBadge('warn','⚠ Not signed in, so this result did not reach Mr. EdLo’s record book. Show him this screen before you leave the computer.'); return; }
+  const payload=lmsPayload(d);
+  try{
+    const r=await lmsSend(payload);
+    try{ localStorage.removeItem(LMS_PEND_KEY); }catch(e){}
+    lmsBadge('ok','✓ Saved to your record — Mr. EdLo can see it. '+d.earned+'/'+d.total+(r&&r.percent!=null?' ('+r.percent+'%)':'')+'.');
+  }catch(e){
+    try{ localStorage.setItem(LMS_PEND_KEY,JSON.stringify(payload)); }catch(e2){}
+    lmsBadge('warn','⚠ Could not reach the record book. Your score is safe on this screen. <button onclick="lmsRetry()">Try again</button>');
+  }
+}
+async function lmsRetry(){
+  let payload=null; try{ payload=JSON.parse(localStorage.getItem(LMS_PEND_KEY)); }catch(e){}
+  if(!payload){ lmsBadge('warn','Nothing left to send.'); return; }
+  lmsBadge('warn','Sending…');
+  try{ await lmsSend(payload); try{ localStorage.removeItem(LMS_PEND_KEY); }catch(e){}
+       lmsBadge('ok','✓ Saved to your record — Mr. EdLo can see it.'); }
+  catch(e){ lmsBadge('warn','Still cannot reach the record book. Show this screen to Mr. EdLo. <button onclick="lmsRetry()">Try again</button>'); }
+}
 async function loadQuestions(){
+  if(LMS_REDIRECT) return;               /* on the way to the login page */
+  lmsFillIdentity();
   if(getSavedResult()){ document.getElementById('gateClosed').classList.remove('show'); return; }
   let out;
   try{ out=await postJSON({mode:'questions', testId:TEST_ID},[0,1500,4000],20000); }
   catch(e){ console.error('gate error',e);
     gateShow('⚠️','Could not connect','This device could not reach the class server, so the questions cannot load yet. Check the internet connection and press Reload.',true); return; }
   const data=(out&&out.body)||{};
-  if(data.ok && data.open && data.questions && data.questions.html){ installQuestions(data.questions); return; }
+  if(data.ok && data.open && data.questions && data.questions.html){
+    const prior=await alreadySubmittedOnAccount();   /* blocks a second sitting from ANY device */
+    if(prior){ showAccountLock(prior); return; }
+    installQuestions(data.questions); return; }
   if(typeof DEV_QUESTIONS!=='undefined' && new URLSearchParams(location.search).get('dev')==='1'){
     installQuestions(DEV_QUESTIONS, '🛠️ DEV: this entry is CLOSED (or not in KV yet) — showing the local copy. Students see the "not open yet" panel.'); return; }
   if(data.ok && !data.open){

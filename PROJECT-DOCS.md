@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** September 25, 2026 (Maths Classwork 1 rebuilt for the Oct 2 check + Problem Set 1 online + Maths keys + Worker `exact` patch) · previous: September 24, 2026 (handover refresh — Aug 5 → Sept 24 work recorded: Std 5 Maths hub + Classwork 1–2, online Check-up + resilience fix, `CLASS_KEYS` passkeys, private-files rule)
+**Last updated:** October 1, 2026 (Maths pages: site login + account lock + Sheet logging; Problem Set 1 fresh start; q10a rubric fixed) · earlier: Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -78,6 +78,27 @@ refresh + the `.gitignore` guard — Edwin commits and pushes them.
   - Answer keys (KV JSON) and ADMIN pages: master copies in the Maths curriculum folder; working copies in each
     page's gitignored `_source/` folder (same pattern as the Science diagnostic) so they show in VS Code but are
     never committed. If you edit one, copy it back to the Maths folder.
+- **Oct 1 — Maths pages now match the Science tests (login · account lock · Sheet row).** During the first live
+  sitting of Problem Set 1 (computer room, Oct 1) students opened it WITHOUT signing in: the Maths engine (Sept 24
+  Classwork 1, reused for Problem Set 1) had never received the Science July-17 layers. Edwin closed the homework,
+  told the class it would be reset, and it was fixed the same evening:
+  - **Classwork Check 1 + Problem Set 1** now: `vcRequireLogin()` (→ /login/?next=…); account retake lock
+    (`vcGetProgress()` rows matched on a unique `ACTIVITY_NAME`, checked BEFORE questions show); one
+    `vcSaveProgress()` row per submit; device lock + autosave keyed `::<username>`; 👤 Next student button;
+    teacher reset now needs `RESET-EDLO` (same as Science). Copied from the Science diagnostic, not reinvented.
+  - Sheet rows: subject `Mathematics`, lo_code `MA1.34-1.35`, activity_type `quiz` (classwork — counts in the
+    dashboard average) / `homework` (shows in the student drill-down; NOT in the mastery average, which counts
+    test/quiz/exit-slip only). ai_feedback column = per-question marks.
+  - **Problem Set 1 fresh start:** lock key `…homework1-math-v2`, drafts `…-v2::<username>` — every Oct 1 lock and
+    draft is ignored automatically. Nothing to delete in the Sheet (the Oct 1 page never logged).
+  - **q10a rubric rewritten** (Science style: "AWARD N MARKS if…", checked in order, examples of child wording).
+    "He rounded down when he needed to round up" was AI-marked 1/3 on Oct 1 → now explicitly 2/3. Only the
+    homework KV changed (`items.q10a.rubric`); its `questions` are byte-identical. Classwork KV unchanged.
+  - Admin copies opened from the computer run in "Preview mode — not signed in" so `?dev=1` testing still works.
+  - Tested: 26/26 browser checks (login redirect, Sheet row, reload lock, Next student, second student on the same
+    computer, same student on another computer blocked, record book down → Try again, reset code, 360px).
+  - Still defaulted, not yet confirmed by Edwin: answers hidden until Tue Oct 6 (`REVEAL_FROM`); Q1 "and" wrong;
+    splits Q6 2+2, Q7 2+2, Q8 1+1+1+1.
 - **Sept 29 — 🔐 TEACHER TEST SWITCH (Teacher Dashboard → "Open & Close Tests").** Edwin closed the wrong
   KV entry by hand (classwork1 vs homework1), so opening/closing moved onto the site:
   - **Worker `edlo-gemini`:** new `mode:"tests"` (list every KV entry: title, subject, open state — never
@@ -101,7 +122,7 @@ updated for any reason, apply the resilience fix in that same update — do not 
 (1) autosave answers to the device as the student works, draft key derived from that page's own test ID,
 per signed-in username; (2) retry the questions-gate and grade calls with a timeout; (3) if grading still
 cannot be reached, record NOTHING — no zero, no submit lock, no Sheet row — and show **Try Submitting
-Again**. Done on: Check-up, Maths Classwork 1–2, Maths Problem Set 1. **Still old behaviour:** the 16 Std5 Science tests/quizzes.
+Again**. Done on: Check-up, Maths Classwork 1–2, Maths Problem Set 1 (Classwork 1 + Problem Set 1 also have login + account lock + Sheet logging since Oct 1; Classwork 2 does NOT yet). **Still old behaviour:** the 16 Std5 Science tests/quizzes.
 
 **🔒 STANDING RULE — private files.** This repo is PUBLIC. Anything with a password, login, class code or
 answer key goes in `..\Virtual-Classroom-private\` (beside the repo, not inside it) or under a
@@ -130,7 +151,14 @@ gitignored `_source/` folder — never in a committed path, `backend/` mirrors i
    Dashboard (this replaces the old step: open with the KV switch — set `"open": true` on
    `sy2627-std5-c1-homework1-math` on Thu Oct 1 (close it after Mon Oct 5) and on `…-classwork1-math` when Friday's
    check begins (close it after). Cards are already lit; the pages show "not open yet" until then.
-8. **Classwork Check 2 PDF still uses the OLD `pdfText` map** — squares/cubes print wrongly (5² → "52"). Apply the
+9. **Weekend Oct 3–4 (before Tue Oct 6): homework feedback on ANY device, released by the switch.** Today the
+   Problem Set 1 answers/explanations unlock by DATE (`REVEAL_FROM` 2026-10-06, device clock) and only on the
+   computer + browser where the student submitted (saved in localStorage). Edwin wants: feedback opens when he
+   CLOSES the homework on the Teacher Dashboard, visible from any device after sign-in. Plan (~1 h build, ~10 min
+   Edwin): Worker `mode:"review"` (returns answerText/explain ONLY when the test is closed — never while open);
+   save each student's typed answers in their Sheet row so they show beside the correct ones; page review screen
+   reads those instead of localStorage. Must ship before Tue Oct 6 or the date-based reveal stays as is.
+8. **Classwork Check 2 (before Wk 7): add the secure gate + login + account lock + Sheet logging (same as Classwork 1, Oct 1) AND the PDF fix — its PDF still uses the OLD `pdfText` map** — squares/cubes print wrongly (5² → "52"). Apply the
    Sept 25 powers fix when Check 2 is next touched (before Wk 7), with the resilience rule.
 
 ---
