@@ -927,7 +927,7 @@ function handleVisibilityChange(){ if(document.hidden && !testSubmitted){ warnCo
 /* HOMEWORK: tab-switch warnings are OFF (students may look at class notes). */
 
 /* ═══ NUMBER-AWARE MARKING (Oct 2, 2026) — one clean form of each answer goes to the Worker ═══
-   3.90 = 3.9 · 27,000 = 27000 · "My answer 900" → 900 · "my answer is 2.80 x 10^6" → 2.8 × 10⁶.
+   6.50 = 6.5 · 31,000 = 31000 · "My answer 450" → 450 · "my answer is 4.10 x 10^3" → 4.1 × 10³.
    Two DIFFERENT numbers in one box → sent as typed (marked wrong): an answer cannot hedge. */
 function mfTrimDec(intPart, dec){ dec=(dec||'').replace(/0+$/,''); return intPart+(dec?'.'+dec:''); }
 function mfOne(list, raw){ const u=[...new Set(list)]; return u.length===1 ? u[0] : String(raw==null?'':raw).trim(); }
@@ -1218,9 +1218,9 @@ function downloadPDF(){
 /* ═══ MATH KEYS + TIDY-UP (Sept 2026) ═══════════════════════════════════════
    LIFT-OUT BLOCK — identical in every Std 5 Maths online page; move to shared JS later.
    • Tapping in a typed answer box opens a small keypad under it: × and the
-     powers of ten 10¹ … 10¹², so nobody needs a special keyboard to write 2.8 × 10⁶.
-   • mathCanon() turns what a student types — 2.8x10^6, 2.8 X 10⁶, 2.8*10^6 —
-     into one standard form, "2.8 × 10⁶", before grading. Anything that is not
+     powers of ten 10¹ … 10¹², so nobody needs a special keyboard to write 4.1 × 10³.
+   • mathCanon() turns what a student types — 4.1x10^3, 4.1 X 10³, 4.1*10^3 —
+     into one standard form, "4.1 × 10³", before grading. Anything that is not
      scientific notation is sent exactly as typed (just trimmed).            */
 const MK_SUP='⁰¹²³⁴⁵⁶⁷⁸⁹';
 function mkToSup(d){ return String(d).split('').map(c=>/[0-9]/.test(c)?MK_SUP[+c]:c).join(''); }

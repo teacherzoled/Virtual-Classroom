@@ -51,7 +51,7 @@ page). Waiting to deploy: the Oct 2 Maths fixes + the Oct 3 save helper (open it
 - **Sept 25 — Maths week 5 online (NOT yet committed — Edwin commits/pushes):**
   - **Classwork Check 1 rebuilt** (`standard5/math/classwork/c1-classwork1/`) to the narrowed Sept 23 paper
     worksheet: 12 items / 42 marks, three worked-example sections, MA 1.34–1.35 only. **q2 is now TYPED**
-    (2.8 × 10⁶), same as paper, because of the new Maths keys. Lock key bumped to `…-v2` and draft key to
+    (a scientific-notation answer), same as paper, because of the new Maths keys. Lock key bumped to `…-v2` and draft key to
     `vc-draft-<testId>-v2` so a test lock or draft from the old July items can't block or pollute the real sitting.
   - **Problem Set 1 online** (`standard5/math/homework/c1-set1/`, KV `sy2627-std5-c1-homework1-math`, 10 questions /
     38 marks, due Mon Oct 5). Homework-only behaviour: idle-blur + tab-switch warnings OFF; score and ✓/✗ at once,
@@ -59,12 +59,12 @@ page). Waiting to deploy: the Oct 2 Maths fixes + the Oct 3 save helper (open it
     button on the lock screen. Q6–Q8 are multi-box `match` items (2+2, 2+2, 1+1+1+1). Q10a (explain Leo's mistake,
     3 marks) is the **first AI-marked Maths item** (`sa` + rubric); Q10b (the answer, 2 marks) is auto-marked.
   - **🧮 Maths keys** (both pages, marked LIFT-OUT BLOCK): keypad with × and 10¹…10¹² under any answer box tagged
-    `data-mk="on"` (only boxes that need a power). `mathCanon()` tidies 2.8x10^6 / 2.8 X 10⁶ / 2.8*10^6 into
-    "2.8 × 10⁶" before grading; KV accept lists also hold the common typed forms.
+    `data-mk="on"` (only boxes that need a power). `mathCanon()` tidies 4.1x10^3 / 4.1 X 10³ / 4.1*10^3 into
+    "4.1 × 10³" before grading; KV accept lists also hold the common typed forms.
   - **PDF fix:** `pdfText()` now prints powers as `10^6` (jsPDF's core font has no ⁴–⁹; the old map printed
-    2.8 × 10⁶ as "2.8 x 106") and keeps ×.
+    4.1 × 10³ as "4.1 x 103") and keeps ×.
   - **Worker patch approved (Edwin, Sept 25):** `"exact": true` on a `fib` item turns off the part-match rule
-    (7.246 was scoring full marks for 7.2). Paste-ready steps: `WORKER-PATCH_exact-match_2026-09-25.md` in the
+    (a longer decimal that merely CONTAINED the right answer was scoring full marks). Paste-ready steps: `WORKER-PATCH_exact-match_2026-09-25.md` in the
     Maths `Assessment/Cycle One/classwork/Check 1/` folder (kept out of this public repo — it quotes answers).
     Both new KV entries carry the tag; it is harmless until the Worker change is deployed.
   - **Both pages now use the SECURE TEST GATE — the same switch as the Science tests.** The questions are NOT in
@@ -93,7 +93,7 @@ page). Waiting to deploy: the Oct 2 Maths fixes + the Oct 3 save helper (open it
   - **Problem Set 1 fresh start:** lock key `…homework1-math-v2`, drafts `…-v2::<username>` — every Oct 1 lock and
     draft is ignored automatically. Nothing to delete in the Sheet (the Oct 1 page never logged).
   - **q10a rubric rewritten** (Science style: "AWARD N MARKS if…", checked in order, examples of child wording).
-    "He rounded down when he needed to round up" was AI-marked 1/3 on Oct 1 → now explicitly 2/3. Only the
+    A correct idea in a child's own words was AI-marked 1/3 on Oct 1 → the rubric now gives it 2/3. Only the
     homework KV changed (`items.q10a.rubric`); its `questions` are byte-identical. Classwork KV unchanged.
   - Admin copies opened from the computer run in "Preview mode — not signed in" so `?dev=1` testing still works.
   - Tested: 26/26 browser checks (login redirect, Sheet row, reload lock, Next student, second student on the same
@@ -106,7 +106,7 @@ page). Waiting to deploy: the Oct 2 Maths fixes + the Oct 3 save helper (open it
      carries the **Science anti-cheat copied exactly** (10 s idle blur, Focus Warning on tab switch AND window blur,
      Warning N of 3); the count survives a reload and is written into the Sheet row (`ai_feedback` ends
      "| focus warnings: N"). **Homework has no anti-cheat — Edwin's rule.**
-  2. **Trailing zeros marked wrong** (3.90, 7.20) and 3. **answers inside a short sentence marked wrong**
+  2. **Trailing zeros marked wrong** (e.g. 6.50 for 6.5) and 3. **answers inside a short sentence marked wrong**
      ("My answer 900") → **number-aware marking, page-side** (no Worker or KV change): trailing zeros ignored,
      digit-group commas/spaces dropped, the number is taken out of a sentence ("Q9:" style numbers ignored),
      scientific notation is taken out of a sentence (standard form still wrong on a sci question), number words
@@ -177,6 +177,11 @@ bare `vcSaveProgress()` — and call **`vcRecoverResult()`** on the lock screen.
 **🔒 STANDING RULE — private files.** This repo is PUBLIC. Anything with a password, login, class code or
 answer key goes in `..\Virtual-Classroom-private\` (beside the repo, not inside it) or under a
 gitignored `_source/` folder — never in a committed path, `backend/` mirrors included.
+
+**🙊 STANDING RULE — no real answers in public files (Oct 3, 2026).** Code comments, examples and these docs
+use NEUTRAL numbers, never a value that is the answer to a live or future item (the Oct 2 marking comments
+quoted Problem Set 1 answers while it was open; fixed the next day). Earlier commits still hold some
+Classwork 1 answers in git history — harmless only because both classes have sat it.
 
 **🔑 STANDING RULE — answer keys in KV are MERGED, never pasted over (Oct 3, 2026).** A live KV entry carries
 fields the site writes itself — `open`, `schedule` and `gateUpdated` (set from the Teacher Dashboard switch).
