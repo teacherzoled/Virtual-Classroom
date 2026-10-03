@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** October 3, 2026 (shared graded-results save helper + Apps Script duplicate guard; Oct 2 Maths fixes; commit `f49e9fa` recorded; KV merge rule) · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
+**Last updated:** October 3, 2026 — later: Science C1 Unit Test 1 page gets the resilience fix + save helper (Science project); KV photos deployed · earlier Oct 3: (shared graded-results save helper + Apps Script duplicate guard; Oct 2 Maths fixes; commit `f49e9fa` recorded; KV merge rule) · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -26,6 +26,8 @@ If the docs are not updated, the task is **not** finished.
 at **`f49e9fa`** (Oct 3, Science project). Edwin's local copy was one commit behind (`fd1f556`) on Oct 3, so
 **`git pull` before committing** the Oct 3 Maths/save work (no overlap — `f49e9fa` touched only the Unit Test 1
 page). Waiting to deploy: the Oct 2 Maths fixes + the Oct 3 save helper (open item 11).
+**Later Oct 3 (Science project):** the Std5 Science C1 Unit Test 1 page now has the resilience fix and uses the
+shared save helper (open item 10 — done); its KV entry (revised questions + photo figures) was deployed and verified.
 
 **What shipped since August 5, 2026 (all committed and pushed):**
 - **Aug 5 — Lesson icon library:** 71 base64-embedded SVG glyphs for Cycle 1 Science in
@@ -123,6 +125,19 @@ page). Waiting to deploy: the Oct 2 Maths fixes + the Oct 3 save helper (open it
 - **Oct 3 — `f49e9fa` (Science project): Std5 Science C1 Unit Test 1 page — time is now 35 minutes** (sat in
   Week 3 Session 3, Wed 7 Oct, after a 5-min Power-Up discussion + 5-min review). Subtitle + instructions box only.
   Its questions and answers were revised **in KV** (`sy2627-std5-c1-unit1-science`) by the Science project.
+- **Oct 3 (later, Science project) — Std5 Science C1 Unit Test 1 page: resilience fix + shared save helper.**
+  Same pattern as Maths Problem Set 1: the saved result, the autosaved draft and any unsent Sheet row are kept
+  **per signed-in username** (`vc-quiz-std5-c1-unit1-science::<user>`, `vc-draft-sy2627-std5-c1-unit1-science::<user>`);
+  "Welcome back" banner restores answers; the questions call (`[0,1.5s,4s]`, 20 s timeout) and the grade call
+  (`[0,2.5s,6s]`, 45 s timeout — it includes the AI marking) are retried; **if grading cannot be reached nothing is
+  recorded or locked** and the button becomes **Try Submitting Again** (the old page zeroed every item). The Sheet
+  row goes through **`vcSubmitResult()`** with a status badge, and the lock screen calls **`vcRecoverResult()`**.
+  Saved results no longer store the figure pictures (`__q.figs = {}`; 7 KB instead of ~300 KB). The student's name
+  pre-fills from the sign-in. Tested in a headless browser with mocked Workers: draft restore; grading down → no
+  record, retry marks 56/56; one Sheet row with the attempt id; second student on the same computer gets a clean
+  test; save down → 4 tries with one attempt id → result waits on the device → sent on return; later visit with the
+  row present sends nothing. **KV `sy2627-std5-c1-unit1-science` deployed Oct 3 12:38** (revised questions/answers
+  + photo figures for Q3, Q5, Q13, ~314 KB): read back identical; `open:false`, no schedule, `gateUpdated` kept.
 - **Oct 3 — 🛟 GRADED RESULTS: one save helper for every subject + duplicate guard (built + tested, NOT yet deployed).**
   - **`edlo-utils.js`** (additions only — `vcSaveProgress` / `vcSaveBeans` unchanged, so lessons and beans behave
     exactly as before): `vcSubmitResult(payload, {onRetry})` gives each submitted result ONE `attempt_id`, keeps it
@@ -172,7 +187,7 @@ updated for any reason, apply the resilience fix in that same update — do not 
 per signed-in username; (2) retry the questions-gate and grade calls with a timeout; (3) if grading still
 cannot be reached, record NOTHING — no zero, no submit lock, no Sheet row — and show **Try Submitting
 Again**; (4) **(Oct 3, 2026)** log the graded result with **`vcSubmitResult()`** from `/edlo-utils.js` — never a
-bare `vcSaveProgress()` — and call **`vcRecoverResult()`** on the lock screen. Done on: Check-up, Maths Classwork 1–2, Maths Problem Set 1 (Classwork 1 + Problem Set 1 also have login + account lock + Sheet logging since Oct 1; Classwork 2 does NOT yet). **Still old behaviour:** the 16 Std5 Science tests/quizzes.
+bare `vcSaveProgress()` — and call **`vcRecoverResult()`** on the lock screen. Done on: Check-up, Maths Classwork 1–2, Maths Problem Set 1 (Classwork 1 + Problem Set 1 also have login + account lock + Sheet logging since Oct 1; Classwork 2 does NOT yet), **Std5 Science C1 Unit Test 1 (Oct 3)**. **Still old behaviour:** the other 15 Std5 Science tests/quizzes.
 
 **🔒 STANDING RULE — private files.** This repo is PUBLIC. Anything with a password, login, class code or
 answer key goes in `..\Virtual-Classroom-private\` (beside the repo, not inside it) or under a
@@ -195,7 +210,7 @@ would silently close or un-schedule the test.
    reads `CLASS_KEYS` and holds no codes) **plus the `exact` change**, ready to paste into Cloudflare. The retired
    codes remain in git history only — never reuse them. From now on: change the mirror first, paste the whole
    file into Cloudflare, Deploy.
-2. **Resilience fix outstanding** on the 16 Std5 Science tests/quizzes — apply as each is next touched.
+2. **Resilience fix outstanding** on 15 of the 16 Std5 Science tests/quizzes (C1 Unit Test 1 done Oct 3) — apply as each is next touched; copy the Unit Test 1 page's RESILIENCE + SHEET ROW blocks.
 3. **Design-rule conflict to settle.** The Design System section below says every NEW page links
    `/vc-theme.css`; the pages built since (Check-up, Power-Ups, Maths hub, Classwork 1–2) are fully
    self-contained and link nothing. Edwin decides which rule stands; then fix the losing rule here.
@@ -220,7 +235,7 @@ would silently close or un-schedule the test.
    Edwin): Worker `mode:"review"` (returns answerText/explain ONLY when the test is closed — never while open);
    save each student's typed answers in their Sheet row so they show beside the correct ones; page review screen
    reads those instead of localStorage. Must ship before Tue Oct 6 or the date-based reveal stays as is.
-10. **Std5 Science C1 Unit Test 1 (`standard5/science/tests/c1-unit1/`) — Science project, before Wed Oct 7.** The
+10. ✅ **DONE Oct 3 (Science project) — see "What shipped".** Original note: **Std5 Science C1 Unit Test 1 (`standard5/science/tests/c1-unit1/`) — Science project, before Wed Oct 7.** The
    page (time changed to 35 min in `f49e9fa`) still needs the **resilience fix** (autosave per username, retried
    gate + grade calls, nothing recorded when grading can't be reached) **plus the new save helper**
    (`vcSubmitResult` + `vcRecoverResult` on the lock screen). The Science project does it **once the Oct 3
@@ -1264,7 +1279,7 @@ cd "C:\Users\Dell Latitude 3520\OneDrive\Shared with me\Code Projects\Python Pro
 | Grade Picker (home) | edlovirtualclassroom.com | ✅ Live |
 | Standard 5 Hub | edlovirtualclassroom.com/standard5/ | ✅ Live (Science card now links to its hub) |
 | Standard 5 Science Hub | edlovirtualclassroom.com/standard5/science/ | ✅ Live (July 15 — phone-verified, themes fixed) |
-| Std5 Science tests & quizzes (16) | edlovirtualclassroom.com/standard5/science/tests/… &amp; /quizzes/… | ✅ Live (July 15) — resilience fix still to apply |
+| Std5 Science tests & quizzes (16) | edlovirtualclassroom.com/standard5/science/tests/… &amp; /quizzes/… | ✅ Live (July 15) — resilience fix done on C1 Unit Test 1 (Oct 3); 15 still to apply |
 | Std5 Beginning-of-Year Check-up | edlovirtualclassroom.com/standard5/science/tests/diagnostic/ | ✅ Live (Sept 10; resilience fix Sept 21) |
 | Std5 Science Power-Ups 1A–3A | edlovirtualclassroom.com/standard5/science/power-ups/… | ✅ Live (Aug 5–7) |
 | Standard 5 Maths Hub | edlovirtualclassroom.com/standard5/math/ | ✅ Live (Sept 24) |
