@@ -11,13 +11,16 @@
  *  It is NOT executed by GitHub Pages; it is the source of truth so future
  *  edits start from here and produce a complete file to paste back.
  *  When you change the live Apps Script, update this file too (and vice versa).
- *  Last synced: July 21, 2026 (added SERVER-SIDE per-lesson bean cap — LESSON-ENGINE-PLAN §4).
+ *  Last synced: October 3, 2026 (save-result skips a DUPLICATE attempt_id — column M; see
+ *  handleSaveResult). Before that: July 21, 2026 (server-side per-lesson bean cap).
  *
  *  Sheet tabs used:
  *    Tab 1 "Students"     → username | password | full_name | first_name | class_id | active | group_id
  *    Tab 2 "All Results"  → timestamp | username | student_name | subject | lo_code |
  *                           activity_type | activity_name | score | max_score | percent | ai_feedback |
  *                           lesson_key   ← column L, added July 21 2026
+ *                           attempt_id   ← column M, added Oct 3 2026 (one id per submitted
+ *                           result; a retry of the same result is NOT written twice)
  *                           lesson_key identifies ONE online lesson (e.g. "std5-sci-wk01").
  *                           ⚠️ lo_code CANNOT be used for this — one outcome can span two
  *                           weeks (SC1.11 = Wks 3 & 4, SC2.12 = Wks 11 & 12, SC3.13 = Wks
@@ -55,6 +58,12 @@ var SESSION_DAYS = 30; // how long a login lasts
 // defeated by clearing the browser, so this is the real limit.
 var LESSON_BEAN_CAP = 30;   // max beans one student can earn from one lesson, ever
 var LESSON_KEY_COL  = 12;   // column L in 'All Results'
+
+// Duplicate guard (Oct 3, 2026). Pages that save through vcSubmitResult() in edlo-utils.js
+// send an attempt_id — one per submitted result — and RETRY when the reply is lost on slow
+// wifi. A retry whose attempt_id is already in column M is answered from that row and NOT
+// appended again. Saves WITHOUT an attempt_id (lessons, beans, older pages) behave as before.
+var ATTEMPT_ID_COL  = 13;   // column M in 'All Results'
 
 // Progressive lesson unlock (IDEAS #8)
 var LOCK_SUFFIX  = '-released-week'; // only these Settings keys are public
@@ -132,7 +141,8 @@ function handleLogin(body) {
 
 // ─────────────────────────────────────────────
 // SAVE RESULT — { action:'save-result', token, subject, lo_code,
-//                 activity_type, activity_name, score, max_score, ai_feedback }
+//                 activity_type, activity_name, score, max_score, ai_feedback,
+//                 lesson_key?, attempt_id? }
 // ─────────────────────────────────────────────
 function handleSaveResult(body) {
   var session = checkToken(body.token);
@@ -142,6 +152,44 @@ function handleSaveResult(body) {
   if (!student || String(student.active).toUpperCase() !== 'YES') {
     return { ok: false, error: 'Account not active' };
   }
+
+  // ── DUPLICATE GUARD (Oct 3, 2026) ──
+  // The check and the append must not interleave with a second copy of the same save
+  // arriving at the same moment, so both happen under the script lock. Saves without
+  // an attempt_id skip the lock entirely (unchanged behaviour).
+  var attemptId = String(body.attempt_id || '').trim().slice(0, 120);
+  if (!attemptId) return saveResultRow(body, session, student, '');
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(15000)) return { ok: false, error: 'Server busy — try again' };
+  try {
+    var earlier = findAttemptRow(attemptId, session.username);
+    if (earlier) {
+      return { ok: true, duplicate: true, percent: earlier.percent, awarded: earlier.score };
+    }
+    return saveResultRow(body, session, student, attemptId);
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+// Returns {score, percent} of the row already holding this attempt_id for this student, or null.
+function findAttemptRow(attemptId, username) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(RESULTS_TAB);
+  var last  = sheet.getLastRow();
+  if (last < 2 || sheet.getMaxColumns() < ATTEMPT_ID_COL) return null;   // column M not there yet
+  var hits = sheet.getRange(2, ATTEMPT_ID_COL, last - 1, 1)
+                  .createTextFinder(attemptId).matchEntireCell(true).findAll();
+  for (var i = 0; i < hits.length; i++) {
+    var row = sheet.getRange(hits[i].getRow(), 1, 1, 10).getValues()[0];
+    if (String(row[1]).toLowerCase() === username) {
+      return { score: Number(row[7]) || 0, percent: Number(row[9]) || 0 };
+    }
+  }
+  return null;
+}
+
+// Appends ONE 'All Results' row (the July 21 logic, unchanged apart from column M).
+function saveResultRow(body, session, student, attemptId) {
 
   var score    = Number(body.score)     || 0;
   var maxScore = Number(body.max_score) || 0;
@@ -178,7 +226,8 @@ function handleSaveResult(body) {
     maxScore,
     percent,
     String(body.ai_feedback || ''),
-    lessonKey
+    lessonKey,
+    attemptId
   ]);
 
   return {
@@ -189,6 +238,27 @@ function handleSaveResult(body) {
     lesson_total: lessonTotal + score,               // running total for this lesson
     lesson_cap: LESSON_BEAN_CAP
   };
+}
+
+// ─────────────────────────────────────────────
+// ONE-OFF MIGRATION (Oct 3, 2026) — attempt_id header for column M
+// ─────────────────────────────────────────────
+function addAttemptIdColumn() {
+  // ONE-OFF (Oct 3, 2026) — run once after pasting this version. Adds the 'attempt_id'
+  // header to column M. Older rows stay blank, which is correct. Safe to run twice.
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(RESULTS_TAB);
+  var head  = sheet.getRange(1, ATTEMPT_ID_COL).getValue();
+  if (String(head) === 'attempt_id') {
+    Logger.log('Already migrated — nothing to do.');
+    return 'already done';
+  }
+  sheet.getRange(1, ATTEMPT_ID_COL)
+       .setValue('attempt_id')
+       .setFontWeight('bold')
+       .setBackground('#20C997')
+       .setFontColor('#ffffff');
+  Logger.log('attempt_id header added to column M.');
+  return 'ok';
 }
 
 // ─────────────────────────────────────────────
@@ -658,7 +728,7 @@ function setupSheet() {
   if (results.getLastRow() === 0) {
     results.appendRow(['timestamp', 'username', 'student_name', 'subject', 'lo_code',
                        'activity_type', 'activity_name', 'score', 'max_score', 'percent', 'ai_feedback',
-                       'lesson_key']);
+                       'lesson_key', 'attempt_id']);
     results.getRange('1:1').setFontWeight('bold').setBackground('#20C997').setFontColor('#ffffff');
     results.setFrozenRows(1);
   }

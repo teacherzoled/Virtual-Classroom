@@ -11,6 +11,12 @@
  *    vcSaveProgress({ subject:'Science', lo_code:'SC6.19',
  *      activity_type:'test', activity_name:'Plant Adaptations',
  *      score:24, max_score:30, ai_feedback:feedbackText });
+ *
+ *  GRADED results (tests, quizzes, homework) — use vcSubmitResult instead
+ *  (Oct 2026). It retries on a busy record book, never writes the same result
+ *  twice, and keeps an unsent result on this device until it gets through:
+ *    vcSubmitResult(payload, { onRetry }) · vcSendUnsent() · vcRecoverResult({...})
+ *  See "GRADED RESULTS" at the bottom of this file.
  * ═══════════════════════════════════════════════════════════════
  */
 
@@ -202,4 +208,195 @@ function vcGetProgress() {
       if (!data.ok) throw new Error(data.error || 'Could not load progress');
       return data.results;
     });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ *  GRADED RESULTS — submit with retry, no duplicates, recovery on return
+ *  (Oct 3, 2026 · built once for every subject: Maths first, Science next)
+ *
+ *  Why: when a whole class submits at once, Google turns some saves away and the
+ *  first try fails (Oct 2, 2026: several students needed "Try again"; anyone who
+ *  left without the green message had no Sheet row). This helper:
+ *   1. gives each submitted result ONE attempt_id. The VC-LMS Apps Script skips a
+ *      save whose attempt_id is already in 'All Results' (column M), so a retry can
+ *      never record the same result twice — even when the first reply was lost.
+ *   2. stores the result on THIS device, under the signed-in student's own name,
+ *      BEFORE the first try (localStorage "vc-unsent::<username>"), so two students
+ *      on one computer never overwrite each other's unsent result.
+ *   3. retries a busy/unreachable record book 3 times over about 20 seconds, each
+ *      device waiting a slightly different time so a class does not retry in step.
+ *   4. drops the stored copy only when the record book confirms the save.
+ *
+ *  Use (a page that logs a graded result):
+ *    vcSubmitResult({ subject, lo_code, activity_type, activity_name, score, max_score,
+ *                     ai_feedback, attempt_id }, { onRetry: function (n, of) {…} })
+ *      → Promise of { ok:true, percent, duplicate? }  or  { ok:false, queued:true, error }
+ *      attempt_id is optional — pass one you saved with the result on the device so a
+ *      later recovery reuses it; otherwise one is made (vcNewAttemptId()).
+ *    vcSendUnsent()        → sends every result this student still has waiting on this device
+ *                            (the "Try again" button). Promise of { ok, sent, left }.
+ *    vcRecoverResult({ activity_name, payload })
+ *                          → for a result kept on the device (lock screen): sends the waiting
+ *                            queue, then checks the record book; if no row with this
+ *                            activity_name exists, sends payload once. Promise of
+ *                            { status:'saved' | 'recovered' | 'unsent' | 'unknown' | 'not-signed-in' }.
+ *                            'unknown' = the record book could not be checked → nothing sent.
+ *  Lessons and beans keep using vcSaveProgress / vcSaveBeans (unchanged).
+ * ═══════════════════════════════════════════════════════════════ */
+var VC_UNSENT_PREFIX     = 'vc-unsent::';
+var VC_SAVE_RETRY_DELAYS = [3000, 6000, 10000];   /* 3 automatic retries ≈ 20 s (each ±40%) */
+var VC_SAVE_TIMEOUT_MS   = 20000;                 /* one try gives up after 20 s */
+
+/** A new id for ONE submitted result: "<username>-<time>-<random>". */
+function vcNewAttemptId() {
+  var s = vcGetSession(), u = (s && s.username) ? s.username : 'guest', r = '';
+  try {
+    if (window.crypto && window.crypto.getRandomValues) {
+      var a = new Uint32Array(2); window.crypto.getRandomValues(a);
+      r = a[0].toString(36) + a[1].toString(36);
+    }
+  } catch (e) { /* fall back below */ }
+  if (!r) r = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+  return u + '-' + Date.now().toString(36) + '-' + r;
+}
+
+function vcUnsentKey_(u) { return VC_UNSENT_PREFIX + u; }
+function vcUnsentRead_(u) {
+  try { var a = JSON.parse(localStorage.getItem(vcUnsentKey_(u)) || '[]'); return Array.isArray(a) ? a : []; }
+  catch (e) { return []; }
+}
+function vcUnsentWrite_(u, list) {
+  try {
+    if (list.length) localStorage.setItem(vcUnsentKey_(u), JSON.stringify(list.slice(-20)));
+    else localStorage.removeItem(vcUnsentKey_(u));
+  } catch (e) { /* storage full or blocked — the send itself still goes ahead */ }
+}
+function vcUnsentPut_(u, item) {
+  var list = vcUnsentRead_(u).filter(function (x) { return x && x.attempt_id !== item.attempt_id; });
+  list.push(item); vcUnsentWrite_(u, list);
+}
+function vcUnsentDrop_(u, id) {
+  vcUnsentWrite_(u, vcUnsentRead_(u).filter(function (x) { return x && x.attempt_id !== id; }));
+}
+/** The results the signed-in student still has waiting on this device (payload copies). */
+function vcUnsent() {
+  var s = vcGetSession(); if (!s) return [];
+  return vcUnsentRead_(s.username).map(function (x) { return x.payload; });
+}
+
+function vcWait_(ms) { return new Promise(function (res) { setTimeout(res, ms); }); }
+
+/* Retry only when the record book was busy or unreachable — never for a bad session. */
+function vcRetryable_(err) {
+  err = String(err || '');
+  return !err || /backend unreachable|server error|busy|timed? ?out|time-?out|too many|rate limit|quota|service invoked|failed to fetch|network|abort/i.test(err);
+}
+
+/* ONE try of /save-result with a timeout. Never throws. */
+function vcPostSave_(body) {
+  var ctl = (typeof AbortController === 'function') ? new AbortController() : null;
+  var timer = ctl ? setTimeout(function () { ctl.abort(); }, VC_SAVE_TIMEOUT_MS) : null;
+  return fetch(VC_LMS_URL + '/save-result', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+    signal: ctl ? ctl.signal : undefined
+  })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (timer) clearTimeout(timer);
+      d = d || {};
+      if (!d.ok) d.retry = vcRetryable_(d.error);
+      return d;
+    })
+    .catch(function (err) {
+      if (timer) clearTimeout(timer);
+      return { ok: false, retry: true, error: String((err && err.message) || err) };
+    });
+}
+
+/* Sends one stored item for user u (only while u is the signed-in student). */
+function vcSendItem_(u, item) {
+  var s = vcGetSession();
+  if (!s || s.username !== u) return Promise.resolve({ ok: false, retry: false, error: 'Not logged in' });
+  var body = {};
+  for (var k in item.payload) if (Object.prototype.hasOwnProperty.call(item.payload, k)) body[k] = item.payload[k];
+  body.token = s.token;
+  body.attempt_id = item.attempt_id;
+  return vcPostSave_(body).then(function (res) {
+    if (res && res.ok) vcUnsentDrop_(u, item.attempt_id);
+    return res;
+  });
+}
+
+/** Saves ONE graded result: stored on the device first, retried, never written twice. */
+function vcSubmitResult(payload, opts) {
+  opts = opts || {};
+  var s = vcGetSession();
+  if (!s) return Promise.resolve({ ok: false, error: 'Not logged in' });
+  var p = {};
+  payload = payload || {};
+  for (var k in payload) if (Object.prototype.hasOwnProperty.call(payload, k) && k !== 'token') p[k] = payload[k];
+  p.attempt_id = String(p.attempt_id || vcNewAttemptId());
+  var item = { attempt_id: p.attempt_id, payload: p, t: Date.now() };
+  vcUnsentPut_(s.username, item);                       /* kept on THIS device before the first try */
+  var delays = opts.retryDelays || VC_SAVE_RETRY_DELAYS, n = 0;
+  function attempt() {
+    return vcSendItem_(s.username, item).then(function (res) {
+      if (res && res.ok) { res.attempt_id = item.attempt_id; return res; }
+      if (res && res.retry && n < delays.length) {
+        var wait = Math.round(delays[n] * (0.6 + Math.random() * 0.8));
+        n++;
+        if (typeof opts.onRetry === 'function') { try { opts.onRetry(n, delays.length, wait); } catch (e) {} }
+        return vcWait_(wait).then(attempt);
+      }
+      return { ok: false, queued: true, attempt_id: item.attempt_id, error: (res && res.error) || 'save failed' };
+    });
+  }
+  return attempt();
+}
+
+/** Sends every result the signed-in student still has waiting on this device. */
+function vcSendUnsent() {
+  var s = vcGetSession();
+  if (!s) return Promise.resolve({ ok: false, sent: 0, left: 0, error: 'Not logged in' });
+  var items = vcUnsentRead_(s.username), sent = 0, lastError = '';
+  return items.reduce(function (chain, item) {
+    return chain.then(function () {
+      return vcSendItem_(s.username, item).then(function (r) {
+        if (r && r.ok) sent++; else lastError = (r && r.error) || 'save failed';
+      });
+    });
+  }, Promise.resolve()).then(function () {
+    var left = vcUnsentRead_(s.username).length;
+    return { ok: left === 0, sent: sent, left: left, error: left ? lastError : '' };
+  });
+}
+
+/** Recovery on return — see the header above. opts: { activity_name, payload, retryDelays? } */
+function vcRecoverResult(opts) {
+  opts = opts || {};
+  var s = vcGetSession();
+  if (!s) return Promise.resolve({ status: 'not-signed-in' });
+  var name = String(opts.activity_name || '').trim();
+  return vcSendUnsent().then(function () {
+    return vcGetProgress().then(function (rows) {
+      var has = Array.isArray(rows) && rows.some(function (r) {
+        return r && String(r.activity_name || '').trim() === name;
+      });
+      if (has) return { status: 'saved' };
+      if (!opts.payload) return { status: 'unsent' };
+      var p = {};
+      for (var k in opts.payload) if (Object.prototype.hasOwnProperty.call(opts.payload, k)) p[k] = opts.payload[k];
+      /* a result saved before attempt ids existed gets a FIXED id per student + activity,
+         so even a repeat recovery can never add a second row */
+      if (!p.attempt_id) p.attempt_id = 'rec-' + s.username + '-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      return vcSubmitResult(p, { retryDelays: opts.retryDelays || [4000] }).then(function (res) {
+        return res.ok ? { status: res.duplicate ? 'saved' : 'recovered', percent: res.percent }
+                      : { status: 'unsent', error: res.error };
+      });
+    }, function (err) {
+      return { status: 'unknown', error: String((err && err.message) || err) };   /* could not check → send nothing */
+    });
+  });
 }

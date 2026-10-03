@@ -684,6 +684,8 @@ h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.9rem,5vw,3.1rem); line
 .lms-badge.ok{background:rgba(105,219,124,.14);border:1px solid rgba(105,219,124,.45);color:#2f9e44;}
 .lms-badge.warn{background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.45);color:#e03131;}
 body.theme-night .lms-badge.ok{color:#69DB7C;} body.theme-night .lms-badge.warn{color:#FF6B6B;}
+.lms-badge.busy{background:rgba(77,171,247,.12);border:1px solid rgba(77,171,247,.45);color:#1971c2;}
+body.theme-night .lms-badge.busy{color:#74C0FC;}
 .lms-badge button{margin-left:.6rem;font:inherit;padding:4px 12px;border-radius:8px;border:1px solid currentColor;background:none;color:inherit;cursor:pointer;min-height:36px;}
 /* ═══ MATH KEYS — on-screen keypad for powers (Sept 2026) ═══ */
 .mk-pad { display:none; margin-top:.5rem; padding:.6rem .7rem .7rem; border-radius:14px; background:var(--info-bg); border:1.5px solid var(--info-border); }
@@ -791,6 +793,7 @@ body.theme-night .lms-badge.ok{color:#69DB7C;} body.theme-night .lms-badge.warn{
     <div class="lock-title">Problem Set Already Submitted</div>
     <div class="lock-msg">You have already submitted this problem set. Your score is saved below. Download your report or return to Mathematics.</div>
     <div class="lock-scores" id="lockScores"></div>
+    <div class="lms-badge" id="lmsLockBadge"></div>
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
       <button class="btn-primary" onclick="downloadPDF()">📄 Download PDF Report</button>
       <button class="btn-secondary" onclick="nextStudent()" style="min-height:44px;">👤 Next student</button>
@@ -892,13 +895,7 @@ topBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 /* ═══ SELECTION + PROGRESS ═══ */
 function syncOptSelected(){ document.querySelectorAll('.question[data-q]').forEach(q=>{
   q.querySelectorAll('.opt').forEach(o=>{ const inp=o.querySelector('input'); o.classList.toggle('selected', !!(inp&&inp.checked)); }); }); }
-function tidy(kind, v){ v=String(v==null?'':v).trim();
-  if(kind==='sci')   return mathCanon(v);
-  if(kind==='num')   return v.replace(/\s*km$/i,'').trim();
-  if(kind==='words') return v.toLowerCase().replace(/[-,.]/g,' ').replace(/\s+/g,' ').trim();
-  if(kind==='money') return v.replace(/\$/g,'').replace(/\s+/g,'').replace(/\.0+$/,'');
-  if(kind==='num-strip') return v.replace(/[,\s]/g,'');
-  return v; }
+function tidy(kind, v){ return markForm(kind, v); }   /* Oct 2: see NUMBER-AWARE MARKING */
 function partKind(p){ return p.kind==='num' ? 'num-strip' : p.kind; }
 function fibEl(it){ return document.getElementById(it.id+'_in'); }
 function isAnswered(it){
@@ -928,6 +925,38 @@ let warnCount=0;
 function handleVisibilityChange(){ if(document.hidden && !testSubmitted){ warnCount++; if(warnCount<=3){ document.getElementById('warnCount').textContent='Warning '+warnCount+' of 3';
   document.getElementById('warnOverlay').classList.add('show'); } } }
 /* HOMEWORK: tab-switch warnings are OFF (students may look at class notes). */
+
+/* ═══ NUMBER-AWARE MARKING (Oct 2, 2026) — one clean form of each answer goes to the Worker ═══
+   3.90 = 3.9 · 27,000 = 27000 · "My answer 900" → 900 · "my answer is 2.80 x 10^6" → 2.8 × 10⁶.
+   Two DIFFERENT numbers in one box → sent as typed (marked wrong): an answer cannot hedge. */
+function mfTrimDec(intPart, dec){ dec=(dec||'').replace(/0+$/,''); return intPart+(dec?'.'+dec:''); }
+function mfOne(list, raw){ const u=[...new Set(list)]; return u.length===1 ? u[0] : String(raw==null?'':raw).trim(); }
+function numFromText(raw){
+  let s=String(raw==null?'':raw);
+  s=s.replace(/(?:\bq|\bquestion|\bno\.?|#)\s*\d+[a-z]?\b/gi,' ');          /* "Q9:", "question 4" are not answers */
+  const out=[]; const re=/(^|[^\d.,])(\d{1,3}(?:[, ]\d{3}(?!\d))+|\d+)(?:\.(\d+))?(?!\d)/g; let m;   /* no look-behind: old tablets */
+  while((m=re.exec(s))){ out.push(mfTrimDec(m[2].replace(/[, ]/g,''), m[3])); }
+  return mfOne(out, raw);
+}
+function sciFromText(raw){
+  const s=String(raw==null?'':raw); const out=[];
+  const re=/(^|[^\d.])(\d+)(?:\.(\d+))?\s*[x×X*✕·]\s*10\s*(?:\^\s*([0-9]+)|([⁰¹²³⁴⁵⁶⁷⁸⁹]+))/g; let m;
+  while((m=re.exec(s))){ const pow=String(parseInt(m[4]!=null?m[4]:mkFromSup(m[5]),10)); out.push(mfTrimDec(m[2],m[3])+' × 10'+mkToSup(pow)); }
+  return mfOne(out, raw);
+}
+const MF_WORDS=new Set('zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty thirty forty fifty sixty seventy eighty ninety hundred thousand million billion and'.split(' '));
+function wordsFromText(raw){
+  const t=String(raw==null?'':raw).toLowerCase().replace(/[-,.:;!?'"()]/g,' ').replace(/\s+/g,' ').trim().split(' ');
+  let best=[], cur=[];
+  for(const w of t.concat([''])){ if(MF_WORDS.has(w)) cur.push(w); else { while(cur.length&&cur[0]==='and')cur.shift(); while(cur.length&&cur[cur.length-1]==='and')cur.pop(); if(cur.length>best.length)best=cur; cur=[]; } }
+  return best.length ? best.join(' ') : t.join(' ').trim();
+}
+function markForm(kind, v){
+  if(kind==='sci')   return sciFromText(v);
+  if(kind==='words') return wordsFromText(v);
+  if(['num','num-strip','dec','money','digit'].includes(kind)) return numFromText(v);
+  return String(v==null?'':v).trim();                      /* written answers (no kind) go as typed */
+}
 
 /* ═══ SUBMIT-LOCK ═══ */
 function getSavedResult(){ try{ return JSON.parse(localStorage.getItem(quizKey())); }catch(e){ return null; } }
@@ -1303,42 +1332,51 @@ function nextStudent(){
   try{ localStorage.removeItem('vc-session'); }catch(e){}
   location.href='/login/?next='+encodeURIComponent(location.pathname);
 }
-function lmsBadge(kind,html){ const b=document.getElementById('lmsSaveBadge'); if(!b) return; b.className='lms-badge show '+kind; b.innerHTML=html; }
+function lmsBadge(kind,html,id){ const b=document.getElementById(id||'lmsSaveBadge'); if(!b) return; b.className='lms-badge show '+kind; b.innerHTML=html; }
 function lmsPayload(d){
   const res=d.results||{}; const parts=[];
   (d.items||ITEMS).forEach(it=>{ const r=res[it.id]||{}; parts.push(it.id+' '+(r.pending?'pending':(r.earned||0)+'/'+(r.points||it.marks))); });
   return { subject:SUBJECT, lo_code:LO_CODE, activity_type:ACTIVITY_TYPE, activity_name:ACTIVITY_NAME,
            score:d.earned, max_score:d.total, ai_feedback:parts.join(' · ')+(d.anyPending?' | written answer pending — check by hand':'') };
 }
-async function lmsSend(payload){
-  if(typeof vcSaveProgress!=='function') throw new Error('sign-in helper not loaded');
-  const r=await vcSaveProgress(payload);
-  if(!r||!r.ok) throw new Error((r&&r.error)||'save failed');
-  return r;
-}
+/* Oct 3, 2026: saving goes through the shared helper in /edlo-utils.js (vcSubmitResult):
+   ONE attempt id per result (kept with the result on this device), 3 automatic retries,
+   never written twice, and an unsent result waits on this computer under the student's
+   own name until it gets through — see "GRADED RESULTS" in edlo-utils.js. */
+const LMS_WAIT_MSG='⚠ Your result has not reached Mr. EdLo’s record book yet. It is safe on this computer and will be sent the next time you sign in and open this page here. ';
 async function lmsSave(d){
   if(!LMS){ lmsBadge('warn','⚠ Not signed in, so this result did not reach Mr. EdLo’s record book. Show him this screen before you leave the computer.'); return; }
-  const payload=lmsPayload(d);
-  try{
-    const r=await lmsSend(payload);
-    try{ localStorage.removeItem(LMS_PEND_KEY); }catch(e){}
-    lmsBadge('ok','✓ Saved to your record — Mr. EdLo can see it. '+d.earned+'/'+d.total+(r&&r.percent!=null?' ('+r.percent+'%)':'')+'.');
-  }catch(e){
-    try{ localStorage.setItem(LMS_PEND_KEY,JSON.stringify(payload)); }catch(e2){}
-    lmsBadge('warn','⚠ Could not reach the record book. Your score is safe on this screen. <button onclick="lmsRetry()">Try again</button>');
-  }
+  if(typeof vcSubmitResult!=='function'){ lmsBadge('warn','⚠ The record book helper did not load. Show Mr. EdLo this screen.'); return; }
+  if(!d.attemptId){ d.attemptId=vcNewAttemptId(); saveResult(d); }   /* same id for every retry and for recovery later */
+  const payload=lmsPayload(d); payload.attempt_id=d.attemptId;
+  lmsBadge('busy','Sending your result to Mr. EdLo’s record book…');
+  const r=await vcSubmitResult(payload,{ onRetry:(n,of)=>lmsBadge('busy','The record book is busy — trying again by itself ('+n+' of '+of+')… please stay on this page.') });
+  if(r && r.ok) lmsBadge('ok','✓ Saved to your record — Mr. EdLo can see it. '+d.earned+'/'+d.total+(r.percent!=null?' ('+r.percent+'%)':'')+'.');
+  else lmsBadge('warn',LMS_WAIT_MSG+'<button onclick="lmsRetry()">Try again</button>');
 }
-async function lmsRetry(){
-  let payload=null; try{ payload=JSON.parse(localStorage.getItem(LMS_PEND_KEY)); }catch(e){}
-  if(!payload){ lmsBadge('warn','Nothing left to send.'); return; }
-  lmsBadge('warn','Sending…');
-  try{ await lmsSend(payload); try{ localStorage.removeItem(LMS_PEND_KEY); }catch(e){}
-       lmsBadge('ok','✓ Saved to your record — Mr. EdLo can see it.'); }
-  catch(e){ lmsBadge('warn','Still cannot reach the record book. Show this screen to Mr. EdLo. <button onclick="lmsRetry()">Try again</button>'); }
+async function lmsRetry(id){
+  lmsBadge('busy','Sending…',id);
+  const r=(typeof vcSendUnsent==='function')?await vcSendUnsent():{ok:false};
+  if(r.ok) lmsBadge('ok','✓ Saved to your record — Mr. EdLo can see it.',id);
+  else lmsBadge('warn','Still cannot reach the record book. Your result stays safe on this computer. <button onclick="lmsRetry(\''+(id||'lmsSaveBadge')+'\')">Try again</button>',id);
+}
+/* RECOVERY ON RETURN: the lock screen shows a result kept on this computer. If the record book has
+   no row for it (the save never got through — e.g. Oct 2, 2026), send it now, once. */
+async function lmsRecover(d){
+  if(!LMS || !d || typeof vcRecoverResult!=='function') return;
+  const id='lmsLockBadge'; lmsBadge('busy','Checking Mr. EdLo’s record book…',id);
+  const payload=lmsPayload(d); if(d.attemptId) payload.attempt_id=d.attemptId;
+  const r=await vcRecoverResult({ activity_name:ACTIVITY_NAME, payload });
+  if(r.status==='saved')          lmsBadge('ok','✓ Mr. EdLo has this result in his record book.',id);
+  else if(r.status==='recovered') lmsBadge('ok','✓ This result had not reached the record book — it has just been sent. Mr. EdLo can see it now.',id);
+  else if(r.status==='unsent')    lmsBadge('warn',LMS_WAIT_MSG+'<button onclick="lmsRecover(getSavedResult())">Try again</button>',id);
+  else                            lmsBadge('warn','Could not check the record book just now. <button onclick="lmsRecover(getSavedResult())">Check again</button>',id);
 }
 async function loadQuestions(){
   if(LMS_REDIRECT) return;               /* on the way to the login page */
   lmsFillIdentity();
+  if(getSavedResult()){ lmsRecover(getSavedResult()); }   /* result on this device but not in the Sheet? send it */
+  else if(LMS && typeof vcUnsent==='function' && vcUnsent().length){ vcSendUnsent(); }   /* other results still waiting */
   if(getSavedResult()){ document.getElementById('gateClosed').classList.remove('show'); return; }
   let out;
   try{ out=await postJSON({mode:'questions', testId:TEST_ID},[0,1500,4000],20000); }

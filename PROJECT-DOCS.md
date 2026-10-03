@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** October 1, 2026 (Maths pages: site login + account lock + Sheet logging; Problem Set 1 fresh start; q10a rubric fixed) · earlier: Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
+**Last updated:** October 3, 2026 (shared graded-results save helper + Apps Script duplicate guard; Oct 2 Maths fixes; commit `f49e9fa` recorded; KV merge rule) · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -20,11 +20,12 @@ If the docs are not updated, the task is **not** finished.
 
 ---
 
-## ▶️ Take-off Point — Next Session (as of September 24, 2026)
+## ▶️ Take-off Point — Next Session (as of October 3, 2026)
 
-**State in one line:** Standard 5 is live and in daily use (school week 4 = week of Sept 21). `main` is
-clean and matches GitHub (last code commit `433fca1`, Sept 24). The only pending change is this docs
-refresh + the `.gitignore` guard — Edwin commits and pushes them.
+**State in one line:** Standard 5 is live and in daily use (school week 5 = week of Sept 28). GitHub `main` is
+at **`f49e9fa`** (Oct 3, Science project). Edwin's local copy was one commit behind (`fd1f556`) on Oct 3, so
+**`git pull` before committing** the Oct 3 Maths/save work (no overlap — `f49e9fa` touched only the Unit Test 1
+page). Waiting to deploy: the Oct 2 Maths fixes + the Oct 3 save helper (open item 11).
 
 **What shipped since August 5, 2026 (all committed and pushed):**
 - **Aug 5 — Lesson icon library:** 71 base64-embedded SVG glyphs for Cycle 1 Science in
@@ -99,6 +100,54 @@ refresh + the `.gitignore` guard — Edwin commits and pushes them.
     computer, same student on another computer blocked, record book down → Try again, reset code, 360px).
   - Still defaulted, not yet confirmed by Edwin: answers hidden until Tue Oct 6 (`REVEAL_FROM`); Q1 "and" wrong;
     splits Q6 2+2, Q7 2+2, Q8 1+1+1+1.
+- **Oct 2 — first class sat Classwork Check 1 + Problem Set 1 online.** Three problems, all from defaults Claude
+  set without confirming them:
+  1. **Anti-cheat missing** (Classwork had a 90 s blur and no window-blur check; homework had none) → Classwork now
+     carries the **Science anti-cheat copied exactly** (10 s idle blur, Focus Warning on tab switch AND window blur,
+     Warning N of 3); the count survives a reload and is written into the Sheet row (`ai_feedback` ends
+     "| focus warnings: N"). **Homework has no anti-cheat — Edwin's rule.**
+  2. **Trailing zeros marked wrong** (3.90, 7.20) and 3. **answers inside a short sentence marked wrong**
+     ("My answer 900") → **number-aware marking, page-side** (no Worker or KV change): trailing zeros ignored,
+     digit-group commas/spaces dropped, the number is taken out of a sentence ("Q9:" style numbers ignored),
+     scientific notation is taken out of a sentence (standard form still wrong on a sci question), number words
+     likewise. Two DIFFERENT numbers in one box → marked wrong (no hedging). Written (AI) answers go as typed.
+     Q1 "and" stays wrong — the Maths ATP convention (no "and" in a whole number), confirmed by Edwin.
+  - Build step `secure.py` (after `lms.apply`): `secure.apply(page)` for checks/tests, `anticheat=False` for homework.
+    Full source + test record: claude.ai Project doc `claude/Maths-Oct2-fixes-2026-10-02.md`.
+  - The class that already sat both: typed answers are not stored server-side, so no automatic regrade — Edwin
+    explained it to the class; any adjustment is by hand. The second class was told to type the answer only.
+  - **Teacher Dashboard showed "Backend unreachable: Unexpected token '<' … not valid JSON"** while a class was
+    submitting; a reload opened it. Not a code fault: the Apps Script answers every error as JSON (`doPost` catch),
+    so the HTML page came from Google turning requests away under load. Same cause: several students' saves
+    failed and needed **Try again**; anyone who left without the green message had no Sheet row → Oct 3 fix below.
+- **Oct 3 — `f49e9fa` (Science project): Std5 Science C1 Unit Test 1 page — time is now 35 minutes** (sat in
+  Week 3 Session 3, Wed 7 Oct, after a 5-min Power-Up discussion + 5-min review). Subtitle + instructions box only.
+  Its questions and answers were revised **in KV** (`sy2627-std5-c1-unit1-science`) by the Science project.
+- **Oct 3 — 🛟 GRADED RESULTS: one save helper for every subject + duplicate guard (built + tested, NOT yet deployed).**
+  - **`edlo-utils.js`** (additions only — `vcSaveProgress` / `vcSaveBeans` unchanged, so lessons and beans behave
+    exactly as before): `vcSubmitResult(payload, {onRetry})` gives each submitted result ONE `attempt_id`, keeps it
+    on the device under the signed-in student (`localStorage "vc-unsent::<username>"`) BEFORE the first try,
+    retries a busy/unreachable record book 3 times over ~20 s (each device waits a slightly different time), and
+    drops the stored copy only when the Sheet confirms. `vcSendUnsent()` = the Try again button.
+    `vcRecoverResult({activity_name, payload})` = recovery on return: sends anything waiting, then — only if the
+    record book can be CHECKED and has no row for that activity — sends the device's result once (a result from
+    before attempt ids gets the fixed id `rec-<username>-<activity>`). Retries only for busy/unreachable errors,
+    never for a bad session.
+  - **Apps Script `handleSaveResult`:** a save carrying an `attempt_id` that is already in **column M** for the
+    same student is answered from that row (`duplicate:true`) and NOT appended; check + append run under the
+    script lock (busy → "Server busy — try again", which the helper retries). Saves without an `attempt_id`
+    (lessons, beans, older pages) are unchanged. New one-off `addAttemptIdColumn()` adds the M header.
+    `edlo-lms` Worker: no change (it already forwards every field).
+  - **Maths Classwork 1 + Problem Set 1** now save through the helper; the attempt id is kept with the result on
+    the device. The lock screen checks the record book and sends a missing result automatically ("✓ This result
+    had not reached the record book — it has just been sent"). **This also recovers the Oct 1–2 results that never
+    reached the Sheet:** the student signs in on the SAME computer + browser and opens the page.
+  - Tested: Apps Script against a mocked Sheet 10/10 (first save, duplicate retry, other student's id, no-id
+    saves unchanged, bean cap, lock busy, lock released, bad token, column M missing, migration); browser 17/17
+    (busy ×2 then saved → 1 row; reply lost → retry recognised → 1 row; down all sitting → recovered on return →
+    1 row; two students on one computer recover only their own; a result saved by the REAL Oct 1–2 live page is
+    recovered; an old result already in the Sheet is not resent; record book cannot be checked → nothing sent);
+    previous suites 26/26 + 20/20; marking 73/73.
 - **Sept 29 — 🔐 TEACHER TEST SWITCH (Teacher Dashboard → "Open & Close Tests").** Edwin closed the wrong
   KV entry by hand (classwork1 vs homework1), so opening/closing moved onto the site:
   - **Worker `edlo-gemini`:** new `mode:"tests"` (list every KV entry: title, subject, open state — never
@@ -122,11 +171,19 @@ updated for any reason, apply the resilience fix in that same update — do not 
 (1) autosave answers to the device as the student works, draft key derived from that page's own test ID,
 per signed-in username; (2) retry the questions-gate and grade calls with a timeout; (3) if grading still
 cannot be reached, record NOTHING — no zero, no submit lock, no Sheet row — and show **Try Submitting
-Again**. Done on: Check-up, Maths Classwork 1–2, Maths Problem Set 1 (Classwork 1 + Problem Set 1 also have login + account lock + Sheet logging since Oct 1; Classwork 2 does NOT yet). **Still old behaviour:** the 16 Std5 Science tests/quizzes.
+Again**; (4) **(Oct 3, 2026)** log the graded result with **`vcSubmitResult()`** from `/edlo-utils.js` — never a
+bare `vcSaveProgress()` — and call **`vcRecoverResult()`** on the lock screen. Done on: Check-up, Maths Classwork 1–2, Maths Problem Set 1 (Classwork 1 + Problem Set 1 also have login + account lock + Sheet logging since Oct 1; Classwork 2 does NOT yet). **Still old behaviour:** the 16 Std5 Science tests/quizzes.
 
 **🔒 STANDING RULE — private files.** This repo is PUBLIC. Anything with a password, login, class code or
 answer key goes in `..\Virtual-Classroom-private\` (beside the repo, not inside it) or under a
 gitignored `_source/` folder — never in a committed path, `backend/` mirrors included.
+
+**🔑 STANDING RULE — answer keys in KV are MERGED, never pasted over (Oct 3, 2026).** A live KV entry carries
+fields the site writes itself — `open`, `schedule` and `gateUpdated` (set from the Teacher Dashboard switch).
+Any answer-key or question update must MERGE into the live entry and keep those fields as they are: copy the
+live value out first, change only `items` / `questions` (or what the update is about), paste the merged result
+back. **Never paste a whole file from disk over a live entry** — the file's `"open": false` and missing schedule
+would silently close or un-schedule the test.
 
 **⚠️ Open items (Edwin chooses the order):**
 1. ✅ **DONE Sept 29 — `backend/edlo-gemini.js` now matches the live Worker** (Edwin pasted the live code; it
@@ -158,6 +215,20 @@ gitignored `_source/` folder — never in a committed path, `backend/` mirrors i
    Edwin): Worker `mode:"review"` (returns answerText/explain ONLY when the test is closed — never while open);
    save each student's typed answers in their Sheet row so they show beside the correct ones; page review screen
    reads those instead of localStorage. Must ship before Tue Oct 6 or the date-based reveal stays as is.
+10. **Std5 Science C1 Unit Test 1 (`standard5/science/tests/c1-unit1/`) — Science project, before Wed Oct 7.** The
+   page (time changed to 35 min in `f49e9fa`) still needs the **resilience fix** (autosave per username, retried
+   gate + grade calls, nothing recorded when grading can't be reached) **plus the new save helper**
+   (`vcSubmitResult` + `vcRecoverResult` on the lock screen). The Science project does it **once the Oct 3
+   `edlo-utils.js` is pushed** (item 11). Its KV answer update follows the merge rule above.
+11. **Deploy the Oct 2–3 Maths + save work (Edwin) — in THIS order:**
+   (a) **Apps Script first:** open VC-LMS → Extensions → Apps Script; check the live file is **739 lines** (the
+   July 21 mirror). If it is, paste the whole new `backend/VC-LMS-Backend.gs` (809 lines) → Save → Deploy →
+   **Manage deployments → edit the ACTIVE deployment → New version** (keeps the same /exec URL). If it is NOT 739,
+   stop and copy the live code out first. Then run **`addAttemptIdColumn`** once (column M header).
+   (b) `git pull` (brings `f49e9fa`), then commit + push `edlo-utils.js`, both Maths pages, `backend/VC-LMS-Backend.gs`
+   and this file. (c) Live check: submit a Classwork 1 `?dev=1` ADMIN copy as `test.student` → one row with an
+   attempt id in column M. (d) Monday: students unsure whether their Oct 1–2 result arrived sign in on the computer
+   they used and open the page — the lock screen says "has this result" or sends it.
 8. **Classwork Check 2 (before Wk 7): add the secure gate + login + account lock + Sheet logging (same as Classwork 1, Oct 1) AND the PDF fix — its PDF still uses the OLD `pdfText` map** — squares/cubes print wrongly (5² → "52"). Apply the
    Sept 25 powers fix when Check 2 is next touched (before Wk 7), with the resilience rule.
 
@@ -885,6 +956,9 @@ and the activity continues.
 ### edlo-utils.js functions
 `vcLogin(u, p)` · `vcGetSession()` · `vcRequireLogin()` · `vcLogout()` · `vcSaveProgress(payload)` ·
 `vcGetProgress()` (returns the student's result rows — the student dashboard's data source) ·
+**`vcSubmitResult(payload, {onRetry})` · `vcSendUnsent()` · `vcRecoverResult({activity_name, payload})` ·
+`vcNewAttemptId()` · `vcUnsent()`** *(Oct 3, 2026 — graded results: retry, no duplicates, per-student unsent
+storage, recovery on return; see the "GRADED RESULTS" block in the file)* ·
 `vcSaveBeans(activityId, beans, maxBeans, meta)` *(added July 16, 2026)* — awards cacao beans 🌱 for a
 lesson activity ONCE per device (`localStorage` lock `vc-pts-<activityId>`); writes a Tab 2 row with
 `activity_type:'lesson'` (score = beans earned, max_score = beans possible); silent no-op when logged
