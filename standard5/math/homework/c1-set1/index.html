@@ -715,6 +715,52 @@ body.theme-night .lms-badge.busy{color:#74C0FC;}
 .results-summary .rs-total{ font-family:'Fredoka One',cursive; font-size:2.2rem; }
 .results-summary .rs-pct{ font-size:1rem; font-weight:800; color:var(--card-desc); margin-top:.3rem; }
 .locked-opt{ pointer-events:none; }
+
+/* ═══ READABLE ASSESSMENT LAYOUT — standing rule (Edwin, Oct 3 2026) ═══
+   Every new or updated assessment: the test card fills the page width (no 900px column), and the
+   question type is big enough to read from a computer-room chair. See PROJECT-DOCS "Readable assessment layout". */
+.wrapper{width:100%;min-width:0;padding-left:max(1rem,2vw);padding-right:max(1rem,2vw);}
+.q-label,.opt,.instr-card,.worked,.res-line{overflow-wrap:anywhere;}
+.test-container{max-width:none;}
+.q-progress-inner{max-width:1400px;padding:0 max(1rem,2vw);}
+.q-progress-label{font-size:.85rem;} .q-progress-count{font-size:1.2rem;}
+.sec-card > p[style]{font-size:1.1rem !important;line-height:1.55;}   /* section intro lines set inline in the questions HTML */
+.sec-card{padding:1.8rem 2.2rem;}
+.sec-title{font-size:1.45rem;}
+.sec-pts{font-size:.95rem;}
+.instr-card{font-size:1.15rem;line-height:1.6;}
+.worked{font-size:1.15rem;line-height:1.6;}
+.worked-title{font-size:1.3rem;}
+.q-label{font-size:1.3rem;line-height:1.55;}
+.q-num{font-size:1.35rem;}
+.q-pts{font-size:.9rem;}
+.sub-lab,.part-lab{font-size:1.15rem;}
+.opt{font-size:1.2rem;padding:.85rem 1.15rem;}
+.opt input{width:22px;height:22px;}
+.answer-input{font-size:1.3rem;padding:.8rem 1.1rem;}
+.money-sign,.unit{font-size:1.3rem;}
+.ans-hint{font-size:.98rem;}
+.res-line{font-size:1.05rem;line-height:1.5;}
+.formula-box,.working-area,.fb-box{font-size:1.1rem;}
+.sc-group input{font-size:1.05rem;min-width:0;width:100%;}
+.student-card{flex-wrap:wrap;}
+.sc-group label,.field-label{font-size:.78rem;}
+.lock-msg,.modal-desc,.blur-sub,.warn-msg{font-size:1.05rem;}
+.submit-hint{font-size:.95rem;}
+.lms-badge{font-size:1rem;}
+.mk-btn,.mk-btn.mk-pow{font-size:1.3rem;min-height:48px;}
+.mk-tip{font-size:.95rem;}
+.mk-preview{font-size:1.1rem;}
+.vc-pow{font-size:1.4em;line-height:1;}            /* superscript digits: 10⁶ reads as clearly as 10^6 */
+@media (max-width:640px){
+  .sec-card{padding:1.2rem 1rem;}
+  .q-label{font-size:1.12rem;} .q-num{font-size:1.15rem;}
+  .opt{font-size:1.05rem;padding:.75rem .9rem;}
+  .answer-input{font-size:1.15rem;}
+  .instr-card,.worked{font-size:1.02rem;}
+  .sec-title{font-size:1.25rem;}
+  .q-label{flex-wrap:wrap;} .q-label .q-pts{order:3;width:100%;padding-left:1.9rem;margin-left:0;}
+}
 </style>
 </head>
 <body class="theme-night">
@@ -1397,6 +1443,36 @@ async function loadQuestions(){
 }
 loadQuestions();
 
+</script>
+<script>
+/* ═══ READABLE ASSESSMENT LAYOUT — bigger superscripts (Edwin, Oct 3 2026) ═══
+   Wraps runs of superscript characters (⁰¹²³⁴⁵⁶⁷⁸⁹⁻) in <span class="vc-pow"> so a power is as easy to
+   read as the number in front of it. Watches the page, so questions loaded from the server, results and
+   explanations are covered too. Answer boxes are not touched (the bigger box font covers them). */
+(function(){
+  var RE=/[⁰¹²³⁴-⁹⁻]+/;
+  function wrap(root){
+    if(!root||!document.createTreeWalker) return;
+    var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null,false), list=[], n;
+    while((n=w.nextNode())){
+      var p=n.parentNode; if(!p||!RE.test(n.nodeValue)) continue;
+      var tag=p.nodeName; if(tag==='SCRIPT'||tag==='STYLE'||tag==='TEXTAREA'||tag==='OPTION'||(p.classList&&p.classList.contains('vc-pow'))) continue;
+      list.push(n);
+    }
+    list.forEach(function(t){
+      var parts=t.nodeValue.split(/([⁰¹²³⁴-⁹⁻]+)/), f=document.createDocumentFragment();
+      parts.forEach(function(s,i){ if(!s) return; if(i%2){ var sp=document.createElement('span'); sp.className='vc-pow'; sp.textContent=s; f.appendChild(sp); } else f.appendChild(document.createTextNode(s)); });
+      t.parentNode.replaceChild(f,t);
+    });
+  }
+  function start(){
+    wrap(document.body);
+    if(window.MutationObserver) new MutationObserver(function(ms){ ms.forEach(function(m){
+      if(m.type==='characterData') wrap(m.target.parentNode); else m.addedNodes.forEach(function(x){ if(x.nodeType===1) wrap(x); else if(x.nodeType===3&&x.parentNode) wrap(x.parentNode); });
+    }); }).observe(document.body,{childList:true,subtree:true,characterData:true});
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
+})();
 </script>
 </body>
 </html>

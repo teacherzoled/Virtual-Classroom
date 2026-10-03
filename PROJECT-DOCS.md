@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** October 3, 2026 (shared graded-results save helper + Apps Script duplicate guard; Oct 2 Maths fixes; commit `f49e9fa` recorded; KV merge rule) · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
+**Last updated:** October 3, 2026 (readable assessment layout + full anti-cheat as STANDING RULES; shared graded-results save helper + Apps Script duplicate guard — live; Oct 2 Maths fixes; `f49e9fa` recorded; KV merge rule) · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -120,6 +120,10 @@ page). Waiting to deploy: the Oct 2 Maths fixes + the Oct 3 save helper (open it
     submitting; a reload opened it. Not a code fault: the Apps Script answers every error as JSON (`doPost` catch),
     so the HTML page came from Google turning requests away under load. Same cause: several students' saves
     failed and needed **Try again**; anyone who left without the green message had no Sheet row → Oct 3 fix below.
+- **Oct 3 — readable layout + answered-question blur (Maths Classwork 1 + Problem Set 1).** The card now fills
+  the page (1311px of a 1366px screen instead of 900px), type is ~35% bigger, powers are enlarged; Classwork 1
+  also blurs a question once it is answered (homework does not). Both written as standing rules above.
+  Tested: overflow check at 360px (none), answered-blur 9/9, previous suites 26/26 + 20/20 + 17/17, marking 73/73.
 - **Oct 3 — `f49e9fa` (Science project): Std5 Science C1 Unit Test 1 page — time is now 35 minutes** (sat in
   Week 3 Session 3, Wed 7 Oct, after a 5-min Power-Up discussion + 5-min review). Subtitle + instructions box only.
   Its questions and answers were revised **in KV** (`sy2627-std5-c1-unit1-science`) by the Science project.
@@ -142,6 +146,8 @@ page). Waiting to deploy: the Oct 2 Maths fixes + the Oct 3 save helper (open it
     the device. The lock screen checks the record book and sends a missing result automatically ("✓ This result
     had not reached the record book — it has just been sent"). **This also recovers the Oct 1–2 results that never
     reached the Sheet:** the student signs in on the SAME computer + browser and opens the page.
+  - **Deployed Oct 3:** Apps Script version 7 (same /exec URL), `addAttemptIdColumn` run, commit `83adf5b`;
+    live check → one `test.student` row with an attempt id in column M.
   - Tested: Apps Script against a mocked Sheet 10/10 (first save, duplicate retry, other student's id, no-id
     saves unchanged, bean cap, lock busy, lock released, bad token, column M missing, migration); browser 17/17
     (busy ×2 then saved → 1 row; reply lost → retry recognised → 1 row; down all sitting → recovered on return →
@@ -178,10 +184,36 @@ bare `vcSaveProgress()` — and call **`vcRecoverResult()`** on the lock screen.
 answer key goes in `..\Virtual-Classroom-private\` (beside the repo, not inside it) or under a
 gitignored `_source/` folder — never in a committed path, `backend/` mirrors included.
 
+**📐 STANDING RULE — readable assessment layout (Edwin, Oct 3 2026 — asked for many times; now written down).**
+Applies to EVERY new online assessment and to every existing one when it is next updated, any subject.
+The test card must NOT sit in a narrow column with empty bands on both sides, and the type must be big enough
+that nobody has to ask what the small raised number in a power is.
+- **Width:** `.test-container{max-width:none}` — the card fills the 1400px wrapper; wrapper side padding
+  `max(1rem,2vw)` with `width:100%;min-width:0`; the sticky progress bar matches (`.q-progress-inner` 1400px).
+- **Type (desktop):** question text `.q-label` 1.3rem · question number 1.35rem · options `.opt` 1.2rem (radio
+  22px) · answer boxes `.answer-input` 1.3rem · instructions / worked examples 1.15rem · section titles 1.45rem ·
+  part labels 1.15rem · hints ~1rem · result lines 1.05rem · Maths keypad buttons 1.3rem. **Phones (≤640px):**
+  question 1.12rem, options 1.05rem, boxes 1.15rem; the marks pill drops under the question; no sideways scroll
+  at 360px.
+- **Powers / superscripts:** every run of ⁰¹²³⁴⁵⁶⁷⁸⁹⁻ is wrapped in `<span class="vc-pow">` at **1.4em**
+  (questions from the server, results, explanations and the lock screen are all covered by one watcher script).
+- Maths builds it with `readable.py` (last build step). A page built another way copies the same CSS block
+  ("READABLE ASSESSMENT LAYOUT") and the superscript script from a Maths page.
+
+**🛡️ STANDING RULE — anti-cheat on classwork, quizzes and tests (NOT homework) (Edwin, Oct 2–3 2026).** The full
+Science anti-cheat, nothing less: (1) **answered-question blur** — 0.8 s after a question is answered it fades
+(opacity .18) and blurs; hovering it or working inside it (`:focus-within`) shows it again; un-answering removes
+it; results after submit are never blurred; (2) **idle blur** after 10 s ("Screen Hidden", click to continue);
+(3) **Focus Warning** on leaving the page — tab switch (`visibilitychange`) AND clicking to another window/app
+(`window` blur) — "Warning N of 3", with the blur behind it; (4) the warning count survives a reload and goes into
+the Sheet row (`ai_feedback` ends "| focus warnings: N"). All listeners start only once the questions are on
+screen. **Homework gets none of this** (Edwin's rule). Maths builds it with `secure.py`.
+
 **🙊 STANDING RULE — no real answers in public files (Oct 3, 2026).** Code comments, examples and these docs
 use NEUTRAL numbers, never a value that is the answer to a live or future item (the Oct 2 marking comments
-quoted Problem Set 1 answers while it was open; fixed the next day). Earlier commits still hold some
-Classwork 1 answers in git history — harmless only because both classes have sat it.
+quoted Problem Set 1 answers while it was open; fixed the same day). Git history still holds them: commit
+`83adf5b` has Problem Set 1 Q6, Q7 and the Q10a idea; older commits have Classwork 1 Q2 and Q8. Treat those
+items as burned — do not reuse them as they are.
 
 **🔑 STANDING RULE — answer keys in KV are MERGED, never pasted over (Oct 3, 2026).** A live KV entry carries
 fields the site writes itself — `open`, `schedule` and `gateUpdated` (set from the Teacher Dashboard switch).
@@ -221,7 +253,8 @@ would silently close or un-schedule the test.
    save each student's typed answers in their Sheet row so they show beside the correct ones; page review screen
    reads those instead of localStorage. Must ship before Tue Oct 6 or the date-based reveal stays as is.
 10. **Std5 Science C1 Unit Test 1 (`standard5/science/tests/c1-unit1/`) — Science project, before Wed Oct 7.** The
-   page (time changed to 35 min in `f49e9fa`) still needs the **resilience fix** (autosave per username, retried
+   page (time changed to 35 min in `f49e9fa`) still needs the **readable layout** and the **full anti-cheat**
+   (standing rules above), the **resilience fix** (autosave per username, retried
    gate + grade calls, nothing recorded when grading can't be reached) **plus the new save helper**
    (`vcSubmitResult` + `vcRecoverResult` on the lock screen). The Science project does it **once the Oct 3
    `edlo-utils.js` is pushed** (item 11). Its KV answer update follows the merge rule above.
