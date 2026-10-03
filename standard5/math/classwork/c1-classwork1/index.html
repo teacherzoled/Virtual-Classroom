@@ -692,8 +692,9 @@ body.theme-night .lms-badge.busy{color:#74C0FC;}
 @media (max-width:640px){ .mk-btn { min-width:40px; padding:0 .5rem; } }
 
 /* ═══ ANSWERED-QUESTION BLUR (Science anti-cheat, Oct 3 2026) — a finished answer fades so a neighbour can't
-   copy it; hovering it, or working inside it (typing, choosing), shows it again. ═══ */
-.question.answered-fade:focus-within{opacity:1;filter:blur(0px);}
+   copy it; hovering it, or working inside it (typing, choosing), shows it again.
+   Only a box being TYPED in (or a list being chosen from) stays readable — a clicked option fades at once. ═══ */
+.question.answered-fade:has(input[type=text]:focus,textarea:focus,select:focus){opacity:1;filter:blur(0px);}
 </style>
 
 <style>
@@ -744,7 +745,16 @@ body.theme-night .lms-badge.busy{color:#74C0FC;}
 .mk-btn,.mk-btn.mk-pow{font-size:1.3rem;min-height:48px;}
 .mk-tip{font-size:.95rem;}
 .mk-preview{font-size:1.1rem;}
-.vc-pow{font-size:1.4em;line-height:1;}            /* superscript digits: 10⁶ reads as clearly as 10^6 */
+.vc-pow{font-size:1.4em;line-height:1;}
+/* Science test markup (same rule, Science class names) */
+.sec-note{font-size:1.1rem;line-height:1.55;}
+.opt-letter{font-size:1.15rem;width:auto;min-width:1.2rem;}
+.tf-opt{width:170px;}
+.fib-input{font-size:1.3rem;width:min(100%,340px);padding:.7rem 1rem;}
+.match-item{font-size:1.15rem;width:260px;}
+.match-sel{font-size:1.1rem;width:min(100%,360px);min-height:46px;}
+.scenario-box{font-size:1.12rem;line-height:1.6;} .scenario-label{font-size:.8rem;}
+.q-figure,.label-figure{max-width:860px;}              /* figures stay a readable size, not stretched to full width */            /* superscript digits: 10⁶ reads as clearly as 10^6 */
 @media (max-width:640px){
   .sec-card{padding:1.2rem 1rem;}
   .q-label{font-size:1.12rem;} .q-num{font-size:1.15rem;}
@@ -753,6 +763,7 @@ body.theme-night .lms-badge.busy{color:#74C0FC;}
   .instr-card,.worked{font-size:1.02rem;}
   .sec-title{font-size:1.25rem;}
   .q-label{flex-wrap:wrap;} .q-label .q-pts{order:3;width:100%;padding-left:1.9rem;margin-left:0;}
+  .match-row{flex-wrap:wrap;} .match-item,.match-sel{width:100%;} .tf-opt{width:auto;flex:1;}
 }
 </style>
 </head>
@@ -1419,6 +1430,7 @@ loadQuestions();
     var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null,false), list=[], n;
     while((n=w.nextNode())){
       var p=n.parentNode; if(!p||!RE.test(n.nodeValue)) continue;
+      if(p.namespaceURI==='http://www.w3.org/2000/svg'||(p.closest&&p.closest('svg'))) continue;   /* labels inside pictures stay as drawn */
       var tag=p.nodeName; if(tag==='SCRIPT'||tag==='STYLE'||tag==='TEXTAREA'||tag==='OPTION'||(p.classList&&p.classList.contains('vc-pow'))) continue;
       list.push(n);
     }

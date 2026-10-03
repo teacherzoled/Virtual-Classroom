@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** October 3, 2026 — latest: Science C1 Unit Test 1 now meets the readable-layout and full anti-cheat rules (Science project) · earlier Oct 3: (readable assessment layout + full anti-cheat as STANDING RULES; Science C1 Unit Test 1 page gets the resilience fix + save helper (Science project, `001c112`); KV photos deployed; shared graded-results save helper + Apps Script duplicate guard — live; Oct 2 Maths fixes; `f49e9fa` recorded; KV merge rule) · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
+**Last updated:** October 3, 2026 — latest: answer-blur fix on all three assessment pages (a clicked option fades at once; only a box being typed in stays readable) + SVG labels left as drawn · Science C1 Unit Test 1 now meets the readable-layout and full anti-cheat rules (Science project) · earlier Oct 3: (readable assessment layout + full anti-cheat as STANDING RULES; Science C1 Unit Test 1 page gets the resilience fix + save helper (Science project, `001c112`); KV photos deployed; shared graded-results save helper + Apps Script duplicate guard — live; Oct 2 Maths fixes; `f49e9fa` recorded; KV merge rule) · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -146,11 +146,22 @@ shared save helper (open item 10 — done); its KV entry (revised questions + ph
   The Maths "READABLE ASSESSMENT LAYOUT" CSS adapted to the Science page's classes (card 1311px of a 1366px screen;
   question 1.3rem, options 1.2rem, blanks/boxes 1.3rem, matching/labels 1.15rem, instructions + section notes
   1.15rem; phone sizes; figures up to 620px, Q13 pictures 260px each) and the superscript watcher script.
-  Anti-cheat gaps closed: `.question.answered-fade:focus-within` (a question being worked in stays readable) and the
+  Anti-cheat gaps closed: an answered question being worked in stays readable (written as `:focus-within`, replaced
+  the same day by the `:has(…:focus)` rule below — see the anti-cheat standing rule) and the
   Focus Warning count kept per student (`<quiz key>::warnings`), surviving a reload and sent in the Sheet row
   (`ai_feedback` ends "| focus warnings: N"). Tested: 1366px card width + font sizes; 360px no sideways scroll;
   focus-within opacity 1 while typing, 0.18 after; warning count 1 after a reload and in the row; the resilience
   suite re-run (draft restore, grading down, save down + recovery, two students) all pass.
+- **Oct 3 (latest, this project) — answer-blur fix on the two pages that blur + SVG labels left as drawn.**
+  The blur rule was `:focus-within`, which kept a question readable while anything inside it had focus — including
+  a **clicked radio**, so a chosen multiple-choice answer stayed on screen for a neighbour to read. The two pages
+  that blur (Maths Classwork 1 and Science C1 Unit Test 1) now use
+  `:has(input[type=text]:focus,textarea:focus,select:focus)`: a box being typed in or a drop-down being chosen from
+  stays readable, a clicked option fades at once. **Problem Set 1 is homework, so it has no blur at all** — it
+  carries the dormant `.answered-fade` CSS from the shared block but nothing ever adds the class; it took only the
+  readable-layout and superscript changes. The superscript watcher also skips anything inside an `<svg>`,
+  because rewrapping an SVG label loses the character. The Science page keeps its own figure caps (620px / 260px)
+  and everything else from the Science-project commit — only those two lines changed there.
 - **Correction (Oct 3, Edwin):** online assessments are sat **one student per Chromebook or lab computer**. The
   older "groups of ~7 sharing one Chromebook" arrangement (still written in the Science Assessment Plan and
   master doc in the Curriculum folder) is obsolete.
@@ -224,17 +235,35 @@ that nobody has to ask what the small raised number in a power is.
   at 360px.
 - **Powers / superscripts:** every run of ⁰¹²³⁴⁵⁶⁷⁸⁹⁻ is wrapped in `<span class="vc-pow">` at **1.4em**
   (questions from the server, results, explanations and the lock screen are all covered by one watcher script).
-- Maths builds it with `readable.py` (last build step). A page built another way copies the same CSS block
-  ("READABLE ASSESSMENT LAYOUT") and the superscript script from a Maths page.
+  **Text inside a picture is left as drawn** — the watcher skips any node in an `<svg>`, because rewrapping an
+  SVG label loses the character (Oct 3).
+- **Figures do NOT stretch to the full-width card.** Each page caps them for its own pictures: Science C1 Unit
+  Test 1 uses `.q-figure img{max-width:620px}` and `.label-figure img{max-width:260px}`; the Maths pages cap
+  `.q-figure,.label-figure` at 860px. Set the cap from the pictures on the page, not from the card.
+- Maths builds it with `readable.py` (last build step); the same block also carries the Science class names
+  (`.sec-note`, `.fib-input`, `.match-item`, `.match-sel`, `.tf-opt`, `.scenario-box`). A page built another way
+  copies the CSS block ("READABLE ASSESSMENT LAYOUT") and the superscript script from Science C1 Unit Test 1 or
+  a Maths page.
 
 **🛡️ STANDING RULE — anti-cheat on classwork, quizzes and tests (NOT homework) (Edwin, Oct 2–3 2026).** The full
 Science anti-cheat, nothing less: (1) **answered-question blur** — 0.8 s after a question is answered it fades
-(opacity .18) and blurs; hovering it or working inside it (`:focus-within`) shows it again; un-answering removes
-it; results after submit are never blurred; (2) **idle blur** after 10 s ("Screen Hidden", click to continue);
+(opacity .18) and blurs; hovering it shows it again, and so does TYPING in it — only a text box, text area or
+drop-down with focus keeps its question readable:
+`.question.answered-fade:has(input[type=text]:focus,textarea:focus,select:focus)`. **A clicked option must fade at
+once.** `:focus-within` was tried first and is WRONG: a clicked radio keeps focus, so the
+answer the student had just chosen stayed readable (fixed Oct 3). Un-answering removes the fade; results after
+submit are never blurred; (2) **idle blur** after 10 s ("Screen Hidden", click to continue);
 (3) **Focus Warning** on leaving the page — tab switch (`visibilitychange`) AND clicking to another window/app
 (`window` blur) — "Warning N of 3", with the blur behind it; (4) the warning count survives a reload and goes into
 the Sheet row (`ai_feedback` ends "| focus warnings: N"). All listeners start only once the questions are on
 screen. **Homework gets none of this** (Edwin's rule). Maths builds it with `secure.py`.
+
+**🔁 STANDING RULE — two sessions push to `main` (Edwin, Oct 3 2026).** This project's session AND the
+Science & Technology project's session both commit to `main`, so the remote often moves between one session's
+commits. **Always `git pull` before committing**, keep what the other session pushed (never revert or rewrite it),
+and record your own changes here. Where both sessions did the same job twice, keep the page the other session
+shipped and apply only the genuinely new lines on top — that is how the Oct 3 blur fix reached Science C1 Unit
+Test 1 without losing its Science figure sizes or its `RESET-EDLO` cleanup.
 
 **🙊 STANDING RULE — no real answers in public files (Oct 3, 2026).** Code comments, examples and these docs
 use NEUTRAL numbers, never a value that is the answer to a live or future item (the Oct 2 marking comments
@@ -280,7 +309,7 @@ would silently close or un-schedule the test.
    save each student's typed answers in their Sheet row so they show beside the correct ones; page review screen
    reads those instead of localStorage. Must ship before Tue Oct 6 or the date-based reveal stays as is.
 10. ✅ **DONE Oct 3 — Std5 Science C1 Unit Test 1 is fully up to the standing rules** (resilience + save helper in
-   `001c112`; readable layout + `:focus-within` + warning count in the latest Science-project commit — see "What
+   `001c112`; readable layout + answered-question blur + warning count in the latest Science-project commit — see "What
    shipped"). Before its first online sitting: one test-student submission against the live Workers. Original note:
    ✅ Oct 3 (`001c112`, Science project): resilience fix +
    shared save helper. ⬜ **STILL TO DO (now done):** the readable layout standing rule (the card is still a 900px column,

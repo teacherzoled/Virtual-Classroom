@@ -320,7 +320,7 @@ body.theme-night .lms-badge.busy{color:#74C0FC;}
 .gate-msg{color:var(--body-color);opacity:.85;font-size:1.02rem;line-height:1.55;margin:0 auto 1.4rem;max-width:30rem;}
 .gate-actions{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;}
 /* ═══ ANSWERED-QUESTION BLUR — working inside a question (typing, choosing) shows it again (anti-cheat rule, Oct 3 2026) ═══ */
-.question.answered-fade:focus-within{opacity:1;filter:blur(0px);}
+.question.answered-fade:has(input[type=text]:focus,textarea:focus,select:focus){opacity:1;filter:blur(0px);}   /* Oct 3: NOT :focus-within — a clicked radio keeps focus, so the chosen answer stayed readable */
 /* ═══ READABLE ASSESSMENT LAYOUT — standing rule (Edwin, Oct 3 2026) ═══
    The test card fills the page width (no 900px column) and the type is big enough to read from a
    computer-room chair. Same sizes as the Maths pages; see PROJECT-DOCS "Readable assessment layout". */
@@ -1338,6 +1338,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     while((n=w.nextNode())){
       var p=n.parentNode; if(!p||!RE.test(n.nodeValue)) continue;
       var tag=p.nodeName; if(tag==='SCRIPT'||tag==='STYLE'||tag==='TEXTAREA'||tag==='OPTION'||(p.classList&&p.classList.contains('vc-pow'))) continue;
+      if(p.namespaceURI==='http://www.w3.org/2000/svg'||(p.closest&&p.closest('svg'))) continue;   /* labels inside pictures stay as drawn */
       list.push(n);
     }
     list.forEach(function(t){
