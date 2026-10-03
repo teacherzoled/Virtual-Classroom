@@ -258,6 +258,14 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
 .prog-bg{height:16px;background:var(--progress-bg);border-radius:999px;overflow:hidden;}
 .prog-fill{height:100%;border-radius:999px;transition:width .8s cubic-bezier(.22,.68,0,1.2),background .5s;background:var(--top-badge-bg);}
 .perf-badge{display:block;text-align:center;font-family:'Fredoka One',cursive;font-size:1.3rem;padding:.9rem;border-radius:14px;background:var(--card-bg);border:1.5px solid var(--card-border);margin-bottom:1rem;}
+.lms-badge{display:none;margin:.9rem auto 0;max-width:640px;padding:11px 15px;border-radius:12px;font-size:.85rem;font-weight:600;text-align:center;line-height:1.45;}
+.lms-badge.show{display:block;}
+.lms-badge.ok{background:rgba(105,219,124,.14);border:1px solid rgba(105,219,124,.45);color:#2f9e44;}
+.lms-badge.warn{background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.45);color:#e03131;}
+body.theme-night .lms-badge.ok{color:#69DB7C;} body.theme-night .lms-badge.warn{color:#FF6B6B;}
+.lms-badge.busy{background:rgba(77,171,247,.12);border:1px solid rgba(77,171,247,.45);color:#1971c2;}
+body.theme-night .lms-badge.busy{color:#74C0FC;}
+.lms-badge button{margin-left:.6rem;font:inherit;padding:4px 12px;border-radius:8px;border:1px solid currentColor;background:none;color:inherit;cursor:pointer;min-height:36px;}
 .pending-note{font-size:.78rem;font-weight:700;color:var(--section-lbl);text-align:center;font-style:italic;margin-bottom:1rem;line-height:1.5;}
 .pdf-row{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;}
 .modal-overlay{position:fixed;inset:0;z-index:200;background:var(--modal-bg);display:flex;align-items:center;justify-content:center;animation:fadeIn .2s ease both;padding:1rem;}
@@ -387,6 +395,7 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
     <div class="lock-title">Test Already Submitted</div>
     <div class="lock-msg">You have already completed this test. Your results are saved below. Download your PDF report or go back to Science.</div>
     <div class="lock-scores" id="lockScores"></div>
+    <div class="lms-badge" id="lmsLockBadge"></div>
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
       <button class="btn-primary" onclick="downloadPDF()">📄 Download PDF Report</button>
       <a class="btn-secondary" href="https://edlovirtualclassroom.com/standard5/science/">← Back to Science</a>
@@ -444,6 +453,7 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
       </div>
       <div class="perf-badge" id="perfBadge">—</div>
       <div class="pending-note" id="pendingNote" style="display:none"></div>
+      <div class="lms-badge" id="lmsSaveBadge"></div>
       <div class="pdf-row">
         <button class="btn-primary" onclick="downloadPDF()">📄 Download PDF Report</button>
         <a class="btn-secondary" href="https://edlovirtualclassroom.com/standard5/science/">← Back to Science</a>
@@ -453,7 +463,7 @@ h1{font-family:'Fredoka One',cursive;font-size:clamp(1.9rem,5vw,3.1rem);line-hei
     <!-- SUBMIT -->
     <div class="submit-area" id="submitArea">
       <button class="btn-primary" id="submitBtn" disabled onclick="startSubmit()">Submit Test</button>
-      <div class="spinner-wrap" id="spinnerWrap"><div class="spinner"></div><span>Grading your test… a few seconds.</span></div>
+      <div class="spinner-wrap" id="spinnerWrap"><div class="spinner"></div><span id="spinnerText">Grading your test… a few seconds.</span></div>
       <div class="submit-hint" id="submitHint">Answer all 15 questions to submit</div>
     </div>
   </div>
@@ -493,6 +503,12 @@ const SUBJECT       = "Science";
 const LO_CODE       = "SC1.09";
 const ACTIVITY_TYPE = "test";
 const ACTIVITY_NAME = "Cycle 1 Unit Test 1 — Climate & Weather";
+/* SITE SESSION — set on load by vcRequireLogin() (edlo-utils.js). The saved result, the
+   autosaved draft and any unsent Sheet row are all kept per SIGNED-IN STUDENT, so two
+   students on one Chromebook never see or overwrite each other's work. */
+let LMS = null;
+function who_(){ return (LMS && LMS.username) ? LMS.username : 'guest'; }
+function quizKey(){ return QUIZ_KEY + '::' + who_(); }
 
 /* ---------------- ITEM DEFINITIONS (display data only) ----------------
    NO answers. NO accept-lists. NO rubrics. Marks shown here are for
@@ -631,6 +647,7 @@ function updateQuestionProgress(){
   hint.textContent=ready?'✅ All questions answered — ready to submit!':`Answer all ${TOTAL_Q} questions to submit (${TOTAL_Q-answered} remaining)`;
   hint.classList.toggle('ready',ready);
   updateFade();
+  saveDraft();
 }
 
 function updateFade(){
@@ -674,6 +691,7 @@ let GRADED=null; // final merged results, drives report + PDF
 
 function startSubmit(){
   if(document.body.classList.contains('test-locked'))return;
+  if(retryPasskey){ runSubmit(retryPasskey); return; }
   // passkey gate (modal) — carried forward from the S6 design
   const saved=getSavedPasskey();
   if(saved){ runSubmit(saved); }
@@ -697,26 +715,25 @@ async function runSubmit(passkey){
   const btn=document.getElementById('submitBtn');
   btn.disabled=true; btn.textContent='Grading…';
   document.getElementById('spinnerWrap').classList.add('show');
-  document.getElementById('submitHint').style.display='none';
+  setSpinnerText('Grading your test… a few seconds.');
+  const h0=document.getElementById('submitHint'); h0.style.display='none'; h0.style.color=''; h0.style.fontWeight='';
 
   const answers=collectAnswers();
+  saveDraft();
 
-  // ---- ONE call: Worker grades the WHOLE test (fixed + written) ----
-  // The upgraded Worker scores fixed items against KV and AI-grades the
-  // written items against the rubrics stored in KV, all server-side.
-  let grade=null;
+  // ---- ONE call: Worker grades the WHOLE test (fixed + written), retried with a timeout ----
+  let out;
   try{
-    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({passkey,mode:'grade',testId:TEST_ID,answers})});
-    if(res.status===403){ badPasskey(); return; }
-    grade=await res.json();
-    if(!grade.ok) throw new Error(grade.error||'grade failed');
-  }catch(e){
-    console.error('grade error',e);
-    grade={ok:false,results:{}};   // everything falls back to pending in mergeAndShow
-  }
+    out=await postJSON({passkey,mode:'grade',testId:TEST_ID,answers},[0,2500,6000],45000,
+      (n,of)=>setSpinnerText('The internet is slow — trying again ('+n+' of '+of+')… keep this page open.'));
+  }catch(e){ console.error('grade error',e); gradeUnreachable(passkey); return; }
+  const grade=out.body||{};
+  if(out.status===403 || grade.error==='INVALID_KEY'){ retryPasskey=null; badPasskey(); return; }
+  if(!grade.ok){ console.error('grade error',grade); gradeUnreachable(passkey); return; }
 
+  retryPasskey=null;
   savePasskey(passkey);
+  clearDraft();
   mergeAndShow(grade,answers);
   document.getElementById('spinnerWrap').classList.remove('show');
 }
@@ -793,9 +810,11 @@ function mergeAndShow(grade,answers){
 
   // save + lock + reveal
   const saveData=buildSaveData({autoEarned,autoTotal,writtenEarned,writtenTotal,secEarned,secTotal,total,pct,band,perItem,answers});
-  saveData.__q={items:ITEMS,sections:SECTIONS,figs:FIGURES};
+  saveData.__q={items:ITEMS,sections:SECTIONS,figs:{}};   /* pictures are not kept on the device (size) */
+  saveData.anyPending=anyPending;
+  if(typeof vcNewAttemptId==='function') saveData.attemptId=vcNewAttemptId();
   saveResult(saveData); window._savedData=saveData; GRADED=saveData;
-  if(typeof vcSaveProgress==='function'){ try{ vcSaveProgress({subject:SUBJECT,lo_code:LO_CODE,activity_type:ACTIVITY_TYPE,activity_name:ACTIVITY_NAME,score:total,max_score:MAX_MARKS}); }catch(e){ console.warn('save-progress skipped',e); } }
+  lmsSave(saveData);   /* -> 'All Results' row for the signed-in student (retried, never written twice) */
 
   document.getElementById('submitArea').style.display='none';
   const rs=document.getElementById('resultsSection'); rs.classList.add('show');
@@ -881,8 +900,8 @@ function buildSaveData(x){
     perItem:x.perItem, answers
   };
 }
-function getSavedResult(){try{return JSON.parse(localStorage.getItem(QUIZ_KEY));}catch(e){return null;}}
-function saveResult(d){localStorage.setItem(QUIZ_KEY,JSON.stringify(d));}
+function getSavedResult(){try{return JSON.parse(localStorage.getItem(quizKey()));}catch(e){return null;}}
+function saveResult(d){try{localStorage.setItem(quizKey(),JSON.stringify(d));}catch(e){console.warn('result not stored on device',e);}}
 function getSavedPasskey(){return localStorage.getItem(PK_KEY)||'';}
 function savePasskey(k){localStorage.setItem(PK_KEY,k);}
 function clearPasskey(){localStorage.removeItem(PK_KEY);}
@@ -902,7 +921,7 @@ function showLockScreen(d){
 function teacherReset(){
   const k=prompt('Teacher reset — enter reset code:');
   if(k===null)return;
-  if(k.trim().toUpperCase()==='RESET-EDLO'){localStorage.removeItem(QUIZ_KEY);location.reload();}
+  if(k.trim().toUpperCase()==='RESET-EDLO'){try{localStorage.removeItem(quizKey());localStorage.removeItem(draftKey());}catch(e){}location.reload();}
   else alert('Incorrect reset code.');
 }
 
@@ -1054,6 +1073,139 @@ function downloadPDF(){
   doc.save('Std5_Cycle1_'+(safe||'student')+'.pdf');
 }
 
+/* ═══ RESILIENCE: autosave + retry + nothing recorded on failure (Oct 3, 2026) ═══
+   Standing rule (PROJECT-DOCS, Sept 2026), same pattern as Maths Problem Set 1:
+   1) Every answer is saved on THIS computer as the student works, under his or her own
+      username, so a crash, reload or closed tab loses nothing.
+   2) Loading the questions and grading are retried with a timeout.
+   3) If grading still cannot be reached, NOTHING is recorded and nothing is locked: the
+      answers stay on screen and the student presses "Try Submitting Again".
+   Grading writes nothing on the server, so a retry can never double-count. */
+const DRAFT_BASE = 'vc-draft-' + TEST_ID;
+function draftKey(){ return DRAFT_BASE + '::' + who_(); }
+const DRAFT_MAX_AGE = 7*24*60*60*1000;
+let draftReady = false;
+let retryPasskey = null;
+function saveDraft(){
+  if(!draftReady || testSubmitted) return;
+  try{
+    const nm=document.getElementById('studentName'), gp=document.getElementById('studentGroup');
+    localStorage.setItem(draftKey(), JSON.stringify({t:Date.now(), name:nm?nm.value:'', group:gp?gp.value:'', a:collectAnswers()}));
+  }catch(e){}
+}
+function clearDraft(){ draftReady=false; try{ localStorage.removeItem(draftKey()); }catch(e){} }
+function restoreDraft(){
+  if(testSubmitted) return;
+  let d=null, n=0;
+  try{ d=JSON.parse(localStorage.getItem(draftKey())); }catch(e){}
+  if(d && d.a && (Date.now()-(d.t||0)) < DRAFT_MAX_AGE){
+    ITEMS.forEach(it=>{
+      const v=d.a[it.qid];
+      if(v==null || v==='') return;
+      if(it.type==='mc'||it.type==='tf'){
+        const inp=document.querySelector(`input[name="${it.qid}"][value="${v}"]`);
+        if(inp){ inp.checked=true; const o=inp.closest('.opt'); if(o) o.classList.add('selected'); n++; }
+      }else if(it.type==='match'||it.type==='label'){
+        if(Array.isArray(v)){ let any=false;
+          v.forEach((x,i)=>{ const el=document.querySelector(`[name="${it.qid}_${i}"]`); if(el && x!=null && x!==''){ el.value=x; any=true; } });
+          if(any) n++; }
+      }else{
+        const el=document.querySelector(`[name="${it.qid}"]`); if(el){ el.value=v; n++; }
+      }
+    });
+    const nm=document.getElementById('studentName'); if(nm && d.name && !nm.value) nm.value=d.name;
+    const gp=document.getElementById('studentGroup'); if(gp && d.group && !gp.value) gp.value=d.group;
+  }else if(d){ try{ localStorage.removeItem(draftKey()); }catch(e){} }
+  draftReady=true;
+  updateQuestionProgress();
+  if(n) showDraftBanner(n);
+}
+function showDraftBanner(n){
+  const box=document.getElementById('testContainer'); if(!box) return;
+  const b=document.createElement('div');
+  b.className='draft-banner';
+  b.style.cssText='margin:0 0 1.2rem;padding:.85rem 1.1rem;border-radius:14px;border:1.5px solid #20C997;background:rgba(32,201,151,.13);font-weight:700;color:var(--body-color);display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;justify-content:space-between;';
+  const t=document.createElement('span');
+  t.textContent='Welcome back! Your '+n+' saved answer'+(n===1?' has':'s have')+' been put back. Carry on from where you stopped.';
+  const btn=document.createElement('button');
+  btn.type='button'; btn.textContent='Start again with a blank test';
+  btn.style.cssText='min-height:44px;padding:0 16px;border-radius:12px;border:1.5px solid currentColor;background:transparent;color:inherit;font:inherit;font-weight:800;cursor:pointer;';
+  btn.onclick=()=>{ if(confirm('Clear your saved answers and start this test again?')){ clearDraft(); location.reload(); } };
+  b.appendChild(t); b.appendChild(btn);
+  box.insertBefore(b, box.firstChild);
+}
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+/* POST to the Worker with retries. Retries on no network, timeout or a 5xx.
+   Returns {status, body} for any other response; throws after the last try. */
+async function postJSON(payload, waits, timeoutMs, onRetry){
+  let lastErr=null;
+  for(let i=0;i<waits.length;i++){
+    if(waits[i]){ if(onRetry) onRetry(i+1, waits.length); await sleep(waits[i]); }
+    const ctl=(typeof AbortController!=='undefined') ? new AbortController() : null;
+    const timer=ctl ? setTimeout(()=>ctl.abort(), timeoutMs) : null;
+    try{
+      const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(payload), signal: ctl ? ctl.signal : undefined});
+      if(res.status>=500){ lastErr=new Error('server '+res.status); continue; }
+      const body=await res.json().catch(()=>null);
+      return {status:res.status, body};
+    }catch(e){ lastErr=e; }
+    finally{ if(timer) clearTimeout(timer); }
+  }
+  throw lastErr || new Error('network');
+}
+function setSpinnerText(msg){ const el=document.getElementById('spinnerText'); if(el) el.textContent=msg; }
+function gradeUnreachable(passkey){
+  retryPasskey=passkey||null;
+  document.getElementById('spinnerWrap').classList.remove('show');
+  setSpinnerText('Grading your test… a few seconds.');
+  const btn=document.getElementById('submitBtn'); btn.disabled=false; btn.textContent='Try Submitting Again';
+  const h=document.getElementById('submitHint'); h.style.display='block';
+  h.style.color='#e03131'; h.style.fontWeight='800';
+  h.textContent='Your test could not be marked just now — usually the internet dropped. Your answers are saved on this device, so nothing is lost. Press "Try Submitting Again". If it keeps failing, tell Mr. EdLo.';
+  resetIdleTimer();
+}
+
+/* ═══ SHEET ROW through the shared helper (edlo-utils.js vcSubmitResult, Oct 3, 2026) ═══
+   ONE attempt id per result (kept with the result on this device), 3 automatic retries,
+   never written twice, and an unsent result waits on this computer under the student's
+   own name until it gets through. RECOVERY ON RETURN: when the lock screen shows a result
+   kept on this computer but the record book has no row for it, it is sent once. */
+const LMS_WAIT_MSG='⚠ Your result has not reached Mr. EdLo’s record book yet. It is safe on this computer and will be sent the next time you sign in and open this test here. ';
+function lmsBadge(kind,html,id){ const b=document.getElementById(id||'lmsSaveBadge'); if(!b) return; b.className='lms-badge show '+kind; b.innerHTML=html; }
+function lmsPayload(d){
+  const parts=[]; const pi=d.perItem||{};
+  ((d.__q&&d.__q.items)||ITEMS).forEach(it=>{ const r=pi[it.qid]||{}; parts.push(it.qid+' '+(r.pending?'pending':((r.got==null?0:r.got)+'/'+(r.pts||it.pts)))); });
+  return { subject:SUBJECT, lo_code:LO_CODE, activity_type:ACTIVITY_TYPE, activity_name:ACTIVITY_NAME,
+           score:d.total, max_score:MAX_MARKS, ai_feedback:parts.join(' · ')+(d.anyPending?' | some answers pending — check by hand':'') };
+}
+async function lmsSave(d){
+  if(!LMS){ lmsBadge('warn','⚠ Not signed in, so this result did not reach Mr. EdLo’s record book. Show him this screen before you leave the computer.'); return; }
+  if(typeof vcSubmitResult!=='function'){ lmsBadge('warn','⚠ The record book helper did not load. Show Mr. EdLo this screen.'); return; }
+  if(!d.attemptId){ d.attemptId=vcNewAttemptId(); saveResult(d); }
+  const payload=lmsPayload(d); payload.attempt_id=d.attemptId;
+  lmsBadge('busy','Sending your result to Mr. EdLo’s record book…');
+  const r=await vcSubmitResult(payload,{ onRetry:(n,of)=>lmsBadge('busy','The record book is busy — trying again by itself ('+n+' of '+of+')… please stay on this page.') });
+  if(r && r.ok) lmsBadge('ok','✓ Saved to your record — Mr. EdLo can see it. '+d.total+'/'+MAX_MARKS+(r.percent!=null?' ('+r.percent+'%)':'')+'.');
+  else lmsBadge('warn',LMS_WAIT_MSG+'<button onclick="lmsRetry()">Try again</button>');
+}
+async function lmsRetry(id){
+  lmsBadge('busy','Sending…',id);
+  const r=(typeof vcSendUnsent==='function')?await vcSendUnsent():{ok:false};
+  if(r.ok) lmsBadge('ok','✓ Saved to your record — Mr. EdLo can see it.',id);
+  else lmsBadge('warn','Still cannot reach the record book. Your result stays safe on this computer. <button onclick="lmsRetry(\''+(id||'lmsSaveBadge')+'\')">Try again</button>',id);
+}
+async function lmsRecover(d){
+  if(!LMS || !d || typeof vcRecoverResult!=='function') return;
+  const id='lmsLockBadge'; lmsBadge('busy','Checking Mr. EdLo’s record book…',id);
+  const payload=lmsPayload(d); if(d.attemptId) payload.attempt_id=d.attemptId;
+  const r=await vcRecoverResult({ activity_name:ACTIVITY_NAME, payload });
+  if(r.status==='saved')          lmsBadge('ok','✓ Mr. EdLo has this result in his record book.',id);
+  else if(r.status==='recovered') lmsBadge('ok','✓ This result had not reached the record book — it has just been sent. Mr. EdLo can see it now.',id);
+  else if(r.status==='unsent')    lmsBadge('warn',LMS_WAIT_MSG+'<button onclick="lmsRecover(getSavedResult())">Try again</button>',id);
+  else                            lmsBadge('warn','Could not check the record book just now. <button onclick="lmsRecover(getSavedResult())">Check again</button>',id);
+}
+
 /* ---------------- INIT ---------------- */
 /* ---------------- GATE + LOGIN + LOAD (secure test gate) ---------------- */
 function showGateClosed(){
@@ -1092,13 +1244,15 @@ async function loadTest(){
   // 1) Already submitted on THIS device -> restore the saved lock (works offline).
   const saved=getSavedResult();
   if(saved){ hydrate(saved.__q||{}); showLockScreen(saved);
-    const pw=document.getElementById('qProgressWrap'); if(pw)pw.style.display='none'; testSubmitted=true; return; }
-  // 2) Ask the Worker's secure gate whether this test is open, and for its questions.
+    const pw=document.getElementById('qProgressWrap'); if(pw)pw.style.display='none'; testSubmitted=true;
+    lmsRecover(saved);   /* result on this device but not in the Sheet? send it, once */
+    return; }
+  if(LMS && typeof vcUnsent==='function' && vcUnsent().length){ vcSendUnsent(); }   /* other results still waiting */
+  // 2) Ask the Worker's secure gate whether this test is open, and for its questions (retried).
   let data;
   try{
-    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({mode:'questions',testId:TEST_ID})});
-    data=await res.json();
+    const out=await postJSON({mode:'questions',testId:TEST_ID},[0,1500,4000],20000);
+    data=out.body;
   }catch(e){ console.error('load error',e); showGateError('Could not reach the test server. Check your internet connection and reload.'); return; }
   if(!data||!data.ok){ showGateError('This test could not be loaded. Please tell Mr. EdLo.'+(data&&data.error?' ('+data.error+')':'')); return; }
   if(!data.open){ showGateClosed(); return; }
@@ -1108,10 +1262,13 @@ async function loadTest(){
   if(priorRow){ showAccountLock(priorRow); return; }
   // 4) Cleared to take the test.
   hydrate(data.questions);
-  render(); updateQuestionProgress(); attachIdleListeners();
+  render(); restoreDraft(); attachIdleListeners();
+  const nm=document.getElementById('studentName');
+  if(nm && LMS && !nm.value) nm.value=LMS.full_name||LMS.username||'';
+  ['studentName','studentGroup'].forEach(id=>{ const el=document.getElementById(id); if(el) el.addEventListener('input',saveDraft); });
 }
 window.addEventListener('DOMContentLoaded',()=>{
-  if(typeof vcRequireLogin==='function' && !vcRequireLogin()) return;
+  if(typeof vcRequireLogin==='function'){ LMS=vcRequireLogin(); if(!LMS) return; }
   makeStars();
   const th=localStorage.getItem('vc-theme');
   if(th){document.body.className='theme-'+th;document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));const map={night:0,sunny:1,cloudy:2,nature:3};const btns=document.querySelectorAll('.theme-btn');if(btns[map[th]])btns[map[th]].classList.add('active');}
