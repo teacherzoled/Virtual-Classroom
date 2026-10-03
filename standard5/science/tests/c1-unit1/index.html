@@ -319,6 +319,49 @@ body.theme-night .lms-badge.busy{color:#74C0FC;}
 .gate-title{font-family:'Fredoka One',cursive;font-size:1.5rem;margin-bottom:.6rem;color:var(--body-color);}
 .gate-msg{color:var(--body-color);opacity:.85;font-size:1.02rem;line-height:1.55;margin:0 auto 1.4rem;max-width:30rem;}
 .gate-actions{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;}
+/* ═══ ANSWERED-QUESTION BLUR — working inside a question (typing, choosing) shows it again (anti-cheat rule, Oct 3 2026) ═══ */
+.question.answered-fade:focus-within{opacity:1;filter:blur(0px);}
+/* ═══ READABLE ASSESSMENT LAYOUT — standing rule (Edwin, Oct 3 2026) ═══
+   The test card fills the page width (no 900px column) and the type is big enough to read from a
+   computer-room chair. Same sizes as the Maths pages; see PROJECT-DOCS "Readable assessment layout". */
+.wrapper{width:100%;min-width:0;padding-left:max(1rem,2vw);padding-right:max(1rem,2vw);}
+.q-label,.opt,.match-item,.scenario-box,.fb-box{overflow-wrap:anywhere;}
+.test-container{max-width:none;}
+.q-progress-inner{max-width:1400px;padding:0 max(1rem,2vw);}
+.sec-card{padding:1.8rem 2.2rem;}
+.sec-title{font-size:1.45rem;}
+.sec-pts{font-size:.95rem;}
+.sec-note{font-size:1.15rem;line-height:1.55;}
+.scenario-box{font-size:1.15rem;line-height:1.6;}
+.q-label{font-size:1.3rem;line-height:1.55;}
+.q-num{font-size:1.35rem;}
+.q-pts{font-size:.9rem;}
+.opt{font-size:1.2rem;padding:.85rem 1.15rem;}
+.opt input{width:22px;height:22px;}
+.answer-input{font-size:1.3rem;padding:.8rem 1.1rem;}
+.fib-input{font-size:1.3rem;}
+.match-item{font-size:1.15rem;}
+.match-sel{font-size:1.15rem;min-height:48px;}
+.fb-box{font-size:1.05rem;line-height:1.5;}
+.q-figure img{max-width:620px!important;}
+.label-figure img{max-width:260px!important;}
+.sc-group input{font-size:1.05rem;min-width:0;width:100%;}
+.student-card{flex-wrap:wrap;}
+.sc-group label{font-size:.78rem;}
+.lock-msg,.modal-desc,.blur-sub,.warn-msg{font-size:1.05rem;}
+.submit-hint{font-size:.95rem;}
+.lms-badge{font-size:1rem;}
+.vc-pow{font-size:1.4em;line-height:1;}
+@media (max-width:640px){
+  .sec-card{padding:1.2rem 1rem;}
+  .q-label{font-size:1.12rem;} .q-num{font-size:1.15rem;}
+  .opt{font-size:1.05rem;padding:.75rem .9rem;}
+  .answer-input,.fib-input{font-size:1.15rem;}
+  .match-item,.match-sel{font-size:1.02rem;}
+  .scenario-box,.sec-note{font-size:1.02rem;}
+  .sec-title{font-size:1.25rem;}
+  .q-label{flex-wrap:wrap;} .q-label .q-pts{order:3;width:100%;padding-left:1.9rem;margin-left:0;}
+}
 </style>
 </head>
 <body class="theme-night">
@@ -812,6 +855,7 @@ function mergeAndShow(grade,answers){
   const saveData=buildSaveData({autoEarned,autoTotal,writtenEarned,writtenTotal,secEarned,secTotal,total,pct,band,perItem,answers});
   saveData.__q={items:ITEMS,sections:SECTIONS,figs:{}};   /* pictures are not kept on the device (size) */
   saveData.anyPending=anyPending;
+  saveData.focusWarnings=tabWarnings;
   if(typeof vcNewAttemptId==='function') saveData.attemptId=vcNewAttemptId();
   saveResult(saveData); window._savedData=saveData; GRADED=saveData;
   lmsSave(saveData);   /* -> 'All Results' row for the signed-in student (retried, never written twice) */
@@ -921,7 +965,7 @@ function showLockScreen(d){
 function teacherReset(){
   const k=prompt('Teacher reset — enter reset code:');
   if(k===null)return;
-  if(k.trim().toUpperCase()==='RESET-EDLO'){try{localStorage.removeItem(quizKey());localStorage.removeItem(draftKey());}catch(e){}location.reload();}
+  if(k.trim().toUpperCase()==='RESET-EDLO'){try{localStorage.removeItem(quizKey());localStorage.removeItem(draftKey());localStorage.removeItem(warnKey());}catch(e){}location.reload();}
   else alert('Incorrect reset code.');
 }
 
@@ -948,10 +992,15 @@ function dismissBlur(){blurActive=false;document.getElementById('blurOverlay').c
 function attachIdleListeners(){['mousemove','mousedown','keydown','touchstart','scroll','click'].forEach(e=>document.addEventListener(e,resetIdleTimer,{passive:true}));resetIdleTimer();}
 // tab-switch warnings
 let tabWarnings=0; const MAX_WARNINGS=3;
-function handleVisibilityChange(){if(testSubmitted||!ITEMS.length)return;if(document.hidden){tabWarnings++;document.getElementById('warnCount').textContent='Warning '+tabWarnings+' of '+MAX_WARNINGS;document.getElementById('warnOverlay').classList.add('show');showBlur();}}
+/* The warning count is kept per signed-in student, survives a reload and goes into the Sheet row (anti-cheat rule, Oct 3 2026). */
+function warnKey(){ return quizKey()+'::warnings'; }
+function loadWarnings(){ try{ tabWarnings=Number(localStorage.getItem(warnKey()))||0; }catch(e){ tabWarnings=0; } }
+function noteWarning(){tabWarnings++;try{localStorage.setItem(warnKey(),String(tabWarnings));}catch(e){}
+  document.getElementById('warnCount').textContent='Warning '+tabWarnings+' of '+MAX_WARNINGS;document.getElementById('warnOverlay').classList.add('show');showBlur();}
+function handleVisibilityChange(){if(testSubmitted||!ITEMS.length)return;if(document.hidden){noteWarning();}}
 function dismissWarning(){document.getElementById('warnOverlay').classList.remove('show');dismissBlur();}
 document.addEventListener('visibilitychange',handleVisibilityChange);
-window.addEventListener('blur',()=>{if(!testSubmitted&&ITEMS.length&&!document.hidden){setTimeout(()=>{if(!document.hasFocus()&&!testSubmitted&&ITEMS.length){tabWarnings++;document.getElementById('warnCount').textContent='Warning '+tabWarnings+' of '+MAX_WARNINGS;document.getElementById('warnOverlay').classList.add('show');showBlur();}},300);}});
+window.addEventListener('blur',()=>{if(!testSubmitted&&ITEMS.length&&!document.hidden){setTimeout(()=>{if(!document.hasFocus()&&!testSubmitted&&ITEMS.length&&!document.hidden){noteWarning();}},300);}});
 
 /* ---------------- PDF REPORT (jsPDF) ---------------- */
 function downloadPDF(){
@@ -1177,7 +1226,7 @@ function lmsPayload(d){
   const parts=[]; const pi=d.perItem||{};
   ((d.__q&&d.__q.items)||ITEMS).forEach(it=>{ const r=pi[it.qid]||{}; parts.push(it.qid+' '+(r.pending?'pending':((r.got==null?0:r.got)+'/'+(r.pts||it.pts)))); });
   return { subject:SUBJECT, lo_code:LO_CODE, activity_type:ACTIVITY_TYPE, activity_name:ACTIVITY_NAME,
-           score:d.total, max_score:MAX_MARKS, ai_feedback:parts.join(' · ')+(d.anyPending?' | some answers pending — check by hand':'') };
+           score:d.total, max_score:MAX_MARKS, ai_feedback:parts.join(' · ')+(d.anyPending?' | some answers pending — check by hand':'')+' | focus warnings: '+(d.focusWarnings!=null?d.focusWarnings:tabWarnings) };
 }
 async function lmsSave(d){
   if(!LMS){ lmsBadge('warn','⚠ Not signed in, so this result did not reach Mr. EdLo’s record book. Show him this screen before you leave the computer.'); return; }
@@ -1262,6 +1311,7 @@ async function loadTest(){
   if(priorRow){ showAccountLock(priorRow); return; }
   // 4) Cleared to take the test.
   hydrate(data.questions);
+  loadWarnings();
   render(); restoreDraft(); attachIdleListeners();
   const nm=document.getElementById('studentName');
   if(nm && LMS && !nm.value) nm.value=LMS.full_name||LMS.username||'';
@@ -1275,6 +1325,35 @@ window.addEventListener('DOMContentLoaded',()=>{
   const de=document.getElementById('testDate'); if(de){const dt=new Date();de.value=String(dt.getDate()).padStart(2,'0')+' / '+String(dt.getMonth()+1).padStart(2,'0')+' / '+dt.getFullYear();}
   loadTest();
 });
+</script>
+<script>
+/* ═══ READABLE ASSESSMENT LAYOUT — bigger superscripts (Edwin, Oct 3 2026; same script as the Maths pages) ═══
+   Wraps runs of superscript characters (⁰¹²³⁴⁵⁶⁷⁸⁹⁻) in <span class="vc-pow">. Watches the page, so questions
+   loaded from the server, results and explanations are covered too. */
+(function(){
+  var RE=/[⁰¹²³⁴-⁹⁻]+/;
+  function wrap(root){
+    if(!root||!document.createTreeWalker) return;
+    var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null,false), list=[], n;
+    while((n=w.nextNode())){
+      var p=n.parentNode; if(!p||!RE.test(n.nodeValue)) continue;
+      var tag=p.nodeName; if(tag==='SCRIPT'||tag==='STYLE'||tag==='TEXTAREA'||tag==='OPTION'||(p.classList&&p.classList.contains('vc-pow'))) continue;
+      list.push(n);
+    }
+    list.forEach(function(t){
+      var parts=t.nodeValue.split(/([⁰¹²³⁴-⁹⁻]+)/), f=document.createDocumentFragment();
+      parts.forEach(function(s,i){ if(!s) return; if(i%2){ var sp=document.createElement('span'); sp.className='vc-pow'; sp.textContent=s; f.appendChild(sp); } else f.appendChild(document.createTextNode(s)); });
+      t.parentNode.replaceChild(f,t);
+    });
+  }
+  function start(){
+    wrap(document.body);
+    if(window.MutationObserver) new MutationObserver(function(ms){ ms.forEach(function(m){
+      if(m.type==='characterData') wrap(m.target.parentNode); else m.addedNodes.forEach(function(x){ if(x.nodeType===1) wrap(x); else if(x.nodeType===3&&x.parentNode) wrap(x.parentNode); });
+    }); }).observe(document.body,{childList:true,subtree:true,characterData:true});
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
+})();
 </script>
 </body>
 </html>

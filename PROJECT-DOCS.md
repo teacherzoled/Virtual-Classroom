@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** October 3, 2026 (readable assessment layout + full anti-cheat as STANDING RULES; Science C1 Unit Test 1 page gets the resilience fix + save helper (Science project, `001c112`); KV photos deployed; shared graded-results save helper + Apps Script duplicate guard — live; Oct 2 Maths fixes; `f49e9fa` recorded; KV merge rule) · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
+**Last updated:** October 3, 2026 — latest: Science C1 Unit Test 1 now meets the readable-layout and full anti-cheat rules (Science project) · earlier Oct 3: (readable assessment layout + full anti-cheat as STANDING RULES; Science C1 Unit Test 1 page gets the resilience fix + save helper (Science project, `001c112`); KV photos deployed; shared graded-results save helper + Apps Script duplicate guard — live; Oct 2 Maths fixes; `f49e9fa` recorded; KV merge rule) · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -142,6 +142,18 @@ shared save helper (open item 10 — done); its KV entry (revised questions + ph
   test; save down → 4 tries with one attempt id → result waits on the device → sent on return; later visit with the
   row present sends nothing. **KV `sy2627-std5-c1-unit1-science` deployed Oct 3 12:38** (revised questions/answers
   + photo figures for Q3, Q5, Q13, ~314 KB): read back identical; `open:false`, no schedule, `gateUpdated` kept.
+- **Oct 3 (latest, Science project) — Std5 Science C1 Unit Test 1: readable layout + the rest of the anti-cheat rule.**
+  The Maths "READABLE ASSESSMENT LAYOUT" CSS adapted to the Science page's classes (card 1311px of a 1366px screen;
+  question 1.3rem, options 1.2rem, blanks/boxes 1.3rem, matching/labels 1.15rem, instructions + section notes
+  1.15rem; phone sizes; figures up to 620px, Q13 pictures 260px each) and the superscript watcher script.
+  Anti-cheat gaps closed: `.question.answered-fade:focus-within` (a question being worked in stays readable) and the
+  Focus Warning count kept per student (`<quiz key>::warnings`), surviving a reload and sent in the Sheet row
+  (`ai_feedback` ends "| focus warnings: N"). Tested: 1366px card width + font sizes; 360px no sideways scroll;
+  focus-within opacity 1 while typing, 0.18 after; warning count 1 after a reload and in the row; the resilience
+  suite re-run (draft restore, grading down, save down + recovery, two students) all pass.
+- **Correction (Oct 3, Edwin):** online assessments are sat **one student per Chromebook or lab computer**. The
+  older "groups of ~7 sharing one Chromebook" arrangement (still written in the Science Assessment Plan and
+  master doc in the Curriculum folder) is obsolete.
 - **Oct 3 — 🛟 GRADED RESULTS: one save helper for every subject + duplicate guard (built + tested, NOT yet deployed).**
   - **`edlo-utils.js`** (additions only — `vcSaveProgress` / `vcSaveBeans` unchanged, so lessons and beans behave
     exactly as before): `vcSubmitResult(payload, {onRetry})` gives each submitted result ONE `attempt_id`, keeps it
@@ -267,8 +279,11 @@ would silently close or un-schedule the test.
    Edwin): Worker `mode:"review"` (returns answerText/explain ONLY when the test is closed — never while open);
    save each student's typed answers in their Sheet row so they show beside the correct ones; page review screen
    reads those instead of localStorage. Must ship before Tue Oct 6 or the date-based reveal stays as is.
-10. **Std5 Science C1 Unit Test 1 — before Wed Oct 7.** ✅ Oct 3 (`001c112`, Science project): resilience fix +
-   shared save helper. ⬜ **STILL TO DO:** the readable layout standing rule (the card is still a 900px column,
+10. ✅ **DONE Oct 3 — Std5 Science C1 Unit Test 1 is fully up to the standing rules** (resilience + save helper in
+   `001c112`; readable layout + `:focus-within` + warning count in the latest Science-project commit — see "What
+   shipped"). Before its first online sitting: one test-student submission against the live Workers. Original note:
+   ✅ Oct 3 (`001c112`, Science project): resilience fix +
+   shared save helper. ⬜ **STILL TO DO (now done):** the readable layout standing rule (the card is still a 900px column,
    questions .9rem, powers not enlarged) and the missing parts of the full anti-cheat rule — it already has the
    10 s idle blur, tab + window Focus Warnings and the answered-question blur, but it lacks `:focus-within`
    (a box being typed in stays readable) and the warning count surviving a reload and going into the Sheet row.
