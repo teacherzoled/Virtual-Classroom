@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** October 3, 2026 — latest: answer-blur fix on all three assessment pages (a clicked option fades at once; only a box being typed in stays readable) + SVG labels left as drawn · Science C1 Unit Test 1 now meets the readable-layout and full anti-cheat rules (Science project) · earlier Oct 3: (readable assessment layout + full anti-cheat as STANDING RULES; Science C1 Unit Test 1 page gets the resilience fix + save helper (Science project, `001c112`); KV photos deployed; shared graded-results save helper + Apps Script duplicate guard — live; Oct 2 Maths fixes; `f49e9fa` recorded; KV merge rule) · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
+**Last updated:** October 3, 2026 — latest: Maths C1 Unit Test 1 (Big Numbers, Rounding & Decimals) placed at `standard5/math/tests/c1-unit1/` + its hub card lit (gated, KV `sy2627-std5-c1-unit1-math` to paste — open item 12) · before that: answer-blur fix on all three assessment pages (a clicked option fades at once; only a box being typed in stays readable) + SVG labels left as drawn · Science C1 Unit Test 1 now meets the readable-layout and full anti-cheat rules (Science project) · earlier Oct 3: (readable assessment layout + full anti-cheat as STANDING RULES; Science C1 Unit Test 1 page gets the resilience fix + save helper (Science project, `001c112`); KV photos deployed; shared graded-results save helper + Apps Script duplicate guard — live; Oct 2 Maths fixes; `f49e9fa` recorded; KV merge rule) · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -25,7 +25,7 @@ If the docs are not updated, the task is **not** finished.
 **State in one line:** Standard 5 is live and in daily use (school week 5 = week of Sept 28). GitHub `main` is
 at **`f49e9fa`** (Oct 3, Science project). Edwin's local copy was one commit behind (`fd1f556`) on Oct 3, so
 **`git pull` before committing** the Oct 3 Maths/save work (no overlap — `f49e9fa` touched only the Unit Test 1
-page). Waiting to deploy: the Oct 2 Maths fixes + the Oct 3 save helper (open item 11).
+page). Waiting to deploy: the Oct 2 Maths fixes + the Oct 3 save helper (open item 11) and Maths C1 Unit Test 1 (open item 12 — KV entry + push, sitting Tue Oct 13).
 **Later Oct 3 (Science project):** the Std5 Science C1 Unit Test 1 page now has the resilience fix and uses the
 shared save helper (open item 10 — done); its KV entry (revised questions + photo figures) was deployed and verified.
 
@@ -210,13 +210,27 @@ shared save helper (open item 10 — done); its KV entry (revised questions + ph
 - **Sept 24 — housekeeping:** `Claude outputs/` (student credential files) moved OUT of the repo to
   `..\Virtual-Classroom-private\` — confirmed never committed. `.gitignore` now blocks `Claude outputs/`.
 
+- **Oct 3 (evening, this project) — Std5 Maths C1 Unit Test 1 placed (NOT yet committed — Edwin commits/pushes).**
+  Student page `standard5/math/tests/c1-unit1/index.html` (copied unchanged from the Maths `Assessment/Cycle One/tests/
+  Unit Test 1/` folder — `…_ONLINE_STUDENT.html`). Secure-gate shell: questions come from KV `sy2627-std5-c1-unit1-math`
+  through `mode:'questions'`; built to every standing rule (login + account lock + Sheet row via `vcSubmitResult()`,
+  `vcRecoverResult()` on the lock screen, autosave per user, retried calls + Try Submitting Again, readable layout +
+  `vc-pow`, full anti-cheat with the `:has(…:focus)` blur, warning count in the row). Lock key `vc-quiz-std5-c1-unit1-math-v1`.
+  **Part 1 online = 38 marks** (q1 matching, 4 rows A–E, 8 marks; q2–q11 multiple choice, 3 marks each); **Part 2 on
+  paper = 18 marks** (q12–q15, marked by hand); **test total 56**. MA 1.34–1.36. Sitting **Tue Oct 13** (school wk 7).
+  Hub card lit (no "soon", 🔒 line), retitled from the July placeholder "Big Numbers & Number Types · MA 1.34–1.37".
+  The ADMIN copy and the KV JSON sit in the gitignored `tests/c1-unit1/_source/` for local `?dev=1` testing — never
+  committed. Checked before placing: the student page holds no answer text and differs from ADMIN only in the title,
+  subtitle and the dev bar; KV points total 38; the ADMIN dev answers match the KV key; the Worker already grades
+  `mc` and `match`; the Teacher Dashboard lists every KV key, so Unit Test 1 appears there by itself (as "Unit Test 1").
+
 **🛡️ STANDING RULE — assessment resilience (Edwin, Sept 2026).** Whenever a test or quiz page is
 updated for any reason, apply the resilience fix in that same update — do not batch-patch pages:
 (1) autosave answers to the device as the student works, draft key derived from that page's own test ID,
 per signed-in username; (2) retry the questions-gate and grade calls with a timeout; (3) if grading still
 cannot be reached, record NOTHING — no zero, no submit lock, no Sheet row — and show **Try Submitting
 Again**; (4) **(Oct 3, 2026)** log the graded result with **`vcSubmitResult()`** from `/edlo-utils.js` — never a
-bare `vcSaveProgress()` — and call **`vcRecoverResult()`** on the lock screen. Done on: Check-up, Maths Classwork 1–2, Maths Problem Set 1 (Classwork 1 + Problem Set 1 also have login + account lock + Sheet logging since Oct 1; Classwork 2 does NOT yet), **Std5 Science C1 Unit Test 1 (Oct 3)**. **Still old behaviour:** the other 15 Std5 Science tests/quizzes.
+bare `vcSaveProgress()` — and call **`vcRecoverResult()`** on the lock screen. Done on: Check-up, Maths Classwork 1–2, Maths Problem Set 1, **Maths C1 Unit Test 1 (Oct 3, built in)** (Classwork 1 + Problem Set 1 + Unit Test 1 also have login + account lock + Sheet logging since Oct 1; Classwork 2 does NOT yet), **Std5 Science C1 Unit Test 1 (Oct 3)**. **Still old behaviour:** the other 15 Std5 Science tests/quizzes.
 
 **🔒 STANDING RULE — private files.** This repo is PUBLIC. Anything with a password, login, class code or
 answer key goes in `..\Virtual-Classroom-private\` (beside the repo, not inside it) or under a
@@ -327,6 +341,14 @@ would silently close or un-schedule the test.
    they used and open the page — the lock screen says "has this result" or sends it.
 8. **Classwork Check 2 (before Wk 7): add the secure gate + login + account lock + Sheet logging (same as Classwork 1, Oct 1) AND the PDF fix — its PDF still uses the OLD `pdfText` map** — squares/cubes print wrongly (5² → "52"). Apply the
    Sept 25 powers fix when Check 2 is next touched (before Wk 7), with the resilience rule.
+12. **Deploy Maths C1 Unit Test 1 (Edwin) — before Tue Oct 13:** (a) Cloudflare → KV `ANSWER_KEYS` → add key
+   `sy2627-std5-c1-unit1-math`, value = the whole JSON file (`tests/c1-unit1/_source/sy2627-std5-c1-unit1-math.json`,
+   same file as in the Maths Unit Test 1 folder) — a NEW key, so pasting the whole file is right; it starts `"open": false`.
+   From then on any change MERGES (KV rule). (b) `git pull`, then commit + push `standard5/math/tests/c1-unit1/index.html`,
+   `standard5/math/index.html` and this file (the `_source/` files are ignored by git). (c) Open
+   `tests/c1-unit1/_source/…_ONLINE_ADMIN.html?dev=1` locally: **Auto-Fill must score 38/38, Fill Wrong 0/38** (the ADMIN
+   copy works while the test is closed). (d) Teacher Dashboard → 🔐 Open & Close Tests → Unit Test 1 should be listed;
+   open it (or schedule it) on Tue Oct 13 and close it after. Part 2 (18) is marked by hand; record 38 + 18 = 56.
 
 ---
 
@@ -1360,6 +1382,7 @@ cd "C:\Users\Dell Latitude 3520\OneDrive\Shared with me\Code Projects\Python Pro
 | Std5 Science Power-Ups 1A–3A | edlovirtualclassroom.com/standard5/science/power-ups/… | ✅ Live (Aug 5–7) |
 | Standard 5 Maths Hub | edlovirtualclassroom.com/standard5/math/ | ✅ Live (Sept 24) |
 | Std5 Maths Classwork Checks 1–2 | edlovirtualclassroom.com/standard5/math/classwork/… | ✅ Live (Sept 24, autosave + retry) |
+| Std5 Maths C1 Unit Test 1 | edlovirtualclassroom.com/standard5/math/tests/c1-unit1/ | 🟡 Placed Oct 3 — goes live on push; KV entry to paste (open item 12); sitting Tue Oct 13 |
 | Std5 Science Lesson Wk 1 | edlovirtualclassroom.com/standard5/science/lessons/week01-technology-climate/ | ✅ Live (built July 16) |
 | Std5 Science Lesson Wk 2 | edlovirtualclassroom.com/standard5/science/lessons/week02-climate-economy/ | ✅ Live (built July 16) |
 | Std5 Science Lesson Wk 3 | edlovirtualclassroom.com/standard5/science/lessons/week03-weather-vs-climate/ | ✅ Live (built July 16) |
