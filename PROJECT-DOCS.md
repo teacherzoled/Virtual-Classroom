@@ -54,6 +54,16 @@ If the docs are not updated, the task is **not** finished.
     retune Bean Store prices and the class goal (IDEAS #5). Not done yet — Edwin decides.
   - Tested with a mocked record book: 25/25 beans rows correct, cap key, no re-pay on re-check, 3 quiz rows with
     3 attempt ids, offline → retry recovers, Next student, second student clean; 360px no overflow.
+- **Part locks (Edwin, Oct 7 late): each part opens only when EVERY activity in the part before it is
+  finished.** Worked out from the saved answers (per student), so locks survive a reload. Locked pills show 🔒;
+  tapping one, Next, or a "go to" button shows what is left; a to-do box above Back/Next lists each item ✔/not.
+  "Finished" = Part 1: reflection + all 9 sorted correctly AND Checked (changing an answer needs a new Check) +
+  both exit-ticket answers + the correct upstander choice · Part 2: every word card flipped · Part 3: all 4
+  predictions correct · Part 4: all 9 Code.org levels ticked · Part 5: all 5 Fish Tank challenges · Part 6:
+  both reflections. `?part=quiz` and old saved steps land on the first unfinished part.
+  ⚠️ **Consequence:** the Fish Tank Builder (the no-internet backup) now opens only after the 9 Code.org levels
+  are ticked; the Part 4 "Code.org will not load?" card tells students to tell Mr. EdLo. Ticks are
+  self-reported — Edwin checks Code.org progress for the class section.
 - **Std 5 hub:** Computer Science card changed from Coming Soon to a live link (only edit to an existing file).
 - **Footer note:** the lesson's footer leaves out "All rights reserved" because the content is adapted from
   Code.org under CC BY-NC-SA 4.0, which requires the adapted page to carry the same licence.

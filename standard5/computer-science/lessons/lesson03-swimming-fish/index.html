@@ -131,6 +131,12 @@ header.lesson-head{text-align:center;padding:.6rem 0 1rem}
 .stepper button.on .n{background:var(--accent-c);color:var(--accent)}
 .stepper button.done .n{background:var(--right);color:#fff}
 .stepper button.on.done .n{background:var(--accent-c);color:var(--accent)}
+.stepper button.locked{opacity:.5}
+.stepper button.locked .n{background:transparent;font-size:.95rem}
+.todo{border:2px dashed var(--warm);background:var(--warm-soft);border-radius:14px;padding:12px 16px;margin:6px 0 12px;font-weight:700}
+.todo ul{margin:.3em 0 0;padding-left:1.3em;font-weight:600}
+.todo li.ok{color:var(--muted);text-decoration:line-through}
+.btn.waiting{opacity:.55}
 
 section.step{display:none}
 section.step.on{display:block;animation:fade .25s ease}
@@ -464,9 +470,8 @@ body.theme-night .btn.ok{color:#0d1f1a}
       </ol>
     </div>
     <div class="card">
-      <h3>📶 No internet?</h3>
-      <p>Go to <b>Part 5: Fish Tank Builder</b>. It works right here on this page and teaches the same ideas.</p>
-      <button class="btn alt" data-goto="s-tank">Go to the Fish Tank Builder →</button>
+      <h3>📶 Code.org will not load?</h3>
+      <p>Tell Mr. EdLo straight away. <b>Part 5: Fish Tank Builder</b> works without the internet, and it opens when all 9 levels are ticked.</p>
     </div>
   </div>
 </section>
@@ -535,6 +540,7 @@ body.theme-night .btn.ok{color:#0d1f1a}
   <div id="quizResult"></div>
 </section>
 
+<div class="todo" id="partTodo" style="display:none" role="status"></div>
 <div class="navrow" id="navRow">
   <button class="btn alt" id="prevBtn">← Back</button>
   <button class="btn" id="nextBtn">Next →</button>
@@ -590,7 +596,7 @@ try{   /* work saved by the first version of this page (Oct 7, before sign-in) c
 
 /* ---------- Saved state ---------- */
 function defaults(){
-  return {step:0,visited:{},
+  return {step:0,visited:{},flipped:{},
     warm:{reflect:"",sort:{},sortChecked:false,sortScore:null,sortFirst:null,q1:"",q2:"",upstander:null,upFirst:null},
     predict:{},levels:{},tank:null,challenges:{},
     wrap:{r1:"",r2:""},
@@ -622,14 +628,21 @@ function buildStepper(){
     `<button type="button" data-i="${i}"><span class="n">${i+1}</span>${esc(s.dataset.title)}</button>`).join("");
   $("stepper").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>showStep(+b.dataset.i)));
 }
+/* PART LOCKS (Edwin, Oct 7): a part opens only when EVERY activity in the part before it is finished.
+   openUpTo() = the furthest part a student may open. Locks are worked out from the saved answers,
+   so they survive a reload and follow the signed-in student. */
+function openUpTo(){ let i = 0; while(i < sections.length-1 && partDone(sections[i].id)) i++; return i; }
+function lockedMsg(k){
+  const left = todoFor(sections[k].id).filter(t=>!t.ok).map(t=>t.t);
+  return "🔒 Finish Part " + (k+1) + " first" + (left.length ? ": " + left.join(" · ") : ".");
+}
 function showStep(i){
   i = Math.max(0, Math.min(sections.length-1, i));
+  const top = openUpTo();
+  if(i > top){ toast(lockedMsg(top)); i = (S.step <= top) ? S.step : top; if(i === S.step && sections[i].classList.contains("on")) return; }
   S.step = i; S.visited[sections[i].id] = true;
   sections.forEach((s,k)=>s.classList.toggle("on", k===i));
-  $("stepper").querySelectorAll("button").forEach((b,k)=>{
-    b.classList.toggle("on", k===i);
-    b.classList.toggle("done", partDone(sections[k].id));
-  });
+  $("stepper").querySelectorAll("button").forEach((b,k)=>{ b.classList.toggle("on", k===i); });
   $("prevBtn").style.visibility = i===0 ? "hidden" : "visible";
   $("nextBtn").style.visibility = i===sections.length-1 ? "hidden" : "visible";
   if(sections[i].id==="s-quiz") renderQuizStart();
@@ -648,24 +661,52 @@ $("nextBtn").onclick = ()=>showStep(S.step+1);
 
 /* ---------- Progress ---------- */
 function filled(t){ return t && t.trim().length >= 3; }
-function partDone(id){
+/* Every activity of each part, with whether it is finished. A part is done when all are ok. */
+function todoFor(id){
+  const flipped = Object.keys(S.flipped||{}).filter(w=>VOCAB.some(v=>v.w===w)).length;
+  const sortRight = SORT.filter(it=>S.warm.sort[it.id]===it.a).length;
+  const predRight = PREDICT.filter((_,i)=>S.predict[i] && S.predict[i].checked).length;
   switch(id){
-    case "s-warm":  return S.warm.sortChecked && filled(S.warm.q1) && filled(S.warm.q2) && S.warm.upstander!==null;
-    case "s-vocab": return !!S.visited["s-vocab"];
-    case "s-bridge":return Object.keys(S.predict).filter(k=>S.predict[k]&&S.predict[k].checked).length===PREDICT.length;
-    case "s-levels":return levelsDone()===9;
-    case "s-tank":  return chalDone()===CHALLENGES.length;
-    case "s-wrap":  return filled(S.wrap.r1) && filled(S.wrap.r2);
-    case "s-quiz":  return S.quiz.passed;
+    case "s-warm": return [
+      {t:"write your reflection", ok:filled(S.warm.reflect)},
+      {t:"sort all 9 correctly and press Check (" + (S.warm.sortChecked ? sortRight : 0) + " of 9)", ok:S.warm.sortChecked && sortRight===SORT.length},
+      {t:"answer exit ticket question 1", ok:filled(S.warm.q1)},
+      {t:"answer exit ticket question 2", ok:filled(S.warm.q2)},
+      {t:"choose what an upstander would do", ok:S.warm.upstander!==null && UP[S.warm.upstander].ok}];
+    case "s-vocab": return [{t:"flip every word card (" + flipped + " of " + VOCAB.length + ")", ok:flipped===VOCAB.length}];
+    case "s-bridge":return [{t:"get all 4 predictions correct (" + predRight + " of 4)", ok:predRight===PREDICT.length}];
+    case "s-levels":return [{t:"finish and tick all 9 Code.org levels (" + levelsDone() + " of 9)", ok:levelsDone()===9}];
+    case "s-tank":  return [{t:"finish all 5 Fish Tank challenges (" + chalDone() + " of 5)", ok:chalDone()===CHALLENGES.length}];
+    case "s-wrap":  return [{t:"answer reflection question 1", ok:filled(S.wrap.r1)}, {t:"answer reflection question 2", ok:filled(S.wrap.r2)}];
+    case "s-quiz":  return [{t:"pass the quiz", ok:!!S.quiz.passed}];
   }
-  return false;
+  return [];
 }
+function partDone(id){ return todoFor(id).every(t=>t.ok); }
 function updateProgress(){
   const done = sections.filter(s=>partDone(s.id)).length;
   const pct = Math.round(done/sections.length*100);
   $("progBar").style.width = pct+"%";
   $("progText").textContent = done+" of "+sections.length+" parts done · "+pct+"%";
-  $("stepper").querySelectorAll("button").forEach((b,k)=>b.classList.toggle("done", partDone(sections[k].id)));
+  const top = openUpTo();
+  $("stepper").querySelectorAll("button").forEach((b,k)=>{
+    const locked = k > top;
+    b.classList.toggle("done", partDone(sections[k].id));
+    b.classList.toggle("locked", locked);
+    b.querySelector(".n").textContent = locked ? "🔒" : String(k+1);
+    b.title = locked ? lockedMsg(top) : "";
+    b.setAttribute("aria-disabled", locked ? "true" : "false");
+  });
+  /* the to-do box under the current part, and the Next button */
+  const i = S.step, list = todoFor(sections[i].id), box = $("partTodo");
+  const last = i === sections.length-1, here = partDone(sections[i].id);
+  if(!last && !here){
+    box.innerHTML = "🔒 To open <b>Part " + (i+2) + ": " + esc(sections[i+1].dataset.title) + "</b>, finish everything in this part:"
+      + "<ul>" + list.map(t=>'<li class="' + (t.ok ? "ok" : "") + '">' + (t.ok ? "✔ " : "") + esc(t.t) + "</li>").join("") + "</ul>";
+    box.style.display = "block";
+  } else box.style.display = "none";
+  $("nextBtn").classList.toggle("waiting", !last && !here);
+  $("nextBtn").textContent = (!last && !here) ? "🔒 Next" : "Next →";
 }
 
 /* ---------- Text bindings ---------- */
@@ -695,7 +736,7 @@ function renderSort(){
         <button type="button" class="chip ${v==="private"?"sel":""}" data-s="${it.id}" data-v="private">🔒 Private</button>
       </span><span class="fb"></span></div>`;}).join("");
   $("sortList").querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
-    S.warm.sort[b.dataset.s] = b.dataset.v; save(); renderSort();
+    S.warm.sort[b.dataset.s] = b.dataset.v; S.warm.sortChecked = false; save(); renderSort();   /* a changed answer needs a fresh Check */
   }));
 }
 $("sortCheck").onclick = ()=>{
@@ -748,7 +789,11 @@ $("vocabCards").innerHTML = VOCAB.map((v,i)=>`
       </div>
     </button>
   </div>`).join("");
-$("vocabCards").querySelectorAll(".flip").forEach(b=>b.addEventListener("click",()=>b.classList.toggle("on")));
+$("vocabCards").querySelectorAll(".flip").forEach((b,i)=>b.addEventListener("click",()=>{
+  b.classList.toggle("on");
+  if(!S.flipped) S.flipped = {};
+  if(!S.flipped[VOCAB[i].w]){ S.flipped[VOCAB[i].w] = true; save(); }
+}));
 
 /* ---------- Sprite engine ---------- */
 const COSTUMES = {
@@ -1452,7 +1497,8 @@ if(new URLSearchParams(location.search).get("part")==="quiz") S.step = sections.
 renderSignin(); offerGuestWork();
 buildStepper(); renderSort(); renderUp(); renderPredict(); renderLevels();
 renderEditor(); renderBlocks(S.tank, $("tankCode")); renderChal(); tank.load([]); tank.render();
-showStep(S.step || 0);
+S.step = Math.min(S.step || 0, openUpTo());
+showStep(S.step);
 settleBeans();   /* sends any beans earned while the record book was unreachable */
 if(SESSION && typeof vcUnsent==="function" && vcUnsent().length){
   vcSendUnsent().then(r=>{ if(r && r.ok){ markSaved(); if(S.quiz.last!==null) showSaveState(); } });
