@@ -7,6 +7,7 @@
 <meta name="description" content="Standard 5 Computer Science · Code.org Course E · Lesson 3 — interactive lesson and quiz.">
 <link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="/edlo-utils.js"></script>   <!-- site login + beans + record book (vcGetSession / vcSaveBeans / vcSubmitResult) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" async></script>
 <style>
 /* Std 5 Computer Science · Course E Lesson 3 — Oct 7, 2026. Self-contained (links no shared CSS).
@@ -100,9 +101,22 @@ header.lesson-head{text-align:center;padding:.6rem 0 1rem}
 .hchip{font-size:.72rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:.32rem .8rem;border-radius:999px;background:var(--card);border:1.5px solid var(--bd);color:var(--muted)}
 .lesson-head h1{font-size:clamp(1.7rem,7vw,2.9rem);line-height:1.15;margin:.1em 0 .4em;
   background:var(--h1-grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.namebox{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
-.namebox label{font-weight:800}
-.namebox input{padding:9px 14px;border-radius:12px;border:1.5px solid var(--bd);background:var(--btn);min-width:240px;max-width:100%}
+.hchip.bean{background:var(--accent);color:var(--accent-c);border-color:var(--accent)}
+.signin{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;color:var(--muted);max-width:900px;margin:0 auto}
+.signin b{color:var(--fg)}
+.signin .btn{min-height:40px;padding:6px 14px;font-size:.88rem}
+.guest-offer{border:2px solid var(--accent);background:var(--accent-soft)}
+.lms-badge{display:none;border-radius:12px;padding:10px 12px;margin:10px 0 0;font-weight:700;font-size:.92rem}
+.lms-badge.show{display:block}
+.lms-badge.ok{background:var(--ok-soft);border:1.5px solid var(--right)}
+.lms-badge.busy{background:var(--accent-soft);border:1.5px solid var(--accent)}
+.lms-badge.warn{background:var(--bad-soft);border:1.5px solid var(--wrong)}
+.lms-badge .btn{min-height:36px;padding:4px 12px;font-size:.85rem;margin-left:6px}
+.bean-note{display:none;font-weight:800;color:var(--accent-ink);margin:8px 0 0}
+.bean-note.show{display:block}
+#toast{position:fixed;left:50%;bottom:1.3rem;transform:translateX(-50%) translateY(160%);background:var(--accent);color:var(--accent-c);
+  font-weight:900;font-size:.95rem;padding:.7rem 1.2rem;border-radius:999px;z-index:99;transition:transform .35s ease;max-width:90vw;text-align:center}
+#toast.show{transform:translateX(-50%) translateY(0)}
 
 /* Sticky progress bar + lesson parts — same pattern as the Std5 tests */
 .progress-wrap{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--bd);padding:.6rem 0 .5rem;margin-bottom:1.2rem;transition:background .4s}
@@ -266,7 +280,6 @@ body.theme-night .btn.ok{color:#0d1f1a}
   body{font-size:16.5px}
   .top-row{justify-content:center}
   .theme-bar{flex:1 1 100%}
-  .namebox input{min-width:0;width:100%}
 }
 
 #printArea{display:none}
@@ -301,12 +314,10 @@ body.theme-night .btn.ok{color:#0d1f1a}
       <span class="hchip">Standard 5 · Computer Science</span>
       <span class="hchip">Course E · Lesson 3</span>
       <span class="hchip">⏱ 55 minutes</span>
+      <span class="hchip bean" id="beanPill">🌱 0 beans</span>
     </div>
     <h1>🐠 Swimming Fish with Sprite Lab</h1>
-    <div class="namebox">
-      <label for="studentName">My name:</label>
-      <input id="studentName" type="text" autocomplete="off" placeholder="First and last name">
-    </div>
+    <div class="signin" id="signinBar"></div>
   </header>
 </div>
 
@@ -320,6 +331,7 @@ body.theme-night .btn.ok{color:#0d1f1a}
 </div>
 
 <main class="wrapper">
+<div class="card guest-offer" id="guestOffer" style="display:none"></div>
 
 <!-- ============ PART 1: WARM UP ============ -->
 <section class="step" id="s-warm" data-title="Warm Up">
@@ -354,6 +366,7 @@ body.theme-night .btn.ok{color:#0d1f1a}
     <p>Choose for each piece of information. Then press <b>Check my sorting</b>.</p>
     <div class="sortlist" id="sortList"></div>
     <div class="btnrow"><button class="btn" id="sortCheck">Check my sorting</button><span id="sortScore" class="goal"></span></div>
+    <p class="bean-note" id="bn-sort"></p>
   </div>
 
   <div class="card">
@@ -370,6 +383,7 @@ body.theme-night .btn.ok{color:#0d1f1a}
     <p>During an online game, some players keep posting mean comments about Andre. What would an upstander do?</p>
     <div class="opts" id="upOpts"></div>
     <div class="feedback" id="upFb"></div>
+    <p class="bean-note" id="bn-upstander"></p>
   </div>
 </section>
 
@@ -425,6 +439,7 @@ body.theme-night .btn.ok{color:#0d1f1a}
   <h3>Predict, then test</h3>
   <p>Choose your prediction. Then use the blocks above to test it before you press <b>Check</b>.</p>
   <div id="predictBox"></div>
+  <p class="bean-note" id="bn-predict"></p>
 </section>
 
 <!-- ============ PART 4: SPRITE LAB LEVELS ============ -->
@@ -475,6 +490,7 @@ body.theme-night .btn.ok{color:#0d1f1a}
       <div class="card" style="margin-top:10px">
         <h3>🏆 Challenges</h3>
         <ul class="checklist" id="chalList"></ul>
+        <p class="bean-note" id="bn-tank"></p>
       </div>
     </div>
     <div class="codecol">
@@ -508,10 +524,13 @@ body.theme-night .btn.ok{color:#0d1f1a}
 <section class="step" id="s-quiz" data-title="Quiz">
   <h2>Part 7 · Lesson Quiz</h2>
   <div class="card info">
-    <p>10 questions · You need <b>7 out of 10 (70%)</b> to pass. If you do not pass, review the lesson parts named in your feedback and try again.</p>
+    <p>10 questions · You need <b>7 out of 10 (70%)</b> to pass. If you do not pass, review the lesson parts named in your feedback and try again. Every attempt goes to Mr. EdLo’s record book.</p>
     <p class="muted" id="quizHistory"></p>
   </div>
-  <div id="quizNeedName" class="card tip" style="display:none"><p>✍️ Type your name in the box at the top of the page before you start the quiz.</p></div>
+  <div id="quizNeedLogin" class="card tip" style="display:none">
+    <p><b>🔑 Sign in to take the quiz.</b> Your quiz result goes to Mr. EdLo’s record book with your name on it.</p>
+    <a class="btn" id="quizLoginBtn" href="/login/" style="display:inline-flex;align-items:center;text-decoration:none">Sign in</a>
+  </div>
   <div id="quizArea"></div>
   <div id="quizResult"></div>
 </section>
@@ -521,11 +540,12 @@ body.theme-night .btn.ok{color:#0d1f1a}
   <button class="btn" id="nextBtn">Next →</button>
 </div>
 </main>
+<div id="toast" role="status" aria-live="polite"></div>
 
 <footer class="site-footer">
   <p>© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize</p>
   <p>Lesson content adapted from Code.org <i>CS Fundamentals Course E (2025), Lesson 3: Swimming Fish with Sprite Lab</i>, licensed <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>. Warm-up exit ticket adapted from Common Sense Education, <i>Private and Personal Information</i> (CC BY-NC-SA). This page is shared under the same licence for non-commercial classroom use.</p>
-  <button type="button" class="reset" id="resetAll">Teacher: clear saved progress on this device</button>
+  <button type="button" class="reset" id="resetAll">Teacher: clear this student’s saved answers on this device (beans stay banked)</button>
 </footer>
 
 <div id="printArea"></div>
@@ -547,13 +567,31 @@ document.querySelectorAll("#themeBar button").forEach(b=>b.addEventListener("cli
 /* ---------- Settings (edit these if Code.org changes its links) ---------- */
 const LESSON_URL = "https://studio.code.org/s/coursee-2025/lessons/3";
 const LEVEL_URL  = n => LESSON_URL + "/levels/" + n;
-const STORE_KEY  = "edlo-csE-L03-swimming-fish-v1";
 const PASS_MARK  = 7;
+
+/* ---------- Site sign-in (/edlo-utils.js — the same account as every page on the site) ----------
+   The lesson stays PUBLIC (Edwin, July 19): signing in changes what a student EARNS, not what he
+   or she SEES. Signed in → beans 🌱 for the team + the quiz, saved to the record book.
+   Signed out → full lesson for practice; the quiz asks the student to sign in. */
+const SESSION = (typeof vcGetSession === "function") ? vcGetSession() : null;
+const WHO     = SESSION ? SESSION.username : "guest";
+function studentName(){ return SESSION ? (SESSION.full_name || SESSION.username || "") : ""; }
+function loginUrl(part){ return "/login/?next=" + encodeURIComponent(location.pathname + (part ? "?part=" + part : "")); }
+
+/* Saved answers are kept PER STUDENT ACCOUNT, so a second student on the same computer starts clean. */
+const STORE_BASE = "edlo-csE-L03-swimming-fish-v1";
+const STORE_KEY  = STORE_BASE + "::" + WHO;
+const GUEST_KEY  = STORE_BASE + "::guest";
+try{   /* work saved by the first version of this page (Oct 7, before sign-in) counts as signed-out work */
+  const old = localStorage.getItem(STORE_BASE);
+  if(old && !localStorage.getItem(GUEST_KEY)) localStorage.setItem(GUEST_KEY, old);
+  if(old) localStorage.removeItem(STORE_BASE);
+}catch(e){}
 
 /* ---------- Saved state ---------- */
 function defaults(){
-  return {name:"",step:0,visited:{},
-    warm:{reflect:"",sort:{},sortChecked:false,sortScore:null,q1:"",q2:"",upstander:null},
+  return {step:0,visited:{},
+    warm:{reflect:"",sort:{},sortChecked:false,sortScore:null,sortFirst:null,q1:"",q2:"",upstander:null,upFirst:null},
     predict:{},levels:{},tank:null,challenges:{},
     wrap:{r1:"",r2:""},
     quiz:{attempts:0,best:null,last:null,passed:false,history:[]}};
@@ -635,8 +673,6 @@ document.querySelectorAll("[data-bind]").forEach(el=>{
   el.value = getPath(el.dataset.bind) || "";
   el.addEventListener("input", ()=>{ setPath(el.dataset.bind, el.value); save(); });
 });
-$("studentName").value = S.name;
-$("studentName").addEventListener("input", e=>{ S.name = e.target.value; save(); if(sections[S.step].id==="s-quiz") renderQuizStart(); });
 
 /* ---------- Part 1: Sort ---------- */
 const SORT = [
@@ -671,7 +707,8 @@ $("sortCheck").onclick = ()=>{
     el.classList.toggle("right", ok); el.classList.toggle("wrong", !ok);
     el.querySelector(".fb").textContent = (ok ? "✔ " : "✘ This is "+it.a+" information. ") + it.why;
   });
-  S.warm.sortChecked = true; S.warm.sortScore = right; save();
+  if(S.warm.sortFirst===null) S.warm.sortFirst = right;     /* beans pay on the FIRST full check only */
+  S.warm.sortChecked = true; S.warm.sortScore = right; save(); settleBeans();
   $("sortScore").textContent = "You sorted "+right+" of "+SORT.length+" correctly." + (right<SORT.length ? " Change the red ones and check again." : " Excellent!");
 };
 
@@ -684,7 +721,7 @@ const UP = [
 ];
 function renderUp(){
   $("upOpts").innerHTML = UP.map((o,i)=>`<label class="opt"><input type="radio" name="up" value="${i}" ${S.warm.upstander===i?"checked":""}><span>${esc(o.t)}</span></label>`).join("");
-  $("upOpts").querySelectorAll("input").forEach(r=>r.addEventListener("change",()=>{ S.warm.upstander=+r.value; save(); showUpFb(); }));
+  $("upOpts").querySelectorAll("input").forEach(r=>r.addEventListener("change",()=>{ S.warm.upstander=+r.value; if(S.warm.upFirst===null) S.warm.upFirst=+r.value; save(); showUpFb(); settleBeans(); }));
   showUpFb();
 }
 function showUpFb(){
@@ -898,6 +935,7 @@ function checkPredict(i, quiet){
   const ok = st.choice === PREDICT[i].a;
   fb.className = "feedback show " + (ok ? "good" : "bad");
   fb.textContent = (ok ? "✔ Correct. " : "✘ Not quite. ") + PREDICT[i].why;
+  if(!quiet && st.first===undefined){ st.first = ok; save(); settleBeans(); }   /* beans pay on the FIRST check only */
   if(ok){ st.checked = true; if(!quiet) save(); }
 }
 
@@ -938,7 +976,7 @@ function renderChal(){
   $("chalList").innerHTML = CHALLENGES.map(c=>`<li class="${S.challenges[c.id]?"done":""}"><span class="tick">${S.challenges[c.id]?"✓":""}</span><span>${esc(c.t)}</span></li>`).join("")
     + (chalDone()===CHALLENGES.length ? '<li class="done"><span class="tick">★</span><span><b>All done! Free play:</b> keep adding creatures and try new behaviors.</span></li>' : "");
 }
-function award(id){ if(!S.challenges[id]){ S.challenges[id]=true; save(); renderChal(); } }
+function award(id){ if(!S.challenges[id]){ S.challenges[id]=true; save(); renderChal(); settleBeans(); } }
 function checkChallengesOnRun(){
   const P = S.tank;
   if(P.length >= 2) award("two");
@@ -998,6 +1036,113 @@ $("tankRun").onclick = ()=>{
 };
 $("tankStopBtn").onclick = ()=>{ tank.stop(); $("tankStatus").textContent = "Program stopped."; };
 
+/* ---------- Beans 🌱 — team points (same system as the Science lessons) ----------
+   vcSaveBeans writes an activity_type:'lesson' row; Group Totals adds it to the student's team
+   and the class goal. lesson_key groups this lesson so the SERVER enforces the 30-bean cap.
+   Beans pay only for answers the page can check itself, on the FIRST try:
+     sort 9 (1 per item) · upstander 3 · predict 8 (2 each) · Fish Tank challenges 10 (2 each) = 30.
+   Code.org level ticks and written answers pay nothing (the page cannot check them).
+   The device lock (vc-pts-<id>) includes the username, so a second student on the same
+   computer can still earn his or her own beans. */
+const LESSON = { idBase:"std5-cs-ce-l03", subject:"Computer Science", lo:"CS-E-L3", label:"CS Course E L3" };
+const LESSON_CAP = 30;
+const BEAN_ACTS = [
+  {act:"sort",      note:"bn-sort",      max:9, name:"Personal or Private sort",
+   earned:()=> S.warm.sortFirst},
+  {act:"upstander", note:"bn-upstander", max:3, name:"Upstander question",
+   earned:()=> S.warm.upFirst===null ? null : (UP[S.warm.upFirst].ok ? 3 : 0)},
+  {act:"predict",   note:"bn-predict",   max:8, name:"Predict questions",
+   earned:()=>{ const f = PREDICT.map((_,i)=>S.predict[i] ? S.predict[i].first : undefined);
+                return f.every(x=>x!==undefined) ? f.filter(Boolean).length*2 : null; }},
+].concat(CHALLENGES.map(c=>({act:"tank-"+c.id, note:"bn-tank", max:2, name:"Fish Tank: "+({two:"second sprite",cost:"new costume",both:"two behaviors",click:"stop on click",size:"new size"}[c.id]||c.id),
+   earned:()=> S.challenges[c.id] ? 2 : null})));
+function lockId(act){ return LESSON.idBase + "-" + act + "-" + WHO; }
+function beanLock(act){ try{ const r = localStorage.getItem("vc-pts-" + lockId(act)); return r ? JSON.parse(r) : null; }catch(e){ return null; } }
+function beansFor(act){ const l = beanLock(act); return l ? (+l.b || 0) : 0; }
+function beansBanked(){ return BEAN_ACTS.reduce((s,a)=>s + beansFor(a.act), 0); }
+const PENDING = new Set(); let pendingBeans = 0;
+function settleBeans(){
+  if(SESSION && typeof vcSaveBeans === "function"){
+    BEAN_ACTS.forEach(a=>{
+      const e = a.earned();
+      if(e===null || e===undefined || beanLock(a.act) || PENDING.has(a.act)) return;
+      const give = Math.max(0, Math.min(e, LESSON_CAP - beansBanked() - pendingBeans));
+      PENDING.add(a.act); pendingBeans += give;
+      vcSaveBeans(lockId(a.act), give, a.max, { subject:LESSON.subject, lo_code:LESSON.lo,
+        lesson_key:LESSON.idBase, activity_name:LESSON.label + " · " + a.name })
+      .then(res=>{
+        PENDING.delete(a.act); pendingBeans -= give;
+        if(res && res.ok){
+          const g = (res.granted != null) ? res.granted : give;
+          if(g > 0) toast("🌱 +" + g + " bean" + (g===1?"":"s") + " for your team!");
+          else if(e > 0) toast("🌱 You reached this lesson’s " + LESSON_CAP + "-bean cap. Keep going for practice!");
+        } else if(!(res && res.locked)){
+          toast("⚠ Beans could not be saved just now. Reload this page later and they will be sent.");
+        }
+        renderBeans();
+      }, ()=>{ PENDING.delete(a.act); pendingBeans -= give; renderBeans(); });
+    });
+  }
+  renderBeans();
+}
+function renderBeans(){
+  $("beanPill").textContent = SESSION ? "🌱 " + beansBanked() + " / " + LESSON_CAP + " beans" : "🌱 Log in to earn beans";
+  const notes = {};
+  BEAN_ACTS.forEach(a=>{
+    const l = beanLock(a.act), e = a.earned();
+    if(!notes[a.note]) notes[a.note] = {got:0, max:0, done:0, any:false};
+    const n = notes[a.note]; n.max += a.max;
+    if(l){ n.got += (+l.b || 0); n.done++; n.any = true; } else if(e!==null && e!==undefined){ n.any = true; }
+  });
+  Object.keys(notes).forEach(id=>{
+    const el = $(id), n = notes[id]; if(!el) return;
+    if(!SESSION){ el.className = "bean-note show"; el.innerHTML = '🌱 <a href="' + loginUrl() + '">Log in</a> to earn up to ' + n.max + ' beans here for your team.'; return; }
+    if(!n.any){ el.className = "bean-note show"; el.textContent = "🌱 Up to " + n.max + " beans for your team — your FIRST try counts."; return; }
+    el.className = "bean-note show"; el.textContent = "🌱 You banked " + n.got + " of " + n.max + " beans here.";
+  });
+}
+let toastTimer = 0;
+function toast(msg){ const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove("show"), 3200); }
+
+/* ---------- Sign-in bar + "Next student" ---------- */
+function renderSignin(){
+  const bar = $("signinBar");
+  if(SESSION){
+    bar.innerHTML = '<span>✓ Signed in as <b>' + esc(studentName()) + '</b> · your beans 🌱 and quiz result save to your account</span>'
+      + '<button type="button" class="btn alt" id="nextStudent">Next student ↪</button>';
+    $("nextStudent").onclick = ()=>{
+      if(!confirm("Hand this computer to the next student?\n\nYour work stays saved under your own name. The next student signs in with his or her own username.")) return;
+      try{ localStorage.removeItem("vc-session"); }catch(e){}
+      location.href = loginUrl();
+    };
+  } else {
+    bar.innerHTML = '<span>🔑 <a href="' + loginUrl() + '">Log in</a> to earn up to ' + LESSON_CAP + ' beans 🌱 for your team and to take the quiz. You can do the lesson without logging in, for practice.</span>';
+  }
+}
+function guestHasWork(raw){
+  try{
+    const g = JSON.parse(raw), w = g.warm || {}, txt = t => !!(t && String(t).trim());
+    return !!(w.sortChecked || w.upstander!==null && w.upstander!==undefined || txt(w.reflect) || txt(w.q1) || txt(w.q2)
+      || Object.keys(g.predict||{}).length || Object.values(g.levels||{}).some(Boolean)
+      || Object.values(g.challenges||{}).some(Boolean) || (g.wrap && (txt(g.wrap.r1) || txt(g.wrap.r2)))
+      || (g.quiz && g.quiz.attempts));
+  }catch(e){ return false; }
+}
+/* Work done on this computer BEFORE signing in: ask whether it belongs to this student. */
+function offerGuestWork(){
+  let guest = null;
+  try{ if(SESSION && !localStorage.getItem(STORE_KEY)) guest = localStorage.getItem(GUEST_KEY); }catch(e){}
+  if(!guest) return;
+  if(!guestHasWork(guest)){ try{ localStorage.removeItem(GUEST_KEY); }catch(e){} return; }   /* only opened the page — nothing to claim */
+  const box = $("guestOffer");
+  box.innerHTML = '<p><b>Some of this lesson was done on this computer before anyone signed in.</b> Is that your work, ' + esc(SESSION.first_name || studentName()) + '?</p>'
+    + '<div class="btnrow"><button type="button" class="btn" id="guestYes">Yes, add it to my account</button>'
+    + '<button type="button" class="btn alt" id="guestNo">No, start fresh</button></div>';
+  box.style.display = "block";
+  $("guestYes").onclick = ()=>{ try{ localStorage.setItem(STORE_KEY, guest); localStorage.removeItem(GUEST_KEY); }catch(e){} location.reload(); };
+  $("guestNo").onclick  = ()=>{ try{ localStorage.removeItem(GUEST_KEY); }catch(e){} box.style.display = "none"; };
+}
+
 /* ---------- Part 7: Quiz ---------- */
 const QUIZ = [
   {id:"q1", q:"What is a sprite?", o:["A graphic on the screen with a location, size, and appearance","A sound that plays when the program starts","The button you press to run a program","A list of instructions written on paper"], a:0, part:"Part 2: Vocabulary",
@@ -1025,18 +1170,19 @@ let current = null;
 function renderQuizStart(){
   $("quizHistory").textContent = S.quiz.attempts
     ? "Attempts: "+S.quiz.attempts+" · Best score: "+S.quiz.best+"/10" + (S.quiz.passed ? " · PASSED ✔" : "") : "";
-  const needName = !S.name.trim();
-  $("quizNeedName").style.display = needName ? "block" : "none";
+  const needLogin = !SESSION;
+  $("quizNeedLogin").style.display = needLogin ? "block" : "none";
+  $("quizLoginBtn").href = loginUrl("quiz");
   if(current) return;
-  if(S.quiz.attempts && !$("quizResult").innerHTML){ renderResult(S.quiz.lastDetail || null); }
-  if(needName){ $("quizArea").innerHTML = ""; return; }
+  if(S.quiz.attempts && !$("quizResult").innerHTML){ renderResult(S.quiz.lastDetail || null); showSaveState(); }
+  if(needLogin){ $("quizArea").innerHTML = ""; return; }
   if(!$("quizResult").innerHTML){
     $("quizArea").innerHTML = '<button class="btn coral" id="startQuiz">Start the quiz</button>';
     $("startQuiz").onclick = startQuiz;
   } else { $("quizArea").innerHTML = ""; }
 }
 function startQuiz(){
-  if(!S.name.trim()){ renderQuizStart(); $("studentName").focus(); return; }
+  if(!SESSION){ renderQuizStart(); return; }
   current = shuffle(QUIZ).map(q=>({q, order:shuffle(q.o.map((_,i)=>i)), pick:null}));
   $("quizResult").innerHTML = "";
   $("quizArea").innerHTML = current.map((c,i)=>`
@@ -1058,13 +1204,48 @@ function submitQuiz(){
   const passedNow = score >= PASS_MARK;
   S.quiz.attempts++; S.quiz.last = score; S.quiz.best = Math.max(S.quiz.best||0, score);
   if(passedNow) S.quiz.passed = true;
-  S.quiz.history.push({score, date:new Date().toISOString()});
+  const marks = current.map(c=>c.q.id + (c.pick===c.q.a ? "✓" : "✗")).join(" ");
+  const entry = {score, date:new Date().toISOString(), n:S.quiz.attempts, marks, saved:false,
+                 attemptId:(typeof vcNewAttemptId==="function") ? vcNewAttemptId() : WHO + "-" + Date.now()};
+  S.quiz.history.push(entry);
   S.quiz.lastDetail = current.map(c=>({id:c.q.id, pick:c.pick}));
   save();
   $("quizArea").innerHTML = ""; current = null;
   renderResult(S.quiz.lastDetail);
   renderQuizStart();
   $("quizResult").scrollIntoView({behavior:"smooth"});
+  lmsSaveQuiz(entry);
+}
+
+/* ---------- Record book (Sheet) — every attempt is its own row ----------
+   Same helper as the Maths classwork (vcSubmitResult): kept on this computer first, retried
+   automatically, never written twice (attempt_id). activity_type 'quiz' adds no beans. */
+const ACTIVITY_NAME = "Std 5 CS · Course E L3 — Swimming Fish Quiz";
+function lmsBadge(kind, html){ const b = $("lmsBadge"); if(!b) return; b.className = "lms-badge show " + kind; b.innerHTML = html; }
+const LMS_WAIT = "⚠ Your result has not reached Mr. EdLo’s record book yet. It is safe on this computer and will be sent the next time you sign in and open this page here.";
+function markSaved(){ S.quiz.history.forEach(h=>{ h.saved = true; }); save(); }
+async function lmsSaveQuiz(h){
+  if(!SESSION){ lmsBadge("warn", "⚠ Not signed in, so this result did not reach Mr. EdLo’s record book."); return; }
+  if(typeof vcSubmitResult !== "function"){ lmsBadge("warn", "⚠ The record book helper did not load (check the internet). Your PDF still shows your result."); return; }
+  lmsBadge("busy", "Sending your result to Mr. EdLo’s record book…");
+  const payload = { subject:LESSON.subject, lo_code:LESSON.lo, activity_type:"quiz", activity_name:ACTIVITY_NAME,
+                    score:h.score, max_score:QUIZ.length, attempt_id:h.attemptId,
+                    ai_feedback:"Attempt #" + h.n + " · " + h.marks + (h.score >= PASS_MARK ? " · PASS" : " · not yet") };
+  const r = await vcSubmitResult(payload, { onRetry:(n,of)=>lmsBadge("busy", "The record book is busy — trying again by itself (" + n + " of " + of + ")… please stay on this page.") });
+  if(r && r.ok){ h.saved = true; save(); lmsBadge("ok", "✓ Saved to your record — Mr. EdLo can see it. " + h.score + "/10" + (r.percent!=null ? " (" + r.percent + "%)" : "") + "."); }
+  else { lmsBadge("warn", LMS_WAIT + ' <button type="button" class="btn alt" id="lmsRetry">Try again</button>'); $("lmsRetry").onclick = lmsRetry; }
+}
+async function lmsRetry(){
+  lmsBadge("busy", "Sending…");
+  const r = (typeof vcSendUnsent === "function") ? await vcSendUnsent() : {ok:false};
+  if(r.ok){ markSaved(); lmsBadge("ok", "✓ Saved to your record — Mr. EdLo can see it."); }
+  else { lmsBadge("warn", "Still cannot reach the record book. Your result stays safe on this computer." + ' <button type="button" class="btn alt" id="lmsRetry">Try again</button>'); $("lmsRetry").onclick = lmsRetry; }
+}
+function showSaveState(){
+  const last = S.quiz.history[S.quiz.history.length-1];
+  if(!last || !SESSION) return;
+  if(last.saved) lmsBadge("ok", "✓ Saved to your record — Mr. EdLo can see it.");
+  else { lmsBadge("warn", LMS_WAIT + ' <button type="button" class="btn alt" id="lmsRetry">Try again</button>'); $("lmsRetry").onclick = lmsRetry; }
 }
 function renderResult(detail){
   if(S.quiz.last===null) return;
@@ -1073,7 +1254,8 @@ function renderResult(detail){
     <p><b>${passed ? "🎉 You passed! Well done." : "Not yet. You need 7 out of 10 to pass. Review the parts below, then try again."}</b></p>
     <div class="btnrow">${passed ? "" : '<button class="btn coral" id="retake">Try again</button>'}
       ${passed ? '<button class="btn alt" id="retake">Practise again</button>' : ""}</div>
-    <p class="muted">${passed ? "" : "Correct answers are shown after you pass. "}Every attempt is recorded in your PDF.</p></div>
+    <p class="muted">${passed ? "" : "Correct answers are shown after you pass. "}Every attempt is recorded in your PDF and in Mr. EdLo’s record book.</p>
+    <div class="lms-badge" id="lmsBadge" role="status"></div></div>
   <div class="card turnin" id="turnIn">
     <h3>📤 Turn in your work on Google Classroom</h3>
     <ol>
@@ -1161,7 +1343,7 @@ function buildResultsPdf(){
   para("Mr. EdLo - Computer Science - Course E, Lesson 3", 10, false, 0);
   para("Swimming Fish with Sprite Lab: Quiz Results", 17, true, 6);
   table([
-    ["Name", S.name.trim()],
+    ["Name", studentName() + (SESSION ? "  (" + SESSION.username + ")" : "")],
     ["Submitted", lastAttemptTime()],
     ["Quiz score (this attempt)", score+" / 10  ("+score*10+"%)"],
     ["Result (pass mark 70%)", passed ? "PASSED" : "NOT YET PASSED"],
@@ -1186,7 +1368,8 @@ function buildResultsPdf(){
     ["Predict questions", PREDICT.filter((_,i)=>S.predict[i]&&S.predict[i].checked).length+" / 4 correct"],
     ["Code.org levels ticked", levelsDone()+" / 9"],
     ["Fish Tank challenges", chalDone()+" / 5"],
-    ["Reflection written", (filled(S.wrap.r1) && filled(S.wrap.r2)) ? "Yes" : "No"]
+    ["Reflection written", (filled(S.wrap.r1) && filled(S.wrap.r2)) ? "Yes" : "No"],
+    ["Beans banked (this lesson)", beansBanked() + " / " + LESSON_CAP]
   ]);
 
   heading("My written answers");
@@ -1199,14 +1382,14 @@ function buildResultsPdf(){
   const n = doc.getNumberOfPages();
   for(let p=1;p<=n;p++){
     doc.setPage(p); font(8.5, false);
-    doc.text(pdfText(S.name.trim()+"  -  Swimming Fish with Sprite Lab  -  Page "+p+" of "+n), M, PH-28);
+    doc.text(pdfText(studentName()+"  -  Swimming Fish with Sprite Lab  -  Page "+p+" of "+n), M, PH-28);
   }
-  const fname = "CS-E-L03-SwimmingFish_"+fileSafe(S.name)+"_"+score+"of10.pdf";
+  const fname = "CS-E-L03-SwimmingFish_"+fileSafe(studentName())+"_"+score+"of10.pdf";
   return {doc, fname};
 }
 function savePdf(){
   const msg = $("pdfMsg");
-  if(!S.name.trim()){ msg.className="pdfmsg show bad"; msg.textContent="Type your name in the box at the top of the page first."; $("studentName").focus(); return; }
+  if(!SESSION){ msg.className="pdfmsg show bad"; msg.innerHTML='Sign in first: <a href="'+loginUrl("quiz")+'">Log in</a>.'; return; }
   if(!(window.jspdf && window.jspdf.jsPDF)){
     msg.className = "pdfmsg show bad";
     msg.innerHTML = "The PDF maker did not load (check the internet). Use <b>Print → Save as PDF</b> instead: in the print window, choose <b>Save as PDF</b> as the printer.";
@@ -1231,7 +1414,7 @@ function printSlip(){
   $("printArea").innerHTML = `
     <h1>Result Slip · Computer Science Course E, Lesson 3: Swimming Fish with Sprite Lab</h1>
     <table>
-      <tr><th style="width:30%">Name</th><td>${esc(S.name||"")}</td></tr>
+      <tr><th style="width:30%">Name</th><td>${esc(studentName())}</td></tr>
       <tr><th>Date</th><td>${esc(today)}</td></tr>
       <tr><th>Quiz score (latest)</th><td>${S.quiz.last===null?"-":S.quiz.last+" / 10 ("+S.quiz.last*10+"%)"}</td></tr>
       <tr><th>Best score · Attempts</th><td>${S.quiz.best===null?"-":S.quiz.best+" / 10"} · ${S.quiz.attempts}</td></tr>
@@ -1265,9 +1448,15 @@ $("resetAll").onclick = ()=>{
 };
 
 /* ---------- Start ---------- */
+if(new URLSearchParams(location.search).get("part")==="quiz") S.step = sections.findIndex(s=>s.id==="s-quiz");
+renderSignin(); offerGuestWork();
 buildStepper(); renderSort(); renderUp(); renderPredict(); renderLevels();
 renderEditor(); renderBlocks(S.tank, $("tankCode")); renderChal(); tank.load([]); tank.render();
 showStep(S.step || 0);
+settleBeans();   /* sends any beans earned while the record book was unreachable */
+if(SESSION && typeof vcUnsent==="function" && vcUnsent().length){
+  vcSendUnsent().then(r=>{ if(r && r.ok){ markSaved(); if(S.quiz.last!==null) showSaveState(); } });
+}
 </script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** October 7, 2026 — latest: Std 5 **Computer Science hub** (`/standard5/computer-science/`) + **Course E Lesson 3: Swimming Fish with Sprite Lab** (interactive lesson, 10-question quiz, PDF results for Google Classroom) + Std 5 hub's CS card lit — NOT yet committed · before that, Oct 3: Maths C1 Unit Test 1 (Big Numbers, Rounding & Decimals) placed at `standard5/math/tests/c1-unit1/` + its hub card lit (gated, KV `sy2627-std5-c1-unit1-math` to paste — open item 12) · before that: answer-blur fix on all three assessment pages (a clicked option fades at once; only a box being typed in stays readable) + SVG labels left as drawn · Science C1 Unit Test 1 now meets the readable-layout and full anti-cheat rules (Science project) · earlier Oct 3: (readable assessment layout + full anti-cheat as STANDING RULES; Science C1 Unit Test 1 page gets the resilience fix + save helper (Science project, `001c112`); KV photos deployed; shared graded-results save helper + Apps Script duplicate guard — live; Oct 2 Maths fixes; `f49e9fa` recorded; KV merge rule) · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
+**Last updated:** October 7, 2026 (late) — latest: CS Lesson 3 now uses the site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · before that: Std 5 **Computer Science hub** (`/standard5/computer-science/`) + **Course E Lesson 3: Swimming Fish with Sprite Lab** (interactive lesson, 10-question quiz, PDF results for Google Classroom) + Std 5 hub's CS card lit — NOT yet committed · before that, Oct 3: Maths C1 Unit Test 1 (Big Numbers, Rounding & Decimals) placed at `standard5/math/tests/c1-unit1/` + its hub card lit (gated, KV `sy2627-std5-c1-unit1-math` to paste — open item 12) · before that: answer-blur fix on all three assessment pages (a clicked option fades at once; only a box being typed in stays readable) + SVG labels left as drawn · Science C1 Unit Test 1 now meets the readable-layout and full anti-cheat rules (Science project) · earlier Oct 3: (readable assessment layout + full anti-cheat as STANDING RULES; Science C1 Unit Test 1 page gets the resilience fix + save helper (Science project, `001c112`); KV photos deployed; shared graded-results save helper + Apps Script duplicate guard — live; Oct 2 Maths fixes; `f49e9fa` recorded; KV merge rule) · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -32,9 +32,28 @@ If the docs are not updated, the task is **not** finished.
   reflection, quiz). Theme palette mirrors the Week 1 Science lesson; sticky progress bar + part pills.
   Saves progress in `localStorage` key `edlo-csE-L03-swimming-fish-v1` (per device; footer button clears it).
 - **Quiz = lesson check, not a graded assessment** (Edwin, Oct 7): 10 MCQ, shuffled, pass 7/10, retakes,
-  answers hidden until passed. Graded in the page (answers sit in the public code — accepted for a lesson
-  check); it does NOT go through `edlo-gemini` or the Sheet. The record is the student's **PDF**
-  (jsPDF 2.5.1, same as Maths Classwork), turned in on Google Classroom; offline fallback = Print → Save as PDF.
+  answers hidden until passed. Marked in the page (answers sit in the public code — accepted for a lesson
+  check); it does NOT go through `edlo-gemini`. Plus the student's **PDF** (jsPDF 2.5.1, same as Maths
+  Classwork), turned in on Google Classroom; offline fallback = Print → Save as PDF.
+- **Site sign-in added (later Oct 7, Edwin: "the sign in also records beans, game points and the group
+  competition").** Loads `/edlo-utils.js`. Lesson stays PUBLIC (July 19 rule); the name now comes from the
+  account (no typed name). Signed out = practice: no beans, and the quiz shows a **Sign in** button
+  (`/login/?next=…?part=quiz` returns straight to the quiz).
+  - **Quiz → Sheet:** every attempt is its own row via `vcSubmitResult` (retry, no duplicates, kept on the
+    device until sent): subject `Computer Science`, lo_code `CS-E-L3`, activity_type `quiz`,
+    activity_name `Std 5 CS · Course E L3 — Swimming Fish Quiz`, score /10, ai_feedback
+    `Attempt #n · q1✓ q2✗ … · PASS|not yet`. Quiz rows add no beans.
+  - **Beans 🌱:** `vcSaveBeans`, lesson_key `std5-cs-ce-l03` (server cap 30), first try only — sort 9 ·
+    upstander 3 · predict 8 · Fish Tank challenges 5×2 = 30. Code.org ticks and written answers pay 0.
+    **The lock id includes the username** (`vc-pts-std5-cs-ce-l03-<act>-<username>`), so a second student on a
+    shared computer earns his or her own beans — the Science lessons lock per DEVICE and do not do this yet.
+  - **Shared computers:** saved answers are per account (`edlo-csE-L03-swimming-fish-v1::<username>`);
+    **Next student** signs out → `/login/`. Work done signed-out is offered once to the next student who signs
+    in ("Is that your work?") only if real work exists.
+  - ⚠️ **First second-subject beans.** LESSON-ENGINE-PLAN §4: when a second subject's lessons pay beans,
+    retune Bean Store prices and the class goal (IDEAS #5). Not done yet — Edwin decides.
+  - Tested with a mocked record book: 25/25 beans rows correct, cap key, no re-pay on re-check, 3 quiz rows with
+    3 attempt ids, offline → retry recovers, Next student, second student clean; 360px no overflow.
 - **Std 5 hub:** Computer Science card changed from Coming Soon to a live link (only edit to an existing file).
 - **Footer note:** the lesson's footer leaves out "All rights reserved" because the content is adapted from
   Code.org under CC BY-NC-SA 4.0, which requires the adapted page to carry the same licence.
