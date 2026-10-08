@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 3 · Swimming Fish with Sprite Lab — Mr. EdLo's Virtual Classroom</title>
+<meta name="description" content="Standard 5 Computer Science · Code.org Course E · Lesson 3 — interactive lesson and quiz.">
+<link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" async></script>
+<style>
+/* Std 5 Computer Science · Course E Lesson 3 — Oct 7, 2026. Self-contained (links no shared CSS).
+   ⚠️ overflow-x:hidden must NOT go on <html> — it breaks position:sticky on the progress bar. Body only. */
+body{overflow-x:hidden}
+*{box-sizing:border-box}
+html,body{margin:0}
+
+/* ═══ THEME PALETTE — mirrors standard5/science/lessons/week01-technology-climate/ ═══
+   The ACCENT follows the theme: Night teal · Sunny orange · Cloudy blue · Nature green.
+   --accent-ink is the readable accent for TEXT on light themes (same as the hub's --cycle-color). */
+:root, body.theme-night{
+  --bg:#0d1f1a; --fg:#ffffff;
+  --card:rgba(255,255,255,0.06); --bd:rgba(255,255,255,0.12);
+  --bd-h:rgba(32,201,151,0.40); --muted:rgba(255,255,255,0.62);
+  --btn:rgba(255,255,255,0.08); --star:1;
+  --accent:#20C997; --accent-c:#0d1f1a; --accent-soft:rgba(32,201,151,0.12); --accent-ink:#20C997;
+  --h1-grad:linear-gradient(135deg,#fff 0%,#20C997 55%,#69DB7C 100%);
+  --footer-border:rgba(255,255,255,0.07); --footer-c:rgba(255,255,255,0.45);
+  --right:#69DB7C; --wrong:#FF6B6B;
+  --ok-soft:rgba(105,219,124,0.12); --bad-soft:rgba(255,107,107,0.12);
+  --warm:#FFA94D; --warm-c:#1a1205; --warm-soft:rgba(255,169,77,0.12); --warm-ink:#FFC078;
+}
+body.theme-sunny{
+  --bg:#fffbea; --fg:#2d2000;
+  --card:rgba(255,255,255,0.75); --bd:rgba(200,150,0,0.22);
+  --bd-h:rgba(200,120,0,0.45); --muted:rgba(80,50,0,0.72);
+  --btn:rgba(255,255,255,0.85); --star:0;
+  --accent:#FF922B; --accent-c:#ffffff; --accent-soft:rgba(255,180,0,0.15); --accent-ink:#8a4800;
+  --h1-grad:linear-gradient(135deg,#b35c00 0%,#e67e00 50%,#f5a623 100%);
+  --footer-border:rgba(200,150,0,0.20); --footer-c:rgba(100,60,0,0.62);
+  --right:#2e7d1a; --wrong:#c62828;
+  --ok-soft:rgba(46,125,26,0.10); --bad-soft:rgba(198,40,40,0.10);
+  --warm:#7c3aed; --warm-c:#ffffff; --warm-soft:rgba(124,58,237,0.08); --warm-ink:#6d28d9;
+}
+body.theme-cloudy{
+  --bg:#e8edf2; --fg:#1c2533;
+  --card:rgba(255,255,255,0.72); --bd:rgba(100,130,160,0.22);
+  --bd-h:rgba(80,110,150,0.40); --muted:rgba(40,60,90,0.75);
+  --btn:rgba(255,255,255,0.85); --star:0;
+  --accent:#4A90D9; --accent-c:#ffffff; --accent-soft:rgba(100,140,200,0.12); --accent-ink:#2c5282;
+  --h1-grad:linear-gradient(135deg,#1a365d 0%,#2b6cb0 50%,#4299e1 100%);
+  --footer-border:rgba(80,120,180,0.18); --footer-c:rgba(30,60,100,0.62);
+  --right:#2e7d1a; --wrong:#c62828;
+  --ok-soft:rgba(46,125,26,0.10); --bad-soft:rgba(198,40,40,0.10);
+  --warm:#c2410c; --warm-c:#ffffff; --warm-soft:rgba(194,65,12,0.08); --warm-ink:#9a3412;
+}
+body.theme-nature{
+  --bg:#f0f7ee; --fg:#1a2e10;
+  --card:rgba(255,255,255,0.72); --bd:rgba(60,120,40,0.22);
+  --bd-h:rgba(40,100,20,0.40); --muted:rgba(30,70,15,0.75);
+  --btn:rgba(255,255,255,0.85); --star:0;
+  --accent:#4CAF50; --accent-c:#ffffff; --accent-soft:rgba(60,140,30,0.12); --accent-ink:#276221;
+  --h1-grad:linear-gradient(135deg,#1b4d0f 0%,#2e7d1a 50%,#66bb44 100%);
+  --footer-border:rgba(50,120,20,0.18); --footer-c:rgba(20,70,10,0.62);
+  --right:#2e7d1a; --wrong:#c62828;
+  --ok-soft:rgba(46,125,26,0.10); --bad-soft:rgba(198,40,40,0.10);
+  --warm:#c2410c; --warm-c:#ffffff; --warm-soft:rgba(194,65,12,0.08); --warm-ink:#9a3412;
+}
+:root{
+  /* Sprite Lab block colours — the same in every theme, like Code.org */
+  --blk-run:#c98a00; --blk-sprite:#c2306f; --blk-beh:#2a8f55; --blk-event:#d9a400;
+  --radius:16px;
+}
+
+body{background:var(--bg);color:var(--fg);font-family:'Nunito',system-ui,sans-serif;font-size:18px;line-height:1.55;
+     min-height:100vh;display:flex;flex-direction:column;transition:background .4s,color .4s}
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;opacity:var(--star);transition:opacity .4s}
+.star{position:absolute;border-radius:50%;background:#fff;opacity:.35}
+.wrapper{position:relative;z-index:1;max-width:1400px;margin:0 auto;width:100%;padding:0 max(1rem,4vw) 2rem;flex:1}
+.wrapper.head-wrap{flex:none;padding-bottom:0}
+h1,h2,h3{line-height:1.25;margin:.2em 0 .5em;font-family:'Fredoka One',cursive;font-weight:400}
+h2{font-size:1.55rem} h3{font-size:1.18rem}
+p{margin:.4em 0 .8em}
+a{color:var(--accent-ink);font-weight:700}
+b,strong{font-weight:800}
+button{font:inherit;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit}
+
+/* Top row + theme bar (same pattern as the Science lessons) */
+.top-row{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:1rem 0 .3rem}
+.back-link{color:var(--muted);text-decoration:none;font-weight:800;font-size:.9rem;min-height:44px;display:inline-flex;align-items:center}
+.back-link:hover{color:var(--accent-ink)}
+.theme-bar{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center}
+.theme-bar button{font-family:inherit;font-size:.8rem;font-weight:800;padding:.35rem .75rem;min-height:40px;border-radius:999px;border:1.5px solid var(--bd);background:var(--btn);color:var(--fg);transition:border-color .25s,color .25s}
+.theme-bar button:hover{border-color:var(--bd-h)}
+.theme-bar button.active{border-color:var(--accent);color:var(--accent-ink)}
+
+header.lesson-head{text-align:center;padding:.6rem 0 1rem}
+.chip-row{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:.8rem}
+.hchip{font-size:.72rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:.32rem .8rem;border-radius:999px;background:var(--card);border:1.5px solid var(--bd);color:var(--muted)}
+.lesson-head h1{font-size:clamp(1.7rem,7vw,2.9rem);line-height:1.15;margin:.1em 0 .4em;
+  background:var(--h1-grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.namebox{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+.namebox label{font-weight:800}
+.namebox input{padding:9px 14px;border-radius:12px;border:1.5px solid var(--bd);background:var(--btn);min-width:240px;max-width:100%}
+
+/* Sticky progress bar + lesson parts — same pattern as the Std5 tests */
+.progress-wrap{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--bd);padding:.6rem 0 .5rem;margin-bottom:1.2rem;transition:background .4s}
+.progress-inner{max-width:1400px;margin:0 auto;padding:0 max(1rem,4vw)}
+.progress-label{display:flex;justify-content:space-between;gap:10px;font-size:.8rem;font-weight:800;color:var(--muted);margin-bottom:.35rem}
+.progress-track{height:.55rem;border-radius:999px;background:var(--card);border:1px solid var(--bd);overflow:hidden}
+.progress-fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--accent),#4DABF7);transition:width .4s ease}
+.stepper{display:flex;gap:6px;overflow-x:auto;padding:.55rem 0 .15rem;scrollbar-width:thin}
+.stepper button{flex:0 0 auto;border:1.5px solid var(--bd);background:var(--btn);color:var(--fg);border-radius:999px;padding:5px 13px;font-size:.88rem;font-weight:700;display:flex;gap:8px;align-items:center;min-height:40px}
+.stepper button .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--bd);font-weight:900;font-size:.78rem}
+.stepper button.on{background:var(--accent);color:var(--accent-c);border-color:var(--accent)}
+.stepper button.on .n{background:var(--accent-c);color:var(--accent)}
+.stepper button.done .n{background:var(--right);color:#fff}
+.stepper button.on.done .n{background:var(--accent-c);color:var(--accent)}
+
+section.step{display:none}
+section.step.on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.time{display:inline-block;background:var(--warm-soft);color:var(--warm-ink);border:1px solid var(--warm);border-radius:99px;padding:2px 12px;font-size:.82rem;font-weight:800;margin-bottom:6px}
+
+.card{background:var(--card);border:1.5px solid var(--bd);border-radius:var(--radius);padding:18px 20px;margin:0 0 18px}
+.cards{display:flex;flex-wrap:wrap;gap:16px;margin:0 0 18px}
+.cards>.card{flex:0 1 260px;margin:0;min-width:0}
+.cards.grow>.card{flex:1 1 260px}
+.tip{border-left:6px solid var(--warm);background:var(--warm-soft)}
+.info{border-left:6px solid var(--accent);background:var(--accent-soft)}
+.goal{font-weight:800}
+.muted{color:var(--muted)}
+ul.clean,ol.clean{margin:.3em 0 .6em;padding-left:1.3em}
+
+textarea{width:100%;min-height:96px;border:1.5px solid var(--bd);border-radius:12px;padding:10px 12px;background:var(--btn);resize:vertical}
+textarea:focus,input:focus,select:focus{outline:3px solid var(--bd-h);outline-offset:1px}
+.starter{font-size:.9rem;color:var(--muted);margin:.2em 0 .4em}
+
+.btn{border:0;border-radius:12px;padding:10px 18px;background:var(--accent);color:var(--accent-c);font-weight:900;min-height:44px}
+.btn:hover{filter:brightness(1.07)}
+.btn.alt{background:var(--btn);color:var(--fg);border:1.5px solid var(--bd)}
+.btn.alt:hover{border-color:var(--accent)}
+.btn.coral{background:var(--warm);color:var(--warm-c)}
+.btn.ok{background:var(--right);color:#fff}
+body.theme-night .btn.ok{color:#0d1f1a}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+.navrow{display:flex;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
+
+/* Sort activity */
+.sortlist{display:flex;flex-direction:column;gap:8px}
+.sortitem{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;border:1.5px solid var(--bd);border-radius:12px;padding:8px 12px;background:var(--btn)}
+.sortitem .lbl{flex:1 1 220px;font-weight:700}
+.sortitem .choices{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:2px solid var(--bd);background:var(--btn);color:var(--fg);border-radius:99px;padding:4px 12px;font-size:.9rem;font-weight:700;min-height:40px}
+.chip.sel{border-color:var(--accent);background:var(--accent);color:var(--accent-c)}
+.sortitem.right{border-color:var(--right);background:var(--ok-soft)}
+.sortitem.wrong{border-color:var(--wrong);background:var(--bad-soft)}
+.sortitem .fb{flex:1 1 100%;font-size:.9rem;display:none}
+.sortitem.right .fb,.sortitem.wrong .fb{display:block}
+
+/* Options (radio) */
+.opts{display:flex;flex-direction:column;gap:8px;margin:8px 0}
+.opt{display:flex;gap:10px;align-items:flex-start;border:2px solid var(--bd);border-radius:12px;padding:8px 12px;background:var(--btn);cursor:pointer;font-weight:600}
+.opt input{margin-top:5px;transform:scale(1.2);accent-color:var(--accent)}
+.opt:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.opt.right{border-color:var(--right);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--wrong);background:var(--bad-soft)}
+.feedback{border-radius:12px;padding:10px 12px;margin-top:8px;display:none;font-weight:600}
+.feedback.show{display:block}
+.feedback.good{background:var(--ok-soft);border:1.5px solid var(--right)}
+.feedback.bad{background:var(--bad-soft);border:1.5px solid var(--wrong)}
+
+/* Flip cards */
+.flip{perspective:900px;border:0;padding:0;background:none;text-align:left;width:100%;min-height:190px;color:var(--fg)}
+.flip .inner{position:relative;width:100%;min-height:190px;transition:transform .5s;transform-style:preserve-3d}
+.flip.on .inner{transform:rotateY(180deg)}
+.flip .face{position:absolute;inset:0;border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;justify-content:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:1.5px solid var(--bd)}
+.flip .front{background:var(--accent);color:var(--accent-c);align-items:center;text-align:center}
+.flip .front .word{font-family:'Fredoka One',cursive;font-size:1.8rem}
+.flip .front small{opacity:.9;font-weight:700}
+.flip .back{background:var(--bg);transform:rotateY(180deg)}
+.flip .back b{color:var(--accent-ink)}
+.flipcol{flex:0 1 260px;min-width:0}
+.flipcol.extra .front{background:var(--warm);color:var(--warm-c)}
+
+/* Stage + blocks */
+.lab{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
+.stagebox{flex:0 1 420px;min-width:0;width:100%}
+.stagebox canvas{width:100%;max-width:420px;aspect-ratio:1/1;display:block;border-radius:14px;border:3px solid var(--bd-h);background:#7fd3f0;touch-action:manipulation}
+.stagebox .btnrow{justify-content:flex-start}
+.status{font-size:.9rem;color:var(--muted);min-height:1.4em;font-weight:600}
+.codecol{flex:1 1 360px;min-width:0}
+.blocks{background:#f4f5f9;color:#222;border:1.5px solid var(--bd);border-radius:14px;padding:12px;font-size:.92rem;overflow-x:auto}
+.blocks .muted{color:#555}
+.stack{margin:0 0 12px}
+.blk{display:inline-block;color:#fff;border-radius:6px;padding:5px 10px;margin:2px 0;font-weight:700;white-space:nowrap}
+.blk .slot{display:inline-block;background:rgba(255,255,255,.92);color:#222;border-radius:5px;padding:0 6px;margin:0 2px;font-weight:700}
+.blk.hat{background:var(--blk-run);border-radius:14px 14px 6px 6px}
+.blk.ev{background:var(--blk-event);color:#2b2100;border-radius:14px 14px 6px 6px}
+.blk.sp{background:var(--blk-sprite)}
+.blk.bh{background:var(--blk-beh)}
+.stack .body{border-left:10px solid #ddd;margin-left:6px;padding-left:8px;display:flex;flex-direction:column;align-items:flex-start}
+.stack.run .body{border-color:var(--blk-run)}
+.stack.ev .body{border-color:var(--blk-event)}
+.legend{display:flex;flex-wrap:wrap;gap:8px;font-size:.82rem;margin-top:6px;font-weight:600}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend i{width:14px;height:14px;border-radius:3px;display:inline-block}
+
+.toggles{display:flex;flex-direction:column;gap:6px;margin:6px 0 10px}
+.toggles label{display:flex;gap:10px;align-items:center;border:1.5px solid var(--bd);border-radius:12px;padding:6px 10px;background:var(--btn);cursor:pointer;min-height:44px}
+.toggles input{transform:scale(1.25);accent-color:var(--accent)}
+
+/* Sprite editor */
+.sprites{display:flex;flex-wrap:wrap;gap:12px;margin:10px 0}
+.spcard{flex:0 1 260px;min-width:0;border:1.5px solid var(--bd);border-radius:14px;padding:12px;background:var(--card)}
+.spcard .sphead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.spcard .sphead b{font-size:1.05rem}
+.spcard .del{border:0;background:var(--bad-soft);color:var(--wrong);border-radius:8px;padding:3px 10px;font-size:.85rem;font-weight:800}
+.field{margin:6px 0}
+.field label{display:block;font-size:.85rem;font-weight:800;color:var(--muted)}
+.field select{width:100%;padding:6px 8px;border-radius:9px;border:1.5px solid var(--bd);background:var(--bg);color:var(--fg)}
+.field input[type=range]{width:100%;accent-color:var(--accent)}
+.beh{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:.9rem}
+.beh label{display:flex;gap:5px;align-items:center;font-weight:600;color:var(--fg)}
+.beh input{accent-color:var(--accent)}
+
+.checklist{list-style:none;padding:0;margin:6px 0}
+.checklist li{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px dashed var(--bd)}
+.checklist li:last-child{border-bottom:0}
+.tick{flex:0 0 26px;height:26px;border-radius:50%;border:2px solid var(--bd);display:grid;place-items:center;font-weight:900;color:#fff}
+.checklist li.done .tick{background:var(--right);border-color:var(--right)}
+
+/* Level cards */
+.lvl{display:flex;flex-direction:column;gap:6px}
+.lvl .tag{font-size:.78rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--warm-ink)}
+.lvl .nums{display:flex;gap:6px;flex-wrap:wrap}
+.lvlbtn{display:flex;align-items:center;gap:6px;border:2px solid var(--bd);border-radius:12px;padding:4px 10px;background:var(--btn);min-height:44px}
+.lvlbtn a{font-weight:800;text-decoration:none}
+.lvlbtn input{transform:scale(1.2);accent-color:var(--right)}
+.lvlbtn.done{border-color:var(--right);background:var(--ok-soft)}
+
+/* Quiz */
+.q{border:1.5px solid var(--bd);border-radius:14px;padding:14px 16px;margin:0 0 14px;background:var(--card)}
+.q .qn{font-weight:900;color:var(--accent-ink)}
+.q.right{border-color:var(--right)}
+.q.wrong{border-color:var(--wrong)}
+.scorebig{font-family:'Fredoka One',cursive;font-size:2.6rem}
+.pass{color:var(--right)} .notyet{color:var(--wrong)}
+.turnin{border:2px solid var(--warm);background:var(--warm-soft)}
+.turnin ol{margin:.4em 0 .4em;padding-left:1.4em}
+.turnin li{margin:0 0 12px}
+.turnin li .btn{margin-top:6px;display:inline-flex;align-items:center;text-decoration:none}
+.pdfmsg{border-radius:12px;padding:10px 12px;margin-top:6px;display:none;font-weight:600}
+.pdfmsg.show{display:block}
+.pdfmsg.good{background:var(--ok-soft);border:1.5px solid var(--right)}
+.pdfmsg.bad{background:var(--bad-soft);border:1.5px solid var(--wrong)}
+
+.site-footer{position:relative;z-index:1;text-align:center;padding:1.5rem max(1rem,4vw);font-size:.8rem;color:var(--footer-c);border-top:1px solid var(--footer-border)}
+.site-footer p{margin:.3em auto;max-width:90ch}
+.site-footer a{color:inherit}
+.site-footer .reset{background:none;border:1px solid var(--footer-border);color:var(--footer-c);border-radius:999px;padding:4px 12px;font-size:.75rem;font-weight:700;margin-top:.4rem}
+
+@media (max-width:600px){
+  body{font-size:16.5px}
+  .top-row{justify-content:center}
+  .theme-bar{flex:1 1 100%}
+  .namebox input{min-width:0;width:100%}
+}
+
+#printArea{display:none}
+@media print{
+  body{background:#fff;color:#000;font-size:12pt;display:block}
+  body>*:not(#printArea){display:none !important}
+  #printArea{display:block}
+  #printArea *{color:#000 !important;background:#fff !important;box-shadow:none !important}
+  #printArea table{width:100%;border-collapse:collapse}
+  #printArea td,#printArea th{border:1px solid #000;padding:5px 7px;text-align:left;vertical-align:top}
+  #printArea h1{font-size:16pt;margin:0 0 4pt;font-family:Arial,sans-serif}
+  #printArea h3{font-family:Arial,sans-serif}
+  #printArea .ans{border:1px solid #000;padding:6px 8px;min-height:30px;white-space:pre-wrap;margin:2px 0 8px}
+}
+</style>
+</head>
+<body class="theme-night">
+<div class="stars" id="stars"></div>
+
+<div class="wrapper head-wrap">
+  <div class="top-row">
+    <a class="back-link" href="/standard5/computer-science/">← Back to Computer Science</a>
+    <div class="theme-bar" id="themeBar">
+      <button type="button" data-t="night">🌙 Night</button>
+      <button type="button" data-t="sunny">☀️ Sunny</button>
+      <button type="button" data-t="cloudy">☁️ Cloudy</button>
+      <button type="button" data-t="nature">🌿 Nature</button>
+    </div>
+  </div>
+  <header class="lesson-head">
+    <div class="chip-row">
+      <span class="hchip">Standard 5 · Computer Science</span>
+      <span class="hchip">Course E · Lesson 3</span>
+      <span class="hchip">⏱ 55 minutes</span>
+    </div>
+    <h1>🐠 Swimming Fish with Sprite Lab</h1>
+    <div class="namebox">
+      <label for="studentName">My name:</label>
+      <input id="studentName" type="text" autocomplete="off" placeholder="First and last name">
+    </div>
+  </header>
+</div>
+
+<!-- Sticky progress bar + lesson parts -->
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="progress-label" aria-live="polite"><span>Your progress</span><span id="progText">0 of 7 parts done · 0%</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progBar"></div></div>
+    <nav class="stepper" id="stepper" aria-label="Lesson parts"></nav>
+  </div>
+</div>
+
+<main class="wrapper">
+
+<!-- ============ PART 1: WARM UP ============ -->
+<section class="step" id="s-warm" data-title="Warm Up">
+  <span class="time">⏱ 10 minutes</span>
+  <h2>Part 1 · Warm Up: Staying Safe Online</h2>
+
+  <div class="cards grow">
+    <div class="card info">
+      <h3>🎯 Today I can…</h3>
+      <ul class="clean">
+        <li>create new <b>sprites</b> and give them <b>costumes</b> and <b>behaviors</b>.</li>
+        <li>explain that a sprite is a character or object on the screen that can be moved and changed.</li>
+        <li><b>modify</b> (change) a program to add new features.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>💭 Reflect</h3>
+      <p><b>How can we safely present ourselves online?</b> Think about our last two lessons.</p>
+      <p class="starter">Sentence starter: “To stay safe online, I should… because…”</p>
+      <textarea data-bind="warm.reflect" aria-label="Reflection: How can we safely present ourselves online?"></textarea>
+    </div>
+  </div>
+
+  <div class="cards grow">
+    <div class="card"><h3>🙂 Personal information</h3><p>Information about you that <b>cannot</b> be used to find out exactly who you are, because many people share it. <span class="muted">Example: your favourite food.</span></p></div>
+    <div class="card"><h3>🔒 Private information</h3><p>Information about you that <b>can</b> be used to find out exactly who you are, because it belongs only to you. <span class="muted">Example: your home address.</span></p></div>
+    <div class="card"><h3>🦸 Upstander</h3><p>A person who supports and stands up for someone who is being treated badly, online or in person.</p></div>
+  </div>
+
+  <div class="card">
+    <h3>🗂 Sort it! Personal or private?</h3>
+    <p>Choose for each piece of information. Then press <b>Check my sorting</b>.</p>
+    <div class="sortlist" id="sortList"></div>
+    <div class="btnrow"><button class="btn" id="sortCheck">Check my sorting</button><span id="sortScore" class="goal"></span></div>
+  </div>
+
+  <div class="card">
+    <h3>🎟 Exit Ticket: Meeting a New Student</h3>
+    <p>Imagine a new student joined our class today, and you are getting to know her.</p>
+    <p><b>1. What is one piece of personal information that you would share with her? Why?</b></p>
+    <textarea data-bind="warm.q1" aria-label="Exit ticket question 1"></textarea>
+    <p style="margin-top:12px"><b>2. What is one piece of private information that you would NOT share? Why not?</b></p>
+    <textarea data-bind="warm.q2" aria-label="Exit ticket question 2"></textarea>
+  </div>
+
+  <div class="card">
+    <h3>🦸 Be an Upstander</h3>
+    <p>During an online game, some players keep posting mean comments about Andre. What would an upstander do?</p>
+    <div class="opts" id="upOpts"></div>
+    <div class="feedback" id="upFb"></div>
+  </div>
+</section>
+
+<!-- ============ PART 2: VOCABULARY ============ -->
+<section class="step" id="s-vocab" data-title="Vocabulary">
+  <span class="time">⏱ part of Warm Up</span>
+  <h2>Part 2 · Today’s Vocabulary</h2>
+  <p>Tap each card to flip it. Read the meaning and the example, then flip it back and say the meaning in your own words.</p>
+  <div class="cards" id="vocabCards"></div>
+  <p class="muted">Orange cards are extra words you will see on the Sprite Lab screen today.</p>
+</section>
+
+<!-- ============ PART 3: MEET A SPRITE ============ -->
+<section class="step" id="s-bridge" data-title="Meet a Sprite">
+  <span class="time">⏱ 10 minutes</span>
+  <h2>Part 3 · Meet a Sprite</h2>
+  <div class="card info">
+    <p>This tumbleweed is a <b>sprite</b>. It is a picture on the screen that is controlled by a program. Turn blocks on and off, then press <b>▶ Run</b> to see what happens.</p>
+  </div>
+
+  <div class="lab">
+    <div class="stagebox">
+      <canvas id="demoStage" width="800" height="800" aria-label="Sprite stage with a tumbleweed"></canvas>
+      <div class="btnrow">
+        <button class="btn ok" id="demoRun">▶ Run</button>
+        <button class="btn alt" id="demoReset">⟲ Reset</button>
+      </div>
+      <div class="status" id="demoStatus">Press Run to start the program.</div>
+    </div>
+    <div class="codecol">
+      <h3>Choose the blocks</h3>
+      <div class="toggles">
+        <label><input type="checkbox" id="dSpin"> tumbleweed begins <b>spinning right</b></label>
+        <label><input type="checkbox" id="dSwim"> tumbleweed begins <b>swimming left-right</b></label>
+        <label><input type="checkbox" id="dStop"> when tumbleweed is <b>clicked</b> → it <b>stops all behaviors</b></label>
+      </div>
+      <h3>The program</h3>
+      <div class="blocks" id="demoCode"></div>
+      <div class="legend">
+        <span><i style="background:var(--blk-run)"></i>runs right away</span>
+        <span><i style="background:var(--blk-event)"></i>event (waits)</span>
+        <span><i style="background:var(--blk-sprite)"></i>sprite</span>
+        <span><i style="background:var(--blk-beh)"></i>behavior</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card tip" style="margin-top:18px">
+    <h3>💡 How Sprite Lab is different</h3>
+    <p>In Sprite Lab, all the code under <b>when run</b> happens <b>right away, in order</b>, as soon as you press Run. Code inside an <b>event</b> block (like <i>when clicked</i>) waits until that event happens.</p>
+  </div>
+
+  <h3>Predict, then test</h3>
+  <p>Choose your prediction. Then use the blocks above to test it before you press <b>Check</b>.</p>
+  <div id="predictBox"></div>
+</section>
+
+<!-- ============ PART 4: SPRITE LAB LEVELS ============ -->
+<section class="step" id="s-levels" data-title="Sprite Lab Levels">
+  <span class="time">⏱ 20 minutes</span>
+  <h2>Part 4 · Swimming Fish on Code.org</h2>
+  <div class="card info">
+    <p class="goal">Goal: Program your own Fish Tank. First put sprites on the screen, then make them move, then add any sea creatures and objects you like.</p>
+    <p>This is a <b>creative</b> activity to help you learn Sprite Lab. It is not a test. Open each level, finish it, then tick the box.</p>
+    <p class="muted">Sign in to Code.org with your class login first. <a id="lessonLink" target="_blank" rel="noopener">Open the whole lesson on Code.org ↗</a></p>
+  </div>
+  <div class="cards" id="levelCards"></div>
+
+  <div class="cards grow">
+    <div class="card tip">
+      <h3>🙋 Stuck? Ask 3 before me</h3>
+      <p>First ask your partner. Then ask a nearby group. Describe the problem using these questions:</p>
+      <ol class="clean">
+        <li>What is it <b>supposed</b> to do?</li>
+        <li>What does it <b>actually</b> do?</li>
+        <li>What does that <b>tell</b> you?</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>📶 No internet?</h3>
+      <p>Go to <b>Part 5: Fish Tank Builder</b>. It works right here on this page and teaches the same ideas.</p>
+      <button class="btn alt" data-goto="s-tank">Go to the Fish Tank Builder →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PART 5: FISH TANK BUILDER ============ -->
+<section class="step" id="s-tank" data-title="Fish Tank Builder">
+  <span class="time">⏱ practice &amp; free play</span>
+  <h2>Part 5 · Fish Tank Builder: Our Barrier Reef</h2>
+  <div class="card info">
+    <p>Here is a program with one angelfish. <b>Modify</b> it to build your own Belize Barrier Reef tank. Change the sprites, then press <b>▶ Run</b>. Finish all 5 challenges!</p>
+  </div>
+
+  <div class="lab">
+    <div class="stagebox">
+      <canvas id="tankStage" width="800" height="800" aria-label="Fish tank stage"></canvas>
+      <div class="btnrow">
+        <button class="btn ok" id="tankRun">▶ Run</button>
+        <button class="btn alt" id="tankStopBtn">■ Stop</button>
+      </div>
+      <div class="status" id="tankStatus">Press Run to start the program.</div>
+      <div class="card" style="margin-top:10px">
+        <h3>🏆 Challenges</h3>
+        <ul class="checklist" id="chalList"></ul>
+      </div>
+    </div>
+    <div class="codecol">
+      <div class="btnrow">
+        <button class="btn" id="addSprite">＋ Make a new sprite</button>
+        <button class="btn alt" id="resetTank">Start over</button>
+      </div>
+      <div class="sprites" id="spriteEditor"></div>
+      <h3>My program</h3>
+      <div class="blocks" id="tankCode"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PART 6: WRAP UP ============ -->
+<section class="step" id="s-wrap" data-title="Wrap Up">
+  <span class="time">⏱ 15 minutes (with the quiz)</span>
+  <h2>Part 6 · Wrap Up: Reflection</h2>
+  <div class="card">
+    <p><b>1. What was today’s lesson about?</b></p>
+    <p class="starter">Word bank: sprite · costume · behavior · event · modify · location · size<br>Sentence starter: “Today I learned that a sprite… I made my fish…”</p>
+    <textarea data-bind="wrap.r1" aria-label="Reflection question 1"></textarea>
+    <p style="margin-top:12px"><b>2. Was it difficult to finish a lesson where there was no clear “right” and “wrong”? Why or why not?</b></p>
+    <p class="starter">Sentence starter: “It was (easy / difficult) because…”</p>
+    <textarea data-bind="wrap.r2" aria-label="Reflection question 2"></textarea>
+  </div>
+  <button class="btn coral" data-goto="s-quiz">I’m ready for the quiz →</button>
+</section>
+
+<!-- ============ PART 7: QUIZ ============ -->
+<section class="step" id="s-quiz" data-title="Quiz">
+  <h2>Part 7 · Lesson Quiz</h2>
+  <div class="card info">
+    <p>10 questions · You need <b>7 out of 10 (70%)</b> to pass. If you do not pass, review the lesson parts named in your feedback and try again.</p>
+    <p class="muted" id="quizHistory"></p>
+  </div>
+  <div id="quizNeedName" class="card tip" style="display:none"><p>✍️ Type your name in the box at the top of the page before you start the quiz.</p></div>
+  <div id="quizArea"></div>
+  <div id="quizResult"></div>
+</section>
+
+<div class="navrow" id="navRow">
+  <button class="btn alt" id="prevBtn">← Back</button>
+  <button class="btn" id="nextBtn">Next →</button>
+</div>
+</main>
+
+<footer class="site-footer">
+  <p>© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize</p>
+  <p>Lesson content adapted from Code.org <i>CS Fundamentals Course E (2025), Lesson 3: Swimming Fish with Sprite Lab</i>, licensed <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>. Warm-up exit ticket adapted from Common Sense Education, <i>Private and Personal Information</i> (CC BY-NC-SA). This page is shared under the same licence for non-commercial classroom use.</p>
+  <button type="button" class="reset" id="resetAll">Teacher: clear saved progress on this device</button>
+</footer>
+
+<div id="printArea"></div>
+
+<script>
+"use strict";
+/* ---------- Theme (site-wide: body.theme-*, saved in localStorage "vc-theme") ---------- */
+const THEMES = ["night","sunny","cloudy","nature"];
+function setTheme(t){
+  THEMES.forEach(x=>document.body.classList.remove("theme-"+x));
+  document.body.classList.add("theme-"+t);
+  document.querySelectorAll("#themeBar button").forEach(b=>b.classList.toggle("active", b.dataset.t===t));
+  try{ localStorage.setItem("vc-theme", t); }catch(e){}
+}
+document.querySelectorAll("#themeBar button").forEach(b=>b.addEventListener("click",()=>setTheme(b.dataset.t)));
+(function(){ let s=null; try{ s=localStorage.getItem("vc-theme"); }catch(e){} setTheme(THEMES.includes(s)?s:"night"); })();
+(function(){ const sc=document.getElementById("stars"); for(let i=0;i<70;i++){ const s=document.createElement("div"); s.className="star"; const z=Math.random()*2.2+1;
+  s.style.cssText="width:"+z+"px;height:"+z+"px;top:"+(Math.random()*100)+"%;left:"+(Math.random()*100)+"%;opacity:"+(Math.random()*.4+.15).toFixed(2); sc.appendChild(s);} })();
+/* ---------- Settings (edit these if Code.org changes its links) ---------- */
+const LESSON_URL = "https://studio.code.org/s/coursee-2025/lessons/3";
+const LEVEL_URL  = n => LESSON_URL + "/levels/" + n;
+const STORE_KEY  = "edlo-csE-L03-swimming-fish-v1";
+const PASS_MARK  = 7;
+
+/* ---------- Saved state ---------- */
+function defaults(){
+  return {name:"",step:0,visited:{},
+    warm:{reflect:"",sort:{},sortChecked:false,sortScore:null,q1:"",q2:"",upstander:null},
+    predict:{},levels:{},tank:null,challenges:{},
+    wrap:{r1:"",r2:""},
+    quiz:{attempts:0,best:null,last:null,passed:false,history:[]}};
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(raw){
+      const d = defaults(), s = JSON.parse(raw);
+      for(const k in d){ if(s[k]!==undefined){ d[k] = (d[k] && typeof d[k]==="object" && !Array.isArray(d[k])) ? Object.assign(d[k], s[k]) : s[k]; } }
+      return d;
+    }
+  }catch(e){}
+  return defaults();
+}
+let S = load();
+function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); }catch(e){} updateProgress(); }
+const $ = id => document.getElementById(id);
+function esc(t){ return String(t).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function getPath(p){ return p.split(".").reduce((o,k)=>o[k], S); }
+function setPath(p,v){ const ks=p.split("."), last=ks.pop(); ks.reduce((o,k)=>o[k], S)[last]=v; }
+
+/* ---------- Steps / navigation ---------- */
+const sections = Array.from(document.querySelectorAll("section.step"));
+function buildStepper(){
+  $("stepper").innerHTML = sections.map((s,i)=>
+    `<button type="button" data-i="${i}"><span class="n">${i+1}</span>${esc(s.dataset.title)}</button>`).join("");
+  $("stepper").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>showStep(+b.dataset.i)));
+}
+function showStep(i){
+  i = Math.max(0, Math.min(sections.length-1, i));
+  S.step = i; S.visited[sections[i].id] = true;
+  sections.forEach((s,k)=>s.classList.toggle("on", k===i));
+  $("stepper").querySelectorAll("button").forEach((b,k)=>{
+    b.classList.toggle("on", k===i);
+    b.classList.toggle("done", partDone(sections[k].id));
+  });
+  $("prevBtn").style.visibility = i===0 ? "hidden" : "visible";
+  $("nextBtn").style.visibility = i===sections.length-1 ? "hidden" : "visible";
+  if(sections[i].id==="s-quiz") renderQuizStart();
+  if(sections[i].id!=="s-tank") tank.stop();
+  if(sections[i].id!=="s-bridge") demo.stop();
+  const on = $("stepper").querySelector("button.on"); if(on && on.scrollIntoView) on.scrollIntoView({inline:"center",block:"nearest"});
+  window.scrollTo({top:0,behavior:"smooth"});
+  save();
+}
+document.addEventListener("click", e=>{
+  const g = e.target.closest("[data-goto]");
+  if(g){ showStep(sections.findIndex(s=>s.id===g.dataset.goto)); }
+});
+$("prevBtn").onclick = ()=>showStep(S.step-1);
+$("nextBtn").onclick = ()=>showStep(S.step+1);
+
+/* ---------- Progress ---------- */
+function filled(t){ return t && t.trim().length >= 3; }
+function partDone(id){
+  switch(id){
+    case "s-warm":  return S.warm.sortChecked && filled(S.warm.q1) && filled(S.warm.q2) && S.warm.upstander!==null;
+    case "s-vocab": return !!S.visited["s-vocab"];
+    case "s-bridge":return Object.keys(S.predict).filter(k=>S.predict[k]&&S.predict[k].checked).length===PREDICT.length;
+    case "s-levels":return levelsDone()===9;
+    case "s-tank":  return chalDone()===CHALLENGES.length;
+    case "s-wrap":  return filled(S.wrap.r1) && filled(S.wrap.r2);
+    case "s-quiz":  return S.quiz.passed;
+  }
+  return false;
+}
+function updateProgress(){
+  const done = sections.filter(s=>partDone(s.id)).length;
+  const pct = Math.round(done/sections.length*100);
+  $("progBar").style.width = pct+"%";
+  $("progText").textContent = done+" of "+sections.length+" parts done · "+pct+"%";
+  $("stepper").querySelectorAll("button").forEach((b,k)=>b.classList.toggle("done", partDone(sections[k].id)));
+}
+
+/* ---------- Text bindings ---------- */
+document.querySelectorAll("[data-bind]").forEach(el=>{
+  el.value = getPath(el.dataset.bind) || "";
+  el.addEventListener("input", ()=>{ setPath(el.dataset.bind, el.value); save(); });
+});
+$("studentName").value = S.name;
+$("studentName").addEventListener("input", e=>{ S.name = e.target.value; save(); if(sections[S.step].id==="s-quiz") renderQuizStart(); });
+
+/* ---------- Part 1: Sort ---------- */
+const SORT = [
+  {id:"food",  t:"My favourite food is rice and beans", a:"personal", why:"Many people love rice and beans, so it cannot show exactly who you are."},
+  {id:"addr",  t:"My home address", a:"private", why:"Your address shows exactly where you live. Keep it private."},
+  {id:"team",  t:"My favourite football team", a:"personal", why:"Thousands of fans like the same team."},
+  {id:"phone", t:"My phone number", a:"private", why:"A phone number belongs only to you or your family."},
+  {id:"pet",   t:"I have a pet dog", a:"personal", why:"Lots of people have dogs, so this is safe to share."},
+  {id:"pass",  t:"My password", a:"private", why:"Never share a password, except with a parent or guardian."},
+  {id:"colour",t:"My favourite colour is green", a:"personal", why:"Many people share a favourite colour."},
+  {id:"full",  t:"My full name", a:"private", why:"Your full name can be used to find you."},
+  {id:"bday",  t:"My full date of birth", a:"private", why:"Your full birth date can be used with other facts to identify you."}
+];
+function renderSort(){
+  $("sortList").innerHTML = SORT.map(it=>{
+    const v = S.warm.sort[it.id];
+    return `<div class="sortitem" id="si-${it.id}"><span class="lbl">${esc(it.t)}</span>
+      <span class="choices">
+        <button type="button" class="chip ${v==="personal"?"sel":""}" data-s="${it.id}" data-v="personal">🙂 Personal</button>
+        <button type="button" class="chip ${v==="private"?"sel":""}" data-s="${it.id}" data-v="private">🔒 Private</button>
+      </span><span class="fb"></span></div>`;}).join("");
+  $("sortList").querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
+    S.warm.sort[b.dataset.s] = b.dataset.v; save(); renderSort();
+  }));
+}
+$("sortCheck").onclick = ()=>{
+  const answered = SORT.filter(it=>S.warm.sort[it.id]).length;
+  if(answered < SORT.length){ $("sortScore").textContent = "Sort all "+SORT.length+" items first ("+answered+" done)."; return; }
+  let right = 0;
+  SORT.forEach(it=>{
+    const el = $("si-"+it.id), ok = S.warm.sort[it.id]===it.a; if(ok) right++;
+    el.classList.toggle("right", ok); el.classList.toggle("wrong", !ok);
+    el.querySelector(".fb").textContent = (ok ? "✔ " : "✘ This is "+it.a+" information. ") + it.why;
+  });
+  S.warm.sortChecked = true; S.warm.sortScore = right; save();
+  $("sortScore").textContent = "You sorted "+right+" of "+SORT.length+" correctly." + (right<SORT.length ? " Change the red ones and check again." : " Excellent!");
+};
+
+/* ---------- Part 1: Upstander ---------- */
+const UP = [
+  {t:"Join in and post a mean comment too.", ok:false, fb:"That would make things worse for Andre. An upstander supports the person being hurt."},
+  {t:"Send Andre a kind message, refuse to join in, and tell a trusted adult.", ok:true, fb:"Yes! An upstander supports the person and gets help from a trusted adult."},
+  {t:"Ignore it. It is not my problem.", ok:false, fb:"Someone who sees it and does nothing is a bystander. An upstander helps."},
+  {t:"Share Andre’s home address with the other players.", ok:false, fb:"Never share someone’s private information. That could put Andre in danger."}
+];
+function renderUp(){
+  $("upOpts").innerHTML = UP.map((o,i)=>`<label class="opt"><input type="radio" name="up" value="${i}" ${S.warm.upstander===i?"checked":""}><span>${esc(o.t)}</span></label>`).join("");
+  $("upOpts").querySelectorAll("input").forEach(r=>r.addEventListener("change",()=>{ S.warm.upstander=+r.value; save(); showUpFb(); }));
+  showUpFb();
+}
+function showUpFb(){
+  const i = S.warm.upstander, fb = $("upFb");
+  if(i===null){ fb.className="feedback"; return; }
+  fb.className = "feedback show " + (UP[i].ok ? "good" : "bad");
+  fb.textContent = (UP[i].ok ? "✔ " : "✘ ") + UP[i].fb + (UP[i].ok ? "" : " Try another answer.");
+}
+
+/* ---------- Part 2: Vocabulary ---------- */
+const VOCAB = [
+  {w:"Sprite", d:"A graphic on the screen with a location, size, and appearance.", e:"The angelfish swimming in our tank is a sprite."},
+  {w:"Behavior", d:"An action that a sprite does continuously (over and over) until it is told to stop.", e:"“Swimming left-right” keeps going until the fish is told to stop."},
+  {w:"Modify", d:"To make small changes to something, usually to make it better.", e:"I modified my program by adding a sea turtle."},
+  {w:"Costume", d:"The picture a sprite uses, which decides how it looks.", e:"I changed the fish’s costume to a lobster.", extra:true},
+  {w:"Event", d:"Something that happens, like a click, that can make code run.", e:"“When clicked” runs only when you click the sprite.", extra:true}
+];
+$("vocabCards").innerHTML = VOCAB.map((v,i)=>`
+  <div class="flipcol ${v.extra?"extra":""}">
+    <button type="button" class="flip" aria-label="Flip card: ${esc(v.w)}">
+      <div class="inner">
+        <div class="face front"><span class="word">${esc(v.w)}</span><small>${v.extra?"extra word · ":""}tap to flip</small></div>
+        <div class="face back"><p><b>${esc(v.w)}:</b> ${esc(v.d)}</p><p class="muted">Example: ${esc(v.e)}</p></div>
+      </div>
+    </button>
+  </div>`).join("");
+$("vocabCards").querySelectorAll(".flip").forEach(b=>b.addEventListener("click",()=>b.classList.toggle("on")));
+
+/* ---------- Sprite engine ---------- */
+const COSTUMES = {
+  angelfish:{e:"🐠",n:"angelfish"}, bluefish:{e:"🐟",n:"blue fish"}, puffer:{e:"🐡",n:"puffer fish"},
+  turtle:{e:"🐢",n:"sea turtle"}, shark:{e:"🦈",n:"nurse shark"}, octopus:{e:"🐙",n:"octopus"},
+  crab:{e:"🦀",n:"crab"}, lobster:{e:"🦞",n:"lobster"}, dolphin:{e:"🐬",n:"dolphin"},
+  tumbleweed:{e:null,n:"tumbleweed"}
+};
+const BEHAVIORS = {swim:"swimming left-right", wander:"wandering", spin:"spinning right", jitter:"jittering", bob:"bobbing up-down"};
+const CLICKS = {none:"(nothing)", stop:"stops all behaviors", say:"says “Hello!”", spin:"begins spinning right"};
+const EMOJI_FONT = '"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+
+function makeStage(canvas, bg, hooks){
+  const ctx = canvas.getContext("2d");
+  const W = 400, SC = canvas.width / W;
+  const st = {sprites:[], running:false, raf:0, t:0, last:0, bubbles:[], hooks:hooks||{}};
+  for(let i=0;i<12;i++) st.bubbles.push({x:Math.random()*400,y:Math.random()*400,r:2+Math.random()*4,v:.3+Math.random()*.6});
+
+  function drawBg(){
+    if(bg==="desert"){
+      const g = ctx.createLinearGradient(0,0,0,400); g.addColorStop(0,"#bfe6f7"); g.addColorStop(.65,"#f6e7c4"); g.addColorStop(1,"#e2c58c");
+      ctx.fillStyle=g; ctx.fillRect(0,0,400,400);
+      ctx.fillStyle="#c9a66b"; ctx.beginPath(); ctx.ellipse(90,330,120,22,0,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle="#5e9e4f"; [[330,300],[60,280]].forEach(([x,y])=>{ ctx.fillRect(x-6,y-50,12,60); ctx.fillRect(x-22,y-35,16,8); ctx.fillRect(x-22,y-48,8,20); ctx.fillRect(x+6,y-30,16,8); ctx.fillRect(x+14,y-44,8,20); });
+      return;
+    }
+    const g = ctx.createLinearGradient(0,0,0,400); g.addColorStop(0,"#8adcf4"); g.addColorStop(1,"#13649a");
+    ctx.fillStyle=g; ctx.fillRect(0,0,400,400);
+    ctx.fillStyle="rgba(255,255,255,.08)";
+    for(let i=0;i<4;i++){ ctx.beginPath(); ctx.moveTo(40+i*100,0); ctx.lineTo(80+i*100,0); ctx.lineTo(20+i*100,380); ctx.lineTo(0+i*100,380); ctx.fill(); }
+    ctx.fillStyle="#ead7a0"; ctx.beginPath(); ctx.moveTo(0,370); ctx.quadraticCurveTo(200,345,400,372); ctx.lineTo(400,400); ctx.lineTo(0,400); ctx.fill();
+    ctx.strokeStyle="#2f8f4e"; ctx.lineWidth=6; ctx.lineCap="round";
+    [30,70,300,345,375].forEach((x,i)=>{ const sway=Math.sin(st.t*.03+i)*10; ctx.beginPath(); ctx.moveTo(x,375); ctx.quadraticCurveTo(x+sway,320,x+sway*1.5,270+i*8); ctx.stroke(); });
+    ctx.fillStyle="#e2735a"; [[150,368,16],[175,362,22],[205,370,14]].forEach(([x,y,r])=>{ ctx.beginPath(); ctx.arc(x,y,r,Math.PI,0); ctx.fill(); });
+    ctx.fillStyle="#7f8a93"; ctx.beginPath(); ctx.ellipse(250,372,26,14,0,Math.PI,0); ctx.fill();
+    ctx.fillStyle="rgba(255,255,255,.55)";
+    st.bubbles.forEach(b=>{ ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fill(); });
+  }
+  function drawSprite(s){
+    const fs = 60 * s.size/100;
+    ctx.save();
+    ctx.translate(s.x + (s.jx||0), s.y + (s.by||0) + (s.jy||0));
+    ctx.rotate(s.angle);
+    if(s.costume==="tumbleweed"){
+      const r = fs/2;
+      ctx.fillStyle="#c49a5a"; ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle="#7a5527"; ctx.lineWidth=2.2;
+      for(let k=0;k<9;k++){ const a=k*0.7; ctx.beginPath(); ctx.arc(Math.cos(a)*r*.25,Math.sin(a)*r*.25,r*.75,a,a+2.4); ctx.stroke(); }
+      ctx.strokeStyle="#5b3d18"; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(-r*.7,0); ctx.lineTo(r*.7,0); ctx.stroke();
+    } else {
+      ctx.font = fs+"px "+EMOJI_FONT; ctx.textAlign="center"; ctx.textBaseline="middle";
+      ctx.fillText(COSTUMES[s.costume].e, 0, 0);
+    }
+    ctx.restore();
+    if(s.say && st.t < s.sayUntil){
+      const tx = s.x, ty = s.y - fs/2 - 16; ctx.font = "bold 16px sans-serif";
+      const w = ctx.measureText(s.say).width + 18;
+      ctx.fillStyle="#fff"; ctx.strokeStyle="#222"; ctx.lineWidth=1.5;
+      ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(tx-w/2,ty-15,w,28,8); else ctx.rect(tx-w/2,ty-15,w,28); ctx.fill(); ctx.stroke();
+      ctx.fillStyle="#222"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(s.say,tx,ty);
+    }
+  }
+  function step(k){
+    st.t += k;
+    st.bubbles.forEach(b=>{ b.y -= b.v*k; if(b.y < -10){ b.y = 380; b.x = Math.random()*400; } });
+    st.sprites.forEach(s=>{
+      s.jx = s.jy = 0;
+      if(s.active.has("swim")){ s.x += s.dir*1.6*k; if(s.x>375){s.x=375;s.dir=-1;} if(s.x<25){s.x=25;s.dir=1;} }
+      if(s.active.has("wander")){ s.h += (Math.random()-.5)*.35*k; s.x += Math.cos(s.h)*1.2*k; s.y += Math.sin(s.h)*1.2*k;
+        if(s.x<25||s.x>375){ s.h = Math.PI - s.h; s.x = Math.max(25,Math.min(375,s.x)); }
+        if(s.y<25||s.y>345){ s.h = -s.h; s.y = Math.max(25,Math.min(345,s.y)); } }
+      if(s.active.has("spin")) s.angle += .06*k;
+      if(s.active.has("jitter")){ s.jx = (Math.random()-.5)*7; s.jy = (Math.random()-.5)*7; }
+      s.by = s.active.has("bob") ? Math.sin(st.t*.05 + s.phase)*22 : (s.by||0);
+    });
+  }
+  function frame(now){
+    const k = st.last ? Math.min(3,(now-st.last)/16.67) : 1; st.last = now;
+    step(k); render();
+    if(st.running) st.raf = requestAnimationFrame(frame);
+  }
+  function render(){
+    ctx.setTransform(SC,0,0,SC,0,0); drawBg();
+    st.sprites.forEach(drawSprite);
+  }
+  st.load = function(program){
+    st.sprites = program.map((p,i)=>({id:i,costume:p.costume,x:+p.x,y:+p.y,size:+p.size,
+      active:new Set(p.behaviors),onClick:p.onClick,angle:0,dir:1,h:Math.random()*Math.PI*2,phase:i,by:0,say:null,sayUntil:0}));
+  };
+  st.run = function(program){
+    st.stop(); st.load(program); st.running = true; st.last = 0; st.raf = requestAnimationFrame(frame);
+  };
+  st.stop = function(){ st.running = false; cancelAnimationFrame(st.raf); };
+  st.clear = function(){ st.stop(); st.sprites = []; render(); };
+  st.render = render;
+  canvas.addEventListener("click", ev=>{
+    if(!st.running) return;
+    const r = canvas.getBoundingClientRect(), x = (ev.clientX-r.left)*400/r.width, y = (ev.clientY-r.top)*400/r.height;
+    for(let i=st.sprites.length-1;i>=0;i--){
+      const s = st.sprites[i], rad = 30*s.size/100 + 6;
+      if(Math.hypot(x-(s.x), y-(s.y+(s.by||0))) <= rad){
+        if(s.onClick==="stop"){ s.active.clear(); }
+        else if(s.onClick==="say"){ s.say="Hello!"; s.sayUntil = st.t + 120; }
+        else if(s.onClick==="spin"){ s.active.add("spin"); }
+        if(st.hooks.click) st.hooks.click(s);
+        break;
+      }
+    }
+  });
+  render();
+  return st;
+}
+
+/* Blocks view */
+function slot(t){ return `<span class="slot">${esc(t)}</span>`; }
+function spriteLabel(c){ const C = COSTUMES[c]; return (C.e ? C.e+" " : "") + C.n; }
+function renderBlocks(program, el){
+  if(!program.length){ el.innerHTML = '<span class="muted">No blocks yet. Make a new sprite!</span>'; return; }
+  let h = '<div class="stack run"><span class="blk hat">when run</span><div class="body">';
+  program.forEach(p=>{
+    const nm = spriteLabel(p.costume);
+    h += `<span class="blk sp">make a new ${slot(nm)} sprite at ${slot("x: "+p.x+", y: "+p.y)}</span>`;
+    if(+p.size !== 100) h += `<span class="blk sp">set ${slot(nm)} size to ${slot(p.size)}</span>`;
+    p.behaviors.forEach(b=>{ h += `<span class="blk bh">${slot(nm)} begins ${slot(BEHAVIORS[b])}</span>`; });
+  });
+  h += '</div></div>';
+  program.forEach(p=>{
+    if(p.onClick && p.onClick!=="none"){
+      const nm = spriteLabel(p.costume);
+      h += `<div class="stack ev"><span class="blk ev">when ${slot(nm)} clicked</span><div class="body">`;
+      h += p.onClick==="spin" ? `<span class="blk bh">${slot(nm)} begins ${slot("spinning right")}</span>`
+                               : `<span class="blk sp">${slot(nm)} ${esc(CLICKS[p.onClick])}</span>`;
+      h += '</div></div>';
+    }
+  });
+  el.innerHTML = h;
+}
+
+/* ---------- Part 3: Demo ---------- */
+const demo = makeStage($("demoStage"), "desert", {click: s=>{ if(s.onClick==="stop") $("demoStatus").textContent = "You clicked the tumbleweed. Its behaviors stopped!"; }});
+function demoProgram(){
+  const b = []; if($("dSpin").checked) b.push("spin"); if($("dSwim").checked) b.push("swim");
+  return [{costume:"tumbleweed",x:200,y:220,size:110,behaviors:b,onClick:$("dStop").checked?"stop":"none"}];
+}
+function demoRefresh(){ renderBlocks(demoProgram(), $("demoCode")); }
+["dSpin","dSwim","dStop"].forEach(id=>$(id).addEventListener("change",()=>{ demoRefresh(); if(demo.running){ demo.stop(); $("demoStatus").textContent="You changed the program. Press Run again."; } }));
+$("demoRun").onclick = ()=>{
+  const p = demoProgram(); demo.run(p);
+  const n = p[0].behaviors.length;
+  $("demoStatus").textContent = n===0 ? "The sprite appeared, but it has no behavior, so it just sits there."
+    : n===2 ? "Two behaviors at the same time! Watch it carefully. Does it ever stop by itself?"
+    : "The behavior keeps going… and going…" + (p[0].onClick==="stop" ? " Try clicking the tumbleweed." : "");
+};
+$("demoReset").onclick = ()=>{ demo.clear(); $("demoStatus").textContent="Stage cleared. Press Run to start the program."; };
+demoRefresh(); demo.load([]); demo.render();
+
+const PREDICT = [
+  {q:"Which blocks do we need to make the tumbleweed spin?", o:["Only “make a new sprite”","“Make a new sprite” and “begins spinning right”","Only a “when clicked” block"], a:1,
+   why:"First the sprite must be made, then it needs the “spinning right” behavior. Test it: turn on only the spinning block and press Run."},
+  {q:"What will happen if we tell the sprite to begin two behaviors at once?", o:["It does only the first behavior","It does both behaviors at the same time","The program shows an error"], a:1,
+   why:"Sprites can do more than one behavior at a time. Turn on spinning AND swimming to see it roll across the screen."},
+  {q:"Will the sprite ever stop these behaviors on its own?", o:["Yes, after a few seconds","Yes, when it reaches the edge","No, it keeps going until it is told to stop"], a:2,
+   why:"A behavior is continuous. It keeps going until the program tells the sprite to stop."},
+  {q:"How can we make the sprite stop its behaviors when we click it?", o:["Add a “when clicked” event with a “stops all behaviors” block","Press the Run button again","Make the sprite bigger"], a:0,
+   why:"An event block waits for the click. Then the code inside it runs. Turn on the third block, press Run, and click the tumbleweed."}
+];
+function renderPredict(){
+  $("predictBox").innerHTML = PREDICT.map((p,i)=>{
+    const st = S.predict[i] || {};
+    return `<div class="card" id="pr-${i}"><p><b>${i+1}. ${esc(p.q)}</b></p>
+      <div class="opts">${p.o.map((o,j)=>`<label class="opt"><input type="radio" name="pr${i}" value="${j}" ${st.choice===j?"checked":""}><span>${esc(o)}</span></label>`).join("")}</div>
+      <button class="btn alt" data-pr="${i}">Check</button>
+      <div class="feedback" id="prfb-${i}"></div></div>`;
+  }).join("");
+  $("predictBox").querySelectorAll("input").forEach(r=>r.addEventListener("change",()=>{
+    const i = +r.name.slice(2); S.predict[i] = Object.assign(S.predict[i]||{}, {choice:+r.value}); save();
+  }));
+  $("predictBox").querySelectorAll("[data-pr]").forEach(b=>b.addEventListener("click",()=>checkPredict(+b.dataset.pr)));
+  PREDICT.forEach((p,i)=>{ if(S.predict[i] && S.predict[i].checked) checkPredict(i, true); });
+}
+function checkPredict(i, quiet){
+  const st = S.predict[i], fb = $("prfb-"+i);
+  if(!st || st.choice===undefined){ fb.className="feedback show bad"; fb.textContent="Choose a prediction first."; return; }
+  const ok = st.choice === PREDICT[i].a;
+  fb.className = "feedback show " + (ok ? "good" : "bad");
+  fb.textContent = (ok ? "✔ Correct. " : "✘ Not quite. ") + PREDICT[i].why;
+  if(ok){ st.checked = true; if(!quiet) save(); }
+}
+
+/* ---------- Part 4: Levels ---------- */
+$("lessonLink").href = LESSON_URL;
+const LEVEL_GROUPS = [
+  {tag:"Video", title:"Introducing Sprite Lab", lv:[1]},
+  {tag:"Predict", title:"What will the program do?", lv:[2]},
+  {tag:"Skill Building", title:"Make the fish move", lv:[3,4,5]},
+  {tag:"Video", title:"How to Make a Sprite", lv:[6]},
+  {tag:"Practice", title:"Add more to the tank", lv:[7,8]},
+  {tag:"Free Play", title:"Make the tank your own", lv:[9]}
+];
+function levelsDone(){ return [1,2,3,4,5,6,7,8,9].filter(n=>S.levels[n]).length; }
+function renderLevels(){
+  $("levelCards").innerHTML = LEVEL_GROUPS.map(g=>`
+    <div class="card lvl"><span class="tag">${esc(g.tag)}</span><b>${esc(g.title)}</b>
+      <div class="nums">${g.lv.map(n=>`<span class="lvlbtn ${S.levels[n]?"done":""}"><a href="${LEVEL_URL(n)}" target="_blank" rel="noopener">Level ${n} ↗</a>
+        <input type="checkbox" data-lv="${n}" ${S.levels[n]?"checked":""} aria-label="Level ${n} finished"></span>`).join("")}</div>
+    </div>`).join("");
+  $("levelCards").querySelectorAll("[data-lv]").forEach(c=>c.addEventListener("change",()=>{
+    S.levels[c.dataset.lv] = c.checked; c.parentElement.classList.toggle("done", c.checked); save();
+  }));
+}
+
+/* ---------- Part 5: Fish Tank ---------- */
+const STARTER = ()=>[{costume:"angelfish",x:200,y:180,size:100,behaviors:["swim"],onClick:"none"}];
+if(!S.tank) S.tank = STARTER();
+const CHALLENGES = [
+  {id:"two",   t:"Make a second sprite for your tank."},
+  {id:"cost",  t:"Give a sprite a different costume (not an angelfish)."},
+  {id:"both",  t:"Give one sprite two behaviors at the same time."},
+  {id:"click", t:"Make a sprite stop when it is clicked. Run it and click it!"},
+  {id:"size",  t:"Change the size of a sprite."}
+];
+function chalDone(){ return CHALLENGES.filter(c=>S.challenges[c.id]).length; }
+function renderChal(){
+  $("chalList").innerHTML = CHALLENGES.map(c=>`<li class="${S.challenges[c.id]?"done":""}"><span class="tick">${S.challenges[c.id]?"✓":""}</span><span>${esc(c.t)}</span></li>`).join("")
+    + (chalDone()===CHALLENGES.length ? '<li class="done"><span class="tick">★</span><span><b>All done! Free play:</b> keep adding creatures and try new behaviors.</span></li>' : "");
+}
+function award(id){ if(!S.challenges[id]){ S.challenges[id]=true; save(); renderChal(); } }
+function checkChallengesOnRun(){
+  const P = S.tank;
+  if(P.length >= 2) award("two");
+  if(P.some(p=>p.costume!=="angelfish")) award("cost");
+  if(P.some(p=>p.behaviors.length >= 2)) award("both");
+  if(P.some(p=>+p.size !== 100)) award("size");
+}
+const tank = makeStage($("tankStage"), "tank", {click: s=>{
+  if(s.onClick==="stop"){ award("click"); $("tankStatus").textContent = "You clicked the "+COSTUMES[s.costume].n+". It stopped all its behaviors."; }
+  else if(s.onClick==="none"){ $("tankStatus").textContent = "Nothing happened. This sprite has no “when clicked” event."; }
+}});
+function renderEditor(){
+  const costumeOpts = c => Object.keys(COSTUMES).filter(k=>k!=="tumbleweed").map(k=>`<option value="${k}" ${k===c?"selected":""}>${COSTUMES[k].e} ${COSTUMES[k].n}</option>`).join("");
+  $("spriteEditor").innerHTML = S.tank.map((p,i)=>`
+    <div class="spcard" data-i="${i}">
+      <div class="sphead"><b>${COSTUMES[p.costume].e} Sprite ${i+1}</b>${S.tank.length>1?`<button type="button" class="del" data-del="${i}">Delete</button>`:""}</div>
+      <div class="field"><label>Costume</label><select data-k="costume">${costumeOpts(p.costume)}</select></div>
+      <div class="field"><label>Location x (left ↔ right): <span>${p.x}</span></label><input type="range" min="30" max="370" step="10" value="${p.x}" data-k="x"></div>
+      <div class="field"><label>Location y (top ↕ bottom): <span>${p.y}</span></label><input type="range" min="30" max="340" step="10" value="${p.y}" data-k="y"></div>
+      <div class="field"><label>Size: <span>${p.size}</span></label><input type="range" min="40" max="200" step="10" value="${p.size}" data-k="size"></div>
+      <div class="field"><label>Behaviors</label><div class="beh">${Object.keys(BEHAVIORS).map(b=>`<label><input type="checkbox" data-b="${b}" ${p.behaviors.includes(b)?"checked":""}>${BEHAVIORS[b]}</label>`).join("")}</div></div>
+      <div class="field"><label>When this sprite is clicked, it…</label><select data-k="onClick">${Object.keys(CLICKS).map(c=>`<option value="${c}" ${c===p.onClick?"selected":""}>${CLICKS[c]}</option>`).join("")}</select></div>
+    </div>`).join("");
+  $("spriteEditor").querySelectorAll(".spcard").forEach(card=>{
+    const i = +card.dataset.i, p = S.tank[i];
+    card.querySelectorAll("[data-k]").forEach(inp=>{
+      inp.addEventListener("input",()=>{
+        const k = inp.dataset.k;
+        p[k] = inp.type==="range" ? +inp.value : inp.value;
+        if(inp.type==="range") inp.previousElementSibling.querySelector("span").textContent = inp.value;
+        if(k==="costume") card.querySelector(".sphead b").textContent = COSTUMES[p.costume].e+" Sprite "+(i+1);
+        edited();
+      });
+    });
+    card.querySelectorAll("[data-b]").forEach(cb=>cb.addEventListener("change",()=>{
+      const b = cb.dataset.b; p.behaviors = p.behaviors.filter(x=>x!==b); if(cb.checked) p.behaviors.push(b); edited();
+    }));
+    const del = card.querySelector("[data-del]");
+    if(del) del.addEventListener("click",()=>{ S.tank.splice(i,1); edited(); renderEditor(); });
+  });
+}
+function edited(){
+  save(); renderBlocks(S.tank, $("tankCode"));
+  if(tank.running){ tank.stop(); $("tankStatus").textContent = "You modified the program. Press ▶ Run to see your changes."; }
+}
+$("addSprite").onclick = ()=>{
+  if(S.tank.length >= 8){ $("tankStatus").textContent = "The tank is full (8 sprites). Delete one to add another."; return; }
+  const pool = ["turtle","bluefish","puffer","crab","octopus","lobster","shark","dolphin"];
+  const c = pool[S.tank.length % pool.length];
+  S.tank.push({costume:c,x:60+Math.floor(Math.random()*28)*10,y:c==="crab"||c==="lobster"?330:80+Math.floor(Math.random()*20)*10,size:100,behaviors:[],onClick:"none"});
+  edited(); renderEditor();
+};
+$("resetTank").onclick = ()=>{ if(confirm("Start over with only the angelfish? (Your challenge ticks stay.)")){ S.tank = STARTER(); edited(); renderEditor(); tank.clear(); $("tankStatus").textContent="Back to the starting program. Press Run."; } };
+$("tankRun").onclick = ()=>{
+  tank.run(S.tank); checkChallengesOnRun();
+  $("tankStatus").textContent = S.tank.some(p=>p.onClick!=="none") ? "Running! Try clicking your sprites." : "Running! Your sprites keep their behaviors until they are told to stop.";
+};
+$("tankStopBtn").onclick = ()=>{ tank.stop(); $("tankStatus").textContent = "Program stopped."; };
+
+/* ---------- Part 7: Quiz ---------- */
+const QUIZ = [
+  {id:"q1", q:"What is a sprite?", o:["A graphic on the screen with a location, size, and appearance","A sound that plays when the program starts","The button you press to run a program","A list of instructions written on paper"], a:0, part:"Part 2: Vocabulary",
+   why:"A sprite is a graphic (picture) on the screen. It has a location, a size, and an appearance (costume)."},
+  {id:"q2", q:"What is a behavior in Sprite Lab?", o:["Something a sprite does only one time","An action a sprite does continuously until it is told to stop","The name of a sprite","The background of the stage"], a:1, part:"Part 2: Vocabulary",
+   why:"A behavior keeps happening over and over until the sprite is told to stop."},
+  {id:"q3", q:"Kevin’s tank had one fish. He added a crab and made the fish bigger. What did Kevin do to his program?", o:["He deleted it","He modified it","He printed it","He froze it"], a:1, part:"Part 2: Vocabulary and Part 5",
+   why:"To modify means to make changes to something to improve it. Kevin changed his program, so he modified it."},
+  {id:"q4", q:"Mia wants her fish sprite to look like a sea turtle instead. What should she change?", o:["The sprite’s behavior","The sprite’s location","The sprite’s costume","The event block"], a:2, part:"Part 2: Vocabulary and Part 5",
+   why:"The costume is the picture a sprite uses. Changing the costume changes how the sprite looks."},
+  {id:"q5", q:"A block says: make a new fish sprite at x: 100, y: 300. What do the numbers 100 and 300 tell us?", o:["The sprite’s size","Where the sprite appears on the screen (its location)","How fast the sprite swims","How many fish to make"], a:1, part:"Part 5: Fish Tank Builder",
+   why:"x and y give the sprite’s location. x goes left to right and y goes top to bottom."},
+  {id:"q6", q:"A shark begins the “swimming left-right” behavior. When will it stop swimming?", o:["After it swims across the screen one time","After 10 seconds","Only when the program tells it to stop","When another sprite is made"], a:2, part:"Part 3: Meet a Sprite",
+   why:"Behaviors are continuous. The shark keeps swimming until the program tells it to stop."},
+  {id:"q7", q:"Jada gives her turtle two behaviors: “spinning right” and “swimming left-right.” What will the turtle do?", o:["Spin and swim at the same time","Only spin","Only swim","Nothing, because a sprite can have only one behavior"], a:0, part:"Part 3: Meet a Sprite",
+   why:"A sprite can do more than one behavior at the same time, so the turtle spins while it swims."},
+  {id:"q8", q:"Andre wants his octopus to stop moving when he clicks it. What does he need?", o:["A bigger octopus","A “when clicked” event block with a “stops all behaviors” block inside","A new costume","A second octopus"], a:1, part:"Part 3: Meet a Sprite",
+   why:"An event block waits for something to happen. When the octopus is clicked, the code inside the event runs and stops its behaviors."},
+  {id:"q9", q:"In Sprite Lab, what happens to code under “when run” that is NOT inside an event block?", o:["It waits until you click a sprite","It never runs","It runs right away, in order, when you press Run","It runs only on Fridays"], a:2, part:"Part 3: Meet a Sprite (the tip box)",
+   why:"Code under “when run” runs right away and in order. Only code inside an event block waits for the event."},
+  {id:"q10", q:"You are playing an online game. Which piece of information should you keep PRIVATE?", o:["Your favourite colour","Your favourite food","Your home address","That you like football"], a:2, part:"Part 1: Warm Up",
+   why:"Your home address is private information because it shows exactly where you live. The others are personal information many people share."}
+];
+let current = null;
+function renderQuizStart(){
+  $("quizHistory").textContent = S.quiz.attempts
+    ? "Attempts: "+S.quiz.attempts+" · Best score: "+S.quiz.best+"/10" + (S.quiz.passed ? " · PASSED ✔" : "") : "";
+  const needName = !S.name.trim();
+  $("quizNeedName").style.display = needName ? "block" : "none";
+  if(current) return;
+  if(S.quiz.attempts && !$("quizResult").innerHTML){ renderResult(S.quiz.lastDetail || null); }
+  if(needName){ $("quizArea").innerHTML = ""; return; }
+  if(!$("quizResult").innerHTML){
+    $("quizArea").innerHTML = '<button class="btn coral" id="startQuiz">Start the quiz</button>';
+    $("startQuiz").onclick = startQuiz;
+  } else { $("quizArea").innerHTML = ""; }
+}
+function startQuiz(){
+  if(!S.name.trim()){ renderQuizStart(); $("studentName").focus(); return; }
+  current = shuffle(QUIZ).map(q=>({q, order:shuffle(q.o.map((_,i)=>i)), pick:null}));
+  $("quizResult").innerHTML = "";
+  $("quizArea").innerHTML = current.map((c,i)=>`
+    <div class="q" id="qq-${i}"><p><span class="qn">Question ${i+1} of ${current.length}.</span> ${esc(c.q.q)}</p>
+      <div class="opts">${c.order.map(oi=>`<label class="opt"><input type="radio" name="qq${i}" value="${oi}"><span>${esc(c.q.o[oi])}</span></label>`).join("")}</div>
+    </div>`).join("") + '<div class="btnrow"><button class="btn ok" id="submitQuiz" disabled>Submit my answers</button><span id="answeredCount" class="muted">0 of 10 answered</span></div>';
+  $("quizArea").querySelectorAll("input[type=radio]").forEach(r=>r.addEventListener("change",()=>{
+    current[+r.name.slice(2)].pick = +r.value;
+    const n = current.filter(c=>c.pick!==null).length;
+    $("answeredCount").textContent = n+" of "+current.length+" answered";
+    $("submitQuiz").disabled = n < current.length;
+  }));
+  $("submitQuiz").onclick = submitQuiz;
+  $("quizArea").scrollIntoView({behavior:"smooth"});
+}
+function gradeAnswers(answers){ return answers.filter(c=>c.pick===c.q.a).length; }
+function submitQuiz(){
+  const score = gradeAnswers(current);
+  const passedNow = score >= PASS_MARK;
+  S.quiz.attempts++; S.quiz.last = score; S.quiz.best = Math.max(S.quiz.best||0, score);
+  if(passedNow) S.quiz.passed = true;
+  S.quiz.history.push({score, date:new Date().toISOString()});
+  S.quiz.lastDetail = current.map(c=>({id:c.q.id, pick:c.pick}));
+  save();
+  $("quizArea").innerHTML = ""; current = null;
+  renderResult(S.quiz.lastDetail);
+  renderQuizStart();
+  $("quizResult").scrollIntoView({behavior:"smooth"});
+}
+function renderResult(detail){
+  if(S.quiz.last===null) return;
+  const score = S.quiz.last, passed = score >= PASS_MARK, reveal = S.quiz.passed;
+  let h = `<div class="card"><div class="scorebig ${passed?"pass":"notyet"}">${score} / 10 · ${score*10}%</div>
+    <p><b>${passed ? "🎉 You passed! Well done." : "Not yet. You need 7 out of 10 to pass. Review the parts below, then try again."}</b></p>
+    <div class="btnrow">${passed ? "" : '<button class="btn coral" id="retake">Try again</button>'}
+      ${passed ? '<button class="btn alt" id="retake">Practise again</button>' : ""}</div>
+    <p class="muted">${passed ? "" : "Correct answers are shown after you pass. "}Every attempt is recorded in your PDF.</p></div>
+  <div class="card turnin" id="turnIn">
+    <h3>📤 Turn in your work on Google Classroom</h3>
+    <ol>
+      <li><b>Save your results.</b><br><button class="btn coral" id="savePdf">📄 Save my results as PDF</button>
+        <div class="pdfmsg" id="pdfMsg" role="status"></div></li>
+      <li><b>Open Google Classroom</b> and find the <b>Swimming Fish with Sprite Lab</b> assignment.<br>
+        <a class="btn alt" href="https://classroom.google.com" target="_blank" rel="noopener">Open Google Classroom ↗</a></li>
+      <li>Click <b>Add or create</b> → <b>File</b>. Choose your PDF from the <b>Downloads</b> folder. Then click <b>Turn in</b>.</li>
+    </ol>
+    <p class="muted">${passed ? "" : "You may try the quiz again first. Save a new PDF after your last try and turn in that one. "}
+      No PDF? <button class="btn alt" id="printSlip" style="font-size:.85rem;padding:4px 10px">🖨 Print → Save as PDF instead</button></p>
+  </div>`;
+  if(detail){
+    h += detail.map((d,i)=>{
+      const q = QUIZ.find(x=>x.id===d.id), ok = d.pick===q.a;
+      return `<div class="q ${ok?"right":"wrong"}"><p><span class="qn">${ok?"✔":"✘"} Question ${i+1}.</span> ${esc(q.q)}</p>
+        <p>Your answer: <b>${esc(q.o[d.pick])}</b></p>
+        ${ok ? `<p class="muted">${esc(q.why)}</p>`
+             : reveal ? `<p>Correct answer: <b>${esc(q.o[q.a])}</b></p><p class="muted">${esc(q.why)}</p>`
+                      : `<p class="muted">Review <b>${esc(q.part)}</b> to find the answer.</p>`}</div>`;
+    }).join("");
+  }
+  $("quizResult").innerHTML = h;
+  const rt = $("retake"); if(rt) rt.onclick = startQuiz;
+  $("printSlip").onclick = printSlip;
+  $("savePdf").onclick = savePdf;
+}
+
+/* ---------- PDF results file (for Google Classroom) ---------- */
+function pdfText(t){
+  // Built-in PDF fonts cover Latin letters (including Spanish accents) but not emoji or symbols.
+  return String(t==null ? "" : t)
+    .replace(/[‘’ʼ]/g,"'").replace(/[“”]/g,'"')
+    .replace(/[–—]/g,"-").replace(/…/g,"...").replace(/·/g,"-")
+    .replace(/[^\x09\x0A\x0D\x20-\x7E\xA0-\xFF]/g,"").replace(/[ \t]+\n/g,"\n");
+}
+function fileSafe(t){
+  return (pdfText(t).normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Za-z0-9]+/g,"-").replace(/^-+|-+$/g,"") || "Student").slice(0,40);
+}
+function lastAttemptTime(){
+  const h = S.quiz.history[S.quiz.history.length-1];
+  const d = h ? new Date(h.date) : new Date();
+  return d.toLocaleString("en-GB",{day:"numeric",month:"long",year:"numeric",hour:"numeric",minute:"2-digit"});
+}
+function buildResultsPdf(){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({unit:"pt", format:"letter"});
+  const M = 54, PW = doc.internal.pageSize.getWidth(), PH = doc.internal.pageSize.getHeight(), W = PW - 2*M;
+  let y = M;
+  const need = h => { if(y + h > PH - M){ doc.addPage(); y = M; } };
+  const font = (size, bold) => { doc.setFont("helvetica", bold ? "bold" : "normal"); doc.setFontSize(size); };
+  const para = (s, size=11, bold=false, after=4, indent=0) => {
+    font(size, bold); const lh = size*1.3;
+    doc.splitTextToSize(pdfText(s), W-indent).forEach(l=>{ need(lh); doc.text(l, M+indent, y+size); y += lh; });
+    y += after;
+  };
+  const heading = s => { y += 8; need(40); para(s, 13, true, 2); doc.setLineWidth(1); doc.line(M, y, M+W, y); y += 8; };
+  const table = (rows, keyW=180) => {
+    rows.forEach(([k,v])=>{
+      font(10.5, false); const vl = doc.splitTextToSize(pdfText(v), W-keyW-16);
+      font(10.5, true);  const kl = doc.splitTextToSize(pdfText(k), keyW-16);
+      const h = Math.max(vl.length, kl.length)*14 + 10;
+      need(h); doc.setLineWidth(.6); doc.rect(M, y, W, h); doc.line(M+keyW, y, M+keyW, y+h);
+      font(10.5, true);  kl.forEach((l,i)=>doc.text(l, M+8, y+17+i*14));
+      font(10.5, false); vl.forEach((l,i)=>doc.text(l, M+keyW+8, y+17+i*14));
+      y += h;
+    });
+    y += 6;
+  };
+  const answerBox = (label, txt) => {
+    para(label, 10.5, true, 2);
+    font(10.5, false);
+    const lines = doc.splitTextToSize(pdfText(txt && txt.trim() ? txt.trim() : "(no answer)"), W-16);
+    let i = 0;
+    while(i < lines.length){            // split long answers across pages
+      need(14+10); const fit = Math.max(1, Math.min(lines.length-i, Math.floor((PH-M-y-10)/14)));
+      const h = fit*14 + 10; doc.setLineWidth(.6); doc.rect(M, y, W, h);
+      lines.slice(i, i+fit).forEach((l,k)=>doc.text(l, M+8, y+17+k*14));
+      y += h; i += fit;
+    }
+    y += 8;
+  };
+
+  const score = S.quiz.last, passed = score >= PASS_MARK, reveal = S.quiz.passed;
+  para("Mr. EdLo - Computer Science - Course E, Lesson 3", 10, false, 0);
+  para("Swimming Fish with Sprite Lab: Quiz Results", 17, true, 6);
+  table([
+    ["Name", S.name.trim()],
+    ["Submitted", lastAttemptTime()],
+    ["Quiz score (this attempt)", score+" / 10  ("+score*10+"%)"],
+    ["Result (pass mark 70%)", passed ? "PASSED" : "NOT YET PASSED"],
+    ["Best score / attempts", S.quiz.best+" / 10  -  "+S.quiz.attempts+" attempt"+(S.quiz.attempts===1?"":"s")],
+    ["All attempts", S.quiz.history.map((a,i)=>"#"+(i+1)+": "+a.score+"/10").join(",  ")]
+  ]);
+
+  heading("Quiz answers (this attempt)");
+  (S.quiz.lastDetail||[]).forEach((d,i)=>{
+    const q = QUIZ.find(x=>x.id===d.id), ok = d.pick===q.a;
+    need(60);
+    para((i+1)+". "+q.q, 10.5, true, 1);
+    para("My answer: "+q.o[d.pick]+"   ["+(ok ? "CORRECT" : "NOT CORRECT")+"]", 10.5, false, 1, 14);
+    if(!ok && reveal) para("Correct answer: "+q.o[q.a], 10.5, false, 1, 14);
+    y += 5;
+  });
+
+  heading("Lesson completion");
+  table([
+    ["Warm-up sorting", S.warm.sortChecked ? S.warm.sortScore+" / 9 correct" : "Not done"],
+    ["Upstander question", S.warm.upstander===null ? "Not done" : (UP[S.warm.upstander].ok ? "Correct" : "Answered, not correct")],
+    ["Predict questions", PREDICT.filter((_,i)=>S.predict[i]&&S.predict[i].checked).length+" / 4 correct"],
+    ["Code.org levels ticked", levelsDone()+" / 9"],
+    ["Fish Tank challenges", chalDone()+" / 5"],
+    ["Reflection written", (filled(S.wrap.r1) && filled(S.wrap.r2)) ? "Yes" : "No"]
+  ]);
+
+  heading("My written answers");
+  answerBox("How can we safely present ourselves online?", S.warm.reflect);
+  answerBox("Exit ticket 1: Personal information I would share, and why:", S.warm.q1);
+  answerBox("Exit ticket 2: Private information I would NOT share, and why not:", S.warm.q2);
+  answerBox("What was today's lesson about?", S.wrap.r1);
+  answerBox("Was it difficult to finish a lesson with no clear right and wrong? Why or why not?", S.wrap.r2);
+
+  const n = doc.getNumberOfPages();
+  for(let p=1;p<=n;p++){
+    doc.setPage(p); font(8.5, false);
+    doc.text(pdfText(S.name.trim()+"  -  Swimming Fish with Sprite Lab  -  Page "+p+" of "+n), M, PH-28);
+  }
+  const fname = "CS-E-L03-SwimmingFish_"+fileSafe(S.name)+"_"+score+"of10.pdf";
+  return {doc, fname};
+}
+function savePdf(){
+  const msg = $("pdfMsg");
+  if(!S.name.trim()){ msg.className="pdfmsg show bad"; msg.textContent="Type your name in the box at the top of the page first."; $("studentName").focus(); return; }
+  if(!(window.jspdf && window.jspdf.jsPDF)){
+    msg.className = "pdfmsg show bad";
+    msg.innerHTML = "The PDF maker did not load (check the internet). Use <b>Print → Save as PDF</b> instead: in the print window, choose <b>Save as PDF</b> as the printer.";
+    return;
+  }
+  try{
+    const {doc, fname} = buildResultsPdf();
+    doc.save(fname);
+    msg.className = "pdfmsg show good";
+    msg.innerHTML = "✔ Saved <b>"+esc(fname)+"</b> to your Downloads folder. Now do step 2.";
+  }catch(e){
+    msg.className = "pdfmsg show bad";
+    msg.innerHTML = "Something went wrong making the PDF. Use <b>Print → Save as PDF</b> instead.";
+  }
+}
+
+/* ---------- Printable result slip (black & white) ---------- */
+function printSlip(){
+  const yes = b => b ? "Yes" : "No";
+  const ans = t => esc(t && t.trim() ? t.trim() : "(no answer)");
+  const today = new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("printArea").innerHTML = `
+    <h1>Result Slip · Computer Science Course E, Lesson 3: Swimming Fish with Sprite Lab</h1>
+    <table>
+      <tr><th style="width:30%">Name</th><td>${esc(S.name||"")}</td></tr>
+      <tr><th>Date</th><td>${esc(today)}</td></tr>
+      <tr><th>Quiz score (latest)</th><td>${S.quiz.last===null?"-":S.quiz.last+" / 10 ("+S.quiz.last*10+"%)"}</td></tr>
+      <tr><th>Best score · Attempts</th><td>${S.quiz.best===null?"-":S.quiz.best+" / 10"} · ${S.quiz.attempts}</td></tr>
+      <tr><th>Result (pass mark 70%)</th><td><b>${S.quiz.passed?"PASSED":"NOT YET PASSED"}</b></td></tr>
+    </table>
+    <h3>Lesson completion</h3>
+    <table>
+      <tr><th>Warm-up sorting</th><td>${S.warm.sortChecked ? S.warm.sortScore+" / 9 correct" : "Not done"}</td></tr>
+      <tr><th>Upstander question</th><td>${S.warm.upstander===null ? "Not done" : (UP[S.warm.upstander].ok ? "Correct" : "Answered, not correct")}</td></tr>
+      <tr><th>Predict questions</th><td>${PREDICT.filter((_,i)=>S.predict[i]&&S.predict[i].checked).length} / 4 correct</td></tr>
+      <tr><th>Code.org levels ticked</th><td>${levelsDone()} / 9</td></tr>
+      <tr><th>Fish Tank challenges</th><td>${chalDone()} / 5</td></tr>
+      <tr><th>Reflection written</th><td>${yes(filled(S.wrap.r1) && filled(S.wrap.r2))}</td></tr>
+    </table>
+    <h3>Written answers</h3>
+    <p><b>How can we safely present ourselves online?</b></p><div class="ans">${ans(S.warm.reflect)}</div>
+    <p><b>Exit ticket 1: Personal information I would share, and why:</b></p><div class="ans">${ans(S.warm.q1)}</div>
+    <p><b>Exit ticket 2: Private information I would not share, and why not:</b></p><div class="ans">${ans(S.warm.q2)}</div>
+    <p><b>What was today’s lesson about?</b></p><div class="ans">${ans(S.wrap.r1)}</div>
+    <p><b>Was it difficult to finish a lesson with no clear right and wrong?</b></p><div class="ans">${ans(S.wrap.r2)}</div>
+    <p style="margin-top:14px">Teacher signature: ______________________________</p>`;
+  window.print();
+}
+
+/* ---------- Teacher reset ---------- */
+$("resetAll").onclick = ()=>{
+  if(confirm("Clear ALL saved answers and quiz results on this device? This cannot be undone.")){
+    try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+    location.reload();
+  }
+};
+
+/* ---------- Start ---------- */
+buildStepper(); renderSort(); renderUp(); renderPredict(); renderLevels();
+renderEditor(); renderBlocks(S.tank, $("tankCode")); renderChal(); tank.load([]); tank.render();
+showStep(S.step || 0);
+</script>
+</body>
+</html>

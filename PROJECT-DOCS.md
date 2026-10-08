@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** October 3, 2026 — latest: Maths C1 Unit Test 1 (Big Numbers, Rounding & Decimals) placed at `standard5/math/tests/c1-unit1/` + its hub card lit (gated, KV `sy2627-std5-c1-unit1-math` to paste — open item 12) · before that: answer-blur fix on all three assessment pages (a clicked option fades at once; only a box being typed in stays readable) + SVG labels left as drawn · Science C1 Unit Test 1 now meets the readable-layout and full anti-cheat rules (Science project) · earlier Oct 3: (readable assessment layout + full anti-cheat as STANDING RULES; Science C1 Unit Test 1 page gets the resilience fix + save helper (Science project, `001c112`); KV photos deployed; shared graded-results save helper + Apps Script duplicate guard — live; Oct 2 Maths fixes; `f49e9fa` recorded; KV merge rule) · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
+**Last updated:** October 7, 2026 — latest: Std 5 **Computer Science hub** (`/standard5/computer-science/`) + **Course E Lesson 3: Swimming Fish with Sprite Lab** (interactive lesson, 10-question quiz, PDF results for Google Classroom) + Std 5 hub's CS card lit — NOT yet committed · before that, Oct 3: Maths C1 Unit Test 1 (Big Numbers, Rounding & Decimals) placed at `standard5/math/tests/c1-unit1/` + its hub card lit (gated, KV `sy2627-std5-c1-unit1-math` to paste — open item 12) · before that: answer-blur fix on all three assessment pages (a clicked option fades at once; only a box being typed in stays readable) + SVG labels left as drawn · Science C1 Unit Test 1 now meets the readable-layout and full anti-cheat rules (Science project) · earlier Oct 3: (readable assessment layout + full anti-cheat as STANDING RULES; Science C1 Unit Test 1 page gets the resilience fix + save helper (Science project, `001c112`); KV photos deployed; shared graded-results save helper + Apps Script duplicate guard — live; Oct 2 Maths fixes; `f49e9fa` recorded; KV merge rule) · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -20,7 +20,27 @@ If the docs are not updated, the task is **not** finished.
 
 ---
 
-## ▶️ Take-off Point — Next Session (as of October 3, 2026)
+## ▶️ Take-off Point — Next Session (as of October 7, 2026)
+
+**Oct 7 — Standard 5 Computer Science online (NOT yet committed — Edwin commits/pushes):**
+- **New hub** `standard5/computer-science/index.html` — structure, theme bar, zoom, footer and mobile rules copied
+  from the Maths hub; palette copied unchanged from the Science hub (accent follows the theme). Self-contained
+  (links no shared CSS — Edwin's choice for these pages, Oct 7). One section, "Code.org Course E · Lessons",
+  plus Quick Links (Code.org, Google Classroom). Add a lesson by copying the Lesson 3 card (comment in the file).
+- **New lesson** `standard5/computer-science/lessons/lesson03-swimming-fish/index.html` — Course E Lesson 3 in
+  7 parts (privacy warm-up, vocabulary, sprite demo, Code.org levels 1–9 tracker, offline Fish Tank Builder,
+  reflection, quiz). Theme palette mirrors the Week 1 Science lesson; sticky progress bar + part pills.
+  Saves progress in `localStorage` key `edlo-csE-L03-swimming-fish-v1` (per device; footer button clears it).
+- **Quiz = lesson check, not a graded assessment** (Edwin, Oct 7): 10 MCQ, shuffled, pass 7/10, retakes,
+  answers hidden until passed. Graded in the page (answers sit in the public code — accepted for a lesson
+  check); it does NOT go through `edlo-gemini` or the Sheet. The record is the student's **PDF**
+  (jsPDF 2.5.1, same as Maths Classwork), turned in on Google Classroom; offline fallback = Print → Save as PDF.
+- **Std 5 hub:** Computer Science card changed from Coming Soon to a live link (only edit to an existing file).
+- **Footer note:** the lesson's footer leaves out "All rights reserved" because the content is adapted from
+  Code.org under CC BY-NC-SA 4.0, which requires the adapted page to carry the same licence.
+- **Check after push:** open one Code.org level link on the lesson page — the course slug
+  `coursee-2025` was not verified (change `LESSON_URL` at the top of the page script if it is wrong).
+
 
 **State in one line:** Standard 5 is live and in daily use (school week 5 = week of Sept 28). GitHub `main` is
 at **`f49e9fa`** (Oct 3, Science project). Edwin's local copy was one commit behind (`fd1f556`) on Oct 3, so
@@ -301,6 +321,8 @@ would silently close or un-schedule the test.
 3. **Design-rule conflict to settle.** The Design System section below says every NEW page links
    `/vc-theme.css`; the pages built since (Check-up, Power-Ups, Maths hub, Classwork 1–2) are fully
    self-contained and link nothing. Edwin decides which rule stands; then fix the losing rule here.
+   *Oct 7:* the Computer Science hub + Lesson 3 were built self-contained (Edwin's choice for those pages);
+   the site-wide rule is still open.
 4. **Lessons:** only Weeks 1–3 exist. The July `std5-science-daily-lesson-build` scheduled task no longer
    exists — treat it as stopped.
 5. **claude.ai Project instructions are out of date** (say Standard 6, `padding: 0 1in`, one repo per
@@ -847,6 +869,8 @@ previously-visited URLs may cache for up to ~10 min.
 | Standard 5 Hub | https://edlovirtualclassroom.com/standard5/ |
 | Standard 5 Science Hub | https://edlovirtualclassroom.com/standard5/science/ |
 | Standard 5 Mathematics Hub | https://edlovirtualclassroom.com/standard5/math/ |
+| Standard 5 Computer Science Hub | https://edlovirtualclassroom.com/standard5/computer-science/ |
+| Std5 CS · Course E Lesson 3 | https://edlovirtualclassroom.com/standard5/computer-science/lessons/lesson03-swimming-fish/ |
 | Standard 6 Hub | https://edlovirtualclassroom.com/standard6/ |
 | Spanish Subject Hub (Std6) | https://edlovirtualclassroom.com/standard6/spanish/ |
 | Science Subject Hub (Std6) | https://edlovirtualclassroom.com/standard6/science/ |
@@ -915,9 +939,13 @@ Virtual-Classroom/
 │   │   ├── quizzes/                    ← 4 STUDENT quiz pages (adaptation, solar-system,
 │   │   │                                  reflection-refraction, digital-citizenship)
 │   │   └── power-ups/                  ← 1A, 1B, 2A, 2B, 3A self-check worksheets (🌱 beans)
-│   └── math/
-│       ├── index.html                  ← Std5 Maths hub (Sept 24, 2026)
-│       └── classwork/                  ← c1-classwork1/, c1-classwork2/ (autosave + retry)
+│   ├── math/
+│   │   ├── index.html                  ← Std5 Maths hub (Sept 24, 2026)
+│   │   └── classwork/                  ← c1-classwork1/, c1-classwork2/ (autosave + retry)
+│   └── computer-science/
+│       ├── index.html                  ← Std5 Computer Science hub (Oct 7, 2026)
+│       └── lessons/
+│           └── lesson03-swimming-fish/ ← Code.org Course E L3 · quiz + PDF for Google Classroom
 │
 ├── standard6/
 │   ├── index.html                      ← Standard 6 hub (subject cards)
@@ -1375,12 +1403,14 @@ cd "C:\Users\Dell Latitude 3520\OneDrive\Shared with me\Code Projects\Python Pro
 | Page | URL | Status |
 |---|---|---|
 | Grade Picker (home) | edlovirtualclassroom.com | ✅ Live |
-| Standard 5 Hub | edlovirtualclassroom.com/standard5/ | ✅ Live (Science card now links to its hub) |
+| Standard 5 Hub | edlovirtualclassroom.com/standard5/ | ✅ Live (Science, Maths and Computer Science cards link their hubs — CS lit Oct 7) |
 | Standard 5 Science Hub | edlovirtualclassroom.com/standard5/science/ | ✅ Live (July 15 — phone-verified, themes fixed) |
 | Std5 Science tests & quizzes (16) | edlovirtualclassroom.com/standard5/science/tests/… &amp; /quizzes/… | ✅ Live (July 15) — resilience fix done on C1 Unit Test 1 (Oct 3); 15 still to apply |
 | Std5 Beginning-of-Year Check-up | edlovirtualclassroom.com/standard5/science/tests/diagnostic/ | ✅ Live (Sept 10; resilience fix Sept 21) |
 | Std5 Science Power-Ups 1A–3A | edlovirtualclassroom.com/standard5/science/power-ups/… | ✅ Live (Aug 5–7) |
 | Standard 5 Maths Hub | edlovirtualclassroom.com/standard5/math/ | ✅ Live (Sept 24) |
+| Standard 5 Computer Science Hub | edlovirtualclassroom.com/standard5/computer-science/ | 🟡 Built Oct 7 — goes live on push |
+| Std5 CS · Course E Lesson 3 (Swimming Fish) | edlovirtualclassroom.com/standard5/computer-science/lessons/lesson03-swimming-fish/ | 🟡 Built Oct 7 — goes live on push |
 | Std5 Maths Classwork Checks 1–2 | edlovirtualclassroom.com/standard5/math/classwork/… | ✅ Live (Sept 24, autosave + retry) |
 | Std5 Maths C1 Unit Test 1 | edlovirtualclassroom.com/standard5/math/tests/c1-unit1/ | 🟡 Placed Oct 3 — goes live on push; KV entry to paste (open item 12); sitting Tue Oct 13 |
 | Std5 Science Lesson Wk 1 | edlovirtualclassroom.com/standard5/science/lessons/week01-technology-climate/ | ✅ Live (built July 16) |
@@ -1394,7 +1424,7 @@ cd "C:\Users\Dell Latitude 3520\OneDrive\Shared with me\Code Projects\Python Pro
 | Scriptures Hub (Std6) | edlovirtualclassroom.com/standard6/scriptures/ | ❌ Not built yet |
 | Computer Science Hub (Std6) | edlovirtualclassroom.com/standard6/computersc/ | ❌ Not built yet |
 | PE Hub (Std6) | edlovirtualclassroom.com/standard6/pe/ | ❌ Not built yet |
-| Other Standard 5 subject hubs | edlovirtualclassroom.com/standard5/&lt;subject&gt;/ | ❌ Not built yet (Science and Maths done) |
+| Other Standard 5 subject hubs | edlovirtualclassroom.com/standard5/&lt;subject&gt;/ | ❌ Not built yet (Science, Maths and Computer Science done) |
 | Login Page | edlovirtualclassroom.com/login/ | ✅ Live (July 16, 2026) |
 | Student Dashboard | edlovirtualclassroom.com/dashboard/ | ✅ Live (built July 17) |
 | Teacher Dashboard | edlovirtualclassroom.com/teacher/ | ✅ Live (built July 17) |
@@ -1402,6 +1432,11 @@ cd "C:\Users\Dell Latitude 3520\OneDrive\Shared with me\Code Projects\Python Pro
 ---
 
 ## 📚 Lessons Built
+
+### Computer Science — Standard 5 (Code.org Course E companions, zero AI cost)
+| Lesson | Folder | Status | Activities | Record |
+|---|---|---|---|---|
+| Course E L3 · Swimming Fish with Sprite Lab | standard5/computer-science/lessons/lesson03-swimming-fish/ | 🟡 Built Oct 7, 2026 | warm-up sort + exit ticket, flip-card vocab, sprite demo + predict, Code.org L1–9 tracker, offline Fish Tank Builder, reflection, 10-Q quiz | PDF → Google Classroom |
 
 ### Spanish
 | Lesson | Folder | Status | Activities | AI Feedback |
