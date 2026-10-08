@@ -61,9 +61,16 @@ If the docs are not updated, the task is **not** finished.
   both exit-ticket answers + the correct upstander choice · Part 2: every word card flipped · Part 3: all 4
   predictions correct · Part 4: all 9 Code.org levels ticked · Part 5: all 5 Fish Tank challenges · Part 6:
   both reflections. `?part=quiz` and old saved steps land on the first unfinished part.
-  ⚠️ **Consequence:** the Fish Tank Builder (the no-internet backup) now opens only after the 9 Code.org levels
-  are ticked; the Part 4 "Code.org will not load?" card tells students to tell Mr. EdLo. Ticks are
-  self-reported — Edwin checks Code.org progress for the class section.
+  **Part 5 is EXEMPT from the lock (Edwin, Oct 7).** The Fish Tank Builder is the no-internet backup, so it must
+  open even when Code.org cannot be reached and the Part 4 ticks are missing — the first build locked it behind
+  those ticks, which shut the fallback exactly when it was needed. `ALWAYS_OPEN = ["s-tank"]` and `isLocked(k)`
+  carry the exemption; it also survives a reload (the saved-step clamp keeps an exempt part). Part 5 still has to
+  be finished before Part 6, and skipping Part 4 still keeps Parts 6–7 shut, so the Code.org work is not optional.
+  While a student sits in Part 5 during an outage, the to-do box names the real blocker ("finish everything in
+  **Part 4: Sprite Lab Levels**") instead of listing Part 5's own items. The Part 4 "Code.org will not load?"
+  card still tells students to tell Mr. EdLo. Ticks are self-reported — Edwin checks Code.org progress for the
+  class section. Tested: 15/15 lock cases (fresh page, outage, Part 4 done, through Part 5, Part 4 skipped,
+  `?part=quiz`, reload in Part 5).
 - **Std 5 hub:** Computer Science card changed from Coming Soon to a live link (only edit to an existing file).
 - **Footer note:** the lesson's footer leaves out "All rights reserved" because the content is adapted from
   Code.org under CC BY-NC-SA 4.0, which requires the adapted page to carry the same licence.

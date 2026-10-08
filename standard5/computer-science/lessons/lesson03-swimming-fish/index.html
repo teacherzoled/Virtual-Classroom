@@ -632,6 +632,10 @@ function buildStepper(){
    openUpTo() = the furthest part a student may open. Locks are worked out from the saved answers,
    so they survive a reload and follow the signed-in student. */
 function openUpTo(){ let i = 0; while(i < sections.length-1 && partDone(sections[i].id)) i++; return i; }
+/* EXEMPT FROM THE LOCK (Edwin, Oct 7): the Fish Tank Builder is the no-internet backup, so it must open even
+   when Code.org cannot be reached and the Part 4 ticks are missing. It still has to be finished before Part 6. */
+const ALWAYS_OPEN = ["s-tank"];
+function isLocked(k){ return k > openUpTo() && ALWAYS_OPEN.indexOf(sections[k].id) === -1; }
 function lockedMsg(k){
   const left = todoFor(sections[k].id).filter(t=>!t.ok).map(t=>t.t);
   return "🔒 Finish Part " + (k+1) + " first" + (left.length ? ": " + left.join(" · ") : ".");
@@ -639,7 +643,7 @@ function lockedMsg(k){
 function showStep(i){
   i = Math.max(0, Math.min(sections.length-1, i));
   const top = openUpTo();
-  if(i > top){ toast(lockedMsg(top)); i = (S.step <= top) ? S.step : top; if(i === S.step && sections[i].classList.contains("on")) return; }
+  if(isLocked(i)){ toast(lockedMsg(top)); i = isLocked(S.step) ? top : S.step; if(i === S.step && sections[i].classList.contains("on")) return; }
   S.step = i; S.visited[sections[i].id] = true;
   sections.forEach((s,k)=>s.classList.toggle("on", k===i));
   $("stepper").querySelectorAll("button").forEach((b,k)=>{ b.classList.toggle("on", k===i); });
@@ -690,7 +694,7 @@ function updateProgress(){
   $("progText").textContent = done+" of "+sections.length+" parts done · "+pct+"%";
   const top = openUpTo();
   $("stepper").querySelectorAll("button").forEach((b,k)=>{
-    const locked = k > top;
+    const locked = isLocked(k);
     b.classList.toggle("done", partDone(sections[k].id));
     b.classList.toggle("locked", locked);
     b.querySelector(".n").textContent = locked ? "🔒" : String(k+1);
@@ -698,15 +702,19 @@ function updateProgress(){
     b.setAttribute("aria-disabled", locked ? "true" : "false");
   });
   /* the to-do box under the current part, and the Next button */
-  const i = S.step, list = todoFor(sections[i].id), box = $("partTodo");
-  const last = i === sections.length-1, here = partDone(sections[i].id);
-  if(!last && !here){
-    box.innerHTML = "🔒 To open <b>Part " + (i+2) + ": " + esc(sections[i+1].dataset.title) + "</b>, finish everything in this part:"
+  const i = S.step, box = $("partTodo");
+  const last = i === sections.length-1, nextLocked = !last && isLocked(i+1);
+  if(nextLocked){
+    /* `top` is the part that actually blocks the next one — usually this part, but it can be an earlier one
+       when the student is sitting in an exempt part (Fish Tank Builder opened without the Part 4 ticks). */
+    const blocker = Math.min(top, i), list = todoFor(sections[blocker].id);
+    box.innerHTML = "🔒 To open <b>Part " + (i+2) + ": " + esc(sections[i+1].dataset.title) + "</b>, finish everything in "
+      + (blocker === i ? "this part" : "<b>Part " + (blocker+1) + ": " + esc(sections[blocker].dataset.title) + "</b>") + ":"
       + "<ul>" + list.map(t=>'<li class="' + (t.ok ? "ok" : "") + '">' + (t.ok ? "✔ " : "") + esc(t.t) + "</li>").join("") + "</ul>";
     box.style.display = "block";
   } else box.style.display = "none";
-  $("nextBtn").classList.toggle("waiting", !last && !here);
-  $("nextBtn").textContent = (!last && !here) ? "🔒 Next" : "Next →";
+  $("nextBtn").classList.toggle("waiting", nextLocked);
+  $("nextBtn").textContent = nextLocked ? "🔒 Next" : "Next →";
 }
 
 /* ---------- Text bindings ---------- */
@@ -1497,7 +1505,7 @@ if(new URLSearchParams(location.search).get("part")==="quiz") S.step = sections.
 renderSignin(); offerGuestWork();
 buildStepper(); renderSort(); renderUp(); renderPredict(); renderLevels();
 renderEditor(); renderBlocks(S.tank, $("tankCode")); renderChal(); tank.load([]); tank.render();
-S.step = Math.min(S.step || 0, openUpTo());
+S.step = isLocked(S.step || 0) ? openUpTo() : (S.step || 0);   /* keep an exempt part (Fish Tank Builder) across a reload */
 showStep(S.step);
 settleBeans();   /* sends any beans earned while the record book was unreachable */
 if(SESSION && typeof vcUnsent==="function" && vcUnsent().length){
