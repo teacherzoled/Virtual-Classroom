@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** October 10, 2026 — latest: CS **Course E Lesson 4: Hello World** built as a DRAFT by the Saturday scheduled task (`standard5/computer-science/lessons/lesson04-hello-world/` + hub card) — NOT committed · before that, Oct 7 (late): CS Lesson 3 now uses the site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · before that: Std 5 **Computer Science hub** (`/standard5/computer-science/`) + **Course E Lesson 3: Swimming Fish with Sprite Lab** (interactive lesson, 10-question quiz, PDF results for Google Classroom) + Std 5 hub's CS card lit — NOT yet committed · before that, Oct 3: Maths C1 Unit Test 1 (Big Numbers, Rounding & Decimals) placed at `standard5/math/tests/c1-unit1/` + its hub card lit (gated, KV `sy2627-std5-c1-unit1-math` to paste — open item 12) · before that: answer-blur fix on all three assessment pages (a clicked option fades at once; only a box being typed in stays readable) + SVG labels left as drawn · Science C1 Unit Test 1 now meets the readable-layout and full anti-cheat rules (Science project) · earlier Oct 3: (readable assessment layout + full anti-cheat as STANDING RULES; Science C1 Unit Test 1 page gets the resilience fix + save helper (Science project, `001c112`); KV photos deployed; shared graded-results save helper + Apps Script duplicate guard — live; Oct 2 Maths fixes; `f49e9fa` recorded; KV merge rule) · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
+**Last updated:** October 10, 2026 — **everything through CS Course E Lesson 4 is committed, pushed and LIVE** (`33ee23b`). Latest: CS **Lesson 4: Hello World** (Saturday scheduled task) + hub card · CS Lesson 3 help layer (Struggling? card, helper badge, raise hand) + class checkpoint before Code.org · CS Lesson 3 tap-to-answer reflections + fun layer · Part 5 exempt from the part locks · CS Lesson 3 site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · Std 5 **Computer Science hub** + **Lesson 3: Swimming Fish** + Std 5 hub's CS card lit · Oct 3: Maths C1 Unit Test 1 at `standard5/math/tests/c1-unit1/` + hub card (gated; KV `sy2627-std5-c1-unit1-math` still to paste — open item 12) · answer-blur fix (a clicked option fades at once) + SVG labels left as drawn · Science C1 Unit Test 1 up to the readable-layout and anti-cheat rules (Science project) · earlier Oct 3: readable layout + full anti-cheat as STANDING RULES, shared save helper + Apps Script duplicate guard, KV merge rule · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -20,9 +20,9 @@ If the docs are not updated, the task is **not** finished.
 
 ---
 
-## ▶️ Take-off Point — Next Session (as of October 7, 2026)
+## ▶️ Take-off Point — Next Session (as of October 10, 2026)
 
-**Oct 7 — Standard 5 Computer Science online (NOT yet committed — Edwin commits/pushes):**
+**Oct 7 — Standard 5 Computer Science online (committed and pushed; live):**
 - **New hub** `standard5/computer-science/index.html` — structure, theme bar, zoom, footer and mobile rules copied
   from the Maths hub; palette copied unchanged from the Science hub (accent follows the theme). Self-contained
   (links no shared CSS — Edwin's choice for these pages, Oct 7). One section, "Code.org Course E · Lessons",
@@ -72,7 +72,7 @@ If the docs are not updated, the task is **not** finished.
   class section. Tested: 15/15 lock cases (fresh page, outage, Part 4 done, through Part 5, Part 4 skipped,
   `?part=quiz`, reload in Part 5).
 - **Oct 10 — tap-to-answer reflections + fun layer (Edwin: "students are slow at typing… make it a little more fun,
-  without taking the focus off learning the content and passing the quiz").** NOT yet committed.
+  without taking the focus off learning the content and passing the quiz").** Committed and pushed (`524a7ac`); live.
   - **Reflections:** the 5 typed answers became tap-to-finish sentences (`FRAMES` + `renderFrame()`/`frameDone()`).
     Opinion blanks have no wrong choice; blanks with a right answer are CHECKED and keep the part locked until
     fixed (exit ticket: pick something PERSONAL / PRIVATE from a mixed list; Wrap Up: what a sprite / a behavior
@@ -92,7 +92,7 @@ If the docs are not updated, the task is **not** finished.
     streak, team chip, badge + confetti after the quiz only, legacy student keeps all 7 parts, reduced motion
     = no confetti, 360px no overflow, PDF shows every sentence + own words + typed line.
 - **Oct 10 (later) — help layer + class checkpoint (Edwin: students work through the lesson on their own; he
-  guides). Page-alone — no backend change.** NOT yet committed.
+  guides). Page-alone — no backend change.** Committed and pushed (`5a80070`); live.
   - **"Struggling?" card:** after 2 wrong answers in a part (`miss()`) or 6 minutes in a part with no progress
     (`partClock`, checked every 20 s). At most ONCE per part, never in the quiz, never while waiting at the
     checkpoint. Choices: 👥 ask a helper · 🙋 call Mr. EdLo · 🔁 look back one part · 👍 I'm OK.
@@ -124,10 +124,10 @@ If the docs are not updated, the task is **not** finished.
 - **Std 5 hub:** Computer Science card changed from Coming Soon to a live link (only edit to an existing file).
 - **Footer note:** the lesson's footer leaves out "All rights reserved" because the content is adapted from
   Code.org under CC BY-NC-SA 4.0, which requires the adapted page to carry the same licence.
-- **Check after push:** open one Code.org level link on the lesson page — the course slug
-  `coursee-2025` was not verified (change `LESSON_URL` at the top of the page script if it is wrong).
+- **Course slug VERIFIED (Oct 10):** `coursee-2025` is correct — `studio.code.org/s/coursee-2025/lessons/3`,
+  `…/lessons/4` and `…/lessons/4/levels/1` all answer 200. `LESSON_URL` needs no change on either lesson.
 
-- **Oct 10 — CS Course E Lesson 4 built as a DRAFT by the Saturday scheduled task — NOT committed — Edwin reviews and pushes.**
+- **Oct 10 — CS Course E Lesson 4, built by the Saturday scheduled task; reviewed, committed and pushed (`33ee23b`); LIVE.**
   `standard5/computer-science/lessons/lesson04-hello-world/index.html`, cloned from Lesson 3's engine (themes, sign-in,
   beans, part locks + `ALWAYS_OPEN = ["s-world"]`, tap-to-answer reflections, fun layer, help layer, class checkpoint,
   quiz, record book, PDF). Sources: `_source/Hello-World.pdf` (lesson plan, 45 min) + Lesson 4's section of
@@ -143,10 +143,12 @@ If the docs are not updated, the task is **not** finished.
   share with friends). Tested in a headless browser with a mocked record book: 67/67 checks passed.
 
 
-**State in one line:** Standard 5 is live and in daily use (school week 5 = week of Sept 28). GitHub `main` is
-at **`f49e9fa`** (Oct 3, Science project). Edwin's local copy was one commit behind (`fd1f556`) on Oct 3, so
-**`git pull` before committing** the Oct 3 Maths/save work (no overlap — `f49e9fa` touched only the Unit Test 1
-page). Waiting to deploy: the Oct 2 Maths fixes + the Oct 3 save helper (open item 11) and Maths C1 Unit Test 1 (open item 12 — KV entry + push, sitting Tue Oct 13).
+**State in one line:** Standard 5 is live and in daily use (school week 7 = week of Oct 12). GitHub `main` is at
+**`33ee23b`** (Oct 10) and the working copy matches it — **nothing is waiting to be committed or pushed.**
+Both sessions push to `main`, so **`git pull` before committing** (standing rule below). Every page through CS
+Course E Lesson 4 is live and was URL-checked on Oct 10. Still OFF the repo and outstanding: the Maths C1 Unit
+Test 1 **KV entry** (open item 12 — paste + merge, sitting Tue Oct 13) and the Apps Script / save-helper deploy
+steps in open item 11 where not already done.
 **Later Oct 3 (Science project):** the Std5 Science C1 Unit Test 1 page now has the resilience fix and uses the
 shared save helper (open item 10 — done); its KV entry (revised questions + photo figures) was deployed and verified.
 
@@ -171,7 +173,7 @@ shared save helper (open item 10 — done); its KV entry (revised questions + ph
   `CLASS_KEYS` (JSON: `"YYYY-MM"` → code, plus `"default"`), not in Worker code. The old hardcoded
   codes were retired because they had been exposed in this public repo. Std 5 student login
   credential cards were produced (kept privately — see below).
-- **Sept 25 — Maths week 5 online (NOT yet committed — Edwin commits/pushes):**
+- **Sept 25 — Maths week 5 online (committed and pushed; live):**
   - **Classwork Check 1 rebuilt** (`standard5/math/classwork/c1-classwork1/`) to the narrowed Sept 23 paper
     worksheet: 12 items / 42 marks, three worked-example sections, MA 1.34–1.35 only. **q2 is now TYPED**
     (a scientific-notation answer), same as paper, because of the new Maths keys. Lock key bumped to `…-v2` and draft key to
@@ -331,7 +333,7 @@ shared save helper (open item 10 — done); its KV entry (revised questions + ph
 - **Sept 24 — housekeeping:** `Claude outputs/` (student credential files) moved OUT of the repo to
   `..\Virtual-Classroom-private\` — confirmed never committed. `.gitignore` now blocks `Claude outputs/`.
 
-- **Oct 3 (evening, this project) — Std5 Maths C1 Unit Test 1 placed (NOT yet committed — Edwin commits/pushes).**
+- **Oct 3 (evening, this project) — Std5 Maths C1 Unit Test 1 placed; committed and pushed (`6cda171`); page live, KV entry still to paste (open item 12).**
   Student page `standard5/math/tests/c1-unit1/index.html` (copied unchanged from the Maths `Assessment/Cycle One/tests/
   Unit Test 1/` folder — `…_ONLINE_STUDENT.html`). Secure-gate shell: questions come from KV `sy2627-std5-c1-unit1-math`
   through `mode:'questions'`; built to every standing rule (login + account lock + Sheet row via `vcSubmitResult()`,
@@ -1055,7 +1057,7 @@ Virtual-Classroom/
 │   ├── spanish/
 │   │   ├── index.html                  ← Spanish subject hub (LIVE)
 │   │   ├── lessons/                     ← includes mis-aspiraciones-intro (LIVE)
-│   │   ├── activities/
+│   │   ├── Activities/
 │   │   └── images/
 │   ├── science/
 │   │   └── index.html                  ← Science subject hub (LIVE, 30 wks)
@@ -1512,11 +1514,11 @@ cd "C:\Users\Dell Latitude 3520\OneDrive\Shared with me\Code Projects\Python Pro
 | Std5 Beginning-of-Year Check-up | edlovirtualclassroom.com/standard5/science/tests/diagnostic/ | ✅ Live (Sept 10; resilience fix Sept 21) |
 | Std5 Science Power-Ups 1A–3A | edlovirtualclassroom.com/standard5/science/power-ups/… | ✅ Live (Aug 5–7) |
 | Standard 5 Maths Hub | edlovirtualclassroom.com/standard5/math/ | ✅ Live (Sept 24) |
-| Standard 5 Computer Science Hub | edlovirtualclassroom.com/standard5/computer-science/ | 🟡 Built Oct 7 — goes live on push |
-| Std5 CS · Course E Lesson 3 (Swimming Fish) | edlovirtualclassroom.com/standard5/computer-science/lessons/lesson03-swimming-fish/ | 🟡 Built Oct 7 — goes live on push |
-| Std5 CS · Course E Lesson 4 (Hello World) | edlovirtualclassroom.com/standard5/computer-science/lessons/lesson04-hello-world/ | 🟡 Draft Oct 10 (Saturday task) — goes live on push |
+| Standard 5 Computer Science Hub | edlovirtualclassroom.com/standard5/computer-science/ | ✅ Live (Oct 10, URL-checked) |
+| Std5 CS · Course E Lesson 3 (Swimming Fish) | edlovirtualclassroom.com/standard5/computer-science/lessons/lesson03-swimming-fish/ | ✅ Live (Oct 10, URL-checked) |
+| Std5 CS · Course E Lesson 4 (Hello World) | edlovirtualclassroom.com/standard5/computer-science/lessons/lesson04-hello-world/ | ✅ Live (Oct 10, URL-checked) |
 | Std5 Maths Classwork Checks 1–2 | edlovirtualclassroom.com/standard5/math/classwork/… | ✅ Live (Sept 24, autosave + retry) |
-| Std5 Maths C1 Unit Test 1 | edlovirtualclassroom.com/standard5/math/tests/c1-unit1/ | 🟡 Placed Oct 3 — goes live on push; KV entry to paste (open item 12); sitting Tue Oct 13 |
+| Std5 Maths C1 Unit Test 1 | edlovirtualclassroom.com/standard5/math/tests/c1-unit1/ | ✅ Page live (Oct 10, URL-checked) — **KV entry still to paste** (open item 12); sitting Tue Oct 13 |
 | Std5 Science Lesson Wk 1 | edlovirtualclassroom.com/standard5/science/lessons/week01-technology-climate/ | ✅ Live (built July 16) |
 | Std5 Science Lesson Wk 2 | edlovirtualclassroom.com/standard5/science/lessons/week02-climate-economy/ | ✅ Live (built July 16) |
 | Std5 Science Lesson Wk 3 | edlovirtualclassroom.com/standard5/science/lessons/week03-weather-vs-climate/ | ✅ Live (built July 16) |
@@ -1541,7 +1543,7 @@ cd "C:\Users\Dell Latitude 3520\OneDrive\Shared with me\Code Projects\Python Pro
 | Lesson | Folder | Status | Activities | Record |
 |---|---|---|---|---|
 | Course E L3 · Swimming Fish with Sprite Lab | standard5/computer-science/lessons/lesson03-swimming-fish/ | 🟡 Built Oct 7, 2026 | warm-up sort + exit ticket, flip-card vocab, sprite demo + predict, Code.org L1–9 tracker, offline Fish Tank Builder, reflection, 10-Q quiz | PDF → Google Classroom |
-| Course E L4 · Hello World | standard5/computer-science/lessons/lesson04-hello-world/ | 🟡 Draft Oct 10, 2026 (Saturday task) | event/action sort + event question, flip-card vocab, events demo (say / when clicked / when touches) + predict + checkpoint, Code.org L1–14 tracker, offline Hello World Builder, tap reflections + 1 typed line, 10-Q quiz | PDF → Google Classroom |
+| Course E L4 · Hello World | standard5/computer-science/lessons/lesson04-hello-world/ | ✅ Live Oct 10, 2026 (Saturday task; reviewed + pushed) | event/action sort + event question, flip-card vocab, events demo (say / when clicked / when touches) + predict + checkpoint, Code.org L1–14 tracker, offline Hello World Builder, tap reflections + 1 typed line, 10-Q quiz | PDF → Google Classroom |
 
 ### Spanish
 | Lesson | Folder | Status | Activities | AI Feedback |
