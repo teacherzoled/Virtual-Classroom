@@ -304,6 +304,15 @@
   .grade-card:hover .grade-enter { gap: 0.9rem; }
   .grade-card.locked { opacity: 0.45; pointer-events: none; cursor: default; }
   .grade-card.locked .grade-enter { display: none; }
+  /* ON HALT (Oct 10, 2026) — the class is closed to students: the card stays readable so they can see WHY,
+     but it is a <div>, not a link, so there is nothing to tap through to. Put it back by making it an
+     <a class="grade-card" href="/standard6/"> again and restoring the "Now Open" chip. */
+  .grade-card.maint { pointer-events: none; cursor: default; }
+  .grade-card.maint .orbit-dot { animation: none; }
+  .grade-card.maint .grade-num { opacity: .55; }
+  .grade-card.maint .grade-title { opacity: .75; }
+  .pill-maint { background: var(--top-badge-bg); border-color: transparent; color: #1A1A1A; }
+  .maint-note { display: block; margin-top: .85rem; font-size: .9rem; font-weight: 700; line-height: 1.5; color: var(--card-desc); }
   .grade-lock-chip { display: inline-block; margin-top: 1.2rem; background: var(--badge-bg); border: 1px solid var(--badge-border); color: var(--badge-color); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.06em; padding: 5px 14px; border-radius: 999px; }
 
   @keyframes riseUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
@@ -411,16 +420,17 @@
       <span class="grade-enter">Enter Standard 5 →</span>
     </a>
 
-    <a class="grade-card" href="/standard6/" style="--accent:var(--a-science);">
+    <div class="grade-card maint" style="--accent:var(--a-science);" role="note" aria-label="Standard 6 is closed for maintenance">
       <div class="orbit-wrap">
         <span class="orbit-ring"></span><span class="orbit-dot"></span>
         <div class="grade-num">6</div>
       </div>
       <div class="grade-title">Standard 6</div>
       <div class="grade-desc">All six subjects, 30 weeks of lessons, activities, quizzes, tests & labs.</div>
-      <span class="grade-chip pill-open"><span class="sp-dot"></span>Now Open</span>
-      <span class="grade-enter">Enter Standard 6 →</span>
-    </a>
+      <span class="grade-chip pill-maint">🔧 On Maintenance</span>
+      <span class="maint-note">Standard 6 is closed just now while Mr. EdLo works on it. Nothing is lost — your
+        work is saved. Please check back soon, and ask Mr. EdLo if you need something from this class.</span>
+    </div>
 
   </div>
 

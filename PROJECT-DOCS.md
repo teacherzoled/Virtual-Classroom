@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** October 10, 2026 — **everything through CS Course E Lesson 4 is committed, pushed and LIVE** (`33ee23b`). Latest: CS **Lesson 4: Hello World** (Saturday scheduled task) + hub card · CS Lesson 3 help layer (Struggling? card, helper badge, raise hand) + class checkpoint before Code.org · CS Lesson 3 tap-to-answer reflections + fun layer · Part 5 exempt from the part locks · CS Lesson 3 site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · Std 5 **Computer Science hub** + **Lesson 3: Swimming Fish** + Std 5 hub's CS card lit · Oct 3: Maths C1 Unit Test 1 at `standard5/math/tests/c1-unit1/` + hub card (gated; KV `sy2627-std5-c1-unit1-math` still to paste — open item 12) · answer-blur fix (a clicked option fades at once) + SVG labels left as drawn · Science C1 Unit Test 1 up to the readable-layout and anti-cheat rules (Science project) · earlier Oct 3: readable layout + full anti-cheat as STANDING RULES, shared save helper + Apps Script duplicate guard, KV merge rule · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
+**Last updated:** October 10, 2026 — **Standard 6 is ON HALT** (home-page card shows 🔧 On Maintenance, front door only — see the entry below) · **everything through CS Course E Lesson 4 is committed, pushed and LIVE** (`33ee23b`). Latest: CS **Lesson 4: Hello World** (Saturday scheduled task) + hub card · CS Lesson 3 help layer (Struggling? card, helper badge, raise hand) + class checkpoint before Code.org · CS Lesson 3 tap-to-answer reflections + fun layer · Part 5 exempt from the part locks · CS Lesson 3 site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · Std 5 **Computer Science hub** + **Lesson 3: Swimming Fish** + Std 5 hub's CS card lit · Oct 3: Maths C1 Unit Test 1 at `standard5/math/tests/c1-unit1/` + hub card (gated; KV `sy2627-std5-c1-unit1-math` still to paste — open item 12) · answer-blur fix (a clicked option fades at once) + SVG labels left as drawn · Science C1 Unit Test 1 up to the readable-layout and anti-cheat rules (Science project) · earlier Oct 3: readable layout + full anti-cheat as STANDING RULES, shared save helper + Apps Script duplicate guard, KV merge rule · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -121,6 +121,17 @@ If the docs are not updated, the task is **not** finished.
   everything as a DRAFT — never commits or pushes. Needs this computer on with the Claude app open. It will not
   build if last week's CS draft is still uncommitted (it sends a reminder instead). First run must verify the
   `coursee-2025` slug. Changing the build rules = edit that scheduled task's prompt.
+- **Oct 10 — STANDARD 6 PUT ON HALT (Edwin). Its card on the home page is no longer a link.** `index.html`:
+  the Standard 6 `<a class="grade-card">` is now a `<div class="grade-card maint">` with a 🔧 **On Maintenance**
+  chip and a short message for students ("closed just now while Mr. EdLo works on it … your work is saved").
+  Non-navigable (`pointer-events:none`, no `href`, `role="note"`), and Standard 5 is untouched.
+  **To reopen:** make it an `<a class="grade-card" href="/standard6/">` again and restore the "Now Open" chip
+  — the how-to is in a comment beside the `.grade-card.maint` CSS.
+  ⚠️ **This closes the front door only.** All 66 Standard 6 pages are still live and open to anyone with a
+  direct link or bookmark, and four other doors still lead in: `404.html` (a "Standard 6" link) and the three
+  legacy redirect shims `portfolios/index.html`, `science/index.html`, `spanish/index.html` (old URLs that
+  forward to `/standard6/…`). If students must really be kept out, say so and those get closed too — the
+  thorough version is a maintenance page at `standard6/index.html` itself.
 - **Std 5 hub:** Computer Science card changed from Coming Soon to a live link (only edit to an existing file).
 - **Footer note:** the lesson's footer leaves out "All rights reserved" because the content is adapted from
   Code.org under CC BY-NC-SA 4.0, which requires the adapted page to carry the same licence.
@@ -975,7 +986,7 @@ previously-visited URLs may cache for up to ~10 min.
 | Standard 5 Computer Science Hub | https://edlovirtualclassroom.com/standard5/computer-science/ |
 | Std5 CS · Course E Lesson 3 | https://edlovirtualclassroom.com/standard5/computer-science/lessons/lesson03-swimming-fish/ |
 | Std5 CS · Course E Lesson 4 (draft) | https://edlovirtualclassroom.com/standard5/computer-science/lessons/lesson04-hello-world/ |
-| Standard 6 Hub | https://edlovirtualclassroom.com/standard6/ |
+| Standard 6 Hub | https://edlovirtualclassroom.com/standard6/ | 🔧 On halt (Oct 10) — card unlinked on the home page; pages still reachable by direct link 
 | Spanish Subject Hub (Std6) | https://edlovirtualclassroom.com/standard6/spanish/ |
 | Science Subject Hub (Std6) | https://edlovirtualclassroom.com/standard6/science/ |
 | Student Portfolios (Std6) | https://edlovirtualclassroom.com/standard6/portfolios/ |
