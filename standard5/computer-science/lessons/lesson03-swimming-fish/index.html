@@ -117,6 +117,37 @@ header.lesson-head{text-align:center;padding:.6rem 0 1rem}
 #toast{position:fixed;left:50%;bottom:1.3rem;transform:translateX(-50%) translateY(160%);background:var(--accent);color:var(--accent-c);
   font-weight:900;font-size:.95rem;padding:.7rem 1.2rem;border-radius:999px;z-index:99;transition:transform .35s ease;max-width:90vw;text-align:center}
 #toast.show{transform:translateX(-50%) translateY(0)}
+/* Tap-to-answer reflections (Edwin, Oct 10: slow typists) */
+.frame{margin:6px 0 4px}
+.frame .sentence{font-size:1.08rem;font-weight:700;line-height:1.9;background:var(--btn);border:1.5px solid var(--bd);border-radius:12px;padding:10px 14px;margin:6px 0 10px}
+.frame .blank{display:inline;border-bottom:3px solid var(--accent);padding:0 3px;color:var(--accent-ink);font-weight:900}
+.frame .blank.empty{color:var(--muted);font-weight:700;letter-spacing:.1em}
+.frame .blank.bad{border-color:var(--wrong);color:var(--wrong)}
+.frame .slot{margin:0 0 10px}
+.frame .slot-l{font-size:.85rem;font-weight:800;color:var(--muted);margin-bottom:4px}
+.frame .chips{display:flex;flex-wrap:wrap;gap:6px}
+.frame .chip{text-align:left;min-height:44px}
+.frame .chip.sel.right{background:var(--right);border-color:var(--right);color:#fff}
+.frame .chip.sel.wrong{background:var(--bad-soft);border-color:var(--wrong);color:var(--fg)}
+.frame .ffb{font-weight:700;font-size:.92rem;margin:4px 0 0}
+.frame .ffb.bad{color:var(--wrong)}
+.frame .legacy{font-size:.9rem;color:var(--muted);font-weight:700;margin:0 0 6px}
+.frame details{margin-top:4px}
+.frame summary{cursor:pointer;font-weight:800;color:var(--accent-ink);min-height:36px;display:inline-flex;align-items:center}
+.frame details textarea{min-height:64px;margin-top:6px}
+input.short{width:100%;padding:10px 12px;border-radius:12px;border:1.5px solid var(--bd);background:var(--btn);font-size:1rem}
+/* Fun layer (Edwin, Oct 10) — short, never blocks a button, nothing during the quiz */
+.hchip.team{background:var(--accent-soft);color:var(--accent-ink);border-color:var(--accent)}
+.hchip.streak{background:var(--warm-soft);color:var(--warm-ink);border-color:var(--warm)}
+.progress-lane{position:relative}
+.mascot{position:absolute;top:50%;left:2%;transform:translate(-50%,-55%);font-size:1.35rem;line-height:1;transition:left .9s ease;pointer-events:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:120;overflow:hidden}
+#confetti i{position:absolute;top:-14px;width:8px;height:12px;border-radius:2px;animation:cf-fall 1.4s ease-in forwards}
+@keyframes cf-fall{to{transform:translate(var(--dx),105vh) rotate(var(--rot));opacity:.85}}
+.badge-card{display:flex;gap:14px;align-items:center;border:2px solid var(--accent);background:var(--accent-soft)}
+.badge-card .ico{font-size:2.6rem;line-height:1}
+.badge-card b{font-family:'Fredoka One',cursive;font-weight:400;font-size:1.25rem;color:var(--accent-ink)}
+@media (prefers-reduced-motion: reduce){ .mascot{transition:none} #confetti{display:none} #toast{transition:none} }
 
 /* Sticky progress bar + lesson parts — same pattern as the Std5 tests */
 .progress-wrap{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--bd);padding:.6rem 0 .5rem;margin-bottom:1.2rem;transition:background .4s}
@@ -321,6 +352,8 @@ body.theme-night .btn.ok{color:#0d1f1a}
       <span class="hchip">Course E · Lesson 3</span>
       <span class="hchip">⏱ 55 minutes</span>
       <span class="hchip bean" id="beanPill">🌱 0 beans</span>
+      <span class="hchip team" id="teamChip" style="display:none"></span>
+      <span class="hchip streak" id="streakChip" style="display:none"></span>
     </div>
     <h1>🐠 Swimming Fish with Sprite Lab</h1>
     <div class="signin" id="signinBar"></div>
@@ -331,7 +364,7 @@ body.theme-night .btn.ok{color:#0d1f1a}
 <div class="progress-wrap">
   <div class="progress-inner">
     <div class="progress-label" aria-live="polite"><span>Your progress</span><span id="progText">0 of 7 parts done · 0%</span></div>
-    <div class="progress-track"><div class="progress-fill" id="progBar"></div></div>
+    <div class="progress-lane"><div class="progress-track"><div class="progress-fill" id="progBar"></div></div><span class="mascot" id="mascot" aria-hidden="true">🐠</span></div>
     <nav class="stepper" id="stepper" aria-label="Lesson parts"></nav>
   </div>
 </div>
@@ -356,8 +389,8 @@ body.theme-night .btn.ok{color:#0d1f1a}
     <div class="card">
       <h3>💭 Reflect</h3>
       <p><b>How can we safely present ourselves online?</b> Think about our last two lessons.</p>
-      <p class="starter">Sentence starter: “To stay safe online, I should… because…”</p>
-      <textarea data-bind="warm.reflect" aria-label="Reflection: How can we safely present ourselves online?"></textarea>
+      <p class="starter">👆 Tap to finish the sentence.</p>
+      <div class="frame" data-frame="reflect"></div>
     </div>
   </div>
 
@@ -379,9 +412,9 @@ body.theme-night .btn.ok{color:#0d1f1a}
     <h3>🎟 Exit Ticket: Meeting a New Student</h3>
     <p>Imagine a new student joined our class today, and you are getting to know her.</p>
     <p><b>1. What is one piece of personal information that you would share with her? Why?</b></p>
-    <textarea data-bind="warm.q1" aria-label="Exit ticket question 1"></textarea>
+    <div class="frame" data-frame="q1"></div>
     <p style="margin-top:12px"><b>2. What is one piece of private information that you would NOT share? Why not?</b></p>
-    <textarea data-bind="warm.q2" aria-label="Exit ticket question 2"></textarea>
+    <div class="frame" data-frame="q2"></div>
   </div>
 
   <div class="card">
@@ -515,12 +548,13 @@ body.theme-night .btn.ok{color:#0d1f1a}
   <span class="time">⏱ 15 minutes (with the quiz)</span>
   <h2>Part 6 · Wrap Up: Reflection</h2>
   <div class="card">
-    <p><b>1. What was today’s lesson about?</b></p>
-    <p class="starter">Word bank: sprite · costume · behavior · event · modify · location · size<br>Sentence starter: “Today I learned that a sprite… I made my fish…”</p>
-    <textarea data-bind="wrap.r1" aria-label="Reflection question 1"></textarea>
+    <p><b>1. What was today’s lesson about?</b> <span class="starter">👆 Tap to finish the sentences.</span></p>
+    <div class="frame" data-frame="r1"></div>
     <p style="margin-top:12px"><b>2. Was it difficult to finish a lesson where there was no clear “right” and “wrong”? Why or why not?</b></p>
-    <p class="starter">Sentence starter: “It was (easy / difficult) because…”</p>
-    <textarea data-bind="wrap.r2" aria-label="Reflection question 2"></textarea>
+    <div class="frame" data-frame="r2"></div>
+    <p style="margin-top:14px"><b>3. ✏️ Type ONE short sentence: what did you make in your fish tank?</b></p>
+    <p class="starter">Example: “I made a turtle that spins and a crab that stops when I click it.”</p>
+    <input class="short" type="text" maxlength="160" autocomplete="off" data-bind="wrap.r3" aria-label="One short sentence: what did you make in your fish tank?">
   </div>
   <button class="btn coral" data-goto="s-quiz">I’m ready for the quiz →</button>
 </section>
@@ -547,6 +581,7 @@ body.theme-night .btn.ok{color:#0d1f1a}
 </div>
 </main>
 <div id="toast" role="status" aria-live="polite"></div>
+<div id="confetti" aria-hidden="true"></div>
 
 <footer class="site-footer">
   <p>© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize</p>
@@ -599,7 +634,7 @@ function defaults(){
   return {step:0,visited:{},flipped:{},
     warm:{reflect:"",sort:{},sortChecked:false,sortScore:null,sortFirst:null,q1:"",q2:"",upstander:null,upFirst:null},
     predict:{},levels:{},tank:null,challenges:{},
-    wrap:{r1:"",r2:""},
+    wrap:{r1:"",r2:"",r3:""}, frames:{}, extra:{}, firstPick:{}, streak:0, bestStreak:0, legacy:null,
     quiz:{attempts:0,best:null,last:null,passed:false,history:[]}};
 }
 function load(){
@@ -608,6 +643,9 @@ function load(){
     if(raw){
       const d = defaults(), s = JSON.parse(raw);
       for(const k in d){ if(s[k]!==undefined){ d[k] = (d[k] && typeof d[k]==="object" && !Array.isArray(d[k])) ? Object.assign(d[k], s[k]) : s[k]; } }
+      /* Saved BEFORE tap-to-answer (Oct 10)? Then the student typed full answers: keep them counting. */
+      if(d.legacy === null){ const w = s.warm || {}, r = s.wrap || {};
+        d.legacy = s.frames === undefined && [w.reflect, w.q1, w.q2, r.r1, r.r2].some(t => t && String(t).trim().length >= 3); }
       return d;
     }
   }catch(e){}
@@ -620,6 +658,139 @@ function esc(t){ return String(t).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&l
 function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function getPath(p){ return p.split(".").reduce((o,k)=>o[k], S); }
 function setPath(p,v){ const ks=p.split("."), last=ks.pop(); ks.reduce((o,k)=>o[k], S)[last]=v; }
+
+/* ---------- Tap-to-answer reflections (Edwin, Oct 10: many students type slowly) ----------
+   Each reflection is a sentence the student finishes by TAPPING choices. Opinion blanks have no wrong
+   answer; blanks with `ans` are checked (wrong picks are shown, and the part stays locked until fixed).
+   The finished sentence is saved to the old answer field, so the PDF reads it as a full sentence.
+   "Add my own words" is optional. The ONE required typed answer is the short sentence at Wrap Up (wrap.r3).
+   Answers typed before this change still count (S.legacy). */
+const INFO = ["my favourite food", "my home address", "my favourite colour", "my phone number",
+              "that I have a pet dog", "my password", "my favourite football team", "my full date of birth"];
+const FRAMES = {
+  reflect:{ path:"warm.reflect", parts:["To stay safe online, I should ",
+    {k:"a", l:"I should…", o:["keep my home address and phone number private", "ask a trusted adult before I share anything",
+                             "share only personal information, never private information", "be an upstander when someone is treated badly"]},
+    " because ",
+    {k:"b", l:"because…", o:["a stranger could use private information to find me", "my information could be used to trick me",
+                            "everyone deserves to feel safe online"]}, "."]},
+  q1:{ path:"warm.q1", parts:["I would share ",
+    {k:"a", l:"Choose ONE thing you could SHARE", o:INFO, ans:[0,2,4,6], bad:"That is PRIVATE information. Choose something personal that many people share."},
+    " because ",
+    {k:"b", l:"because…", o:["many people share it, so it cannot show exactly who I am", "it helps us become friends", "it is safe and fun to talk about"]}, "."]},
+  q2:{ path:"warm.q2", parts:["I would NOT share ",
+    {k:"a", l:"Choose ONE thing you would KEEP PRIVATE", o:INFO, ans:[1,3,5,7], bad:"That is PERSONAL information. It is safe to share. Choose something private."},
+    " because ",
+    {k:"b", l:"because…", o:["it could help a stranger find me", "it belongs only to me", "someone could use it to pretend to be me"]}, "."]},
+  r1:{ path:"wrap.r1", parts:["Today I learned that a sprite is ",
+    {k:"a", l:"A sprite is…", o:["a picture on the screen that a program controls", "a sound the computer makes", "the button that runs a program"],
+     ans:[0], bad:"Not quite. Flip the “Sprite” card in Part 2 again."},
+    ". A behavior is ",
+    {k:"b", l:"A behavior is…", o:["an action it does only one time", "an action it keeps doing until it is told to stop", "the colour of the sprite"],
+     ans:[1], bad:"Not quite. Does a behavior stop by itself? Look at Part 3 again."},
+    ". My favourite part was ",
+    {k:"c", l:"My favourite part was…", o:["building my fish tank", "the Code.org levels", "meeting the tumbleweed sprite", "the word cards"]}, "."]},
+  r2:{ path:"wrap.r2", parts:["It was ",
+    {k:"a", l:"How did it feel? Tap a face.", o:["😀 easy", "🙂 a little easy", "😐 a little hard", "😟 hard"]},
+    " for me, because ",
+    {k:"b", l:"because…", o:["I could try my own ideas", "I was not sure what to make at first", "I liked choosing my own sprites", "I needed help from a partner"]}, "."]}
+};
+function frameBlanks(id){ return FRAMES[id].parts.filter(x=>typeof x !== "string"); }
+function framePicks(id){ return (S.frames && S.frames[id]) || null; }
+function blankOk(b, pick){ return pick !== undefined && (!b.ans || b.ans.indexOf(pick) !== -1); }
+function frameDone(id){
+  const p = framePicks(id);
+  if(!p || !Object.keys(p).length) return !!S.legacy && filled(getPath(FRAMES[id].path));
+  return frameBlanks(id).every(b=>blankOk(b, p[b.k]));
+}
+function frameSentence(id){
+  const p = framePicks(id) || {};
+  return FRAMES[id].parts.map(x=> typeof x === "string" ? x : (p[x.k] !== undefined ? x.o[p[x.k]].replace(/^\S+\s(?=[a-z])/u, m => /\p{Extended_Pictographic}/u.test(m) ? "" : m) : "____")).join("");
+}
+function answerText(id){
+  const own = S.extra && S.extra[id] && S.extra[id].trim() ? "  My own words: " + S.extra[id].trim() : "";
+  return (getPath(FRAMES[id].path) || "") + own;
+}
+function shortDone(){
+  if((S.wrap.r3 || "").trim().split(/\s+/).filter(Boolean).length >= 3) return true;
+  return !!S.legacy && filled(S.wrap.r2);       /* finished the Wrap Up before this question existed */
+}
+function renderFrame(id){
+  const el = document.querySelector('[data-frame="' + id + '"]'); if(!el) return;
+  const f = FRAMES[id], p = framePicks(id) || {}, legacyText = S.legacy && !Object.keys(p).length ? getPath(f.path) : "";
+  let sent = "", slots = "", fb = "";
+  f.parts.forEach(x=>{
+    if(typeof x === "string"){ sent += esc(x); return; }
+    const pick = p[x.k], ok = blankOk(x, pick);
+    sent += pick === undefined ? '<span class="blank empty">______</span>'
+          : '<span class="blank' + (ok ? "" : " bad") + '">' + esc(x.o[pick]) + "</span>";
+    slots += '<div class="slot"><div class="slot-l">' + esc(x.l) + '</div><div class="chips">'
+      + x.o.map((o,i)=>'<button type="button" class="chip' + (pick===i ? " sel" + (x.ans ? (ok ? " right" : " wrong") : "") : "")
+        + '" data-f="' + id + '" data-k="' + x.k + '" data-i="' + i + '">' + esc(o) + "</button>").join("") + "</div></div>";
+    if(pick !== undefined && !ok) fb += '<p class="ffb bad">✘ ' + esc(x.bad) + "</p>";
+  });
+  el.innerHTML = (legacyText ? '<p class="legacy">✔ Your typed answer is saved: “' + esc(legacyText) + '”. You may also tap an answer below.</p>' : "")
+    + '<div class="sentence">' + sent + "</div>" + slots + fb
+    + '<details' + (S.extra && S.extra[id] ? " open" : "") + '><summary>✏️ Add my own words (optional)</summary>'
+    + '<textarea data-extra="' + id + '" aria-label="My own words (optional)">' + esc((S.extra && S.extra[id]) || "") + "</textarea></details>";
+  el.querySelectorAll("button[data-f]").forEach(b=>b.addEventListener("click", ()=>pickBlank(b.dataset.f, b.dataset.k, +b.dataset.i)));
+  const ta = el.querySelector("textarea[data-extra]");
+  ta.addEventListener("input", ()=>{ S.extra[id] = ta.value; save(); });
+}
+function pickBlank(id, k, i){
+  if(!S.frames[id]) S.frames[id] = {};
+  S.frames[id][k] = i;
+  const b = frameBlanks(id).find(x=>x.k===k), key = id + "." + k;
+  if(b.ans && S.firstPick[key] === undefined){ S.firstPick[key] = b.ans.indexOf(i) !== -1; streakHit(S.firstPick[key]); }
+  const complete = frameBlanks(id).every(x=>S.frames[id][x.k] !== undefined);
+  setPath(FRAMES[id].path, complete ? frameSentence(id) : "");
+  save(); renderFrame(id);
+}
+function renderFrames(){ Object.keys(FRAMES).forEach(renderFrame); }
+
+/* ---------- Fun layer (Edwin, Oct 10) — supports the learning, never replaces it ----------
+   🐠 mascot swims along the progress bar · 🎉 short confetti when a part unlocks · 🔥 first-try streak ·
+   👥 the student's team bean total (group competition) · 🏅 lesson badge for passing the quiz.
+   Rules: nothing fires while a quiz is open; every effect is under 2 s and never blocks a button;
+   no sound; "reduce motion" computers get no animation (messages only). */
+const BADGE = { name:"Sprite Master", icon:"🏅", why:"You passed Course E Lesson 3: Swimming Fish with Sprite Lab." };
+const REDUCED = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+var quizBusy = false, lastTop = null;
+function confetti(){
+  if(REDUCED) return;
+  const box = $("confetti"), colors = ["#20C997","#FFA94D","#4DABF7","#FFD43B","#F783AC","#9775FA"];
+  for(let i=0;i<36;i++){ const d = document.createElement("i");
+    d.style.left = (Math.random()*100) + "%"; d.style.background = colors[i % colors.length];
+    d.style.setProperty("--dx", ((Math.random()-.5)*160) + "px"); d.style.setProperty("--rot", (Math.random()*720-360) + "deg");
+    d.style.animationDelay = (Math.random()*.25) + "s"; box.appendChild(d); }
+  setTimeout(()=>{ box.innerHTML = ""; }, 1900);
+}
+function celebrateUnlock(top){
+  confetti();
+  toast("🎉 Part " + (top+1) + " unlocked: " + sections[top].dataset.title + "!");
+}
+function streakHit(ok){
+  if(ok){ S.streak = (S.streak||0) + 1; S.bestStreak = Math.max(S.bestStreak||0, S.streak);
+    if(S.streak >= 3 && S.streak % 2 === 1) toast("🔥 " + S.streak + " right in a row on the first try!"); }
+  else S.streak = 0;
+  renderStreak();
+}
+function renderStreak(){
+  const c = $("streakChip");
+  if((S.streak||0) >= 2){ c.textContent = "🔥 " + S.streak + " in a row"; c.style.display = ""; } else c.style.display = "none";
+}
+let teamTimer = 0;
+function refreshTeam(delay){
+  if(!SESSION || typeof vcGetLeaderboard !== "function") return;
+  clearTimeout(teamTimer);
+  teamTimer = setTimeout(()=>{
+    vcGetLeaderboard().then(r=>{
+      if(!r || !r.ok || !r.my_group) return;
+      const g = (r.groups || []).find(x=>String(x.group) === String(r.my_group)); if(!g) return;
+      const c = $("teamChip"); c.textContent = "👥 " + r.my_group + ": " + g.beans + " 🌱"; c.title = "Your team's beans in the group competition"; c.style.display = "";
+    }, ()=>{});
+  }, delay || 0);
+}
 
 /* ---------- Steps / navigation ---------- */
 const sections = Array.from(document.querySelectorAll("section.step"));
@@ -672,16 +843,17 @@ function todoFor(id){
   const predRight = PREDICT.filter((_,i)=>S.predict[i] && S.predict[i].checked).length;
   switch(id){
     case "s-warm": return [
-      {t:"write your reflection", ok:filled(S.warm.reflect)},
+      {t:"finish the reflection sentence", ok:frameDone("reflect")},
       {t:"sort all 9 correctly and press Check (" + (S.warm.sortChecked ? sortRight : 0) + " of 9)", ok:S.warm.sortChecked && sortRight===SORT.length},
-      {t:"answer exit ticket question 1", ok:filled(S.warm.q1)},
-      {t:"answer exit ticket question 2", ok:filled(S.warm.q2)},
+      {t:"exit ticket 1: choose something PERSONAL and a reason", ok:frameDone("q1")},
+      {t:"exit ticket 2: choose something PRIVATE and a reason", ok:frameDone("q2")},
       {t:"choose what an upstander would do", ok:S.warm.upstander!==null && UP[S.warm.upstander].ok}];
     case "s-vocab": return [{t:"flip every word card (" + flipped + " of " + VOCAB.length + ")", ok:flipped===VOCAB.length}];
     case "s-bridge":return [{t:"get all 4 predictions correct (" + predRight + " of 4)", ok:predRight===PREDICT.length}];
     case "s-levels":return [{t:"finish and tick all 9 Code.org levels (" + levelsDone() + " of 9)", ok:levelsDone()===9}];
     case "s-tank":  return [{t:"finish all 5 Fish Tank challenges (" + chalDone() + " of 5)", ok:chalDone()===CHALLENGES.length}];
-    case "s-wrap":  return [{t:"answer reflection question 1", ok:filled(S.wrap.r1)}, {t:"answer reflection question 2", ok:filled(S.wrap.r2)}];
+    case "s-wrap":  return [{t:"finish sentence 1 (sprite and behavior)", ok:frameDone("r1")}, {t:"finish sentence 2", ok:frameDone("r2")},
+                            {t:"type one short sentence about your fish tank (3 words or more)", ok:shortDone()}];
     case "s-quiz":  return [{t:"pass the quiz", ok:!!S.quiz.passed}];
   }
   return [];
@@ -692,7 +864,10 @@ function updateProgress(){
   const pct = Math.round(done/sections.length*100);
   $("progBar").style.width = pct+"%";
   $("progText").textContent = done+" of "+sections.length+" parts done · "+pct+"%";
+  $("mascot").style.left = Math.min(97, Math.max(2, pct)) + "%";
   const top = openUpTo();
+  if(lastTop !== null && top > lastTop && !quizBusy) celebrateUnlock(top);
+  lastTop = top;
   $("stepper").querySelectorAll("button").forEach((b,k)=>{
     const locked = isLocked(k);
     b.classList.toggle("done", partDone(sections[k].id));
@@ -756,7 +931,7 @@ $("sortCheck").onclick = ()=>{
     el.classList.toggle("right", ok); el.classList.toggle("wrong", !ok);
     el.querySelector(".fb").textContent = (ok ? "✔ " : "✘ This is "+it.a+" information. ") + it.why;
   });
-  if(S.warm.sortFirst===null) S.warm.sortFirst = right;     /* beans pay on the FIRST full check only */
+  if(S.warm.sortFirst===null){ S.warm.sortFirst = right; streakHit(right===SORT.length); }     /* beans pay on the FIRST full check only */
   S.warm.sortChecked = true; S.warm.sortScore = right; save(); settleBeans();
   $("sortScore").textContent = "You sorted "+right+" of "+SORT.length+" correctly." + (right<SORT.length ? " Change the red ones and check again." : " Excellent!");
 };
@@ -770,7 +945,7 @@ const UP = [
 ];
 function renderUp(){
   $("upOpts").innerHTML = UP.map((o,i)=>`<label class="opt"><input type="radio" name="up" value="${i}" ${S.warm.upstander===i?"checked":""}><span>${esc(o.t)}</span></label>`).join("");
-  $("upOpts").querySelectorAll("input").forEach(r=>r.addEventListener("change",()=>{ S.warm.upstander=+r.value; if(S.warm.upFirst===null) S.warm.upFirst=+r.value; save(); showUpFb(); settleBeans(); }));
+  $("upOpts").querySelectorAll("input").forEach(r=>r.addEventListener("change",()=>{ S.warm.upstander=+r.value; if(S.warm.upFirst===null){ S.warm.upFirst=+r.value; streakHit(UP[+r.value].ok); } save(); showUpFb(); settleBeans(); }));
   showUpFb();
 }
 function showUpFb(){
@@ -988,7 +1163,7 @@ function checkPredict(i, quiet){
   const ok = st.choice === PREDICT[i].a;
   fb.className = "feedback show " + (ok ? "good" : "bad");
   fb.textContent = (ok ? "✔ Correct. " : "✘ Not quite. ") + PREDICT[i].why;
-  if(!quiet && st.first===undefined){ st.first = ok; save(); settleBeans(); }   /* beans pay on the FIRST check only */
+  if(!quiet && st.first===undefined){ st.first = ok; streakHit(ok); save(); settleBeans(); }   /* beans pay on the FIRST check only */
   if(ok){ st.checked = true; if(!quiet) save(); }
 }
 
@@ -1127,7 +1302,7 @@ function settleBeans(){
         PENDING.delete(a.act); pendingBeans -= give;
         if(res && res.ok){
           const g = (res.granted != null) ? res.granted : give;
-          if(g > 0) toast("🌱 +" + g + " bean" + (g===1?"":"s") + " for your team!");
+          if(g > 0){ toast("🌱 +" + g + " bean" + (g===1?"":"s") + " for your team!"); refreshTeam(1500); }
           else if(e > 0) toast("🌱 You reached this lesson’s " + LESSON_CAP + "-bean cap. Keep going for practice!");
         } else if(!(res && res.locked)){
           toast("⚠ Beans could not be saved just now. Reload this page later and they will be sent.");
@@ -1154,8 +1329,10 @@ function renderBeans(){
     el.className = "bean-note show"; el.textContent = "🌱 You banked " + n.got + " of " + n.max + " beans here.";
   });
 }
-let toastTimer = 0;
-function toast(msg){ const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove("show"), 3200); }
+const toastQ = []; let toastBusy = false;
+function toast(msg){ toastQ.push(msg); if(toastQ.length > 4) toastQ.splice(0, toastQ.length - 4); if(!toastBusy) nextToast(); }
+function nextToast(){ const t = $("toast"); if(!toastQ.length){ toastBusy = false; t.classList.remove("show"); return; }
+  toastBusy = true; t.textContent = toastQ.shift(); t.classList.add("show"); setTimeout(nextToast, 2600); }
 
 /* ---------- Sign-in bar + "Next student" ---------- */
 function renderSignin(){
@@ -1175,6 +1352,7 @@ function renderSignin(){
 function guestHasWork(raw){
   try{
     const g = JSON.parse(raw), w = g.warm || {}, txt = t => !!(t && String(t).trim());
+    if(Object.keys(g.frames||{}).length) return true;
     return !!(w.sortChecked || w.upstander!==null && w.upstander!==undefined || txt(w.reflect) || txt(w.q1) || txt(w.q2)
       || Object.keys(g.predict||{}).length || Object.values(g.levels||{}).some(Boolean)
       || Object.values(g.challenges||{}).some(Boolean) || (g.wrap && (txt(g.wrap.r1) || txt(g.wrap.r2)))
@@ -1236,6 +1414,7 @@ function renderQuizStart(){
 }
 function startQuiz(){
   if(!SESSION){ renderQuizStart(); return; }
+  quizBusy = true;
   current = shuffle(QUIZ).map(q=>({q, order:shuffle(q.o.map((_,i)=>i)), pick:null}));
   $("quizResult").innerHTML = "";
   $("quizArea").innerHTML = current.map((c,i)=>`
@@ -1253,10 +1432,14 @@ function startQuiz(){
 }
 function gradeAnswers(answers){ return answers.filter(c=>c.pick===c.q.a).length; }
 function submitQuiz(){
+  quizBusy = false;
   const score = gradeAnswers(current);
   const passedNow = score >= PASS_MARK;
   S.quiz.attempts++; S.quiz.last = score; S.quiz.best = Math.max(S.quiz.best||0, score);
   if(passedNow) S.quiz.passed = true;
+  if(passedNow){ const firstBadge = !S.quiz.badge, perfect = score === QUIZ.length;
+    if(firstBadge || (perfect && !S.quiz.badge.perfect)) S.quiz.badge = { name:BADGE.name, perfect: perfect || !!(S.quiz.badge && S.quiz.badge.perfect), date:new Date().toISOString() };
+    setTimeout(()=>{ confetti(); toast(BADGE.icon + " Badge earned: " + BADGE.name + (perfect ? " 🌟 Perfect score!" : "")); }, 400); }
   const marks = current.map(c=>c.q.id + (c.pick===c.q.a ? "✓" : "✗")).join(" ");
   const entry = {score, date:new Date().toISOString(), n:S.quiz.attempts, marks, saved:false,
                  attemptId:(typeof vcNewAttemptId==="function") ? vcNewAttemptId() : WHO + "-" + Date.now()};
@@ -1309,6 +1492,7 @@ function renderResult(detail){
       ${passed ? '<button class="btn alt" id="retake">Practise again</button>' : ""}</div>
     <p class="muted">${passed ? "" : "Correct answers are shown after you pass. "}Every attempt is recorded in your PDF and in Mr. EdLo’s record book.</p>
     <div class="lms-badge" id="lmsBadge" role="status"></div></div>
+  ${S.quiz.badge ? `<div class="card badge-card"><div class="ico">${BADGE.icon}</div><div><b>Badge earned: ${esc(BADGE.name)}</b>${S.quiz.badge.perfect ? " 🌟" : ""}<br><span class="muted">${esc(BADGE.why)}${S.quiz.badge.perfect ? " Perfect score!" : ""}</span></div></div>` : ""}
   <div class="card turnin" id="turnIn">
     <h3>📤 Turn in your work on Google Classroom</h3>
     <ol>
@@ -1401,6 +1585,7 @@ function buildResultsPdf(){
     ["Quiz score (this attempt)", score+" / 10  ("+score*10+"%)"],
     ["Result (pass mark 70%)", passed ? "PASSED" : "NOT YET PASSED"],
     ["Best score / attempts", S.quiz.best+" / 10  -  "+S.quiz.attempts+" attempt"+(S.quiz.attempts===1?"":"s")],
+    ["Badge", S.quiz.badge ? BADGE.name + (S.quiz.badge.perfect ? " (perfect score)" : "") : "Not yet - pass the quiz to earn it"],
     ["All attempts", S.quiz.history.map((a,i)=>"#"+(i+1)+": "+a.score+"/10").join(",  ")]
   ]);
 
@@ -1421,16 +1606,18 @@ function buildResultsPdf(){
     ["Predict questions", PREDICT.filter((_,i)=>S.predict[i]&&S.predict[i].checked).length+" / 4 correct"],
     ["Code.org levels ticked", levelsDone()+" / 9"],
     ["Fish Tank challenges", chalDone()+" / 5"],
-    ["Reflection written", (filled(S.wrap.r1) && filled(S.wrap.r2)) ? "Yes" : "No"],
+    ["Reflection finished", partDone("s-wrap") ? "Yes" : "No"],
+    ["Best first-try streak", String(S.bestStreak || 0)],
     ["Beans banked (this lesson)", beansBanked() + " / " + LESSON_CAP]
   ]);
 
   heading("My written answers");
-  answerBox("How can we safely present ourselves online?", S.warm.reflect);
-  answerBox("Exit ticket 1: Personal information I would share, and why:", S.warm.q1);
-  answerBox("Exit ticket 2: Private information I would NOT share, and why not:", S.warm.q2);
-  answerBox("What was today's lesson about?", S.wrap.r1);
-  answerBox("Was it difficult to finish a lesson with no clear right and wrong? Why or why not?", S.wrap.r2);
+  answerBox("How can we safely present ourselves online?", answerText("reflect"));
+  answerBox("Exit ticket 1: Personal information I would share, and why:", answerText("q1"));
+  answerBox("Exit ticket 2: Private information I would NOT share, and why not:", answerText("q2"));
+  answerBox("What was today's lesson about?", answerText("r1"));
+  answerBox("Was it difficult to finish a lesson with no clear right and wrong? Why or why not?", answerText("r2"));
+  answerBox("What I made in my fish tank (typed):", S.wrap.r3);
 
   const n = doc.getNumberOfPages();
   for(let p=1;p<=n;p++){
@@ -1480,14 +1667,16 @@ function printSlip(){
       <tr><th>Predict questions</th><td>${PREDICT.filter((_,i)=>S.predict[i]&&S.predict[i].checked).length} / 4 correct</td></tr>
       <tr><th>Code.org levels ticked</th><td>${levelsDone()} / 9</td></tr>
       <tr><th>Fish Tank challenges</th><td>${chalDone()} / 5</td></tr>
-      <tr><th>Reflection written</th><td>${yes(filled(S.wrap.r1) && filled(S.wrap.r2))}</td></tr>
+      <tr><th>Reflection finished</th><td>${yes(partDone("s-wrap"))}</td></tr>
+      <tr><th>Badge</th><td>${S.quiz.badge ? esc(BADGE.name) + (S.quiz.badge.perfect ? " (perfect score)" : "") : "Not yet"}</td></tr>
     </table>
     <h3>Written answers</h3>
-    <p><b>How can we safely present ourselves online?</b></p><div class="ans">${ans(S.warm.reflect)}</div>
-    <p><b>Exit ticket 1: Personal information I would share, and why:</b></p><div class="ans">${ans(S.warm.q1)}</div>
-    <p><b>Exit ticket 2: Private information I would not share, and why not:</b></p><div class="ans">${ans(S.warm.q2)}</div>
-    <p><b>What was today’s lesson about?</b></p><div class="ans">${ans(S.wrap.r1)}</div>
-    <p><b>Was it difficult to finish a lesson with no clear right and wrong?</b></p><div class="ans">${ans(S.wrap.r2)}</div>
+    <p><b>How can we safely present ourselves online?</b></p><div class="ans">${ans(answerText("reflect"))}</div>
+    <p><b>Exit ticket 1: Personal information I would share, and why:</b></p><div class="ans">${ans(answerText("q1"))}</div>
+    <p><b>Exit ticket 2: Private information I would not share, and why not:</b></p><div class="ans">${ans(answerText("q2"))}</div>
+    <p><b>What was today’s lesson about?</b></p><div class="ans">${ans(answerText("r1"))}</div>
+    <p><b>Was it difficult to finish a lesson with no clear right and wrong?</b></p><div class="ans">${ans(answerText("r2"))}</div>
+    <p><b>What I made in my fish tank (typed):</b></p><div class="ans">${ans(S.wrap.r3)}</div>
     <p style="margin-top:14px">Teacher signature: ______________________________</p>`;
   window.print();
 }
@@ -1502,7 +1691,7 @@ $("resetAll").onclick = ()=>{
 
 /* ---------- Start ---------- */
 if(new URLSearchParams(location.search).get("part")==="quiz") S.step = sections.findIndex(s=>s.id==="s-quiz");
-renderSignin(); offerGuestWork();
+renderSignin(); offerGuestWork(); renderFrames(); renderStreak(); refreshTeam(0);
 buildStepper(); renderSort(); renderUp(); renderPredict(); renderLevels();
 renderEditor(); renderBlocks(S.tank, $("tankCode")); renderChal(); tank.load([]); tank.render();
 S.step = isLocked(S.step || 0) ? openUpTo() : (S.step || 0);   /* keep an exempt part (Fish Tank Builder) across a reload */

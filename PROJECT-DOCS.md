@@ -71,6 +71,33 @@ If the docs are not updated, the task is **not** finished.
   card still tells students to tell Mr. EdLo. Ticks are self-reported — Edwin checks Code.org progress for the
   class section. Tested: 15/15 lock cases (fresh page, outage, Part 4 done, through Part 5, Part 4 skipped,
   `?part=quiz`, reload in Part 5).
+- **Oct 10 — tap-to-answer reflections + fun layer (Edwin: "students are slow at typing… make it a little more fun,
+  without taking the focus off learning the content and passing the quiz").** NOT yet committed.
+  - **Reflections:** the 5 typed answers became tap-to-finish sentences (`FRAMES` + `renderFrame()`/`frameDone()`).
+    Opinion blanks have no wrong choice; blanks with a right answer are CHECKED and keep the part locked until
+    fixed (exit ticket: pick something PERSONAL / PRIVATE from a mixed list; Wrap Up: what a sprite / a behavior
+    is). The finished sentence is saved in the old field (`warm.reflect`, `warm.q1`, `warm.q2`, `wrap.r1`,
+    `wrap.r2`), so the PDF prints full sentences. "✏️ Add my own words" is optional (`S.extra`, printed as
+    "My own words"). **ONE required typed answer (Edwin's choice): Wrap Up Q3, one short sentence (3+ words)
+    about the fish tank** (`wrap.r3`). Students who typed answers before Oct 10 keep them counting (`S.legacy`)
+    and are not asked for Q3, so nobody's parts re-lock.
+  - **Fun (all four chosen by Edwin):** 🐠 mascot swims along the progress bar · 🎉 ~1.5 s confetti + "Part N
+    unlocked!" when a part opens · 🔥 first-try streak chip + toast at 3, 5, 7… (first tries only, so it cannot
+    be farmed) · 👥 team bean total in the header (`vcGetLeaderboard`, refreshed after beans save) · 🏅 lesson
+    badge "Sprite Master" on passing the quiz (🌟 for 10/10), shown on the results and the PDF. Guardrails:
+    nothing fires while a quiz is open (`quizBusy`), no sound, no timers, effects never block a button, and
+    "reduce motion" computers get messages only. Toasts now queue instead of overwriting each other.
+  - Beans are unchanged (30, same split) — taps pay no beans. Tested: new student taps through (0 required
+    textareas), wrong taps caught + part stays locked, 2 typed words blocked / 3 open the quiz, 30 beans,
+    streak, team chip, badge + confetti after the quiz only, legacy student keeps all 7 parts, reduced motion
+    = no confetti, 360px no overflow, PDF shows every sentence + own words + typed line.
+- **🤖 Saturday CS build — scheduled task "Weekly CS lesson build — Std 5" (created Oct 7; Saturdays 8:52 am
+  Belize; first run Sat Oct 10).** Builds ONE next Course E lesson per run (highest `lessonNN` + 1) from the
+  Code.org website by cloning Lesson 3's engine (themes, sign-in, beans, part locks incl. the ALWAYS_OPEN practice
+  part, quiz, record book, PDF), adds its hub card, tests it in a headless browser, updates these docs, and leaves
+  everything as a DRAFT — never commits or pushes. Needs this computer on with the Claude app open. It will not
+  build if last week's CS draft is still uncommitted (it sends a reminder instead). First run must verify the
+  `coursee-2025` slug. Changing the build rules = edit that scheduled task's prompt.
 - **Std 5 hub:** Computer Science card changed from Coming Soon to a live link (only edit to an existing file).
 - **Footer note:** the lesson's footer leaves out "All rights reserved" because the content is adapted from
   Code.org under CC BY-NC-SA 4.0, which requires the adapted page to carry the same licence.
