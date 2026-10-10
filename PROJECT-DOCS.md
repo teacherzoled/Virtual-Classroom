@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** October 7, 2026 (late) — latest: CS Lesson 3 now uses the site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · before that: Std 5 **Computer Science hub** (`/standard5/computer-science/`) + **Course E Lesson 3: Swimming Fish with Sprite Lab** (interactive lesson, 10-question quiz, PDF results for Google Classroom) + Std 5 hub's CS card lit — NOT yet committed · before that, Oct 3: Maths C1 Unit Test 1 (Big Numbers, Rounding & Decimals) placed at `standard5/math/tests/c1-unit1/` + its hub card lit (gated, KV `sy2627-std5-c1-unit1-math` to paste — open item 12) · before that: answer-blur fix on all three assessment pages (a clicked option fades at once; only a box being typed in stays readable) + SVG labels left as drawn · Science C1 Unit Test 1 now meets the readable-layout and full anti-cheat rules (Science project) · earlier Oct 3: (readable assessment layout + full anti-cheat as STANDING RULES; Science C1 Unit Test 1 page gets the resilience fix + save helper (Science project, `001c112`); KV photos deployed; shared graded-results save helper + Apps Script duplicate guard — live; Oct 2 Maths fixes; `f49e9fa` recorded; KV merge rule) · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
+**Last updated:** October 10, 2026 — latest: CS **Course E Lesson 4: Hello World** built as a DRAFT by the Saturday scheduled task (`standard5/computer-science/lessons/lesson04-hello-world/` + hub card) — NOT committed · before that, Oct 7 (late): CS Lesson 3 now uses the site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · before that: Std 5 **Computer Science hub** (`/standard5/computer-science/`) + **Course E Lesson 3: Swimming Fish with Sprite Lab** (interactive lesson, 10-question quiz, PDF results for Google Classroom) + Std 5 hub's CS card lit — NOT yet committed · before that, Oct 3: Maths C1 Unit Test 1 (Big Numbers, Rounding & Decimals) placed at `standard5/math/tests/c1-unit1/` + its hub card lit (gated, KV `sy2627-std5-c1-unit1-math` to paste — open item 12) · before that: answer-blur fix on all three assessment pages (a clicked option fades at once; only a box being typed in stays readable) + SVG labels left as drawn · Science C1 Unit Test 1 now meets the readable-layout and full anti-cheat rules (Science project) · earlier Oct 3: (readable assessment layout + full anti-cheat as STANDING RULES; Science C1 Unit Test 1 page gets the resilience fix + save helper (Science project, `001c112`); KV photos deployed; shared graded-results save helper + Apps Script duplicate guard — live; Oct 2 Maths fixes; `f49e9fa` recorded; KV merge rule) · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -126,6 +126,21 @@ If the docs are not updated, the task is **not** finished.
   Code.org under CC BY-NC-SA 4.0, which requires the adapted page to carry the same licence.
 - **Check after push:** open one Code.org level link on the lesson page — the course slug
   `coursee-2025` was not verified (change `LESSON_URL` at the top of the page script if it is wrong).
+
+- **Oct 10 — CS Course E Lesson 4 built as a DRAFT by the Saturday scheduled task — NOT committed — Edwin reviews and pushes.**
+  `standard5/computer-science/lessons/lesson04-hello-world/index.html`, cloned from Lesson 3's engine (themes, sign-in,
+  beans, part locks + `ALWAYS_OPEN = ["s-world"]`, tap-to-answer reflections, fun layer, help layer, class checkpoint,
+  quiz, record book, PDF). Sources: `_source/Hello-World.pdf` (lesson plan, 45 min) + Lesson 4's section of
+  `_source/CSF - Course E - Slides 2025-26.pdf` (student wording). 7 parts: Warm Up (Reflect + "A Series of Events"
+  event/action sort + "which is a computer-science event?") · Vocabulary (Event, Algorithm, Loop, Modify + Sprite,
+  Costume) · Events in Sprite Lab (robot/alien demo: say under when run, when clicked, when touches; 4 predictions;
+  checkpoint) · Code.org levels 1–14 (1 Video · 2–5 Skill · 6 Video · 7–12 Skill · 13 Video · 14 Free Play) ·
+  Hello World Builder (offline; 5 challenges: say when run, second costume, moving sprite, talk on click, touch event) ·
+  Wrap Up (2 tap sentences + ONE typed sentence "what did your sprites say or do?") · Quiz (10 MCQ).
+  Beans: sort 8 · event question 4 · predict 8 · builder 5×2 = 30 (lesson_key `std5-cs-ce-l04`, lo `CS-E-L04`).
+  Badge "Event Explorer". Checkpoint after Part 3 — code in `_source/checkpoint-codes.txt`. Store key
+  `edlo-csE-L04-hello-world-v1`. The Level 14 card says "Ask Mr. EdLo first" before pressing Share (the slide says to
+  share with friends). Tested in a headless browser with a mocked record book: 67/67 checks passed.
 
 
 **State in one line:** Standard 5 is live and in daily use (school week 5 = week of Sept 28). GitHub `main` is
@@ -957,6 +972,7 @@ previously-visited URLs may cache for up to ~10 min.
 | Standard 5 Mathematics Hub | https://edlovirtualclassroom.com/standard5/math/ |
 | Standard 5 Computer Science Hub | https://edlovirtualclassroom.com/standard5/computer-science/ |
 | Std5 CS · Course E Lesson 3 | https://edlovirtualclassroom.com/standard5/computer-science/lessons/lesson03-swimming-fish/ |
+| Std5 CS · Course E Lesson 4 (draft) | https://edlovirtualclassroom.com/standard5/computer-science/lessons/lesson04-hello-world/ |
 | Standard 6 Hub | https://edlovirtualclassroom.com/standard6/ |
 | Spanish Subject Hub (Std6) | https://edlovirtualclassroom.com/standard6/spanish/ |
 | Science Subject Hub (Std6) | https://edlovirtualclassroom.com/standard6/science/ |
@@ -1031,7 +1047,8 @@ Virtual-Classroom/
 │   └── computer-science/
 │       ├── index.html                  ← Std5 Computer Science hub (Oct 7, 2026)
 │       └── lessons/
-│           └── lesson03-swimming-fish/ ← Code.org Course E L3 · quiz + PDF for Google Classroom
+│           ├── lesson03-swimming-fish/ ← Code.org Course E L3 · quiz + PDF for Google Classroom
+│           └── lesson04-hello-world/   ← Code.org Course E L4 · Hello World (events) · quiz + PDF (draft, Oct 10)
 │
 ├── standard6/
 │   ├── index.html                      ← Standard 6 hub (subject cards)
@@ -1497,6 +1514,7 @@ cd "C:\Users\Dell Latitude 3520\OneDrive\Shared with me\Code Projects\Python Pro
 | Standard 5 Maths Hub | edlovirtualclassroom.com/standard5/math/ | ✅ Live (Sept 24) |
 | Standard 5 Computer Science Hub | edlovirtualclassroom.com/standard5/computer-science/ | 🟡 Built Oct 7 — goes live on push |
 | Std5 CS · Course E Lesson 3 (Swimming Fish) | edlovirtualclassroom.com/standard5/computer-science/lessons/lesson03-swimming-fish/ | 🟡 Built Oct 7 — goes live on push |
+| Std5 CS · Course E Lesson 4 (Hello World) | edlovirtualclassroom.com/standard5/computer-science/lessons/lesson04-hello-world/ | 🟡 Draft Oct 10 (Saturday task) — goes live on push |
 | Std5 Maths Classwork Checks 1–2 | edlovirtualclassroom.com/standard5/math/classwork/… | ✅ Live (Sept 24, autosave + retry) |
 | Std5 Maths C1 Unit Test 1 | edlovirtualclassroom.com/standard5/math/tests/c1-unit1/ | 🟡 Placed Oct 3 — goes live on push; KV entry to paste (open item 12); sitting Tue Oct 13 |
 | Std5 Science Lesson Wk 1 | edlovirtualclassroom.com/standard5/science/lessons/week01-technology-climate/ | ✅ Live (built July 16) |
@@ -1523,6 +1541,7 @@ cd "C:\Users\Dell Latitude 3520\OneDrive\Shared with me\Code Projects\Python Pro
 | Lesson | Folder | Status | Activities | Record |
 |---|---|---|---|---|
 | Course E L3 · Swimming Fish with Sprite Lab | standard5/computer-science/lessons/lesson03-swimming-fish/ | 🟡 Built Oct 7, 2026 | warm-up sort + exit ticket, flip-card vocab, sprite demo + predict, Code.org L1–9 tracker, offline Fish Tank Builder, reflection, 10-Q quiz | PDF → Google Classroom |
+| Course E L4 · Hello World | standard5/computer-science/lessons/lesson04-hello-world/ | 🟡 Draft Oct 10, 2026 (Saturday task) | event/action sort + event question, flip-card vocab, events demo (say / when clicked / when touches) + predict + checkpoint, Code.org L1–14 tracker, offline Hello World Builder, tap reflections + 1 typed line, 10-Q quiz | PDF → Google Classroom |
 
 ### Spanish
 | Lesson | Folder | Status | Activities | AI Feedback |

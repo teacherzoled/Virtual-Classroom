@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 4 · Hello World — Mr. EdLo's Virtual Classroom</title>
+<meta name="description" content="Standard 5 Computer Science · Code.org Course E · Lesson 4: Hello World — interactive lesson and quiz.">
+<link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="/edlo-utils.js"></script>   <!-- site login + beans + record book (vcGetSession / vcSaveBeans / vcSubmitResult) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" async></script>
+<style>
+/* Std 5 Computer Science · Course E Lesson 4: Hello World — Oct 10, 2026 (cloned from Lesson 3's engine). Self-contained (links no shared CSS).
+   ⚠️ overflow-x:hidden must NOT go on <html> — it breaks position:sticky on the progress bar. Body only. */
+body{overflow-x:hidden}
+*{box-sizing:border-box}
+html,body{margin:0}
+
+/* ═══ THEME PALETTE — mirrors standard5/science/lessons/week01-technology-climate/ ═══
+   The ACCENT follows the theme: Night teal · Sunny orange · Cloudy blue · Nature green.
+   --accent-ink is the readable accent for TEXT on light themes (same as the hub's --cycle-color). */
+:root, body.theme-night{
+  --bg:#0d1f1a; --fg:#ffffff;
+  --card:rgba(255,255,255,0.06); --bd:rgba(255,255,255,0.12);
+  --bd-h:rgba(32,201,151,0.40); --muted:rgba(255,255,255,0.62);
+  --btn:rgba(255,255,255,0.08); --star:1;
+  --accent:#20C997; --accent-c:#0d1f1a; --accent-soft:rgba(32,201,151,0.12); --accent-ink:#20C997;
+  --h1-grad:linear-gradient(135deg,#fff 0%,#20C997 55%,#69DB7C 100%);
+  --footer-border:rgba(255,255,255,0.07); --footer-c:rgba(255,255,255,0.45);
+  --right:#69DB7C; --wrong:#FF6B6B;
+  --ok-soft:rgba(105,219,124,0.12); --bad-soft:rgba(255,107,107,0.12);
+  --warm:#FFA94D; --warm-c:#1a1205; --warm-soft:rgba(255,169,77,0.12); --warm-ink:#FFC078;
+}
+body.theme-sunny{
+  --bg:#fffbea; --fg:#2d2000;
+  --card:rgba(255,255,255,0.75); --bd:rgba(200,150,0,0.22);
+  --bd-h:rgba(200,120,0,0.45); --muted:rgba(80,50,0,0.72);
+  --btn:rgba(255,255,255,0.85); --star:0;
+  --accent:#FF922B; --accent-c:#ffffff; --accent-soft:rgba(255,180,0,0.15); --accent-ink:#8a4800;
+  --h1-grad:linear-gradient(135deg,#b35c00 0%,#e67e00 50%,#f5a623 100%);
+  --footer-border:rgba(200,150,0,0.20); --footer-c:rgba(100,60,0,0.62);
+  --right:#2e7d1a; --wrong:#c62828;
+  --ok-soft:rgba(46,125,26,0.10); --bad-soft:rgba(198,40,40,0.10);
+  --warm:#7c3aed; --warm-c:#ffffff; --warm-soft:rgba(124,58,237,0.08); --warm-ink:#6d28d9;
+}
+body.theme-cloudy{
+  --bg:#e8edf2; --fg:#1c2533;
+  --card:rgba(255,255,255,0.72); --bd:rgba(100,130,160,0.22);
+  --bd-h:rgba(80,110,150,0.40); --muted:rgba(40,60,90,0.75);
+  --btn:rgba(255,255,255,0.85); --star:0;
+  --accent:#4A90D9; --accent-c:#ffffff; --accent-soft:rgba(100,140,200,0.12); --accent-ink:#2c5282;
+  --h1-grad:linear-gradient(135deg,#1a365d 0%,#2b6cb0 50%,#4299e1 100%);
+  --footer-border:rgba(80,120,180,0.18); --footer-c:rgba(30,60,100,0.62);
+  --right:#2e7d1a; --wrong:#c62828;
+  --ok-soft:rgba(46,125,26,0.10); --bad-soft:rgba(198,40,40,0.10);
+  --warm:#c2410c; --warm-c:#ffffff; --warm-soft:rgba(194,65,12,0.08); --warm-ink:#9a3412;
+}
+body.theme-nature{
+  --bg:#f0f7ee; --fg:#1a2e10;
+  --card:rgba(255,255,255,0.72); --bd:rgba(60,120,40,0.22);
+  --bd-h:rgba(40,100,20,0.40); --muted:rgba(30,70,15,0.75);
+  --btn:rgba(255,255,255,0.85); --star:0;
+  --accent:#4CAF50; --accent-c:#ffffff; --accent-soft:rgba(60,140,30,0.12); --accent-ink:#276221;
+  --h1-grad:linear-gradient(135deg,#1b4d0f 0%,#2e7d1a 50%,#66bb44 100%);
+  --footer-border:rgba(50,120,20,0.18); --footer-c:rgba(20,70,10,0.62);
+  --right:#2e7d1a; --wrong:#c62828;
+  --ok-soft:rgba(46,125,26,0.10); --bad-soft:rgba(198,40,40,0.10);
+  --warm:#c2410c; --warm-c:#ffffff; --warm-soft:rgba(194,65,12,0.08); --warm-ink:#9a3412;
+}
+:root{
+  /* Sprite Lab block colours — the same in every theme, like Code.org */
+  --blk-run:#c98a00; --blk-sprite:#c2306f; --blk-beh:#2a8f55; --blk-event:#d9a400;
+  --radius:16px;
+}
+
+body{background:var(--bg);color:var(--fg);font-family:'Nunito',system-ui,sans-serif;font-size:18px;line-height:1.55;
+     min-height:100vh;display:flex;flex-direction:column;transition:background .4s,color .4s}
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;opacity:var(--star);transition:opacity .4s}
+.star{position:absolute;border-radius:50%;background:#fff;opacity:.35}
+.wrapper{position:relative;z-index:1;max-width:1400px;margin:0 auto;width:100%;padding:0 max(1rem,4vw) 2rem;flex:1}
+.wrapper.head-wrap{flex:none;padding-bottom:0}
+h1,h2,h3{line-height:1.25;margin:.2em 0 .5em;font-family:'Fredoka One',cursive;font-weight:400}
+h2{font-size:1.55rem} h3{font-size:1.18rem}
+p{margin:.4em 0 .8em}
+a{color:var(--accent-ink);font-weight:700}
+b,strong{font-weight:800}
+button{font:inherit;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit}
+
+/* Top row + theme bar (same pattern as the Science lessons) */
+.top-row{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:1rem 0 .3rem}
+.back-link{color:var(--muted);text-decoration:none;font-weight:800;font-size:.9rem;min-height:44px;display:inline-flex;align-items:center}
+.back-link:hover{color:var(--accent-ink)}
+.theme-bar{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center}
+.theme-bar button{font-family:inherit;font-size:.8rem;font-weight:800;padding:.35rem .75rem;min-height:40px;border-radius:999px;border:1.5px solid var(--bd);background:var(--btn);color:var(--fg);transition:border-color .25s,color .25s}
+.theme-bar button:hover{border-color:var(--bd-h)}
+.theme-bar button.active{border-color:var(--accent);color:var(--accent-ink)}
+
+header.lesson-head{text-align:center;padding:.6rem 0 1rem}
+.chip-row{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:.8rem}
+.hchip{font-size:.72rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:.32rem .8rem;border-radius:999px;background:var(--card);border:1.5px solid var(--bd);color:var(--muted)}
+.lesson-head h1{font-size:clamp(1.7rem,7vw,2.9rem);line-height:1.15;margin:.1em 0 .4em;
+  background:var(--h1-grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hchip.bean{background:var(--accent);color:var(--accent-c);border-color:var(--accent)}
+.signin{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;color:var(--muted);max-width:900px;margin:0 auto}
+.signin b{color:var(--fg)}
+.signin .btn{min-height:40px;padding:6px 14px;font-size:.88rem}
+.guest-offer{border:2px solid var(--accent);background:var(--accent-soft)}
+.lms-badge{display:none;border-radius:12px;padding:10px 12px;margin:10px 0 0;font-weight:700;font-size:.92rem}
+.lms-badge.show{display:block}
+.lms-badge.ok{background:var(--ok-soft);border:1.5px solid var(--right)}
+.lms-badge.busy{background:var(--accent-soft);border:1.5px solid var(--accent)}
+.lms-badge.warn{background:var(--bad-soft);border:1.5px solid var(--wrong)}
+.lms-badge .btn{min-height:36px;padding:4px 12px;font-size:.85rem;margin-left:6px}
+.bean-note{display:none;font-weight:800;color:var(--accent-ink);margin:8px 0 0}
+.bean-note.show{display:block}
+#toast{position:fixed;left:50%;bottom:1.3rem;transform:translateX(-50%) translateY(160%);background:var(--accent);color:var(--accent-c);
+  font-weight:900;font-size:.95rem;padding:.7rem 1.2rem;border-radius:999px;z-index:99;transition:transform .35s ease;max-width:90vw;text-align:center}
+#toast.show{transform:translateX(-50%) translateY(0)}
+/* Tap-to-answer reflections (Edwin, Oct 10: slow typists) */
+.frame{margin:6px 0 4px}
+.frame .sentence{font-size:1.08rem;font-weight:700;line-height:1.9;background:var(--btn);border:1.5px solid var(--bd);border-radius:12px;padding:10px 14px;margin:6px 0 10px}
+.frame .blank{display:inline;border-bottom:3px solid var(--accent);padding:0 3px;color:var(--accent-ink);font-weight:900}
+.frame .blank.empty{color:var(--muted);font-weight:700;letter-spacing:.1em}
+.frame .blank.bad{border-color:var(--wrong);color:var(--wrong)}
+.frame .slot{margin:0 0 10px}
+.frame .slot-l{font-size:.85rem;font-weight:800;color:var(--muted);margin-bottom:4px}
+.frame .chips{display:flex;flex-wrap:wrap;gap:6px}
+.frame .chip{text-align:left;min-height:44px}
+.frame .chip.sel.right{background:var(--right);border-color:var(--right);color:#fff}
+.frame .chip.sel.wrong{background:var(--bad-soft);border-color:var(--wrong);color:var(--fg)}
+.frame .ffb{font-weight:700;font-size:.92rem;margin:4px 0 0}
+.frame .ffb.bad{color:var(--wrong)}
+.frame .legacy{font-size:.9rem;color:var(--muted);font-weight:700;margin:0 0 6px}
+.frame details{margin-top:4px}
+.frame summary{cursor:pointer;font-weight:800;color:var(--accent-ink);min-height:36px;display:inline-flex;align-items:center}
+.frame details textarea{min-height:64px;margin-top:6px}
+input.short{width:100%;padding:10px 12px;border-radius:12px;border:1.5px solid var(--bd);background:var(--btn);font-size:1rem}
+/* Fun layer (Edwin, Oct 10) — short, never blocks a button, nothing during the quiz */
+.hchip.team{background:var(--accent-soft);color:var(--accent-ink);border-color:var(--accent)}
+.hchip.streak{background:var(--warm-soft);color:var(--warm-ink);border-color:var(--warm)}
+.progress-lane{position:relative}
+.mascot{position:absolute;top:50%;left:2%;transform:translate(-50%,-55%);font-size:1.35rem;line-height:1;transition:left .9s ease;pointer-events:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:120;overflow:hidden}
+#confetti i{position:absolute;top:-14px;width:8px;height:12px;border-radius:2px;animation:cf-fall 1.4s ease-in forwards}
+@keyframes cf-fall{to{transform:translate(var(--dx),105vh) rotate(var(--rot));opacity:.85}}
+.badge-card{display:flex;gap:14px;align-items:center;border:2px solid var(--accent);background:var(--accent-soft)}
+.badge-card .ico{font-size:2.6rem;line-height:1}
+.badge-card b{font-family:'Fredoka One',cursive;font-weight:400;font-size:1.25rem;color:var(--accent-ink)}
+/* Help layer + class checkpoint (Edwin, Oct 10) */
+.hand-banner{display:none;background:#FFA94D;color:#1a1205;font-weight:900;font-size:1.15rem;padding:10px max(1rem,4vw);text-align:center;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+.hand-banner.show{display:flex}
+.hand-banner button{background:#1a1205;color:#fff;border:0;border-radius:999px;padding:6px 16px;font-weight:900;min-height:40px}
+.helper-chip{display:none;margin:.45rem 0 0;padding:4px 12px;border-radius:999px;border:1.5px solid var(--right);background:var(--ok-soft);color:var(--fg);font-weight:900;font-size:.88rem;width:max-content;max-width:100%}
+.helper-chip.show{display:block}
+.help-panel{display:none;position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:110;width:min(540px,calc(100vw - 2rem));background:var(--bg);color:var(--fg);border:2px solid var(--warm);border-radius:16px;padding:14px 16px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.help-panel.show{display:block}
+.help-panel .opts3{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.help-panel .btn{text-align:left;width:100%}
+.checkpoint{border:3px dashed var(--warm);background:var(--warm-soft)}
+.checkpoint.done{border-style:solid;border-color:var(--right);background:var(--ok-soft)}
+.checkpoint ol{margin:.3em 0 .6em;padding-left:1.3em;font-weight:700}
+.checkpoint input{padding:10px 12px;border-radius:12px;border:1.5px solid var(--bd);background:var(--btn);font-size:1.05rem;text-transform:uppercase;letter-spacing:.15em;width:10em;max-width:100%}
+#helpBtn{order:0}
+@media (prefers-reduced-motion: reduce){ .mascot{transition:none} #confetti{display:none} #toast{transition:none} }
+
+/* Sticky progress bar + lesson parts — same pattern as the Std5 tests */
+.progress-wrap{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--bd);padding:.6rem 0 .5rem;margin-bottom:1.2rem;transition:background .4s}
+.progress-inner{max-width:1400px;margin:0 auto;padding:0 max(1rem,4vw)}
+.progress-label{display:flex;justify-content:space-between;gap:10px;font-size:.8rem;font-weight:800;color:var(--muted);margin-bottom:.35rem}
+.progress-track{height:.55rem;border-radius:999px;background:var(--card);border:1px solid var(--bd);overflow:hidden}
+.progress-fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--accent),#4DABF7);transition:width .4s ease}
+.stepper{display:flex;gap:6px;overflow-x:auto;padding:.55rem 0 .15rem;scrollbar-width:thin}
+.stepper button{flex:0 0 auto;border:1.5px solid var(--bd);background:var(--btn);color:var(--fg);border-radius:999px;padding:5px 13px;font-size:.88rem;font-weight:700;display:flex;gap:8px;align-items:center;min-height:40px}
+.stepper button .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--bd);font-weight:900;font-size:.78rem}
+.stepper button.on{background:var(--accent);color:var(--accent-c);border-color:var(--accent)}
+.stepper button.on .n{background:var(--accent-c);color:var(--accent)}
+.stepper button.done .n{background:var(--right);color:#fff}
+.stepper button.on.done .n{background:var(--accent-c);color:var(--accent)}
+.stepper button.locked{opacity:.5}
+.stepper button.locked .n{background:transparent;font-size:.95rem}
+.todo{border:2px dashed var(--warm);background:var(--warm-soft);border-radius:14px;padding:12px 16px;margin:6px 0 12px;font-weight:700}
+.todo ul{margin:.3em 0 0;padding-left:1.3em;font-weight:600}
+.todo li.ok{color:var(--muted);text-decoration:line-through}
+.btn.waiting{opacity:.55}
+
+section.step{display:none}
+section.step.on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.time{display:inline-block;background:var(--warm-soft);color:var(--warm-ink);border:1px solid var(--warm);border-radius:99px;padding:2px 12px;font-size:.82rem;font-weight:800;margin-bottom:6px}
+
+.card{background:var(--card);border:1.5px solid var(--bd);border-radius:var(--radius);padding:18px 20px;margin:0 0 18px}
+.cards{display:flex;flex-wrap:wrap;gap:16px;margin:0 0 18px}
+.cards>.card{flex:0 1 260px;margin:0;min-width:0}
+.cards.grow>.card{flex:1 1 260px}
+.tip{border-left:6px solid var(--warm);background:var(--warm-soft)}
+.info{border-left:6px solid var(--accent);background:var(--accent-soft)}
+.goal{font-weight:800}
+.muted{color:var(--muted)}
+ul.clean,ol.clean{margin:.3em 0 .6em;padding-left:1.3em}
+
+textarea{width:100%;min-height:96px;border:1.5px solid var(--bd);border-radius:12px;padding:10px 12px;background:var(--btn);resize:vertical}
+textarea:focus,input:focus,select:focus{outline:3px solid var(--bd-h);outline-offset:1px}
+.starter{font-size:.9rem;color:var(--muted);margin:.2em 0 .4em}
+
+.btn{border:0;border-radius:12px;padding:10px 18px;background:var(--accent);color:var(--accent-c);font-weight:900;min-height:44px}
+.btn:hover{filter:brightness(1.07)}
+.btn.alt{background:var(--btn);color:var(--fg);border:1.5px solid var(--bd)}
+.btn.alt:hover{border-color:var(--accent)}
+.btn.coral{background:var(--warm);color:var(--warm-c)}
+.btn.ok{background:var(--right);color:#fff}
+body.theme-night .btn.ok{color:#0d1f1a}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+.navrow{display:flex;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
+
+/* Sort activity */
+.sortlist{display:flex;flex-direction:column;gap:8px}
+.sortitem{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;border:1.5px solid var(--bd);border-radius:12px;padding:8px 12px;background:var(--btn)}
+.sortitem .lbl{flex:1 1 220px;font-weight:700}
+.sortitem .choices{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:2px solid var(--bd);background:var(--btn);color:var(--fg);border-radius:99px;padding:4px 12px;font-size:.9rem;font-weight:700;min-height:40px}
+.chip.sel{border-color:var(--accent);background:var(--accent);color:var(--accent-c)}
+.sortitem.right{border-color:var(--right);background:var(--ok-soft)}
+.sortitem.wrong{border-color:var(--wrong);background:var(--bad-soft)}
+.sortitem .fb{flex:1 1 100%;font-size:.9rem;display:none}
+.sortitem.right .fb,.sortitem.wrong .fb{display:block}
+
+/* Options (radio) */
+.opts{display:flex;flex-direction:column;gap:8px;margin:8px 0}
+.opt{display:flex;gap:10px;align-items:flex-start;border:2px solid var(--bd);border-radius:12px;padding:8px 12px;background:var(--btn);cursor:pointer;font-weight:600}
+.opt input{margin-top:5px;transform:scale(1.2);accent-color:var(--accent)}
+.opt:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.opt.right{border-color:var(--right);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--wrong);background:var(--bad-soft)}
+.feedback{border-radius:12px;padding:10px 12px;margin-top:8px;display:none;font-weight:600}
+.feedback.show{display:block}
+.feedback.good{background:var(--ok-soft);border:1.5px solid var(--right)}
+.feedback.bad{background:var(--bad-soft);border:1.5px solid var(--wrong)}
+
+/* Flip cards */
+.flip{perspective:900px;border:0;padding:0;background:none;text-align:left;width:100%;min-height:190px;color:var(--fg)}
+.flip .inner{position:relative;width:100%;min-height:190px;transition:transform .5s;transform-style:preserve-3d}
+.flip.on .inner{transform:rotateY(180deg)}
+.flip .face{position:absolute;inset:0;border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;justify-content:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:1.5px solid var(--bd)}
+.flip .front{background:var(--accent);color:var(--accent-c);align-items:center;text-align:center}
+.flip .front .word{font-family:'Fredoka One',cursive;font-size:1.8rem}
+.flip .front small{opacity:.9;font-weight:700}
+.flip .back{background:var(--bg);transform:rotateY(180deg)}
+.flip .back b{color:var(--accent-ink)}
+.flipcol{flex:0 1 260px;min-width:0}
+.flipcol.extra .front{background:var(--warm);color:var(--warm-c)}
+
+/* Stage + blocks */
+.lab{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
+.stagebox{flex:0 1 420px;min-width:0;width:100%}
+.stagebox canvas{width:100%;max-width:420px;aspect-ratio:1/1;display:block;border-radius:14px;border:3px solid var(--bd-h);background:#7fd3f0;touch-action:manipulation}
+.stagebox .btnrow{justify-content:flex-start}
+.status{font-size:.9rem;color:var(--muted);min-height:1.4em;font-weight:600}
+.codecol{flex:1 1 360px;min-width:0}
+.blocks{background:#f4f5f9;color:#222;border:1.5px solid var(--bd);border-radius:14px;padding:12px;font-size:.92rem;overflow-x:auto}
+.blocks .muted{color:#555}
+.stack{margin:0 0 12px}
+.blk{display:inline-block;color:#fff;border-radius:6px;padding:5px 10px;margin:2px 0;font-weight:700;white-space:nowrap}
+.blk .slot{display:inline-block;background:rgba(255,255,255,.92);color:#222;border-radius:5px;padding:0 6px;margin:0 2px;font-weight:700}
+.blk.hat{background:var(--blk-run);border-radius:14px 14px 6px 6px}
+.blk.ev{background:var(--blk-event);color:#2b2100;border-radius:14px 14px 6px 6px}
+.blk.sp{background:var(--blk-sprite)}
+.blk.bh{background:var(--blk-beh)}
+.stack .body{border-left:10px solid #ddd;margin-left:6px;padding-left:8px;display:flex;flex-direction:column;align-items:flex-start}
+.stack.run .body{border-color:var(--blk-run)}
+.stack.ev .body{border-color:var(--blk-event)}
+.legend{display:flex;flex-wrap:wrap;gap:8px;font-size:.82rem;margin-top:6px;font-weight:600}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend i{width:14px;height:14px;border-radius:3px;display:inline-block}
+
+.toggles{display:flex;flex-direction:column;gap:6px;margin:6px 0 10px}
+.toggles label{display:flex;gap:10px;align-items:center;border:1.5px solid var(--bd);border-radius:12px;padding:6px 10px;background:var(--btn);cursor:pointer;min-height:44px}
+.toggles input{transform:scale(1.25);accent-color:var(--accent)}
+
+/* Sprite editor */
+.sprites{display:flex;flex-wrap:wrap;gap:12px;margin:10px 0}
+.spcard{flex:0 1 260px;min-width:0;border:1.5px solid var(--bd);border-radius:14px;padding:12px;background:var(--card)}
+.spcard .sphead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.spcard .sphead b{font-size:1.05rem}
+.spcard .del{border:0;background:var(--bad-soft);color:var(--wrong);border-radius:8px;padding:3px 10px;font-size:.85rem;font-weight:800}
+.field{margin:6px 0}
+.field label{display:block;font-size:.85rem;font-weight:800;color:var(--muted)}
+.field select{width:100%;padding:6px 8px;border-radius:9px;border:1.5px solid var(--bd);background:var(--bg);color:var(--fg)}
+.field input[type=range]{width:100%;accent-color:var(--accent)}
+.beh{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:.9rem}
+.beh label{display:flex;gap:5px;align-items:center;font-weight:600;color:var(--fg)}
+.beh input{accent-color:var(--accent)}
+
+.checklist{list-style:none;padding:0;margin:6px 0}
+.checklist li{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px dashed var(--bd)}
+.checklist li:last-child{border-bottom:0}
+.tick{flex:0 0 26px;height:26px;border-radius:50%;border:2px solid var(--bd);display:grid;place-items:center;font-weight:900;color:#fff}
+.checklist li.done .tick{background:var(--right);border-color:var(--right)}
+
+/* Level cards */
+.lvl{display:flex;flex-direction:column;gap:6px}
+.lvl .tag{font-size:.78rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--warm-ink)}
+.lvl .nums{display:flex;gap:6px;flex-wrap:wrap}
+.lvlbtn{display:flex;align-items:center;gap:6px;border:2px solid var(--bd);border-radius:12px;padding:4px 10px;background:var(--btn);min-height:44px}
+.lvlbtn a{font-weight:800;text-decoration:none}
+.lvlbtn input{transform:scale(1.2);accent-color:var(--right)}
+.lvlbtn.done{border-color:var(--right);background:var(--ok-soft)}
+
+/* Quiz */
+.q{border:1.5px solid var(--bd);border-radius:14px;padding:14px 16px;margin:0 0 14px;background:var(--card)}
+.q .qn{font-weight:900;color:var(--accent-ink)}
+.q.right{border-color:var(--right)}
+.q.wrong{border-color:var(--wrong)}
+.scorebig{font-family:'Fredoka One',cursive;font-size:2.6rem}
+.pass{color:var(--right)} .notyet{color:var(--wrong)}
+.turnin{border:2px solid var(--warm);background:var(--warm-soft)}
+.turnin ol{margin:.4em 0 .4em;padding-left:1.4em}
+.turnin li{margin:0 0 12px}
+.turnin li .btn{margin-top:6px;display:inline-flex;align-items:center;text-decoration:none}
+.pdfmsg{border-radius:12px;padding:10px 12px;margin-top:6px;display:none;font-weight:600}
+.pdfmsg.show{display:block}
+.pdfmsg.good{background:var(--ok-soft);border:1.5px solid var(--right)}
+.pdfmsg.bad{background:var(--bad-soft);border:1.5px solid var(--wrong)}
+
+.site-footer{position:relative;z-index:1;text-align:center;padding:1.5rem max(1rem,4vw);font-size:.8rem;color:var(--footer-c);border-top:1px solid var(--footer-border)}
+.site-footer p{margin:.3em auto;max-width:90ch}
+.site-footer a{color:inherit}
+.site-footer .reset{background:none;border:1px solid var(--footer-border);color:var(--footer-c);border-radius:999px;padding:4px 12px;font-size:.75rem;font-weight:700;margin-top:.4rem}
+
+@media (max-width:600px){
+  body{font-size:16.5px}
+  .top-row{justify-content:center}
+  .theme-bar{flex:1 1 100%}
+}
+
+#printArea{display:none}
+@media print{
+  body{background:#fff;color:#000;font-size:12pt;display:block}
+  body>*:not(#printArea){display:none !important}
+  #printArea{display:block}
+  #printArea *{color:#000 !important;background:#fff !important;box-shadow:none !important}
+  #printArea table{width:100%;border-collapse:collapse}
+  #printArea td,#printArea th{border:1px solid #000;padding:5px 7px;text-align:left;vertical-align:top}
+  #printArea h1{font-size:16pt;margin:0 0 4pt;font-family:Arial,sans-serif}
+  #printArea h3{font-family:Arial,sans-serif}
+  #printArea .ans{border:1px solid #000;padding:6px 8px;min-height:30px;white-space:pre-wrap;margin:2px 0 8px}
+}
+</style>
+</head>
+<body class="theme-night">
+<div class="stars" id="stars"></div>
+
+<div class="wrapper head-wrap">
+  <div class="top-row">
+    <a class="back-link" href="/standard5/computer-science/">← Back to Computer Science</a>
+    <div class="theme-bar" id="themeBar">
+      <button type="button" data-t="night">🌙 Night</button>
+      <button type="button" data-t="sunny">☀️ Sunny</button>
+      <button type="button" data-t="cloudy">☁️ Cloudy</button>
+      <button type="button" data-t="nature">🌿 Nature</button>
+    </div>
+  </div>
+  <header class="lesson-head">
+    <div class="chip-row">
+      <span class="hchip">Standard 5 · Computer Science</span>
+      <span class="hchip">Course E · Lesson 4</span>
+      <span class="hchip">⏱ 45 minutes</span>
+      <span class="hchip bean" id="beanPill">🌱 0 beans</span>
+      <span class="hchip team" id="teamChip" style="display:none"></span>
+      <span class="hchip streak" id="streakChip" style="display:none"></span>
+    </div>
+    <h1>👋 Hello World</h1>
+    <div class="signin" id="signinBar"></div>
+  </header>
+</div>
+
+<!-- Sticky progress bar + lesson parts -->
+<div class="progress-wrap">
+  <div class="hand-banner" id="handBanner" role="status" aria-live="polite"></div>
+  <div class="progress-inner">
+    <div class="progress-label" aria-live="polite"><span>Your progress</span><span id="progText">0 of 7 parts done · 0%</span></div>
+    <div class="progress-lane"><div class="progress-track"><div class="progress-fill" id="progBar"></div></div><span class="mascot" id="mascot" aria-hidden="true">🐠</span></div>
+    <nav class="stepper" id="stepper" aria-label="Lesson parts"></nav>
+    <div class="helper-chip" id="helperChip"></div>
+  </div>
+</div>
+
+<main class="wrapper">
+<div class="card guest-offer" id="guestOffer" style="display:none"></div>
+
+<!-- ============ PART 1: WARM UP ============ -->
+<section class="step" id="s-warm" data-title="Warm Up">
+  <span class="time">⏱ 10 minutes</span>
+  <h2>Part 1 · Warm Up: A Series of Events</h2>
+
+  <div class="cards grow">
+    <div class="card info">
+      <h3>🎯 Today I can…</h3>
+      <ul class="clean">
+        <li>make new <b>sprites</b> and give them <b>costumes</b> and <b>locations</b>.</li>
+        <li>make a sprite <b>say</b> things in a speech bubble.</li>
+        <li>use <b>events</b>, like a click, to make my sprites do something.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>💭 Reflect</h3>
+      <p><b>How do we use sprites in our programs?</b> Think about the fish tank from our last lesson.</p>
+      <p class="starter">👆 Tap to finish the sentence.</p>
+      <div class="frame" data-frame="reflect"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🔍 Let’s find a pattern</h3>
+    <ul class="clean">
+      <li>When you <b>flip a switch</b>, the lights turn on.</li>
+      <li>When you <b>tap on a device</b>, an app starts.</li>
+      <li>When the <b>alarm goes off</b>, you get out of bed.</li>
+    </ul>
+    <p class="goal">The pattern: When (event), (action).</p>
+    <p>The <b>event</b> comes first. It <b>causes</b> the action to happen.</p>
+  </div>
+
+  <div class="card">
+    <h3>🗂 Sort it! Event or action?</h3>
+    <p>For each one, choose: is it the <b>event</b> (what happens first and causes something) or the <b>action</b> (what happens because of it)? Then press <b>Check my sorting</b>.</p>
+    <div class="sortlist" id="sortList"></div>
+    <div class="btnrow"><button class="btn" id="sortCheck">Check my sorting</button><span id="sortScore" class="goal"></span></div>
+    <p class="bean-note" id="bn-sort"></p>
+  </div>
+
+  <div class="card">
+    <h3>🤔 A new meaning for “event”</h3>
+    <p>Most days, “event” means a field trip, a competition or a birthday party. Today we learn a <b>computer science</b> meaning. Which one is an event in computer science?</p>
+    <div class="opts" id="upOpts"></div>
+    <div class="feedback" id="upFb"></div>
+    <p class="bean-note" id="bn-eventq"></p>
+  </div>
+</section>
+
+<!-- ============ PART 2: VOCABULARY ============ -->
+<section class="step" id="s-vocab" data-title="Vocabulary">
+  <span class="time">⏱ part of Warm Up</span>
+  <h2>Part 2 · Today’s Vocabulary</h2>
+  <p>Tap each card to flip it. Read the meaning and the example, then flip it back and say the meaning in your own words.</p>
+  <div class="cards" id="vocabCards"></div>
+  <p class="muted">Orange cards are words from our last lesson that you will use again today.</p>
+</section>
+
+<!-- ============ PART 3: EVENTS IN SPRITE LAB ============ -->
+<section class="step" id="s-bridge" data-title="Events in Sprite Lab">
+  <span class="time">⏱ 5 minutes</span>
+  <h2>Part 3 · Events in Sprite Lab</h2>
+  <div class="card info">
+    <p>Today you will make sprites <b>say</b> things in speech bubbles, like in a comic book. You will also make them answer when someone <b>clicks</b> them. Turn blocks on and off, then press <b>▶ Run</b>. Click the robot!</p>
+  </div>
+
+  <div class="lab">
+    <div class="stagebox">
+      <canvas id="demoStage" width="800" height="800" aria-label="Sprite stage with a robot and an alien"></canvas>
+      <div class="btnrow">
+        <button class="btn ok" id="demoRun">▶ Run</button>
+        <button class="btn alt" id="demoReset">⟲ Reset</button>
+      </div>
+      <div class="status" id="demoStatus">Press Run to start the program.</div>
+    </div>
+    <div class="codecol">
+      <h3>Choose the blocks</h3>
+      <div class="toggles">
+        <label><input type="checkbox" id="dSay"> robot <b>says “Hello World!”</b> (under <i>when run</i>)</label>
+        <label><input type="checkbox" id="dClick"> when robot is <b>clicked</b> → robot <b>says “Beep boop!”</b></label>
+        <label><input type="checkbox" id="dMove"> alien begins <b>moving left-right</b> (under <i>when run</i>)</label>
+        <label><input type="checkbox" id="dTouch"> when alien <b>touches</b> another sprite → alien <b>says “Nice to meet you!”</b></label>
+      </div>
+      <h3>The program</h3>
+      <div class="blocks" id="demoCode"></div>
+      <div class="legend">
+        <span><i style="background:var(--blk-run)"></i>runs right away</span>
+        <span><i style="background:var(--blk-event)"></i>event (waits)</span>
+        <span><i style="background:var(--blk-sprite)"></i>sprite</span>
+        <span><i style="background:var(--blk-beh)"></i>behavior</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card tip" style="margin-top:18px">
+    <h3>💡 Two kinds of code</h3>
+    <p>Code under <b>when run</b> happens <b>right away, in order</b>, when you press Run. Code inside an <b>event</b> block (like <i>when clicked</i> or <i>when touches</i>) <b>waits</b> until that event happens. The event causes the action.</p>
+  </div>
+
+  <h3>Predict, then test</h3>
+  <p>Choose your prediction. Then use the blocks above to test it before you press <b>Check</b>.</p>
+  <div id="predictBox"></div>
+  <p class="bean-note" id="bn-predict"></p>
+  <div class="card checkpoint" id="checkpointCard" style="margin-top:18px"></div>
+</section>
+
+<!-- ============ PART 4: SPRITE LAB LEVELS ============ -->
+<section class="step" id="s-levels" data-title="Sprite Lab Levels">
+  <span class="time">⏱ 25 minutes</span>
+  <h2>Part 4 · Hello World on Code.org</h2>
+  <div class="card info">
+    <p class="goal">Goal: Make an interactive world with fun sprites. Make them say things, and make them answer when they are clicked.</p>
+    <p><b>Do this:</b> Follow the instructions on each level. Finish all the skill-building levels before you move on. Then tick the box.</p>
+    <p class="muted">Sign in to Code.org with your class login first. <a id="lessonLink" target="_blank" rel="noopener">Open the whole lesson on Code.org ↗</a></p>
+  </div>
+  <div class="cards" id="levelCards"></div>
+
+  <div class="cards grow">
+    <div class="card tip">
+      <h3>🙋 Stuck? Try these first</h3>
+      <ul class="clean">
+        <li><b>Read the instructions</b> again, slowly.</li>
+        <li><b>Look for hints.</b> Each level has a hint that tells you which blocks to try.</li>
+        <li><b>Ask a neighbour</b> to look at your screen with you.</li>
+        <li><b>Take your time</b> and try your own ideas.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>⭐ Finished early? (Level 14)</h3>
+      <ul class="clean">
+        <li>What other sprites could you add?</li>
+        <li>Have you looked at the costume library, or drawn your own costume?</li>
+        <li>What else could your sprites say?</li>
+        <li>What should your sprites do when they are clicked?</li>
+      </ul>
+      <p class="muted">Want to press <b>Share</b>? Ask Mr. EdLo first.</p>
+    </div>
+    <div class="card">
+      <h3>📶 Code.org will not load?</h3>
+      <p>Tell Mr. EdLo straight away. <b>Part 5: Hello World Builder</b> works without the internet. It is always open, so tap it in the part buttons and practise there while you wait.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PART 5: HELLO WORLD BUILDER ============ -->
+<section class="step" id="s-world" data-title="Hello World Builder">
+  <span class="time">⏱ practice &amp; free play</span>
+  <h2>Part 5 · Hello World Builder</h2>
+  <div class="card info">
+    <p>Here is a program with one robot. <b>Modify</b> it to build your own interactive world. Choose what each sprite says, and what it does when it is <b>clicked</b> or when it <b>touches</b> another sprite. Then press <b>▶ Run</b>. Finish all 5 challenges!</p>
+  </div>
+
+  <div class="lab">
+    <div class="stagebox">
+      <canvas id="tankStage" width="800" height="800" aria-label="Hello World stage"></canvas>
+      <div class="btnrow">
+        <button class="btn ok" id="tankRun">▶ Run</button>
+        <button class="btn alt" id="tankStopBtn">■ Stop</button>
+      </div>
+      <div class="status" id="tankStatus">Press Run to start the program.</div>
+      <div class="card" style="margin-top:10px">
+        <h3>🏆 Challenges</h3>
+        <ul class="checklist" id="chalList"></ul>
+        <p class="bean-note" id="bn-tank"></p>
+      </div>
+    </div>
+    <div class="codecol">
+      <div class="btnrow">
+        <button class="btn" id="addSprite">＋ Make a new sprite</button>
+        <button class="btn alt" id="resetTank">Start over</button>
+      </div>
+      <div class="sprites" id="spriteEditor"></div>
+      <h3>My program</h3>
+      <div class="blocks" id="tankCode"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PART 6: WRAP UP ============ -->
+<section class="step" id="s-wrap" data-title="Wrap Up">
+  <span class="time">⏱ 10 minutes (with the quiz)</span>
+  <h2>Part 6 · Wrap Up: Reflection</h2>
+  <div class="card">
+    <p><b>1. What did you learn today about sprites?</b> <span class="starter">👆 Tap to finish the sentences.</span></p>
+    <div class="frame" data-frame="r1"></div>
+    <p style="margin-top:12px"><b>2. How do events work in your code?</b></p>
+    <div class="frame" data-frame="r2"></div>
+    <p style="margin-top:14px"><b>3. ✏️ Type ONE short sentence: what did your sprites say or do?</b></p>
+    <p class="starter">Example: “My robot says hello and the cat says meow when I click it.”</p>
+    <input class="short" type="text" maxlength="160" autocomplete="off" data-bind="wrap.r3" aria-label="One short sentence: what did your sprites say or do?">
+  </div>
+  <button class="btn coral" data-goto="s-quiz">I’m ready for the quiz →</button>
+</section>
+
+<!-- ============ PART 7: QUIZ ============ -->
+<section class="step" id="s-quiz" data-title="Quiz">
+  <h2>Part 7 · Lesson Quiz</h2>
+  <div class="card info">
+    <p>10 questions · You need <b>7 out of 10 (70%)</b> to pass. If you do not pass, review the lesson parts named in your feedback and try again. Every attempt goes to Mr. EdLo’s record book.</p>
+    <p class="muted" id="quizHistory"></p>
+  </div>
+  <div id="quizNeedLogin" class="card tip" style="display:none">
+    <p><b>🔑 Sign in to take the quiz.</b> Your quiz result goes to Mr. EdLo’s record book with your name on it.</p>
+    <a class="btn" id="quizLoginBtn" href="/login/" style="display:inline-flex;align-items:center;text-decoration:none">Sign in</a>
+  </div>
+  <div id="quizArea"></div>
+  <div id="quizResult"></div>
+</section>
+
+<div class="todo" id="partTodo" style="display:none" role="status"></div>
+<div class="navrow" id="navRow">
+  <button class="btn alt" id="prevBtn">← Back</button>
+  <button class="btn alt" id="helpBtn" type="button">🙋 I need help</button>
+  <button class="btn" id="nextBtn">Next →</button>
+</div>
+</main>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="confetti" aria-hidden="true"></div>
+<div class="help-panel" id="helpPanel" role="dialog" aria-label="Help options"></div>
+
+<footer class="site-footer">
+  <p>© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize</p>
+  <p>Lesson content adapted from Code.org <i>CS Fundamentals Course E (2025), Lesson 4: Hello World</i>, licensed <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>. This page is shared under the same licence for non-commercial classroom use.</p>
+  <button type="button" class="reset" id="resetAll">Teacher: clear this student’s saved answers on this device (beans stay banked)</button>
+</footer>
+
+<div id="printArea"></div>
+
+<script>
+"use strict";
+/* ---------- Theme (site-wide: body.theme-*, saved in localStorage "vc-theme") ---------- */
+const THEMES = ["night","sunny","cloudy","nature"];
+function setTheme(t){
+  THEMES.forEach(x=>document.body.classList.remove("theme-"+x));
+  document.body.classList.add("theme-"+t);
+  document.querySelectorAll("#themeBar button").forEach(b=>b.classList.toggle("active", b.dataset.t===t));
+  try{ localStorage.setItem("vc-theme", t); }catch(e){}
+}
+document.querySelectorAll("#themeBar button").forEach(b=>b.addEventListener("click",()=>setTheme(b.dataset.t)));
+(function(){ let s=null; try{ s=localStorage.getItem("vc-theme"); }catch(e){} setTheme(THEMES.includes(s)?s:"night"); })();
+(function(){ const sc=document.getElementById("stars"); for(let i=0;i<70;i++){ const s=document.createElement("div"); s.className="star"; const z=Math.random()*2.2+1;
+  s.style.cssText="width:"+z+"px;height:"+z+"px;top:"+(Math.random()*100)+"%;left:"+(Math.random()*100)+"%;opacity:"+(Math.random()*.4+.15).toFixed(2); sc.appendChild(s);} })();
+/* ---------- Settings (edit these if Code.org changes its links) ---------- */
+const LESSON_URL = "https://studio.code.org/s/coursee-2025/lessons/4";
+const LEVEL_URL  = n => LESSON_URL + "/levels/" + n;
+const PASS_MARK  = 7;
+
+/* ---------- Site sign-in (/edlo-utils.js — the same account as every page on the site) ----------
+   The lesson stays PUBLIC (Edwin, July 19): signing in changes what a student EARNS, not what he
+   or she SEES. Signed in → beans 🌱 for the team + the quiz, saved to the record book.
+   Signed out → full lesson for practice; the quiz asks the student to sign in. */
+const SESSION = (typeof vcGetSession === "function") ? vcGetSession() : null;
+const WHO     = SESSION ? SESSION.username : "guest";
+function studentName(){ return SESSION ? (SESSION.full_name || SESSION.username || "") : ""; }
+function loginUrl(part){ return "/login/?next=" + encodeURIComponent(location.pathname + (part ? "?part=" + part : "")); }
+
+/* Saved answers are kept PER STUDENT ACCOUNT, so a second student on the same computer starts clean. */
+const STORE_BASE = "edlo-csE-L04-hello-world-v1";
+const STORE_KEY  = STORE_BASE + "::" + WHO;
+const GUEST_KEY  = STORE_BASE + "::guest";
+try{   /* work saved by the first version of this page (Oct 7, before sign-in) counts as signed-out work */
+  const old = localStorage.getItem(STORE_BASE);
+  if(old && !localStorage.getItem(GUEST_KEY)) localStorage.setItem(GUEST_KEY, old);
+  if(old) localStorage.removeItem(STORE_BASE);
+}catch(e){}
+
+/* ---------- Saved state ---------- */
+function defaults(){
+  return {step:0,visited:{},flipped:{},
+    warm:{reflect:"",sort:{},sortChecked:false,sortScore:null,sortFirst:null,upstander:null,upFirst:null},   /* upstander/upFirst = the "which is an event?" question */
+    predict:{},levels:{},tank:null,challenges:{},
+    wrap:{r1:"",r2:"",r3:""}, frames:{}, extra:{}, firstPick:{}, streak:0, bestStreak:0, legacy:null,
+    checkpoint:{passed:false}, help:{popped:{}, misses:{}, raised:false, hands:0, offers:0},
+    quiz:{attempts:0,best:null,last:null,passed:false,history:[]}};
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(raw){
+      const d = defaults(), s = JSON.parse(raw);
+      for(const k in d){ if(s[k]!==undefined){ d[k] = (d[k] && typeof d[k]==="object" && !Array.isArray(d[k])) ? Object.assign(d[k], s[k]) : s[k]; } }
+      /* Saved BEFORE tap-to-answer (Oct 10)? Then the student typed full answers: keep them counting. */
+      if(d.legacy === null){ const w = s.warm || {}, r = s.wrap || {};
+        d.legacy = s.frames === undefined && [w.reflect, w.q1, w.q2, r.r1, r.r2].some(t => t && String(t).trim().length >= 3); }
+      /* Already past Part 3 before the checkpoint existed (Oct 10)? Don't lock them out again. */
+      if(s.checkpoint === undefined && s.visited && (s.visited["s-levels"] || s.visited["s-wrap"] || s.visited["s-quiz"])) d.checkpoint = {passed:true, auto:true};
+      return d;
+    }
+  }catch(e){}
+  return defaults();
+}
+let S = load();
+function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); }catch(e){} updateProgress(); }
+const $ = id => document.getElementById(id);
+function esc(t){ return String(t).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function getPath(p){ return p.split(".").reduce((o,k)=>o[k], S); }
+function setPath(p,v){ const ks=p.split("."), last=ks.pop(); ks.reduce((o,k)=>o[k], S)[last]=v; }
+
+/* ---------- Tap-to-answer reflections (Edwin, Oct 10: many students type slowly) ----------
+   Each reflection is a sentence the student finishes by TAPPING choices. Opinion blanks have no wrong
+   answer; blanks with `ans` are checked (wrong picks are shown, and the part stays locked until fixed).
+   The finished sentence is saved to the old answer field, so the PDF reads it as a full sentence.
+   "Add my own words" is optional. The ONE required typed answer is the short sentence at Wrap Up (wrap.r3).
+   Answers typed before this change still count (S.legacy). */
+const FRAMES = {
+  reflect:{ path:"warm.reflect", parts:["We use sprites in our programs to ",
+    {k:"a", l:"We use sprites to…", o:["show characters and objects on the screen", "make characters that move", "tell a story or make a game", "build a world, like our fish tank"]},
+    ". A sprite is ",
+    {k:"b", l:"A sprite is…", o:["a picture on the screen that a program controls", "a sound the computer makes", "the button that runs a program"],
+     ans:[0], bad:"Not quite. Remember our last lesson: the fish in the tank were sprites. What were they?"}, "."]},
+  r1:{ path:"wrap.r1", parts:["Today I learned that a sprite can ",
+    {k:"a", l:"A sprite can…", o:["say words in a speech bubble", "move with a behavior", "answer when I click it", "change its costume"]},
+    ". To make a sprite talk, I use the ",
+    {k:"b", l:"Which block makes a sprite talk?", o:["“say”", "“set size”", "“begins spinning”"],
+     ans:[0], bad:"Not quite. Look at the blocks in Part 3 again. Which block made the robot talk?"}, " block."]},
+  r2:{ path:"wrap.r2", parts:["An event is ",
+    {k:"a", l:"An event is…", o:["an action that causes something to happen", "a party or a field trip", "a picture on the screen"],
+     ans:[0], bad:"Not quite. Flip the “Event” card in Part 2 again."},
+    ". The blocks inside a “when clicked” event run ",
+    {k:"b", l:"They run…", o:["only when the sprite is clicked", "right away when I press Run", "over and over forever"],
+     ans:[0], bad:"Not quite. In Part 3, what made the robot say “Beep boop!”?"},
+    ". Today’s lesson felt ",
+    {k:"c", l:"How did it feel? Tap a face.", o:["😀 easy", "🙂 a little easy", "😐 a little hard", "😟 hard"]}, " for me."]}
+};
+function frameBlanks(id){ return FRAMES[id].parts.filter(x=>typeof x !== "string"); }
+function framePicks(id){ return (S.frames && S.frames[id]) || null; }
+function blankOk(b, pick){ return pick !== undefined && (!b.ans || b.ans.indexOf(pick) !== -1); }
+function frameDone(id){
+  const p = framePicks(id);
+  if(!p || !Object.keys(p).length) return !!S.legacy && filled(getPath(FRAMES[id].path));
+  return frameBlanks(id).every(b=>blankOk(b, p[b.k]));
+}
+function frameSentence(id){
+  const p = framePicks(id) || {};
+  return FRAMES[id].parts.map(x=> typeof x === "string" ? x : (p[x.k] !== undefined ? x.o[p[x.k]].replace(/^\S+\s(?=[a-z])/u, m => /\p{Extended_Pictographic}/u.test(m) ? "" : m) : "____")).join("");
+}
+function answerText(id){
+  const own = S.extra && S.extra[id] && S.extra[id].trim() ? "  My own words: " + S.extra[id].trim() : "";
+  return (getPath(FRAMES[id].path) || "") + own;
+}
+function shortDone(){
+  if((S.wrap.r3 || "").trim().split(/\s+/).filter(Boolean).length >= 3) return true;
+  return !!S.legacy && filled(S.wrap.r2);       /* finished the Wrap Up before this question existed */
+}
+function renderFrame(id){
+  const el = document.querySelector('[data-frame="' + id + '"]'); if(!el) return;
+  const f = FRAMES[id], p = framePicks(id) || {}, legacyText = S.legacy && !Object.keys(p).length ? getPath(f.path) : "";
+  let sent = "", slots = "", fb = "";
+  f.parts.forEach(x=>{
+    if(typeof x === "string"){ sent += esc(x); return; }
+    const pick = p[x.k], ok = blankOk(x, pick);
+    sent += pick === undefined ? '<span class="blank empty">______</span>'
+          : '<span class="blank' + (ok ? "" : " bad") + '">' + esc(x.o[pick]) + "</span>";
+    slots += '<div class="slot"><div class="slot-l">' + esc(x.l) + '</div><div class="chips">'
+      + x.o.map((o,i)=>'<button type="button" class="chip' + (pick===i ? " sel" + (x.ans ? (ok ? " right" : " wrong") : "") : "")
+        + '" data-f="' + id + '" data-k="' + x.k + '" data-i="' + i + '">' + esc(o) + "</button>").join("") + "</div></div>";
+    if(pick !== undefined && !ok) fb += '<p class="ffb bad">✘ ' + esc(x.bad) + "</p>";
+  });
+  el.innerHTML = (legacyText ? '<p class="legacy">✔ Your typed answer is saved: “' + esc(legacyText) + '”. You may also tap an answer below.</p>' : "")
+    + '<div class="sentence">' + sent + "</div>" + slots + fb
+    + '<details' + (S.extra && S.extra[id] ? " open" : "") + '><summary>✏️ Add my own words (optional)</summary>'
+    + '<textarea data-extra="' + id + '" aria-label="My own words (optional)">' + esc((S.extra && S.extra[id]) || "") + "</textarea></details>";
+  el.querySelectorAll("button[data-f]").forEach(b=>b.addEventListener("click", ()=>pickBlank(b.dataset.f, b.dataset.k, +b.dataset.i)));
+  const ta = el.querySelector("textarea[data-extra]");
+  ta.addEventListener("input", ()=>{ S.extra[id] = ta.value; save(); });
+}
+function pickBlank(id, k, i){
+  if(!S.frames[id]) S.frames[id] = {};
+  S.frames[id][k] = i;
+  const b = frameBlanks(id).find(x=>x.k===k), key = id + "." + k;
+  if(b.ans && S.firstPick[key] === undefined){ S.firstPick[key] = b.ans.indexOf(i) !== -1; streakHit(S.firstPick[key]); }
+  if(b.ans && b.ans.indexOf(i) === -1) miss();
+  const complete = frameBlanks(id).every(x=>S.frames[id][x.k] !== undefined);
+  setPath(FRAMES[id].path, complete ? frameSentence(id) : "");
+  save(); renderFrame(id);
+}
+function renderFrames(){ Object.keys(FRAMES).forEach(renderFrame); }
+
+/* ---------- Fun layer (Edwin, Oct 10) — supports the learning, never replaces it ----------
+   🐠 mascot swims along the progress bar · 🎉 short confetti when a part unlocks · 🔥 first-try streak ·
+   👥 the student's team bean total (group competition) · 🏅 lesson badge for passing the quiz.
+   Rules: nothing fires while a quiz is open; every effect is under 2 s and never blocks a button;
+   no sound; "reduce motion" computers get no animation (messages only). */
+const BADGE = { name:"Event Explorer", icon:"🏅", why:"You passed Course E Lesson 4: Hello World — you can make sprites talk and answer events." };
+const REDUCED = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+var quizBusy = false, lastTop = null;
+function confetti(){
+  if(REDUCED) return;
+  const box = $("confetti"), colors = ["#20C997","#FFA94D","#4DABF7","#FFD43B","#F783AC","#9775FA"];
+  for(let i=0;i<36;i++){ const d = document.createElement("i");
+    d.style.left = (Math.random()*100) + "%"; d.style.background = colors[i % colors.length];
+    d.style.setProperty("--dx", ((Math.random()-.5)*160) + "px"); d.style.setProperty("--rot", (Math.random()*720-360) + "deg");
+    d.style.animationDelay = (Math.random()*.25) + "s"; box.appendChild(d); }
+  setTimeout(()=>{ box.innerHTML = ""; }, 1900);
+}
+function celebrateUnlock(top){
+  confetti();
+  toast("🎉 Part " + (top+1) + " unlocked: " + sections[top].dataset.title + "!");
+}
+function streakHit(ok){
+  if(ok){ S.streak = (S.streak||0) + 1; S.bestStreak = Math.max(S.bestStreak||0, S.streak);
+    if(S.streak >= 3 && S.streak % 2 === 1) toast("🔥 " + S.streak + " right in a row on the first try!"); }
+  else S.streak = 0;
+  renderStreak();
+}
+function renderStreak(){
+  const c = $("streakChip");
+  if((S.streak||0) >= 2){ c.textContent = "🔥 " + S.streak + " in a row"; c.style.display = ""; } else c.style.display = "none";
+}
+let teamTimer = 0;
+function refreshTeam(delay){
+  if(!SESSION || typeof vcGetLeaderboard !== "function") return;
+  clearTimeout(teamTimer);
+  teamTimer = setTimeout(()=>{
+    vcGetLeaderboard().then(r=>{
+      if(!r || !r.ok || !r.my_group) return;
+      const g = (r.groups || []).find(x=>String(x.group) === String(r.my_group)); if(!g) return;
+      const c = $("teamChip"); c.textContent = "👥 " + r.my_group + ": " + g.beans + " 🌱"; c.title = "Your team's beans in the group competition"; c.style.display = "";
+    }, ()=>{});
+  }, delay || 0);
+}
+
+/* ---------- Help layer + class checkpoint (Edwin, Oct 10) ----------
+   Students work through the lesson on their own; these keep the teacher and classmates in the loop.
+   • "Struggling?" card — after 2 wrong answers in a part, or 6 minutes in a part with no progress.
+     At most ONCE per part, never in the quiz, never while waiting at the checkpoint.
+     Choices: ask a helper · call Mr. EdLo · look back one part · I'm OK. "🙋 I need help" opens it any time.
+   • Helper badge — "✅ I can help with Parts 1–N" in the sticky bar, so stuck students can find a helper.
+   • Raise hand — a bright banner across the top of the screen until the student taps "Helped ✓".
+   • Class checkpoint after Part 3 — the page waits for the code Mr. EdLo says aloud after a 3–5 minute
+     class check. The code controls PACING, not security (only its hash is in the page).
+     Teacher's code list: standard5/computer-science/_source/checkpoint-codes.txt (gitignored). */
+const CHECKPOINT = { after:"s-bridge", hash:"ced96b98", /* code for this lesson: see checkpoint-codes.txt */
+  questions:["What is an event? Give an example from real life.",
+             "“When the robot is clicked, it says Beep boop.” Which part is the event, and which part is the action?",
+             "When does a “say” block under “when run” happen?"] };
+const HELP_MISSES = 2, HELP_MINUTES = 6;
+let partClock = { id:null, since:Date.now(), done:-1 };
+function fnv(s){ let h = 0x811c9dc5; for(const ch of s){ h ^= ch.codePointAt(0); h = Math.imul(h, 0x01000193) >>> 0; } return h.toString(16); }
+function checkpointPassed(){ return !!(S.checkpoint && S.checkpoint.passed); }
+function helpState(){ if(!S.help) S.help = {popped:{}, misses:{}, raised:false, hands:0, offers:0}; return S.help; }
+function firstName(){ return SESSION ? (SESSION.first_name || studentName() || "This student") : "This student"; }
+function miss(){
+  const id = sections[S.step].id, H = helpState();
+  if(id === "s-quiz" || quizBusy) return;
+  H.misses[id] = (H.misses[id] || 0) + 1;
+  if(H.misses[id] >= HELP_MISSES) offerHelp("misses");
+}
+function offerHelp(reason){
+  const id = sections[S.step].id, H = helpState();
+  if(reason !== "manual"){ if(id === "s-quiz" || quizBusy || H.popped[id]) return; H.popped[id] = true; }
+  H.offers = (H.offers || 0) + 1; save();
+  const k = S.step, prev = k > 0 ? k - 1 : null, p = $("helpPanel");
+  const head = reason === "time" ? "⏱ You have been on this part for a while." : reason === "misses" ? "🤔 This one is tricky!" : "🆘 Let’s get you unstuck.";
+  p.innerHTML = "<p><b>" + head + "</b> Pick one:</p><div class=\"opts3\">"
+    + '<button type="button" class="btn alt" data-h="peer">👥 Ask a helper — find a classmate whose screen says “✅ I can help with Part ' + (k+1) + '”</button>'
+    + '<button type="button" class="btn coral" data-h="hand">🙋 Call Mr. EdLo</button>'
+    + (prev !== null ? '<button type="button" class="btn alt" data-h="back">🔁 Look back at Part ' + (prev+1) + ": " + esc(sections[prev].dataset.title) + "</button>" : "")
+    + '<button type="button" class="btn alt" data-h="ok">👍 I’m OK — keep going</button></div>';
+  p.classList.add("show");
+  p.querySelectorAll("[data-h]").forEach(b=>b.addEventListener("click", ()=>{
+    p.classList.remove("show");
+    const h = b.dataset.h;
+    if(h === "peer") toast("👥 Look around for a ✅ helper badge for Part " + (k+1) + ". Ask quietly!");
+    if(h === "hand") raiseHand(true);
+    if(h === "back") showStep(prev);
+  }));
+}
+function raiseHand(on){ const H = helpState(); H.raised = on; if(on) H.hands = (H.hands || 0) + 1; save(); renderHand();
+  if(on) toast("🙋 Your hand is up. Mr. EdLo will come to you. Keep trying while you wait!"); }
+function renderHand(){
+  const b = $("handBanner"), H = helpState();
+  if(!H.raised){ b.classList.remove("show"); b.innerHTML = ""; return; }
+  b.innerHTML = "<span>🙋 " + esc(firstName()) + " needs help with Part " + (S.step+1) + ": " + esc(sections[S.step].dataset.title) + "</span>"
+    + '<button type="button" id="handDown">Helped ✓</button>';
+  b.classList.add("show");
+  $("handDown").onclick = ()=>raiseHand(false);
+}
+function renderHelper(){
+  let n = 0; while(n < sections.length-1 && partDone(sections[n].id)) n++;
+  const c = $("helperChip");
+  if(n >= 1){ c.textContent = "✅ I can help with Part" + (n > 1 ? "s 1–" + n : " 1"); c.classList.add("show"); }
+  else c.classList.remove("show");
+}
+function renderCheckpoint(){
+  const el = $("checkpointCard"); if(!el) return;
+  const predDone = PREDICT.every((_,i)=>S.predict[i] && S.predict[i].checked);
+  if(checkpointPassed()){ el.className = "card checkpoint done"; el.innerHTML = "<b>✅ Class checkpoint done.</b> Part 4 is open — great work!"; return; }
+  el.className = "card checkpoint";
+  if(!predDone){ el.innerHTML = "<b>🛑 Class checkpoint comes next.</b> Get all 4 predictions correct first."; return; }
+  if(el.querySelector("#cpCode")) return;   /* keep what the student is typing */
+  el.innerHTML = "<h3>🛑 CHECKPOINT — Stop here!</h3><p><b>Mr. EdLo will do a quick class check.</b> While you wait, get ready to answer:</p><ol>"
+    + CHECKPOINT.questions.map(q=>"<li>" + esc(q) + "</li>").join("") + "</ol>"
+    + '<p>When Mr. EdLo gives the class code, type it here:</p><div class="btnrow"><input id="cpCode" type="text" maxlength="12" autocomplete="off" aria-label="Checkpoint code"><button type="button" class="btn" id="cpGo">Open Part 4</button></div><p class="status" id="cpMsg"></p>';
+  const go = ()=>{
+    const v = ($("cpCode").value || "").trim().toLowerCase().replace(/\s+/g, "");
+    if(fnv(v) === CHECKPOINT.hash){ S.checkpoint = {passed:true, date:new Date().toISOString()}; save(); renderCheckpoint(); }
+    else { $("cpMsg").textContent = "That is not the code yet. Wait for Mr. EdLo — you can look back at your answers while you wait."; }
+  };
+  $("cpGo").onclick = go;
+  $("cpCode").addEventListener("keydown", e=>{ if(e.key === "Enter") go(); });
+}
+/* "6 minutes without progress" clock — checked every 20 s */
+setInterval(()=>{
+  if(!sections[S.step]) return;
+  const id = sections[S.step].id;
+  if(id === "s-quiz" || quizBusy || partDone(id)) { partClock = {id, since:Date.now(), done:-1}; return; }
+  const list = todoFor(id), done = list.filter(t=>t.ok).length;
+  const waiting = id === CHECKPOINT.after && list.filter(t=>!t.ok).length === 1 && !checkpointPassed();
+  if(partClock.id !== id || partClock.done !== done || waiting){ partClock = {id, since:Date.now(), done}; return; }
+  if(Date.now() - partClock.since >= HELP_MINUTES * 60000) offerHelp("time");
+}, 20000);
+
+/* ---------- Steps / navigation ---------- */
+const sections = Array.from(document.querySelectorAll("section.step"));
+function buildStepper(){
+  $("stepper").innerHTML = sections.map((s,i)=>
+    `<button type="button" data-i="${i}"><span class="n">${i+1}</span>${esc(s.dataset.title)}</button>`).join("");
+  $("stepper").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>showStep(+b.dataset.i)));
+}
+/* PART LOCKS (Edwin, Oct 7): a part opens only when EVERY activity in the part before it is finished.
+   openUpTo() = the furthest part a student may open. Locks are worked out from the saved answers,
+   so they survive a reload and follow the signed-in student. */
+function openUpTo(){ let i = 0; while(i < sections.length-1 && partDone(sections[i].id)) i++; return i; }
+/* EXEMPT FROM THE LOCK (Edwin, Oct 7): the on-page practice part (here: Hello World Builder) is the no-internet backup, so it must open even
+   when Code.org cannot be reached and the Part 4 ticks are missing. It still has to be finished before Part 6. */
+const ALWAYS_OPEN = ["s-world"];
+function isLocked(k){ return k > openUpTo() && ALWAYS_OPEN.indexOf(sections[k].id) === -1; }
+function lockedMsg(k){
+  const left = todoFor(sections[k].id).filter(t=>!t.ok).map(t=>t.t);
+  return "🔒 Finish Part " + (k+1) + " first" + (left.length ? ": " + left.join(" · ") : ".");
+}
+function showStep(i){
+  i = Math.max(0, Math.min(sections.length-1, i));
+  const top = openUpTo();
+  if(isLocked(i)){ toast(lockedMsg(top)); i = isLocked(S.step) ? top : S.step; if(i === S.step && sections[i].classList.contains("on")) return; }
+  S.step = i; S.visited[sections[i].id] = true;
+  sections.forEach((s,k)=>s.classList.toggle("on", k===i));
+  $("stepper").querySelectorAll("button").forEach((b,k)=>{ b.classList.toggle("on", k===i); });
+  $("prevBtn").style.visibility = i===0 ? "hidden" : "visible";
+  $("nextBtn").style.visibility = i===sections.length-1 ? "hidden" : "visible";
+  if(sections[i].id==="s-quiz") renderQuizStart();
+  $("helpPanel").classList.remove("show"); renderHand();
+  if(sections[i].id!=="s-world") tank.stop();
+  if(sections[i].id!=="s-bridge") demo.stop();
+  const on = $("stepper").querySelector("button.on"); if(on && on.scrollIntoView) on.scrollIntoView({inline:"center",block:"nearest"});
+  window.scrollTo({top:0,behavior:"smooth"});
+  save();
+}
+document.addEventListener("click", e=>{
+  const g = e.target.closest("[data-goto]");
+  if(g){ showStep(sections.findIndex(s=>s.id===g.dataset.goto)); }
+});
+$("prevBtn").onclick = ()=>showStep(S.step-1);
+$("nextBtn").onclick = ()=>showStep(S.step+1);
+
+/* ---------- Progress ---------- */
+function filled(t){ return t && t.trim().length >= 3; }
+/* Every activity of each part, with whether it is finished. A part is done when all are ok. */
+function todoFor(id){
+  const flipped = Object.keys(S.flipped||{}).filter(w=>VOCAB.some(v=>v.w===w)).length;
+  const sortRight = SORT.filter(it=>S.warm.sort[it.id]===it.a).length;
+  const predRight = PREDICT.filter((_,i)=>S.predict[i] && S.predict[i].checked).length;
+  switch(id){
+    case "s-warm": return [
+      {t:"finish the reflection sentence", ok:frameDone("reflect")},
+      {t:"sort all " + SORT.length + " correctly and press Check (" + (S.warm.sortChecked ? sortRight : 0) + " of " + SORT.length + ")", ok:S.warm.sortChecked && sortRight===SORT.length},
+      {t:"choose the computer science event", ok:S.warm.upstander!==null && UP[S.warm.upstander].ok}];
+    case "s-vocab": return [{t:"flip every word card (" + flipped + " of " + VOCAB.length + ")", ok:flipped===VOCAB.length}];
+    case "s-bridge":return [{t:"get all 4 predictions correct (" + predRight + " of 4)", ok:predRight===PREDICT.length},
+                            {t:"🛑 class checkpoint with Mr. EdLo (type the code he gives)", ok:checkpointPassed()}];
+    case "s-levels":return [{t:"finish and tick all " + LEVEL_COUNT + " Code.org levels (" + levelsDone() + " of " + LEVEL_COUNT + ")", ok:levelsDone()===LEVEL_COUNT}];
+    case "s-world": return [{t:"finish all 5 Hello World challenges (" + chalDone() + " of 5)", ok:chalDone()===CHALLENGES.length}];
+    case "s-wrap":  return [{t:"finish sentence 1 (sprites)", ok:frameDone("r1")}, {t:"finish sentence 2 (events)", ok:frameDone("r2")},
+                            {t:"type one short sentence about your sprites (3 words or more)", ok:shortDone()}];
+    case "s-quiz":  return [{t:"pass the quiz", ok:!!S.quiz.passed}];
+  }
+  return [];
+}
+function partDone(id){ return todoFor(id).every(t=>t.ok); }
+function updateProgress(){
+  const done = sections.filter(s=>partDone(s.id)).length;
+  const pct = Math.round(done/sections.length*100);
+  $("progBar").style.width = pct+"%";
+  $("progText").textContent = done+" of "+sections.length+" parts done · "+pct+"%";
+  $("mascot").style.left = Math.min(97, Math.max(2, pct)) + "%";
+  renderHelper(); renderCheckpoint();
+  const top = openUpTo();
+  if(lastTop !== null && top > lastTop && !quizBusy) celebrateUnlock(top);
+  lastTop = top;
+  $("stepper").querySelectorAll("button").forEach((b,k)=>{
+    const locked = isLocked(k);
+    b.classList.toggle("done", partDone(sections[k].id));
+    b.classList.toggle("locked", locked);
+    b.querySelector(".n").textContent = locked ? "🔒" : String(k+1);
+    b.title = locked ? lockedMsg(top) : "";
+    b.setAttribute("aria-disabled", locked ? "true" : "false");
+  });
+  /* the to-do box under the current part, and the Next button */
+  const i = S.step, box = $("partTodo");
+  const last = i === sections.length-1, nextLocked = !last && isLocked(i+1);
+  if(nextLocked){
+    /* `top` is the part that actually blocks the next one — usually this part, but it can be an earlier one
+       when the student is sitting in an exempt part (Hello World Builder opened without the Part 4 ticks). */
+    const blocker = Math.min(top, i), list = todoFor(sections[blocker].id);
+    box.innerHTML = "🔒 To open <b>Part " + (i+2) + ": " + esc(sections[i+1].dataset.title) + "</b>, finish everything in "
+      + (blocker === i ? "this part" : "<b>Part " + (blocker+1) + ": " + esc(sections[blocker].dataset.title) + "</b>") + ":"
+      + "<ul>" + list.map(t=>'<li class="' + (t.ok ? "ok" : "") + '">' + (t.ok ? "✔ " : "") + esc(t.t) + "</li>").join("") + "</ul>";
+    box.style.display = "block";
+  } else box.style.display = "none";
+  $("nextBtn").classList.toggle("waiting", nextLocked);
+  $("nextBtn").textContent = nextLocked ? "🔒 Next" : "Next →";
+}
+
+/* ---------- Text bindings ---------- */
+document.querySelectorAll("[data-bind]").forEach(el=>{
+  el.value = getPath(el.dataset.bind) || "";
+  el.addEventListener("input", ()=>{ setPath(el.dataset.bind, el.value); save(); });
+});
+
+/* ---------- Part 1: Sort (event or action?) ---------- */
+const SORT = [
+  {id:"switch", t:"You flip a switch", a:"event", why:"Flipping the switch comes first. It causes the lights to turn on."},
+  {id:"bubble", t:"The sprite says “Hello!”", a:"action", why:"The sprite talks BECAUSE someone clicked it. That is the action."},
+  {id:"alarm",  t:"The alarm goes off", a:"event", why:"The alarm comes first. It causes you to get out of bed."},
+  {id:"app",    t:"The app starts", a:"action", why:"The app starts BECAUSE you tapped it. That is the action."},
+  {id:"click",  t:"You click a sprite", a:"event", why:"The click comes first. It can make the sprite say something."},
+  {id:"lights", t:"The lights turn on", a:"action", why:"The lights turn on BECAUSE you flipped the switch."},
+  {id:"tap",    t:"You tap an app on a tablet", a:"event", why:"The tap comes first. It causes the app to start."},
+  {id:"bed",    t:"You get out of bed", a:"action", why:"You get up BECAUSE the alarm went off."}
+];
+function renderSort(){
+  $("sortList").innerHTML = SORT.map(it=>{
+    const v = S.warm.sort[it.id];
+    return `<div class="sortitem" id="si-${it.id}"><span class="lbl">${esc(it.t)}</span>
+      <span class="choices">
+        <button type="button" class="chip ${v==="event"?"sel":""}" data-s="${it.id}" data-v="event">⚡ Event</button>
+        <button type="button" class="chip ${v==="action"?"sel":""}" data-s="${it.id}" data-v="action">🎬 Action</button>
+      </span><span class="fb"></span></div>`;}).join("");
+  $("sortList").querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
+    S.warm.sort[b.dataset.s] = b.dataset.v; S.warm.sortChecked = false; save(); renderSort();   /* a changed answer needs a fresh Check */
+  }));
+}
+$("sortCheck").onclick = ()=>{
+  const answered = SORT.filter(it=>S.warm.sort[it.id]).length;
+  if(answered < SORT.length){ $("sortScore").textContent = "Sort all "+SORT.length+" first ("+answered+" done)."; return; }
+  let right = 0;
+  SORT.forEach(it=>{
+    const el = $("si-"+it.id), ok = S.warm.sort[it.id]===it.a; if(ok) right++;
+    el.classList.toggle("right", ok); el.classList.toggle("wrong", !ok);
+    el.querySelector(".fb").textContent = (ok ? "✔ " : "✘ This is an "+it.a+". ") + it.why;
+  });
+  if(S.warm.sortFirst===null){ S.warm.sortFirst = right; streakHit(right===SORT.length); }     /* beans pay on the FIRST full check only */
+  S.warm.sortChecked = true; S.warm.sortScore = right; save(); settleBeans();
+  if(right < SORT.length) miss();
+  $("sortScore").textContent = "You sorted "+right+" of "+SORT.length+" correctly." + (right<SORT.length ? " Change the red ones and check again." : " Excellent!");
+};
+
+/* ---------- Part 1: Which one is a computer science event? (kept in S.warm.upstander / upFirst) ---------- */
+const UP = [
+  {t:"A field trip to the zoo", ok:false, fb:"That is the everyday meaning of “event”. In computer science, an event is an action that causes something to happen."},
+  {t:"Clicking on a sprite, which makes it say “Hello!”", ok:true, fb:"Yes! The click is an event. It causes the sprite to say something."},
+  {t:"A birthday party", ok:false, fb:"That is the everyday meaning of “event”. Look for an action that causes something to happen in a program."},
+  {t:"A football competition", ok:false, fb:"That is the everyday meaning of “event”. Which choice makes something happen on the screen?"}
+];
+function renderUp(){
+  $("upOpts").innerHTML = UP.map((o,i)=>`<label class="opt"><input type="radio" name="up" value="${i}" ${S.warm.upstander===i?"checked":""}><span>${esc(o.t)}</span></label>`).join("");
+  $("upOpts").querySelectorAll("input").forEach(r=>r.addEventListener("change",()=>{ S.warm.upstander=+r.value; if(!UP[+r.value].ok) miss(); if(S.warm.upFirst===null){ S.warm.upFirst=+r.value; streakHit(UP[+r.value].ok); } save(); showUpFb(); settleBeans(); }));
+  showUpFb();
+}
+function showUpFb(){
+  const i = S.warm.upstander, fb = $("upFb");
+  if(i===null){ fb.className="feedback"; return; }
+  fb.className = "feedback show " + (UP[i].ok ? "good" : "bad");
+  fb.textContent = (UP[i].ok ? "✔ " : "✘ ") + UP[i].fb + (UP[i].ok ? "" : " Try another answer.");
+}
+
+/* ---------- Part 2: Vocabulary ---------- */
+const VOCAB = [
+  {w:"Event", d:"An action that causes something to happen.", e:"Clicking a sprite is an event. It can make the sprite say “Hello!”."},
+  {w:"Algorithm", d:"A list of steps to complete a task.", e:"The steps for making a sandwich are an algorithm."},
+  {w:"Loop", d:"The action of doing something over and over again.", e:"A sprite that keeps spinning is doing something over and over."},
+  {w:"Modify", d:"To make small changes to something, usually to make it better.", e:"I modified my program by adding a cat that says “Meow!”."},
+  {w:"Sprite", d:"A graphic on the screen with a location, size, and appearance.", e:"The robot on the stage is a sprite.", extra:true},
+  {w:"Costume", d:"The picture a sprite uses, which decides how it looks.", e:"I changed the robot’s costume to a cat.", extra:true}
+];
+$("vocabCards").innerHTML = VOCAB.map((v,i)=>`
+  <div class="flipcol ${v.extra?"extra":""}">
+    <button type="button" class="flip" aria-label="Flip card: ${esc(v.w)}">
+      <div class="inner">
+        <div class="face front"><span class="word">${esc(v.w)}</span><small>${v.extra?"extra word · ":""}tap to flip</small></div>
+        <div class="face back"><p><b>${esc(v.w)}:</b> ${esc(v.d)}</p><p class="muted">Example: ${esc(v.e)}</p></div>
+      </div>
+    </button>
+  </div>`).join("");
+$("vocabCards").querySelectorAll(".flip").forEach((b,i)=>b.addEventListener("click",()=>{
+  b.classList.toggle("on");
+  if(!S.flipped) S.flipped = {};
+  if(!S.flipped[VOCAB[i].w]){ S.flipped[VOCAB[i].w] = true; save(); }
+}));
+
+/* ---------- Sprite engine (Lesson 3's stage, plus "say" speech bubbles and a "when touches" event) ---------- */
+const COSTUMES = {
+  robot:{e:"🤖",n:"robot"}, alien:{e:"👽",n:"alien"}, cat:{e:"🐱",n:"cat"}, dog:{e:"🐶",n:"dog"},
+  monkey:{e:"🐒",n:"monkey"}, parrot:{e:"🦜",n:"parrot"}, ball:{e:"⚽",n:"ball"}, star:{e:"⭐",n:"star"}
+};
+const BEHAVIORS = {swim:"moving left-right", wander:"wandering", spin:"spinning right", jitter:"jittering", bob:"bobbing up-down"};
+/* What a sprite says right away (under "when run") */
+const SAYS = {none:"(nothing)", hw:"Hello World!", hi:"Hi, I am new here!", welcome:"Welcome to my world!", friends:"Let’s be friends!"};
+/* What a sprite does when an EVENT happens (clicked / touches another sprite) */
+const ACTIONS = {none:"(nothing)", hello:"says “Hello!”", beep:"says “Beep boop!”", meet:"says “Nice to meet you!”",
+                 ouch:"says “Ouch!”", play:"says “Let’s play!”", stop:"stops all behaviors", spin:"begins spinning right"};
+const ACTION_SAY = {hello:"Hello!", beep:"Beep boop!", meet:"Nice to meet you!", ouch:"Ouch!", play:"Let’s play!"};
+const EMOJI_FONT = '"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+const isSay = a => !!ACTION_SAY[a];
+
+function makeStage(canvas, bg, hooks){
+  const ctx = canvas.getContext("2d");
+  const W = 400, SC = canvas.width / W;
+  const st = {sprites:[], running:false, raf:0, t:0, last:0, hooks:hooks||{}};
+  function drawBg(){
+    const g = ctx.createLinearGradient(0,0,0,400); g.addColorStop(0,"#9fdcf7"); g.addColorStop(.7,"#d9f2fb"); g.addColorStop(.7,"#7cc96a"); g.addColorStop(1,"#4e9e45");
+    ctx.fillStyle=g; ctx.fillRect(0,0,400,400);
+    ctx.fillStyle="#ffe066"; ctx.beginPath(); ctx.arc(350,50,26,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle="rgba(255,255,255,.9)";
+    [[70,60],[210,40]].forEach(([x,y],i)=>{ const dx = Math.sin(st.t*.004+i)*8; ctx.beginPath(); ctx.arc(x+dx,y,16,0,Math.PI*2); ctx.arc(x+dx+18,y-6,20,0,Math.PI*2); ctx.arc(x+dx+38,y,15,0,Math.PI*2); ctx.fill(); });
+    ctx.fillStyle="#3f8a3a"; [[30,300],[380,310]].forEach(([x,y])=>{ ctx.beginPath(); ctx.arc(x,y,22,0,Math.PI*2); ctx.fill(); });
+  }
+  function drawSprite(s){
+    const fs = 60 * s.size/100;
+    ctx.save();
+    ctx.translate(s.x + (s.jx||0), s.y + (s.by||0) + (s.jy||0));
+    ctx.rotate(s.angle);
+    ctx.font = fs+"px "+EMOJI_FONT; ctx.textAlign="center"; ctx.textBaseline="middle";
+    ctx.fillText(COSTUMES[s.costume].e, 0, 0);
+    ctx.restore();
+    if(s.say && st.t < s.sayUntil){
+      ctx.font = "bold 15px sans-serif";
+      const w = ctx.measureText(s.say).width + 18;
+      const tx = Math.max(w/2+4, Math.min(400-w/2-4, s.x)), ty = Math.max(20, s.y + (s.by||0) - fs/2 - 18);
+      ctx.fillStyle="#fff"; ctx.strokeStyle="#222"; ctx.lineWidth=1.5;
+      ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(tx-w/2,ty-14,w,28,8); else ctx.rect(tx-w/2,ty-14,w,28); ctx.fill(); ctx.stroke();
+      ctx.fillStyle="#222"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(s.say,tx,ty);
+    }
+  }
+  function act(s, a){
+    if(a==="stop") s.active.clear();
+    else if(a==="spin") s.active.add("spin");
+    else if(isSay(a)){ s.say = ACTION_SAY[a]; s.sayUntil = st.t + 150; }
+  }
+  function step(k){
+    st.t += k;
+    st.sprites.forEach(s=>{
+      s.jx = s.jy = 0;
+      if(s.active.has("swim")){ s.x += s.dir*1.6*k; if(s.x>375){s.x=375;s.dir=-1;} if(s.x<25){s.x=25;s.dir=1;} }
+      if(s.active.has("wander")){ s.h += (Math.random()-.5)*.35*k; s.x += Math.cos(s.h)*1.2*k; s.y += Math.sin(s.h)*1.2*k;
+        if(s.x<25||s.x>375){ s.h = Math.PI - s.h; s.x = Math.max(25,Math.min(375,s.x)); }
+        if(s.y<25||s.y>345){ s.h = -s.h; s.y = Math.max(25,Math.min(345,s.y)); } }
+      if(s.active.has("spin")) s.angle += .06*k;
+      if(s.active.has("jitter")){ s.jx = (Math.random()-.5)*7; s.jy = (Math.random()-.5)*7; }
+      s.by = s.active.has("bob") ? Math.sin(st.t*.05 + s.phase)*22 : (s.by||0);
+    });
+    /* EVENT: "when <sprite> touches another sprite" — fires once each time two sprites start touching */
+    st.sprites.forEach(s=>{
+      if(!s.onTouch || s.onTouch==="none") return;
+      st.sprites.forEach(o=>{
+        if(o===s) return;
+        const near = Math.hypot(s.x-o.x, (s.y+(s.by||0))-(o.y+(o.by||0))) < (30*s.size/100 + 30*o.size/100) * .8;
+        if(near && !s.touching.has(o.id)){ s.touching.add(o.id); act(s, s.onTouch); if(st.hooks.touch) st.hooks.touch(s, o); }
+        else if(!near) s.touching.delete(o.id);
+      });
+    });
+  }
+  function frame(now){
+    const k = st.last ? Math.min(3,(now-st.last)/16.67) : 1; st.last = now;
+    step(k); render();
+    if(st.running) st.raf = requestAnimationFrame(frame);
+  }
+  function render(){
+    ctx.setTransform(SC,0,0,SC,0,0); drawBg();
+    st.sprites.forEach(drawSprite);
+  }
+  st.load = function(program){
+    st.sprites = program.map((p,i)=>({id:i,costume:p.costume,x:+p.x,y:+p.y,size:+p.size,
+      active:new Set(p.behaviors),onClick:p.onClick,onTouch:p.onTouch||"none",touching:new Set(),angle:0,dir:1,h:Math.random()*Math.PI*2,phase:i,by:0,
+      say: p.sayStart && p.sayStart!=="none" ? SAYS[p.sayStart] : null, sayUntil: Infinity}));   /* "say" under when run happens right away */
+  };
+  st.run = function(program){
+    st.stop(); st.load(program); st.running = true; st.last = 0; st.raf = requestAnimationFrame(frame);
+  };
+  st.stop = function(){ st.running = false; cancelAnimationFrame(st.raf); };
+  st.clear = function(){ st.stop(); st.sprites = []; render(); };
+  st.render = render;
+  canvas.addEventListener("click", ev=>{
+    if(!st.running) return;
+    const r = canvas.getBoundingClientRect(), x = (ev.clientX-r.left)*400/r.width, y = (ev.clientY-r.top)*400/r.height;
+    for(let i=st.sprites.length-1;i>=0;i--){
+      const s = st.sprites[i], rad = 30*s.size/100 + 6;
+      if(Math.hypot(x-(s.x), y-(s.y+(s.by||0))) <= rad){
+        act(s, s.onClick);                       /* EVENT: "when <sprite> clicked" */
+        if(st.hooks.click) st.hooks.click(s);
+        break;
+      }
+    }
+  });
+  render();
+  return st;
+}
+
+/* Blocks view */
+function slot(t){ return `<span class="slot">${esc(t)}</span>`; }
+function spriteLabel(c){ const C = COSTUMES[c]; return (C.e ? C.e+" " : "") + C.n; }
+function actionBlock(nm, a){
+  return a==="spin" ? `<span class="blk bh">${slot(nm)} begins ${slot("spinning right")}</span>`
+       : isSay(a)   ? `<span class="blk sp">${slot(nm)} says ${slot(ACTION_SAY[a])}</span>`
+                    : `<span class="blk sp">${slot(nm)} ${esc(ACTIONS[a])}</span>`;
+}
+function renderBlocks(program, el){
+  if(!program.length){ el.innerHTML = '<span class="muted">No blocks yet. Make a new sprite!</span>'; return; }
+  let h = '<div class="stack run"><span class="blk hat">when run</span><div class="body">';
+  program.forEach(p=>{
+    const nm = spriteLabel(p.costume);
+    h += `<span class="blk sp">make a new ${slot(nm)} sprite at ${slot("x: "+p.x+", y: "+p.y)}</span>`;
+    if(+p.size !== 100) h += `<span class="blk sp">set ${slot(nm)} size to ${slot(p.size)}</span>`;
+    if(p.sayStart && p.sayStart!=="none") h += `<span class="blk sp">${slot(nm)} says ${slot(SAYS[p.sayStart])}</span>`;
+    p.behaviors.forEach(b=>{ h += `<span class="blk bh">${slot(nm)} begins ${slot(BEHAVIORS[b])}</span>`; });
+  });
+  h += '</div></div>';
+  program.forEach(p=>{
+    const nm = spriteLabel(p.costume);
+    if(p.onClick && p.onClick!=="none")
+      h += `<div class="stack ev"><span class="blk ev">when ${slot(nm)} clicked</span><div class="body">${actionBlock(nm, p.onClick)}</div></div>`;
+    if(p.onTouch && p.onTouch!=="none")
+      h += `<div class="stack ev"><span class="blk ev">when ${slot(nm)} touches ${slot("another sprite")}</span><div class="body">${actionBlock(nm, p.onTouch)}</div></div>`;
+  });
+  el.innerHTML = h;
+}
+
+/* ---------- Part 3: Demo ---------- */
+const demo = makeStage($("demoStage"), "park", {
+  click: s=>{ if(s.costume==="robot") $("demoStatus").textContent = s.onClick==="beep" ? "You clicked the robot. The click (event) made it say “Beep boop!” (action)." : "You clicked the robot, but nothing happened. It has no “when clicked” event yet."; },
+  touch: s=>{ $("demoStatus").textContent = "The alien touched the robot. The touch (event) made the alien say “Nice to meet you!” (action)."; }});
+function demoProgram(){
+  return [{costume:"robot",x:110,y:230,size:110,behaviors:[],sayStart:$("dSay").checked?"hw":"none",onClick:$("dClick").checked?"beep":"none",onTouch:"none"},
+          {costume:"alien",x:300,y:230,size:100,behaviors:$("dMove").checked?["swim"]:[],sayStart:"none",onClick:"none",onTouch:$("dTouch").checked?"meet":"none"}];
+}
+function demoRefresh(){ renderBlocks(demoProgram(), $("demoCode")); }
+["dSay","dClick","dMove","dTouch"].forEach(id=>$(id).addEventListener("change",()=>{ demoRefresh(); if(demo.running){ demo.stop(); $("demoStatus").textContent="You changed the program. Press Run again."; } }));
+$("demoRun").onclick = ()=>{
+  const p = demoProgram(); demo.run(p);
+  $("demoStatus").textContent = p[0].sayStart!=="none" ? "The robot spoke right away, because its “say” block is under when run."
+    : p[0].onClick!=="none" ? "Nothing yet… the “when clicked” event is waiting. Click the robot!"
+    : p[1].onTouch!=="none" && !p[1].behaviors.length ? "The “when touches” event is waiting, but the alien is not moving. Can it ever touch the robot?"
+    : "The program is running. Turn on more blocks to see events at work.";
+};
+$("demoReset").onclick = ()=>{ demo.clear(); $("demoStatus").textContent="Stage cleared. Press Run to start the program."; };
+demoRefresh(); demo.load([]); demo.render();
+
+const PREDICT = [
+  {q:"The robot’s “say” block is under when run, not inside an event. When will the robot say “Hello World!”?", o:["Right away, when I press Run","Only when I click the robot","Never"], a:0,
+   why:"Code under when run happens right away, in order. Test it: turn on only the first block and press Run."},
+  {q:"What must happen before the robot says “Beep boop!”?", o:["I press Run, then wait 10 seconds","I click the robot","The alien says something first"], a:1,
+   why:"The “when clicked” event waits. Clicking the robot causes it to say “Beep boop!”. Turn on the second block, press Run, and click the robot."},
+  {q:"The alien is moving left-right. When will it say “Nice to meet you!”?", o:["As soon as I press Run","When the alien touches the robot","When I click the sky"], a:1,
+   why:"The “when touches” event waits until the two sprites touch. Turn on the last two blocks, press Run, and watch."},
+  {q:"“When the robot is clicked, the robot says Beep boop.” Which part is the EVENT?", o:["The robot is clicked","The robot says Beep boop","The speech bubble"], a:0,
+   why:"The event comes first and causes the action. The click is the event. Saying “Beep boop” is the action."}
+];
+function renderPredict(){
+  $("predictBox").innerHTML = PREDICT.map((p,i)=>{
+    const st = S.predict[i] || {};
+    return `<div class="card" id="pr-${i}"><p><b>${i+1}. ${esc(p.q)}</b></p>
+      <div class="opts">${p.o.map((o,j)=>`<label class="opt"><input type="radio" name="pr${i}" value="${j}" ${st.choice===j?"checked":""}><span>${esc(o)}</span></label>`).join("")}</div>
+      <button class="btn alt" data-pr="${i}">Check</button>
+      <div class="feedback" id="prfb-${i}"></div></div>`;
+  }).join("");
+  $("predictBox").querySelectorAll("input").forEach(r=>r.addEventListener("change",()=>{
+    const i = +r.name.slice(2); S.predict[i] = Object.assign(S.predict[i]||{}, {choice:+r.value}); save();
+  }));
+  $("predictBox").querySelectorAll("[data-pr]").forEach(b=>b.addEventListener("click",()=>checkPredict(+b.dataset.pr)));
+  PREDICT.forEach((p,i)=>{ if(S.predict[i] && S.predict[i].checked) checkPredict(i, true); });
+}
+function checkPredict(i, quiet){
+  const st = S.predict[i], fb = $("prfb-"+i);
+  if(!st || st.choice===undefined){ fb.className="feedback show bad"; fb.textContent="Choose a prediction first."; return; }
+  const ok = st.choice === PREDICT[i].a;
+  fb.className = "feedback show " + (ok ? "good" : "bad");
+  fb.textContent = (ok ? "✔ Correct. " : "✘ Not quite. ") + PREDICT[i].why;
+  if(!quiet && !ok) miss();
+  if(!quiet && st.first===undefined){ st.first = ok; streakHit(ok); save(); settleBeans(); }   /* beans pay on the FIRST check only */
+  if(ok){ st.checked = true; if(!quiet) save(); }
+}
+
+/* ---------- Part 4: Levels (lesson plan: 1 Video · 2-5 Skill Building · 6 Video · 7-12 Skill Building · 13 Video · 14 Free Play) ---------- */
+$("lessonLink").href = LESSON_URL;
+const LEVEL_GROUPS = [
+  {tag:"Video", title:"Welcome to Sprite Lab", lv:[1]},
+  {tag:"Skill Building", title:"Levels 2–5", lv:[2,3,4,5]},
+  {tag:"Video", title:"Programming with Events", lv:[6]},
+  {tag:"Skill Building", title:"Levels 7–12", lv:[7,8,9,10,11,12]},
+  {tag:"Video", title:"Do What You Want", lv:[13]},
+  {tag:"Free Play", title:"Now create whatever you want!", lv:[14]}
+];
+const LEVEL_COUNT = 14;
+function levelsDone(){ let n = 0; for(let i=1;i<=LEVEL_COUNT;i++) if(S.levels[i]) n++; return n; }
+function renderLevels(){
+  $("levelCards").innerHTML = LEVEL_GROUPS.map(g=>`
+    <div class="card lvl"><span class="tag">${esc(g.tag)}</span><b>${esc(g.title)}</b>
+      <div class="nums">${g.lv.map(n=>`<span class="lvlbtn ${S.levels[n]?"done":""}"><a href="${LEVEL_URL(n)}" target="_blank" rel="noopener">Level ${n} ↗</a>
+        <input type="checkbox" data-lv="${n}" ${S.levels[n]?"checked":""} aria-label="Level ${n} finished"></span>`).join("")}</div>
+    </div>`).join("");
+  $("levelCards").querySelectorAll("[data-lv]").forEach(c=>c.addEventListener("change",()=>{
+    S.levels[c.dataset.lv] = c.checked; c.parentElement.classList.toggle("done", c.checked); save();
+  }));
+}
+
+/* ---------- Part 5: Hello World Builder (S.tank holds the program) ---------- */
+const STARTER = ()=>[{costume:"robot",x:200,y:220,size:100,behaviors:[],sayStart:"none",onClick:"none",onTouch:"none"}];
+if(!S.tank) S.tank = STARTER();
+const CHALLENGES = [
+  {id:"say",   t:"Make a sprite say something right away when the program runs."},
+  {id:"two",   t:"Make a second sprite with a different costume."},
+  {id:"move",  t:"Give a sprite a behavior so it moves."},
+  {id:"click", t:"Make a sprite say something when it is clicked. Run it and click it!"},
+  {id:"touch", t:"Make a sprite do something when it touches another sprite. Run it and watch!"}
+];
+function chalDone(){ return CHALLENGES.filter(c=>S.challenges[c.id]).length; }
+function renderChal(){
+  $("chalList").innerHTML = CHALLENGES.map(c=>`<li class="${S.challenges[c.id]?"done":""}"><span class="tick">${S.challenges[c.id]?"✓":""}</span><span>${esc(c.t)}</span></li>`).join("")
+    + (chalDone()===CHALLENGES.length ? '<li class="done"><span class="tick">★</span><span><b>All done! Free play:</b> add more sprites and try new events.</span></li>' : "");
+}
+function award(id){ if(!S.challenges[id]){ S.challenges[id]=true; save(); renderChal(); settleBeans(); } }
+function checkChallengesOnRun(){
+  const P = S.tank;
+  if(P.some(p=>p.sayStart && p.sayStart!=="none")) award("say");
+  if(P.length >= 2 && new Set(P.map(p=>p.costume)).size >= 2) award("two");
+  if(P.some(p=>p.behaviors.length >= 1)) award("move");
+}
+const tank = makeStage($("tankStage"), "park", {
+  click: s=>{
+    if(isSay(s.onClick)){ award("click"); $("tankStatus").textContent = "You clicked the "+COSTUMES[s.costume].n+". The click (event) made it talk (action)!"; }
+    else if(s.onClick==="none"){ $("tankStatus").textContent = "Nothing happened. This sprite has no “when clicked” event."; }
+    else { $("tankStatus").textContent = "You clicked the "+COSTUMES[s.costume].n+". It "+ACTIONS[s.onClick]+". To finish the challenge, make a sprite SAY something when clicked."; }
+  },
+  touch: (s,o)=>{ award("touch"); $("tankStatus").textContent = "The "+COSTUMES[s.costume].n+" touched the "+COSTUMES[o.costume].n+". The touch (event) made it act!"; }});
+function renderEditor(){
+  const opts = (obj, v) => Object.keys(obj).map(k=>`<option value="${k}" ${k===v?"selected":""}>${esc(obj[k])}</option>`).join("");
+  const costumeOpts = c => Object.keys(COSTUMES).map(k=>`<option value="${k}" ${k===c?"selected":""}>${COSTUMES[k].e} ${COSTUMES[k].n}</option>`).join("");
+  $("spriteEditor").innerHTML = S.tank.map((p,i)=>`
+    <div class="spcard" data-i="${i}">
+      <div class="sphead"><b>${COSTUMES[p.costume].e} Sprite ${i+1}</b>${S.tank.length>1?`<button type="button" class="del" data-del="${i}">Delete</button>`:""}</div>
+      <div class="field"><label>Costume</label><select data-k="costume">${costumeOpts(p.costume)}</select></div>
+      <div class="field"><label>Location x (left ↔ right): <span>${p.x}</span></label><input type="range" min="30" max="370" step="10" value="${p.x}" data-k="x"></div>
+      <div class="field"><label>Location y (top ↕ bottom): <span>${p.y}</span></label><input type="range" min="30" max="340" step="10" value="${p.y}" data-k="y"></div>
+      <div class="field"><label>Size: <span>${p.size}</span></label><input type="range" min="40" max="200" step="10" value="${p.size}" data-k="size"></div>
+      <div class="field"><label>When run, it says…</label><select data-k="sayStart">${opts(SAYS, p.sayStart||"none")}</select></div>
+      <div class="field"><label>Behaviors</label><div class="beh">${Object.keys(BEHAVIORS).map(b=>`<label><input type="checkbox" data-b="${b}" ${p.behaviors.includes(b)?"checked":""}>${BEHAVIORS[b]}</label>`).join("")}</div></div>
+      <div class="field"><label>⚡ When this sprite is clicked, it…</label><select data-k="onClick">${opts(ACTIONS, p.onClick||"none")}</select></div>
+      <div class="field"><label>⚡ When it touches another sprite, it…</label><select data-k="onTouch">${opts(ACTIONS, p.onTouch||"none")}</select></div>
+    </div>`).join("");
+  $("spriteEditor").querySelectorAll(".spcard").forEach(card=>{
+    const i = +card.dataset.i, p = S.tank[i];
+    card.querySelectorAll("[data-k]").forEach(inp=>{
+      inp.addEventListener("input",()=>{
+        const k = inp.dataset.k;
+        p[k] = inp.type==="range" ? +inp.value : inp.value;
+        if(inp.type==="range") inp.previousElementSibling.querySelector("span").textContent = inp.value;
+        if(k==="costume") card.querySelector(".sphead b").textContent = COSTUMES[p.costume].e+" Sprite "+(i+1);
+        edited();
+      });
+    });
+    card.querySelectorAll("[data-b]").forEach(cb=>cb.addEventListener("change",()=>{
+      const b = cb.dataset.b; p.behaviors = p.behaviors.filter(x=>x!==b); if(cb.checked) p.behaviors.push(b); edited();
+    }));
+    const del = card.querySelector("[data-del]");
+    if(del) del.addEventListener("click",()=>{ S.tank.splice(i,1); edited(); renderEditor(); });
+  });
+}
+function edited(){
+  save(); renderBlocks(S.tank, $("tankCode"));
+  if(tank.running){ tank.stop(); $("tankStatus").textContent = "You modified the program. Press ▶ Run to see your changes."; }
+}
+$("addSprite").onclick = ()=>{
+  if(S.tank.length >= 8){ $("tankStatus").textContent = "The stage is full (8 sprites). Delete one to add another."; return; }
+  const pool = ["cat","alien","dog","parrot","ball","monkey","star","robot"];
+  const c = pool[(S.tank.length - 1) % pool.length];
+  S.tank.push({costume:c,x:60+Math.floor(Math.random()*28)*10,y:180+Math.floor(Math.random()*8)*10,size:100,behaviors:[],sayStart:"none",onClick:"none",onTouch:"none"});
+  edited(); renderEditor();
+};
+$("resetTank").onclick = ()=>{ if(confirm("Start over with only the robot? (Your challenge ticks stay.)")){ S.tank = STARTER(); edited(); renderEditor(); tank.clear(); $("tankStatus").textContent="Back to the starting program. Press Run."; } };
+$("tankRun").onclick = ()=>{
+  tank.run(S.tank); checkChallengesOnRun();
+  $("tankStatus").textContent = S.tank.some(p=>p.onClick!=="none") ? "Running! Try clicking your sprites." : "Running! Events wait until they happen.";
+};
+$("tankStopBtn").onclick = ()=>{ tank.stop(); $("tankStatus").textContent = "Program stopped."; };
+
+/* ---------- Beans 🌱 — team points (same system as the Science lessons) ----------
+   vcSaveBeans writes an activity_type:'lesson' row; Group Totals adds it to the student's team
+   and the class goal. lesson_key groups this lesson so the SERVER enforces the 30-bean cap.
+   Beans pay only for answers the page can check itself, on the FIRST try:
+     event/action sort 8 (1 per item) · "which is an event?" 4 · predict 8 (2 each) · Hello World challenges 10 (2 each) = 30.
+   Code.org level ticks and written answers pay nothing (the page cannot check them).
+   The device lock (vc-pts-<id>) includes the username, so a second student on the same
+   computer can still earn his or her own beans. */
+const LESSON = { idBase:"std5-cs-ce-l04", subject:"Computer Science", lo:"CS-E-L04", label:"CS Course E L04" };
+const LESSON_CAP = 30;
+const BEAN_ACTS = [
+  {act:"sort",      note:"bn-sort",      max:8, name:"Event or action sort",
+   earned:()=> S.warm.sortFirst},
+  {act:"eventq",    note:"bn-eventq",    max:4, name:"Which is an event?",
+   earned:()=> S.warm.upFirst===null ? null : (UP[S.warm.upFirst].ok ? 4 : 0)},
+  {act:"predict",   note:"bn-predict",   max:8, name:"Predict questions",
+   earned:()=>{ const f = PREDICT.map((_,i)=>S.predict[i] ? S.predict[i].first : undefined);
+                return f.every(x=>x!==undefined) ? f.filter(Boolean).length*2 : null; }},
+].concat(CHALLENGES.map(c=>({act:"world-"+c.id, note:"bn-tank", max:2, name:"Hello World: "+({say:"say when run",two:"second sprite",move:"moving sprite",click:"talk on click",touch:"touch event"}[c.id]||c.id),
+   earned:()=> S.challenges[c.id] ? 2 : null})));
+function lockId(act){ return LESSON.idBase + "-" + act + "-" + WHO; }
+function beanLock(act){ try{ const r = localStorage.getItem("vc-pts-" + lockId(act)); return r ? JSON.parse(r) : null; }catch(e){ return null; } }
+function beansFor(act){ const l = beanLock(act); return l ? (+l.b || 0) : 0; }
+function beansBanked(){ return BEAN_ACTS.reduce((s,a)=>s + beansFor(a.act), 0); }
+const PENDING = new Set(); let pendingBeans = 0;
+function settleBeans(){
+  if(SESSION && typeof vcSaveBeans === "function"){
+    BEAN_ACTS.forEach(a=>{
+      const e = a.earned();
+      if(e===null || e===undefined || beanLock(a.act) || PENDING.has(a.act)) return;
+      const give = Math.max(0, Math.min(e, LESSON_CAP - beansBanked() - pendingBeans));
+      PENDING.add(a.act); pendingBeans += give;
+      vcSaveBeans(lockId(a.act), give, a.max, { subject:LESSON.subject, lo_code:LESSON.lo,
+        lesson_key:LESSON.idBase, activity_name:LESSON.label + " · " + a.name })
+      .then(res=>{
+        PENDING.delete(a.act); pendingBeans -= give;
+        if(res && res.ok){
+          const g = (res.granted != null) ? res.granted : give;
+          if(g > 0){ toast("🌱 +" + g + " bean" + (g===1?"":"s") + " for your team!"); refreshTeam(1500); }
+          else if(e > 0) toast("🌱 You reached this lesson’s " + LESSON_CAP + "-bean cap. Keep going for practice!");
+        } else if(!(res && res.locked)){
+          toast("⚠ Beans could not be saved just now. Reload this page later and they will be sent.");
+        }
+        renderBeans();
+      }, ()=>{ PENDING.delete(a.act); pendingBeans -= give; renderBeans(); });
+    });
+  }
+  renderBeans();
+}
+function renderBeans(){
+  $("beanPill").textContent = SESSION ? "🌱 " + beansBanked() + " / " + LESSON_CAP + " beans" : "🌱 Log in to earn beans";
+  const notes = {};
+  BEAN_ACTS.forEach(a=>{
+    const l = beanLock(a.act), e = a.earned();
+    if(!notes[a.note]) notes[a.note] = {got:0, max:0, done:0, any:false};
+    const n = notes[a.note]; n.max += a.max;
+    if(l){ n.got += (+l.b || 0); n.done++; n.any = true; } else if(e!==null && e!==undefined){ n.any = true; }
+  });
+  Object.keys(notes).forEach(id=>{
+    const el = $(id), n = notes[id]; if(!el) return;
+    if(!SESSION){ el.className = "bean-note show"; el.innerHTML = '🌱 <a href="' + loginUrl() + '">Log in</a> to earn up to ' + n.max + ' beans here for your team.'; return; }
+    if(!n.any){ el.className = "bean-note show"; el.textContent = "🌱 Up to " + n.max + " beans for your team — your FIRST try counts."; return; }
+    el.className = "bean-note show"; el.textContent = "🌱 You banked " + n.got + " of " + n.max + " beans here.";
+  });
+}
+const toastQ = []; let toastBusy = false;
+function toast(msg){ toastQ.push(msg); if(toastQ.length > 4) toastQ.splice(0, toastQ.length - 4); if(!toastBusy) nextToast(); }
+function nextToast(){ const t = $("toast"); if(!toastQ.length){ toastBusy = false; t.classList.remove("show"); return; }
+  toastBusy = true; t.textContent = toastQ.shift(); t.classList.add("show"); setTimeout(nextToast, 2600); }
+
+/* ---------- Sign-in bar + "Next student" ---------- */
+function renderSignin(){
+  const bar = $("signinBar");
+  if(SESSION){
+    bar.innerHTML = '<span>✓ Signed in as <b>' + esc(studentName()) + '</b> · your beans 🌱 and quiz result save to your account</span>'
+      + '<button type="button" class="btn alt" id="nextStudent">Next student ↪</button>';
+    $("nextStudent").onclick = ()=>{
+      if(!confirm("Hand this computer to the next student?\n\nYour work stays saved under your own name. The next student signs in with his or her own username.")) return;
+      try{ localStorage.removeItem("vc-session"); }catch(e){}
+      location.href = loginUrl();
+    };
+  } else {
+    bar.innerHTML = '<span>🔑 <a href="' + loginUrl() + '">Log in</a> to earn up to ' + LESSON_CAP + ' beans 🌱 for your team and to take the quiz. You can do the lesson without logging in, for practice.</span>';
+  }
+}
+function guestHasWork(raw){
+  try{
+    const g = JSON.parse(raw), w = g.warm || {}, txt = t => !!(t && String(t).trim());
+    if(Object.keys(g.frames||{}).length) return true;
+    return !!(w.sortChecked || w.upstander!==null && w.upstander!==undefined || txt(w.reflect) || txt(w.q1) || txt(w.q2)
+      || Object.keys(g.predict||{}).length || Object.values(g.levels||{}).some(Boolean)
+      || Object.values(g.challenges||{}).some(Boolean) || (g.wrap && (txt(g.wrap.r1) || txt(g.wrap.r2)))
+      || (g.quiz && g.quiz.attempts));
+  }catch(e){ return false; }
+}
+/* Work done on this computer BEFORE signing in: ask whether it belongs to this student. */
+function offerGuestWork(){
+  let guest = null;
+  try{ if(SESSION && !localStorage.getItem(STORE_KEY)) guest = localStorage.getItem(GUEST_KEY); }catch(e){}
+  if(!guest) return;
+  if(!guestHasWork(guest)){ try{ localStorage.removeItem(GUEST_KEY); }catch(e){} return; }   /* only opened the page — nothing to claim */
+  const box = $("guestOffer");
+  box.innerHTML = '<p><b>Some of this lesson was done on this computer before anyone signed in.</b> Is that your work, ' + esc(SESSION.first_name || studentName()) + '?</p>'
+    + '<div class="btnrow"><button type="button" class="btn" id="guestYes">Yes, add it to my account</button>'
+    + '<button type="button" class="btn alt" id="guestNo">No, start fresh</button></div>';
+  box.style.display = "block";
+  $("guestYes").onclick = ()=>{ try{ localStorage.setItem(STORE_KEY, guest); localStorage.removeItem(GUEST_KEY); }catch(e){} location.reload(); };
+  $("guestNo").onclick  = ()=>{ try{ localStorage.removeItem(GUEST_KEY); }catch(e){} box.style.display = "none"; };
+}
+
+/* ---------- Part 7: Quiz ---------- */
+const QUIZ = [
+  {id:"q1", q:"In computer science, what is an event?", o:["An action that causes something to happen","A party or a field trip","A picture on the screen","A list of steps to complete a task"], a:0, part:"Part 2: Vocabulary",
+   why:"An event is an action that causes something to happen, like a click that makes a sprite talk."},
+  {id:"q2", q:"Which of these is an event in a Sprite Lab program?", o:["Clicking on a sprite","A school field trip","A birthday party","The colour of the sky"], a:0, part:"Part 1: Warm Up",
+   why:"Clicking on a sprite is an action that can cause something to happen in the program."},
+  {id:"q3", q:"“When you flip a switch, the lights turn on.” Which part is the event?", o:["You flip a switch","The lights turn on","The lights","The room"], a:0, part:"Part 1: Warm Up (the sort)",
+   why:"Flipping the switch comes first and causes the lights to turn on. The lights turning on is the action."},
+  {id:"q4", q:"What is an algorithm?", o:["A list of steps to complete a task","A picture on the screen","A speech bubble","A sprite’s costume"], a:0, part:"Part 2: Vocabulary",
+   why:"An algorithm is a list of steps to complete a task."},
+  {id:"q5", q:"A sprite keeps spinning over and over again. Which word means doing something over and over again?", o:["Loop","Costume","Event","Location"], a:0, part:"Part 2: Vocabulary",
+   why:"A loop is the action of doing something over and over again."},
+  {id:"q6", q:"Lena added a cat to her program and changed what the robot says. What did Lena do to her program?", o:["She modified it","She deleted it","She printed it","She stopped it"], a:0, part:"Part 2: Vocabulary and Part 5",
+   why:"To modify means to make changes to something to improve it. Lena changed her program, so she modified it."},
+  {id:"q7", q:"Ravi puts the block “robot says Hello World!” under when run, NOT inside an event. When does the speech bubble appear?", o:["Right away, when he presses Run","Only when he clicks the robot","Only when two sprites touch","Never"], a:0, part:"Part 3: Events in Sprite Lab",
+   why:"Code under when run happens right away, in order, when you press Run."},
+  {id:"q8", q:"When does the code inside a “when clicked” event block run?", o:["Only when that sprite is clicked","Right away, when Run is pressed","Over and over, forever","Never"], a:0, part:"Part 3: Events in Sprite Lab",
+   why:"An event block waits. The code inside “when clicked” runs only when the sprite is clicked."},
+  {id:"q9", q:"Maya’s program says: when the ball touches the dog → the ball says “Ouch!”. When will the ball say “Ouch!”?", o:["When the ball and the dog touch","As soon as Run is pressed","When the sky is clicked","Every 5 seconds"], a:0, part:"Part 3 and Part 5",
+   why:"“When touches” is an event. It waits until the two sprites touch, then the action happens."},
+  {id:"q10", q:"Sam wants his new sprite to look like a parrot and to appear near the top of the screen. What should he set?", o:["Its costume and its location","Its behavior and its event","Only its speech bubble","Only its size"], a:0, part:"Part 2 (Sprite, Costume) and Part 5",
+   why:"The costume decides how a sprite looks. The location (x and y) decides where it appears."}
+];
+let current = null;
+function renderQuizStart(){
+  $("quizHistory").textContent = S.quiz.attempts
+    ? "Attempts: "+S.quiz.attempts+" · Best score: "+S.quiz.best+"/10" + (S.quiz.passed ? " · PASSED ✔" : "") : "";
+  const needLogin = !SESSION;
+  $("quizNeedLogin").style.display = needLogin ? "block" : "none";
+  $("quizLoginBtn").href = loginUrl("quiz");
+  if(current) return;
+  if(S.quiz.attempts && !$("quizResult").innerHTML){ renderResult(S.quiz.lastDetail || null); showSaveState(); }
+  if(needLogin){ $("quizArea").innerHTML = ""; return; }
+  if(!$("quizResult").innerHTML){
+    $("quizArea").innerHTML = '<button class="btn coral" id="startQuiz">Start the quiz</button>';
+    $("startQuiz").onclick = startQuiz;
+  } else { $("quizArea").innerHTML = ""; }
+}
+function startQuiz(){
+  if(!SESSION){ renderQuizStart(); return; }
+  quizBusy = true;
+  current = shuffle(QUIZ).map(q=>({q, order:shuffle(q.o.map((_,i)=>i)), pick:null}));
+  $("quizResult").innerHTML = "";
+  $("quizArea").innerHTML = current.map((c,i)=>`
+    <div class="q" id="qq-${i}"><p><span class="qn">Question ${i+1} of ${current.length}.</span> ${esc(c.q.q)}</p>
+      <div class="opts">${c.order.map(oi=>`<label class="opt"><input type="radio" name="qq${i}" value="${oi}"><span>${esc(c.q.o[oi])}</span></label>`).join("")}</div>
+    </div>`).join("") + '<div class="btnrow"><button class="btn ok" id="submitQuiz" disabled>Submit my answers</button><span id="answeredCount" class="muted">0 of 10 answered</span></div>';
+  $("quizArea").querySelectorAll("input[type=radio]").forEach(r=>r.addEventListener("change",()=>{
+    current[+r.name.slice(2)].pick = +r.value;
+    const n = current.filter(c=>c.pick!==null).length;
+    $("answeredCount").textContent = n+" of "+current.length+" answered";
+    $("submitQuiz").disabled = n < current.length;
+  }));
+  $("submitQuiz").onclick = submitQuiz;
+  $("quizArea").scrollIntoView({behavior:"smooth"});
+}
+function gradeAnswers(answers){ return answers.filter(c=>c.pick===c.q.a).length; }
+function submitQuiz(){
+  quizBusy = false;
+  const score = gradeAnswers(current);
+  const passedNow = score >= PASS_MARK;
+  S.quiz.attempts++; S.quiz.last = score; S.quiz.best = Math.max(S.quiz.best||0, score);
+  if(passedNow) S.quiz.passed = true;
+  if(passedNow){ const firstBadge = !S.quiz.badge, perfect = score === QUIZ.length;
+    if(firstBadge || (perfect && !S.quiz.badge.perfect)) S.quiz.badge = { name:BADGE.name, perfect: perfect || !!(S.quiz.badge && S.quiz.badge.perfect), date:new Date().toISOString() };
+    setTimeout(()=>{ confetti(); toast(BADGE.icon + " Badge earned: " + BADGE.name + (perfect ? " 🌟 Perfect score!" : "")); }, 400); }
+  const marks = current.map(c=>c.q.id + (c.pick===c.q.a ? "✓" : "✗")).join(" ");
+  const entry = {score, date:new Date().toISOString(), n:S.quiz.attempts, marks, saved:false,
+                 attemptId:(typeof vcNewAttemptId==="function") ? vcNewAttemptId() : WHO + "-" + Date.now()};
+  S.quiz.history.push(entry);
+  S.quiz.lastDetail = current.map(c=>({id:c.q.id, pick:c.pick}));
+  save();
+  $("quizArea").innerHTML = ""; current = null;
+  renderResult(S.quiz.lastDetail);
+  renderQuizStart();
+  $("quizResult").scrollIntoView({behavior:"smooth"});
+  lmsSaveQuiz(entry);
+}
+
+/* ---------- Record book (Sheet) — every attempt is its own row ----------
+   Same helper as the Maths classwork (vcSubmitResult): kept on this computer first, retried
+   automatically, never written twice (attempt_id). activity_type 'quiz' adds no beans. */
+const ACTIVITY_NAME = "Std 5 CS · Course E L04 — Hello World Quiz";
+function lmsBadge(kind, html){ const b = $("lmsBadge"); if(!b) return; b.className = "lms-badge show " + kind; b.innerHTML = html; }
+const LMS_WAIT = "⚠ Your result has not reached Mr. EdLo’s record book yet. It is safe on this computer and will be sent the next time you sign in and open this page here.";
+function markSaved(){ S.quiz.history.forEach(h=>{ h.saved = true; }); save(); }
+async function lmsSaveQuiz(h){
+  if(!SESSION){ lmsBadge("warn", "⚠ Not signed in, so this result did not reach Mr. EdLo’s record book."); return; }
+  if(typeof vcSubmitResult !== "function"){ lmsBadge("warn", "⚠ The record book helper did not load (check the internet). Your PDF still shows your result."); return; }
+  lmsBadge("busy", "Sending your result to Mr. EdLo’s record book…");
+  const payload = { subject:LESSON.subject, lo_code:LESSON.lo, activity_type:"quiz", activity_name:ACTIVITY_NAME,
+                    score:h.score, max_score:QUIZ.length, attempt_id:h.attemptId,
+                    ai_feedback:"Attempt #" + h.n + " · " + h.marks + (h.score >= PASS_MARK ? " · PASS" : " · not yet") };
+  const r = await vcSubmitResult(payload, { onRetry:(n,of)=>lmsBadge("busy", "The record book is busy — trying again by itself (" + n + " of " + of + ")… please stay on this page.") });
+  if(r && r.ok){ h.saved = true; save(); lmsBadge("ok", "✓ Saved to your record — Mr. EdLo can see it. " + h.score + "/10" + (r.percent!=null ? " (" + r.percent + "%)" : "") + "."); }
+  else { lmsBadge("warn", LMS_WAIT + ' <button type="button" class="btn alt" id="lmsRetry">Try again</button>'); $("lmsRetry").onclick = lmsRetry; }
+}
+async function lmsRetry(){
+  lmsBadge("busy", "Sending…");
+  const r = (typeof vcSendUnsent === "function") ? await vcSendUnsent() : {ok:false};
+  if(r.ok){ markSaved(); lmsBadge("ok", "✓ Saved to your record — Mr. EdLo can see it."); }
+  else { lmsBadge("warn", "Still cannot reach the record book. Your result stays safe on this computer." + ' <button type="button" class="btn alt" id="lmsRetry">Try again</button>'); $("lmsRetry").onclick = lmsRetry; }
+}
+function showSaveState(){
+  const last = S.quiz.history[S.quiz.history.length-1];
+  if(!last || !SESSION) return;
+  if(last.saved) lmsBadge("ok", "✓ Saved to your record — Mr. EdLo can see it.");
+  else { lmsBadge("warn", LMS_WAIT + ' <button type="button" class="btn alt" id="lmsRetry">Try again</button>'); $("lmsRetry").onclick = lmsRetry; }
+}
+function renderResult(detail){
+  if(S.quiz.last===null) return;
+  const score = S.quiz.last, passed = score >= PASS_MARK, reveal = S.quiz.passed;
+  let h = `<div class="card"><div class="scorebig ${passed?"pass":"notyet"}">${score} / 10 · ${score*10}%</div>
+    <p><b>${passed ? "🎉 You passed! Well done." : "Not yet. You need 7 out of 10 to pass. Review the parts below, then try again."}</b></p>
+    <div class="btnrow">${passed ? "" : '<button class="btn coral" id="retake">Try again</button>'}
+      ${passed ? '<button class="btn alt" id="retake">Practise again</button>' : ""}</div>
+    <p class="muted">${passed ? "" : "Correct answers are shown after you pass. "}Every attempt is recorded in your PDF and in Mr. EdLo’s record book.</p>
+    <div class="lms-badge" id="lmsBadge" role="status"></div></div>
+  ${S.quiz.badge ? `<div class="card badge-card"><div class="ico">${BADGE.icon}</div><div><b>Badge earned: ${esc(BADGE.name)}</b>${S.quiz.badge.perfect ? " 🌟" : ""}<br><span class="muted">${esc(BADGE.why)}${S.quiz.badge.perfect ? " Perfect score!" : ""}</span></div></div>` : ""}
+  <div class="card turnin" id="turnIn">
+    <h3>📤 Turn in your work on Google Classroom</h3>
+    <ol>
+      <li><b>Save your results.</b><br><button class="btn coral" id="savePdf">📄 Save my results as PDF</button>
+        <div class="pdfmsg" id="pdfMsg" role="status"></div></li>
+      <li><b>Open Google Classroom</b> and find the <b>Hello World</b> assignment.<br>
+        <a class="btn alt" href="https://classroom.google.com" target="_blank" rel="noopener">Open Google Classroom ↗</a></li>
+      <li>Click <b>Add or create</b> → <b>File</b>. Choose your PDF from the <b>Downloads</b> folder. Then click <b>Turn in</b>.</li>
+    </ol>
+    <p class="muted">${passed ? "" : "You may try the quiz again first. Save a new PDF after your last try and turn in that one. "}
+      No PDF? <button class="btn alt" id="printSlip" style="font-size:.85rem;padding:4px 10px">🖨 Print → Save as PDF instead</button></p>
+  </div>`;
+  if(detail){
+    h += detail.map((d,i)=>{
+      const q = QUIZ.find(x=>x.id===d.id), ok = d.pick===q.a;
+      return `<div class="q ${ok?"right":"wrong"}"><p><span class="qn">${ok?"✔":"✘"} Question ${i+1}.</span> ${esc(q.q)}</p>
+        <p>Your answer: <b>${esc(q.o[d.pick])}</b></p>
+        ${ok ? `<p class="muted">${esc(q.why)}</p>`
+             : reveal ? `<p>Correct answer: <b>${esc(q.o[q.a])}</b></p><p class="muted">${esc(q.why)}</p>`
+                      : `<p class="muted">Review <b>${esc(q.part)}</b> to find the answer.</p>`}</div>`;
+    }).join("");
+  }
+  $("quizResult").innerHTML = h;
+  const rt = $("retake"); if(rt) rt.onclick = startQuiz;
+  $("printSlip").onclick = printSlip;
+  $("savePdf").onclick = savePdf;
+}
+
+/* ---------- PDF results file (for Google Classroom) ---------- */
+function pdfText(t){
+  // Built-in PDF fonts cover Latin letters (including Spanish accents) but not emoji or symbols.
+  return String(t==null ? "" : t)
+    .replace(/[‘’ʼ]/g,"'").replace(/[“”]/g,'"')
+    .replace(/[–—]/g,"-").replace(/…/g,"...").replace(/·/g,"-")
+    .replace(/[^\x09\x0A\x0D\x20-\x7E\xA0-\xFF]/g,"").replace(/[ \t]+\n/g,"\n");
+}
+function fileSafe(t){
+  return (pdfText(t).normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Za-z0-9]+/g,"-").replace(/^-+|-+$/g,"") || "Student").slice(0,40);
+}
+function lastAttemptTime(){
+  const h = S.quiz.history[S.quiz.history.length-1];
+  const d = h ? new Date(h.date) : new Date();
+  return d.toLocaleString("en-GB",{day:"numeric",month:"long",year:"numeric",hour:"numeric",minute:"2-digit"});
+}
+function buildResultsPdf(){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({unit:"pt", format:"letter"});
+  const M = 54, PW = doc.internal.pageSize.getWidth(), PH = doc.internal.pageSize.getHeight(), W = PW - 2*M;
+  let y = M;
+  const need = h => { if(y + h > PH - M){ doc.addPage(); y = M; } };
+  const font = (size, bold) => { doc.setFont("helvetica", bold ? "bold" : "normal"); doc.setFontSize(size); };
+  const para = (s, size=11, bold=false, after=4, indent=0) => {
+    font(size, bold); const lh = size*1.3;
+    doc.splitTextToSize(pdfText(s), W-indent).forEach(l=>{ need(lh); doc.text(l, M+indent, y+size); y += lh; });
+    y += after;
+  };
+  const heading = s => { y += 8; need(40); para(s, 13, true, 2); doc.setLineWidth(1); doc.line(M, y, M+W, y); y += 8; };
+  const table = (rows, keyW=180) => {
+    rows.forEach(([k,v])=>{
+      font(10.5, false); const vl = doc.splitTextToSize(pdfText(v), W-keyW-16);
+      font(10.5, true);  const kl = doc.splitTextToSize(pdfText(k), keyW-16);
+      const h = Math.max(vl.length, kl.length)*14 + 10;
+      need(h); doc.setLineWidth(.6); doc.rect(M, y, W, h); doc.line(M+keyW, y, M+keyW, y+h);
+      font(10.5, true);  kl.forEach((l,i)=>doc.text(l, M+8, y+17+i*14));
+      font(10.5, false); vl.forEach((l,i)=>doc.text(l, M+keyW+8, y+17+i*14));
+      y += h;
+    });
+    y += 6;
+  };
+  const answerBox = (label, txt) => {
+    para(label, 10.5, true, 2);
+    font(10.5, false);
+    const lines = doc.splitTextToSize(pdfText(txt && txt.trim() ? txt.trim() : "(no answer)"), W-16);
+    let i = 0;
+    while(i < lines.length){            // split long answers across pages
+      need(14+10); const fit = Math.max(1, Math.min(lines.length-i, Math.floor((PH-M-y-10)/14)));
+      const h = fit*14 + 10; doc.setLineWidth(.6); doc.rect(M, y, W, h);
+      lines.slice(i, i+fit).forEach((l,k)=>doc.text(l, M+8, y+17+k*14));
+      y += h; i += fit;
+    }
+    y += 8;
+  };
+
+  const score = S.quiz.last, passed = score >= PASS_MARK, reveal = S.quiz.passed;
+  para("Mr. EdLo - Computer Science - Course E, Lesson 4", 10, false, 0);
+  para("Hello World: Quiz Results", 17, true, 6);
+  table([
+    ["Name", studentName() + (SESSION ? "  (" + SESSION.username + ")" : "")],
+    ["Submitted", lastAttemptTime()],
+    ["Quiz score (this attempt)", score+" / 10  ("+score*10+"%)"],
+    ["Result (pass mark 70%)", passed ? "PASSED" : "NOT YET PASSED"],
+    ["Best score / attempts", S.quiz.best+" / 10  -  "+S.quiz.attempts+" attempt"+(S.quiz.attempts===1?"":"s")],
+    ["Badge", S.quiz.badge ? BADGE.name + (S.quiz.badge.perfect ? " (perfect score)" : "") : "Not yet - pass the quiz to earn it"],
+    ["All attempts", S.quiz.history.map((a,i)=>"#"+(i+1)+": "+a.score+"/10").join(",  ")]
+  ]);
+
+  heading("Quiz answers (this attempt)");
+  (S.quiz.lastDetail||[]).forEach((d,i)=>{
+    const q = QUIZ.find(x=>x.id===d.id), ok = d.pick===q.a;
+    need(60);
+    para((i+1)+". "+q.q, 10.5, true, 1);
+    para("My answer: "+q.o[d.pick]+"   ["+(ok ? "CORRECT" : "NOT CORRECT")+"]", 10.5, false, 1, 14);
+    if(!ok && reveal) para("Correct answer: "+q.o[q.a], 10.5, false, 1, 14);
+    y += 5;
+  });
+
+  heading("Lesson completion");
+  table([
+    ["Event or action sort", S.warm.sortChecked ? S.warm.sortScore+" / "+SORT.length+" correct" : "Not done"],
+    ["Which is an event?", S.warm.upstander===null ? "Not done" : (UP[S.warm.upstander].ok ? "Correct" : "Answered, not correct")],
+    ["Predict questions", PREDICT.filter((_,i)=>S.predict[i]&&S.predict[i].checked).length+" / 4 correct"],
+    ["Code.org levels ticked", levelsDone()+" / "+LEVEL_COUNT],
+    ["Hello World challenges", chalDone()+" / 5"],
+    ["Class checkpoint", checkpointPassed() ? "Done" : "Not yet"],
+    ["Called Mr. EdLo for help", String((S.help && S.help.hands) || 0) + " time(s)"],
+    ["Reflection finished", partDone("s-wrap") ? "Yes" : "No"],
+    ["Best first-try streak", String(S.bestStreak || 0)],
+    ["Beans banked (this lesson)", beansBanked() + " / " + LESSON_CAP]
+  ]);
+
+  heading("My written answers");
+  answerBox("How do we use sprites in our programs?", answerText("reflect"));
+  answerBox("What did you learn today about sprites?", answerText("r1"));
+  answerBox("How do events work in your code?", answerText("r2"));
+  answerBox("What my sprites said or did (typed):", S.wrap.r3);
+
+  const n = doc.getNumberOfPages();
+  for(let p=1;p<=n;p++){
+    doc.setPage(p); font(8.5, false);
+    doc.text(pdfText(studentName()+"  -  Hello World  -  Page "+p+" of "+n), M, PH-28);
+  }
+  const fname = "CS-E-L04-HelloWorld_"+fileSafe(studentName())+"_"+score+"of10.pdf";
+  return {doc, fname};
+}
+function savePdf(){
+  const msg = $("pdfMsg");
+  if(!SESSION){ msg.className="pdfmsg show bad"; msg.innerHTML='Sign in first: <a href="'+loginUrl("quiz")+'">Log in</a>.'; return; }
+  if(!(window.jspdf && window.jspdf.jsPDF)){
+    msg.className = "pdfmsg show bad";
+    msg.innerHTML = "The PDF maker did not load (check the internet). Use <b>Print → Save as PDF</b> instead: in the print window, choose <b>Save as PDF</b> as the printer.";
+    return;
+  }
+  try{
+    const {doc, fname} = buildResultsPdf();
+    doc.save(fname);
+    msg.className = "pdfmsg show good";
+    msg.innerHTML = "✔ Saved <b>"+esc(fname)+"</b> to your Downloads folder. Now do step 2.";
+  }catch(e){
+    msg.className = "pdfmsg show bad";
+    msg.innerHTML = "Something went wrong making the PDF. Use <b>Print → Save as PDF</b> instead.";
+  }
+}
+
+/* ---------- Printable result slip (black & white) ---------- */
+function printSlip(){
+  const yes = b => b ? "Yes" : "No";
+  const ans = t => esc(t && t.trim() ? t.trim() : "(no answer)");
+  const today = new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("printArea").innerHTML = `
+    <h1>Result Slip · Computer Science Course E, Lesson 4: Hello World</h1>
+    <table>
+      <tr><th style="width:30%">Name</th><td>${esc(studentName())}</td></tr>
+      <tr><th>Date</th><td>${esc(today)}</td></tr>
+      <tr><th>Quiz score (latest)</th><td>${S.quiz.last===null?"-":S.quiz.last+" / 10 ("+S.quiz.last*10+"%)"}</td></tr>
+      <tr><th>Best score · Attempts</th><td>${S.quiz.best===null?"-":S.quiz.best+" / 10"} · ${S.quiz.attempts}</td></tr>
+      <tr><th>Result (pass mark 70%)</th><td><b>${S.quiz.passed?"PASSED":"NOT YET PASSED"}</b></td></tr>
+    </table>
+    <h3>Lesson completion</h3>
+    <table>
+      <tr><th>Event or action sort</th><td>${S.warm.sortChecked ? S.warm.sortScore+" / "+SORT.length+" correct" : "Not done"}</td></tr>
+      <tr><th>Which is an event?</th><td>${S.warm.upstander===null ? "Not done" : (UP[S.warm.upstander].ok ? "Correct" : "Answered, not correct")}</td></tr>
+      <tr><th>Predict questions</th><td>${PREDICT.filter((_,i)=>S.predict[i]&&S.predict[i].checked).length} / 4 correct</td></tr>
+      <tr><th>Code.org levels ticked</th><td>${levelsDone()} / ${LEVEL_COUNT}</td></tr>
+      <tr><th>Hello World challenges</th><td>${chalDone()} / 5</td></tr>
+      <tr><th>Class checkpoint</th><td>${checkpointPassed() ? "Done" : "Not yet"}</td></tr>
+      <tr><th>Reflection finished</th><td>${yes(partDone("s-wrap"))}</td></tr>
+      <tr><th>Called Mr. EdLo for help</th><td>${(S.help && S.help.hands) || 0} time(s)</td></tr>
+      <tr><th>Badge</th><td>${S.quiz.badge ? esc(BADGE.name) + (S.quiz.badge.perfect ? " (perfect score)" : "") : "Not yet"}</td></tr>
+    </table>
+    <h3>Written answers</h3>
+    <p><b>How do we use sprites in our programs?</b></p><div class="ans">${ans(answerText("reflect"))}</div>
+    <p><b>What did you learn today about sprites?</b></p><div class="ans">${ans(answerText("r1"))}</div>
+    <p><b>How do events work in your code?</b></p><div class="ans">${ans(answerText("r2"))}</div>
+    <p><b>What my sprites said or did (typed):</b></p><div class="ans">${ans(S.wrap.r3)}</div>
+    <p style="margin-top:14px">Teacher signature: ______________________________</p>`;
+  window.print();
+}
+
+/* ---------- Teacher reset ---------- */
+$("resetAll").onclick = ()=>{
+  if(confirm("Clear ALL saved answers and quiz results on this device? This cannot be undone.")){
+    try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+    location.reload();
+  }
+};
+
+/* ---------- Start ---------- */
+if(new URLSearchParams(location.search).get("part")==="quiz") S.step = sections.findIndex(s=>s.id==="s-quiz");
+renderSignin(); offerGuestWork(); renderFrames(); renderStreak(); refreshTeam(0);
+$("helpBtn").onclick = ()=>offerHelp("manual");
+buildStepper(); renderSort(); renderUp(); renderPredict(); renderLevels();
+renderEditor(); renderBlocks(S.tank, $("tankCode")); renderChal(); tank.load([]); tank.render();
+S.step = isLocked(S.step || 0) ? openUpTo() : (S.step || 0);   /* keep an exempt part (Hello World Builder) across a reload */
+showStep(S.step);
+settleBeans();   /* sends any beans earned while the record book was unreachable */
+if(SESSION && typeof vcUnsent==="function" && vcUnsent().length){
+  vcSendUnsent().then(r=>{ if(r && r.ok){ markSaved(); if(S.quiz.last!==null) showSaveState(); } });
+}
+</script>
+</body>
+</html>
