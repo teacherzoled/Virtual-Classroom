@@ -147,6 +147,21 @@ input.short{width:100%;padding:10px 12px;border-radius:12px;border:1.5px solid v
 .badge-card{display:flex;gap:14px;align-items:center;border:2px solid var(--accent);background:var(--accent-soft)}
 .badge-card .ico{font-size:2.6rem;line-height:1}
 .badge-card b{font-family:'Fredoka One',cursive;font-weight:400;font-size:1.25rem;color:var(--accent-ink)}
+/* Help layer + class checkpoint (Edwin, Oct 10) */
+.hand-banner{display:none;background:#FFA94D;color:#1a1205;font-weight:900;font-size:1.15rem;padding:10px max(1rem,4vw);text-align:center;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+.hand-banner.show{display:flex}
+.hand-banner button{background:#1a1205;color:#fff;border:0;border-radius:999px;padding:6px 16px;font-weight:900;min-height:40px}
+.helper-chip{display:none;margin:.45rem 0 0;padding:4px 12px;border-radius:999px;border:1.5px solid var(--right);background:var(--ok-soft);color:var(--fg);font-weight:900;font-size:.88rem;width:max-content;max-width:100%}
+.helper-chip.show{display:block}
+.help-panel{display:none;position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:110;width:min(540px,calc(100vw - 2rem));background:var(--bg);color:var(--fg);border:2px solid var(--warm);border-radius:16px;padding:14px 16px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.help-panel.show{display:block}
+.help-panel .opts3{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.help-panel .btn{text-align:left;width:100%}
+.checkpoint{border:3px dashed var(--warm);background:var(--warm-soft)}
+.checkpoint.done{border-style:solid;border-color:var(--right);background:var(--ok-soft)}
+.checkpoint ol{margin:.3em 0 .6em;padding-left:1.3em;font-weight:700}
+.checkpoint input{padding:10px 12px;border-radius:12px;border:1.5px solid var(--bd);background:var(--btn);font-size:1.05rem;text-transform:uppercase;letter-spacing:.15em;width:10em;max-width:100%}
+#helpBtn{order:0}
 @media (prefers-reduced-motion: reduce){ .mascot{transition:none} #confetti{display:none} #toast{transition:none} }
 
 /* Sticky progress bar + lesson parts — same pattern as the Std5 tests */
@@ -362,10 +377,12 @@ body.theme-night .btn.ok{color:#0d1f1a}
 
 <!-- Sticky progress bar + lesson parts -->
 <div class="progress-wrap">
+  <div class="hand-banner" id="handBanner" role="status" aria-live="polite"></div>
   <div class="progress-inner">
     <div class="progress-label" aria-live="polite"><span>Your progress</span><span id="progText">0 of 7 parts done · 0%</span></div>
     <div class="progress-lane"><div class="progress-track"><div class="progress-fill" id="progBar"></div></div><span class="mascot" id="mascot" aria-hidden="true">🐠</span></div>
     <nav class="stepper" id="stepper" aria-label="Lesson parts"></nav>
+    <div class="helper-chip" id="helperChip"></div>
   </div>
 </div>
 
@@ -479,6 +496,7 @@ body.theme-night .btn.ok{color:#0d1f1a}
   <p>Choose your prediction. Then use the blocks above to test it before you press <b>Check</b>.</p>
   <div id="predictBox"></div>
   <p class="bean-note" id="bn-predict"></p>
+  <div class="card checkpoint" id="checkpointCard" style="margin-top:18px"></div>
 </section>
 
 <!-- ============ PART 4: SPRITE LAB LEVELS ============ -->
@@ -504,7 +522,7 @@ body.theme-night .btn.ok{color:#0d1f1a}
     </div>
     <div class="card">
       <h3>📶 Code.org will not load?</h3>
-      <p>Tell Mr. EdLo straight away. <b>Part 5: Fish Tank Builder</b> works without the internet, and it opens when all 9 levels are ticked.</p>
+      <p>Tell Mr. EdLo straight away. <b>Part 5: Fish Tank Builder</b> works without the internet. It is always open, so tap it in the part buttons and practise there while you wait.</p>
     </div>
   </div>
 </section>
@@ -577,11 +595,13 @@ body.theme-night .btn.ok{color:#0d1f1a}
 <div class="todo" id="partTodo" style="display:none" role="status"></div>
 <div class="navrow" id="navRow">
   <button class="btn alt" id="prevBtn">← Back</button>
+  <button class="btn alt" id="helpBtn" type="button">🙋 I need help</button>
   <button class="btn" id="nextBtn">Next →</button>
 </div>
 </main>
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="confetti" aria-hidden="true"></div>
+<div class="help-panel" id="helpPanel" role="dialog" aria-label="Help options"></div>
 
 <footer class="site-footer">
   <p>© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize</p>
@@ -635,6 +655,7 @@ function defaults(){
     warm:{reflect:"",sort:{},sortChecked:false,sortScore:null,sortFirst:null,q1:"",q2:"",upstander:null,upFirst:null},
     predict:{},levels:{},tank:null,challenges:{},
     wrap:{r1:"",r2:"",r3:""}, frames:{}, extra:{}, firstPick:{}, streak:0, bestStreak:0, legacy:null,
+    checkpoint:{passed:false}, help:{popped:{}, misses:{}, raised:false, hands:0, offers:0},
     quiz:{attempts:0,best:null,last:null,passed:false,history:[]}};
 }
 function load(){
@@ -646,6 +667,8 @@ function load(){
       /* Saved BEFORE tap-to-answer (Oct 10)? Then the student typed full answers: keep them counting. */
       if(d.legacy === null){ const w = s.warm || {}, r = s.wrap || {};
         d.legacy = s.frames === undefined && [w.reflect, w.q1, w.q2, r.r1, r.r2].some(t => t && String(t).trim().length >= 3); }
+      /* Already past Part 3 before the checkpoint existed (Oct 10)? Don't lock them out again. */
+      if(s.checkpoint === undefined && s.visited && (s.visited["s-levels"] || s.visited["s-wrap"] || s.visited["s-quiz"])) d.checkpoint = {passed:true, auto:true};
       return d;
     }
   }catch(e){}
@@ -742,6 +765,7 @@ function pickBlank(id, k, i){
   S.frames[id][k] = i;
   const b = frameBlanks(id).find(x=>x.k===k), key = id + "." + k;
   if(b.ans && S.firstPick[key] === undefined){ S.firstPick[key] = b.ans.indexOf(i) !== -1; streakHit(S.firstPick[key]); }
+  if(b.ans && b.ans.indexOf(i) === -1) miss();
   const complete = frameBlanks(id).every(x=>S.frames[id][x.k] !== undefined);
   setPath(FRAMES[id].path, complete ? frameSentence(id) : "");
   save(); renderFrame(id);
@@ -792,6 +816,96 @@ function refreshTeam(delay){
   }, delay || 0);
 }
 
+/* ---------- Help layer + class checkpoint (Edwin, Oct 10) ----------
+   Students work through the lesson on their own; these keep the teacher and classmates in the loop.
+   • "Struggling?" card — after 2 wrong answers in a part, or 6 minutes in a part with no progress.
+     At most ONCE per part, never in the quiz, never while waiting at the checkpoint.
+     Choices: ask a helper · call Mr. EdLo · look back one part · I'm OK. "🙋 I need help" opens it any time.
+   • Helper badge — "✅ I can help with Parts 1–N" in the sticky bar, so stuck students can find a helper.
+   • Raise hand — a bright banner across the top of the screen until the student taps "Helped ✓".
+   • Class checkpoint after Part 3 — the page waits for the code Mr. EdLo says aloud after a 3–5 minute
+     class check. The code controls PACING, not security (only its hash is in the page).
+     Teacher's code list: standard5/computer-science/_source/checkpoint-codes.txt (gitignored). */
+const CHECKPOINT = { after:"s-bridge", hash:"e74ffd5", /* code for this lesson: see checkpoint-codes.txt */
+  questions:["What is a sprite?", "Does a behavior stop by itself? How do we stop it?",
+             "What happens to code inside a “when clicked” event?"] };
+const HELP_MISSES = 2, HELP_MINUTES = 6;
+let partClock = { id:null, since:Date.now(), done:-1 };
+function fnv(s){ let h = 0x811c9dc5; for(const ch of s){ h ^= ch.codePointAt(0); h = Math.imul(h, 0x01000193) >>> 0; } return h.toString(16); }
+function checkpointPassed(){ return !!(S.checkpoint && S.checkpoint.passed); }
+function helpState(){ if(!S.help) S.help = {popped:{}, misses:{}, raised:false, hands:0, offers:0}; return S.help; }
+function firstName(){ return SESSION ? (SESSION.first_name || studentName() || "This student") : "This student"; }
+function miss(){
+  const id = sections[S.step].id, H = helpState();
+  if(id === "s-quiz" || quizBusy) return;
+  H.misses[id] = (H.misses[id] || 0) + 1;
+  if(H.misses[id] >= HELP_MISSES) offerHelp("misses");
+}
+function offerHelp(reason){
+  const id = sections[S.step].id, H = helpState();
+  if(reason !== "manual"){ if(id === "s-quiz" || quizBusy || H.popped[id]) return; H.popped[id] = true; }
+  H.offers = (H.offers || 0) + 1; save();
+  const k = S.step, prev = k > 0 ? k - 1 : null, p = $("helpPanel");
+  const head = reason === "time" ? "⏱ You have been on this part for a while." : reason === "misses" ? "🤔 This one is tricky!" : "🆘 Let’s get you unstuck.";
+  p.innerHTML = "<p><b>" + head + "</b> Pick one:</p><div class=\"opts3\">"
+    + '<button type="button" class="btn alt" data-h="peer">👥 Ask a helper — find a classmate whose screen says “✅ I can help with Part ' + (k+1) + '”</button>'
+    + '<button type="button" class="btn coral" data-h="hand">🙋 Call Mr. EdLo</button>'
+    + (prev !== null ? '<button type="button" class="btn alt" data-h="back">🔁 Look back at Part ' + (prev+1) + ": " + esc(sections[prev].dataset.title) + "</button>" : "")
+    + '<button type="button" class="btn alt" data-h="ok">👍 I’m OK — keep going</button></div>';
+  p.classList.add("show");
+  p.querySelectorAll("[data-h]").forEach(b=>b.addEventListener("click", ()=>{
+    p.classList.remove("show");
+    const h = b.dataset.h;
+    if(h === "peer") toast("👥 Look around for a ✅ helper badge for Part " + (k+1) + ". Ask quietly!");
+    if(h === "hand") raiseHand(true);
+    if(h === "back") showStep(prev);
+  }));
+}
+function raiseHand(on){ const H = helpState(); H.raised = on; if(on) H.hands = (H.hands || 0) + 1; save(); renderHand();
+  if(on) toast("🙋 Your hand is up. Mr. EdLo will come to you. Keep trying while you wait!"); }
+function renderHand(){
+  const b = $("handBanner"), H = helpState();
+  if(!H.raised){ b.classList.remove("show"); b.innerHTML = ""; return; }
+  b.innerHTML = "<span>🙋 " + esc(firstName()) + " needs help with Part " + (S.step+1) + ": " + esc(sections[S.step].dataset.title) + "</span>"
+    + '<button type="button" id="handDown">Helped ✓</button>';
+  b.classList.add("show");
+  $("handDown").onclick = ()=>raiseHand(false);
+}
+function renderHelper(){
+  let n = 0; while(n < sections.length-1 && partDone(sections[n].id)) n++;
+  const c = $("helperChip");
+  if(n >= 1){ c.textContent = "✅ I can help with Part" + (n > 1 ? "s 1–" + n : " 1"); c.classList.add("show"); }
+  else c.classList.remove("show");
+}
+function renderCheckpoint(){
+  const el = $("checkpointCard"); if(!el) return;
+  const predDone = PREDICT.every((_,i)=>S.predict[i] && S.predict[i].checked);
+  if(checkpointPassed()){ el.className = "card checkpoint done"; el.innerHTML = "<b>✅ Class checkpoint done.</b> Part 4 is open — great work!"; return; }
+  el.className = "card checkpoint";
+  if(!predDone){ el.innerHTML = "<b>🛑 Class checkpoint comes next.</b> Get all 4 predictions correct first."; return; }
+  if(el.querySelector("#cpCode")) return;   /* keep what the student is typing */
+  el.innerHTML = "<h3>🛑 CHECKPOINT — Stop here!</h3><p><b>Mr. EdLo will do a quick class check.</b> While you wait, get ready to answer:</p><ol>"
+    + CHECKPOINT.questions.map(q=>"<li>" + esc(q) + "</li>").join("") + "</ol>"
+    + '<p>When Mr. EdLo gives the class code, type it here:</p><div class="btnrow"><input id="cpCode" type="text" maxlength="12" autocomplete="off" aria-label="Checkpoint code"><button type="button" class="btn" id="cpGo">Open Part 4</button></div><p class="status" id="cpMsg"></p>';
+  const go = ()=>{
+    const v = ($("cpCode").value || "").trim().toLowerCase().replace(/\s+/g, "");
+    if(fnv(v) === CHECKPOINT.hash){ S.checkpoint = {passed:true, date:new Date().toISOString()}; save(); renderCheckpoint(); }
+    else { $("cpMsg").textContent = "That is not the code yet. Wait for Mr. EdLo — you can look back at your answers while you wait."; }
+  };
+  $("cpGo").onclick = go;
+  $("cpCode").addEventListener("keydown", e=>{ if(e.key === "Enter") go(); });
+}
+/* "6 minutes without progress" clock — checked every 20 s */
+setInterval(()=>{
+  if(!sections[S.step]) return;
+  const id = sections[S.step].id;
+  if(id === "s-quiz" || quizBusy || partDone(id)) { partClock = {id, since:Date.now(), done:-1}; return; }
+  const list = todoFor(id), done = list.filter(t=>t.ok).length;
+  const waiting = id === CHECKPOINT.after && list.filter(t=>!t.ok).length === 1 && !checkpointPassed();
+  if(partClock.id !== id || partClock.done !== done || waiting){ partClock = {id, since:Date.now(), done}; return; }
+  if(Date.now() - partClock.since >= HELP_MINUTES * 60000) offerHelp("time");
+}, 20000);
+
 /* ---------- Steps / navigation ---------- */
 const sections = Array.from(document.querySelectorAll("section.step"));
 function buildStepper(){
@@ -821,6 +935,7 @@ function showStep(i){
   $("prevBtn").style.visibility = i===0 ? "hidden" : "visible";
   $("nextBtn").style.visibility = i===sections.length-1 ? "hidden" : "visible";
   if(sections[i].id==="s-quiz") renderQuizStart();
+  $("helpPanel").classList.remove("show"); renderHand();
   if(sections[i].id!=="s-tank") tank.stop();
   if(sections[i].id!=="s-bridge") demo.stop();
   const on = $("stepper").querySelector("button.on"); if(on && on.scrollIntoView) on.scrollIntoView({inline:"center",block:"nearest"});
@@ -849,7 +964,8 @@ function todoFor(id){
       {t:"exit ticket 2: choose something PRIVATE and a reason", ok:frameDone("q2")},
       {t:"choose what an upstander would do", ok:S.warm.upstander!==null && UP[S.warm.upstander].ok}];
     case "s-vocab": return [{t:"flip every word card (" + flipped + " of " + VOCAB.length + ")", ok:flipped===VOCAB.length}];
-    case "s-bridge":return [{t:"get all 4 predictions correct (" + predRight + " of 4)", ok:predRight===PREDICT.length}];
+    case "s-bridge":return [{t:"get all 4 predictions correct (" + predRight + " of 4)", ok:predRight===PREDICT.length},
+                            {t:"🛑 class checkpoint with Mr. EdLo (type the code he gives)", ok:checkpointPassed()}];
     case "s-levels":return [{t:"finish and tick all 9 Code.org levels (" + levelsDone() + " of 9)", ok:levelsDone()===9}];
     case "s-tank":  return [{t:"finish all 5 Fish Tank challenges (" + chalDone() + " of 5)", ok:chalDone()===CHALLENGES.length}];
     case "s-wrap":  return [{t:"finish sentence 1 (sprite and behavior)", ok:frameDone("r1")}, {t:"finish sentence 2", ok:frameDone("r2")},
@@ -865,6 +981,7 @@ function updateProgress(){
   $("progBar").style.width = pct+"%";
   $("progText").textContent = done+" of "+sections.length+" parts done · "+pct+"%";
   $("mascot").style.left = Math.min(97, Math.max(2, pct)) + "%";
+  renderHelper(); renderCheckpoint();
   const top = openUpTo();
   if(lastTop !== null && top > lastTop && !quizBusy) celebrateUnlock(top);
   lastTop = top;
@@ -933,6 +1050,7 @@ $("sortCheck").onclick = ()=>{
   });
   if(S.warm.sortFirst===null){ S.warm.sortFirst = right; streakHit(right===SORT.length); }     /* beans pay on the FIRST full check only */
   S.warm.sortChecked = true; S.warm.sortScore = right; save(); settleBeans();
+  if(right < SORT.length) miss();
   $("sortScore").textContent = "You sorted "+right+" of "+SORT.length+" correctly." + (right<SORT.length ? " Change the red ones and check again." : " Excellent!");
 };
 
@@ -945,7 +1063,7 @@ const UP = [
 ];
 function renderUp(){
   $("upOpts").innerHTML = UP.map((o,i)=>`<label class="opt"><input type="radio" name="up" value="${i}" ${S.warm.upstander===i?"checked":""}><span>${esc(o.t)}</span></label>`).join("");
-  $("upOpts").querySelectorAll("input").forEach(r=>r.addEventListener("change",()=>{ S.warm.upstander=+r.value; if(S.warm.upFirst===null){ S.warm.upFirst=+r.value; streakHit(UP[+r.value].ok); } save(); showUpFb(); settleBeans(); }));
+  $("upOpts").querySelectorAll("input").forEach(r=>r.addEventListener("change",()=>{ S.warm.upstander=+r.value; if(!UP[+r.value].ok) miss(); if(S.warm.upFirst===null){ S.warm.upFirst=+r.value; streakHit(UP[+r.value].ok); } save(); showUpFb(); settleBeans(); }));
   showUpFb();
 }
 function showUpFb(){
@@ -1163,6 +1281,7 @@ function checkPredict(i, quiet){
   const ok = st.choice === PREDICT[i].a;
   fb.className = "feedback show " + (ok ? "good" : "bad");
   fb.textContent = (ok ? "✔ Correct. " : "✘ Not quite. ") + PREDICT[i].why;
+  if(!quiet && !ok) miss();
   if(!quiet && st.first===undefined){ st.first = ok; streakHit(ok); save(); settleBeans(); }   /* beans pay on the FIRST check only */
   if(ok){ st.checked = true; if(!quiet) save(); }
 }
@@ -1606,6 +1725,8 @@ function buildResultsPdf(){
     ["Predict questions", PREDICT.filter((_,i)=>S.predict[i]&&S.predict[i].checked).length+" / 4 correct"],
     ["Code.org levels ticked", levelsDone()+" / 9"],
     ["Fish Tank challenges", chalDone()+" / 5"],
+    ["Class checkpoint", checkpointPassed() ? "Done" : "Not yet"],
+    ["Called Mr. EdLo for help", String((S.help && S.help.hands) || 0) + " time(s)"],
     ["Reflection finished", partDone("s-wrap") ? "Yes" : "No"],
     ["Best first-try streak", String(S.bestStreak || 0)],
     ["Beans banked (this lesson)", beansBanked() + " / " + LESSON_CAP]
@@ -1668,6 +1789,7 @@ function printSlip(){
       <tr><th>Code.org levels ticked</th><td>${levelsDone()} / 9</td></tr>
       <tr><th>Fish Tank challenges</th><td>${chalDone()} / 5</td></tr>
       <tr><th>Reflection finished</th><td>${yes(partDone("s-wrap"))}</td></tr>
+      <tr><th>Called Mr. EdLo for help</th><td>${(S.help && S.help.hands) || 0} time(s)</td></tr>
       <tr><th>Badge</th><td>${S.quiz.badge ? esc(BADGE.name) + (S.quiz.badge.perfect ? " (perfect score)" : "") : "Not yet"}</td></tr>
     </table>
     <h3>Written answers</h3>
@@ -1692,6 +1814,7 @@ $("resetAll").onclick = ()=>{
 /* ---------- Start ---------- */
 if(new URLSearchParams(location.search).get("part")==="quiz") S.step = sections.findIndex(s=>s.id==="s-quiz");
 renderSignin(); offerGuestWork(); renderFrames(); renderStreak(); refreshTeam(0);
+$("helpBtn").onclick = ()=>offerHelp("manual");
 buildStepper(); renderSort(); renderUp(); renderPredict(); renderLevels();
 renderEditor(); renderBlocks(S.tank, $("tankCode")); renderChal(); tank.load([]); tank.render();
 S.step = isLocked(S.step || 0) ? openUpTo() : (S.step || 0);   /* keep an exempt part (Fish Tank Builder) across a reload */

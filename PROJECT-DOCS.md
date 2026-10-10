@@ -91,6 +91,29 @@ If the docs are not updated, the task is **not** finished.
     textareas), wrong taps caught + part stays locked, 2 typed words blocked / 3 open the quiz, 30 beans,
     streak, team chip, badge + confetti after the quiz only, legacy student keeps all 7 parts, reduced motion
     = no confetti, 360px no overflow, PDF shows every sentence + own words + typed line.
+- **Oct 10 (later) — help layer + class checkpoint (Edwin: students work through the lesson on their own; he
+  guides). Page-alone — no backend change.** NOT yet committed.
+  - **"Struggling?" card:** after 2 wrong answers in a part (`miss()`) or 6 minutes in a part with no progress
+    (`partClock`, checked every 20 s). At most ONCE per part, never in the quiz, never while waiting at the
+    checkpoint. Choices: 👥 ask a helper · 🙋 call Mr. EdLo · 🔁 look back one part · 👍 I'm OK.
+    A **🙋 I need help** button beside Back/Next opens it any time.
+  - **Helper badge** in the sticky bar: "✅ I can help with Parts 1–N" — stuck students look for it in the room.
+  - **Raise hand:** a bright orange banner across the top ("🙋 Ana needs help with Part 4: …") until the student
+    taps "Helped ✓". Survives a reload. The count prints on the PDF ("Called Mr. EdLo for help").
+  - **Class checkpoint after Part 3 (before Code.org):** Part 4 stays locked until the student types the code
+    Mr. EdLo says aloud after a 3–5 minute class check. Students who arrive early see the 3 class-check
+    questions. Only an FNV hash of the code is in the page (pacing, not security). **Codes + class-check
+    questions live in `standard5/computer-science/_source/checkpoint-codes.txt` (gitignored).** The code for each lesson is in that file.
+    Students already past Part 3 before this change are let through automatically. **Codes must be words that
+    appear nowhere on the lesson page and are unrelated to its theme** (Oct 10: the first code matched the page's
+    own Part 5 title, so it was guessable — replaced before publishing). Never write a code in this file.
+  - Fixed: the Part 4 "Code.org will not load?" card still said the Fish Tank opens only after the 9 ticks
+    (stale since the Part 5 exemption) — it now says Part 5 is always open.
+  - Later option (needs Apps Script + teacher page): send hand-raises and part progress to the teacher dashboard
+    and open the checkpoint for every screen with one button.
+  - Tested: miss→card once per part, hand banner + reload + Helped ✓, manual help button, wrong/right code
+    (case-insensitive) → Part 4 + confetti, no timer card while waiting at the checkpoint, timer card after 7 min
+    stuck, no card during the quiz, legacy student past Part 3 not re-locked, PDF rows, 360px no overflow.
 - **🤖 Saturday CS build — scheduled task "Weekly CS lesson build — Std 5" (created Oct 7; Saturdays 8:52 am
   Belize; first run Sat Oct 10).** Builds ONE next Course E lesson per run (highest `lessonNN` + 1) from the
   Code.org website by cloning Lesson 3's engine (themes, sign-in, beans, part locks incl. the ALWAYS_OPEN practice
