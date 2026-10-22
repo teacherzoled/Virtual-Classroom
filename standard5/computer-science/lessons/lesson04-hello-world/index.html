@@ -648,7 +648,26 @@ function loginUrl(part){ return "/login/?next=" + encodeURIComponent(location.pa
 
 /* Saved answers are kept PER STUDENT ACCOUNT, so a second student on the same computer starts clean. */
 const STORE_BASE = "edlo-csE-L04-hello-world-v1";
-const STORE_KEY  = STORE_BASE + "::" + WHO;
+/* ---------- Teacher preview (Edwin, Oct 21) ----------
+   Open the page with ?preview and type the teacher code: every part opens (no part locks, no checkpoint),
+   the quiz works without signing in, and NOTHING is sent: no beans, no quiz rows in the record book.
+   Preview work is saved under its own key, apart from every student's. The switch is shared by all CS lessons
+   in this browser and stays on until "Exit preview" (or ?preview=off). Only the code's hash is in the page:
+   the locks pace students, they are not security. Teacher code: _source/checkpoint-codes.txt (gitignored). */
+const PREVIEW_HASH = "95535796";
+const PREVIEW = (function(){
+  const q = new URLSearchParams(location.search).get("preview");
+  try{
+    if(q === "off"){ localStorage.removeItem("vc-teacher-preview"); return false; }
+    if(localStorage.getItem("vc-teacher-preview") === PREVIEW_HASH) return true;
+  }catch(e){}
+  if(q === null) return false;
+  const c = (prompt("Teacher preview: type your teacher code") || "").trim();
+  if(fnv(c) !== PREVIEW_HASH){ if(c) alert("That is not the teacher code. The page opens as normal."); return false; }
+  try{ localStorage.setItem("vc-teacher-preview", PREVIEW_HASH); }catch(e){}
+  return true;
+})();
+const STORE_KEY  = STORE_BASE + "::" + (PREVIEW ? "teacher-preview" : WHO);
 const GUEST_KEY  = STORE_BASE + "::guest";
 try{   /* work saved by the first version of this page (Oct 7, before sign-in) counts as signed-out work */
   const old = localStorage.getItem(STORE_BASE);
@@ -841,7 +860,7 @@ function miss(){
 }
 function offerHelp(reason){
   const id = sections[S.step].id, H = helpState();
-  if(reason !== "manual"){ if(id === "s-quiz" || quizBusy || H.popped[id]) return; H.popped[id] = true; }
+  if(reason !== "manual"){ if(PREVIEW) return; if(id === "s-quiz" || quizBusy || H.popped[id]) return; H.popped[id] = true; }
   H.offers = (H.offers || 0) + 1; save();
   const k = S.step, prev = k > 0 ? k - 1 : null, p = $("helpPanel");
   const head = reason === "time" ? "⏱ You have been on this part for a while." : reason === "misses" ? "🤔 This one is tricky!" : "🆘 Let’s get you unstuck.";
@@ -918,7 +937,7 @@ function openUpTo(){ let i = 0; while(i < sections.length-1 && partDone(sections
 /* EXEMPT FROM THE LOCK (Edwin, Oct 7): the on-page practice part (here: Hello World Builder) is the no-internet backup, so it must open even
    when Code.org cannot be reached and the Part 4 ticks are missing. It still has to be finished before Part 6. */
 const ALWAYS_OPEN = ["s-world"];
-function isLocked(k){ return k > openUpTo() && ALWAYS_OPEN.indexOf(sections[k].id) === -1; }
+function isLocked(k){ return !PREVIEW && k > openUpTo() && ALWAYS_OPEN.indexOf(sections[k].id) === -1; }
 function lockedMsg(k){
   const left = todoFor(sections[k].id).filter(t=>!t.ok).map(t=>t.t);
   return "🔒 Finish Part " + (k+1) + " first" + (left.length ? ": " + left.join(" · ") : ".");
@@ -1413,7 +1432,7 @@ function beansFor(act){ const l = beanLock(act); return l ? (+l.b || 0) : 0; }
 function beansBanked(){ return BEAN_ACTS.reduce((s,a)=>s + beansFor(a.act), 0); }
 const PENDING = new Set(); let pendingBeans = 0;
 function settleBeans(){
-  if(SESSION && typeof vcSaveBeans === "function"){
+  if(SESSION && !PREVIEW && typeof vcSaveBeans === "function"){
     BEAN_ACTS.forEach(a=>{
       const e = a.earned();
       if(e===null || e===undefined || beanLock(a.act) || PENDING.has(a.act)) return;
@@ -1524,7 +1543,7 @@ let current = null;
 function renderQuizStart(){
   $("quizHistory").textContent = S.quiz.attempts
     ? "Attempts: "+S.quiz.attempts+" · Best score: "+S.quiz.best+"/10" + (S.quiz.passed ? " · PASSED ✔" : "") : "";
-  const needLogin = !SESSION;
+  const needLogin = !SESSION && !PREVIEW;
   $("quizNeedLogin").style.display = needLogin ? "block" : "none";
   $("quizLoginBtn").href = loginUrl("quiz");
   if(current) return;
@@ -1536,7 +1555,7 @@ function renderQuizStart(){
   } else { $("quizArea").innerHTML = ""; }
 }
 function startQuiz(){
-  if(!SESSION){ renderQuizStart(); return; }
+  if(!SESSION && !PREVIEW){ renderQuizStart(); return; }
   quizBusy = true;
   current = shuffle(QUIZ).map(q=>({q, order:shuffle(q.o.map((_,i)=>i)), pick:null}));
   $("quizResult").innerHTML = "";
@@ -1584,6 +1603,7 @@ function lmsBadge(kind, html){ const b = $("lmsBadge"); if(!b) return; b.classNa
 const LMS_WAIT = "⚠ Your result has not reached Mr. EdLo’s record book yet. It is safe on this computer and will be sent the next time you sign in and open this page here.";
 function markSaved(){ S.quiz.history.forEach(h=>{ h.saved = true; }); save(); }
 async function lmsSaveQuiz(h){
+  if(PREVIEW){ lmsBadge("warn", "👩‍🏫 Teacher preview: this result was NOT sent to the record book."); return; }
   if(!SESSION){ lmsBadge("warn", "⚠ Not signed in, so this result did not reach Mr. EdLo’s record book."); return; }
   if(typeof vcSubmitResult !== "function"){ lmsBadge("warn", "⚠ The record book helper did not load (check the internet). Your PDF still shows your result."); return; }
   lmsBadge("busy", "Sending your result to Mr. EdLo’s record book…");
@@ -1602,7 +1622,7 @@ async function lmsRetry(){
 }
 function showSaveState(){
   const last = S.quiz.history[S.quiz.history.length-1];
-  if(!last || !SESSION) return;
+  if(!last || !SESSION || PREVIEW) return;
   if(last.saved) lmsBadge("ok", "✓ Saved to your record — Mr. EdLo can see it.");
   else { lmsBadge("warn", LMS_WAIT + ' <button type="button" class="btn alt" id="lmsRetry">Try again</button>'); $("lmsRetry").onclick = lmsRetry; }
 }
@@ -1814,7 +1834,15 @@ $("resetAll").onclick = ()=>{
 
 /* ---------- Start ---------- */
 if(new URLSearchParams(location.search).get("part")==="quiz") S.step = sections.findIndex(s=>s.id==="s-quiz");
-renderSignin(); offerGuestWork(); renderFrames(); renderStreak(); refreshTeam(0);
+if(PREVIEW){
+  const pb = document.createElement("div");
+  pb.style.cssText = "background:#ffd84d;color:#222;padding:8px 16px;text-align:center;font-weight:700;font-size:.95rem;position:relative;z-index:50";
+  pb.innerHTML = '👩‍🏫 Teacher preview: every part is open · nothing is sent to the record book '
+    + '<button type="button" id="previewOff" style="margin-left:10px;padding:4px 12px;border-radius:8px;border:1px solid #222;background:#fff;color:#222;cursor:pointer;font-weight:700">Exit preview</button>';
+  document.body.prepend(pb);
+  $("previewOff").onclick = ()=>{ try{ localStorage.removeItem("vc-teacher-preview"); }catch(e){} location.href = location.pathname; };
+}
+renderSignin(); if(!PREVIEW) offerGuestWork(); renderFrames(); renderStreak(); refreshTeam(0);
 $("helpBtn").onclick = ()=>offerHelp("manual");
 buildStepper(); renderSort(); renderUp(); renderPredict(); renderLevels();
 renderEditor(); renderBlocks(S.tank, $("tankCode")); renderChal(); tank.load([]); tank.render();

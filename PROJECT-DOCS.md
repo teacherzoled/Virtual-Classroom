@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** October 21, 2026 — CS **Course E Lesson 5: Mini-Project: Career Journeys** built by the scheduled task + hub card, **committed and pushed (`ec682d5`), LIVE** · Oct 11: Maths Problem Set 2 kept on paper (no online build; Problem Set 3 goes online) · **Standard 6 is ON HALT** (home-page card shows 🔧 On Maintenance, front door only — see the entry below) · **everything through CS Course E Lesson 5 is committed, pushed and LIVE** (`ec682d5`). Latest: CS **Lesson 4: Hello World** (Saturday scheduled task) + hub card · CS Lesson 3 help layer (Struggling? card, helper badge, raise hand) + class checkpoint before Code.org · CS Lesson 3 tap-to-answer reflections + fun layer · Part 5 exempt from the part locks · CS Lesson 3 site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · Std 5 **Computer Science hub** + **Lesson 3: Swimming Fish** + Std 5 hub's CS card lit · Oct 3: Maths C1 Unit Test 1 at `standard5/math/tests/c1-unit1/` + hub card (gated; KV `sy2627-std5-c1-unit1-math` still to paste — open item 12) · answer-blur fix (a clicked option fades at once) + SVG labels left as drawn · Science C1 Unit Test 1 up to the readable-layout and anti-cheat rules (Science project) · earlier Oct 3: readable layout + full anti-cheat as STANDING RULES, shared save helper + Apps Script duplicate guard, KV merge rule · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
+**Last updated:** October 21, 2026 — CS **teacher preview** (`?preview` + teacher code opens every part of CS Lessons 3–5, sends nothing) · CS **Course E Lesson 5: Mini-Project: Career Journeys** built by the scheduled task + hub card, **committed and pushed (`ec682d5`), LIVE** · Oct 11: Maths Problem Set 2 kept on paper (no online build; Problem Set 3 goes online) · **Standard 6 is ON HALT** (home-page card shows 🔧 On Maintenance, front door only — see the entry below) · **everything through CS Course E Lesson 5 is committed, pushed and LIVE** (`ec682d5`). Latest: CS **Lesson 4: Hello World** (Saturday scheduled task) + hub card · CS Lesson 3 help layer (Struggling? card, helper badge, raise hand) + class checkpoint before Code.org · CS Lesson 3 tap-to-answer reflections + fun layer · Part 5 exempt from the part locks · CS Lesson 3 site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · Std 5 **Computer Science hub** + **Lesson 3: Swimming Fish** + Std 5 hub's CS card lit · Oct 3: Maths C1 Unit Test 1 at `standard5/math/tests/c1-unit1/` + hub card (gated; KV `sy2627-std5-c1-unit1-math` still to paste — open item 12) · answer-blur fix (a clicked option fades at once) + SVG labels left as drawn · Science C1 Unit Test 1 up to the readable-layout and anti-cheat rules (Science project) · earlier Oct 3: readable layout + full anti-cheat as STANDING RULES, shared save helper + Apps Script duplicate guard, KV merge rule · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -152,6 +152,16 @@ If the docs are not updated, the task is **not** finished.
   Badge "Event Explorer". Checkpoint after Part 3 — code in `_source/checkpoint-codes.txt`. Store key
   `edlo-csE-L04-hello-world-v1`. The Level 14 card says "Ask Mr. EdLo first" before pressing Share (the slide says to
   share with friends). Tested in a headless browser with a mocked record book: 67/67 checks passed.
+
+- **Oct 21 — CS lessons: TEACHER PREVIEW (Edwin asked: "as the creator I should have a code to open each part").**
+  Lessons 3, 4 and 5 (same engine; every later CS lesson must carry it). Open a lesson with `?preview` and type the
+  teacher code (kept ONLY in `standard5/computer-science/_source/checkpoint-codes.txt`, gitignored; the page holds just
+  its FNV hash, `PREVIEW_HASH`). In preview: `isLocked()` is always false (no part locks, no checkpoint), the quiz runs
+  without signing in, and nothing is sent: no `vcSaveBeans`, no `vcSubmitResult` (badge says "NOT sent"), no guest-work
+  offer, no automatic "Struggling?" pop-ups. Preview work is saved under its own key (`<STORE_BASE>::teacher-preview`),
+  never a student's. The switch is one localStorage flag, `vc-teacher-preview`, shared by all CS lessons in that browser;
+  it stays on until the yellow bar's "Exit preview" or `?preview=off`. Like the checkpoint, it paces students and is not
+  security. Tested in headless Chrome with a mocked record book: 54/54 checks passed (18 per lesson).
 
 - **Oct 21 — CS Course E Lesson 5 built by the Saturday scheduled task; committed and pushed (`ec682d5`); LIVE.**
   `standard5/computer-science/lessons/lesson05-career-journeys/index.html` + one new hub card. Lesson 3's engine, taken
