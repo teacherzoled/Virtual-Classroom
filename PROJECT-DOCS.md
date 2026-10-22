@@ -195,9 +195,10 @@ If the docs are not updated, the task is **not** finished.
   "Number Types, Squares & Cubes · MA 1.37–1.39") — retitle or mark it "on paper" only if Edwin asks.
 
 **State in one line:** Standard 5 is live and in daily use (school week 7 = week of Oct 12). GitHub `main` is at
-**`ec682d5`** + this docs update (Oct 21) and the working copy matches it — **nothing is waiting to be committed or pushed.**
+**`0c70070`** (teacher preview, Oct 21) + this docs update and the working copy matches it — **nothing is waiting to be committed or pushed.**
 Both sessions push to `main`, so **`git pull` before committing** (standing rule below). Every page through CS
-Course E Lesson 4 is live and was URL-checked on Oct 10; CS Lesson 5 + hub card were pushed Oct 21 (`ec682d5`, not yet URL-checked). Still OFF the repo and outstanding: the Maths C1 Unit
+Course E Lesson 4 is live and was URL-checked on Oct 10; CS Lesson 5 + hub card (`ec682d5`) and the teacher preview on
+Lessons 3–5 were URL-checked by Edwin on Oct 21. Still OFF the repo and outstanding: the Maths C1 Unit
 Test 1 **KV entry** (open item 12 — paste + merge, sitting Tue Oct 13) and the Apps Script / save-helper deploy
 steps in open item 11 where not already done.
 **Later Oct 3 (Science project):** the Std5 Science C1 Unit Test 1 page now has the resilience fix and uses the
@@ -1570,7 +1571,7 @@ cd "C:\Users\Dell Latitude 3520\OneDrive\Shared with me\Code Projects\Python Pro
 | Standard 5 Computer Science Hub | edlovirtualclassroom.com/standard5/computer-science/ | ✅ Live (Oct 10, URL-checked) |
 | Std5 CS · Course E Lesson 3 (Swimming Fish) | edlovirtualclassroom.com/standard5/computer-science/lessons/lesson03-swimming-fish/ | ✅ Live (Oct 10, URL-checked) |
 | Std5 CS · Course E Lesson 4 (Hello World) | edlovirtualclassroom.com/standard5/computer-science/lessons/lesson04-hello-world/ | ✅ Live (Oct 10, URL-checked) |
-| Std5 CS · Course E Lesson 5 (Career Journeys) | edlovirtualclassroom.com/standard5/computer-science/lessons/lesson05-career-journeys/ | ✅ Live (Oct 21, pushed `ec682d5`; not yet URL-checked) |
+| Std5 CS · Course E Lesson 5 (Career Journeys) | edlovirtualclassroom.com/standard5/computer-science/lessons/lesson05-career-journeys/ | ✅ Live (Oct 21, URL-checked) |
 | Std5 Maths Classwork Checks 1–2 | edlovirtualclassroom.com/standard5/math/classwork/… | ✅ Live (Sept 24, autosave + retry) |
 | Std5 Maths C1 Unit Test 1 | edlovirtualclassroom.com/standard5/math/tests/c1-unit1/ | ✅ Page live (Oct 10, URL-checked) — **KV entry still to paste** (open item 12); sitting Tue Oct 13 |
 | Std5 Science Lesson Wk 1 | edlovirtualclassroom.com/standard5/science/lessons/week01-technology-climate/ | ✅ Live (built July 16) |
