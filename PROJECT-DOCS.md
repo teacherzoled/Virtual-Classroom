@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** October 21, 2026 — CS **Course E Lesson 5: Mini-Project: Career Journeys** built as a 🟡 DRAFT by the scheduled task (NOT committed — Edwin reviews and pushes) + hub card · Oct 11: Maths Problem Set 2 kept on paper (no online build; Problem Set 3 goes online) · **Standard 6 is ON HALT** (home-page card shows 🔧 On Maintenance, front door only — see the entry below) · **everything through CS Course E Lesson 4 is committed, pushed and LIVE** (`33ee23b`). Latest: CS **Lesson 4: Hello World** (Saturday scheduled task) + hub card · CS Lesson 3 help layer (Struggling? card, helper badge, raise hand) + class checkpoint before Code.org · CS Lesson 3 tap-to-answer reflections + fun layer · Part 5 exempt from the part locks · CS Lesson 3 site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · Std 5 **Computer Science hub** + **Lesson 3: Swimming Fish** + Std 5 hub's CS card lit · Oct 3: Maths C1 Unit Test 1 at `standard5/math/tests/c1-unit1/` + hub card (gated; KV `sy2627-std5-c1-unit1-math` still to paste — open item 12) · answer-blur fix (a clicked option fades at once) + SVG labels left as drawn · Science C1 Unit Test 1 up to the readable-layout and anti-cheat rules (Science project) · earlier Oct 3: readable layout + full anti-cheat as STANDING RULES, shared save helper + Apps Script duplicate guard, KV merge rule · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
+**Last updated:** October 21, 2026 — CS **Course E Lesson 5: Mini-Project: Career Journeys** built by the scheduled task + hub card, **committed and pushed (`ec682d5`), LIVE** · Oct 11: Maths Problem Set 2 kept on paper (no online build; Problem Set 3 goes online) · **Standard 6 is ON HALT** (home-page card shows 🔧 On Maintenance, front door only — see the entry below) · **everything through CS Course E Lesson 5 is committed, pushed and LIVE** (`ec682d5`). Latest: CS **Lesson 4: Hello World** (Saturday scheduled task) + hub card · CS Lesson 3 help layer (Struggling? card, helper badge, raise hand) + class checkpoint before Code.org · CS Lesson 3 tap-to-answer reflections + fun layer · Part 5 exempt from the part locks · CS Lesson 3 site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · Std 5 **Computer Science hub** + **Lesson 3: Swimming Fish** + Std 5 hub's CS card lit · Oct 3: Maths C1 Unit Test 1 at `standard5/math/tests/c1-unit1/` + hub card (gated; KV `sy2627-std5-c1-unit1-math` still to paste — open item 12) · answer-blur fix (a clicked option fades at once) + SVG labels left as drawn · Science C1 Unit Test 1 up to the readable-layout and anti-cheat rules (Science project) · earlier Oct 3: readable layout + full anti-cheat as STANDING RULES, shared save helper + Apps Script duplicate guard, KV merge rule · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -153,7 +153,7 @@ If the docs are not updated, the task is **not** finished.
   `edlo-csE-L04-hello-world-v1`. The Level 14 card says "Ask Mr. EdLo first" before pressing Share (the slide says to
   share with friends). Tested in a headless browser with a mocked record book: 67/67 checks passed.
 
-- **Oct 21 — CS Course E Lesson 5 built as a DRAFT by the Saturday scheduled task — NOT committed — Edwin reviews and pushes.**
+- **Oct 21 — CS Course E Lesson 5 built by the Saturday scheduled task; committed and pushed (`ec682d5`); LIVE.**
   `standard5/computer-science/lessons/lesson05-career-journeys/index.html` + one new hub card. Lesson 3's engine, taken
   from Lesson 4 (which carries it unchanged — checked by diff): themes, sign-in, beans, part locks +
   `ALWAYS_OPEN = ["s-build"]`, tap-to-answer reflections, fun layer, help layer, class checkpoint, quiz, record book, PDF.
@@ -185,9 +185,9 @@ If the docs are not updated, the task is **not** finished.
   "Number Types, Squares & Cubes · MA 1.37–1.39") — retitle or mark it "on paper" only if Edwin asks.
 
 **State in one line:** Standard 5 is live and in daily use (school week 7 = week of Oct 12). GitHub `main` is at
-**`33ee23b`** (Oct 10) and the working copy matches it — **nothing is waiting to be committed or pushed.**
+**`ec682d5`** + this docs update (Oct 21) and the working copy matches it — **nothing is waiting to be committed or pushed.**
 Both sessions push to `main`, so **`git pull` before committing** (standing rule below). Every page through CS
-Course E Lesson 4 is live and was URL-checked on Oct 10. **Oct 21: CS Lesson 5 + hub card + these docs are an uncommitted DRAFT** (see the Oct 21 entry). Still OFF the repo and outstanding: the Maths C1 Unit
+Course E Lesson 4 is live and was URL-checked on Oct 10; CS Lesson 5 + hub card were pushed Oct 21 (`ec682d5`, not yet URL-checked). Still OFF the repo and outstanding: the Maths C1 Unit
 Test 1 **KV entry** (open item 12 — paste + merge, sitting Tue Oct 13) and the Apps Script / save-helper deploy
 steps in open item 11 where not already done.
 **Later Oct 3 (Science project):** the Std5 Science C1 Unit Test 1 page now has the resilience fix and uses the
@@ -1016,7 +1016,7 @@ previously-visited URLs may cache for up to ~10 min.
 | Standard 5 Computer Science Hub | https://edlovirtualclassroom.com/standard5/computer-science/ |
 | Std5 CS · Course E Lesson 3 | https://edlovirtualclassroom.com/standard5/computer-science/lessons/lesson03-swimming-fish/ |
 | Std5 CS · Course E Lesson 4 | https://edlovirtualclassroom.com/standard5/computer-science/lessons/lesson04-hello-world/ |
-| Std5 CS · Course E Lesson 5 (draft) | https://edlovirtualclassroom.com/standard5/computer-science/lessons/lesson05-career-journeys/ |
+| Std5 CS · Course E Lesson 5 | https://edlovirtualclassroom.com/standard5/computer-science/lessons/lesson05-career-journeys/ |
 | Standard 6 Hub | https://edlovirtualclassroom.com/standard6/ | 🔧 On halt (Oct 10) — card unlinked on the home page; pages still reachable by direct link 
 | Spanish Subject Hub (Std6) | https://edlovirtualclassroom.com/standard6/spanish/ |
 | Science Subject Hub (Std6) | https://edlovirtualclassroom.com/standard6/science/ |
@@ -1093,7 +1093,7 @@ Virtual-Classroom/
 │       └── lessons/
 │           ├── lesson03-swimming-fish/ ← Code.org Course E L3 · quiz + PDF for Google Classroom
 │           ├── lesson04-hello-world/   ← Code.org Course E L4 · Hello World (events) · quiz + PDF (live, Oct 10)
-│           └── lesson05-career-journeys/ ← Code.org Course E L5 · Mini-Project: Career Journeys · quiz + PDF (draft, Oct 21)
+│           └── lesson05-career-journeys/ ← Code.org Course E L5 · Mini-Project: Career Journeys · quiz + PDF (live, Oct 21)
 │
 ├── standard6/
 │   ├── index.html                      ← Standard 6 hub (subject cards)
@@ -1560,7 +1560,7 @@ cd "C:\Users\Dell Latitude 3520\OneDrive\Shared with me\Code Projects\Python Pro
 | Standard 5 Computer Science Hub | edlovirtualclassroom.com/standard5/computer-science/ | ✅ Live (Oct 10, URL-checked) |
 | Std5 CS · Course E Lesson 3 (Swimming Fish) | edlovirtualclassroom.com/standard5/computer-science/lessons/lesson03-swimming-fish/ | ✅ Live (Oct 10, URL-checked) |
 | Std5 CS · Course E Lesson 4 (Hello World) | edlovirtualclassroom.com/standard5/computer-science/lessons/lesson04-hello-world/ | ✅ Live (Oct 10, URL-checked) |
-| Std5 CS · Course E Lesson 5 (Career Journeys) | edlovirtualclassroom.com/standard5/computer-science/lessons/lesson05-career-journeys/ | 🟡 Draft (Oct 21) — not pushed |
+| Std5 CS · Course E Lesson 5 (Career Journeys) | edlovirtualclassroom.com/standard5/computer-science/lessons/lesson05-career-journeys/ | ✅ Live (Oct 21, pushed `ec682d5`; not yet URL-checked) |
 | Std5 Maths Classwork Checks 1–2 | edlovirtualclassroom.com/standard5/math/classwork/… | ✅ Live (Sept 24, autosave + retry) |
 | Std5 Maths C1 Unit Test 1 | edlovirtualclassroom.com/standard5/math/tests/c1-unit1/ | ✅ Page live (Oct 10, URL-checked) — **KV entry still to paste** (open item 12); sitting Tue Oct 13 |
 | Std5 Science Lesson Wk 1 | edlovirtualclassroom.com/standard5/science/lessons/week01-technology-climate/ | ✅ Live (built July 16) |
@@ -1588,7 +1588,7 @@ cd "C:\Users\Dell Latitude 3520\OneDrive\Shared with me\Code Projects\Python Pro
 |---|---|---|---|---|
 | Course E L3 · Swimming Fish with Sprite Lab | standard5/computer-science/lessons/lesson03-swimming-fish/ | 🟡 Built Oct 7, 2026 | warm-up sort + exit ticket, flip-card vocab, sprite demo + predict, Code.org L1–9 tracker, offline Fish Tank Builder, reflection, 10-Q quiz | PDF → Google Classroom |
 | Course E L4 · Hello World | standard5/computer-science/lessons/lesson04-hello-world/ | ✅ Live Oct 10, 2026 (Saturday task; reviewed + pushed) | event/action sort + event question, flip-card vocab, events demo (say / when clicked / when touches) + predict + checkpoint, Code.org L1–14 tracker, offline Hello World Builder, tap reflections + 1 typed line, 10-Q quiz | PDF → Google Classroom |
-| Course E L5 · Mini-Project: Career Journeys | standard5/computer-science/lessons/lesson05-career-journeys/ | 🟡 Draft Oct 21, 2026 (Saturday task; NOT committed) | career-use match, flip-card vocab + which-word, teaching-career example (background / say / when clicked) + predict + tap project plan + checkpoint, Code.org L1–9 tracker (L10 optional) + career-journey sentences, offline Career Scene Builder, tap share-out + 1 typed line, 10-Q quiz | PDF → Google Classroom |
+| Course E L5 · Mini-Project: Career Journeys | standard5/computer-science/lessons/lesson05-career-journeys/ | ✅ Live Oct 21, 2026 (Saturday task; pushed `ec682d5`) | career-use match, flip-card vocab + which-word, teaching-career example (background / say / when clicked) + predict + tap project plan + checkpoint, Code.org L1–9 tracker (L10 optional) + career-journey sentences, offline Career Scene Builder, tap share-out + 1 typed line, 10-Q quiz | PDF → Google Classroom |
 
 ### Spanish
 | Lesson | Folder | Status | Activities | AI Feedback |
