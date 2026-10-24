@@ -79,7 +79,12 @@ export default {
 
     // Lesson progress (D1) — answered here, never forwarded to Apps Script
     if (request.method === 'POST' && (url.pathname === '/load-state' || url.pathname === '/save-state')) {
-      return handleLessonState(url.pathname, request, env, cors);
+      try {
+        return await handleLessonState(url.pathname, request, env, cors);
+      } catch (err) {
+        // e.g. the D1 table was never created — answer with CORS so the page stops asking
+        return json({ ok: false, error: 'Progress storage error: ' + err.message }, cors, 503);
+      }
     }
 
     // LMS routes

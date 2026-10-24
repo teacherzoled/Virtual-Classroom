@@ -201,19 +201,26 @@ If the docs are not updated, the task is **not** finished.
   - **`/edlo-utils.js`:** new `vcLessonSync(opts)` (adds functions only; the other pages are unaffected). The browser copy
     stays the instant save. The account copy is sent when a part opens, after each quiz attempt, at most once a minute
     while work changes, and when the tab is hidden (switching to Code.org) or the page closes (incl. "Next student").
-    Opening the lesson asks the account first: no copy on this computer → "⏳ Loading your saved work…" covers the page,
-    the account copy is written here and the page reloads once. If two computers both changed the work, the copy that
-    is FURTHER ALONG (parts visited, quiz passed) wins — never the computer clock. Old Worker (404), D1 not set up (503),
-    offline or expired sign-in → silent, page works from the browser copy.
+    Opening the lesson asks the account first ("⏳ Loading your saved work…" covers the page if the answer takes more
+    than 0.3 s): newer work on the account → written here and the page reloads once. If two computers both changed the
+    work, the copy that is FURTHER ALONG (parts visited, quiz passed) wins — never the computer clock — except that a
+    teacher reset always beats older work still waiting on another computer. A reset that cannot reach the account is
+    sent first thing next time. The same lesson open in TWO TABS: the older tab freezes ("This lesson is open in another
+    tab" + Reload) and saves nothing. Old Worker (404), D1 not set up or table missing (503), offline or expired sign-in
+    → silent, page works from the browser copy.
   - **Lessons 3, 4, 5:** a `SYNC` block after `STORE_KEY` (signed in and not teacher preview only — guests and preview
-    stay on the device), `SYNC.touch()` in `save()`, `SYNC.now()` in `celebrateUnlock()` and after a quiz attempt,
+    stay on the device), `SYNC.touch()` in `save()` (and `save()` does nothing in a frozen older tab), `SYNC.now()` in `celebrateUnlock()` and after a quiz attempt,
     `SYNC.touch()` when a student claims guest work, and the teacher reset button now clears the ACCOUNT copy too
     (beans stay banked; label and confirm text updated). **Every later CS lesson carries this block (Lesson 3's engine).**
-  - Tested: Worker API with a local D1 (wrangler) 17/17 · the three lessons in headless Chromium against that Worker
-    117/117, twice (first change sent at once · throttle · unlock sends · tab-hidden sends · page close and Next student
-    send · wipe → work and bean locks come back, no double beans · different computer · stale computer takes newer work
-    · offline conflict keeps the further-along copy · guest and preview send nothing · old Worker: one ask then silent ·
-    teacher reset clears the account and the other computer, no reload loop · slow server overlay · 360px · no errors).
+  - Tested: Worker API with a local D1 (wrangler) 17/17 + missing table → 503 with CORS · the three lessons in headless
+    Chromium against that Worker 147/147, twice (first change sent at once · throttle · unlock sends · tab-hidden sends ·
+    page close and Next student send · wipe → work and bean locks come back, no double beans · different computer ·
+    stale computer takes newer work · offline conflict keeps the further-along copy · guest and preview send nothing ·
+    old Worker: one ask then silent · teacher reset clears the account and the other computer, during a save, and when
+    offline (sent next opening) · reopen after a page close: no reload · two tabs: older tab freezes · slow server
+    overlay · no reload loop · 360px · no errors). An independent code review found 6 issues (stale "unsaved" flag after a
+    page close, a reset lost behind a save in flight, the reload guard, work during the wait, Worker errors without CORS,
+    forced first upload) — all fixed and covered by the tests above.
   - **To go live (Edwin):** create D1 `edlo-lms-db` + table · bind it to `edlo-lms` as `DB` · add secret `SESSION_SECRET`
     · paste `backend/edlo-lms-worker.js` · test with `test.student` · then merge the `cs-progress-d1` branch. Steps in
     `backend/D1-LESSON-PROGRESS-SETUP.md`.

@@ -416,7 +416,7 @@ function vcRecoverResult(opts) {
  *      ? vcLessonSync({ lessonKey: STORE_BASE, storeKey: STORE_KEY,
  *                       beanPrefix: () => "vc-pts-" + LESSON.idBase + "-", beanSuffix: "-" + WHO })
  *      : null;
- *    save()       → if (SYNC) SYNC.touch();     (after writing localStorage)
+ *    save()       → if (SYNC && SYNC.isStale()) return;  … then after writing localStorage: if (SYNC) SYNC.touch();
  *    part opens   → if (SYNC) SYNC.now();
  *    teacher reset→ SYNC.clear().then(() => location.reload())
  *
@@ -429,7 +429,8 @@ function vcRecoverResult(opts) {
  *     work…" covers the page meanwhile). Same version → nothing to do.
  *   • Each save carries the version it was based on (rev). If another computer saved
  *     in between, the copy that is FURTHER ALONG (parts visited, quiz passed) wins —
- *     never the school computer's clock.
+ *     never the school computer's clock — but a teacher reset beats older waiting work.
+ *   • Same lesson in two tabs: the older tab freezes (SYNC.isStale()) and saves nothing.
  *   • The bean locks (vc-pts-…) travel with the work, so a wiped computer cannot
  *     pay the same beans twice.
  *   • Guests and teacher preview: not used (their work stays on this device).
@@ -447,7 +448,8 @@ function vcLessonSync(opts) {
   var metaKey = storeKey + '::sync', guardKey = 'vc-sync-reload::' + storeKey;
   var token = session.token;
   var stopped = false, booted = false, lastPush = 0, timer = 0, inFlight = null, again = false;
-  var preTouched = false;   /* the page saved while the account was still being asked (its own start-up) */
+  var preTouched = false;
+  var staleTab = false;     /* the lesson changed in another tab: this tab must not save over it */   /* the page saved while the account was still being asked (its own start-up) */
   var overlay = null, overlayTimer = 0, bootTimer = 0;
 
   function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -470,7 +472,7 @@ function vcLessonSync(opts) {
     try {
       var s = JSON.parse(raw) || {}, q = s.quiz || {};
       return (s.visited ? Object.keys(s.visited).length : 0) * 10 + (q.passed ? 100 : 0)
-           + (q.attempts ? 5 : 0) + (Number(s.step) || 0);
+           + (q.attempts ? 5 : 0);
     } catch (e) { return -1; }
   }
 
@@ -527,14 +529,21 @@ function vcLessonSync(opts) {
 
   /* Write the account copy here and reload once (never loops). */
   function takeServer(srv) {
-    setMeta({ rev: srv.rev, dirty: false, savedAt: srv.savedAt || 0, sig: sig(srv.state) });
     /* The account copy was cleared (teacher reset) and this page already opened blank → nothing to show. */
-    if (srv.state === null && !hadLocal) { hideOverlay(); return; }
-    if (srv.state === null) del(storeKey); else put(storeKey, srv.state);
+    if (srv.state === null && !hadLocal) {
+      setMeta({ rev: srv.rev, dirty: false, savedAt: srv.savedAt || 0, sig: '' });
+      hideOverlay(); return;
+    }
     var last = 0;
     try { last = Number(sessionStorage.getItem(guardKey)) || 0; } catch (e) {}
-    if (Date.now() - last < 15000) { hideOverlay(); return; }
+    if (Date.now() - last < 15000) {
+      /* Just reloaded and the account still differs: never reload twice. Stop syncing for this visit so the
+         copy on screen cannot overwrite the account; the next visit decides again. */
+      stopped = true; hideOverlay(); return;
+    }
     try { sessionStorage.setItem(guardKey, String(Date.now())); } catch (e) {}
+    setMeta({ rev: srv.rev, dirty: false, savedAt: srv.savedAt || 0, sig: sig(srv.state) });
+    if (srv.state === null) del(storeKey); else put(storeKey, srv.state);
     showOverlay();
     location.reload();
   }
@@ -548,13 +557,25 @@ function vcLessonSync(opts) {
     var local = get(storeKey), m = meta();
     if (!res.found) {                               /* nothing on the account yet */
       hideOverlay();
+      if (m.pendingClear) { delete m.pendingClear; setMeta(m); }   /* nothing there to clear */
       /* work saved here before this feature existed → put it on the account (a brand-new page sends nothing) */
-      if (local !== null && hadLocal) { m.dirty = true; setMeta(m); push({ force: true, boot: true }); }
+      if (local !== null && hadLocal) { m.dirty = true; setMeta(m); push({ boot: true }); }
       return;
     }
     var srv = { rev: Number(res.rev) || 0, state: (typeof res.state === 'string') ? res.state : null, savedAt: res.savedAt };
     restoreBeans(res.beans);
+    /* A teacher reset that did not reach the account last time: send it now, never bring the work back. */
+    if (m.pendingClear) { hideOverlay(); push({ clear: true, force: true, boot: true }); return; }
     if (local === null || quietLocal) return takeServer(srv);
+    /* This computer's last save DID arrive (e.g. sent as the page closed, reply never seen):
+       same content or same save time → just adopt the account's version number. */
+    if (m.rev !== srv.rev && (sig(local) === sig(srv.state) || (m.savedAt && m.savedAt === Number(srv.savedAt)))) {
+      m.rev = srv.rev; m.dirty = false; m.sig = sig(srv.state);
+      if (sig(local) !== m.sig) m.dirty = true;     /* changed again after that save → send it */
+      setMeta(m); hideOverlay();
+      if (m.dirty) push({ boot: true });
+      return;
+    }
     if (m.rev === srv.rev) {
       hideOverlay();
       if (m.dirty || (preTouched && sig(local) !== m.sig)) { m.dirty = true; setMeta(m); push({ boot: true }); }
@@ -563,6 +584,8 @@ function vcLessonSync(opts) {
     if (typeof m.rev === 'number' && m.rev > srv.rev) { hideOverlay(); m.dirty = true; setMeta(m); push({ force: true, boot: true }); return; }
     /* The account changed on another computer since this one last synced. */
     if (typeof m.rev === 'number' && !m.dirty) return takeServer(srv);
+    /* …and that change was a TEACHER RESET: the reset wins over older work still waiting on this computer. */
+    if (srv.state === null) return takeServer(srv);
     if (score(local) > score(srv.state)) { hideOverlay(); m.dirty = true; setMeta(m); push({ force: true, boot: true }); }
     else takeServer(srv);
   }
@@ -580,6 +603,7 @@ function vcLessonSync(opts) {
     var m = meta();
     if (!m.dirty && !o.force && !o.clear) return Promise.resolve();
     var sentAt = m.savedAt, raw = o.clear ? null : get(storeKey);
+    var afterClear = o.clear || !!m.pendingClear;   /* sent after the reset was asked for */
     var body = {
       token: token, lesson: lessonKey, state: raw, beans: beanKeys(),
       baseRev: (typeof m.rev === 'number') ? m.rev : 0, force: !!o.force, savedAt: m.savedAt || Date.now()
@@ -589,6 +613,7 @@ function vcLessonSync(opts) {
       inFlight = null;
       if (res && res.ok) {
         var m2 = meta(); m2.rev = Number(res.rev);
+        if (afterClear) delete m2.pendingClear;     /* the old work is gone from the account */
         if (m2.savedAt === sentAt) { m2.dirty = false; m2.sig = sig(raw); }
         setMeta(m2);
       } else if (res && res.conflict) {
@@ -612,19 +637,21 @@ function vcLessonSync(opts) {
     var m = meta();
     if (!m.dirty) return;
     if (!inFlight) { push({ keepalive: true }); return; }
-    /* A save is still on its way and the page is closing: send the newest copy too, based on the
-       version that save will create. If it arrives first it is refused, and the copy kept here goes
-       up the next time the lesson opens. */
+    /* A save is still on its way and the page is closing: send the newest copy too. It is forced, so
+       whichever of the two arrives first, the account ends with this newest copy (the older save, if it
+       arrives second, is refused as out of date). */
     try {
       post('/save-state', { token: token, lesson: lessonKey, state: get(storeKey), beans: beanKeys(),
-        baseRev: (typeof m.rev === 'number' ? m.rev : 0) + 1, force: false, savedAt: m.savedAt || Date.now() }, true)
+        baseRev: (typeof m.rev === 'number' ? m.rev : 0), force: true, savedAt: m.savedAt || Date.now() }, true)
         ['catch'](function () {});
     } catch (e) {}
   }
 
   /* ---- Boot: ask the account first ---- */
   var hadLocal = get(storeKey) !== null;
-  if (!hadLocal) overlayTimer = setTimeout(showOverlay, 300);   /* no flash when the answer is quick */
+  /* Cover the page while the account answers (only if it takes more than 0.3 s), so nothing the student
+     does in that moment can be thrown away by a reload. */
+  overlayTimer = setTimeout(showOverlay, 300);
   var gaveUp = false;
   bootTimer = setTimeout(function () { gaveUp = true; hideOverlay(); }, VC_STATE_BOOT_WAIT_MS);
   var ready = post('/load-state', { token: token, lesson: lessonKey }).then(function (res) {
@@ -637,11 +664,34 @@ function vcLessonSync(opts) {
     if (m.dirty) schedule(VC_STATE_THROTTLE_MS);
   });
 
+  /* The same lesson changed in ANOTHER tab or window of this browser: this tab's copy is now old.
+     Stop sending it (it would overwrite the newer work) and ask the student to reload. */
+  window.addEventListener('storage', function (e) {
+    if (e.key !== storeKey || staleTab) return;
+    staleTab = true; stopped = true;
+    if (timer) { clearTimeout(timer); timer = 0; }
+    if (!document.body || document.getElementById('vcSyncStale')) return;
+    var d = document.createElement('div');
+    d.id = 'vcSyncStale'; d.setAttribute('role', 'alert');
+    d.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;'
+      + 'background:rgba(10,20,40,.72);padding:16px';
+    d.innerHTML = '<div style="background:#fff;color:#1a2433;border-radius:16px;padding:22px 26px;max-width:360px;'
+      + 'text-align:center;font:700 1.05rem/1.4 system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35)">'
+      + 'This lesson is open in another tab.<div style="font-weight:500;font-size:.9rem;margin:6px 0 14px">'
+      + 'Reload to see your newest work here.</div>'
+      + '<button type="button" style="min-height:44px;padding:8px 20px;border-radius:10px;border:0;background:#1971c2;'
+      + 'color:#fff;font:700 1rem system-ui,sans-serif;cursor:pointer">Reload</button></div>';
+    d.querySelector('button').onclick = function () { location.reload(); };
+    document.body.appendChild(d);
+  });
+
   document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') flush(); });
   window.addEventListener('pagehide', flush);
 
   return {
     ready: ready,
+    /** true once the lesson changed in another tab — the page must stop saving (its copy is old). */
+    isStale: function () { return staleTab; },
     /** Call after every localStorage save of the lesson. */
     touch: function () {
       if (stopped) return;
@@ -659,8 +709,11 @@ function vcLessonSync(opts) {
     },
     /** Teacher reset: clears the account copy too (bean locks stay). Resolves within 5 s either way. */
     clear: function () {
-      var m = meta(); m.dirty = true; m.savedAt = Date.now(); setMeta(m);
-      return Promise.race([push({ clear: true, force: true }), vcWait_(5000)]).then(function () {}, function () {});
+      var m = meta(); m.dirty = true; m.savedAt = Date.now(); m.pendingClear = true; setMeta(m);
+      function go() { return push({ clear: true, force: true }); }
+      var p = inFlight ? inFlight.then(go, go) : go();   /* wait for a save already on its way, then clear */
+      /* If it is slow or fails, pendingClear stays set and the next opening sends the clear first. */
+      return Promise.race([p, vcWait_(5000)]).then(function () {}, function () {});
     }
   };
 }

@@ -706,7 +706,8 @@ function load(){
   return defaults();
 }
 let S = load();
-function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); }catch(e){} if(SYNC) SYNC.touch(); updateProgress(); }
+function save(){ if(SYNC && SYNC.isStale && SYNC.isStale()) return;   /* newer work in another tab — never save over it */
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); }catch(e){} if(SYNC) SYNC.touch(); updateProgress(); }
 const $ = id => document.getElementById(id);
 function esc(t){ return String(t).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
