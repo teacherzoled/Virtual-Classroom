@@ -400,3 +400,267 @@ function vcRecoverResult(opts) {
     });
   });
 }
+
+/* ═══════════════════════════════════════════════════════════════
+ *  LESSON PROGRESS ON THE STUDENT'S ACCOUNT  (Oct 24, 2026 · CS lessons first)
+ *
+ *  Why: lesson pages kept progress ONLY in this browser. School computers wipe
+ *  browser data when a student logs off Windows, and a student may sit at a
+ *  different computer next class, so the lesson started over. Signed-in work is
+ *  now also kept on the server: edlo-lms Worker → Cloudflare D1 (table
+ *  lesson_state). These routes never touch Apps Script or the Sheet, so they
+ *  cannot slow down quiz or bean saves.
+ *
+ *  Use on a lesson page, AFTER STORE_KEY is set and BEFORE the saved work is read:
+ *    const SYNC = (SESSION && !PREVIEW && typeof vcLessonSync === "function")
+ *      ? vcLessonSync({ lessonKey: STORE_BASE, storeKey: STORE_KEY,
+ *                       beanPrefix: () => "vc-pts-" + LESSON.idBase + "-", beanSuffix: "-" + WHO })
+ *      : null;
+ *    save()       → if (SYNC) SYNC.touch();     (after writing localStorage)
+ *    part opens   → if (SYNC) SYNC.now();
+ *    teacher reset→ SYNC.clear().then(() => location.reload())
+ *
+ *  How it decides:
+ *   • The browser copy stays the instant save. The server copy is sent at most once
+ *     a minute while work changes, at once on SYNC.now(), and when the tab is hidden
+ *     or the page closes (switching to Code.org counts).
+ *   • Opening the lesson asks the server first. No copy on this computer → the
+ *     account copy is written here and the page reloads once ("Loading your saved
+ *     work…" covers the page meanwhile). Same version → nothing to do.
+ *   • Each save carries the version it was based on (rev). If another computer saved
+ *     in between, the copy that is FURTHER ALONG (parts visited, quiz passed) wins —
+ *     never the school computer's clock.
+ *   • The bean locks (vc-pts-…) travel with the work, so a wiped computer cannot
+ *     pay the same beans twice.
+ *   • Guests and teacher preview: not used (their work stays on this device).
+ *   • No server, offline or old Worker → the page works exactly as before.
+ * ═══════════════════════════════════════════════════════════════ */
+var VC_STATE_THROTTLE_MS = 60000;
+var VC_STATE_BOOT_WAIT_MS = 6000;
+
+function vcLessonSync(opts) {
+  opts = opts || {};
+  var session = vcGetSession();
+  if (!session || !opts.lessonKey || !opts.storeKey) return null;
+
+  var lessonKey = String(opts.lessonKey), storeKey = String(opts.storeKey);
+  var metaKey = storeKey + '::sync', guardKey = 'vc-sync-reload::' + storeKey;
+  var token = session.token;
+  var stopped = false, booted = false, lastPush = 0, timer = 0, inFlight = null, again = false;
+  var preTouched = false;   /* the page saved while the account was still being asked (its own start-up) */
+  var overlay = null, overlayTimer = 0, bootTimer = 0;
+
+  function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function put(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
+  function del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+  function meta() { try { return JSON.parse(get(metaKey) || 'null') || {}; } catch (e) { return {}; } }
+  function setMeta(m) { put(metaKey, JSON.stringify(m)); }
+  /* Short fingerprint of a saved copy, so an unchanged save sends nothing. */
+  function sig(raw) {
+    if (raw === null || raw === undefined) return '';
+    var h = 0x811c9dc5;
+    for (var i = 0; i < raw.length; i++) { h ^= raw.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+    return raw.length + ':' + h.toString(16);
+  }
+
+  /* How far along a saved copy is — used only when two computers both changed it. */
+  function score(raw) {
+    if (typeof opts.score === 'function') { try { return opts.score(raw); } catch (e) {} }
+    if (raw === null || raw === undefined) return -1;
+    try {
+      var s = JSON.parse(raw) || {}, q = s.quiz || {};
+      return (s.visited ? Object.keys(s.visited).length : 0) * 10 + (q.passed ? 100 : 0)
+           + (q.attempts ? 5 : 0) + (Number(s.step) || 0);
+    } catch (e) { return -1; }
+  }
+
+  function beanKeys() {
+    var p = typeof opts.beanPrefix === 'function' ? opts.beanPrefix() : (opts.beanPrefix || '');
+    var s = opts.beanSuffix || '', out = {};
+    if (!p) return out;
+    try {
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (k && k.indexOf(p) === 0 && (!s || k.slice(-s.length) === s)) out[k] = localStorage.getItem(k);
+      }
+    } catch (e) {}
+    return out;
+  }
+  function restoreBeans(b) {
+    if (!b || typeof b !== 'object') return;
+    for (var k in b) {
+      if (Object.prototype.hasOwnProperty.call(b, k) && k.indexOf('vc-pts-') === 0
+          && typeof b[k] === 'string' && b[k].length < 300 && get(k) === null) put(k, b[k]);
+    }
+  }
+
+  function post(path, body, keepalive) {
+    var text = JSON.stringify(body);
+    /* text/plain keeps this a "simple" request: no CORS preflight, and keepalive works on page close */
+    return fetch(VC_LMS_URL + path, {
+      method: 'POST', headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: text,
+      keepalive: !!keepalive && text.length < 60000
+    }).then(function (r) {
+      return r.json().then(function (j) { j = j || {}; j.status = r.status; return j; });
+    });
+  }
+  /* 404 = the Worker has no progress routes yet · 503 = D1 not set up → stop asking this visit */
+  function unavailable(res) { return !!res && (res.status === 404 || res.status === 503); }
+
+  function showOverlay() {
+    if (overlay || !document.body) return;
+    overlay = document.createElement('div');
+    overlay.id = 'vcSyncOverlay';
+    overlay.setAttribute('role', 'status');
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;'
+      + 'background:rgba(10,20,40,.72);padding:16px';
+    overlay.innerHTML = '<div style="background:#fff;color:#1a2433;border-radius:16px;padding:22px 26px;max-width:340px;'
+      + 'text-align:center;font:700 1.05rem/1.4 system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35)">'
+      + '⏳ Loading your saved work…<div style="font-weight:500;font-size:.9rem;margin-top:6px">One moment, please.</div></div>';
+    document.body.appendChild(overlay);
+  }
+  function hideOverlay() {
+    clearTimeout(overlayTimer); clearTimeout(bootTimer);
+    if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+    overlay = null;
+  }
+
+  /* Write the account copy here and reload once (never loops). */
+  function takeServer(srv) {
+    setMeta({ rev: srv.rev, dirty: false, savedAt: srv.savedAt || 0, sig: sig(srv.state) });
+    /* The account copy was cleared (teacher reset) and this page already opened blank → nothing to show. */
+    if (srv.state === null && !hadLocal) { hideOverlay(); return; }
+    if (srv.state === null) del(storeKey); else put(storeKey, srv.state);
+    var last = 0;
+    try { last = Number(sessionStorage.getItem(guardKey)) || 0; } catch (e) {}
+    if (Date.now() - last < 15000) { hideOverlay(); return; }
+    try { sessionStorage.setItem(guardKey, String(Date.now())); } catch (e) {}
+    showOverlay();
+    location.reload();
+  }
+
+  /* Compare the account copy with this computer's copy and act. */
+  function settle(res, quietLocal) {
+    if (!res || !res.ok) {
+      if (res && (res.auth || unavailable(res))) stopped = true;   /* signed out / not set up: stay local */
+      hideOverlay(); return;
+    }
+    var local = get(storeKey), m = meta();
+    if (!res.found) {                               /* nothing on the account yet */
+      hideOverlay();
+      /* work saved here before this feature existed → put it on the account (a brand-new page sends nothing) */
+      if (local !== null && hadLocal) { m.dirty = true; setMeta(m); push({ force: true, boot: true }); }
+      return;
+    }
+    var srv = { rev: Number(res.rev) || 0, state: (typeof res.state === 'string') ? res.state : null, savedAt: res.savedAt };
+    restoreBeans(res.beans);
+    if (local === null || quietLocal) return takeServer(srv);
+    if (m.rev === srv.rev) {
+      hideOverlay();
+      if (m.dirty || (preTouched && sig(local) !== m.sig)) { m.dirty = true; setMeta(m); push({ boot: true }); }
+      return;
+    }
+    if (typeof m.rev === 'number' && m.rev > srv.rev) { hideOverlay(); m.dirty = true; setMeta(m); push({ force: true, boot: true }); return; }
+    /* The account changed on another computer since this one last synced. */
+    if (typeof m.rev === 'number' && !m.dirty) return takeServer(srv);
+    if (score(local) > score(srv.state)) { hideOverlay(); m.dirty = true; setMeta(m); push({ force: true, boot: true }); }
+    else takeServer(srv);
+  }
+
+  function schedule(delay) {
+    if (stopped || !booted || timer) return;
+    var wait = (delay != null) ? delay : Math.max(0, lastPush + VC_STATE_THROTTLE_MS - Date.now());
+    timer = setTimeout(function () { timer = 0; push(); }, wait);
+  }
+
+  function push(o) {
+    o = o || {};
+    if (stopped) return Promise.resolve();
+    if (inFlight) { again = true; return inFlight; }
+    var m = meta();
+    if (!m.dirty && !o.force && !o.clear) return Promise.resolve();
+    var sentAt = m.savedAt, raw = o.clear ? null : get(storeKey);
+    var body = {
+      token: token, lesson: lessonKey, state: raw, beans: beanKeys(),
+      baseRev: (typeof m.rev === 'number') ? m.rev : 0, force: !!o.force, savedAt: m.savedAt || Date.now()
+    };
+    if (!o.boot) lastPush = Date.now();   /* a start-up sync does not use up the once-a-minute slot */
+    inFlight = post('/save-state', body, o.keepalive).then(function (res) {
+      inFlight = null;
+      if (res && res.ok) {
+        var m2 = meta(); m2.rev = Number(res.rev);
+        if (m2.savedAt === sentAt) { m2.dirty = false; m2.sig = sig(raw); }
+        setMeta(m2);
+      } else if (res && res.conflict) {
+        return post('/load-state', { token: token, lesson: lessonKey }).then(function (r) { settle(r, false); }, function () {});
+      } else if (res && (res.auth || unavailable(res))) {
+        stopped = true;
+      } else {
+        schedule(VC_STATE_THROTTLE_MS);           /* server said no (or old Worker): try again later */
+      }
+      if (again) { again = false; schedule(); }
+    }, function () {
+      inFlight = null; again = false;
+      schedule(VC_STATE_THROTTLE_MS);             /* offline: keep the work here, try again in a minute */
+    });
+    return inFlight;
+  }
+
+  function flush() {
+    if (stopped || !booted) return;
+    if (timer) { clearTimeout(timer); timer = 0; }
+    var m = meta();
+    if (!m.dirty) return;
+    if (!inFlight) { push({ keepalive: true }); return; }
+    /* A save is still on its way and the page is closing: send the newest copy too, based on the
+       version that save will create. If it arrives first it is refused, and the copy kept here goes
+       up the next time the lesson opens. */
+    try {
+      post('/save-state', { token: token, lesson: lessonKey, state: get(storeKey), beans: beanKeys(),
+        baseRev: (typeof m.rev === 'number' ? m.rev : 0) + 1, force: false, savedAt: m.savedAt || Date.now() }, true)
+        ['catch'](function () {});
+    } catch (e) {}
+  }
+
+  /* ---- Boot: ask the account first ---- */
+  var hadLocal = get(storeKey) !== null;
+  if (!hadLocal) overlayTimer = setTimeout(showOverlay, 300);   /* no flash when the answer is quick */
+  var gaveUp = false;
+  bootTimer = setTimeout(function () { gaveUp = true; hideOverlay(); }, VC_STATE_BOOT_WAIT_MS);
+  var ready = post('/load-state', { token: token, lesson: lessonKey }).then(function (res) {
+    booted = true;
+    /* Answer came in time and this computer had no copy → the account copy wins outright. */
+    settle(res, !hadLocal && !gaveUp && res && res.ok && res.found);
+  }, function () {
+    booted = true; hideOverlay();                 /* offline: work locally; saves retry later */
+    var m = meta(); if (preTouched) { m.dirty = true; setMeta(m); }
+    if (m.dirty) schedule(VC_STATE_THROTTLE_MS);
+  });
+
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') flush(); });
+  window.addEventListener('pagehide', flush);
+
+  return {
+    ready: ready,
+    /** Call after every localStorage save of the lesson. */
+    touch: function () {
+      if (stopped) return;
+      if (!booted) { preTouched = true; return; }   /* start-up saves: decided when the account answers */
+      var m = meta();
+      if (!m.dirty && sig(get(storeKey)) === m.sig) return;   /* saved, but nothing changed */
+      m.dirty = true; m.savedAt = Date.now(); setMeta(m);
+      schedule();
+    },
+    /** Send now (a part just opened, a quiz attempt finished). */
+    now: function () {
+      if (stopped || !booted) return;
+      if (timer) { clearTimeout(timer); timer = 0; }
+      push();
+    },
+    /** Teacher reset: clears the account copy too (bean locks stay). Resolves within 5 s either way. */
+    clear: function () {
+      var m = meta(); m.dirty = true; m.savedAt = Date.now(); setMeta(m);
+      return Promise.race([push({ clear: true, force: true }), vcWait_(5000)]).then(function () {}, function () {});
+    }
+  };
+}

@@ -606,7 +606,7 @@ body.theme-night .btn.ok{color:#0d1f1a}
 <footer class="site-footer">
   <p>© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize</p>
   <p>Lesson content adapted from Code.org <i>CS Fundamentals Course E (2025), Lesson 3: Swimming Fish with Sprite Lab</i>, licensed <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>. Warm-up exit ticket adapted from Common Sense Education, <i>Private and Personal Information</i> (CC BY-NC-SA). This page is shared under the same licence for non-commercial classroom use.</p>
-  <button type="button" class="reset" id="resetAll">Teacher: clear this student’s saved answers on this device (beans stay banked)</button>
+  <button type="button" class="reset" id="resetAll">Teacher: clear this student’s saved answers on this device and on his or her account (beans stay banked)</button>
 </footer>
 
 <div id="printArea"></div>
@@ -668,6 +668,18 @@ try{   /* work saved by the first version of this page (Oct 7, before sign-in) c
   if(old) localStorage.removeItem(STORE_BASE);
 }catch(e){}
 
+/* ---------- Progress saved to the student's ACCOUNT (Edwin, Oct 24) ----------
+   Signed in → the work is ALSO kept on the server (edlo-lms Worker → Cloudflare D1), so logging off Windows,
+   a wiped school computer or a different computer no longer starts the lesson over. The browser copy stays the
+   instant save; the account copy is sent when a part opens, after a quiz attempt, at most once a minute while
+   work changes, and when the student leaves the page or switches to Code.org. Opening the lesson loads the
+   account copy first. Guests and teacher preview stay on this device only. Helper: vcLessonSync() in
+   /edlo-utils.js (no server or old Worker → the page works exactly as before). */
+const SYNC = (SESSION && !PREVIEW && typeof vcLessonSync === "function")
+  ? vcLessonSync({ lessonKey: STORE_BASE, storeKey: STORE_KEY,
+                   beanPrefix: ()=>"vc-pts-" + LESSON.idBase + "-", beanSuffix: "-" + WHO })
+  : null;
+
 /* ---------- Saved state ---------- */
 function defaults(){
   return {step:0,visited:{},flipped:{},
@@ -694,7 +706,7 @@ function load(){
   return defaults();
 }
 let S = load();
-function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); }catch(e){} updateProgress(); }
+function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); }catch(e){} if(SYNC) SYNC.touch(); updateProgress(); }
 const $ = id => document.getElementById(id);
 function esc(t){ return String(t).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
@@ -811,6 +823,7 @@ function confetti(){
 function celebrateUnlock(top){
   confetti();
   toast("🎉 Part " + (top+1) + " unlocked: " + sections[top].dataset.title + "!");
+  if(SYNC) SYNC.now();   /* a part just opened: put it on the account now */
 }
 function streakHit(ok){
   if(ok){ S.streak = (S.streak||0) + 1; S.bestStreak = Math.max(S.bestStreak||0, S.streak);
@@ -1508,7 +1521,7 @@ function offerGuestWork(){
     + '<div class="btnrow"><button type="button" class="btn" id="guestYes">Yes, add it to my account</button>'
     + '<button type="button" class="btn alt" id="guestNo">No, start fresh</button></div>';
   box.style.display = "block";
-  $("guestYes").onclick = ()=>{ try{ localStorage.setItem(STORE_KEY, guest); localStorage.removeItem(GUEST_KEY); }catch(e){} location.reload(); };
+  $("guestYes").onclick = ()=>{ try{ localStorage.setItem(STORE_KEY, guest); localStorage.removeItem(GUEST_KEY); }catch(e){} if(SYNC) SYNC.touch(); location.reload(); };
   $("guestNo").onclick  = ()=>{ try{ localStorage.removeItem(GUEST_KEY); }catch(e){} box.style.display = "none"; };
 }
 
@@ -1583,7 +1596,7 @@ function submitQuiz(){
                  attemptId:(typeof vcNewAttemptId==="function") ? vcNewAttemptId() : WHO + "-" + Date.now()};
   S.quiz.history.push(entry);
   S.quiz.lastDetail = current.map(c=>({id:c.q.id, pick:c.pick}));
-  save();
+  save(); if(SYNC) SYNC.now();
   $("quizArea").innerHTML = ""; current = null;
   renderResult(S.quiz.lastDetail);
   renderQuizStart();
@@ -1825,9 +1838,9 @@ function printSlip(){
 
 /* ---------- Teacher reset ---------- */
 $("resetAll").onclick = ()=>{
-  if(confirm("Clear ALL saved answers and quiz results on this device? This cannot be undone.")){
+  if(confirm("Clear ALL saved answers and quiz results for this student — on this device and on his or her account? This cannot be undone.")){
     try{ localStorage.removeItem(STORE_KEY); }catch(e){}
-    location.reload();
+    if(SYNC) SYNC.clear().then(()=>location.reload()); else location.reload();
   }
 };
 

@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** October 21, 2026 — CS **teacher preview** (`?preview` + teacher code opens every part of CS Lessons 3–5, sends nothing) · CS **Course E Lesson 5: Mini-Project: Career Journeys** built by the scheduled task + hub card, **committed and pushed (`ec682d5`), LIVE** · Oct 11: Maths Problem Set 2 kept on paper (no online build; Problem Set 3 goes online) · **Standard 6 is ON HALT** (home-page card shows 🔧 On Maintenance, front door only — see the entry below) · **everything through CS Course E Lesson 5 is committed, pushed and LIVE** (`ec682d5`). Latest: CS **Lesson 4: Hello World** (Saturday scheduled task) + hub card · CS Lesson 3 help layer (Struggling? card, helper badge, raise hand) + class checkpoint before Code.org · CS Lesson 3 tap-to-answer reflections + fun layer · Part 5 exempt from the part locks · CS Lesson 3 site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · Std 5 **Computer Science hub** + **Lesson 3: Swimming Fish** + Std 5 hub's CS card lit · Oct 3: Maths C1 Unit Test 1 at `standard5/math/tests/c1-unit1/` + hub card (gated; KV `sy2627-std5-c1-unit1-math` still to paste — open item 12) · answer-blur fix (a clicked option fades at once) + SVG labels left as drawn · Science C1 Unit Test 1 up to the readable-layout and anti-cheat rules (Science project) · earlier Oct 3: readable layout + full anti-cheat as STANDING RULES, shared save helper + Apps Script duplicate guard, KV merge rule · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
+**Last updated:** October 24, 2026 — CS lessons: **progress saved to the student's account** (edlo-lms Worker + Cloudflare D1; branch `cs-progress-d1`, NOT live until the D1 setup + Worker paste — see the Oct 24 entry) · October 21, 2026 — CS **teacher preview** (`?preview` + teacher code opens every part of CS Lessons 3–5, sends nothing) · CS **Course E Lesson 5: Mini-Project: Career Journeys** built by the scheduled task + hub card, **committed and pushed (`ec682d5`), LIVE** · Oct 11: Maths Problem Set 2 kept on paper (no online build; Problem Set 3 goes online) · **Standard 6 is ON HALT** (home-page card shows 🔧 On Maintenance, front door only — see the entry below) · **everything through CS Course E Lesson 5 is committed, pushed and LIVE** (`ec682d5`). Latest: CS **Lesson 4: Hello World** (Saturday scheduled task) + hub card · CS Lesson 3 help layer (Struggling? card, helper badge, raise hand) + class checkpoint before Code.org · CS Lesson 3 tap-to-answer reflections + fun layer · Part 5 exempt from the part locks · CS Lesson 3 site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · Std 5 **Computer Science hub** + **Lesson 3: Swimming Fish** + Std 5 hub's CS card lit · Oct 3: Maths C1 Unit Test 1 at `standard5/math/tests/c1-unit1/` + hub card (gated; KV `sy2627-std5-c1-unit1-math` still to paste — open item 12) · answer-blur fix (a clicked option fades at once) + SVG labels left as drawn · Science C1 Unit Test 1 up to the readable-layout and anti-cheat rules (Science project) · earlier Oct 3: readable layout + full anti-cheat as STANDING RULES, shared save helper + Apps Script duplicate guard, KV merge rule · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -183,6 +183,40 @@ If the docs are not updated, the task is **not** finished.
   `edlo-csE-L05-career-journeys-v1`. One small change vs the engine: starting the quiz clears queued toasts (an unlock
   toast queued just before could still show over the quiz; Lessons 3–4 have the same latent behaviour, left untouched).
   Tested in a headless browser with a mocked record book: 69/69 checks passed.
+
+- **Oct 24 — CS lessons: PROGRESS SAVED TO THE STUDENT'S ACCOUNT (Cloudflare D1) — written + tested, NOT LIVE yet.**
+  Problem (Edwin, Oct 22): when students log off, the lesson starts over. Cause: Lessons 3–5 kept progress ONLY in the
+  browser (`localStorage`, per username); the school computers wipe browser data at Windows log-off, and a student may
+  sit at a different computer next class. The site's Log out / Next student never cleared it.
+  Fix (Edwin approved D1 over KV on Oct 22 — KV's free tier is 1,000 writes/day, D1's is 100,000):
+  - **Worker `edlo-lms`:** new `POST /load-state` and `POST /save-state`, answered IN the Worker (never Apps Script or
+    the Sheet, so they cannot slow quiz or bean saves). The Worker checks the sign-in token itself (same signature as
+    `checkToken()`; needs secret **`SESSION_SECRET`** = exact copy of the Apps Script one). Stores into D1 database
+    **`edlo-lms-db`** (binding **`DB`**), table **`lesson_state`** (username + lesson_key → saved work JSON, `rev`, time).
+    Each save carries the version it started from; a save based on an old version is refused (409) instead of
+    overwriting newer work. Bean locks (`vc-pts-…`) are stored with the work and only ever added. Limit 200 KB per
+    lesson. Without `DB`/`SESSION_SECRET` the routes answer 503 and pages work exactly as before.
+    ⚠️ The token check does not look up `active` in the Students tab, so a disabled student can still save HIS or HER
+    OWN lesson progress (no Sheet rows, no beans — those still go through Apps Script).
+  - **`/edlo-utils.js`:** new `vcLessonSync(opts)` (adds functions only; the other pages are unaffected). The browser copy
+    stays the instant save. The account copy is sent when a part opens, after each quiz attempt, at most once a minute
+    while work changes, and when the tab is hidden (switching to Code.org) or the page closes (incl. "Next student").
+    Opening the lesson asks the account first: no copy on this computer → "⏳ Loading your saved work…" covers the page,
+    the account copy is written here and the page reloads once. If two computers both changed the work, the copy that
+    is FURTHER ALONG (parts visited, quiz passed) wins — never the computer clock. Old Worker (404), D1 not set up (503),
+    offline or expired sign-in → silent, page works from the browser copy.
+  - **Lessons 3, 4, 5:** a `SYNC` block after `STORE_KEY` (signed in and not teacher preview only — guests and preview
+    stay on the device), `SYNC.touch()` in `save()`, `SYNC.now()` in `celebrateUnlock()` and after a quiz attempt,
+    `SYNC.touch()` when a student claims guest work, and the teacher reset button now clears the ACCOUNT copy too
+    (beans stay banked; label and confirm text updated). **Every later CS lesson carries this block (Lesson 3's engine).**
+  - Tested: Worker API with a local D1 (wrangler) 17/17 · the three lessons in headless Chromium against that Worker
+    117/117, twice (first change sent at once · throttle · unlock sends · tab-hidden sends · page close and Next student
+    send · wipe → work and bean locks come back, no double beans · different computer · stale computer takes newer work
+    · offline conflict keeps the further-along copy · guest and preview send nothing · old Worker: one ask then silent ·
+    teacher reset clears the account and the other computer, no reload loop · slow server overlay · 360px · no errors).
+  - **To go live (Edwin):** create D1 `edlo-lms-db` + table · bind it to `edlo-lms` as `DB` · add secret `SESSION_SECRET`
+    · paste `backend/edlo-lms-worker.js` · test with `test.student` · then merge the `cs-progress-d1` branch. Steps in
+    `backend/D1-LESSON-PROGRESS-SETUP.md`.
 
 - **Oct 11 — Maths Problem Set 2 stays on PAPER (Edwin's decision).** "Odd, Even, Prime & Composite" (MA 1.37
   L1–2, 10 items / 38 marks, Week 04 pack `08_Std5_Homework_ProblemSet2_…docx` + answer key) goes home Fri Oct 16,
@@ -1213,6 +1247,7 @@ Student Browser
 | Apps Script | `VC-LMS Backend` — attached to the Sheet (Extensions → Apps Script) |
 | Cloudflare Worker | `edlo-lms` → https://edlo-lms.smartstandardsix.workers.dev |
 | Health check | `…workers.dev/?action=ping` → `{"ok":true,"message":"LMS backend is alive"}` |
+| D1 database | `edlo-lms-db` (Cloudflare → Storage & databases → D1), bound to `edlo-lms` as `DB` — table `lesson_state`: lesson progress per student (Oct 24, 2026) |
 | Shared JS | `/edlo-utils.js` (repo root) |
 | Login page | `/login/index.html` (root — serves both grades, grade-neutral footer) |
 
@@ -1223,6 +1258,8 @@ Student Browser
 | `SESSION_SECRET` | Apps Script → Script Properties — ⚠️ NEVER change; password hashes depend on it |
 | `APPS_SCRIPT_URL` | Cloudflare Worker `edlo-lms` → Settings → Variables and Secrets |
 | `APPS_SCRIPT_KEY` | Cloudflare Worker `edlo-lms` → Settings → Variables and Secrets |
+| `SESSION_SECRET` (copy) | Cloudflare Worker `edlo-lms` → Settings → Variables and Secrets — EXACT copy of the Apps Script one; the Worker checks tokens for `/load-state` + `/save-state` (Oct 24, 2026). If the Apps Script one ever changes, change this too |
+| D1 binding `DB` | Cloudflare Worker `edlo-lms` → Settings → Bindings → D1 database `edlo-lms-db` (table `lesson_state`) — not a secret |
 
 ### Sessions
 - Login lasts **30 days** per device (`SESSION_DAYS` in the Apps Script)
@@ -1268,6 +1305,9 @@ storage, recovery on return; see the "GRADED RESULTS" block in the file)* ·
 lesson activity ONCE per device (`localStorage` lock `vc-pts-<activityId>`); writes a Tab 2 row with
 `activity_type:'lesson'` (score = beans earned, max_score = beans possible); silent no-op when logged
 out (no lock set, so beans can still be earned after a later login). No quest multiplier yet.
+**`vcLessonSync({lessonKey, storeKey, beanPrefix, beanSuffix})`** *(Oct 24, 2026)* — keeps a lesson page's saved work
+on the student's account (Worker `/load-state` + `/save-state` → D1) as well as in the browser; returns `{touch, now, clear, ready}`
+or null when signed out. See the "LESSON PROGRESS" block in the file and the Oct 24 Take-off entry.
 
 ### Verified end-to-end (July 16, 2026)
 ✅ Login → redirect · ✅ Session persists across pages · ✅ /login/ skips form when logged in ·
