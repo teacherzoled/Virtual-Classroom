@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** October 21, 2026 — CS **teacher preview** (`?preview` + teacher code opens every part of CS Lessons 3–5, sends nothing) · CS **Course E Lesson 5: Mini-Project: Career Journeys** built by the scheduled task + hub card, **committed and pushed (`ec682d5`), LIVE** · Oct 11: Maths Problem Set 2 kept on paper (no online build; Problem Set 3 goes online) · **Standard 6 is ON HALT** (home-page card shows 🔧 On Maintenance, front door only — see the entry below) · **everything through CS Course E Lesson 5 is committed, pushed and LIVE** (`ec682d5`). Latest: CS **Lesson 4: Hello World** (Saturday scheduled task) + hub card · CS Lesson 3 help layer (Struggling? card, helper badge, raise hand) + class checkpoint before Code.org · CS Lesson 3 tap-to-answer reflections + fun layer · Part 5 exempt from the part locks · CS Lesson 3 site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · Std 5 **Computer Science hub** + **Lesson 3: Swimming Fish** + Std 5 hub's CS card lit · Oct 3: Maths C1 Unit Test 1 at `standard5/math/tests/c1-unit1/` + hub card (gated; KV `sy2627-std5-c1-unit1-math` still to paste — open item 12) · answer-blur fix (a clicked option fades at once) + SVG labels left as drawn · Science C1 Unit Test 1 up to the readable-layout and anti-cheat rules (Science project) · earlier Oct 3: readable layout + full anti-cheat as STANDING RULES, shared save helper + Apps Script duplicate guard, KV merge rule · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
+**Last updated:** October 24, 2026 — Maths **Cycle 1 Math Test (Unit Test 2)** placed at `standard5/math/tests/c1-unit2/` + hub card lit (gated; KV `sy2627-std5-c1-unit2-math` still to paste, sitting Fri Oct 30 — open item 13; committed and pushed Oct 24) · Oct 21: CS **teacher preview** (`?preview` + teacher code opens every part of CS Lessons 3–5, sends nothing) · CS **Course E Lesson 5: Mini-Project: Career Journeys** built by the scheduled task + hub card, **committed and pushed (`ec682d5`), LIVE** · Oct 11: Maths Problem Set 2 kept on paper (no online build; Problem Set 3 goes online) · **Standard 6 is ON HALT** (home-page card shows 🔧 On Maintenance, front door only — see the entry below) · **everything through CS Course E Lesson 5 is committed, pushed and LIVE** (`ec682d5`). Latest: CS **Lesson 4: Hello World** (Saturday scheduled task) + hub card · CS Lesson 3 help layer (Struggling? card, helper badge, raise hand) + class checkpoint before Code.org · CS Lesson 3 tap-to-answer reflections + fun layer · Part 5 exempt from the part locks · CS Lesson 3 site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · Std 5 **Computer Science hub** + **Lesson 3: Swimming Fish** + Std 5 hub's CS card lit · Oct 3: Maths C1 Unit Test 1 at `standard5/math/tests/c1-unit1/` + hub card (gated; KV `sy2627-std5-c1-unit1-math` still to paste — open item 12) · answer-blur fix (a clicked option fades at once) + SVG labels left as drawn · Science C1 Unit Test 1 up to the readable-layout and anti-cheat rules (Science project) · earlier Oct 3: readable layout + full anti-cheat as STANDING RULES, shared save helper + Apps Script duplicate guard, KV merge rule · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -399,6 +399,23 @@ shared save helper (open item 10 — done); its KV entry (revised questions + ph
   subtitle and the dev bar; KV points total 38; the ADMIN dev answers match the KV key; the Worker already grades
   `mc` and `match`; the Teacher Dashboard lists every KV key, so Unit Test 1 appears there by itself (as "Unit Test 1").
 
+- **Oct 24 (this project) — Std5 Maths Cycle 1 Math Test (Unit Test 2) placed; committed and pushed Oct 24; KV entry still to paste (open item 13).**
+  Student page `standard5/math/tests/c1-unit2/index.html` (copied unchanged from the Maths `Assessment/Cycle One/tests/
+  Unit Test 2/` folder — `Std5_Math_C1_UnitTest2_Prime_Square_Cube_ONLINE_STUDENT.html`). Same secure-gate shell as
+  Unit Test 1: questions from KV `sy2627-std5-c1-unit2-math` via `mode:'questions'`, TEST_ID `sy2627-std5-c1-unit2-math`,
+  lock key `vc-quiz-std5-c1-unit2-math-v1`, `vcSubmitResult()` + `vcRecoverResult()`, back link `/standard5/math/#assessments`.
+  **Fully online, 56 marks, 15 questions (19 Worker-marked items):** Part 1 Core q1–q11 = 38 (q1 matching, 4 rows A–E,
+  8 marks; q2–q11 multiple choice, 3 each); Part 2 Higher Order q12–q15 = 18, each split into (a) and (b) multiple-choice
+  items (q12a/b 2+2, q13a/b 2+2, q14a/b 3+2, q15a/b 2+3); a question counts as answered only when both parts are.
+  **No paper part, no written or AI-marked items, the `exact` patch does not apply — Worker unchanged** (it already
+  grades `mc` and `match`). MA 1.37–1.39. Sitting **Fri Oct 30**. Hub card retitled from the July placeholder
+  "Unit Test 2 — Squares, Cubes & Patterns · MA 1.38–1.39, 2.16–2.17 · End Wk 8" to **"Cycle 1 Math Test — Prime,
+  Square & Cube Numbers" · MA 1.37–1.39 · Wk 9**, "soon" removed, 🔒 line added.
+  ADMIN copy + KV JSON in the gitignored `tests/c1-unit2/_source/` — never committed. Checked before placing: student
+  page differs from ADMIN only in title, subtitle and dev bar/script (its only `DEV_` text is the same `typeof` guard
+  Unit Test 1 has); KV items total 56; ADMIN `DEV_QUESTIONS` equals the KV `questions`; ADMIN `DEV_FIXED` matches the
+  KV answers on all 19 items; every keyed answer re-worked by hand.
+
 **🛡️ STANDING RULE — assessment resilience (Edwin, Sept 2026).** Whenever a test or quiz page is
 updated for any reason, apply the resilience fix in that same update — do not batch-patch pages:
 (1) autosave answers to the device as the student works, draft key derived from that page's own test ID,
@@ -526,6 +543,14 @@ would silently close or un-schedule the test.
    `tests/c1-unit1/_source/…_ONLINE_ADMIN.html?dev=1` locally: **Auto-Fill must score 38/38, Fill Wrong 0/38** (the ADMIN
    copy works while the test is closed). (d) Teacher Dashboard → 🔐 Open & Close Tests → Unit Test 1 should be listed;
    open it (or schedule it) on Tue Oct 13 and close it after. Part 2 (18) is marked by hand; record 38 + 18 = 56.
+13. **Deploy Maths Cycle 1 Math Test (Unit Test 2) (Edwin) — before Fri Oct 30:** (a) Cloudflare → KV `ANSWER_KEYS` →
+   add key `sy2627-std5-c1-unit2-math`, value = the whole JSON file copied exactly (`tests/c1-unit2/_source/
+   sy2627-std5-c1-unit2-math.json`, same file as in the Maths Unit Test 2 folder) — a NEW key, so pasting the whole
+   file is right; it starts `"open": false`. From then on any change MERGES (KV rule). (b) ✅ DONE Oct 24 — page, hub card and this file
+   committed and pushed (`_source/` is ignored). Check https://edlovirtualclassroom.com/standard5/math/tests/c1-unit2/ loads.
+   (c) Open `tests/c1-unit2/_source/…_ONLINE_ADMIN.html?dev=1` locally: **Auto-Fill must score 56/56, Fill Wrong 0/56**.
+   (d) Teacher Dashboard → 🔐 Open & Close Tests → the test should be listed; open it (or schedule it) on Fri Oct 30
+   and close it after. All 56 marks are online — nothing to mark by hand.
 
 ---
 
@@ -1574,6 +1599,7 @@ cd "C:\Users\Dell Latitude 3520\OneDrive\Shared with me\Code Projects\Python Pro
 | Std5 CS · Course E Lesson 5 (Career Journeys) | edlovirtualclassroom.com/standard5/computer-science/lessons/lesson05-career-journeys/ | ✅ Live (Oct 21, URL-checked) |
 | Std5 Maths Classwork Checks 1–2 | edlovirtualclassroom.com/standard5/math/classwork/… | ✅ Live (Sept 24, autosave + retry) |
 | Std5 Maths C1 Unit Test 1 | edlovirtualclassroom.com/standard5/math/tests/c1-unit1/ | ✅ Page live (Oct 10, URL-checked) — **KV entry still to paste** (open item 12); sitting Tue Oct 13 |
+| Std5 Maths Cycle 1 Math Test (Unit Test 2) | edlovirtualclassroom.com/standard5/math/tests/c1-unit2/ | ✅ Pushed Oct 24 (not yet URL-checked) — **KV entry still to paste** (open item 13); sitting Fri Oct 30 |
 | Std5 Science Lesson Wk 1 | edlovirtualclassroom.com/standard5/science/lessons/week01-technology-climate/ | ✅ Live (built July 16) |
 | Std5 Science Lesson Wk 2 | edlovirtualclassroom.com/standard5/science/lessons/week02-climate-economy/ | ✅ Live (built July 16) |
 | Std5 Science Lesson Wk 3 | edlovirtualclassroom.com/standard5/science/lessons/week03-weather-vs-climate/ | ✅ Live (built July 16) |
