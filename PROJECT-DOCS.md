@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** October 25, 2026 — Science **C1 Unit Test 2** page brought up to every standing rule (rebuilt from the Unit Test 1 page: resilience + save helper, readable layout, full anti-cheat) + photo figures for Q3 and Q11 via KV (sitting Wed Oct 28; merged KV value ready to paste — open item 14) · Oct 24: Maths **Cycle 1 Math Test (Unit Test 2)** placed at `standard5/math/tests/c1-unit2/` + hub card lit (gated; KV `sy2627-std5-c1-unit2-math` still to paste, sitting Fri Oct 30 — open item 13; committed and pushed Oct 24) · Oct 21: CS **teacher preview** (`?preview` + teacher code opens every part of CS Lessons 3–5, sends nothing) · CS **Course E Lesson 5: Mini-Project: Career Journeys** built by the scheduled task + hub card, **committed and pushed (`ec682d5`), LIVE** · Oct 11: Maths Problem Set 2 kept on paper (no online build; Problem Set 3 goes online) · **Standard 6 is ON HALT** (home-page card shows 🔧 On Maintenance, front door only — see the entry below) · **everything through CS Course E Lesson 5 is committed, pushed and LIVE** (`ec682d5`). Latest: CS **Lesson 4: Hello World** (Saturday scheduled task) + hub card · CS Lesson 3 help layer (Struggling? card, helper badge, raise hand) + class checkpoint before Code.org · CS Lesson 3 tap-to-answer reflections + fun layer · Part 5 exempt from the part locks · CS Lesson 3 site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · Std 5 **Computer Science hub** + **Lesson 3: Swimming Fish** + Std 5 hub's CS card lit · Oct 3: Maths C1 Unit Test 1 at `standard5/math/tests/c1-unit1/` + hub card (gated; KV `sy2627-std5-c1-unit1-math` still to paste — open item 12) · answer-blur fix (a clicked option fades at once) + SVG labels left as drawn · Science C1 Unit Test 1 up to the readable-layout and anti-cheat rules (Science project) · earlier Oct 3: readable layout + full anti-cheat as STANDING RULES, shared save helper + Apps Script duplicate guard, KV merge rule · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
+**Last updated:** October 25, 2026 — Science **C1 Unit Test 2** page brought up to every standing rule (rebuilt from the Unit Test 1 page: resilience + save helper, readable layout, full anti-cheat) + photo figures for Q3 and Q11 via KV (sitting Wed Oct 28; KV pasted + checked live Oct 25) · Oct 24: Maths **Cycle 1 Math Test (Unit Test 2)** placed at `standard5/math/tests/c1-unit2/` + hub card lit (gated; KV `sy2627-std5-c1-unit2-math` still to paste, sitting Fri Oct 30 — open item 13; committed and pushed Oct 24) · Oct 21: CS **teacher preview** (`?preview` + teacher code opens every part of CS Lessons 3–5, sends nothing) · CS **Course E Lesson 5: Mini-Project: Career Journeys** built by the scheduled task + hub card, **committed and pushed (`ec682d5`), LIVE** · Oct 11: Maths Problem Set 2 kept on paper (no online build; Problem Set 3 goes online) · **Standard 6 is ON HALT** (home-page card shows 🔧 On Maintenance, front door only — see the entry below) · **everything through CS Course E Lesson 5 is committed, pushed and LIVE** (`ec682d5`). Latest: CS **Lesson 4: Hello World** (Saturday scheduled task) + hub card · CS Lesson 3 help layer (Struggling? card, helper badge, raise hand) + class checkpoint before Code.org · CS Lesson 3 tap-to-answer reflections + fun layer · Part 5 exempt from the part locks · CS Lesson 3 site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · Std 5 **Computer Science hub** + **Lesson 3: Swimming Fish** + Std 5 hub's CS card lit · Oct 3: Maths C1 Unit Test 1 at `standard5/math/tests/c1-unit1/` + hub card (gated; KV `sy2627-std5-c1-unit1-math` still to paste — open item 12) · answer-blur fix (a clicked option fades at once) + SVG labels left as drawn · Science C1 Unit Test 1 up to the readable-layout and anti-cheat rules (Science project) · earlier Oct 3: readable layout + full anti-cheat as STANDING RULES, shared save helper + Apps Script duplicate guard, KV merge rule · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -214,7 +214,7 @@ shared save helper (open item 10 — done); its KV entry (revised questions + ph
   Tested headless with mocked Workers: 15 questions render, both photos load (620px desktop, 270px at 360px), no
   sideways scroll at 360px, full submit → 56/56, one Sheet row, result saved per user. **KV** (Science folder
   `_SECURE_GATE_KV/…unit2…_READY_TO_PASTE_25Oct.json`, ~427 KB): only `questions` changed — Q3 photo, Q11 2×2 photo
-  grid, Q11 stem "The pictures show…" — merged into the live value Oct 25; paste pending (open item 14).
+  grid, Q11 stem "The pictures show…" — merged into the live value, pasted and checked live Oct 25 (100% on a dev run).
 - **Aug 5 — Lesson icon library:** 71 base64-embedded SVG glyphs for Cycle 1 Science in
   `assets/lesson-icons/` (+ `manifest.json`). Raw source PNGs stay local under `_source/`.
 - **Aug 7 — Power-Ups 2A, 2B, 3A** added to the Science hub's Power-Ups tab. 3A is the first with
@@ -495,12 +495,10 @@ back. **Never paste a whole file from disk over a live entry** — the file's `"
 would silently close or un-schedule the test.
 
 **⚠️ Open items (Edwin chooses the order):**
-14. **Science C1 Unit Test 2 KV paste (before Wed Oct 28).** Merge DONE Oct 25: Edwin pasted the live value out;
-   only `questions` (Q3 + Q11 photos, Q11 stem "The pictures show…") was changed. Edwin pastes
-   `…/Science/Assessment/_SECURE_GATE_KV/sy2627-std5-c1-unit2-science_MERGED_TO_PASTE_25Oct.json` into the live key
-   (it keeps `open:false`, no schedule, `gateUpdated` as live). Until then the page shows the OLD line drawings (it still
-   works). Then a quick check with a test account (open briefly from the Teacher Dashboard, close again). Time stays
-   45 minutes (Edwin, Oct 25).
+14. ✅ **DONE Oct 25 — Science C1 Unit Test 2 KV pasted and checked live.** Edwin pasted
+   `…/Science/Assessment/_SECURE_GATE_KV/sy2627-std5-c1-unit2-science_MERGED_TO_PASTE_25Oct.json` (only `questions` changed:
+   Q3 + Q11 photos, Q11 stem "The pictures show…"); all new images show on the live page; dev-tools run scored 100% on
+   fixed and written items. Time stays 45 minutes (Edwin). Sitting Wed Oct 28 — open it from the Teacher Dashboard.
 1. ✅ **DONE Sept 29 — `backend/edlo-gemini.js` now matches the live Worker** (Edwin pasted the live code; it
    reads `CLASS_KEYS` and holds no codes) **plus the `exact` change**, ready to paste into Cloudflare. The retired
    codes remain in git history only — never reuse them. From now on: change the mirror first, paste the whole
