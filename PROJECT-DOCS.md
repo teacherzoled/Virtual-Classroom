@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** November 2, 2026 — CS lesson progress saved to the student's account is **LIVE** (Cloudflare D1 + edlo-lms Worker; CS Lessons 3–5; tested by Edwin with test.student; branch `cs-progress-d1` merged into `main`) — see the Oct 24 entry · October 25, 2026 — Science **C1 Unit Test 2** page brought up to every standing rule (rebuilt from the Unit Test 1 page: resilience + save helper, readable layout, full anti-cheat) + photo figures for Q3 and Q11 via KV (sitting Wed Oct 28; KV pasted + checked live Oct 25) · Oct 24: Maths **Cycle 1 Math Test (Unit Test 2)** placed at `standard5/math/tests/c1-unit2/` + hub card lit (gated; KV `sy2627-std5-c1-unit2-math` pasted and dev-checked by Edwin (Oct 25), sitting Fri Oct 30 — only opening it on the day is left (open item 13); committed and pushed Oct 24) · Oct 21: CS **teacher preview** (`?preview` + teacher code opens every part of CS Lessons 3–5, sends nothing) · CS **Course E Lesson 5: Mini-Project: Career Journeys** built by the scheduled task + hub card, **committed and pushed (`ec682d5`), LIVE** · Oct 11: Maths Problem Set 2 kept on paper (no online build; Problem Set 3 goes online) · **Standard 6 is ON HALT** (home-page card shows 🔧 On Maintenance, front door only — see the entry below) · **everything through CS Course E Lesson 5 is committed, pushed and LIVE** (`ec682d5`). Latest: CS **Lesson 4: Hello World** (Saturday scheduled task) + hub card · CS Lesson 3 help layer (Struggling? card, helper badge, raise hand) + class checkpoint before Code.org · CS Lesson 3 tap-to-answer reflections + fun layer · Part 5 exempt from the part locks · CS Lesson 3 site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · Std 5 **Computer Science hub** + **Lesson 3: Swimming Fish** + Std 5 hub's CS card lit · Oct 3: Maths C1 Unit Test 1 at `standard5/math/tests/c1-unit1/` + hub card (gated; KV `sy2627-std5-c1-unit1-math` still to paste — open item 12) · answer-blur fix (a clicked option fades at once) + SVG labels left as drawn · Science C1 Unit Test 1 up to the readable-layout and anti-cheat rules (Science project) · earlier Oct 3: readable layout + full anti-cheat as STANDING RULES, shared save helper + Apps Script duplicate guard, KV merge rule · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
+**Last updated:** November 2, 2026 — CS **Course E Lesson 6: Game Design** built + hub card, **committed and pushed Nov 2** (see the Nov 2 entry) · CS lesson progress saved to the student's account is **LIVE** (Cloudflare D1 + edlo-lms Worker; CS Lessons 3–5; tested by Edwin with test.student; branch `cs-progress-d1` merged into `main`) — see the Oct 24 entry · October 25, 2026 — Science **C1 Unit Test 2** page brought up to every standing rule (rebuilt from the Unit Test 1 page: resilience + save helper, readable layout, full anti-cheat) + photo figures for Q3 and Q11 via KV (sitting Wed Oct 28; KV pasted + checked live Oct 25) · Oct 24: Maths **Cycle 1 Math Test (Unit Test 2)** placed at `standard5/math/tests/c1-unit2/` + hub card lit (gated; KV `sy2627-std5-c1-unit2-math` pasted and dev-checked by Edwin (Oct 25), sitting Fri Oct 30 — only opening it on the day is left (open item 13); committed and pushed Oct 24) · Oct 21: CS **teacher preview** (`?preview` + teacher code opens every part of CS Lessons 3–5, sends nothing) · CS **Course E Lesson 5: Mini-Project: Career Journeys** built by the scheduled task + hub card, **committed and pushed (`ec682d5`), LIVE** · Oct 11: Maths Problem Set 2 kept on paper (no online build; Problem Set 3 goes online) · **Standard 6 is ON HALT** (home-page card shows 🔧 On Maintenance, front door only — see the entry below) · **everything through CS Course E Lesson 5 is committed, pushed and LIVE** (`ec682d5`). Latest: CS **Lesson 4: Hello World** (Saturday scheduled task) + hub card · CS Lesson 3 help layer (Struggling? card, helper badge, raise hand) + class checkpoint before Code.org · CS Lesson 3 tap-to-answer reflections + fun layer · Part 5 exempt from the part locks · CS Lesson 3 site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · Std 5 **Computer Science hub** + **Lesson 3: Swimming Fish** + Std 5 hub's CS card lit · Oct 3: Maths C1 Unit Test 1 at `standard5/math/tests/c1-unit1/` + hub card (gated; KV `sy2627-std5-c1-unit1-math` still to paste — open item 12) · answer-blur fix (a clicked option fades at once) + SVG labels left as drawn · Science C1 Unit Test 1 up to the readable-layout and anti-cheat rules (Science project) · earlier Oct 3: readable layout + full anti-cheat as STANDING RULES, shared save helper + Apps Script duplicate guard, KV merge rule · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -21,6 +21,8 @@ If the docs are not updated, the task is **not** finished.
 ---
 
 ## ▶️ Take-off Point — Next Session (as of October 10, 2026)
+
+**Nov 2 — CS Lesson 6 is pushed.** Edwin still to do: URL-check it, and answer the two "to check" items in its Nov 2 entry. Next: CS Lesson 7 needs its plan PDF in `_source/`.
 
 **Oct 7 — Standard 5 Computer Science online (committed and pushed; live):**
 - **New hub** `standard5/computer-science/index.html` — structure, theme bar, zoom, footer and mobile rules copied
@@ -239,9 +241,34 @@ If the docs are not updated, the task is **not** finished.
   - **Nov 2 — Edwin's retest PASSED (Lesson 4):** same parts done and same bean count in a normal window and a fresh
     InPrivate window; All Results got no new rows (the fresh window did not re-send beans). **Merged into `main` — LIVE.**
     Still to do: paste the 3 additions into the Saturday task (`Saturday-task-additions`, Oct 24 hand-over) so Lesson 6+
-    carries the account save; save the Lesson 6 lesson plan PDF into `_source/` (none there yet — the build stops without it).
+    carries the account save. (Lesson 6 plan PDF: saved, and Lesson 6 built Nov 2.)
   - **Nov 2 — edlo-lms `APPS_SCRIPT_KEY` changed from a plain Variable to a Secret (Edwin).** All three edlo-lms values that
     matter are now Secrets or non-secret (`APPS_SCRIPT_URL` stays a Variable — it is only an address).
+
+- **Nov 2 — CS Course E Lesson 6: Game Design built on Edwin's request; committed and pushed from this project (Nov 2).**
+  `standard5/computer-science/lessons/lesson06-game-design/index.html` + one new hub card. Cloned from Lesson 3 on `main`:
+  themes, sign-in + Next student + guest offer, beans, part locks + `ALWAYS_OPEN = ["s-build"]`, tap reflections, fun layer,
+  help layer, class checkpoint, teacher preview, quiz, record book, PDF and the account save (`SYNC` block) all kept. Lesson's own
+  content + the sprite stage changed (groups, subject, y counted from the bottom). `edlo-utils.js`, `backend/` and Lessons 3–5 untouched.
+  Sources: `_source/Game-Design.pdf` (plan, 45 min) + Lesson 6's section of the slide deck.
+  Objectives (lead-in carries the methods and materials): create a new sprite with a chosen costume at a chosen location · create a
+  group of sprites with one block · control one sprite from a group with an event, while the other sprites stay the same. Checked by
+  Game Scene challenges + quiz q4, q5, q7, q8, q9, q10.
+  7 parts: Warm Up (penguin scene + tap sentences, instructions vs code, code order question, property/behavior/event sort 8) · Vocabulary
+  (Sprite, Behavior, Event + Costume, Subject sprite) · Lots of Sprites (how events work, strawberry demo: group, sprite X vs subject; 4
+  predictions; checkpoint) · Code.org levels 1–15 (1 Video · 2–4 Setup · 5–7 Behaviors · 8 Video · 9–14 Events · 15 Practice Choices) ·
+  Game Scene Builder (offline, always open; 5 challenges) · Wrap Up (Code A/B/C tap review, goals sentence, ONE typed sentence "what did
+  you build in your game scene?") · Quiz (10 MCQ). Beans: sort 8 · code order 4 · predict 8 · builder 5×2 = 30 (lesson_key
+  `std5-cs-ce-l06`, lo `CS-E-L06`). Badge "Game Designer" 🎮. Store key `edlo-csE-L06-game-design-v1`. Checkpoint after Part 3 — code in
+  `_source/checkpoint-codes.txt`.
+  Level count: the plan's 15 was used. The slides mention a "Level 16", but `levels/15` opens on Code.org and `levels/16` does not.
+  The plan pauses the class after Level 7 to preview events; on this page that preview sits in Part 3, before the checkpoint.
+  **To check (Edwin):** (1) `y` in this lesson counts from the BOTTOM, as the slide's own code shows (penguin at the bottom = y 53). Lesson 3's
+  and Lesson 5's builders say "top ↕ bottom", and Lesson 3's quiz q5 says y goes top to bottom. Not changed. (2) The sources say only that
+  subject and object give "more precise control"; "the sprite the event happened to" is not in them. Check against the Level 8 video.
+  Tested in headless Chromium with a mocked record book: 89/89 checks passed (locks, checkpoint, help, tap reflections, 30 beans + no repeat on
+  reload, quiz pass/fail + one row per attempt, PDF, print slip, preview, guest, 360px, no page errors, account save). Not tested against the
+  real Worker or the real Code.org levels while signed in.
 
 - **Oct 11 — Maths Problem Set 2 stays on PAPER (Edwin's decision).** "Odd, Even, Prime & Composite" (MA 1.37
   L1–2, 10 items / 38 marks, Week 04 pack `08_Std5_Homework_ProblemSet2_…docx` + answer key) goes home Fri Oct 16,
@@ -1202,7 +1229,8 @@ Virtual-Classroom/
 │       └── lessons/
 │           ├── lesson03-swimming-fish/ ← Code.org Course E L3 · quiz + PDF for Google Classroom
 │           ├── lesson04-hello-world/   ← Code.org Course E L4 · Hello World (events) · quiz + PDF (live, Oct 10)
-│           └── lesson05-career-journeys/ ← Code.org Course E L5 · Mini-Project: Career Journeys · quiz + PDF (live, Oct 21)
+│           ├── lesson05-career-journeys/ ← Code.org Course E L5 · Mini-Project: Career Journeys · quiz + PDF (live, Oct 21)
+│           └── lesson06-game-design/   ← Code.org Course E L6 · Game Design (groups, subject) · quiz + PDF (pushed Nov 2)
 │
 ├── standard6/
 │   ├── index.html                      ← Standard 6 hub (subject cards)
@@ -1705,6 +1733,7 @@ cd "C:\Users\Dell Latitude 3520\OneDrive\Shared with me\Code Projects\Python Pro
 | Course E L3 · Swimming Fish with Sprite Lab | standard5/computer-science/lessons/lesson03-swimming-fish/ | 🟡 Built Oct 7, 2026 | warm-up sort + exit ticket, flip-card vocab, sprite demo + predict, Code.org L1–9 tracker, offline Fish Tank Builder, reflection, 10-Q quiz | PDF → Google Classroom |
 | Course E L4 · Hello World | standard5/computer-science/lessons/lesson04-hello-world/ | ✅ Live Oct 10, 2026 (Saturday task; reviewed + pushed) | event/action sort + event question, flip-card vocab, events demo (say / when clicked / when touches) + predict + checkpoint, Code.org L1–14 tracker, offline Hello World Builder, tap reflections + 1 typed line, 10-Q quiz | PDF → Google Classroom |
 | Course E L5 · Mini-Project: Career Journeys | standard5/computer-science/lessons/lesson05-career-journeys/ | ✅ Live Oct 21, 2026 (Saturday task; pushed `ec682d5`) | career-use match, flip-card vocab + which-word, teaching-career example (background / say / when clicked) + predict + tap project plan + checkpoint, Code.org L1–9 tracker (L10 optional) + career-journey sentences, offline Career Scene Builder, tap share-out + 1 typed line, 10-Q quiz | PDF → Google Classroom |
+| Course E L6 · Game Design | standard5/computer-science/lessons/lesson06-game-design/ | 🟡 Pushed Nov 2, 2026 (not yet URL-checked) | scene + code order + property/behavior/event sort, flip-card vocab, strawberry demo + predict + checkpoint, Code.org L1–15 tracker, offline Game Scene Builder, Code A/B/C tap review + 1 typed line, 10-Q quiz | PDF → Google Classroom |
 
 ### Spanish
 | Lesson | Folder | Status | Activities | AI Feedback |
