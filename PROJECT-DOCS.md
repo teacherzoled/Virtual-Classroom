@@ -22,7 +22,7 @@ If the docs are not updated, the task is **not** finished.
 
 ## ▶️ Take-off Point — Next Session (as of October 10, 2026)
 
-**Nov 2 — CS Lesson 6 is pushed.** Edwin still to do: URL-check it, and answer the "to check" item in its Nov 2 entry. Next: CS Lesson 7 needs its plan PDF in `_source/`.
+**Nov 2 — CS Lesson 6 is pushed.** Edwin still to do: URL-check it. Next: CS Lesson 7 needs its plan PDF in `_source/`.
 
 **Oct 7 — Standard 5 Computer Science online (committed and pushed; live):**
 - **New hub** `standard5/computer-science/index.html` — structure, theme bar, zoom, footer and mobile rules copied
@@ -255,7 +255,7 @@ If the docs are not updated, the task is **not** finished.
   group of sprites with one block · control one sprite from a group with an event, while the other sprites stay the same. Checked by
   Game Scene challenges + quiz q4, q5, q7, q8, q9, q10.
   7 parts: Warm Up (penguin scene + tap sentences, instructions vs code, code order question, property/behavior/event sort 8) · Vocabulary
-  (Sprite, Behavior, Event + Costume, Subject sprite) · Lots of Sprites (how events work, strawberry demo: group, sprite X vs subject; 4
+  (Sprite, Behavior, Event + Costume, Subject sprite) · Lots of Sprites (how events work, strawberry demo: grid group, sprite X vs clicked sprite; 4
   predictions; checkpoint) · Code.org levels 1–15 (1 Video · 2–4 Setup · 5–7 Behaviors · 8 Video · 9–14 Events · 15 Practice Choices) ·
   Game Scene Builder (offline, always open; 5 challenges) · Wrap Up (Code A/B/C tap review, goals sentence, ONE typed sentence "what did
   you build in your game scene?") · Quiz (10 MCQ). Beans: sort 8 · code order 4 · predict 8 · builder 5×2 = 30 (lesson_key
@@ -263,11 +263,18 @@ If the docs are not updated, the task is **not** finished.
   `_source/checkpoint-codes.txt`.
   Level count: the plan's 15 was used. The slides mention a "Level 16", but `levels/15` opens on Code.org and `levels/16` does not.
   The plan pauses the class after Level 7 to preview events; on this page that preview sits in Part 3, before the checkpoint.
-  **To check (Edwin):** The sources say only that
-  subject and object give "more precise control"; "the sprite the event happened to" is not in them. Check against the Level 8 video.
   Tested in headless Chromium with a mocked record book: 89/89 checks passed (locks, checkpoint, help, tap reflections, 30 beans + no repeat on
   reload, quiz pass/fail + one row per attempt, PDF, print slip, preview, guest, 360px, no page errors, account save). Not tested against the
   real Worker or the real Code.org levels while signed in.
+
+- **Nov 2 — CS Lesson 6 corrected from the live Code.org levels (committed and pushed).** Edwin signed in with his teacher account in the
+  built-in browser; Claude read Levels 2–7 and 10–15 (instructions, hints, starter code), no level completed, no code run, no roster or section
+  opened. Level 8 is a video (not read); Level 9's data did not load. Found and fixed: (1) `when clicked` uses the block **clicked sprite**, not
+  "subject sprite" (Levels 11–12); subject and object sprites belong to `when touches` (Level 14) — word card, Part 3, builder and quiz q10 updated.
+  (2) Level 15 offers 5 activities, "complete as many as you can". (3) The levels make groups with **make sprites using grid** (Levels 4, 7, 11, 12,
+  14): the demo now uses it and the builder has a tappable 8×8 grid group; `make N new` stays as the random group (Code B on the review slide).
+  Tested in headless Chromium with a mocked record book: 103/103 checks passed.
+  **Decided (Edwin, Nov 2): read the lesson's live levels in every future CS build**; the plan still decides objectives and teaching order.
 
 - **Nov 2 — CS Lessons 3, 4, 5: `y` now counts from the BOTTOM, as on Code.org (committed and pushed).** Edwin tested on Code.org (Lesson 3,
   Level 3): a sprite at (200, 149) sits about 63% of the way down the stage, which only fits y counted from the bottom. Lesson 6 already did this.
@@ -1236,7 +1243,7 @@ Virtual-Classroom/
 │           ├── lesson03-swimming-fish/ ← Code.org Course E L3 · quiz + PDF for Google Classroom
 │           ├── lesson04-hello-world/   ← Code.org Course E L4 · Hello World (events) · quiz + PDF (live, Oct 10)
 │           ├── lesson05-career-journeys/ ← Code.org Course E L5 · Mini-Project: Career Journeys · quiz + PDF (live, Oct 21)
-│           └── lesson06-game-design/   ← Code.org Course E L6 · Game Design (groups, subject) · quiz + PDF (pushed Nov 2)
+│           └── lesson06-game-design/   ← Code.org Course E L6 · Game Design (groups, clicked sprite) · quiz + PDF (pushed Nov 2)
 │
 ├── standard6/
 │   ├── index.html                      ← Standard 6 hub (subject cards)

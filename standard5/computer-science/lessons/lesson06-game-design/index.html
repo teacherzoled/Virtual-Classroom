@@ -346,6 +346,9 @@ body.theme-night .btn.ok{color:#0d1f1a}
   #printArea h3{font-family:Arial,sans-serif}
   #printArea .ans{border:1px solid #000;padding:6px 8px;min-height:30px;white-space:pre-wrap;margin:2px 0 8px}
 }
+.gridpick{display:grid;grid-template-columns:repeat(8,22px);gap:2px;margin-top:4px}
+.gridpick button{width:22px;height:22px;padding:0;border:1px solid #888;border-radius:3px;background:#fff;cursor:pointer}
+.gridpick button.on{background:#3b5bdb;border-color:#3b5bdb}
 </style>
 </head>
 <body class="theme-night">
@@ -500,14 +503,14 @@ body.theme-night .btn.ok{color:#0d1f1a}
       <h3>Choose the blocks</h3>
       <div class="toggles">
         <label><input type="checkbox" id="dOne" checked> make new <b>frog</b> sprite at (200, 60)</label>
-        <label><input type="checkbox" id="dGroup" checked> make <b>6</b> new medium <b>strawberry</b> sprites</label>
+        <label><input type="checkbox" id="dGroup" checked> make <b>strawberry</b> sprites <b>using grid</b></label>
         <label><input type="checkbox" id="dBeh"> sprite strawberry begins <b>wandering</b></label>
       </div>
       <div class="field" style="margin-top:8px"><label for="dEvent">when strawberry clicked…</label>
         <select id="dEvent">
           <option value="none">(no event)</option>
           <option value="allSpin">sprite strawberry begins spinning right</option>
-          <option value="subjectSpin">subject sprite begins spinning right</option>
+          <option value="subjectSpin">clicked sprite begins spinning right</option>
         </select>
       </div>
       <h3>The program</h3>
@@ -528,7 +531,7 @@ body.theme-night .btn.ok{color:#0d1f1a}
     </div>
     <div class="card tip">
       <h3>🧰 The mini-toolbox</h3>
-      <p>An event block has a mini-toolbox that opens when you click the <b>+</b>. Inside are the <b>subject</b> and <b>object</b> sprites. Drag the <b>subject</b> into a block inside the event to give an instruction to one sprite at a time: the sprite the event happened to.</p>
+      <p>An event block has a mini-toolbox that opens when you click the <b>+</b>. In a <b>when clicked</b> event it holds the <b>clicked sprite</b> block. Drag it into a block inside the event to give an instruction to only the sprite that was clicked. A <b>when touches</b> event holds <b>subject sprite</b> and <b>object sprite</b> instead.</p>
     </div>
   </div>
 
@@ -545,7 +548,7 @@ body.theme-night .btn.ok{color:#0d1f1a}
   <h2>Part 4 · Game Design on Code.org</h2>
   <div class="card info">
     <p class="goal">Goal: Learn the two big ideas of Sprite Lab: sprites and behaviors. Then make your sprites interactive with events.</p>
-    <p>Follow the instructions on each level, finish it, then tick the box. In Level 15, choose the project you like best.</p>
+    <p>Follow the instructions on each level, finish it, then tick the box. In Level 15, choose from 5 activities and complete as many as you can.</p>
     <p class="muted">Sign in to Code.org with your class login first. <a id="lessonLink" target="_blank" rel="noopener">Open the whole lesson on Code.org ↗</a></p>
   </div>
   <div class="cards" id="levelCards"></div>
@@ -556,7 +559,7 @@ body.theme-night .btn.ok{color:#0d1f1a}
       <ol class="clean">
         <li>Click the <b>light bulb</b> for a hint.</li>
         <li>Read the feedback in the <b>yellow box</b> under the instructions.</li>
-        <li>Look back at <b>Part 3</b> for events and the subject sprite.</li>
+        <li>Look back at <b>Part 3</b> for events and the clicked sprite.</li>
         <li>Ask your partner, then use <b>🙋 I need help</b>.</li>
       </ol>
     </div>
@@ -572,7 +575,7 @@ body.theme-night .btn.ok{color:#0d1f1a}
   <span class="time">⏱ practice &amp; free play</span>
   <h2>Part 5 · Game Scene Builder</h2>
   <div class="card info">
-    <p>Here is a program with one penguin. Build your own game scene with new sprites and a group of sprites, then press <b>▶ Run</b>. Finish all 5 challenges!</p>
+    <p>Here is a program with one penguin. Build your own game scene with new sprites and a group of sprites (use the grid to choose exactly where they go), then press <b>▶ Run</b>. Finish all 5 challenges!</p>
   </div>
 
   <div class="lab">
@@ -592,7 +595,8 @@ body.theme-night .btn.ok{color:#0d1f1a}
     <div class="codecol">
       <div class="btnrow">
         <button class="btn" id="addSprite">＋ Make a new sprite</button>
-        <button class="btn" id="addGroup">＋ Make a group</button>
+        <button class="btn" id="addGroup">＋ Make a grid group</button>
+        <button class="btn" id="addRandom">＋ Make a random group</button>
         <button class="btn alt" id="resetBuild">Start over</button>
       </div>
       <div class="sprites" id="spriteEditor"></div>
@@ -1152,8 +1156,9 @@ const VOCAB = [
   {w:"Behavior", d:"An action that a sprite performs continuously until it is told to stop.", e:"“Patrolling” keeps going until the penguin is told to stop."},
   {w:"Event", d:"An action that causes something to happen.", e:"Clicking a strawberry can make it begin spinning."},
   {w:"Costume", d:"What determines how a sprite appears.", e:"I changed the sprite’s costume from a frog to a bear.", extra:true},
-  {w:"Subject sprite", d:"In the event’s mini-toolbox: the sprite the event happened to.", e:"In “when strawberry clicked”, the subject is the strawberry you clicked.", extra:true}
+  {w:"Clicked sprite", d:"A block in the mini-toolbox of a “when clicked” event: only the sprite that was clicked.", e:"“Change clicked sprite size” grows only the strawberry you clicked.", extra:true}
 ];
+if(S.flipped && S.flipped["Subject sprite"]) S.flipped["Clicked sprite"] = true;   /* the card’s first name (Nov 2): keep the flip */
 $("vocabCards").innerHTML = VOCAB.map((v,i)=>`
   <div class="flipcol ${v.extra?"extra":""}">
     <button type="button" class="flip" aria-label="Flip card: ${esc(v.w)}">
@@ -1170,17 +1175,17 @@ $("vocabCards").querySelectorAll(".flip").forEach((b,i)=>b.addEventListener("cli
 }));
 
 /* ---------- Sprite engine ----------
-   A program is a list of make-blocks: {kind:"one", x, y} or {kind:"group", count, sizeWord}, each with a costume,
+   A program is a list of make-blocks: {kind:"one", x, y} or {kind:"grid", cells} or {kind:"group", count, sizeWord}, each with a costume,
    behaviors and onClick. As in the Lesson 6 slides, x runs left to right and y runs from the BOTTOM up.
-   "sprite X begins…" and "when X clicked" name every sprite with that costume; the subject is only the clicked one. */
+   "sprite X begins…" and "when X clicked" name every sprite with that costume; the clicked sprite is only the one clicked. */
 const COSTUMES = {
   penguin:{e:"🐧",n:"penguin"}, firebox:{e:"🔥",n:"fire box"}, strawberry:{e:"🍓",n:"strawberry"}, gem:{e:"💎",n:"gem"},
   frog:{e:"🐸",n:"frog"}, bear:{e:"🐻",n:"bear"}, ghost:{e:"👻",n:"ghost"}, robot:{e:"🤖",n:"robot"}, star:{e:"⭐",n:"star"}
 };
 const BEHAVIORS = {patrol:"patrolling", wander:"wandering", spin:"spinning right", jitter:"jittering"};
 const SIZE_WORDS = {small:60, medium:100, large:150};
-const CLICKS = {none:"(no event)", subjectSpin:"subject begins spinning right", subjectSize:"change subject size by 10",
-                subjectStop:"subject stops all behaviors", allSpin:"every sprite with this costume begins spinning right"};
+const CLICKS = {none:"(no event)", subjectSpin:"clicked sprite begins spinning right", subjectSize:"change clicked sprite size by 10",
+                subjectStop:"clicked sprite stops all behaviors", allSpin:"every sprite with this costume begins spinning right"};
 const EMOJI_FONT = '"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
 
 function makeStage(canvas, hooks){
@@ -1229,7 +1234,10 @@ function makeStage(canvas, hooks){
       angle:0,dir:1,h:Math.random()*Math.PI*2});
     const out = [];
     program.forEach(p=>{
-      if(p.kind==="group"){
+      if(p.kind==="grid"){
+        /* an 8 by 8 grid over the stage, as in the Code.org block; row 0 is the top row */
+        (p.cells||[]).forEach(c=>{ const [r,k] = String(c).split(",").map(Number); out.push(make(p, 25+k*50, 25+r*50, 80, true, out.length)); });
+      } else if(p.kind==="group"){
         /* random places, one per cell of a loose grid, so sprites do not sit on top of each other */
         const cells = shuffle(Array.from({length:20},(_,i)=>i)).slice(0,+p.count);
         cells.forEach(c=>out.push(make(p, 50+(c%5)*75+(Math.random()-.5)*20, 70+Math.floor(c/5)*80+(Math.random()-.5)*20, SIZE_WORDS[p.sizeWord]||100, true, out.length)));
@@ -1271,7 +1279,8 @@ function renderBlocks(program, el, background){
   if(background) h += `<span class="blk bh">set background to ${slot(background)}</span>`;
   program.forEach(p=>{
     const nm = spriteLabel(p.costume);
-    h += p.kind==="group" ? `<span class="blk sp">make ${slot(p.count)} new ${slot(p.sizeWord)} ${slot(nm)} sprites</span>`
+    h += p.kind==="grid" ? `<span class="blk sp">make ${slot(nm)} sprites using grid ${slot((p.cells||[]).length+" boxes")}</span>`
+       : p.kind==="group" ? `<span class="blk sp">make ${slot(p.count)} new ${slot(p.sizeWord)} ${slot(nm)} sprites</span>`
                           : `<span class="blk sp">make new ${slot(nm)} sprite at ${slot("("+p.x+", "+p.y+")")}</span>`;
   });
   program.forEach(p=>{ p.behaviors.forEach(b=>{ h += `<span class="blk bh">sprite ${slot(spriteLabel(p.costume))} begins ${slot(BEHAVIORS[b])}</span>`; }); });
@@ -1281,9 +1290,9 @@ function renderBlocks(program, el, background){
       const nm = spriteLabel(p.costume);
       h += `<div class="stack ev"><span class="blk ev">when ${slot(nm)} clicked</span><div class="body">`;
       h += p.onClick==="allSpin" ? `<span class="blk bh">sprite ${slot(nm)} begins ${slot("spinning right")}</span>`
-         : p.onClick==="subjectSpin" ? `<span class="blk bh">${slot("subject")} begins ${slot("spinning right")}</span>`
-         : p.onClick==="subjectSize" ? `<span class="blk bh">change ${slot("subject")} size by ${slot(10)}</span>`
-         : `<span class="blk bh">${slot("subject")} stops all behaviors</span>`;
+         : p.onClick==="subjectSpin" ? `<span class="blk bh">${slot("clicked sprite")} begins ${slot("spinning right")}</span>`
+         : p.onClick==="subjectSize" ? `<span class="blk bh">change ${slot("clicked sprite")} size by ${slot(10)}</span>`
+         : `<span class="blk bh">${slot("clicked sprite")} stops all behaviors</span>`;
       h += '</div></div>';
     }
   });
@@ -1307,31 +1316,31 @@ const demo = makeStage($("demoStage"), {click: s=>{
 function demoProgram(){
   const P = [];
   if($("dOne").checked) P.push({kind:"one",costume:"frog",x:200,y:60,behaviors:[],onClick:"none"});
-  if($("dGroup").checked) P.push({kind:"group",costume:"strawberry",count:6,sizeWord:"medium",behaviors:$("dBeh").checked?["wander"]:[],onClick:$("dEvent").value});
+  if($("dGroup").checked) P.push({kind:"grid",costume:"strawberry",cells:["1,1","1,4","1,6","3,1","3,4","3,6"],behaviors:$("dBeh").checked?["wander"]:[],onClick:$("dEvent").value});
   return P;
 }
 function demoRefresh(){ renderBlocks(demoProgram(), $("demoCode")); }
 ["dOne","dGroup","dBeh","dEvent"].forEach(id=>$(id).addEventListener("change",()=>{ demoRefresh(); if(demo.running){ demo.stop(); $("demoStatus").textContent="You changed the program. Press Run again."; } }));
 $("demoRun").onclick = ()=>{
   const p = demoProgram(); demo.run(p);
-  const g = p.find(x=>x.kind==="group");
+  const g = p.find(x=>x.kind==="grid");
   $("demoStatus").textContent = !p.length ? "No blocks are on, so there are no sprites. Turn on a make block."
     : !g ? "One block made one sprite, at the location in the block."
     : g.onClick!=="none" ? "Running! Click one strawberry and watch all of them."
-    : "One block made 6 strawberries, in random places.";
+    : "One block made 6 strawberries, in the boxes chosen on its grid.";
 };
 $("demoReset").onclick = ()=>{ demo.clear(); $("demoStatus").textContent="Stage cleared. Press Run to start the program."; };
 demoRefresh(); demo.load([]); demo.render();
 
 const PREDICT = [
-  {q:"Which block makes 6 strawberries at one time?", o:["make new strawberry sprite at (200, 60)","make 6 new medium strawberry sprites","sprite strawberry begins wandering"], a:1,
-   why:"One “make 6 new” block makes the whole group. Test it: turn the block on and press Run."},
+  {q:"Which block makes 6 strawberries at one time?", o:["make new strawberry sprite at (200, 60)","make strawberry sprites using grid","sprite strawberry begins wandering"], a:1,
+   why:"One “using grid” block makes the whole group, one sprite in each box you choose. Test it: turn the block on and press Run."},
   {q:"Turn on “sprite strawberry begins wandering”. Which strawberries will wander?", o:["Only the first strawberry","Only the last strawberry","All 6 strawberries"], a:2,
    why:"The block names every strawberry, so the whole group begins the behavior."},
   {q:"Choose “sprite strawberry begins spinning right” in the event. Run it and click ONE strawberry. What happens?", o:["Only the clicked strawberry spins","Every strawberry spins","Nothing spins"], a:1,
    why:"“Sprite strawberry” names every strawberry, so all of them begin spinning."},
-  {q:"You want ONLY the strawberry you clicked to spin. What do you put in the event?", o:["The subject sprite from the mini-toolbox","A second “make 6 new” block","A bigger strawberry costume"], a:0,
-   why:"The subject is the sprite the event happened to, so only that one spins. Choose “subject sprite begins spinning right” and test it."}
+  {q:"You want ONLY the strawberry you clicked to spin. What do you put in the event?", o:["The clicked sprite block from the mini-toolbox","A second “using grid” block","A bigger strawberry costume"], a:0,
+   why:"The clicked sprite is only the one that was clicked, so only that one spins. Choose “clicked sprite begins spinning right” and test it."}
 ];
 function renderPredict(){
   $("predictBox").innerHTML = PREDICT.map((p,i)=>{
@@ -1366,7 +1375,7 @@ const LEVEL_GROUPS = [
   {tag:"Skill Building", title:"Sprite Behaviors", lv:[5,6,7]},
   {tag:"Video", title:"Lots of Sprites", lv:[8]},
   {tag:"Skill Building", title:"Events", lv:[9,10,11,12,13,14]},
-  {tag:"Practice", title:"Practice Choices: pick one project", lv:[15]}
+  {tag:"Practice", title:"Practice Choices: complete as many as you can", lv:[15]}
 ];
 const ALL_LEVELS = LEVEL_GROUPS.reduce((a,g)=>a.concat(g.lv),[]);
 function levelsDone(){ return ALL_LEVELS.filter(n=>S.levels[n]).length; }
@@ -1389,7 +1398,7 @@ const CHALLENGES = [
   {id:"place",   t:"Give a new sprite your own costume and location (not a penguin; move its x or y)."},
   {id:"group",   t:"Make a group of 3 or more sprites with one block."},
   {id:"behave",  t:"Make your group begin a behavior."},
-  {id:"subject", t:"Control one sprite from your group: choose a “subject” action for the event, press Run and click one sprite."}
+  {id:"subject", t:"Control one sprite from your group: choose a “clicked sprite” action for the event, press Run and click one sprite."}
 ];
 function chalDone(){ return CHALLENGES.filter(c=>S.challenges[c.id]).length; }
 function renderChal(){
@@ -1398,26 +1407,27 @@ function renderChal(){
 }
 function award(id){ if(!S.challenges[id]){ S.challenges[id]=true; save(); renderChal(); settleBeans(); } }
 function checkChallengesOnRun(){
-  const P = S.scene, ones = P.filter(p=>p.kind==="one"), groups = P.filter(p=>p.kind==="group");
+  const P = S.scene, ones = P.filter(p=>p.kind==="one"), groups = P.filter(p=>p.kind!=="one");
   if(ones.length >= 2) award("new");
   if(ones.some(p=>p.costume!=="penguin" && p.moved)) award("place");
-  if(groups.some(p=>+p.count >= 3)) award("group");
+  if(groups.some(p=>(p.kind==="grid" ? (p.cells||[]).length : +p.count) >= 3)) award("group");
   if(groups.some(p=>p.behaviors.length >= 1)) award("behave");
 }
 const build = makeStage($("buildStage"), {click: s=>{
   const nm = COSTUMES[s.costume].n;
   if(s.onClick==="none"){ $("buildStatus").textContent = "Nothing happened. This sprite has no “when clicked” event."; return; }
-  if(s.onClick==="allSpin"){ $("buildStatus").textContent = "Every "+nm+" began spinning. To control only one, choose a “subject” action."; return; }
-  $("buildStatus").textContent = "You clicked one "+nm+". Only that sprite changed: it is the subject.";
+  if(s.onClick==="allSpin"){ $("buildStatus").textContent = "Every "+nm+" began spinning. To control only one, choose a “clicked sprite” action."; return; }
+  $("buildStatus").textContent = "You clicked one "+nm+". Only that sprite changed: it is the clicked sprite.";
   if(s.group) award("subject");
 }});
 function renderEditor(){
   const costumeOpts = c => Object.keys(COSTUMES).map(k=>`<option value="${k}" ${k===c?"selected":""}>${COSTUMES[k].e} ${COSTUMES[k].n}</option>`).join("");
   $("spriteEditor").innerHTML = S.scene.map((p,i)=>`
     <div class="spcard" data-i="${i}">
-      <div class="sphead"><b>${COSTUMES[p.costume].e} ${p.kind==="group"?"Group":"Sprite"} ${i+1}</b>${S.scene.length>1?`<button type="button" class="del" data-del="${i}">Delete</button>`:""}</div>
+      <div class="sphead"><b>${COSTUMES[p.costume].e} ${p.kind==="one"?"Sprite":"Group"} ${i+1}</b>${S.scene.length>1?`<button type="button" class="del" data-del="${i}">Delete</button>`:""}</div>
       <div class="field"><label>Costume</label><select data-k="costume">${costumeOpts(p.costume)}</select></div>
-      ${p.kind==="group" ? `
+      ${p.kind==="grid" ? `
+      <div class="field"><label>Using grid: tap the boxes where sprites go</label><div class="gridpick">${Array.from({length:64},(_,n)=>{ const c=Math.floor(n/8)+","+(n%8); return `<button type="button" data-cell="${c}" class="${(p.cells||[]).includes(c)?"on":""}" aria-label="Row ${Math.floor(n/8)+1}, column ${n%8+1}"></button>`; }).join("")}</div></div>` : p.kind==="group" ? `
       <div class="field"><label>How many: <span>${p.count}</span></label><input type="range" min="2" max="8" step="1" value="${p.count}" data-k="count"></div>
       <div class="field"><label>Size</label><select data-k="sizeWord">${Object.keys(SIZE_WORDS).map(w=>`<option value="${w}" ${w===p.sizeWord?"selected":""}>${w}</option>`).join("")}</select></div>` : `
       <div class="field"><label>Location x (left ↔ right): <span>${p.x}</span></label><input type="range" min="30" max="370" step="10" value="${p.x}" data-k="x"></div>
@@ -1433,12 +1443,17 @@ function renderEditor(){
         p[k] = inp.type==="range" ? +inp.value : inp.value;
         if(k==="x" || k==="y") p.moved = true;
         if(inp.type==="range") inp.previousElementSibling.querySelector("span").textContent = inp.value;
-        if(k==="costume") card.querySelector(".sphead b").textContent = COSTUMES[p.costume].e+" "+(p.kind==="group"?"Group":"Sprite")+" "+(i+1);
+        if(k==="costume") card.querySelector(".sphead b").textContent = COSTUMES[p.costume].e+" "+(p.kind==="one"?"Sprite":"Group")+" "+(i+1);
         edited();
       });
     });
     card.querySelectorAll("[data-b]").forEach(cb=>cb.addEventListener("change",()=>{
       const b = cb.dataset.b; p.behaviors = p.behaviors.filter(x=>x!==b); if(cb.checked) p.behaviors.push(b); edited();
+    }));
+    card.querySelectorAll("[data-cell]").forEach(b=>b.addEventListener("click",()=>{
+      const c = b.dataset.cell; p.cells = p.cells || [];
+      if(p.cells.includes(c)) p.cells = p.cells.filter(x=>x!==c); else p.cells.push(c);
+      b.classList.toggle("on", p.cells.includes(c)); edited();
     }));
     const del = card.querySelector("[data-del]");
     if(del) del.addEventListener("click",()=>{ S.scene.splice(i,1); edited(); renderEditor(); });
@@ -1456,6 +1471,12 @@ $("addSprite").onclick = ()=>{
   edited(); renderEditor();
 };
 $("addGroup").onclick = ()=>{
+  if(sceneFull()) return;
+  const pool = ["gem","strawberry","star","ghost","bear","robot"];
+  S.scene.push({kind:"grid",costume:pool[S.scene.length % pool.length],cells:["2,2","2,5","5,2","5,5"],behaviors:[],onClick:"none"});
+  edited(); renderEditor();
+};
+$("addRandom").onclick = ()=>{
   if(sceneFull()) return;
   const pool = ["gem","strawberry","star","ghost","bear","robot"];
   S.scene.push({kind:"group",costume:pool[S.scene.length % pool.length],count:5,sizeWord:"medium",behaviors:[],onClick:"none"});
@@ -1602,10 +1623,10 @@ const QUIZ = [
    why:"With this block he chooses the number of sprites, and they are placed at random."},
   {id:"q8", q:"Kevin wants to arrange 8 enemies in a perfect line. Which block is best?", o:["make 8 new medium enemy sprites","sprite enemy begins wandering","when enemy clicked","make enemy sprites using grid"], a:3, part:"Part 6: Wrap Up",
    why:"With the grid block he can place many sprites exactly where he wants them."},
-  {id:"q9", q:"Ana made 6 strawberries with one block. Her event is: when strawberry clicked → sprite strawberry begins spinning. She clicks one. What happens?", o:["Only the clicked strawberry spins","No strawberry spins","Every strawberry spins","A new strawberry is made"], a:2, part:"Part 3: Lots of Sprites",
+  {id:"q9", q:"Ana made 6 strawberries with one grid block. Her event is: when strawberry clicked → sprite strawberry begins spinning. She clicks one. What happens?", o:["Only the clicked strawberry spins","No strawberry spins","Every strawberry spins","A new strawberry is made"], a:2, part:"Part 3: Lots of Sprites",
    why:"“Sprite strawberry” names every strawberry, so all of them begin spinning."},
-  {id:"q10", q:"Ana wants ONLY the strawberry she clicks to spin. What should she use inside her event?", o:["A second “make new” block","The subject sprite from the mini-toolbox","A different background","A bigger size for all of them"], a:1, part:"Part 3: Lots of Sprites",
-   why:"The subject is the sprite the event happened to, so only that sprite spins."}
+  {id:"q10", q:"Ana wants ONLY the strawberry she clicks to spin. What should she use inside her event?", o:["A second “make new” block","The clicked sprite block from the mini-toolbox","A different background","A bigger size for all of them"], a:1, part:"Part 3: Lots of Sprites",
+   why:"The clicked sprite is only the one that was clicked, so only that sprite spins."}
 ];
 let current = null;
 function renderQuizStart(){
