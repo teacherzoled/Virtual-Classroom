@@ -1453,6 +1453,7 @@ function settleBeans(){
       .then(res=>{
         PENDING.delete(a.act); pendingBeans -= give;
         if(res && res.ok){
+          if(SYNC && SYNC.beansChanged) SYNC.beansChanged();   /* bean lock written: put it on the account now */
           const g = (res.granted != null) ? res.granted : give;
           if(g > 0){ toast("🌱 +" + g + " bean" + (g===1?"":"s") + " for your team!"); refreshTeam(1500); }
           else if(e > 0) toast("🌱 You reached this lesson’s " + LESSON_CAP + "-bean cap. Keep going for practice!");

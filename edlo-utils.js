@@ -447,7 +447,7 @@ function vcLessonSync(opts) {
   var lessonKey = String(opts.lessonKey), storeKey = String(opts.storeKey);
   var metaKey = storeKey + '::sync', guardKey = 'vc-sync-reload::' + storeKey;
   var token = session.token;
-  var stopped = false, booted = false, lastPush = 0, timer = 0, inFlight = null, again = false;
+  var stopped = false, booted = false, lastPush = 0, timer = 0, inFlight = null, again = false, urgentAgain = false;
   var preTouched = false;
   var staleTab = false;     /* the lesson changed in another tab: this tab must not save over it */   /* the page saved while the account was still being asked (its own start-up) */
   var overlay = null, overlayTimer = 0, bootTimer = 0;
@@ -599,7 +599,7 @@ function vcLessonSync(opts) {
   function push(o) {
     o = o || {};
     if (stopped) return Promise.resolve();
-    if (inFlight) { again = true; return inFlight; }
+    if (inFlight) { again = true; if (o.urgent) urgentAgain = true; return inFlight; }
     var m = meta();
     if (!m.dirty && !o.force && !o.clear) return Promise.resolve();
     var sentAt = m.savedAt, raw = o.clear ? null : get(storeKey);
@@ -623,9 +623,9 @@ function vcLessonSync(opts) {
       } else {
         schedule(VC_STATE_THROTTLE_MS);           /* server said no (or old Worker): try again later */
       }
-      if (again) { again = false; schedule(); }
+      if (again) { again = false; var u = urgentAgain; urgentAgain = false; schedule(u ? 0 : undefined); }
     }, function () {
-      inFlight = null; again = false;
+      inFlight = null; again = false; urgentAgain = false;
       schedule(VC_STATE_THROTTLE_MS);             /* offline: keep the work here, try again in a minute */
     });
     return inFlight;
@@ -705,7 +705,16 @@ function vcLessonSync(opts) {
     now: function () {
       if (stopped || !booted) return;
       if (timer) { clearTimeout(timer); timer = 0; }
-      push();
+      push({ urgent: true });
+    },
+    /** A bean was just confirmed (its vc-pts lock written): send the locks now, so another computer
+       restoring this work never pays the same beans twice. */
+    beansChanged: function () {
+      if (stopped) return;
+      if (!booted) { preTouched = true; return; }
+      var m = meta(); m.dirty = true; m.savedAt = Date.now(); setMeta(m);
+      if (timer) { clearTimeout(timer); timer = 0; }
+      push({ urgent: true });
     },
     /** Teacher reset: clears the account copy too (bean locks stay). Resolves within 5 s either way. */
     clear: function () {

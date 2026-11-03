@@ -229,6 +229,14 @@ If the docs are not updated, the task is **not** finished.
     ④ binding `DB` + secret `SESSION_SECRET` (type Secret) added ⑤ 249-line Worker deployed, `?action=ping` OK. Next: ⑥ test
     the branch with test.student on Live Server, ⑦ merge. Note: `APPS_SCRIPT_KEY` on edlo-lms is a plain Variable (value
     shown in the dashboard) — convert it to a Secret later.
+  - **Nov 2 — Edwin's test (Live Server, test.student, InPrivate) found a bean bug; FIXED.** Progress came back (2 of 7
+    parts, Part 3 open) but the InPrivate window showed 0/30 beans vs 12/30. Cause: a bean is confirmed 1–3 s AFTER the
+    part-unlock save, so the account copy went up without the bean locks and nothing sent it again; the restored page
+    could then pay the same activity twice (Apps Script only caps 30 per lesson, it does not stop repeats). Fix:
+    `SYNC.beansChanged()` (new in `vcLessonSync`) is called in `settleBeans()` the moment a bean is confirmed, and an
+    urgent save never waits for the once-a-minute slot. Test added (bean confirmed 1.5 s late → lock on the account,
+    wiped computer pays 0 rows); it fails without the fix and passes with it. Suite now 159/159.
+    ⚠️ test.student's Lesson 3 beans may have been paid twice during that test — check All Results (test account only).
 
 - **Oct 11 — Maths Problem Set 2 stays on PAPER (Edwin's decision).** "Odd, Even, Prime & Composite" (MA 1.37
   L1–2, 10 items / 38 marks, Week 04 pack `08_Std5_Homework_ProblemSet2_…docx` + answer key) goes home Fri Oct 16,
