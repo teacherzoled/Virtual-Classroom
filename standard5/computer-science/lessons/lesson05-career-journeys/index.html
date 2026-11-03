@@ -705,7 +705,7 @@ const SYNC = (SESSION && !PREVIEW && typeof vcLessonSync === "function")
 
 /* ---------- Saved state ---------- */
 function defaults(){
-  return {step:0,visited:{},flipped:{},
+  return {step:0,visited:{},flipped:{},yUp:true,
     warm:{reflect:""}, match:{pick:{},checked:false,score:null,first:null}, words:{pick:{},checked:false,score:null,first:null},
     plan:{text:""}, journey:{text:""},
     predict:{},levels:{},tank:null,sceneBg:null,challenges:{},
@@ -724,6 +724,8 @@ function load(){
         d.legacy = s.frames === undefined && [w.reflect, w.q1, w.q2, r.r1, r.r2].some(t => t && String(t).trim().length >= 3); }
       /* Already past Part 3 before the checkpoint existed (Oct 10)? Don't lock them out again. */
       if(s.checkpoint === undefined && s.visited && (s.visited["s-levels"] || s.visited["s-wrap"] || s.visited["s-quiz"])) d.checkpoint = {passed:true, auto:true};
+      /* Saved before Nov 2, when y counted from the top: y now counts from the bottom, as on Code.org. Sprites stay where they were. */
+      if(s.yUp === undefined && Array.isArray(d.tank)) d.tank.forEach(p=>{ p.y = 400 - (+p.y); });
       return d;
     }
   }catch(e){}
@@ -1281,7 +1283,7 @@ function makeStage(canvas, bg, hooks){
     st.sprites.forEach(drawSprite);
   }
   st.load = function(program){
-    st.sprites = program.map((p,i)=>({id:i,costume:p.costume,x:+p.x,y:+p.y,size:+p.size,
+    st.sprites = program.map((p,i)=>({id:i,costume:p.costume,x:+p.x,y:400-(+p.y),size:+p.size,
       active:new Set(p.behaviors),onClick:p.onClick,onTouch:p.onTouch||"none",touching:new Set(),angle:0,dir:1,h:Math.random()*Math.PI*2,phase:i,by:0,
       say: p.sayStart && p.sayStart!=="none" ? SAYS[p.sayStart] : null, sayUntil: Infinity}));   /* "say" under when run happens right away */
   };
@@ -1343,8 +1345,8 @@ const demo = makeStage($("demoStage"), "park", {
               else $("demoStatus").textContent = "You clicked the teacher. She has no “when clicked” event, so nothing happened."; }});
 function demoBg(){ return $("dBg").checked ? "classroom" : "park"; }
 function demoProgram(){
-  return [{costume:"teacher",x:110,y:240,size:120,behaviors:[],sayStart:$("dSay").checked?"teacher":"none",onClick:"none",onTouch:"none"},
-          {costume:"computer",x:290,y:250,size:100,behaviors:[],sayStart:"none",onClick:$("dClick").checked?"ai":"none",onTouch:"none"}];
+  return [{costume:"teacher",x:110,y:160,size:120,behaviors:[],sayStart:$("dSay").checked?"teacher":"none",onClick:"none",onTouch:"none"},
+          {costume:"computer",x:290,y:150,size:100,behaviors:[],sayStart:"none",onClick:$("dClick").checked?"ai":"none",onTouch:"none"}];
 }
 function demoRefresh(){ renderBlocks(demoProgram(), $("demoCode"), demoBg()); }
 ["dBg","dSay","dClick"].forEach(id=>$(id).addEventListener("change",()=>{ demoRefresh(); if(demo.running){ demo.stop(); $("demoStatus").textContent="You changed the program. Press Run again."; } }));
@@ -1415,7 +1417,7 @@ function renderLevels(){
 }
 
 /* ---------- Part 5: Career Scene Builder (S.tank holds the sprites, S.sceneBg the background) ---------- */
-const STARTER = ()=>[{costume:"teacher",x:200,y:230,size:100,behaviors:[],sayStart:"none",onClick:"none",onTouch:"none"}];
+const STARTER = ()=>[{costume:"teacher",x:200,y:170,size:100,behaviors:[],sayStart:"none",onClick:"none",onTouch:"none"}];
 if(!S.tank) S.tank = STARTER();
 if(!S.sceneBg) S.sceneBg = "park";
 const CHALLENGES = [
@@ -1453,7 +1455,7 @@ function renderEditor(){
       <div class="sphead"><b>${COSTUMES[p.costume].e} Sprite ${i+1}</b>${S.tank.length>1?`<button type="button" class="del" data-del="${i}">Delete</button>`:""}</div>
       <div class="field"><label>Costume</label><select data-k="costume">${costumeOpts(p.costume)}</select></div>
       <div class="field"><label>Location x (left ↔ right): <span>${p.x}</span></label><input type="range" min="30" max="370" step="10" value="${p.x}" data-k="x"></div>
-      <div class="field"><label>Location y (top ↕ bottom): <span>${p.y}</span></label><input type="range" min="30" max="340" step="10" value="${p.y}" data-k="y"></div>
+      <div class="field"><label>Location y (bottom ↕ top): <span>${p.y}</span></label><input type="range" min="60" max="370" step="10" value="${p.y}" data-k="y"></div>
       <div class="field"><label>Size: <span>${p.size}</span></label><input type="range" min="40" max="200" step="10" value="${p.size}" data-k="size"></div>
       <div class="field"><label>When run, it says…</label><select data-k="sayStart">${opts(SAYS, p.sayStart||"none")}</select></div>
       <div class="field"><label>Behaviors</label><div class="beh">${Object.keys(BEHAVIORS).map(b=>`<label><input type="checkbox" data-b="${b}" ${p.behaviors.includes(b)?"checked":""}>${BEHAVIORS[b]}</label>`).join("")}</div></div>
@@ -1487,7 +1489,7 @@ $("addSprite").onclick = ()=>{
   if(S.tank.length >= 8){ $("tankStatus").textContent = "The stage is full (8 sprites). Delete one to add another."; return; }
   const pool = ["computer","books","robot","coder","fish","corn","guitar","doctor"];
   const c = pool[(S.tank.length - 1) % pool.length];
-  S.tank.push({costume:c,x:60+Math.floor(Math.random()*28)*10,y:180+Math.floor(Math.random()*8)*10,size:100,behaviors:[],sayStart:"none",onClick:"none",onTouch:"none"});
+  S.tank.push({costume:c,x:60+Math.floor(Math.random()*28)*10,y:150+Math.floor(Math.random()*8)*10,size:100,behaviors:[],sayStart:"none",onClick:"none",onTouch:"none"});
   edited(); renderEditor();
 };
 $("resetTank").onclick = ()=>{ if(confirm("Start over with only the teacher? (Your challenge ticks stay.)")){ S.tank = STARTER(); S.sceneBg = "park"; edited(); renderEditor(); tank.clear(); $("tankStatus").textContent="Back to the starting program. Press Run."; } };

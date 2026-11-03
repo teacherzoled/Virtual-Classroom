@@ -22,7 +22,7 @@ If the docs are not updated, the task is **not** finished.
 
 ## ▶️ Take-off Point — Next Session (as of October 10, 2026)
 
-**Nov 2 — CS Lesson 6 is pushed.** Edwin still to do: URL-check it, and answer the two "to check" items in its Nov 2 entry. Next: CS Lesson 7 needs its plan PDF in `_source/`.
+**Nov 2 — CS Lesson 6 is pushed.** Edwin still to do: URL-check it, and answer the "to check" item in its Nov 2 entry. Next: CS Lesson 7 needs its plan PDF in `_source/`.
 
 **Oct 7 — Standard 5 Computer Science online (committed and pushed; live):**
 - **New hub** `standard5/computer-science/index.html` — structure, theme bar, zoom, footer and mobile rules copied
@@ -263,12 +263,18 @@ If the docs are not updated, the task is **not** finished.
   `_source/checkpoint-codes.txt`.
   Level count: the plan's 15 was used. The slides mention a "Level 16", but `levels/15` opens on Code.org and `levels/16` does not.
   The plan pauses the class after Level 7 to preview events; on this page that preview sits in Part 3, before the checkpoint.
-  **To check (Edwin):** (1) `y` in this lesson counts from the BOTTOM, as the slide's own code shows (penguin at the bottom = y 53). Lesson 3's
-  and Lesson 5's builders say "top ↕ bottom", and Lesson 3's quiz q5 says y goes top to bottom. Not changed. (2) The sources say only that
+  **To check (Edwin):** The sources say only that
   subject and object give "more precise control"; "the sprite the event happened to" is not in them. Check against the Level 8 video.
   Tested in headless Chromium with a mocked record book: 89/89 checks passed (locks, checkpoint, help, tap reflections, 30 beans + no repeat on
   reload, quiz pass/fail + one row per attempt, PDF, print slip, preview, guest, 360px, no page errors, account save). Not tested against the
   real Worker or the real Code.org levels while signed in.
+
+- **Nov 2 — CS Lessons 3, 4, 5: `y` now counts from the BOTTOM, as on Code.org (committed and pushed).** Edwin tested on Code.org (Lesson 3,
+  Level 3): a sprite at (200, 149) sits about 63% of the way down the stage, which only fits y counted from the bottom. Lesson 6 already did this.
+  The three builders said "top ↕ bottom". Changed: slider label + range (60–370), where sprites are drawn (`400 - y`), the starting and demo
+  numbers (sprites stay in the same spot on the stage), and Lesson 3's quiz q5 explanation. Saved builds convert once on opening (`S.yUp`): the
+  sprite stays where the student put it and its y number changes. Beans, quiz results and progress are untouched.
+  Tested in headless Chromium with a mocked record book: 36/36 checks passed (12 per lesson).
 
 - **Oct 11 — Maths Problem Set 2 stays on PAPER (Edwin's decision).** "Odd, Even, Prime & Composite" (MA 1.37
   L1–2, 10 items / 38 marks, Week 04 pack `08_Std5_Homework_ProblemSet2_…docx` + answer key) goes home Fri Oct 16,
