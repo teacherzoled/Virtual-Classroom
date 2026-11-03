@@ -20,6 +20,21 @@ If the docs are not updated, the task is **not** finished.
 
 ---
 
+## 📌 STANDING RULE — every CS lesson build reads the live Code.org levels (Edwin, Nov 2, 2026)
+
+Before writing any Computer Science lesson page, read that lesson's real levels on Code.org. Lesson 6 showed why: the PDF and slides alone
+gave a wrong block name in a live quiz.
+- **How:** the built-in browser in the Claude desktop app, signed in with Edwin's teacher account (he signs in himself; never ask for or store
+  his password). Each level's instructions, hints and starter code are in the page's `script[data-appoptions]`, at
+  `/courses/coursee-2025/units/1/lessons/N/levels/L`. Video levels have no text to read: say which ones were not seen.
+- **Limits:** read the lesson's levels only. Do not open the roster, sections or student data, and do not use Share or Remix.
+- **Which source wins:** the lesson plan decides objectives and teaching order. The live levels decide on-screen details: block names, level
+  count, how blocks behave. Report every conflict to Edwin.
+- **If the levels cannot be read** (browser offline, not signed in): build nothing and tell Edwin. Do not build from the PDF alone.
+- The plan PDF in `_source/` is still required.
+
+---
+
 ## ▶️ Take-off Point — Next Session (as of October 10, 2026)
 
 **Nov 2 — CS Lesson 6 is pushed.** Edwin still to do: URL-check it. Next: CS Lesson 7 needs its plan PDF in `_source/`.
@@ -274,7 +289,7 @@ If the docs are not updated, the task is **not** finished.
   (2) Level 15 offers 5 activities, "complete as many as you can". (3) The levels make groups with **make sprites using grid** (Levels 4, 7, 11, 12,
   14): the demo now uses it and the builder has a tappable 8×8 grid group; `make N new` stays as the random group (Code B on the review slide).
   Tested in headless Chromium with a mocked record book: 103/103 checks passed.
-  **Decided (Edwin, Nov 2): read the lesson's live levels in every future CS build**; the plan still decides objectives and teaching order.
+  **Now a standing rule (Edwin, Nov 2): see "every CS lesson build reads the live Code.org levels" near the top of this file.**
 
 - **Nov 2 — CS Lessons 3, 4, 5: `y` now counts from the BOTTOM, as on Code.org (committed and pushed).** Edwin tested on Code.org (Lesson 3,
   Level 3): a sprite at (200, 149) sits about 63% of the way down the stage, which only fits y counted from the bottom. Lesson 6 already did this.
