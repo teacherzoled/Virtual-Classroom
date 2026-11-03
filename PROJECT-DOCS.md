@@ -227,8 +227,7 @@ If the docs are not updated, the task is **not** finished.
   - **Nov 2 (Edwin, step by step):** ① live edlo-lms = the 120-line mirror (checked line by line; live edlo-gemini also matches
     `backend/edlo-gemini.js` exactly, so old open item 1 is done) ② D1 `edlo-lms-db` created ③ table `lesson_state` created
     ④ binding `DB` + secret `SESSION_SECRET` (type Secret) added ⑤ 249-line Worker deployed, `?action=ping` OK. Next: ⑥ test
-    the branch with test.student on Live Server, ⑦ merge. Note: `APPS_SCRIPT_KEY` on edlo-lms is a plain Variable (value
-    shown in the dashboard) — convert it to a Secret later.
+    the branch with test.student on Live Server, ⑦ merge.
   - **Nov 2 — Edwin's test (Live Server, test.student, InPrivate) found a bean bug; FIXED.** Progress came back (2 of 7
     parts, Part 3 open) but the InPrivate window showed 0/30 beans vs 12/30. Cause: a bean is confirmed 1–3 s AFTER the
     part-unlock save, so the account copy went up without the bean locks and nothing sent it again; the restored page
@@ -240,7 +239,9 @@ If the docs are not updated, the task is **not** finished.
   - **Nov 2 — Edwin's retest PASSED (Lesson 4):** same parts done and same bean count in a normal window and a fresh
     InPrivate window; All Results got no new rows (the fresh window did not re-send beans). **Merged into `main` — LIVE.**
     Still to do: paste the 3 additions into the Saturday task (`Saturday-task-additions`, Oct 24 hand-over) so Lesson 6+
-    carries the account save; convert edlo-lms `APPS_SCRIPT_KEY` from Variable to Secret.
+    carries the account save; save the Lesson 6 lesson plan PDF into `_source/` (none there yet — the build stops without it).
+  - **Nov 2 — edlo-lms `APPS_SCRIPT_KEY` changed from a plain Variable to a Secret (Edwin).** All three edlo-lms values that
+    matter are now Secrets or non-secret (`APPS_SCRIPT_URL` stays a Variable — it is only an address).
 
 - **Oct 11 — Maths Problem Set 2 stays on PAPER (Edwin's decision).** "Odd, Even, Prime & Composite" (MA 1.37
   L1–2, 10 items / 38 marks, Week 04 pack `08_Std5_Homework_ProblemSet2_…docx` + answer key) goes home Fri Oct 16,
