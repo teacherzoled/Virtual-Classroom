@@ -35,6 +35,18 @@ gave a wrong block name in a live quiz.
 
 ---
 
+## 📌 STANDING RULE — CS quizzes from Lesson 7 onward (Edwin, Nov 5, 2026)
+
+Lessons 3–6 stay as they are. From Lesson 7:
+- At least 3 of the 10 questions ask students to read a short program, using the lesson's real blocks, and predict what it does.
+- Every new attempt reshuffles question order and option order.
+- On a retake, every question replaces at least one wrong option compared with the previous attempt, from spare wrong options in the page's quiz data.
+  The right answer stays correct and moves position. Spare options must be plausible.
+- Test that a second attempt does this, that scoring still works, and that each attempt still sends one row.
+This is an engine change to the quiz, made in the Lesson 7 clone. Why: most students pass with 80–90, and retakes used the same questions.
+
+---
+
 ## ▶️ Take-off Point — Next Session (as of October 10, 2026)
 
 **Nov 2 — CS Lesson 6 is pushed.** Edwin still to do: URL-check it. Next: CS Lesson 7 needs its plan PDF in `_source/`.
