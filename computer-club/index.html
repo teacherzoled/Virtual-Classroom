@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computer Club · Mr. EdLo's Virtual Classroom</title>
+<link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  /* Computer Club hub — Nov 6, 2026. Standards 4–6, one mission a week.
+     Self-contained (links no shared CSS — Edwin's choice, Nov 6). Theme palette copied unchanged
+     from standard5/computer-science/index.html: the accent FOLLOWS THE THEME (July 21 standing rule).
+     Shared JS: /computer-club/club.js only (sign-in + unsent results). */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  /* overflow-x:hidden goes on body (and .wrapper) — NOT on html (Mobile Rules). */
+
+  /* ═══ THEME VARIABLES — copied unchanged from standard5/science/index.html ═══ */
+  :root, body.theme-night {
+    --bg:            #0d1f1a;
+    --body-color:    #ffffff;
+    --card-bg:       rgba(255,255,255,0.06);
+    --card-border:   rgba(255,255,255,0.09);
+    --card-border-h: rgba(32,201,151,0.40);
+    --card-shadow:   rgba(0,0,0,0.45);
+    --card-desc:     rgba(255,255,255,0.48);
+    --section-lbl:   rgba(255,255,255,0.32);
+    --subtitle-c:    rgba(255,255,255,0.52);
+    --welcome-bg:    linear-gradient(135deg,#0d2b22,#102d25);
+    --welcome-border:rgba(32,201,151,0.15);
+    --welcome-text:  rgba(255,255,255,0.65);
+    --header-name:   rgba(255,255,255,0.55);
+    --badge-bg:      rgba(32,201,151,0.12);
+    --badge-border:  rgba(32,201,151,0.22);
+    --badge-color:   rgba(32,201,151,0.85);
+    --top-badge-bg:  #20C997;
+    --top-badge-c:   #0d1f1a;
+    --h1-grad:       linear-gradient(135deg,#fff 0%,#20C997 55%,#69DB7C 100%);
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.50) 100%);
+    --footer-border: rgba(255,255,255,0.07);
+    --footer-name:   rgba(255,255,255,0.38);
+    --footer-tag:    rgba(255,255,255,0.43);
+    --footer-copy:   rgba(255,255,255,0.18);
+    --back-top-bg:   #20C997;
+    --back-top-c:    #0d1f1a;
+    --back-color:    rgba(255,255,255,0.38);
+    --back-hover:    #20C997;
+    --radial1:       rgba(32,201,151,0.12);
+    --radial2:       rgba(105,219,124,0.08);
+    --star-show:     1;
+    --tab-border:    rgba(255,255,255,0.12);
+    --tab-color:     rgba(255,255,255,0.40);
+    --tab-hover-b:   rgba(32,201,151,0.35);
+    --tab-hover-c:   #20C997;
+    --tab-active-bg: #20C997;
+    --tab-active-c:  #0d1f1a;
+    --tab-shadow:    rgba(32,201,151,0.30);
+    --cycle-bg:      rgba(32,201,151,0.07);
+    --cycle-border:  rgba(32,201,151,0.18);
+    --cycle-color:   #20C997;
+    --mol-color:     rgba(32,201,151,0.25);
+    --graded-bg:     rgba(255,215,0,0.12);
+    --graded-border: rgba(255,215,0,0.28);
+    --graded-color:  #FFD43B;
+    --grad-bar:      linear-gradient(90deg,#20C997,#69DB7C,#4DABF7,#9775FA);
+  }
+
+  body.theme-sunny {
+    --bg:            #fffbea;
+    --body-color:    #2d2000;
+    --card-bg:       rgba(255,255,255,0.75);
+    --card-border:   rgba(200,150,0,0.18);
+    --card-border-h: rgba(200,120,0,0.45);
+    --card-shadow:   rgba(180,100,0,0.18);
+    --card-desc:     rgba(80,50,0,0.55);
+    --section-lbl:   rgba(120,80,0,0.50);
+    --subtitle-c:    rgba(100,60,0,0.65);
+    --welcome-bg:    linear-gradient(135deg,#fff8d6,#ffeea0);
+    --welcome-border:rgba(200,150,0,0.25);
+    --welcome-text:  rgba(80,50,0,0.70);
+    --header-name:   #b35c00;
+    --badge-bg:      rgba(255,180,0,0.15);
+    --badge-border:  rgba(255,160,0,0.30);
+    --badge-color:   #8a4800;
+    --top-badge-bg:  #FF922B;
+    --top-badge-c:   #fff;
+    --h1-grad:       linear-gradient(135deg,#b35c00 0%,#e67e00 50%,#f5a623 100%);
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(255,200,50,0.18) 100%);
+    --footer-border: rgba(200,150,0,0.20);
+    --footer-name:   rgba(100,60,0,0.50);
+    --footer-tag:    rgba(100,60,0,0.55);
+    --footer-copy:   rgba(100,60,0,0.30);
+    --back-top-bg:   #FF922B;
+    --back-top-c:    #fff;
+    --back-color:    rgba(120,80,0,0.55);
+    --back-hover:    #b35c00;
+    --radial1:       rgba(255,220,80,0.25);
+    --radial2:       rgba(255,160,30,0.18);
+    --star-show:     0;
+    --tab-border:    rgba(200,150,0,0.30);
+    --tab-color:     rgba(120,80,0,0.60);
+    --tab-hover-b:   rgba(200,120,0,0.50);
+    --tab-hover-c:   #b35c00;
+    --tab-active-bg: #FF922B;
+    --tab-active-c:  #fff;
+    --tab-shadow:    rgba(255,146,43,0.30);
+    --cycle-bg:      rgba(255,180,0,0.12);
+    --cycle-border:  rgba(200,150,0,0.30);
+    --cycle-color:   #8a4800;
+    --mol-color:     rgba(200,140,0,0.20);
+    --graded-bg:     rgba(180,100,0,0.10);
+    --graded-border: rgba(180,100,0,0.28);
+    --graded-color:  #a05c00;
+    --grad-bar:      linear-gradient(90deg,#FF922B,#f5a623,#0077cc,#7a3abf);
+  }
+
+  body.theme-cloudy {
+    --bg:            #e8edf2;
+    --body-color:    #1c2533;
+    --card-bg:       rgba(255,255,255,0.72);
+    --card-border:   rgba(100,130,160,0.18);
+    --card-border-h: rgba(80,110,150,0.40);
+    --card-shadow:   rgba(50,80,120,0.15);
+    --card-desc:     rgba(40,60,90,0.55);
+    --section-lbl:   rgba(60,90,130,0.50);
+    --subtitle-c:    rgba(40,65,100,0.65);
+    --welcome-bg:    linear-gradient(135deg,#dce6f0,#c8d8e8);
+    --welcome-border:rgba(100,140,180,0.22);
+    --welcome-text:  rgba(30,55,85,0.70);
+    --header-name:   #2c5282;
+    --badge-bg:      rgba(100,140,200,0.12);
+    --badge-border:  rgba(80,120,180,0.25);
+    --badge-color:   #2c5282;
+    --top-badge-bg:  #4A90D9;
+    --top-badge-c:   #fff;
+    --h1-grad:       linear-gradient(135deg,#1a365d 0%,#2b6cb0 50%,#4299e1 100%);
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(100,140,200,0.15) 100%);
+    --footer-border: rgba(80,120,180,0.18);
+    --footer-name:   rgba(30,60,100,0.50);
+    --footer-tag:    rgba(30,60,100,0.55);
+    --footer-copy:   rgba(30,60,100,0.30);
+    --back-top-bg:   #4A90D9;
+    --back-top-c:    #fff;
+    --back-color:    rgba(60,90,130,0.55);
+    --back-hover:    #2c5282;
+    --radial1:       rgba(150,190,240,0.30);
+    --radial2:       rgba(100,140,200,0.20);
+    --star-show:     0;
+    --tab-border:    rgba(80,120,180,0.28);
+    --tab-color:     rgba(60,90,130,0.60);
+    --tab-hover-b:   rgba(80,110,150,0.50);
+    --tab-hover-c:   #2c5282;
+    --tab-active-bg: #4A90D9;
+    --tab-active-c:  #fff;
+    --tab-shadow:    rgba(74,144,217,0.30);
+    --cycle-bg:      rgba(100,140,200,0.12);
+    --cycle-border:  rgba(80,120,180,0.28);
+    --cycle-color:   #2c5282;
+    --mol-color:     rgba(80,120,180,0.20);
+    --graded-bg:     rgba(100,70,0,0.08);
+    --graded-border: rgba(120,80,0,0.25);
+    --graded-color:  #7a5000;
+    --grad-bar:      linear-gradient(90deg,#4A90D9,#4299e1,#0d9488,#7c3aed);
+  }
+
+  body.theme-nature {
+    --bg:            #f0f7ee;
+    --body-color:    #1a2e10;
+    --card-bg:       rgba(255,255,255,0.72);
+    --card-border:   rgba(60,120,40,0.18);
+    --card-border-h: rgba(40,100,20,0.40);
+    --card-shadow:   rgba(20,80,10,0.15);
+    --card-desc:     rgba(30,70,15,0.55);
+    --section-lbl:   rgba(40,90,20,0.50);
+    --subtitle-c:    rgba(30,75,15,0.65);
+    --welcome-bg:    linear-gradient(135deg,#d8f0ce,#c4e8b8);
+    --welcome-border:rgba(60,140,30,0.22);
+    --welcome-text:  rgba(20,65,10,0.70);
+    --header-name:   #276221;
+    --badge-bg:      rgba(60,140,30,0.12);
+    --badge-border:  rgba(50,120,20,0.28);
+    --badge-color:   #276221;
+    --top-badge-bg:  #4CAF50;
+    --top-badge-c:   #fff;
+    --h1-grad:       linear-gradient(135deg,#1b4d0f 0%,#2e7d1a 50%,#66bb44 100%);
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(60,140,30,0.12) 100%);
+    --footer-border: rgba(50,120,20,0.18);
+    --footer-name:   rgba(20,70,10,0.50);
+    --footer-tag:    rgba(20,70,10,0.55);
+    --footer-copy:   rgba(20,70,10,0.30);
+    --back-top-bg:   #4CAF50;
+    --back-top-c:    #fff;
+    --back-color:    rgba(40,90,20,0.55);
+    --back-hover:    #276221;
+    --radial1:       rgba(100,200,60,0.22);
+    --radial2:       rgba(60,160,30,0.16);
+    --star-show:     0;
+    --tab-border:    rgba(50,120,20,0.28);
+    --tab-color:     rgba(40,90,20,0.60);
+    --tab-hover-b:   rgba(40,100,20,0.50);
+    --tab-hover-c:   #276221;
+    --tab-active-bg: #4CAF50;
+    --tab-active-c:  #fff;
+    --tab-shadow:    rgba(76,175,80,0.30);
+    --cycle-bg:      rgba(60,140,30,0.12);
+    --cycle-border:  rgba(50,120,20,0.28);
+    --cycle-color:   #276221;
+    --mol-color:     rgba(50,120,20,0.18);
+    --graded-bg:     rgba(80,50,0,0.08);
+    --graded-border: rgba(100,60,0,0.22);
+    --graded-color:  #6b3f00;
+    --grad-bar:      linear-gradient(90deg,#4CAF50,#66bb44,#1565c0,#4a148c);
+  }
+
+
+  /* ═══════════════════════════════════════════
+     BASE
+  ═══════════════════════════════════════════ */
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--body-color);
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.5s ease, color 0.5s ease;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, var(--radial1) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, var(--radial2) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+    transition: background 0.5s ease;
+  }
+
+  .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; opacity: var(--star-show,1); transition: opacity 0.5s ease; }
+  .star  { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--d,3s) ease-in-out infinite var(--delay,0s); opacity: 0; }
+  @keyframes twinkle {
+    0%,100% { opacity:0; transform:scale(1); }
+    50%      { opacity:var(--op,0.5); transform:scale(1.3); }
+  }
+
+  
+  .wrapper { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 0 max(1rem, 4vw) 2rem; flex: 1; overflow-x: hidden; width: 100%; }
+
+  /* Theme bar */
+  .theme-bar {
+    position: relative; z-index: 10;
+    display: flex; justify-content: center; gap: 0.5rem;
+    padding: 0.55rem max(1rem, 4vw);
+    background: rgba(0,0,0,0.22);
+    border-bottom: 1px solid rgba(0,0,0,0.12);
+    flex-wrap: wrap;
+  }
+  body.theme-sunny  .theme-bar,
+  body.theme-cloudy .theme-bar,
+  body.theme-nature .theme-bar { background: rgba(0,0,0,0.05); }
+  .theme-btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.85rem; padding: 5px 18px; border-radius: 999px;
+    min-height: 44px; min-width: 44px;
+    border: 2px solid transparent;
+    background: rgba(128,128,128,0.12);
+    color: var(--body-color); cursor: pointer; opacity: 0.6;
+    transition: all 0.22s ease;
+  }
+  .theme-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .theme-btn.active { opacity:1; background:var(--top-badge-bg); color:var(--top-badge-c); box-shadow:0 3px 12px rgba(0,0,0,.20); }
+
+  /* Site header */
+  .site-header { display:flex; align-items:center; justify-content:space-between; padding:1.2rem 0 0; gap:.75rem; flex-wrap:wrap; animation:fadeDown 0.6s ease both; }
+  .site-header-logo { display:flex; align-items:center; gap:.75rem; text-decoration:none; min-width:0; }
+  .site-header-logo img { height:48px; width:auto; border-radius:10px; box-shadow:0 4px 14px rgba(0,0,0,.25); }
+  .site-header-logo span { font-family:'Fredoka One',cursive; font-size:1.15rem; color:var(--header-name); letter-spacing:.02em; transition:color .4s; }
+  .header-badge { display:inline-block; background:var(--badge-bg); border:1px solid var(--badge-border); color:var(--badge-color); font-size:.72rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:5px 14px; border-radius:999px; transition:all .4s; }
+
+  .back-link { display:inline-flex; align-items:center; gap:6px; margin-top:1.4rem; min-height:44px; font-size:.8rem; font-weight:700; color:var(--back-color); text-decoration:none; transition:color .2s; letter-spacing:.04em; }
+  .back-link:hover { color:var(--back-hover); }
+
+  /* Header */
+  header { text-align:center; padding:2rem 0 1.5rem; animation:fadeDown .7s ease both; }
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-24px)} to{opacity:1;transform:translateY(0)} }
+  .badge { display:inline-block; background:var(--top-badge-bg); color:var(--top-badge-c); font-size:.75rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:4px 14px; border-radius:999px; margin-bottom:1rem; animation:pop .5s cubic-bezier(.36,1.5,.6,1) .3s both; }
+  @keyframes pop { from{opacity:0;transform:scale(.7)} to{opacity:1;transform:scale(1)} }
+  h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.8rem,8vw,3.8rem); line-height:1.1; margin-bottom:.5rem; background:var(--h1-grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .subtitle { font-size:1.05rem; font-weight:600; color:var(--subtitle-c); transition:color .4s; }
+
+  /* Welcome */
+  .welcome { background:var(--welcome-bg); border:1.5px solid var(--welcome-border); border-radius:18px; padding:1.25rem 1.5rem; display:flex; align-items:center; gap:1rem; margin-bottom:.5rem; animation:fadeDown .7s ease .2s both; transition:background .4s,border-color .4s; }
+  .welcome-icon { font-size:2rem; flex-shrink:0; }
+  .welcome-text { font-size:.9rem; color:var(--welcome-text); line-height:1.6; transition:color .4s; min-width:0; word-break:break-word; }
+  .welcome-text strong { color:var(--body-color); }
+
+  @keyframes riseUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+  /* Cycle divider */
+  .cycle-divider { display:flex; align-items:center; gap:.75rem; margin:2.2rem 0 1rem; animation:riseUp .4s ease both; }
+  .cycle-divider-label { font-family:'Fredoka One',cursive; font-size:.78rem; letter-spacing:.07em; text-transform:uppercase; background:var(--cycle-bg); border:1px solid var(--cycle-border); color:var(--cycle-color); padding:5px 14px; border-radius:999px; white-space:normal; text-align:center; flex-shrink:0; transition:all .4s; }
+  .cycle-divider-line  { flex:1; height:1px; background:var(--cycle-border); transition:background .4s; }
+
+  /* Note strip */
+  .note-strip { display:flex; align-items:flex-start; gap:.85rem; background:var(--cycle-bg); border:1.5px solid var(--cycle-border); border-radius:16px; padding:1rem 1.15rem; margin:1.5rem 0 .5rem; transition:all .4s; }
+  .note-icon { font-size:1.5rem; flex-shrink:0; line-height:1; }
+  .note-text { font-size:.82rem; color:var(--card-desc); line-height:1.55; min-width:0; word-break:break-word; }
+  .note-text strong { color:var(--body-color); }
+
+  /* Cards — the card accent is the theme's readable accent (dark on light themes) */
+  .grid { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; }
+  .grid .card { flex:0 1 260px; }
+  .card, .lab-card { --accent: var(--cycle-color); }
+
+  .card {
+    position:relative; display:flex; flex-direction:column; align-items:flex-start;
+    padding:1.4rem 1.3rem 1.2rem; border-radius:18px;
+    background:var(--card-bg); border:1.5px solid var(--card-border);
+    text-decoration:none; color:var(--body-color); overflow:hidden;
+    transition:transform .22s cubic-bezier(.22,.68,0,1.2),border-color .2s,box-shadow .2s,background .4s;
+    animation:riseUp .5s ease both; cursor:pointer;
+  }
+  .card:hover { transform:translateY(-6px) scale(1.02); border-color:var(--card-border-h); box-shadow:0 12px 40px var(--card-shadow); }
+  .card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; border-radius:18px 18px 0 0; background:var(--accent); }
+  .card-num   { font-size:.68rem; font-weight:800; letter-spacing:.08em; color:var(--section-lbl); margin-bottom:.35rem; text-transform:uppercase; }
+  .card-icon  { font-size:2.2rem; margin-bottom:.7rem; line-height:1; }
+  .card-title { font-family:'Fredoka One',cursive; font-size:1.15rem; margin-bottom:.25rem; color:var(--accent); line-height:1.2; }
+  .card-desc  { font-size:.78rem; color:var(--card-desc); font-weight:600; line-height:1.4; transition:color .4s; }
+  .card-tags  { display:flex; gap:5px; flex-wrap:wrap; margin-top:.55rem; }
+  .tag { font-size:.6rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:999px; background:var(--cycle-bg); color:var(--section-lbl); border:1px solid var(--card-border); }
+  .graded-badge { font-size:.6rem; font-weight:800; letter-spacing:.07em; text-transform:uppercase; padding:2px 9px; border-radius:999px; background:var(--graded-bg); color:var(--graded-color); border:1px solid var(--graded-border); transition:all .4s; }
+
+  .card-arrow { position:absolute; bottom:1rem; right:1.1rem; font-size:1rem; opacity:0; transform:translateX(-6px); transition:opacity .2s,transform .2s; color:var(--accent); }
+  .card:hover .card-arrow { opacity:1; transform:translateX(0); }
+
+  /* Coming-soon (light up a card by deleting the word  soon  from its class) */
+  .card.soon, .lab-card.soon { opacity:.46; pointer-events:none; cursor:default; padding-top:2.1rem; }
+  .card.soon::after, .lab-card.soon::after {
+    content:'Coming Soon'; position:absolute; top:.65rem; right:.8rem;
+    font-size:.58rem; font-weight:800; letter-spacing:.07em; text-transform:uppercase;
+    background:var(--badge-bg); border:1px solid var(--badge-border); border-radius:999px;
+    padding:2px 8px; color:var(--badge-color);
+  }
+
+  .card:nth-child(1){animation-delay:.05s}.card:nth-child(2){animation-delay:.10s}.card:nth-child(3){animation-delay:.15s}
+  .card:nth-child(4){animation-delay:.20s}.card:nth-child(5){animation-delay:.25s}.card:nth-child(6){animation-delay:.30s}
+  .card:nth-child(n+7){animation-delay:.35s}
+
+  /* Lab / link cards */
+  .lab-card {
+    flex:0 1 420px;
+    position:relative; display:flex; align-items:flex-start; gap:1.1rem;
+    padding:1.3rem 1.4rem 1.2rem; border-radius:18px;
+    background:var(--card-bg); border:1.5px solid var(--card-border);
+    text-decoration:none; color:var(--body-color); overflow:hidden;
+    transition:transform .22s cubic-bezier(.22,.68,0,1.2),border-color .2s,box-shadow .2s,background .4s;
+    animation:riseUp .5s ease both; cursor:pointer;
+  }
+  .lab-card:hover { transform:translateY(-5px) scale(1.015); border-color:var(--card-border-h); box-shadow:0 10px 32px var(--card-shadow); }
+  .lab-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; border-radius:18px 18px 0 0; background:var(--accent); }
+  .lab-icon  { font-size:2.4rem; flex-shrink:0; line-height:1; margin-top:2px; }
+  .lab-body  { flex:1; min-width:0; }
+  .lab-title { font-family:'Fredoka One',cursive; font-size:1.15rem; color:var(--accent); line-height:1.2; margin-bottom:4px; }
+  .lab-desc  { font-size:.78rem; color:var(--card-desc); font-weight:600; line-height:1.45; word-break:break-word; }
+  .lab-meta  { display:flex; gap:6px; flex-wrap:wrap; margin-top:.55rem; }
+  .lab-tag   { font-size:.6rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:2px 9px; border-radius:999px; background:var(--badge-bg); color:var(--badge-color); border:1px solid var(--badge-border); }
+
+  /* Footer */
+  .site-footer { position:relative; z-index:1; background:var(--footer-bg); border-top:1px solid var(--footer-border); padding:2rem max(1rem, 4vw); margin-top:3rem; display:flex; flex-direction:column; align-items:center; gap:.5rem; transition:background .4s,border-color .4s; }
+  .site-footer::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--grad-bar); }
+  .footer-logo { display:flex; align-items:center; gap:.6rem; margin-bottom:.4rem; }
+  .footer-logo img { height:36px; width:auto; border-radius:8px; opacity:.75; }
+  .footer-logo span { font-family:'Fredoka One',cursive; font-size:1rem; color:var(--footer-name); transition:color .4s; }
+  .footer-tagline { font-size:.82rem; font-weight:700; color:var(--footer-tag); letter-spacing:.03em; font-style:italic; text-align:center; transition:color .4s; }
+  .footer-copy    { font-size:.72rem; color:var(--footer-copy); font-weight:600; letter-spacing:.04em; margin-top:.2rem; text-align:center; transition:color .4s; }
+
+  #back-to-top { display:none; position:fixed; bottom:1.5rem; right:1.5rem; z-index:99; background:var(--back-top-bg); color:var(--back-top-c); border:none; border-radius:12px; width:44px; height:44px; font-size:1.2rem; font-weight:900; cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,.25); transition:background .2s,transform .2s,color .4s; align-items:center; justify-content:center; }
+  #back-to-top:hover { transform:translateY(-3px); filter:brightness(1.1); }
+
+  /* Zoom control */
+  #zoom-btn { position:fixed; bottom:1.5rem; left:1.5rem; z-index:99; background:var(--back-top-bg); color:var(--back-top-c); border:none; border-radius:12px; min-width:44px; height:44px; padding:0 12px; font-family:'Fredoka One',cursive; font-size:.95rem; cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,.25); display:flex; align-items:center; gap:7px; transition:background .2s,transform .2s,color .4s; }
+  #zoom-btn:hover { transform:translateY(-3px); filter:brightness(1.1); }
+  .zoom-dots { display:flex; gap:3px; }
+  .zoom-dot { width:5px; height:5px; border-radius:50%; background:currentColor; opacity:.32; }
+  .zoom-dot.on { opacity:1; }
+  html.zoom-1 { font-size:115%; }
+  html.zoom-2 { font-size:130%; }
+  html.zoom-3 { font-size:150%; }
+
+  @media (max-width:700px) {
+    .grid .card, .lab-card { flex:0 1 100%; }
+  }
+  @media (max-width:640px) {
+    .cycle-divider { flex-wrap:wrap; justify-content:center; }
+    .cycle-divider-label { width:100%; text-align:center; }
+    .cycle-divider-line { display:none; }
+    .site-header { flex-direction:column; align-items:flex-start; gap:.5rem; }
+    .welcome { flex-direction:column; align-items:flex-start; }
+    #zoom-btn, #back-to-top { bottom:1rem; }
+    #zoom-btn { left:1rem; }
+    #back-to-top { right:1rem; }
+  }
+
+
+  /* ═══════════════════════════════════════════
+     COMPUTER CLUB additions (Nov 6, 2026)
+  ═══════════════════════════════════════════ */
+  body.theme-night { --good:#69DB7C; --bad:#FF6B6B; --input-bg:rgba(255,255,255,0.08); --input-c:#fff; }
+  body.theme-sunny, body.theme-cloudy, body.theme-nature { --good:#2e7d1a; --bad:#c62828; --input-bg:#ffffff; --input-c:#1c2533; }
+  :root { --bronze:#a8662f; --silver:#5f6b78; --gold:#c9970c; --skills:#1f8a5e; --create:#8340a8; --games:#c0601a; }
+
+  .status-bar { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:.6rem; margin:.4rem 0 1rem; min-height:44px; }
+  .panel { background:var(--card-bg); border:1.5px solid var(--card-border); border-radius:18px; padding:1.3rem 1.4rem; transition:background .4s; }
+  .panel p { color:var(--card-desc); font-weight:600; line-height:1.55; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:.4rem; min-height:44px; padding:.6rem 1.2rem; border-radius:12px; border:0; cursor:pointer; font:800 1rem 'Nunito',sans-serif; background:var(--top-badge-bg); color:var(--top-badge-c); text-decoration:none; transition:transform .15s, filter .15s; }
+  .btn:hover { transform:translateY(-2px); filter:brightness(1.08); }
+  .btn.ghost { background:transparent; color:var(--body-color); border:2px solid var(--top-badge-bg); }
+  .btn:disabled { opacity:.5; cursor:default; transform:none; }
+  .row-btns { display:flex; flex-wrap:wrap; justify-content:center; gap:.7rem; margin-top:1rem; }
+  .hidden { display:none !important; }
+  .good { color:var(--good); } .bad { color:var(--bad); }
+
+  .levels { display:flex; flex-wrap:wrap; justify-content:center; gap:.8rem; }
+  .lvl-btn { flex:0 1 220px; min-height:44px; border:0; border-radius:14px; cursor:pointer; padding:.9rem 1rem; color:#fff; font:800 1.05rem 'Nunito',sans-serif; box-shadow:inset 0 -4px 0 rgba(0,0,0,.2); transition:transform .12s; }
+  .lvl-btn small { display:block; font-weight:700; font-size:.85rem; margin-top:.2rem; opacity:.95; }
+  .lvl-btn:hover, .lvl-btn:focus-visible { transform:translateY(-2px); }
+  .lvl-btn.bronze { background:var(--bronze); } .lvl-btn.silver { background:var(--silver); } .lvl-btn.gold { background:var(--gold); color:#1a1300; }
+
+  kbd { font-family:'Nunito',sans-serif; font-weight:800; font-size:1rem; background:#fff; color:#1e2a3a; border:2px solid #c5cfdb; border-bottom-width:4px; border-radius:8px; padding:.15rem .55rem; min-width:2.1rem; text-align:center; display:inline-block; }
+
+  .strand { display:inline-block; font-size:.62rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:2px 9px; border-radius:999px; color:#fff; }
+  .strand.skills { background:var(--skills); } .strand.create { background:var(--create); } .strand.games { background:var(--games); }
+
+  .field { width:100%; min-height:48px; padding:.6rem .9rem; border-radius:12px; border:2px solid var(--card-border-h); background:var(--input-bg); color:var(--input-c); font:700 1.1rem 'Nunito',sans-serif; }
+  .field:focus { outline:3px solid var(--top-badge-bg); outline-offset:1px; }
+  .msg { min-height:1.6rem; font-weight:800; margin-top:.7rem; text-align:center; }
+
+  #code-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.55; transition: opacity 0.5s; }
+  .card.static { cursor: default; }
+  .card.static:hover { transform: none; box-shadow: none; border-color: var(--card-border); }
+  .step-num { width:44px; height:44px; border-radius:50%; display:grid; place-items:center; background:var(--top-badge-bg); color:var(--top-badge-c); font-family:'Fredoka One',cursive; font-size:1.3rem; margin-bottom:.7rem; }
+  .card .btn { margin-top:.9rem; font-size:.9rem; }
+  .card-note { font-size:.72rem; font-weight:700; color:var(--card-desc); margin-top:.5rem; }
+  .medal { width:58px; height:58px; border-radius:50%; display:grid; place-items:center; color:#fff; font-family:'Fredoka One',cursive; font-size:1.5rem; margin-bottom:.6rem; box-shadow:inset 0 -4px 0 rgba(0,0,0,.2); }
+  .medal.bronze { background:var(--bronze); } .medal.silver { background:var(--silver); } .medal.gold { background:var(--gold); color:#1a1300; }
+  .level-note { text-align:center; color:var(--card-desc); font-weight:700; font-size:.85rem; margin-top:.9rem; }
+  .board-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; }
+  .board-grid .panel { flex:0 1 420px; }
+  .panel h3 { font-family:'Fredoka One',cursive; font-weight:400; font-size:1.15rem; margin-bottom:.6rem; color:var(--cycle-color); }
+  .board { list-style:none; counter-reset:rank; }
+  .board li { counter-increment:rank; display:flex; justify-content:space-between; gap:.6rem; padding:.45rem .2rem; border-bottom:1px solid var(--card-border); font-weight:700; }
+  .board li::before { content:counter(rank) '.'; width:1.8rem; color:var(--section-lbl); }
+  .board li span:first-of-type { flex:1; min-width:0; word-break:break-word; }
+  .badge-shelf { display:flex; flex-wrap:wrap; gap:.6rem; }
+  .badge-item { flex:0 1 150px; text-align:center; padding:.7rem .5rem; border-radius:14px; border:1.5px solid var(--card-border); font-weight:800; font-size:.8rem; }
+  .badge-item .ico { display:block; font-size:2rem; margin-bottom:.2rem; }
+  .badge-item.locked { opacity:.35; filter:grayscale(1); }
+  .teacher-link { display:block; text-align:center; margin-top:2rem; }
+  .board-grid .panel.wide { flex:1 1 100%; }
+  .mini { font-size:.78rem; margin:-.3rem 0 .6rem; }
+  .board.nocount li::before, .board li.empty::before { content:none; }
+  .board li.me { background:var(--badge-bg); border-radius:10px; }
+  .board li.gap { justify-content:center; color:var(--section-lbl); }
+  .board li.gap::before { content:''; width:0; }
+  .board .sub { font-size:.75rem; color:var(--card-desc); font-weight:700; margin-left:.3rem; }
+  .xp-board li { font-size:1rem; padding:.55rem .3rem; }
+  .battle-row { margin:.55rem 0; }
+  .battle-row .lbl { display:flex; justify-content:space-between; font-weight:800; font-size:.9rem; margin-bottom:.25rem; }
+  .battle-track { height:18px; border-radius:999px; background:var(--card-border); overflow:hidden; }
+  .battle-fill { height:100%; background:var(--top-badge-bg); border-radius:999px; transition:width .8s ease; }
+  .std-mini { margin-bottom:.7rem; }
+  .std-mini h4 { font-family:'Fredoka One',cursive; font-weight:400; font-size:.95rem; color:var(--section-lbl); margin-bottom:.2rem; }
+  .rules li { margin:.35rem 0 .35rem 1.1rem; font-weight:700; color:var(--card-desc); font-size:.9rem; }
+
+</style>
+</head>
+<body class="theme-night">
+<canvas id="code-canvas"></canvas>
+<div class="stars" id="stars"></div>
+
+<div class="theme-bar">
+  <button class="theme-btn active" onclick="setTheme('night',this)">🌙 Night</button>
+  <button class="theme-btn" onclick="setTheme('sunny',this)">☀️ Sunny</button>
+  <button class="theme-btn" onclick="setTheme('cloudy',this)">☁️ Cloudy</button>
+  <button class="theme-btn" onclick="setTheme('nature',this)">🌿 Nature</button>
+</div>
+
+<div class="wrapper">
+
+  <div class="site-header">
+    <a class="site-header-logo" href="/">
+      <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+      <span>Mr. EdLo's Virtual Classroom</span>
+    </a>
+    <span class="header-badge">Computer Club &nbsp;·&nbsp; Standards 4–6</span>
+  </div>
+
+  <a class="back-link" href="/">← Back to Virtual Classroom</a>
+
+
+  <header>
+    <div class="badge">Standards 4–6 &nbsp;·&nbsp; Every week</div>
+    <h1>💻 Computer Club</h1>
+    <p class="subtitle">Type faster, work smarter, create something cool &amp; win challenges</p>
+  </header>
+
+  <div class="status-bar" id="status"></div>
+
+  <div class="welcome">
+    <div class="welcome-icon">🚀</div>
+    <div class="welcome-text">
+      <strong>Welcome, club members!</strong> Sign in at the start of every club session: that is how your
+      attendance, typing tests and missions get saved. Then warm up on TypingClub, take on this week's mission,
+      and get ready to show &amp; share.
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════
+       HOW TO OPEN A MISSION: build its page in  missions/NN-mission-name/index.html  (copy the newest
+       mission page), then on its card below delete the word  soon  and change the <div> to
+       <a href="/computer-club/missions/NN-mission-name/">. Also add it to MISSIONS in teacher/index.html.
+  ════════════════════════════════════════════════ -->
+
+  <div class="cycle-divider">
+    <span class="cycle-divider-label">⏱️ Our Club Routine · 45 minutes</span>
+    <div class="cycle-divider-line"></div>
+  </div>
+  <div class="grid">
+    <div class="card static">
+      <div class="step-num">1</div>
+      <div class="card-title">Warm-up · 10 min</div>
+      <div class="card-desc">Practise your next TypingClub lessons. Eyes on the screen, fingers on the home row!</div>
+      <a class="btn" id="tcLink" href="https://howardsmithnazarene.typingclub.com/" target="_blank" rel="noopener">⌨️ Open TypingClub</a>
+      <div class="card-note" id="tcNote">New to TypingClub? Sign in to the club first to get our class join link.</div>
+    </div>
+    <div class="card static">
+      <div class="step-num">2</div>
+      <div class="card-title">Mission · 25 min</div>
+      <div class="card-desc">Open this week's mission, pick your level, and finish the challenge. Your result is saved.</div>
+    </div>
+    <div class="card static">
+      <div class="step-num">3</div>
+      <div class="card-title">Show &amp; Share · 10 min</div>
+      <div class="card-desc">Show your work, teach a friend a tip, and check your new badges.</div>
+    </div>
+  </div>
+
+  <div class="cycle-divider">
+    <span class="cycle-divider-label">🏅 Pick Your Level</span>
+    <div class="cycle-divider-line"></div>
+  </div>
+  <div class="grid">
+    <div class="card static"><div class="medal bronze">B</div><div class="card-title">Bronze</div><div class="card-desc">I'm getting started. I like hints and step-by-step help.</div></div>
+    <div class="card static"><div class="medal silver">S</div><div class="card-title">Silver</div><div class="card-desc">I know the basics. I'm ready for fewer hints and more to do.</div></div>
+    <div class="card static"><div class="medal gold">G</div><div class="card-title">Gold</div><div class="card-desc">I want the expert challenge: speed rounds and no hints!</div></div>
+  </div>
+  <p class="level-note">Any member can choose any level. Earn 3 stars, then try the next level up!</p>
+
+  <div class="cycle-divider">
+    <span class="cycle-divider-label">🎯 Club Challenges · saved to your record</span>
+    <div class="cycle-divider-line"></div>
+  </div>
+  <div class="grid">
+    <a class="lab-card" href="/computer-club/typing-test/">
+      <div class="lab-icon">⌨️</div>
+      <div class="lab-body">
+        <div class="lab-title">Typing Test</div>
+        <div class="lab-desc">1 or 2 minutes. Measure your speed (WPM) and accuracy. Beat your best and earn typing badges.</div>
+        <div class="lab-meta"><span class="lab-tag">Bronze · Silver · Gold</span></div>
+      </div>
+    </a>
+    <a class="lab-card" href="/computer-club/missions/01-shortcut-ninja/">
+      <div class="lab-icon">🥷</div>
+      <div class="lab-body">
+        <div class="lab-title">Week 1 · Shortcut Ninja</div>
+        <div class="lab-desc">Master the keyboard shortcuts that make you super fast.</div>
+        <div class="lab-meta"><span class="lab-tag">This week's mission</span></div>
+      </div>
+    </a>
+  </div>
+
+  <div class="cycle-divider">
+    <span class="cycle-divider-label">🗺️ Term Missions</span>
+    <div class="cycle-divider-line"></div>
+  </div>
+  <div class="grid">
+    <a class="card" href="/computer-club/missions/01-shortcut-ninja/">
+      <div class="card-num">Week 1</div><div class="card-icon">🥷</div>
+      <div class="card-title">Shortcut Ninja</div>
+      <div class="card-desc">Copy, paste, undo and more, without the mouse</div>
+      <div class="card-tags"><span class="strand games">Games &amp; challenges</span></div>
+      <span class="card-arrow">→</span>
+    </a>
+    <div class="card soon">
+      <div class="card-num">Week 2</div><div class="card-icon">🖥️</div>
+      <div class="card-title">Know Your Computer</div>
+      <div class="card-desc">Scavenger hunt: find and name the parts of a computer</div>
+      <div class="card-tags"><span class="strand skills">Computer skills</span></div>
+    </div>
+    <div class="card soon">
+      <div class="card-num">Week 3</div><div class="card-icon">🗂️</div>
+      <div class="card-title">Folder Detective</div>
+      <div class="card-desc">Sort a messy pile of files into neat folders in Google Drive</div>
+      <div class="card-tags"><span class="strand skills">Computer skills</span></div>
+    </div>
+    <div class="card soon">
+      <div class="card-num">Week 4</div><div class="card-icon">🛡️</div>
+      <div class="card-title">Safe Surfer</div>
+      <div class="card-desc">Spot the scam, protect your password, stay safe online</div>
+      <div class="card-tags"><span class="strand skills">Computer skills</span></div>
+    </div>
+    <div class="card soon">
+      <div class="card-num">Week 5</div><div class="card-icon">🔎</div>
+      <div class="card-title">Search Sleuth</div>
+      <div class="card-desc">Race to find answers using smart search words</div>
+      <div class="card-tags"><span class="strand games">Games &amp; challenges</span></div>
+    </div>
+    <div class="card soon">
+      <div class="card-num">Week 6</div><div class="card-icon">🟪</div>
+      <div class="card-title">Pixel Artist</div>
+      <div class="card-desc">Create a picture one square at a time in Google Sheets</div>
+      <div class="card-tags"><span class="strand create">Digital creativity</span></div>
+    </div>
+    <div class="card soon">
+      <div class="card-num">Week 7</div><div class="card-icon">🎨</div>
+      <div class="card-title">Badge Designer</div>
+      <div class="card-desc">Design our Computer Club badge in Canva</div>
+      <div class="card-tags"><span class="strand create">Digital creativity</span></div>
+    </div>
+    <div class="card soon">
+      <div class="card-num">Week 8</div><div class="card-icon">📣</div>
+      <div class="card-title">Poster Pro</div>
+      <div class="card-desc">Make an eye-catching poster for a school event in Canva</div>
+      <div class="card-tags"><span class="strand create">Digital creativity</span></div>
+    </div>
+    <div class="card soon">
+      <div class="card-num">Week 9</div><div class="card-icon">🎞️</div>
+      <div class="card-title">Slide Show Star</div>
+      <div class="card-desc">Build an animated Google Slides show about Belize</div>
+      <div class="card-tags"><span class="strand create">Digital creativity</span></div>
+    </div>
+    <div class="card soon">
+      <div class="card-num">Week 10</div><div class="card-icon">🏅</div>
+      <div class="card-title">Typing Olympics</div>
+      <div class="card-desc">Team typing races and our end-of-term showcase</div>
+      <div class="card-tags"><span class="strand games">Games &amp; challenges</span></div>
+    </div>
+  </div>
+
+  <div class="cycle-divider" id="standings">
+    <span class="cycle-divider-label">🏆 Club Standings · live</span>
+    <div class="cycle-divider-line"></div>
+  </div>
+  <div id="signedOutBoard" class="note-strip">
+    <div class="note-icon">🔒</div>
+    <div class="note-text"><strong>Sign in to join the race!</strong> Club members see their XP, level and rank, and the club boards. Only club members can see the names.</div>
+  </div>
+  <div id="signedInBoard" class="hidden">
+    <p class="level-note" id="boardUpdated" style="margin:0 0 1rem"></p>
+    <div class="board-grid">
+      <div class="panel wide"><h3>⭐ Overall XP · Top 10</h3><ol class="board xp-board nocount" id="boardXp"></ol></div>
+      <div class="panel"><h3>⚔️ Standard vs Standard</h3><p class="mini">Average XP per member, so a small group can win too.</p><div id="boardBattle"></div></div>
+      <div class="panel"><h3>📈 Most Improved Typing</h3><p class="mini">Best speed minus first speed (90%+ accuracy).</p><ol class="board" id="boardImproved"></ol></div>
+      <div class="panel"><h3>⌨️ Fastest Typist per Standard</h3><div id="boardFastest"></div></div>
+      <div class="panel"><h3>🥷 Shortcut Ninja · Gold</h3><ol class="board" id="boardNinja"></ol></div>
+      <div class="panel"><h3>🎯 How to earn XP</h3><ul class="rules" id="xpRules"></ul></div>
+    </div>
+    <div class="panel" style="margin-top:1rem">
+      <h3>My badges</h3>
+      <div class="badge-shelf" id="myBadges"></div>
+      <p id="myBests" style="margin-top:.8rem"></p>
+    </div>
+  </div>
+
+  <a class="back-link teacher-link" href="/computer-club/teacher/">🧑‍🏫 Teacher dashboard</a>
+
+</div><!-- /wrapper -->
+
+<footer class="site-footer">
+  <div class="footer-logo">
+    <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+    <span>Mr. EdLo's Virtual Classroom</span>
+  </div>
+  <p class="footer-tagline">Explore, discover, and learn something new every day!</p>
+  <p class="footer-copy">© 2026 Mr. EdLo's Virtual Classroom — Computer Club · Belize · All rights reserved.</p>
+</footer>
+
+<button id="zoom-btn" title="Change text size" aria-label="Change text size">
+  <span id="zoom-label">A</span>
+  <span class="zoom-dots">
+    <span class="zoom-dot on"></span><span class="zoom-dot"></span><span class="zoom-dot"></span><span class="zoom-dot"></span>
+  </span>
+</button>
+
+<button id="back-to-top" title="Back to top" aria-label="Back to top">↑</button>
+
+
+<script>
+
+/* Stars */
+const sc = document.getElementById('stars');
+for (let i = 0; i < 80; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const sz = Math.random()*2.5+1;
+  s.style.cssText = 'width:'+sz+'px;height:'+sz+'px;top:'+(Math.random()*100)+'%;left:'+(Math.random()*100)+'%;--d:'+(Math.random()*4+2).toFixed(1)+'s;--delay:-'+(Math.random()*6).toFixed(1)+'s;--op:'+(Math.random()*0.4+0.15).toFixed(2)+';';
+  sc.appendChild(s);
+}
+
+/* Theme */
+const THEMES = ['night','sunny','cloudy','nature'];
+function setTheme(theme, btn) {
+  THEMES.forEach(t => document.body.classList.remove('theme-'+t));
+  document.body.classList.add('theme-'+theme);
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  try { localStorage.setItem('vc-theme', theme); } catch(e) {}
+}
+(function(){
+  let saved = null;
+  try { saved = localStorage.getItem('vc-theme'); } catch(e) {}
+  if (saved && THEMES.includes(saved)) {
+    THEMES.forEach(t => document.body.classList.remove('theme-'+t));
+    document.body.classList.add('theme-'+saved);
+    document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase().includes(saved)));
+  }
+})();
+
+/* Zoom */
+const ZOOM_LABELS = ['A','A+','A++','A+++'];
+let zoomLevel = 0;
+function applyZoom(level) {
+  zoomLevel = level;
+  document.documentElement.classList.remove('zoom-1','zoom-2','zoom-3');
+  if (level > 0) document.documentElement.classList.add('zoom-'+level);
+  document.getElementById('zoom-label').textContent = ZOOM_LABELS[level];
+  document.querySelectorAll('.zoom-dot').forEach((d,i) => d.classList.toggle('on', i <= level));
+  try { localStorage.setItem('vc-zoom', String(level)); } catch(e) {}
+}
+document.getElementById('zoom-btn').addEventListener('click', () => applyZoom((zoomLevel+1) % 4));
+(function(){
+  let z = 0;
+  try { z = parseInt(localStorage.getItem('vc-zoom') || '0', 10); } catch(e) {}
+  if (isNaN(z) || z < 0 || z > 3) z = 0;
+  applyZoom(z);
+})();
+
+/* Back to top */
+const topBtn = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => { topBtn.style.display = window.scrollY > 300 ? 'flex' : 'none'; });
+topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+/* Floating code field */
+const canvas = document.getElementById('code-canvas');
+const ctx    = canvas.getContext('2d');
+const GLYPHS = ['{ }','< >','</>','( )','[ ]',';','=','==','if','for','01','10','▶','#','&&','++','//','fn'];
+let W, H, bits;
+
+function getCodeColor() {
+  return getComputedStyle(document.body).getPropertyValue('--mol-color').trim() || 'rgba(32,201,151,0.25)';
+}
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+function initBits(n) {
+  bits = [];
+  for (let i=0;i<n;i++) bits.push({
+    x: Math.random()*W,
+    y: Math.random()*H,
+    vx: (Math.random()-.5)*.22,
+    vy: (Math.random()-.5)*.22,
+    size: Math.random()*14+11,
+    g: GLYPHS[Math.floor(Math.random()*GLYPHS.length)],
+    a: Math.random()*0.5+0.3
+  });
+}
+function drawBits() {
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = getCodeColor();
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  bits.forEach(b => {
+    ctx.globalAlpha = b.a;
+    ctx.font = '700 ' + b.size + "px 'Courier New', monospace";
+    ctx.fillText(b.g, b.x, b.y);
+  });
+  ctx.globalAlpha = 1;
+}
+function updateBits() {
+  bits.forEach(b => {
+    b.x += b.vx; b.y += b.vy;
+    if (b.x < -30) b.x = W+30; if (b.x > W+30) b.x = -30;
+    if (b.y < -20) b.y = H+20; if (b.y > H+20) b.y = -20;
+  });
+}
+function loop() { updateBits(); drawBits(); requestAnimationFrame(loop); }
+
+resize(); initBits(38); loop();
+window.addEventListener('resize', () => { resize(); initBits(38); });
+
+
+</script>
+<script src="/computer-club/club.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  CC.statusChip($('status'), '/computer-club/');
+  var s = CC.session();
+  if (!s) return;
+  $('signedOutBoard').classList.add('hidden');
+  $('signedInBoard').classList.remove('hidden');
+
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = String(text);
+    return e;
+  }
+  function item(left, right, cls, sub) {
+    var li = el('li', cls || '');
+    var a = el('span', '', left);
+    if (sub) a.appendChild(el('span', 'sub', sub));
+    li.appendChild(a);
+    li.appendChild(el('span', '', right));
+    return li;
+  }
+  function empty(ol, text) { ol.textContent = ''; ol.appendChild(el('li', 'empty', text || 'No scores yet. Be the first!')); }
+
+  // Boards redraw every time the live bar refreshes (club.js fires 'cc-standings').
+  window.addEventListener('cc-standings', function (e) {
+    var st = e.detail, me = st.me;
+    $('boardUpdated').textContent = 'Updates by itself every minute · last update ' + new Date().toLocaleTimeString();
+
+    // Overall XP: top 10 + me (and the student just ahead) if I am lower down
+    var ol = $('boardXp'); ol.textContent = '';
+    var meShown = false;
+    st.top.forEach(function (r) {
+      var isMe = !!r.is_me;
+      if (isMe) meShown = true;
+      ol.appendChild(item('#' + r.rank + '  ' + r.name, r.xp + ' XP', isMe ? 'me' : '', 'Std ' + r.standard + ' · Lv ' + r.level + ' ' + r.level_name));
+    });
+    if (!meShown) {
+      ol.appendChild(el('li', 'gap', '⋯'));
+      if (me.ahead) ol.appendChild(item('Next up: ' + me.ahead.name, '+' + me.ahead.gap + ' XP ahead of you'));
+      ol.appendChild(item('#' + me.rank + '  ' + me.name + ' (you)', me.xp + ' XP', 'me', 'Lv ' + me.level + ' ' + me.level_name));
+    }
+
+    // Standard vs Standard
+    var bb = $('boardBattle'); bb.textContent = '';
+    var max = Math.max.apply(null, st.battle.map(function (b) { return b.avg; }).concat([1]));
+    st.battle.forEach(function (b, i) {
+      var row = el('div', 'battle-row');
+      var lbl = el('div', 'lbl');
+      lbl.appendChild(el('span', '', (i === 0 && b.avg > 0 ? '👑 ' : '') + 'Standard ' + b.standard));
+      lbl.appendChild(el('span', '', b.avg + ' XP avg · ' + b.members + (b.members === 1 ? ' member' : ' members')));
+      var tr = el('div', 'battle-track'); var fill = el('div', 'battle-fill');
+      fill.style.width = Math.round(b.avg / max * 100) + '%';
+      tr.appendChild(fill); row.appendChild(lbl); row.appendChild(tr); bb.appendChild(row);
+    });
+
+    // Most improved
+    var mi = $('boardImproved');
+    if (!st.most_improved.length) empty(mi, 'Do two typing tests at 90%+ to get on this board!');
+    else { mi.textContent = ''; st.most_improved.forEach(function (r) {
+      mi.appendChild(item(r.name, '+' + r.value + ' WPM', '', 'Std ' + r.standard + ' · ' + r.from + ' → ' + r.to));
+    }); }
+
+    // Fastest per standard
+    var bf = $('boardFastest'); bf.textContent = '';
+    [4, 5, 6].forEach(function (std) {
+      var box = el('div', 'std-mini');
+      box.appendChild(el('h4', '', 'Standard ' + std));
+      var list = el('ol', 'board');
+      var rows = st.fastest_by_standard[std] || [];
+      if (!rows.length) empty(list, 'No 90%+ tests yet');
+      rows.forEach(function (r) { list.appendChild(item(r.name, r.value + ' WPM')); });
+      box.appendChild(list); bf.appendChild(box);
+    });
+
+    // Shortcut Ninja Gold
+    var bn = $('boardNinja');
+    if (!st.shortcut_gold.length) empty(bn);
+    else { bn.textContent = ''; st.shortcut_gold.forEach(function (r) { bn.appendChild(item(r.name, r.value + ' correct', '', 'Std ' + r.standard)); }); }
+
+    // Rules
+    var ru = $('xpRules'); ru.textContent = '';
+    st.xp_rules.forEach(function (t) { ru.appendChild(el('li', '', t)); });
+  });
+
+  // Badges + TypingClub link (once per visit)
+  CC.call('/me', { token: s.token }).then(function (me) {
+    if (!me || !me.ok) { if (me && me.auth) { CC.signOut(); location.reload(); } return; }
+    if (me.typingclub_url) {
+      $('tcLink').href = me.typingclub_url;
+      $('tcNote').textContent = 'Opens our class page on TypingClub.';
+    }
+    var owned = {};
+    (me.badges || []).forEach(function (b) { owned[b.id] = true; });
+    var shelf = $('myBadges'); shelf.textContent = '';
+    (me.all_badges || []).forEach(function (b) {
+      var d = el('div', 'badge-item' + (owned[b.id] ? '' : ' locked'));
+      d.appendChild(el('span', 'ico', b.icon));
+      d.appendChild(document.createTextNode(b.name));
+      shelf.appendChild(d);
+    });
+    $('myBests').textContent = 'My best typing speed: ' + (me.best_wpm || 0) + ' WPM  ·  My Shortcut Ninja Gold best: ' + (me.shortcut_gold_best || 0);
+  });
+})();
+</script>
+</body>
+</html>

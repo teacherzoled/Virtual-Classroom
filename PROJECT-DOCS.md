@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** November 2, 2026 — CS **Course E Lesson 6: Game Design** built + hub card, **committed and pushed Nov 2** (see the Nov 2 entry) · CS lesson progress saved to the student's account is **LIVE** (Cloudflare D1 + edlo-lms Worker; CS Lessons 3–5; tested by Edwin with test.student; branch `cs-progress-d1` merged into `main`) — see the Oct 24 entry · October 25, 2026 — Science **C1 Unit Test 2** page brought up to every standing rule (rebuilt from the Unit Test 1 page: resilience + save helper, readable layout, full anti-cheat) + photo figures for Q3 and Q11 via KV (sitting Wed Oct 28; KV pasted + checked live Oct 25) · Oct 24: Maths **Cycle 1 Math Test (Unit Test 2)** placed at `standard5/math/tests/c1-unit2/` + hub card lit (gated; KV `sy2627-std5-c1-unit2-math` pasted and dev-checked by Edwin (Oct 25), sitting Fri Oct 30 — only opening it on the day is left (open item 13); committed and pushed Oct 24) · Oct 21: CS **teacher preview** (`?preview` + teacher code opens every part of CS Lessons 3–5, sends nothing) · CS **Course E Lesson 5: Mini-Project: Career Journeys** built by the scheduled task + hub card, **committed and pushed (`ec682d5`), LIVE** · Oct 11: Maths Problem Set 2 kept on paper (no online build; Problem Set 3 goes online) · **Standard 6 is ON HALT** (home-page card shows 🔧 On Maintenance, front door only — see the entry below) · **everything through CS Course E Lesson 5 is committed, pushed and LIVE** (`ec682d5`). Latest: CS **Lesson 4: Hello World** (Saturday scheduled task) + hub card · CS Lesson 3 help layer (Struggling? card, helper badge, raise hand) + class checkpoint before Code.org · CS Lesson 3 tap-to-answer reflections + fun layer · Part 5 exempt from the part locks · CS Lesson 3 site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · Std 5 **Computer Science hub** + **Lesson 3: Swimming Fish** + Std 5 hub's CS card lit · Oct 3: Maths C1 Unit Test 1 at `standard5/math/tests/c1-unit1/` + hub card (gated; KV `sy2627-std5-c1-unit1-math` still to paste — open item 12) · answer-blur fix (a clicked option fades at once) + SVG labels left as drawn · Science C1 Unit Test 1 up to the readable-layout and anti-cheat rules (Science project) · earlier Oct 3: readable layout + full anti-cheat as STANDING RULES, shared save helper + Apps Script duplicate guard, KV merge rule · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
+**Last updated:** November 6, 2026 — **Computer Club** built for Standards 4–6 (`/computer-club/` + homepage card + separate `computer-club-records` Worker and `Computer Club Records` Sheet; tested end-to-end against a mock Sheet; **not yet committed, pushed or set up** — see the Nov 6 Take-off entry and the 💻 Computer Club section) · November 2, 2026 — CS **Course E Lesson 6: Game Design** built + hub card, **committed and pushed Nov 2** (see the Nov 2 entry) · CS lesson progress saved to the student's account is **LIVE** (Cloudflare D1 + edlo-lms Worker; CS Lessons 3–5; tested by Edwin with test.student; branch `cs-progress-d1` merged into `main`) — see the Oct 24 entry · October 25, 2026 — Science **C1 Unit Test 2** page brought up to every standing rule (rebuilt from the Unit Test 1 page: resilience + save helper, readable layout, full anti-cheat) + photo figures for Q3 and Q11 via KV (sitting Wed Oct 28; KV pasted + checked live Oct 25) · Oct 24: Maths **Cycle 1 Math Test (Unit Test 2)** placed at `standard5/math/tests/c1-unit2/` + hub card lit (gated; KV `sy2627-std5-c1-unit2-math` pasted and dev-checked by Edwin (Oct 25), sitting Fri Oct 30 — only opening it on the day is left (open item 13); committed and pushed Oct 24) · Oct 21: CS **teacher preview** (`?preview` + teacher code opens every part of CS Lessons 3–5, sends nothing) · CS **Course E Lesson 5: Mini-Project: Career Journeys** built by the scheduled task + hub card, **committed and pushed (`ec682d5`), LIVE** · Oct 11: Maths Problem Set 2 kept on paper (no online build; Problem Set 3 goes online) · **Standard 6 is ON HALT** (home-page card shows 🔧 On Maintenance, front door only — see the entry below) · **everything through CS Course E Lesson 5 is committed, pushed and LIVE** (`ec682d5`). Latest: CS **Lesson 4: Hello World** (Saturday scheduled task) + hub card · CS Lesson 3 help layer (Struggling? card, helper badge, raise hand) + class checkpoint before Code.org · CS Lesson 3 tap-to-answer reflections + fun layer · Part 5 exempt from the part locks · CS Lesson 3 site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · Std 5 **Computer Science hub** + **Lesson 3: Swimming Fish** + Std 5 hub's CS card lit · Oct 3: Maths C1 Unit Test 1 at `standard5/math/tests/c1-unit1/` + hub card (gated; KV `sy2627-std5-c1-unit1-math` still to paste — open item 12) · answer-blur fix (a clicked option fades at once) + SVG labels left as drawn · Science C1 Unit Test 1 up to the readable-layout and anti-cheat rules (Science project) · earlier Oct 3: readable layout + full anti-cheat as STANDING RULES, shared save helper + Apps Script duplicate guard, KV merge rule · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -48,6 +48,24 @@ This is an engine change to the quiz, made in the Lesson 7 clone. Why: most stud
 ---
 
 ## ▶️ Take-off Point — Next Session (as of October 10, 2026)
+
+**Nov 6 — Computer Club (Standards 4–6) built; Edwin still to do: set up + commit + push.**
+- **What:** `/computer-club/` hub (routine, levels, 10-week mission map, my badges + club leaderboard), `sign-in/`
+  (club code → name → 4-digit PIN; signing in = attendance), `typing-test/` (Bronze/Silver 1 min, Gold 2 min; WPM,
+  accuracy, mistakes saved), `missions/01-shortcut-ninja/` (Week 1, saves every finished game), `teacher/` (teacher code:
+  set the weekly club code/week/mission, projector view, attendance grid, typing progress, mission results, badges,
+  leaderboards). Homepage: new **Clubs** section with a Computer Club card (purple `--a-cs`).
+- **Backend (new, separate):** Worker `computer-club-records` → Apps Script `Computer Club Backend` → Sheet
+  `Computer Club Records`. Mirrors in `backend/`; steps in `backend/COMPUTER-CLUB-SETUP.md`.
+- **Edwin's next steps:** (1) do `backend/COMPUTER-CLUB-SETUP.md` Steps 1–5; (2) commit + push; (3) Step 6 live test.
+  The TypingClub class sign-up link goes ONLY in the Sheet's Settings tab (`typingclub_url`), never in the repo.
+- **Tested (Nov 6):** the real Apps Script ran in a mock Sheet behind the real Worker code: wrong/right club code, name
+  list, wrong PIN + 5-try lock, PIN with leading zero, one attendance row a day, Bronze/Silver/Gold rounds saved,
+  badge once only, offline result kept and sent once (no duplicate), typing test saved (24 WPM, 97.6%), second student
+  on the same computer, teacher dashboard + set session, leaderboards; every page 360px and 1280px with no sideways scroll.
+- **Later Nov 6 — Club XP + live standings added** (see 💻 Computer Club → Club XP). Same setup steps; nothing new to configure.
+- **Next mission to build:** Week 2 Know Your Computer (copy the Shortcut Ninja page; add it to the hub card and
+  `MISSIONS` in `teacher/index.html`; add a badge rule in `BADGES` if it should award one).
 
 **Nov 2 — CS Lesson 6 is pushed.** Edwin still to do: URL-check it. Next: CS Lesson 7 needs its plan PDF in `_source/`.
 
@@ -1295,6 +1313,13 @@ Virtual-Classroom/
 │   └── index.html                      ← Student login page — ROOT (✅ LIVE July 16, 2026)
 ├── dashboard/                          ← Student dashboard — ROOT (live)
 ├── teacher/                            ← Teacher dashboard — ROOT (live)
+├── computer-club/                      ← Computer Club, Standards 4–6 — ROOT (Nov 6, 2026; own Worker + Sheet)
+│   ├── index.html                      ← Club hub (routine, levels, mission map, badges, leaderboard)
+│   ├── club.js                         ← Club shared JS: sign-in session + unsent-results queue
+│   ├── sign-in/                        ← Club code → name → PIN (= attendance)
+│   ├── typing-test/                    ← Saved typing tests (WPM, accuracy)
+│   ├── missions/01-shortcut-ninja/     ← Week 1 mission (MISSION TEMPLATE — copy for the next one)
+│   └── teacher/                        ← Club teacher dashboard (TEACHER_CODE)
 ├── backend/                            ← Mirrors of Apps Script + Workers (NOT served; no secrets)
 ├── assets/lesson-icons/                ← SVG glyph library (Aug 5, 2026)
 └── tools/                              ← Python helpers (powerup-images.py, new-week-from-bank.py)
@@ -1445,6 +1470,79 @@ or null when signed out. See the "LESSON PROGRESS" block in the file and the Oct
 ✅ Login → redirect · ✅ Session persists across pages · ✅ /login/ skips form when logged in ·
 ✅ Wrong password rejected · ✅ Score saved to All Results (80%) · ✅ Progress retrieved ·
 ✅ Tabs 3 & 4 auto-calculate
+
+---
+
+## 💻 Computer Club (Nov 6, 2026)
+
+A weekly club for **Standards 4–6** (one computer each, ~45 min: 10 min TypingClub warm-up · 25 min mission ·
+10 min show & share). Students **practise** on TypingClub; **tests and challenges happen on the site** so they are recorded.
+
+### Architecture — separate from the class LMS on purpose
+```
+/computer-club/* pages ── /computer-club/club.js
+        │  (POST, JSON sent as text/plain — no CORS preflight)
+        ▼
+Cloudflare Worker: computer-club-records   ← messenger only (CORS + secret key), same pattern as edlo-lms
+        ▼
+Apps Script: Computer Club Backend          ← all logic: club code, PINs, tokens, attendance, badges
+        ▼
+Google Sheet: Computer Club Records         ← Students · Settings · Sessions · Attendance · Mission Results ·
+                                              Typing · Badges · Summary (formulas)
+```
+Nothing is shared with `edlo-lms`, `VC-LMS` or `edlo-gemini`. Club members are NOT class accounts.
+
+### Secrets and private values (never in the repo)
+| Value | Where it lives |
+|---|---|
+| `API_KEY`, `SESSION_SECRET`, `TEACHER_CODE` | Apps Script → Project Settings → Script Properties |
+| `APPS_SCRIPT_URL`, `APPS_SCRIPT_KEY` | Worker `computer-club-records` → Settings → Variables and Secrets |
+| Weekly club code, TypingClub class sign-up link | Sheet → **Settings** tab (`club_code`, `typingclub_url`) |
+| Student PINs | Students tab (hashed by `prepareRoster`); plain list only in `Virtual-Classroom-private\` |
+
+### How it works
+- **Sign-in:** this week's club code (teacher sets it on the dashboard and projects it) → names (first name + last
+  initial, shown only with the right code) → 4-digit PIN. Signing in writes ONE Attendance row per student per day.
+  5 wrong PINs = 10-minute wait. Session lasts 6 hours (`localStorage` **`cc-session`**).
+- **Results:** `CC.submit()` keeps each result on the computer (`cc-unsent::<id>`) until the Worker confirms it; every
+  result has an `attempt_id`, so a resend never makes a second row. Signed-out play is practice (not saved).
+- **Badges:** rules in `BADGES` at the top of the Apps Script, once per student. Typing badges + leaderboard need 90%+ accuracy.
+- **TypingClub card:** signed out → school login page; signed in → the class sign-up link from Settings.
+
+### Club XP + live standings (Edwin, Nov 6, 2026 — "I want this to be competitive")
+- **Why XP and not raw scores:** the club mixes Std 4–6; on raw typing speed Std 6 nearly always wins, so the youngest
+  would sit at the bottom every week. XP rewards effort and improvement, which anyone can win.
+- **XP rules** (constants `XP` at the top of the Apps Script; worked out from existing rows, nothing extra stored):
+  attend +10 · mission round +5 and +5 per star (max 60 a day) · typing test +5 (max 25 a day) · beat your own best +10
+  (typing at 90%+, or a Gold score) · badge +25 · a level every 100 XP: Rookie, Explorer, Coder, Hacker, Wizard, Legend.
+  The daily caps stop XP farming by replaying Bronze.
+- **Live bar** (`club.js`): sticky under the theme bar on every club page for a signed-in student: level, XP bar,
+  "#4 of 22", "12 XP behind Ben T." Refreshes every 60 s and right after a result is saved; "Level up!" pop-up.
+  The teacher page opts out (`<body data-cc-no-bar>`).
+- **Boards (hub, "Club Standings"):** Overall XP top 10 (+ the student's own row and the student just ahead) ·
+  Standard vs Standard (AVERAGE XP per member) · Most Improved typing (best 90%+ WPM minus first 90%+ WPM) ·
+  Fastest typist per standard (top 5) · Shortcut Ninja Gold · "How to earn XP". Students never see the bottom of the list.
+- **Teacher:** "Club XP · everyone" table with the XP breakdown, and **📺 Live leaderboard** (full-screen, refreshes every 30 s).
+- **Load:** the Apps Script keeps the standings for 30 s (`STANDINGS_SECONDS`) and clears them on every new row.
+  25 students × 1 refresh a minute × 45 min ≈ 1,100 requests a session — well inside the free plans.
+- Tested Nov 6 against hand-worked numbers (caps, personal bests, tied ranks, average battle) and in the browser.
+
+### Decisions (Edwin, Nov 6, 2026)
+| Decision | Why |
+|---|---|
+| Club website inside Virtual-Classroom, root `computer-club/` + homepage "Clubs" card | One repo; the club spans Std 4–6, so not under `standard5/` |
+| Separate Worker + Sheet | A club bug can never break class logins, grading or lessons |
+| Name + club code + 4-digit PIN | Std 4 friendly; stops sign-ins and attendance from home; repo and Worker are public |
+| Club pages self-contained (no `/vc-theme.css`), palette copied from the Std 5 CS hub, accent follows the theme | Edwin's choice for these pages (open item 3 stays open for other subjects) |
+| Strands: Computer skills · Digital creativity · Games & challenges; Bronze/Silver/Gold chosen by the student | Mixed Std 4–6; ability varies more than standard |
+| Canva for Education + school Google accounts available | Weeks 6–9 use Google Sheets/Slides and Canva |
+| Footer: `© 2026 Mr. EdLo's Virtual Classroom — Computer Club · Belize · All rights reserved.` | Grade-neutral club footer |
+
+### Adding a mission
+1. Copy `computer-club/missions/01-shortcut-ninja/` to `missions/NN-name/`; change `MISSION_ID`, content and game.
+2. Hub: light its card (remove `soon`, make it an `<a>`), and update the "Club Challenges" mission card.
+3. `teacher/index.html`: add the id → name in `MISSION_NAMES`.
+4. Badge? Add a rule to `BADGES` in the Apps Script, update `backend/Computer-Club-Backend.gs`, deploy a **new version**.
 
 ---
 
