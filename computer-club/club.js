@@ -25,6 +25,12 @@
  *    CC.statusChip(el, nextUrl)      → fills el with "Signed in as …" or a Sign in button
  *    CC.toastBadges(badges)          → shows a badge pop-up
  *    CC.refreshProgress()            → reloads the live XP bar now (also runs every 60 s)
+ *    CC.cachedWeek()                 → last known club week on this computer (number) or null
+ *    CC.clubWeek()                   → Promise<number|null>: the teacher's current club week
+ *
+ *  WEEK LOCK: missions open week by week. A page locks anything whose week is later than
+ *  the club week (kept in cc-week); the Apps Script refuses results for future-week missions
+ *  anyway (MISSION_WEEKS), so the page lock is only the friendly front door.
  *
  *  LIVE XP BAR: on every club page a signed-in student sees a sticky bar under the theme bar:
  *  level, XP progress to the next level, rank ("#4 of 22") and the student just ahead.
@@ -133,6 +139,20 @@
     });
   }
 
+
+
+  // ── Club week (for the week-by-week mission lock) ──
+  var WEEK_KEY = 'cc-week';
+  function cachedWeek() {
+    var w = Number(read(WEEK_KEY));
+    return w > 0 ? w : null;
+  }
+  function clubWeek() {
+    return call('/status', {}).then(function (r) {
+      if (r && r.ok && Number(r.week) > 0) { write(WEEK_KEY, String(Number(r.week))); return Number(r.week); }
+      return cachedWeek();
+    });
+  }
 
   // ── Live XP bar ──
   var REFRESH_MS = 60000;
@@ -295,7 +315,9 @@
     unsentCount: function () { var s = session(); return s ? unsentList(s.id).length : 0; },
     statusChip: statusChip,
     toastBadges: toastBadges,
-    refreshProgress: refreshProgress
+    refreshProgress: refreshProgress,
+    cachedWeek: cachedWeek,
+    clubWeek: clubWeek
   };
 
   // Try to send anything left over from a dropped connection.

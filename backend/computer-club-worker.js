@@ -13,7 +13,7 @@
  *  but a separate Worker so the club can never break class logins or grading.
  *
  *  Routes (POST, body = JSON sent as text/plain so the browser skips the preflight):
- *    /roster · /signin · /save-result · /save-typing · /me · /leaderboard · /standings
+ *    /status · /roster · /signin · /save-result · /save-typing · /me · /leaderboard · /standings
  *    /teacher-data · /teacher-standings · /set-session
  *  GET /ping  → health check
  *
@@ -32,7 +32,7 @@ const ALLOWED_ORIGINS = [
 ];
 
 const ROUTES = {
-  '/roster': 'roster', '/signin': 'signin', '/save-result': 'save-result',
+  '/status': 'status', '/roster': 'roster', '/signin': 'signin', '/save-result': 'save-result',
   '/save-typing': 'save-typing', '/me': 'me', '/leaderboard': 'leaderboard', '/standings': 'standings',
   '/teacher-data': 'teacher-data', '/teacher-standings': 'teacher-standings', '/set-session': 'set-session'
 };

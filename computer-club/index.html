@@ -459,6 +459,13 @@
   .teacher-link { display:block; text-align:center; margin-top:2rem; }
   .board-grid .panel.wide { flex:1 1 100%; }
   .mini { font-size:.78rem; margin:-.3rem 0 .6rem; }
+  .card.locked { opacity:.46; pointer-events:none; cursor:default; padding-top:2.1rem; }
+  .card.locked::after {
+    content:attr(data-lock); position:absolute; top:.65rem; right:.8rem;
+    font-size:.58rem; font-weight:800; letter-spacing:.07em; text-transform:uppercase;
+    background:var(--badge-bg); border:1px solid var(--badge-border); border-radius:999px;
+    padding:2px 8px; color:var(--badge-color);
+  }
   .board.nocount li::before, .board li.empty::before { content:none; }
   .board li.me { background:var(--badge-bg); border-radius:10px; }
   .board li.gap { justify-content:center; color:var(--section-lbl); }
@@ -518,8 +525,10 @@
 
   <!-- ════════════════════════════════════════════════
        HOW TO OPEN A MISSION: build its page in  missions/NN-mission-name/index.html  (copy the newest
-       mission page), then on its card below delete the word  soon  and change the <div> to
-       <a href="/computer-club/missions/NN-mission-name/">. Also add it to MISSIONS in teacher/index.html.
+       mission page, set MISSION_ID and MISSION_WEEK), then on its card below delete the word  soon  and
+       change the <div> to <a ... href="/computer-club/missions/NN-mission-name/"> (keep data-week).
+       Add its id → week to MISSION_WEEKS in the Apps Script, and its id → name to MISSION_NAMES in teacher/index.html.
+       WEEK LOCK: cards whose data-week is later than the club week (set on the teacher dashboard) lock themselves.
   ════════════════════════════════════════════════ -->
 
   <div class="cycle-divider">
@@ -570,11 +579,11 @@
         <div class="lab-meta"><span class="lab-tag">Bronze · Silver · Gold</span></div>
       </div>
     </a>
-    <a class="lab-card" href="/computer-club/missions/01-shortcut-ninja/">
-      <div class="lab-icon">🥷</div>
+    <a class="lab-card" id="labMission" href="/computer-club/missions/01-shortcut-ninja/">
+      <div class="lab-icon" id="labIcon">🥷</div>
       <div class="lab-body">
-        <div class="lab-title">Week 1 · Shortcut Ninja</div>
-        <div class="lab-desc">Master the keyboard shortcuts that make you super fast.</div>
+        <div class="lab-title" id="labTitle">Week 1 · Shortcut Ninja</div>
+        <div class="lab-desc" id="labDesc">Master the keyboard shortcuts that make you super fast.</div>
         <div class="lab-meta"><span class="lab-tag">This week's mission</span></div>
       </div>
     </a>
@@ -584,63 +593,64 @@
     <span class="cycle-divider-label">🗺️ Term Missions</span>
     <div class="cycle-divider-line"></div>
   </div>
+  <p class="level-note" id="weekNote" style="margin:-.3rem 0 1rem">Each mission opens in its own week, during Computer Club.</p>
   <div class="grid">
-    <a class="card" href="/computer-club/missions/01-shortcut-ninja/">
+    <a class="card mission" data-week="1" href="/computer-club/missions/01-shortcut-ninja/">
       <div class="card-num">Week 1</div><div class="card-icon">🥷</div>
       <div class="card-title">Shortcut Ninja</div>
       <div class="card-desc">Copy, paste, undo and more, without the mouse</div>
       <div class="card-tags"><span class="strand games">Games &amp; challenges</span></div>
       <span class="card-arrow">→</span>
     </a>
-    <div class="card soon">
+    <div class="card soon mission" data-week="2">
       <div class="card-num">Week 2</div><div class="card-icon">🖥️</div>
       <div class="card-title">Know Your Computer</div>
       <div class="card-desc">Scavenger hunt: find and name the parts of a computer</div>
       <div class="card-tags"><span class="strand skills">Computer skills</span></div>
     </div>
-    <div class="card soon">
+    <div class="card soon mission" data-week="3">
       <div class="card-num">Week 3</div><div class="card-icon">🗂️</div>
       <div class="card-title">Folder Detective</div>
       <div class="card-desc">Sort a messy pile of files into neat folders in Google Drive</div>
       <div class="card-tags"><span class="strand skills">Computer skills</span></div>
     </div>
-    <div class="card soon">
+    <div class="card soon mission" data-week="4">
       <div class="card-num">Week 4</div><div class="card-icon">🛡️</div>
       <div class="card-title">Safe Surfer</div>
       <div class="card-desc">Spot the scam, protect your password, stay safe online</div>
       <div class="card-tags"><span class="strand skills">Computer skills</span></div>
     </div>
-    <div class="card soon">
+    <div class="card soon mission" data-week="5">
       <div class="card-num">Week 5</div><div class="card-icon">🔎</div>
       <div class="card-title">Search Sleuth</div>
       <div class="card-desc">Race to find answers using smart search words</div>
       <div class="card-tags"><span class="strand games">Games &amp; challenges</span></div>
     </div>
-    <div class="card soon">
+    <div class="card soon mission" data-week="6">
       <div class="card-num">Week 6</div><div class="card-icon">🟪</div>
       <div class="card-title">Pixel Artist</div>
       <div class="card-desc">Create a picture one square at a time in Google Sheets</div>
       <div class="card-tags"><span class="strand create">Digital creativity</span></div>
     </div>
-    <div class="card soon">
+    <div class="card soon mission" data-week="7">
       <div class="card-num">Week 7</div><div class="card-icon">🎨</div>
       <div class="card-title">Badge Designer</div>
       <div class="card-desc">Design our Computer Club badge in Canva</div>
       <div class="card-tags"><span class="strand create">Digital creativity</span></div>
     </div>
-    <div class="card soon">
+    <div class="card soon mission" data-week="8">
       <div class="card-num">Week 8</div><div class="card-icon">📣</div>
       <div class="card-title">Poster Pro</div>
       <div class="card-desc">Make an eye-catching poster for a school event in Canva</div>
       <div class="card-tags"><span class="strand create">Digital creativity</span></div>
     </div>
-    <div class="card soon">
+    <div class="card soon mission" data-week="9">
       <div class="card-num">Week 9</div><div class="card-icon">🎞️</div>
       <div class="card-title">Slide Show Star</div>
       <div class="card-desc">Build an animated Google Slides show about Belize</div>
       <div class="card-tags"><span class="strand create">Digital creativity</span></div>
     </div>
-    <div class="card soon">
+    <div class="card soon mission" data-week="10">
       <div class="card-num">Week 10</div><div class="card-icon">🏅</div>
       <div class="card-title">Typing Olympics</div>
       <div class="card-desc">Team typing races and our end-of-term showcase</div>
@@ -804,6 +814,41 @@ window.addEventListener('resize', () => { resize(); initBits(38); });
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   CC.statusChip($('status'), '/computer-club/');
+
+  // ── Week lock: a mission card opens only when the club reaches its week ──
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.card.mission[data-week]'));
+  function applyWeek(w) {
+    w = w || 1;
+    cards.forEach(function (c) {
+      var wk = Number(c.getAttribute('data-week'));
+      if (c.tagName === 'A' && !c.getAttribute('data-href')) c.setAttribute('data-href', c.getAttribute('href'));
+      if (wk > w) {
+        c.classList.add('locked');
+        c.setAttribute('data-lock', '🔒 Opens Week ' + wk);
+        if (c.tagName === 'A') { c.removeAttribute('href'); c.setAttribute('aria-disabled', 'true'); }
+      } else {
+        c.classList.remove('locked');
+        if (c.tagName === 'A') { c.setAttribute('href', c.getAttribute('data-href')); c.removeAttribute('aria-disabled'); }
+      }
+    });
+    // "This week's mission" = the newest built mission that is open
+    var open = cards.filter(function (c) { return c.tagName === 'A' && Number(c.getAttribute('data-week')) <= w; })
+      .sort(function (a, b) { return Number(b.getAttribute('data-week')) - Number(a.getAttribute('data-week')); })[0];
+    var lab = $('labMission');
+    if (open) {
+      lab.classList.remove('hidden');
+      lab.setAttribute('href', open.getAttribute('data-href'));
+      $('labIcon').textContent = open.querySelector('.card-icon').textContent;
+      $('labTitle').textContent = 'Week ' + open.getAttribute('data-week') + ' · ' + open.querySelector('.card-title').textContent;
+      $('labDesc').textContent = open.querySelector('.card-desc').textContent;
+    } else {
+      lab.classList.add('hidden');
+    }
+    $('weekNote').textContent = 'We are in Week ' + w + ' of Computer Club. Each mission opens in its own week, during club time.';
+  }
+  applyWeek(CC.cachedWeek());
+  CC.clubWeek().then(applyWeek);
+
   var s = CC.session();
   if (!s) return;
   $('signedOutBoard').classList.add('hidden');

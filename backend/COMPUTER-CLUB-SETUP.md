@@ -106,6 +106,7 @@ every PIN becomes a `sha256:…` hash, and `active` becomes `YES`. Check **Execu
 ## Every club day
 
 1. Open the teacher dashboard → type a **new club code** (letters/numbers) → week → mission → **Start this session**.
+   The week you set also **unlocks** that week's mission; later weeks stay locked (🔒) for students.
 2. **📽️ Show club code on projector.**
 3. Students: Computer Club → Sign in → club code → name → PIN. That is their attendance.
 4. After club: the dashboard (or the **Summary** tab) shows attendance, typing progress, missions and badges.

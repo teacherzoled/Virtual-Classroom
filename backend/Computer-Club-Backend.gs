@@ -24,7 +24,7 @@
  *    handed only to signed-in members)
  *
  *  Actions (all POST bodies carry { key, action, ... }):
- *    ping · roster · signin · save-result · save-typing · me · leaderboard · standings
+ *    ping · status · roster · signin · save-result · save-typing · me · leaderboard · standings
  *    teacher-data · teacher-standings · set-session
  *
  *  Teacher utilities (run from the editor):
@@ -84,6 +84,16 @@ var BADGES = [
 ];
 
 // ─────────────────────────────────────────────
+// MISSION WEEKS — every mission page's id and the club week it opens in.
+// A mission stays LOCKED until the teacher's current week (Settings → week, set with
+// "Start this session") reaches it: future-week results are refused here, whatever the page does.
+// ⚠️ Add each new mission here before students use it (an unknown id is refused).
+// ─────────────────────────────────────────────
+var MISSION_WEEKS = {
+  'shortcut-ninja': 1
+};
+
+// ─────────────────────────────────────────────
 // CLUB XP — worked out from rows the Sheet already has (nothing extra to type in).
 // Daily caps stop anyone farming XP by replaying the same easy round.
 // ─────────────────────────────────────────────
@@ -113,6 +123,7 @@ function doPost(e) {
 
     switch (body.action) {
       case 'ping':         return reply({ ok: true, message: 'Computer Club backend is alive' });
+      case 'status':       return reply(handleStatus());
       case 'roster':       return reply(handleRoster(body));
       case 'signin':       return reply(handleSignin(body));
       case 'save-result':  return reply(handleSaveResult(body));
@@ -128,6 +139,15 @@ function doPost(e) {
   } catch (err) {
     return reply({ ok: false, error: 'Server error: ' + err.message });
   }
+}
+
+// ─────────────────────────────────────────────
+// STATUS — public (no sign-in): the current club week, so pages can lock future missions.
+// Never returns the club code.
+// ─────────────────────────────────────────────
+function handleStatus() {
+  var s = getSettings();
+  return { ok: true, week: s.week, mission: s.mission };
 }
 
 // ─────────────────────────────────────────────
@@ -227,6 +247,11 @@ function handleSaveResult(body) {
     detail: String(body.detail || '').slice(0, 300)
   };
   if (!r.mission_id) return { ok: false, error: 'Missing mission id' };
+  var opensIn = MISSION_WEEKS[r.mission_id];
+  if (!opensIn) return { ok: false, error: 'Unknown mission. Please tell Mr. EdLo.' };
+  if (opensIn > getSettings().week) {
+    return { ok: false, locked: true, error: 'This mission opens in Week ' + opensIn + '. It is done during Computer Club.' };
+  }
 
   var lock = LockService.getScriptLock();
   lock.waitLock(20000);
