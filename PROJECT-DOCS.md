@@ -63,7 +63,7 @@ This is an engine change to the quiz, made in the Lesson 7 clone. Why: most stud
   list, wrong PIN + 5-try lock, PIN with leading zero, one attendance row a day, Bronze/Silver/Gold rounds saved,
   badge once only, offline result kept and sent once (no duplicate), typing test saved (24 WPM, 97.6%), second student
   on the same computer, teacher dashboard + set session, leaderboards; every page 360px and 1280px with no sideways scroll.
-- **Later Nov 6 — week lock added:** future-week missions stay locked until the dashboard's club week reaches them (see 💻 Computer Club → Week lock).
+- **Later Nov 6 — Open / Close switches added:** "Club in session" (3 h, auto-closes) + one switch per mission on the teacher dashboard; everything is locked while closed (see 💻 Computer Club → Open / Close).
 - **Later Nov 6 — Club XP + live standings added** (see 💻 Computer Club → Club XP). Same setup steps; nothing new to configure.
 - **Next mission to build:** Week 2 Know Your Computer (copy the Shortcut Ninja page; add it to the hub card and
   `MISSIONS` in `teacher/index.html`; add a badge rule in `BADGES` if it should award one).
@@ -1539,26 +1539,28 @@ Nothing is shared with `edlo-lms`, `VC-LMS` or `edlo-gemini`. Club members are N
 | Canva for Education + school Google accounts available | Weeks 6–9 use Google Sheets/Slides and Canva |
 | Footer: `© 2026 Mr. EdLo's Virtual Classroom — Computer Club · Belize · All rights reserved.` | Grade-neutral club footer |
 
-### Week lock (Edwin, Nov 6, 2026 — "the work should be done during the computer club")
-- A mission opens only when the **club week** reaches it. The club week is the Week the teacher sets with
-  **Start this session** on the dashboard (Settings → `week`).
-- **Hub:** every mission card carries `data-week`; later weeks show "🔒 Opens Week N" and are not links. The
-  "Club Challenges" mission card always shows the newest built mission that is open.
-- **Mission page:** `MISSION_WEEK` at the top of its script; before that week the page shows a lock panel instead of
-  the mission. A first visit with no internet counts as locked (for any mission after Week 1).
-- **Apps Script (the real gate):** `MISSION_WEEKS` maps each `mission_id` → week. A result for a future week is
-  refused, and an unknown id is refused, so nothing early or unlisted ever reaches the Sheet.
-- Public `status` route returns the week only (never the club code). The typing test is not week-locked.
-- Earlier weeks stay open. Signed-out visitors can still try an OPEN mission as practice; nothing is saved without
-  a club sign-in, which needs the club code shown during club.
+### Open / Close switches (Edwin, Nov 6, 2026 — "the work should be done during the computer club")
+- **Teacher dashboard → 🔓 Open / Close:** one **Club in session** switch + one switch **per mission**.
+  - Opening the club lasts **3 hours** (`CLUB_OPEN_HOURS`), then it closes by itself. **Start this session** also opens it.
+  - Students can reach a mission only while the club is in session **and** that mission is switched on.
+  - While the club is closed: no sign-in (so no attendance), no typing tests, no missions, nothing saved.
+- **What students see:** hub banner (🟢 in session until … / 🔴 closed); closed mission cards show "🔒 Club closed" or
+  "🔒 Locked" and are not links; the typing-test card locks; mission and typing pages show a lock panel instead.
+  The "Club Challenges" mission card shows the newest mission that is open right now.
+- **The real gate is the Apps Script:** sign-in, results and typing tests are refused while closed, and a result for a
+  switched-off or unlisted mission is refused, even if a page is still open (tested: teacher closes mid-round → the
+  round is not saved and the student sees why).
+- Stored in the Sheet's Settings tab as `club_open_until` (time) and `open_missions` (ids), written only by the dashboard.
+  Public `status` route returns open/closed + open missions + week (never the club code).
+- The week number is for records (attendance grid, labels) only. (An earlier week-number lock was replaced by these
+  switches the same day.)
 
 ### Adding a mission
-1. Copy `computer-club/missions/01-shortcut-ninja/` to `missions/NN-name/`; change `MISSION_ID`, `MISSION_WEEK`,
-   content and game.
-2. Hub: light its card (remove `soon`, make it an `<a>` with the href; keep `data-week`). The week lock and the
-   "Club Challenges" card follow by themselves.
-3. Apps Script: add `'mission-id': week` to `MISSION_WEEKS` (results are refused until you do).
-4. `teacher/index.html`: add the id → name in `MISSION_NAMES`.
+1. Copy `computer-club/missions/01-shortcut-ninja/` to `missions/NN-name/`; change `MISSION_ID`, content and game.
+2. Hub: light its card (remove `soon`, make it an `<a>` with `data-mission="<id>"` and the href; keep `data-week`).
+3. Apps Script: add `'<id>': { week: N, name: '…' }` to `MISSIONS`. That also gives it a switch on the dashboard
+   (results are refused until it is listed).
+4. On club day, switch it on in the dashboard's Open / Close panel.
 5. Badge? Add a rule to `BADGES`. After any Apps Script change: update `backend/Computer-Club-Backend.gs` and
    deploy a **new version**.
 

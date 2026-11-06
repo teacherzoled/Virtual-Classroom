@@ -21,11 +21,12 @@
  *
  *  Settings tab (typed by the teacher, never committed — the repo is public):
  *    club_code · week · mission · typingclub_url (the TypingClub class sign-up link,
- *    handed only to signed-in members)
+ *    handed only to signed-in members) · club_open_until + open_missions (written by the
+ *    dashboard's Open/Close switches — leave them to the dashboard)
  *
  *  Actions (all POST bodies carry { key, action, ... }):
  *    ping · status · roster · signin · save-result · save-typing · me · leaderboard · standings
- *    teacher-data · teacher-standings · set-session
+ *    teacher-data · teacher-standings · set-session · set-access
  *
  *  Teacher utilities (run from the editor):
  *    setupSheet()   → builds every tab with headers (safe to re-run)
@@ -84,14 +85,18 @@ var BADGES = [
 ];
 
 // ─────────────────────────────────────────────
-// MISSION WEEKS — every mission page's id and the club week it opens in.
-// A mission stays LOCKED until the teacher's current week (Settings → week, set with
-// "Start this session") reaches it: future-week results are refused here, whatever the page does.
+// MISSIONS + OPEN/CLOSE SWITCHES (Edwin, Nov 6, 2026: "the work should be done during the computer club")
+// Every mission page's id, its week (order + labels) and its name for the dashboard switches.
+// Students can play and save a mission ONLY when BOTH are true:
+//   1. the club is in session  (Settings → club_open_until is in the future; "Open club" lasts CLUB_OPEN_HOURS)
+//   2. that mission is switched open (Settings → open_missions, a comma list of ids)
+// The teacher flips both on the dashboard. Results for a closed or unlisted mission are refused here.
 // ⚠️ Add each new mission here before students use it (an unknown id is refused).
 // ─────────────────────────────────────────────
-var MISSION_WEEKS = {
-  'shortcut-ninja': 1
+var MISSIONS = {
+  'shortcut-ninja': { week: 1, name: 'Shortcut Ninja' }
 };
+var CLUB_OPEN_HOURS = 3;
 
 // ─────────────────────────────────────────────
 // CLUB XP — worked out from rows the Sheet already has (nothing extra to type in).
@@ -134,6 +139,7 @@ function doPost(e) {
       case 'teacher-standings': return reply(handleTeacherStandings(body));
       case 'teacher-data': return reply(handleTeacherData(body));
       case 'set-session':  return reply(handleSetSession(body));
+      case 'set-access':   return reply(handleSetAccess(body));
     }
     return reply({ ok: false, error: 'Unknown action' });
   } catch (err) {
@@ -142,19 +148,31 @@ function doPost(e) {
 }
 
 // ─────────────────────────────────────────────
-// STATUS — public (no sign-in): the current club week, so pages can lock future missions.
+// STATUS — public (no sign-in): is the club in session, and which missions are open.
 // Never returns the club code.
 // ─────────────────────────────────────────────
 function handleStatus() {
-  var s = getSettings();
-  return { ok: true, week: s.week, mission: s.mission };
+  var s = getSettings(), a = access(s);
+  return { ok: true, week: s.week, mission: s.mission, club_open: a.club_open, open_until: a.open_until,
+           open_missions: a.open_missions };
 }
+
+function access(s) {
+  s = s || getSettings();
+  var until = Number(s.club_open_until) || 0;
+  var open = String(s.open_missions || '').split(',').map(function (x) { return x.trim(); })
+    .filter(function (x) { return x && MISSIONS[x]; });
+  return { club_open: Date.now() < until, open_until: Date.now() < until ? until : 0, open_missions: open };
+}
+
+var CLOSED_MSG = 'Computer Club is closed right now. Come back during club time!';
 
 // ─────────────────────────────────────────────
 // ROSTER — { club_code } → names to pick from (only with this week's code)
 // ─────────────────────────────────────────────
 function handleRoster(body) {
   var s = getSettings();
+  if (!access(s).club_open) return { ok: false, closed: true, error: CLOSED_MSG };
   if (!codeMatches(body.club_code, s.club_code)) {
     return { ok: false, error: 'That club code is not right. Check the board and try again.' };
   }
@@ -172,6 +190,7 @@ function handleRoster(body) {
 // ─────────────────────────────────────────────
 function handleSignin(body) {
   var s = getSettings();
+  if (!access(s).club_open) return { ok: false, closed: true, error: CLOSED_MSG };
   if (!codeMatches(body.club_code, s.club_code)) {
     return { ok: false, error: 'That club code is not right. Check the board and try again.' };
   }
@@ -247,10 +266,11 @@ function handleSaveResult(body) {
     detail: String(body.detail || '').slice(0, 300)
   };
   if (!r.mission_id) return { ok: false, error: 'Missing mission id' };
-  var opensIn = MISSION_WEEKS[r.mission_id];
-  if (!opensIn) return { ok: false, error: 'Unknown mission. Please tell Mr. EdLo.' };
-  if (opensIn > getSettings().week) {
-    return { ok: false, locked: true, error: 'This mission opens in Week ' + opensIn + '. It is done during Computer Club.' };
+  if (!MISSIONS[r.mission_id]) return { ok: false, error: 'Unknown mission. Please tell Mr. EdLo.' };
+  var acc = access();
+  if (!acc.club_open) return { ok: false, closed: true, error: CLOSED_MSG };
+  if (acc.open_missions.indexOf(r.mission_id) === -1) {
+    return { ok: false, closed: true, error: 'This mission is locked. Mr. EdLo opens it during Computer Club.' };
   }
 
   var lock = LockService.getScriptLock();
@@ -285,6 +305,7 @@ function handleSaveTyping(body) {
   if (!attempt) return { ok: false, error: 'Missing attempt id' };
   var level = String(body.level || '').toLowerCase();
   if (MISSION_LEVELS.indexOf(level) === -1) return { ok: false, error: 'Bad level' };
+  if (!access().club_open) return { ok: false, closed: true, error: CLOSED_MSG };
 
   var t = {
     level: level,
@@ -404,7 +425,8 @@ function handleTeacherData(body) {
   var sessions = rowsOf(TAB.SESSIONS).map(function (r) {
     return { date: dateStr(r[0]), week: r[1], mission: r[2] };
   });
-  return { ok: true, settings: getSettings(), students: students, attendance: attendance,
+  return { ok: true, settings: publicSettings(), access: access(), missions: missionList(),
+           students: students, attendance: attendance,
            typing: typing, results: results, badges: badges, sessions: sessions,
            leaderboard: { typing: topTyping(10), shortcut_gold: topShortcutGold(10) },
            all_badges: badgeList() };
@@ -425,11 +447,47 @@ function handleSetSession(body) {
     setSetting('club_code', code);
     setSetting('week', week);
     setSetting('mission', mission);
+    setSetting('club_open_until', Date.now() + CLUB_OPEN_HOURS * 3600 * 1000);   // starting a session opens the club
     sheet(TAB.SESSIONS).appendRow([todayStr(), week, mission, code, nowStr()]);
   } finally {
     lock.releaseLock();
   }
-  return { ok: true, settings: getSettings() };
+  return { ok: true, settings: publicSettings(), access: access(), missions: missionList() };
+}
+
+// { teacher_code, club_open?: true|false, mission_id?, mission_open?: true|false }
+//   club_open true → open for CLUB_OPEN_HOURS from now · false → close now
+//   mission_id + mission_open → switch one mission open or closed
+function handleSetAccess(body) {
+  var t = checkTeacher(body);
+  if (!t.ok) return t;
+  var lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    if (body.club_open === true) setSetting('club_open_until', Date.now() + CLUB_OPEN_HOURS * 3600 * 1000);
+    if (body.club_open === false) setSetting('club_open_until', 0);
+    if (body.mission_id !== undefined) {
+      var id = cleanId(body.mission_id);
+      if (!MISSIONS[id]) return { ok: false, error: 'Unknown mission' };
+      var list = access().open_missions.filter(function (x) { return x !== id; });
+      if (body.mission_open === true) list.push(id);
+      setSetting('open_missions', list.join(','));
+    }
+  } finally {
+    lock.releaseLock();
+  }
+  return { ok: true, access: access(), missions: missionList() };
+}
+
+function missionList() {
+  return Object.keys(MISSIONS).map(function (id) { return { id: id, week: MISSIONS[id].week, name: MISSIONS[id].name }; })
+    .sort(function (a, b) { return a.week - b.week; });
+}
+
+// Settings for the dashboard, without the raw switch values (they come back as "access").
+function publicSettings() {
+  var s = getSettings();
+  return { club_code: s.club_code, week: s.week, mission: s.mission };
 }
 
 // ─────────────────────────────────────────────
@@ -771,6 +829,8 @@ function setupSheet() {
     settings.appendRow(['week', 1]);
     settings.appendRow(['mission', 'Shortcut Ninja']);
     settings.appendRow(['typingclub_url', '']);   // paste the class sign-up link here (never in the repo)
+    settings.appendRow(['club_open_until', 0]);   // set by the dashboard: Open club / Start this session
+    settings.appendRow(['open_missions', '']);    // set by the dashboard's mission switches
   }
   // Summary tab — formulas only; one row per student (rows 2–101)
   var sum = ss.getSheetByName(TAB.SUMMARY) || ss.insertSheet(TAB.SUMMARY);

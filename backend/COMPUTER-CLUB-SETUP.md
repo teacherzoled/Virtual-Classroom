@@ -41,6 +41,7 @@ It shares **nothing** with `VC-LMS`, `edlo-lms` or `edlo-gemini`.
 | `week` | `1` |
 | `mission` | `Shortcut Ninja` |
 | `typingclub_url` | Paste your **TypingClub class sign-up link** (`https://howardsmithnazarene.typingclub.com/signup/…`). Only signed-in club members are given it. |
+| `club_open_until`, `open_missions` | Leave them alone: the dashboard's **Open / Close** switches write these. |
 
 ## Step 3 — Enter the club roster
 
@@ -97,7 +98,8 @@ every PIN becomes a `sha256:…` hash, and `active` becomes `YES`. Check **Execu
 1. On GitHub, open pull request **#1 "Computer Club…"** → **Merge pull request** → **Confirm merge**. GitHub Pages
    publishes it in a minute or two. Then in GitHub Desktop: **Fetch origin → Pull origin**, so your computer has it too.
 2. On the live site: **edlovirtualclassroom.com → Computer Club → 🧑‍🏫 Teacher dashboard** → type your
-   `TEACHER_CODE` → set a club code, Week 1, Shortcut Ninja → **Start this session**.
+   `TEACHER_CODE` → set a club code, Week 1, Shortcut Ninja → **Start this session** (this opens the club) →
+   in **🔓 Open / Close**, switch **Week 1 · Shortcut Ninja** on.
 3. Add yourself as a test member in the Students tab (e.g. `Test S.`, standard 5, PIN `0000`), run
    `prepareRoster`, then sign in with the club code, play one Bronze round and do one Bronze typing test.
 4. Check the Sheet: one Attendance row, one Mission Results row, one Typing row. Set the test member to
@@ -106,16 +108,19 @@ every PIN becomes a `sha256:…` hash, and `active` becomes `YES`. Check **Execu
 ## Every club day
 
 1. Open the teacher dashboard → type a **new club code** (letters/numbers) → week → mission → **Start this session**.
-   The week you set also **unlocks** that week's mission; later weeks stay locked (🔒) for students.
-2. **📽️ Show club code on projector.**
-3. Students: Computer Club → Sign in → club code → name → PIN. That is their attendance.
-4. After club: the dashboard (or the **Summary** tab) shows attendance, typing progress, missions and badges.
+   This opens the club for 3 hours.
+2. **🔓 Open / Close:** switch on the mission(s) students should do today. Everything else stays 🔒.
+3. **📽️ Show club code on projector.**
+4. Students: Computer Club → Sign in → club code → name → PIN. That is their attendance.
+5. End of club: switch **Club in session** off (or let it close itself after 3 hours).
+6. After club: the dashboard (or the **Summary** tab) shows attendance, typing progress, missions and badges.
 
 ## Rules the backend follows
 
 - **Club XP** (live bar + standings) needs no setup: it is worked out from the tabs above. To change the points,
   edit `XP` near the top of the Apps Script, update `backend/Computer-Club-Backend.gs`, and deploy a **new version**.
 
+- While the club is closed, nobody can sign in, take a typing test, open a mission or save anything.
 - Sign-in needs the **current** club code, so nobody can be marked present from home.
 - 5 wrong PINs → that student waits 10 minutes. 10 wrong teacher codes → 10-minute wait.
 - A sign-in lasts 6 hours (one club session) on that computer. **Sign out** on a shared computer.

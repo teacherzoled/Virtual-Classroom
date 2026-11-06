@@ -459,6 +459,10 @@
   .teacher-link { display:block; text-align:center; margin-top:2rem; }
   .board-grid .panel.wide { flex:1 1 100%; }
   .mini { font-size:.78rem; margin:-.3rem 0 .6rem; }
+  .lab-card.locked { opacity:.46; pointer-events:none; cursor:default; }
+  .club-banner { max-width:760px; margin:0 auto 1rem; text-align:center; font-weight:800; padding:.7rem 1rem; border-radius:14px; border:1.5px solid var(--card-border); background:var(--card-bg); }
+  .club-banner.open { border-color:var(--good); color:var(--good); }
+  .club-banner.closed { color:var(--card-desc); }
   .card.locked { opacity:.46; pointer-events:none; cursor:default; padding-top:2.1rem; }
   .card.locked::after {
     content:attr(data-lock); position:absolute; top:.65rem; right:.8rem;
@@ -513,6 +517,7 @@
   </header>
 
   <div class="status-bar" id="status"></div>
+  <div class="club-banner" id="clubBanner" role="status"></div>
 
   <div class="welcome">
     <div class="welcome-icon">🚀</div>
@@ -524,11 +529,11 @@
   </div>
 
   <!-- ════════════════════════════════════════════════
-       HOW TO OPEN A MISSION: build its page in  missions/NN-mission-name/index.html  (copy the newest
-       mission page, set MISSION_ID and MISSION_WEEK), then on its card below delete the word  soon  and
-       change the <div> to <a ... href="/computer-club/missions/NN-mission-name/"> (keep data-week).
-       Add its id → week to MISSION_WEEKS in the Apps Script, and its id → name to MISSION_NAMES in teacher/index.html.
-       WEEK LOCK: cards whose data-week is later than the club week (set on the teacher dashboard) lock themselves.
+       HOW TO ADD A MISSION: build its page in  missions/NN-mission-name/index.html  (copy the newest mission
+       page, set MISSION_ID), then on its card below delete the word  soon  and change the <div> to
+       <a ... data-mission="mission-id" href="/computer-club/missions/NN-mission-name/"> (keep data-week).
+       Add it to MISSIONS in the Apps Script (that also gives it a switch on the teacher dashboard).
+       OPEN/CLOSE: a card opens only while the club is in session AND its mission is switched open.
   ════════════════════════════════════════════════ -->
 
   <div class="cycle-divider">
@@ -571,7 +576,7 @@
     <div class="cycle-divider-line"></div>
   </div>
   <div class="grid">
-    <a class="lab-card" href="/computer-club/typing-test/">
+    <a class="lab-card" id="labTyping" href="/computer-club/typing-test/">
       <div class="lab-icon">⌨️</div>
       <div class="lab-body">
         <div class="lab-title">Typing Test</div>
@@ -593,9 +598,9 @@
     <span class="cycle-divider-label">🗺️ Term Missions</span>
     <div class="cycle-divider-line"></div>
   </div>
-  <p class="level-note" id="weekNote" style="margin:-.3rem 0 1rem">Each mission opens in its own week, during Computer Club.</p>
+  <p class="level-note" id="weekNote" style="margin:-.3rem 0 1rem">Missions open during Computer Club, when Mr. EdLo switches them on.</p>
   <div class="grid">
-    <a class="card mission" data-week="1" href="/computer-club/missions/01-shortcut-ninja/">
+    <a class="card mission" data-week="1" data-mission="shortcut-ninja" href="/computer-club/missions/01-shortcut-ninja/">
       <div class="card-num">Week 1</div><div class="card-icon">🥷</div>
       <div class="card-title">Shortcut Ninja</div>
       <div class="card-desc">Copy, paste, undo and more, without the mouse</div>
@@ -815,39 +820,43 @@ window.addEventListener('resize', () => { resize(); initBits(38); });
   var $ = function (id) { return document.getElementById(id); };
   CC.statusChip($('status'), '/computer-club/');
 
-  // ── Week lock: a mission card opens only when the club reaches its week ──
+  // ── Open/Close: a card opens only while the club is in session AND its mission is switched open ──
   var cards = Array.prototype.slice.call(document.querySelectorAll('.card.mission[data-week]'));
-  function applyWeek(w) {
-    w = w || 1;
+  function lockLink(c, locked, label) {
+    if (!c.getAttribute('data-href') && c.getAttribute('href')) c.setAttribute('data-href', c.getAttribute('href'));
+    c.classList.toggle('locked', locked);
+    if (locked) { c.setAttribute('data-lock', label); c.removeAttribute('href'); c.setAttribute('aria-disabled', 'true'); }
+    else { c.setAttribute('href', c.getAttribute('data-href')); c.removeAttribute('aria-disabled'); }
+  }
+  function applyAccess(st) {
+    var open = !!(st && st.club_open);
+    var banner = $('clubBanner');
+    banner.className = 'club-banner ' + (open ? 'open' : 'closed');
+    banner.textContent = open
+      ? '🟢 Computer Club is in session until ' + CC.untilText(st) + '. Open missions are unlocked!'
+      : '🔴 Computer Club is closed. Missions and typing tests open during club time.';
     cards.forEach(function (c) {
-      var wk = Number(c.getAttribute('data-week'));
-      if (c.tagName === 'A' && !c.getAttribute('data-href')) c.setAttribute('data-href', c.getAttribute('href'));
-      if (wk > w) {
-        c.classList.add('locked');
-        c.setAttribute('data-lock', '🔒 Opens Week ' + wk);
-        if (c.tagName === 'A') { c.removeAttribute('href'); c.setAttribute('aria-disabled', 'true'); }
-      } else {
-        c.classList.remove('locked');
-        if (c.tagName === 'A') { c.setAttribute('href', c.getAttribute('data-href')); c.removeAttribute('aria-disabled'); }
-      }
+      if (c.tagName !== 'A' && !c.getAttribute('data-href')) return;          // not built yet: stays "Coming soon"
+      var ok = CC.missionOpen(st, c.getAttribute('data-mission'));
+      lockLink(c, !ok, open ? '🔒 Locked' : '🔒 Club closed');
     });
-    // "This week's mission" = the newest built mission that is open
-    var open = cards.filter(function (c) { return c.tagName === 'A' && Number(c.getAttribute('data-week')) <= w; })
+    lockLink($('labTyping'), !open, '');
+    // "This week's mission" = the newest mission that is open right now
+    var newest = cards.filter(function (c) { return c.classList.contains('mission') && !c.classList.contains('locked') && c.getAttribute('data-href'); })
       .sort(function (a, b) { return Number(b.getAttribute('data-week')) - Number(a.getAttribute('data-week')); })[0];
     var lab = $('labMission');
-    if (open) {
+    if (newest) {
       lab.classList.remove('hidden');
-      lab.setAttribute('href', open.getAttribute('data-href'));
-      $('labIcon').textContent = open.querySelector('.card-icon').textContent;
-      $('labTitle').textContent = 'Week ' + open.getAttribute('data-week') + ' · ' + open.querySelector('.card-title').textContent;
-      $('labDesc').textContent = open.querySelector('.card-desc').textContent;
+      lab.setAttribute('href', newest.getAttribute('data-href'));
+      $('labIcon').textContent = newest.querySelector('.card-icon').textContent;
+      $('labTitle').textContent = 'Week ' + newest.getAttribute('data-week') + ' · ' + newest.querySelector('.card-title').textContent;
+      $('labDesc').textContent = newest.querySelector('.card-desc').textContent;
     } else {
       lab.classList.add('hidden');
     }
-    $('weekNote').textContent = 'We are in Week ' + w + ' of Computer Club. Each mission opens in its own week, during club time.';
   }
-  applyWeek(CC.cachedWeek());
-  CC.clubWeek().then(applyWeek);
+  applyAccess(CC.cachedStatus());
+  CC.clubStatus().then(applyAccess);
 
   var s = CC.session();
   if (!s) return;

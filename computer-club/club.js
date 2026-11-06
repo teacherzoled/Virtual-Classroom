@@ -25,12 +25,12 @@
  *    CC.statusChip(el, nextUrl)      → fills el with "Signed in as …" or a Sign in button
  *    CC.toastBadges(badges)          → shows a badge pop-up
  *    CC.refreshProgress()            → reloads the live XP bar now (also runs every 60 s)
- *    CC.cachedWeek()                 → last known club week on this computer (number) or null
- *    CC.clubWeek()                   → Promise<number|null>: the teacher's current club week
+ *    CC.cachedStatus() / CC.clubStatus() → { club_open, open_until, open_missions[], week } (cached / fresh)
+ *    CC.missionOpen(status, id)      → true only if the club is in session AND that mission is switched open
  *
- *  WEEK LOCK: missions open week by week. A page locks anything whose week is later than
- *  the club week (kept in cc-week); the Apps Script refuses results for future-week missions
- *  anyway (MISSION_WEEKS), so the page lock is only the friendly front door.
+ *  OPEN/CLOSE: the teacher dashboard has a "Club in session" switch (3 hours, then it closes by itself)
+ *  and one switch per mission. Pages lock themselves from /status (kept in cc-status); the Apps Script
+ *  refuses sign-in, results and typing tests while closed anyway, so the page lock is only the front door.
  *
  *  LIVE XP BAR: on every club page a signed-in student sees a sticky bar under the theme bar:
  *  level, XP progress to the next level, rank ("#4 of 22") and the student just ahead.
@@ -141,17 +141,26 @@
 
 
 
-  // ── Club week (for the week-by-week mission lock) ──
-  var WEEK_KEY = 'cc-week';
-  function cachedWeek() {
-    var w = Number(read(WEEK_KEY));
-    return w > 0 ? w : null;
+  // ── Club status (the teacher's Open/Close switches) ──
+  var STATUS_KEY = 'cc-status';
+  function normalise(st) {
+    if (!st) return null;
+    var until = Number(st.open_until) || 0;
+    return { club_open: !!st.club_open && Date.now() < until, open_until: until,
+             open_missions: st.open_missions || [], week: Number(st.week) || 1 };
   }
-  function clubWeek() {
+  function cachedStatus() {
+    try { return normalise(JSON.parse(read(STATUS_KEY) || 'null')); } catch (e) { return null; }
+  }
+  function clubStatus() {
     return call('/status', {}).then(function (r) {
-      if (r && r.ok && Number(r.week) > 0) { write(WEEK_KEY, String(Number(r.week))); return Number(r.week); }
-      return cachedWeek();
+      if (r && r.ok) { write(STATUS_KEY, JSON.stringify(r)); return normalise(r); }
+      return cachedStatus();                       // offline: last known (an expired "open" counts as closed)
     });
+  }
+  function missionOpen(st, id) { return !!(st && st.club_open && st.open_missions.indexOf(id) !== -1); }
+  function untilText(st) {
+    return st && st.club_open ? new Date(st.open_until).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '';
   }
 
   // ── Live XP bar ──
@@ -316,8 +325,10 @@
     statusChip: statusChip,
     toastBadges: toastBadges,
     refreshProgress: refreshProgress,
-    cachedWeek: cachedWeek,
-    clubWeek: clubWeek
+    cachedStatus: cachedStatus,
+    clubStatus: clubStatus,
+    missionOpen: missionOpen,
+    untilText: untilText
   };
 
   // Try to send anything left over from a dropped connection.

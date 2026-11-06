@@ -14,7 +14,7 @@
  *
  *  Routes (POST, body = JSON sent as text/plain so the browser skips the preflight):
  *    /status · /roster · /signin · /save-result · /save-typing · /me · /leaderboard · /standings
- *    /teacher-data · /teacher-standings · /set-session
+ *    /teacher-data · /teacher-standings · /set-session · /set-access
  *  GET /ping  → health check
  *
  *  Secrets (Worker → Settings → Variables and Secrets):
@@ -34,7 +34,7 @@ const ALLOWED_ORIGINS = [
 const ROUTES = {
   '/status': 'status', '/roster': 'roster', '/signin': 'signin', '/save-result': 'save-result',
   '/save-typing': 'save-typing', '/me': 'me', '/leaderboard': 'leaderboard', '/standings': 'standings',
-  '/teacher-data': 'teacher-data', '/teacher-standings': 'teacher-standings', '/set-session': 'set-session'
+  '/teacher-data': 'teacher-data', '/teacher-standings': 'teacher-standings', '/set-session': 'set-session', '/set-access': 'set-access'
 };
 
 const MAX_BODY = 8000;   // bytes — every real request is far smaller

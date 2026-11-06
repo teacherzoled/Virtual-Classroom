@@ -10,7 +10,8 @@
   /* Computer Club Typing Test — Nov 6, 2026. Students practise on TypingClub; the TESTS happen here so
      every result is saved to the club Sheet (Typing tab) through /computer-club/club.js.
      WPM = correctly typed characters ÷ 5 ÷ minutes. Accuracy = right keys ÷ all keys typed.
-     Paste is blocked; the caret stays at the end; backspace is allowed. Self-contained page. */
+     Paste is blocked; the caret stays at the end; backspace is allowed. Self-contained page.
+     OPEN/CLOSE: locked while the club is closed (teacher dashboard); the Apps Script refuses tests then anyway. */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -489,7 +490,14 @@
 
   <div class="status-bar" id="status"></div>
 
-  <div class="test-wrap">
+  <section class="panel hidden" id="typingLocked" style="text-align:center;margin:1.5rem auto;max-width:720px">
+    <div style="font-size:3rem">🔒</div>
+    <h3 style="font-family:'Fredoka One',cursive;font-weight:400;font-size:1.6rem;margin:.4rem 0;color:var(--cycle-color)">Computer Club is closed</h3>
+    <p>Typing tests open during Computer Club. Keep practising on TypingClub, and see you at club!</p>
+    <div class="row-btns"><a class="btn" href="/computer-club/">← Back to Computer Club</a></div>
+  </section>
+
+  <div class="test-wrap" id="typingBody">
 
     <section class="panel" id="screenStart">
       <div class="levels">
@@ -620,6 +628,17 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
   var $ = function (id) { return document.getElementById(id); };
   CC.statusChip($('status'), '/computer-club/typing-test/');
 
+  // Open/Close: tests only while the club is in session (teacher dashboard). A test already running is not cut off.
+  function applyLock(st) {
+    if (T && !T.done) return;
+    var locked = !(st && st.club_open);
+    $('typingLocked').classList.toggle('hidden', !locked);
+    $('typingBody').classList.toggle('hidden', locked);
+  }
+  var T = null, timer = null;
+  applyLock(CC.cachedStatus());
+  CC.clubStatus().then(applyLock);
+
   // ── Texts (original, written for the club) ──
   var WORDS = ['as','ask','dad','sad','all','fall','hall','add','had','has','glass','salad','flag','half','lads',
                'the','and','is','it','we','go','to','sun','fun','run','cat','dog','big','red','hat','sit','top',
@@ -665,8 +684,7 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
     return shuffle(PARAGRAPHS).join(' ');
   }
 
-  // ── Test state ──
-  var T = null, timer = null;
+  // ── Test state (T and timer are declared above, with the lock) ──
 
   function show(id) {
     ['screenStart', 'screenTest', 'screenResult'].forEach(function (s) { $(s).classList.toggle('hidden', s !== id); });

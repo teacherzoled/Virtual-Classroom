@@ -8,12 +8,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
 <style>
   /* Computer Club · Week 1 mission: Shortcut Ninja — Nov 6, 2026.
-     MISSION TEMPLATE: copy this page for the next mission (set MISSION_ID + MISSION_WEEK). Fixed sections: goal → Step 1 Learn →
+     MISSION TEMPLATE: copy this page for the next mission (set MISSION_ID). Fixed sections: goal → Step 1 Learn →
      Step 2 Play (levelled game, result saved) → Step 3 Use it for real → Step 4 Show & Share → Teacher notes.
      Each finished game sends ONE row to the club Sheet (Mission Results) through /computer-club/club.js:
      mission_id 'shortcut-ninja'. Badge rule lives in the Apps Script (BADGES). Self-contained page.
-     WEEK LOCK: the page shuts itself until the club week (teacher dashboard) reaches MISSION_WEEK, and the
-     Apps Script refuses results for a mission whose week has not come (MISSION_WEEKS). */
+     OPEN/CLOSE: the page shows only while the club is in session AND this mission is switched open on the
+     teacher dashboard; the Apps Script refuses results otherwise (MISSIONS + Settings switches). */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -511,7 +511,7 @@
   <section class="panel hidden" id="missionLocked" style="text-align:center;margin:1.5rem auto;max-width:720px">
     <div style="font-size:3rem">🔒</div>
     <h3 style="font-family:'Fredoka One',cursive;font-weight:400;font-size:1.6rem;margin:.4rem 0;color:var(--cycle-color)" id="lockTitle">This mission is locked</h3>
-    <p>Missions open week by week, and we do them together during Computer Club. See you there!</p>
+    <p id="lockText">Missions open during Computer Club, when Mr. EdLo switches them on.</p>
     <div class="row-btns"><a class="btn" href="/computer-club/">← Back to Computer Club</a></div>
   </section>
 
@@ -694,7 +694,6 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
 <script>
 (function () {
   var MISSION_ID = 'shortcut-ninja';
-  var MISSION_WEEK = 1;      // the club week this mission opens in (must match MISSION_WEEKS in the Apps Script)
   var SHORTCUTS = [
     { id: 'copy',      code: 'KeyC', key: 'C', action: 'Copy',        tip: 'C for Copy.',                                level: 'bronze' },
     { id: 'paste',     code: 'KeyV', key: 'V', action: 'Paste',       tip: 'V is an arrow pointing down: drop it in!',  level: 'bronze' },
@@ -713,16 +712,22 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
 
   CC.statusChip($('status'), '/computer-club/missions/01-shortcut-ninja/');
 
-  // ── Week lock: the whole mission stays shut until the club reaches MISSION_WEEK.
-  //    Unknown week (first visit, no internet) counts as locked for any mission after Week 1.
-  function applyLock(w) {
-    var locked = MISSION_WEEK > 1 && (!w || w < MISSION_WEEK);
+  // ── Open/Close: the mission shows only while the club is in session AND this mission is switched open
+  //    (teacher dashboard). Unknown status (first visit, no internet) counts as closed.
+  function applyLock(st) {
+    var locked = !CC.missionOpen(st, MISSION_ID);
     $('missionLocked').classList.toggle('hidden', !locked);
     $('missionBody').classList.toggle('hidden', locked);
-    if (locked) $('lockTitle').textContent = 'This mission opens in Week ' + MISSION_WEEK;
+    if (locked) {
+      var clubOpen = !!(st && st.club_open);
+      $('lockTitle').textContent = clubOpen ? 'This mission is locked' : 'Computer Club is closed';
+      $('lockText').textContent = clubOpen
+        ? 'Mr. EdLo opens each mission during Computer Club. Check back in a moment!'
+        : 'Missions open during Computer Club, when Mr. EdLo switches them on. See you there!';
+    }
   }
-  applyLock(CC.cachedWeek());
-  CC.clubWeek().then(applyLock);
+  applyLock(CC.cachedStatus());
+  CC.clubStatus().then(applyLock);
 
   function shuffle(a) {
     a = a.slice();

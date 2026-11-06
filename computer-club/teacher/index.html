@@ -469,6 +469,15 @@
   .projector .p-code { font-family:'Fredoka One',cursive; font-size:clamp(4rem,18vw,12rem); letter-spacing:.12em; color:#20C997; line-height:1.1; word-break:break-all; }
   .projector .p-sub { font-weight:800; font-size:clamp(1rem,2.5vw,1.6rem); opacity:.75; margin-top:1rem; }
   .muted { color:var(--card-desc); font-weight:600; font-size:.85rem; }
+  .switch-row { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.7rem 0; border-bottom:1px solid var(--card-border); }
+  .switch-row.big .sw-name { font-family:'Fredoka One',cursive; font-size:1.25rem; }
+  .sw-name { font-weight:800; }
+  .switch { position:relative; flex:0 0 auto; width:76px; height:44px; border-radius:999px; border:2px solid var(--card-border-h); background:var(--card-border); cursor:pointer; transition:background .2s; }
+  .switch span { position:absolute; top:4px; left:4px; width:32px; height:32px; border-radius:50%; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,.3); transition:left .2s; }
+  .switch[aria-checked="true"] { background:var(--good); border-color:var(--good); }
+  .switch[aria-checked="true"] span { left:36px; }
+  .switch:disabled { opacity:.5; cursor:wait; }
+  .state-open { color:var(--good); font-weight:800; }
   .live { position:fixed; inset:0; z-index:310; background:#0b1a16; color:#fff; padding:1.2rem 2rem; overflow:auto; font-family:'Nunito',sans-serif; }
   .live-head { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:1rem; }
   .live-title { font-family:'Fredoka One',cursive; font-size:clamp(1.6rem,3.5vw,2.8rem); color:#20C997; }
@@ -539,6 +548,18 @@
       <button class="btn ghost" type="button" id="lockBtn">🔒 Lock dashboard</button>
     </div>
     <p class="msg muted" id="loadedAt"></p>
+
+    <section class="panel section" id="accessPanel">
+      <h3>🔓 Open / Close</h3>
+      <div class="switch-row big">
+        <div><div class="sw-name">Club in session</div><div class="muted" id="clubState">Closed</div></div>
+        <button class="switch" type="button" id="clubSwitch" role="switch" aria-checked="false" aria-label="Club in session"><span></span></button>
+      </div>
+      <div id="missionSwitches"></div>
+      <p class="muted" style="margin-top:.7rem">Students can sign in, take typing tests and play a mission only while the club is in session <strong>and</strong>
+        that mission is switched on. Opening the club lasts 3 hours, then it closes by itself. "Start this session" also opens it.</p>
+      <div class="msg" id="accessMsg"></div>
+    </section>
 
     <section class="panel section">
       <h3>This week's session</h3>
@@ -762,7 +783,46 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
     });
   }
 
+  // ── Open / Close switches ──
+  function untilText(ms) { return new Date(ms).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); }
+  function renderAccess(acc, missions) {
+    D.access = acc; if (missions) D.missions = missions;
+    var cs = $('clubSwitch');
+    cs.setAttribute('aria-checked', acc.club_open ? 'true' : 'false');
+    var st = $('clubState');
+    st.textContent = acc.club_open ? 'OPEN until ' + untilText(acc.open_until) : 'Closed';
+    st.className = acc.club_open ? 'state-open' : 'muted';
+    var box = $('missionSwitches'); box.textContent = '';
+    (D.missions || []).forEach(function (m) {
+      var rw = el('div', 'switch-row');
+      var name = el('div');
+      name.appendChild(el('div', 'sw-name', 'Week ' + m.week + ' · ' + m.name));
+      var on = acc.open_missions.indexOf(m.id) !== -1;
+      name.appendChild(el('div', on ? 'state-open' : 'muted', on ? (acc.club_open ? 'Open to students' : 'Switched on (opens when the club is in session)') : 'Closed'));
+      var b = el('button', 'switch'); b.type = 'button'; b.setAttribute('role', 'switch');
+      b.setAttribute('aria-checked', on ? 'true' : 'false'); b.setAttribute('aria-label', m.name);
+      b.appendChild(el('span'));
+      b.addEventListener('click', function () { setAccess({ mission_id: m.id, mission_open: !on }, b); });
+      rw.appendChild(name); rw.appendChild(b); box.appendChild(rw);
+    });
+  }
+  function setAccess(change, btn) {
+    var msg = $('accessMsg');
+    if (btn) btn.disabled = true;
+    msg.className = 'msg'; msg.textContent = 'Saving…';
+    CC.call('/set-access', Object.assign({ teacher_code: getCode() }, change)).then(function (r) {
+      if (btn) btn.disabled = false;
+      if (!r || !r.ok) { msg.className = 'msg bad'; msg.textContent = (r && r.error) || 'Not saved.'; return; }
+      msg.className = 'msg good'; msg.textContent = '✓ Saved. Students see it the next time a page loads.';
+      renderAccess(r.access, r.missions);
+    });
+  }
+  $('clubSwitch').addEventListener('click', function () {
+    setAccess({ club_open: !(D.access && D.access.club_open) }, this);
+  });
+
   function render() {
+    renderAccess(D.access, D.missions);
     var st = D.settings || {};
     $('codeNow').textContent = st.club_code || '-';
     $('weekNow').textContent = st.week || '-';
@@ -849,6 +909,10 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
     board($('lbNinja'), D.leaderboard.shortcut_gold, 'correct');
   }
 
+  function missionName(id) {
+    var m = (D.missions || []).filter(function (x) { return x.id === id; })[0];
+    return m ? m.name : (MISSION_NAMES[id] || id);
+  }
   function renderResults() {
     var who = $('resStudent').value;
     var nameOf = {};
@@ -861,7 +925,7 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
     list.forEach(function (r) {
       var s = nameOf[r.id] || { name: r.id };
       rt.appendChild(row([{ text: r.date }, { text: r.week, cls: 'num' }, { text: s.name, cls: 'name' },
-        { text: MISSION_NAMES[r.mission_id] || r.mission_id }, { text: r.level },
+        { text: missionName(r.mission_id) }, { text: r.level },
         { text: r.max_score ? r.score + '/' + r.max_score : r.score, cls: 'num' },
         { text: '★'.repeat(Number(r.stars) || 0), cls: 'num' }, { text: r.misses, cls: 'num' }]));
     });
