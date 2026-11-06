@@ -89,6 +89,8 @@ var BADGES = [
 // Every mission page's id, its week (order + labels) and its name for the dashboard switches.
 // Students can play and save a mission ONLY when BOTH are true:
 //   1. the club is in session  (Settings → club_open_until is in the future; "Open club" lasts CLUB_OPEN_HOURS)
+//      Saving alone gets SAVE_GRACE_MIN more minutes, so results kept on a computer during a dropped
+//      connection still arrive after the club closes. Sign-in and opening missions stop at close.
 //   2. that mission is switched open (Settings → open_missions, a comma list of ids)
 // The teacher flips both on the dashboard. Results for a closed or unlisted mission are refused here.
 // ⚠️ Add each new mission here before students use it (an unknown id is refused).
@@ -97,6 +99,7 @@ var MISSIONS = {
   'shortcut-ninja': { week: 1, name: 'Shortcut Ninja' }
 };
 var CLUB_OPEN_HOURS = 3;
+var SAVE_GRACE_MIN  = 30;   // after the club closes, results made in club may still arrive (dropped internet)
 
 // ─────────────────────────────────────────────
 // CLUB XP — worked out from rows the Sheet already has (nothing extra to type in).
@@ -162,7 +165,8 @@ function access(s) {
   var until = Number(s.club_open_until) || 0;
   var open = String(s.open_missions || '').split(',').map(function (x) { return x.trim(); })
     .filter(function (x) { return x && MISSIONS[x]; });
-  return { club_open: Date.now() < until, open_until: Date.now() < until ? until : 0, open_missions: open };
+  return { club_open: Date.now() < until, open_until: Date.now() < until ? until : 0, open_missions: open,
+           can_save: Date.now() < until + SAVE_GRACE_MIN * 60000 };   // saving only: sign-in stops at close
 }
 
 var CLOSED_MSG = 'Computer Club is closed right now. Come back during club time!';
@@ -268,7 +272,7 @@ function handleSaveResult(body) {
   if (!r.mission_id) return { ok: false, error: 'Missing mission id' };
   if (!MISSIONS[r.mission_id]) return { ok: false, error: 'Unknown mission. Please tell Mr. EdLo.' };
   var acc = access();
-  if (!acc.club_open) return { ok: false, closed: true, error: CLOSED_MSG };
+  if (!acc.can_save) return { ok: false, closed: true, error: CLOSED_MSG };
   if (acc.open_missions.indexOf(r.mission_id) === -1) {
     return { ok: false, closed: true, error: 'This mission is locked. Mr. EdLo opens it during Computer Club.' };
   }
@@ -305,7 +309,7 @@ function handleSaveTyping(body) {
   if (!attempt) return { ok: false, error: 'Missing attempt id' };
   var level = String(body.level || '').toLowerCase();
   if (MISSION_LEVELS.indexOf(level) === -1) return { ok: false, error: 'Bad level' };
-  if (!access().club_open) return { ok: false, closed: true, error: CLOSED_MSG };
+  if (!access().can_save) return { ok: false, closed: true, error: CLOSED_MSG };
 
   var t = {
     level: level,
@@ -465,7 +469,7 @@ function handleSetAccess(body) {
   lock.waitLock(20000);
   try {
     if (body.club_open === true) setSetting('club_open_until', Date.now() + CLUB_OPEN_HOURS * 3600 * 1000);
-    if (body.club_open === false) setSetting('club_open_until', 0);
+    if (body.club_open === false) setSetting('club_open_until', Date.now());   // closed now; the save grace starts here
     if (body.mission_id !== undefined) {
       var id = cleanId(body.mission_id);
       if (!MISSIONS[id]) return { ok: false, error: 'Unknown mission' };

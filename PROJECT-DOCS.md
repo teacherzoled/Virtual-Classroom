@@ -1543,13 +1543,15 @@ Nothing is shared with `edlo-lms`, `VC-LMS` or `edlo-gemini`. Club members are N
 - **Teacher dashboard → 🔓 Open / Close:** one **Club in session** switch + one switch **per mission**.
   - Opening the club lasts **3 hours** (`CLUB_OPEN_HOURS`), then it closes by itself. **Start this session** also opens it.
   - Students can reach a mission only while the club is in session **and** that mission is switched on.
-  - While the club is closed: no sign-in (so no attendance), no typing tests, no missions, nothing saved.
+  - While the club is closed: no sign-in (so no attendance), no typing tests, no missions, nothing saved — except a
+    **30-minute save grace** after closing (`SAVE_GRACE_MIN`), so results kept on a computer during a dropped
+    connection in club still arrive. Sign-in and opening pages stop the moment the club closes.
 - **What students see:** hub banner (🟢 in session until … / 🔴 closed); closed mission cards show "🔒 Club closed" or
   "🔒 Locked" and are not links; the typing-test card locks; mission and typing pages show a lock panel instead.
   The "Club Challenges" mission card shows the newest mission that is open right now.
 - **The real gate is the Apps Script:** sign-in, results and typing tests are refused while closed, and a result for a
-  switched-off or unlisted mission is refused, even if a page is still open (tested: teacher closes mid-round → the
-  round is not saved and the student sees why).
+  switched-off or unlisted mission is refused, even if a page is still open (tested: a round finished more than 30
+  minutes after closing is not saved and the student sees why).
 - Stored in the Sheet's Settings tab as `club_open_until` (time) and `open_missions` (ids), written only by the dashboard.
   Public `status` route returns open/closed + open missions + week (never the club code).
 - The week number is for records (attendance grid, labels) only. (An earlier week-number lock was replaced by these

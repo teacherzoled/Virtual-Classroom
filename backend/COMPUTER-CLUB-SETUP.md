@@ -120,7 +120,8 @@ every PIN becomes a `sha256:…` hash, and `active` becomes `YES`. Check **Execu
 - **Club XP** (live bar + standings) needs no setup: it is worked out from the tabs above. To change the points,
   edit `XP` near the top of the Apps Script, update `backend/Computer-Club-Backend.gs`, and deploy a **new version**.
 
-- While the club is closed, nobody can sign in, take a typing test, open a mission or save anything.
+- While the club is closed, nobody can sign in, take a typing test, open a mission or save anything. One exception:
+  for 30 minutes after closing, results done in club that were stuck on a computer (no internet) can still arrive.
 - Sign-in needs the **current** club code, so nobody can be marked present from home.
 - 5 wrong PINs → that student waits 10 minutes. 10 wrong teacher codes → 10-minute wait.
 - A sign-in lasts 6 hours (one club session) on that computer. **Sign out** on a shared computer.
