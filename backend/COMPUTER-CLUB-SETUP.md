@@ -92,9 +92,10 @@ every PIN becomes a `sha256:…` hash, and `active` becomes `YES`. Check **Execu
 > The pages call exactly that address (it is in `/computer-club/club.js`). If Cloudflare gives the Worker a
 > different address, tell Claude so the one line in `club.js` can be changed.
 
-## Step 6 — Push the website and test
+## Step 6 — Put the website live and test
 
-1. GitHub Desktop → commit → push (see PROJECT-DOCS).
+1. On GitHub, open pull request **#1 "Computer Club…"** → **Merge pull request** → **Confirm merge**. GitHub Pages
+   publishes it in a minute or two. Then in GitHub Desktop: **Fetch origin → Pull origin**, so your computer has it too.
 2. On the live site: **edlovirtualclassroom.com → Computer Club → 🧑‍🏫 Teacher dashboard** → type your
    `TEACHER_CODE` → set a club code, Week 1, Shortcut Ninja → **Start this session**.
 3. Add yourself as a test member in the Students tab (e.g. `Test S.`, standard 5, PIN `0000`), run
