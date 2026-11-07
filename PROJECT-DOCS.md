@@ -57,7 +57,7 @@ with timers, sounds and typing tips (#4), floating timer + tab-name countdown + 
 - **Ranks plan approved (Nov 6, late): 🎖️ Cadet (the current 10 weeks) → ✈️ Pilot (12 missions) → 🚀 Commander (14 missions,
   returning members next year).** Nothing built yet. Rules in the 💻 Computer Club section → "Ranks"; full plan with both
   mission lists: Computer Club project doc `claude/computer-club-stages-plan.md`. Build order: Week 2 → rank system → Cadet
-  Weeks 3–10 → Pilot Mission 1 around Cadet Week 8.
+  Weeks 3–10 (one a week) → Pilot Mission 1 around Cadet Week 8.
 - **Next session: build Week 2 · Know Your Computer.** Plan first and get Edwin's OK. Handoff with checklist and a draft
   plan: the Computer Club project doc `claude/computer-club-handoff.md`. Copy `missions/01-shortcut-ninja/` (the
   mission template), add `'know-your-computer': { week: 2, … }` to `MISSIONS` in the Apps Script (Edwin deploys a new
@@ -1593,14 +1593,22 @@ Edwin: new members and returning members each need their own path, each longer a
 |---|---|---|---|
 | Who | Every new member | Finished Cadet | Returning members (next year) |
 | Missions | the current 10 weeks | 12 (~15 sessions) | 14 (~22 sessions) |
-| Typing goal to finish | 15 WPM, 90%+, any test level | 25 WPM, 90%+, Silver or Gold test | 35 WPM, 90%+, Gold test |
+| How missions open | class pace: every week ever started stays open | own pace, one after another | own pace, one after another |
+| Typing goal (90%+) | 15 WPM **or** start speed + 5 | 25 WPM (Silver/Gold test) **or** Cadet-finish speed + 5 | 35 WPM (Gold test) **or** Pilot-finish speed + 5 |
 
 - **Why not "Level":** "level" already means Bronze/Silver/Gold and the XP levels (Rookie → Legend). Code uses `stage: 1|2|3`.
 - **Mission passed** = the Shortcut Ninja badge test (2+ stars Bronze/Silver, or the Gold target). Canva/Slides/Docs missions:
   checklist + short quiz on the page; Edwin can mark **redo** on the dashboard.
 - **Rank finished** = every mission of the rank passed **and** its typing goal → badge `stage-N-complete` (+25 XP).
   **Rank = 1 + number of stage badges** (no new tab). The Apps Script refuses a result for a mission above the student's rank.
-- **No teacher override.** Absences: re-open older missions with the switches; the hub shows a "Catch up" list.
+- **Typing goal = fast enough OR clearly better (Option C, Edwin Nov 6).** Why: only 15 min of typing a week, so some
+  students pass every mission long before 15 WPM. **Start speed** = best 90%+ test in the student's first two club weeks.
+  While waiting, a **Typing Boost** mission (drills from his or her most-missed keys) is open; hub shows "3 WPM to go".
+- **Opening missions (Edwin: "past sessions stay open … so it does not become a headache"):** Cadet weeks open once
+  **Start this session** has reached them and then stay open whenever the club is in session (new members and students
+  who are behind catch up on their own). Pilot/Commander: next mission opens when the student passes the one before.
+  The per-mission switches become emergency **hold** switches (off by default). Hub: **Start here** + **Catch up** list.
+- **No teacher override.**
 - **No coding in the club** (Std 5 already does Code.org in class); Commander's Storybook mission (linked slides) replaces Scratch.
 - **Next year:** same Sheet, same student ids; leavers `active = NO`; returners keep their rank. XP carry-over: decide by August 2027.
 - Mission lists, hub/dashboard changes and the technical checklist: project doc `claude/computer-club-stages-plan.md`.
