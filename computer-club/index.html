@@ -523,8 +523,8 @@
     <div class="welcome-icon">🚀</div>
     <div class="welcome-text">
       <strong>Welcome, club members!</strong> Sign in at the start of every club session: that is how your
-      attendance, typing tests and missions get saved. Then warm up on TypingClub, take on this week's mission,
-      and get ready to show &amp; share.
+      attendance, typing tests and missions get saved. Then warm up on TypingClub for 15 minutes, take on this week's
+      mission for 25, and finish with 5 minutes of show &amp; share.
     </div>
   </div>
 
@@ -543,22 +543,25 @@
   <div class="grid">
     <div class="card static">
       <div class="step-num">1</div>
-      <div class="card-title">Warm-up · 10 min</div>
+      <div class="card-title">Warm-up · 15 min</div>
       <div class="card-desc">Practise your next TypingClub lessons. Eyes on the screen, fingers on the home row!</div>
-      <a class="btn" id="tcLink" href="https://howardsmithnazarene.typingclub.com/" target="_blank" rel="noopener">⌨️ Open TypingClub</a>
+      <a class="btn" id="tcLink" href="https://howardsmithnazarene.typingclub.com/" target="_blank" rel="noopener" data-timer="Warm-up" data-min="15" data-next="this week's mission">⌨️ Open TypingClub + start 15 min</a>
       <div class="card-note" id="tcNote">New to TypingClub? Sign in to the club first to get our class join link.</div>
     </div>
     <div class="card static">
       <div class="step-num">2</div>
       <div class="card-title">Mission · 25 min</div>
       <div class="card-desc">Open this week's mission, pick your level, and finish the challenge. Your result is saved.</div>
+      <button class="btn" type="button" data-timer="Mission" data-min="25" data-next="Show &amp; Share">⏱️ Start 25 min</button>
     </div>
     <div class="card static">
       <div class="step-num">3</div>
-      <div class="card-title">Show &amp; Share · 10 min</div>
+      <div class="card-title">Show &amp; Share · 5 min</div>
       <div class="card-desc">Show your work, teach a friend a tip, and check your new badges.</div>
+      <button class="btn" type="button" data-timer="Show &amp; Share" data-min="5" data-next="sign out and see you next week">⏱️ Start 5 min</button>
     </div>
   </div>
+  <p class="level-note">Click a button to start its timer. A soft chime plays and the screen flashes when the time is up. <button class="btn ghost" id="soundBtn" style="font-size:.8rem;min-height:36px;padding:.2rem .8rem;margin-left:.4rem"></button></p>
 
   <div class="cycle-divider">
     <span class="cycle-divider-label">🏅 Pick Your Level</span>
@@ -819,6 +822,14 @@ window.addEventListener('resize', () => { resize(); initBits(38); });
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   CC.statusChip($('status'), '/computer-club/');
+
+  // ── Routine timers: each routine card starts its own countdown (it follows the student to other club pages) ──
+  Array.prototype.forEach.call(document.querySelectorAll('[data-timer]'), function (b) {
+    b.addEventListener('click', function () {
+      CC.timer.start(b.getAttribute('data-timer'), Number(b.getAttribute('data-min')), b.getAttribute('data-next'));
+    });
+  });
+  CC.sound.toggle($('soundBtn'));
 
   // ── Open/Close: a card opens only while the club is in session AND its mission is switched open ──
   var cards = Array.prototype.slice.call(document.querySelectorAll('.card.mission[data-week]'));

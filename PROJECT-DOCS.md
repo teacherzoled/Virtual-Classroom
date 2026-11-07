@@ -1476,8 +1476,8 @@ or null when signed out. See the "LESSON PROGRESS" block in the file and the Oct
 
 ## 💻 Computer Club (Nov 6, 2026)
 
-A weekly club for **Standards 4–6** (one computer each, ~45 min: 10 min TypingClub warm-up · 25 min mission ·
-10 min show & share). Students **practise** on TypingClub; **tests and challenges happen on the site** so they are recorded.
+A weekly club for **Standards 4–6** (one computer each, ~45 min: **15 min TypingClub warm-up · 25 min mission ·
+5 min show & share** — Edwin, Nov 6: typing practice is 15 min, taken from show & share). Students **practise** on TypingClub; **tests and challenges happen on the site** so they are recorded.
 
 ### Architecture — separate from the class LMS on purpose
 ```
@@ -1509,6 +1509,18 @@ Nothing is shared with `edlo-lms`, `VC-LMS` or `edlo-gemini`. Club members are N
   result has an `attempt_id`, so a resend never makes a second row. Signed-out play is practice (not saved).
 - **Badges:** rules in `BADGES` at the top of the Apps Script, once per student. Typing badges + leaderboard need 90%+ accuracy.
 - **TypingClub card:** signed out → school login page; signed in → the class sign-up link from Settings.
+
+### Timers, sounds and tips (Edwin, Nov 6, 2026)
+- **Routine timers:** each routine card on the hub has a start button (Open TypingClub also starts the 15-min warm-up).
+  One countdown at a time (`cc-timer`), shown as a pill at the bottom of every club page, so it follows the student
+  to the mission. When it ends: a soft three-note chime + a big flashing "⏰ Time's up! … Next: …" (closes itself).
+- **Sound:** made in code with Web Audio (no sound files). Soft key clicks in the typing test and Shortcut Ninja; a
+  🔊 on/off button on the hub, typing test and Shortcut Ninja (`cc-sound`, per computer). Browsers allow sound only
+  after the student has clicked or typed on that page; if not, the flashing notice still shows.
+- **Typing test:** chime + flash "Time's up!" (or "You typed it all!"); **How to get better** box: most-missed keys,
+  accuracy/speed advice, Shift tip for capitals, and "ready for the next level". **Shortcut Ninja:** Gold round ends
+  with the chime + flash; every result lists the shortcuts the student missed most.
+- A background tab may ring up to about a minute late (browsers slow down timers in hidden tabs).
 
 ### Club XP + live standings (Edwin, Nov 6, 2026 — "I want this to be competitive")
 - **Why XP and not raw scores:** the club mixes Std 4–6; on raw typing speed Std 6 nearly always wins, so the youngest

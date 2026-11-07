@@ -544,6 +544,7 @@
         <button class="lvl-btn gold" data-level="gold" type="button">Gold<small>60-second speed round · no hints</small></button>
       </div>
       <p class="msg" id="bestNote"></p>
+      <div class="row-btns" style="margin-top:.3rem"><button class="btn ghost" id="soundBtn"></button></div>
     </div>
 
     <div id="screenPlay" class="hidden">
@@ -604,7 +605,7 @@
   <details class="panel teacher">
     <summary>🧑‍🏫 Teacher notes</summary>
     <ul>
-      <li><strong>Timing (25 min):</strong> Step 1 · 5 min together on the projector · Step 2 · 10 min · Step 3 · 7 min · Step 4 in Show &amp; Share.</li>
+      <li><strong>Timing (25 min mission):</strong> Step 1 · 5 min together on the projector · Step 2 · 12 min · Step 3 · 8 min · Step 4 in the 5-minute Show &amp; Share.</li>
       <li><strong>Levels:</strong> most Standard 4 members start at Bronze; many Standard 6 members can go straight to Silver. Move up after 3 stars.</li>
       <li><strong>Badge (automatic):</strong> Bronze or Silver with 2+ stars, or Gold with 12+ correct → 🥷 Shortcut Ninja. Every finished game is one row in Mission Results.</li>
       <li><strong>Common mistake:</strong> pressing the letter first, then Ctrl. The game says "Hold Ctrl first".</li>
@@ -791,7 +792,7 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
     return pick;
   }
   function start(level) {
-    state = { level: level, queue: buildQueue(level), index: 0, current: null, missesThis: 0, totalMisses: 0,
+    state = { level: level, queue: buildQueue(level), index: 0, current: null, missesThis: 0, totalMisses: 0, missed: {},
               correct: 0, streak: 0, bestStreak: 0, timeLeft: GOLD_SECONDS };
     state.current = level === 'gold' ? nextGold(null) : state.queue[0];
     showScreen('screenPlay');
@@ -805,7 +806,12 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
   function tick() {
     if (!state) return;
     state.timeLeft -= 1;
-    if (state.timeLeft <= 0) { state.timeLeft = 0; render(); finish(); return; }
+    if (state.timeLeft <= 0) {
+      state.timeLeft = 0; render();
+      CC.sound.chime();
+      CC.flash('⏰ Time\'s up!', 'Hands off the keyboard! Let\'s see your Gold score.');
+      finish(); return;
+    }
     render();
   }
   function render() {
@@ -845,6 +851,7 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
   function onWrong(msg) {
     var s = state;
     s.missesThis += 1; s.totalMisses += 1; s.streak = 0;
+    s.missed[s.current.id] = (s.missed[s.current.id] || 0) + 1;
     $('feedback').className = 'feedback bad';
     $('feedback').textContent = msg;
     flash($('action'), 'shake');
@@ -875,6 +882,9 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
     }
     $('resultStars').textContent = '★'.repeat(stars) + '☆'.repeat(3 - stars);
     $('rank').textContent = rank;
+    var tricky = Object.keys(s.missed).sort(function (a, b) { return s.missed[b] - s.missed[a]; }).slice(0, 3)
+      .map(function (id) { var sc = SHORTCUTS.filter(function (x) { return x.id === id; })[0]; return 'Ctrl + ' + sc.key + ' (' + sc.action + ')'; });
+    if (tricky.length) text += ' Practise these: ' + tricky.join(', ') + '. Check Step 1 for the memory tips!';
     $('resultText').textContent = text;
     $('againBtn').dataset.level = s.level;
     showScreen('screenResult');
@@ -920,12 +930,14 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
     if (['Control', 'Meta', 'Shift', 'Alt', 'CapsLock', 'Tab'].indexOf(e.key) !== -1) return;
     var mod = e.ctrlKey || e.metaKey;
     if (!mod) {
-      if (/^Key[A-Z]$/.test(e.code)) { e.preventDefault(); onWrong('Hold Ctrl first, then tap the letter.'); }
+      if (/^Key[A-Z]$/.test(e.code)) { e.preventDefault(); CC.sound.click('wrong'); onWrong('Hold Ctrl first, then tap the letter.'); }
       return;
     }
     e.preventDefault();            // stop Save, Find, Bold… from opening browser windows
     if (e.repeat) return;
-    if (e.code === state.current.code && !e.shiftKey && !e.altKey) onCorrect();
+    var ok = e.code === state.current.code && !e.shiftKey && !e.altKey;
+    CC.sound.click(ok ? '' : 'wrong');
+    if (ok) onCorrect();
     else onWrong('That was Ctrl + ' + (/^Key[A-Z]$/.test(e.code) ? e.code.slice(3) : '?') + '. Try again!');
   });
 
@@ -935,6 +947,7 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
   $('againBtn').addEventListener('click', function () { start(this.dataset.level); });
   $('menuBtn').addEventListener('click', backToMenu);
   $('quitBtn').addEventListener('click', backToMenu);
+  CC.sound.toggle($('soundBtn'));
 
   // ── Step 3 Practice Pad (not recorded) ──
   var pad = $('pad'), done = {};
