@@ -2,7 +2,7 @@
 **Teacher:** Edwin (Mr. EdLo)  
 **School:** Howard Smith Nazarene School, Belize  
 **Classes:** Standard 5 & Standard 6  
-**Last updated:** November 6, 2026 (late) — **Computer Club LIVE** for Standards 4–6 (`/computer-club/` + homepage card + separate `computer-club-records` Worker and `Computer Club Records` Sheet; PRs #1–#6 merged; next: Week 2 — see the Nov 6 Take-off entry and the 💻 Computer Club section) · November 2, 2026 — CS **Course E Lesson 6: Game Design** built + hub card, **committed and pushed Nov 2** (see the Nov 2 entry) · CS lesson progress saved to the student's account is **LIVE** (Cloudflare D1 + edlo-lms Worker; CS Lessons 3–5; tested by Edwin with test.student; branch `cs-progress-d1` merged into `main`) — see the Oct 24 entry · October 25, 2026 — Science **C1 Unit Test 2** page brought up to every standing rule (rebuilt from the Unit Test 1 page: resilience + save helper, readable layout, full anti-cheat) + photo figures for Q3 and Q11 via KV (sitting Wed Oct 28; KV pasted + checked live Oct 25) · Oct 24: Maths **Cycle 1 Math Test (Unit Test 2)** placed at `standard5/math/tests/c1-unit2/` + hub card lit (gated; KV `sy2627-std5-c1-unit2-math` pasted and dev-checked by Edwin (Oct 25), sitting Fri Oct 30 — only opening it on the day is left (open item 13); committed and pushed Oct 24) · Oct 21: CS **teacher preview** (`?preview` + teacher code opens every part of CS Lessons 3–5, sends nothing) · CS **Course E Lesson 5: Mini-Project: Career Journeys** built by the scheduled task + hub card, **committed and pushed (`ec682d5`), LIVE** · Oct 11: Maths Problem Set 2 kept on paper (no online build; Problem Set 3 goes online) · **Standard 6 is ON HALT** (home-page card shows 🔧 On Maintenance, front door only — see the entry below) · **everything through CS Course E Lesson 5 is committed, pushed and LIVE** (`ec682d5`). Latest: CS **Lesson 4: Hello World** (Saturday scheduled task) + hub card · CS Lesson 3 help layer (Struggling? card, helper badge, raise hand) + class checkpoint before Code.org · CS Lesson 3 tap-to-answer reflections + fun layer · Part 5 exempt from the part locks · CS Lesson 3 site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · Std 5 **Computer Science hub** + **Lesson 3: Swimming Fish** + Std 5 hub's CS card lit · Oct 3: Maths C1 Unit Test 1 at `standard5/math/tests/c1-unit1/` + hub card (gated; KV `sy2627-std5-c1-unit1-math` still to paste — open item 12) · answer-blur fix (a clicked option fades at once) + SVG labels left as drawn · Science C1 Unit Test 1 up to the readable-layout and anti-cheat rules (Science project) · earlier Oct 3: readable layout + full anti-cheat as STANDING RULES, shared save helper + Apps Script duplicate guard, KV merge rule · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
+**Last updated:** November 6, 2026 (late) — **Computer Club LIVE** for Standards 4–6 (`/computer-club/` + homepage card + separate `computer-club-records` Worker and `Computer Club Records` Sheet; PRs #1–#6 merged; next: Week 2, then the Cadet/Pilot/Commander rank system — see the Nov 6 Take-off entry and the 💻 Computer Club section) · November 2, 2026 — CS **Course E Lesson 6: Game Design** built + hub card, **committed and pushed Nov 2** (see the Nov 2 entry) · CS lesson progress saved to the student's account is **LIVE** (Cloudflare D1 + edlo-lms Worker; CS Lessons 3–5; tested by Edwin with test.student; branch `cs-progress-d1` merged into `main`) — see the Oct 24 entry · October 25, 2026 — Science **C1 Unit Test 2** page brought up to every standing rule (rebuilt from the Unit Test 1 page: resilience + save helper, readable layout, full anti-cheat) + photo figures for Q3 and Q11 via KV (sitting Wed Oct 28; KV pasted + checked live Oct 25) · Oct 24: Maths **Cycle 1 Math Test (Unit Test 2)** placed at `standard5/math/tests/c1-unit2/` + hub card lit (gated; KV `sy2627-std5-c1-unit2-math` pasted and dev-checked by Edwin (Oct 25), sitting Fri Oct 30 — only opening it on the day is left (open item 13); committed and pushed Oct 24) · Oct 21: CS **teacher preview** (`?preview` + teacher code opens every part of CS Lessons 3–5, sends nothing) · CS **Course E Lesson 5: Mini-Project: Career Journeys** built by the scheduled task + hub card, **committed and pushed (`ec682d5`), LIVE** · Oct 11: Maths Problem Set 2 kept on paper (no online build; Problem Set 3 goes online) · **Standard 6 is ON HALT** (home-page card shows 🔧 On Maintenance, front door only — see the entry below) · **everything through CS Course E Lesson 5 is committed, pushed and LIVE** (`ec682d5`). Latest: CS **Lesson 4: Hello World** (Saturday scheduled task) + hub card · CS Lesson 3 help layer (Struggling? card, helper badge, raise hand) + class checkpoint before Code.org · CS Lesson 3 tap-to-answer reflections + fun layer · Part 5 exempt from the part locks · CS Lesson 3 site sign-in (beans 🌱 for the team + every quiz attempt to the Sheet) · Std 5 **Computer Science hub** + **Lesson 3: Swimming Fish** + Std 5 hub's CS card lit · Oct 3: Maths C1 Unit Test 1 at `standard5/math/tests/c1-unit1/` + hub card (gated; KV `sy2627-std5-c1-unit1-math` still to paste — open item 12) · answer-blur fix (a clicked option fades at once) + SVG labels left as drawn · Science C1 Unit Test 1 up to the readable-layout and anti-cheat rules (Science project) · earlier Oct 3: readable layout + full anti-cheat as STANDING RULES, shared save helper + Apps Script duplicate guard, KV merge rule · earlier: Oct 1 (Maths login + account lock + Sheet logging), Sept 29–30 (Teacher test switch), Sept 25 (Maths wk 5 online)
 
 ---
 
@@ -54,6 +54,15 @@ Version 2, Worker `computer-club-records`, 15 students + Test S. + 10 spares, PI
 club site + XP + Open/Close switches (#1), result-stars fix (#2), personal-best bonus once a day (#3), 15/25/5 routine
 with timers, sounds and typing tips (#4), floating timer + tab-name countdown + projector timer (#5, confirmed in Edge),
 6-line typing box + themed text pools (#6). Details: 💻 Computer Club section below.
+- **Ranks plan approved (Nov 6, late): 🎖️ Cadet (the current 10 weeks) → ✈️ Pilot (12 missions) → 🚀 Commander (14 missions,
+  returning members next year).** Nothing built yet. Rules in the 💻 Computer Club section → "Ranks"; full plan with both
+  mission lists: Computer Club project doc `claude/computer-club-stages-plan.md`.
+  **Build order (Nov 7) — only 2 Apps Script deploys for the rest of the year:** (1) next session, Step 1: one-time update
+  — all 10 Cadet missions in `MISSIONS` (`stage: 1`), one general badge rule for any scored mission, "not built yet"
+  labels on the dashboard switches, test kit in the repo; (2) Week 2 · Know Your Computer, website only; (3) rank-system
+  session = second deploy (Pilot ids, "finished" result type for Weeks 6–9 and Canva/Docs/Slides missions, rank lock,
+  Typing Boost, always-open Cadet weeks, hold switches) — **must be live before Cadet Week 6 (~Dec 11)** or Week 6 needs
+  its own deploy; (4) Cadet Weeks 3–10 one a week, website only; (5) Pilot Mission 1 around Cadet Week 8.
 - **Next session: build Week 2 · Know Your Computer.** Plan first and get Edwin's OK. Handoff with checklist and a draft
   plan: the Computer Club project doc `claude/computer-club-handoff.md`. Copy `missions/01-shortcut-ninja/` (the
   mission template), add `'know-your-computer': { week: 2, … }` to `MISSIONS` in the Apps Script (Edwin deploys a new
@@ -1582,6 +1591,32 @@ Nothing is shared with `edlo-lms`, `VC-LMS` or `edlo-gemini`. Club members are N
   Public `status` route returns open/closed + open missions + week (never the club code).
 - The week number is for records (attendance grid, labels) only. (An earlier week-number lock was replaced by these
   switches the same day.)
+
+### Ranks: Cadet · Pilot · Commander (plan approved by Edwin, Nov 6, 2026 — NOT BUILT YET)
+Edwin: new members and returning members each need their own path, each longer and more advanced, locked until reached.
+| | 🎖️ Cadet (stage 1) | ✈️ Pilot (stage 2) | 🚀 Commander (stage 3) |
+|---|---|---|---|
+| Who | Every new member | Finished Cadet | Returning members (next year) |
+| Missions | the current 10 weeks | 12 (~15 sessions) | 14 (~22 sessions) |
+| How missions open | class pace: every week ever started stays open | own pace, one after another | own pace, one after another |
+| Typing goal (90%+) | 15 WPM **or** start speed + 5 | 25 WPM (Silver/Gold test) **or** Cadet-finish speed + 5 | 35 WPM (Gold test) **or** Pilot-finish speed + 5 |
+
+- **Why not "Level":** "level" already means Bronze/Silver/Gold and the XP levels (Rookie → Legend). Code uses `stage: 1|2|3`.
+- **Mission passed** = the Shortcut Ninja badge test (2+ stars Bronze/Silver, or the Gold target). Canva/Slides/Docs missions:
+  checklist + short quiz on the page; Edwin can mark **redo** on the dashboard.
+- **Rank finished** = every mission of the rank passed **and** its typing goal → badge `stage-N-complete` (+25 XP).
+  **Rank = 1 + number of stage badges** (no new tab). The Apps Script refuses a result for a mission above the student's rank.
+- **Typing goal = fast enough OR clearly better (Option C, Edwin Nov 6).** Why: only 15 min of typing a week, so some
+  students pass every mission long before 15 WPM. **Start speed** = best 90%+ test in the student's first two club weeks.
+  While waiting, a **Typing Boost** mission (drills from his or her most-missed keys) is open; hub shows "3 WPM to go".
+- **Opening missions (Edwin: "past sessions stay open … so it does not become a headache"):** Cadet weeks open once
+  **Start this session** has reached them and then stay open whenever the club is in session (new members and students
+  who are behind catch up on their own). Pilot/Commander: next mission opens when the student passes the one before.
+  The per-mission switches become emergency **hold** switches (off by default). Hub: **Start here** + **Catch up** list.
+- **No teacher override.**
+- **No coding in the club** (Std 5 already does Code.org in class); Commander's Storybook mission (linked slides) replaces Scratch.
+- **Next year:** same Sheet, same student ids; leavers `active = NO`; returners keep their rank. XP carry-over: decide by August 2027.
+- Mission lists, hub/dashboard changes and the technical checklist: project doc `claude/computer-club-stages-plan.md`.
 
 ### Adding a mission
 1. Copy `computer-club/missions/01-shortcut-ninja/` to `missions/NN-name/`; change `MISSION_ID`, content and game.
