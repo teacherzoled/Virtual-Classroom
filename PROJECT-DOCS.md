@@ -1522,6 +1522,16 @@ Nothing is shared with `edlo-lms`, `VC-LMS` or `edlo-gemini`. Club members are N
   with the chime + flash; every result lists the shortcuts the student missed most.
 - A background tab may ring up to about a minute late (browsers slow down timers in hidden tabs).
 
+### Typing test texts (Edwin, Nov 6, 2026 — "bigger pools with the weekly themes")
+- All texts live in `computer-club/typing-test/index.html` (`WORDS`, `THEMES`, `SENTENCES`, `PARAGRAPHS`), original and
+  Belize-friendly. Pools: 222 easy words + 8 theme words a week · 95 sentences (8 per week + 15 general) · 24 Gold
+  paragraphs (2 per week + 4 general).
+- Each test uses the **club week** set on the teacher dashboard: Bronze = 90 words, about 1 in 3 from the week's theme;
+  Silver = the week's 8 sentences, then random others; Gold = the week's 2 paragraphs + 2 random from the other 22.
+  The start screen shows "This week's typing theme: … (Week N)". Weeks above 10 reuse the themes.
+- Fair scores: Gold paragraphs are 260–298 characters and Silver sentences 30–55, all plain keyboard characters.
+  Keep new texts in those ranges.
+
 ### Club XP + live standings (Edwin, Nov 6, 2026 — "I want this to be competitive")
 - **Why XP and not raw scores:** the club mixes Std 4–6; on raw typing speed Std 6 nearly always wins, so the youngest
   would sit at the bottom every week. XP rewards effort and improvement, which anyone can win.
