@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 7 · Variables as Score — Mr. EdLo's Virtual Classroom</title>
+<meta name="description" content="Standard 5 Computer Science · Code.org Course E · Lesson 7 — interactive lesson and quiz.">
+<link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="/edlo-utils.js"></script>   <!-- site login + beans + record book (vcGetSession / vcSaveBeans / vcSubmitResult) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" async></script>
+<style>
+/* Std 5 Computer Science · Course E Lesson 7 (cloned from Lesson 6, itself a Lesson 3 clone) — Nov 7, 2026. Self-contained (links no shared CSS).
+   ⚠️ overflow-x:hidden must NOT go on <html> — it breaks position:sticky on the progress bar. Body only. */
+body{overflow-x:hidden}
+*{box-sizing:border-box}
+html,body{margin:0}
+
+/* ═══ THEME PALETTE — mirrors standard5/science/lessons/week01-technology-climate/ ═══
+   The ACCENT follows the theme: Night teal · Sunny orange · Cloudy blue · Nature green.
+   --accent-ink is the readable accent for TEXT on light themes (same as the hub's --cycle-color). */
+:root, body.theme-night{
+  --bg:#0d1f1a; --fg:#ffffff;
+  --card:rgba(255,255,255,0.06); --bd:rgba(255,255,255,0.12);
+  --bd-h:rgba(32,201,151,0.40); --muted:rgba(255,255,255,0.62);
+  --btn:rgba(255,255,255,0.08); --star:1;
+  --accent:#20C997; --accent-c:#0d1f1a; --accent-soft:rgba(32,201,151,0.12); --accent-ink:#20C997;
+  --h1-grad:linear-gradient(135deg,#fff 0%,#20C997 55%,#69DB7C 100%);
+  --footer-border:rgba(255,255,255,0.07); --footer-c:rgba(255,255,255,0.45);
+  --right:#69DB7C; --wrong:#FF6B6B;
+  --ok-soft:rgba(105,219,124,0.12); --bad-soft:rgba(255,107,107,0.12);
+  --warm:#FFA94D; --warm-c:#1a1205; --warm-soft:rgba(255,169,77,0.12); --warm-ink:#FFC078;
+}
+body.theme-sunny{
+  --bg:#fffbea; --fg:#2d2000;
+  --card:rgba(255,255,255,0.75); --bd:rgba(200,150,0,0.22);
+  --bd-h:rgba(200,120,0,0.45); --muted:rgba(80,50,0,0.72);
+  --btn:rgba(255,255,255,0.85); --star:0;
+  --accent:#FF922B; --accent-c:#ffffff; --accent-soft:rgba(255,180,0,0.15); --accent-ink:#8a4800;
+  --h1-grad:linear-gradient(135deg,#b35c00 0%,#e67e00 50%,#f5a623 100%);
+  --footer-border:rgba(200,150,0,0.20); --footer-c:rgba(100,60,0,0.62);
+  --right:#2e7d1a; --wrong:#c62828;
+  --ok-soft:rgba(46,125,26,0.10); --bad-soft:rgba(198,40,40,0.10);
+  --warm:#7c3aed; --warm-c:#ffffff; --warm-soft:rgba(124,58,237,0.08); --warm-ink:#6d28d9;
+}
+body.theme-cloudy{
+  --bg:#e8edf2; --fg:#1c2533;
+  --card:rgba(255,255,255,0.72); --bd:rgba(100,130,160,0.22);
+  --bd-h:rgba(80,110,150,0.40); --muted:rgba(40,60,90,0.75);
+  --btn:rgba(255,255,255,0.85); --star:0;
+  --accent:#4A90D9; --accent-c:#ffffff; --accent-soft:rgba(100,140,200,0.12); --accent-ink:#2c5282;
+  --h1-grad:linear-gradient(135deg,#1a365d 0%,#2b6cb0 50%,#4299e1 100%);
+  --footer-border:rgba(80,120,180,0.18); --footer-c:rgba(30,60,100,0.62);
+  --right:#2e7d1a; --wrong:#c62828;
+  --ok-soft:rgba(46,125,26,0.10); --bad-soft:rgba(198,40,40,0.10);
+  --warm:#c2410c; --warm-c:#ffffff; --warm-soft:rgba(194,65,12,0.08); --warm-ink:#9a3412;
+}
+body.theme-nature{
+  --bg:#f0f7ee; --fg:#1a2e10;
+  --card:rgba(255,255,255,0.72); --bd:rgba(60,120,40,0.22);
+  --bd-h:rgba(40,100,20,0.40); --muted:rgba(30,70,15,0.75);
+  --btn:rgba(255,255,255,0.85); --star:0;
+  --accent:#4CAF50; --accent-c:#ffffff; --accent-soft:rgba(60,140,30,0.12); --accent-ink:#276221;
+  --h1-grad:linear-gradient(135deg,#1b4d0f 0%,#2e7d1a 50%,#66bb44 100%);
+  --footer-border:rgba(50,120,20,0.18); --footer-c:rgba(20,70,10,0.62);
+  --right:#2e7d1a; --wrong:#c62828;
+  --ok-soft:rgba(46,125,26,0.10); --bad-soft:rgba(198,40,40,0.10);
+  --warm:#c2410c; --warm-c:#ffffff; --warm-soft:rgba(194,65,12,0.08); --warm-ink:#9a3412;
+}
+:root{
+  /* Sprite Lab block colours — the same in every theme, like Code.org */
+  --blk-run:#c98a00; --blk-sprite:#c2306f; --blk-beh:#2a8f55; --blk-event:#d9a400;
+  --radius:16px;
+}
+
+body{background:var(--bg);color:var(--fg);font-family:'Nunito',system-ui,sans-serif;font-size:18px;line-height:1.55;
+     min-height:100vh;display:flex;flex-direction:column;transition:background .4s,color .4s}
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;opacity:var(--star);transition:opacity .4s}
+.star{position:absolute;border-radius:50%;background:#fff;opacity:.35}
+.wrapper{position:relative;z-index:1;max-width:1400px;margin:0 auto;width:100%;padding:0 max(1rem,4vw) 2rem;flex:1}
+.wrapper.head-wrap{flex:none;padding-bottom:0}
+h1,h2,h3{line-height:1.25;margin:.2em 0 .5em;font-family:'Fredoka One',cursive;font-weight:400}
+h2{font-size:1.55rem} h3{font-size:1.18rem}
+p{margin:.4em 0 .8em}
+a{color:var(--accent-ink);font-weight:700}
+b,strong{font-weight:800}
+button{font:inherit;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit}
+
+/* Top row + theme bar (same pattern as the Science lessons) */
+.top-row{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:1rem 0 .3rem}
+.back-link{color:var(--muted);text-decoration:none;font-weight:800;font-size:.9rem;min-height:44px;display:inline-flex;align-items:center}
+.back-link:hover{color:var(--accent-ink)}
+.theme-bar{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center}
+.theme-bar button{font-family:inherit;font-size:.8rem;font-weight:800;padding:.35rem .75rem;min-height:40px;border-radius:999px;border:1.5px solid var(--bd);background:var(--btn);color:var(--fg);transition:border-color .25s,color .25s}
+.theme-bar button:hover{border-color:var(--bd-h)}
+.theme-bar button.active{border-color:var(--accent);color:var(--accent-ink)}
+
+header.lesson-head{text-align:center;padding:.6rem 0 1rem}
+.chip-row{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:.8rem}
+.hchip{font-size:.72rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:.32rem .8rem;border-radius:999px;background:var(--card);border:1.5px solid var(--bd);color:var(--muted)}
+.lesson-head h1{font-size:clamp(1.7rem,7vw,2.9rem);line-height:1.15;margin:.1em 0 .4em;
+  background:var(--h1-grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hchip.bean{background:var(--accent);color:var(--accent-c);border-color:var(--accent)}
+.signin{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;color:var(--muted);max-width:900px;margin:0 auto}
+.signin b{color:var(--fg)}
+.signin .btn{min-height:40px;padding:6px 14px;font-size:.88rem}
+.guest-offer{border:2px solid var(--accent);background:var(--accent-soft)}
+.lms-badge{display:none;border-radius:12px;padding:10px 12px;margin:10px 0 0;font-weight:700;font-size:.92rem}
+.lms-badge.show{display:block}
+.lms-badge.ok{background:var(--ok-soft);border:1.5px solid var(--right)}
+.lms-badge.busy{background:var(--accent-soft);border:1.5px solid var(--accent)}
+.lms-badge.warn{background:var(--bad-soft);border:1.5px solid var(--wrong)}
+.lms-badge .btn{min-height:36px;padding:4px 12px;font-size:.85rem;margin-left:6px}
+.bean-note{display:none;font-weight:800;color:var(--accent-ink);margin:8px 0 0}
+.bean-note.show{display:block}
+#toast{position:fixed;left:50%;bottom:1.3rem;transform:translateX(-50%) translateY(160%);background:var(--accent);color:var(--accent-c);
+  font-weight:900;font-size:.95rem;padding:.7rem 1.2rem;border-radius:999px;z-index:99;transition:transform .35s ease;max-width:90vw;text-align:center}
+#toast.show{transform:translateX(-50%) translateY(0)}
+/* Tap-to-answer reflections (Edwin, Oct 10: slow typists) */
+.frame{margin:6px 0 4px}
+.frame .sentence{font-size:1.08rem;font-weight:700;line-height:1.9;background:var(--btn);border:1.5px solid var(--bd);border-radius:12px;padding:10px 14px;margin:6px 0 10px}
+.frame .blank{display:inline;border-bottom:3px solid var(--accent);padding:0 3px;color:var(--accent-ink);font-weight:900}
+.frame .blank.empty{color:var(--muted);font-weight:700;letter-spacing:.1em}
+.frame .blank.bad{border-color:var(--wrong);color:var(--wrong)}
+.frame .slot{margin:0 0 10px}
+.frame .slot-l{font-size:.85rem;font-weight:800;color:var(--muted);margin-bottom:4px}
+.frame .chips{display:flex;flex-wrap:wrap;gap:6px}
+.frame .chip{text-align:left;min-height:44px}
+.frame .chip.sel.right{background:var(--right);border-color:var(--right);color:#fff}
+.frame .chip.sel.wrong{background:var(--bad-soft);border-color:var(--wrong);color:var(--fg)}
+.frame .ffb{font-weight:700;font-size:.92rem;margin:4px 0 0}
+.frame .ffb.bad{color:var(--wrong)}
+.frame .legacy{font-size:.9rem;color:var(--muted);font-weight:700;margin:0 0 6px}
+.frame details{margin-top:4px}
+.frame summary{cursor:pointer;font-weight:800;color:var(--accent-ink);min-height:36px;display:inline-flex;align-items:center}
+.frame details textarea{min-height:64px;margin-top:6px}
+input.short{width:100%;padding:10px 12px;border-radius:12px;border:1.5px solid var(--bd);background:var(--btn);font-size:1rem}
+/* Fun layer (Edwin, Oct 10) — short, never blocks a button, nothing during the quiz */
+.hchip.team{background:var(--accent-soft);color:var(--accent-ink);border-color:var(--accent)}
+.hchip.streak{background:var(--warm-soft);color:var(--warm-ink);border-color:var(--warm)}
+.progress-lane{position:relative}
+.mascot{position:absolute;top:50%;left:2%;transform:translate(-50%,-55%);font-size:1.35rem;line-height:1;transition:left .9s ease;pointer-events:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:120;overflow:hidden}
+#confetti i{position:absolute;top:-14px;width:8px;height:12px;border-radius:2px;animation:cf-fall 1.4s ease-in forwards}
+@keyframes cf-fall{to{transform:translate(var(--dx),105vh) rotate(var(--rot));opacity:.85}}
+.badge-card{display:flex;gap:14px;align-items:center;border:2px solid var(--accent);background:var(--accent-soft)}
+.badge-card .ico{font-size:2.6rem;line-height:1}
+.badge-card b{font-family:'Fredoka One',cursive;font-weight:400;font-size:1.25rem;color:var(--accent-ink)}
+/* Help layer + class checkpoint (Edwin, Oct 10) */
+.hand-banner{display:none;background:#FFA94D;color:#1a1205;font-weight:900;font-size:1.15rem;padding:10px max(1rem,4vw);text-align:center;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+.hand-banner.show{display:flex}
+.hand-banner button{background:#1a1205;color:#fff;border:0;border-radius:999px;padding:6px 16px;font-weight:900;min-height:40px}
+.helper-chip{display:none;margin:.45rem 0 0;padding:4px 12px;border-radius:999px;border:1.5px solid var(--right);background:var(--ok-soft);color:var(--fg);font-weight:900;font-size:.88rem;width:max-content;max-width:100%}
+.helper-chip.show{display:block}
+.help-panel{display:none;position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:110;width:min(540px,calc(100vw - 2rem));background:var(--bg);color:var(--fg);border:2px solid var(--warm);border-radius:16px;padding:14px 16px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.help-panel.show{display:block}
+.help-panel .opts3{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.help-panel .btn{text-align:left;width:100%}
+.checkpoint{border:3px dashed var(--warm);background:var(--warm-soft)}
+.checkpoint.done{border-style:solid;border-color:var(--right);background:var(--ok-soft)}
+.checkpoint ol{margin:.3em 0 .6em;padding-left:1.3em;font-weight:700}
+.checkpoint input{padding:10px 12px;border-radius:12px;border:1.5px solid var(--bd);background:var(--btn);font-size:1.05rem;text-transform:uppercase;letter-spacing:.15em;width:10em;max-width:100%}
+#helpBtn{order:0}
+@media (prefers-reduced-motion: reduce){ .mascot{transition:none} #confetti{display:none} #toast{transition:none} }
+
+/* Sticky progress bar + lesson parts — same pattern as the Std5 tests */
+.progress-wrap{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--bd);padding:.6rem 0 .5rem;margin-bottom:1.2rem;transition:background .4s}
+.progress-inner{max-width:1400px;margin:0 auto;padding:0 max(1rem,4vw)}
+.progress-label{display:flex;justify-content:space-between;gap:10px;font-size:.8rem;font-weight:800;color:var(--muted);margin-bottom:.35rem}
+.progress-track{height:.55rem;border-radius:999px;background:var(--card);border:1px solid var(--bd);overflow:hidden}
+.progress-fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--accent),#4DABF7);transition:width .4s ease}
+.stepper{display:flex;gap:6px;overflow-x:auto;padding:.55rem 0 .15rem;scrollbar-width:thin}
+.stepper button{flex:0 0 auto;border:1.5px solid var(--bd);background:var(--btn);color:var(--fg);border-radius:999px;padding:5px 13px;font-size:.88rem;font-weight:700;display:flex;gap:8px;align-items:center;min-height:40px}
+.stepper button .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--bd);font-weight:900;font-size:.78rem}
+.stepper button.on{background:var(--accent);color:var(--accent-c);border-color:var(--accent)}
+.stepper button.on .n{background:var(--accent-c);color:var(--accent)}
+.stepper button.done .n{background:var(--right);color:#fff}
+.stepper button.on.done .n{background:var(--accent-c);color:var(--accent)}
+.stepper button.locked{opacity:.5}
+.stepper button.locked .n{background:transparent;font-size:.95rem}
+.todo{border:2px dashed var(--warm);background:var(--warm-soft);border-radius:14px;padding:12px 16px;margin:6px 0 12px;font-weight:700}
+.todo ul{margin:.3em 0 0;padding-left:1.3em;font-weight:600}
+.todo li.ok{color:var(--muted);text-decoration:line-through}
+.btn.waiting{opacity:.55}
+
+section.step{display:none}
+section.step.on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.time{display:inline-block;background:var(--warm-soft);color:var(--warm-ink);border:1px solid var(--warm);border-radius:99px;padding:2px 12px;font-size:.82rem;font-weight:800;margin-bottom:6px}
+
+.card{background:var(--card);border:1.5px solid var(--bd);border-radius:var(--radius);padding:18px 20px;margin:0 0 18px}
+.cards{display:flex;flex-wrap:wrap;gap:16px;margin:0 0 18px}
+.cards>.card{flex:0 1 260px;margin:0;min-width:0}
+.cards.grow>.card{flex:1 1 260px}
+.tip{border-left:6px solid var(--warm);background:var(--warm-soft)}
+.info{border-left:6px solid var(--accent);background:var(--accent-soft)}
+.goal{font-weight:800}
+.muted{color:var(--muted)}
+ul.clean,ol.clean{margin:.3em 0 .6em;padding-left:1.3em}
+
+textarea{width:100%;min-height:96px;border:1.5px solid var(--bd);border-radius:12px;padding:10px 12px;background:var(--btn);resize:vertical}
+textarea:focus,input:focus,select:focus{outline:3px solid var(--bd-h);outline-offset:1px}
+.starter{font-size:.9rem;color:var(--muted);margin:.2em 0 .4em}
+
+.btn{border:0;border-radius:12px;padding:10px 18px;background:var(--accent);color:var(--accent-c);font-weight:900;min-height:44px}
+.btn:hover{filter:brightness(1.07)}
+.btn.alt{background:var(--btn);color:var(--fg);border:1.5px solid var(--bd)}
+.btn.alt:hover{border-color:var(--accent)}
+.btn.coral{background:var(--warm);color:var(--warm-c)}
+.btn.ok{background:var(--right);color:#fff}
+body.theme-night .btn.ok{color:#0d1f1a}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+.navrow{display:flex;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
+
+/* Sort activity */
+.sortlist{display:flex;flex-direction:column;gap:8px}
+.sortitem{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;border:1.5px solid var(--bd);border-radius:12px;padding:8px 12px;background:var(--btn)}
+.sortitem .lbl{flex:1 1 220px;font-weight:700}
+.sortitem .choices{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:2px solid var(--bd);background:var(--btn);color:var(--fg);border-radius:99px;padding:4px 12px;font-size:.9rem;font-weight:700;min-height:40px}
+.chip.sel{border-color:var(--accent);background:var(--accent);color:var(--accent-c)}
+.sortitem.right{border-color:var(--right);background:var(--ok-soft)}
+.sortitem.wrong{border-color:var(--wrong);background:var(--bad-soft)}
+.sortitem .fb{flex:1 1 100%;font-size:.9rem;display:none}
+.sortitem.right .fb,.sortitem.wrong .fb{display:block}
+
+/* Options (radio) */
+.opts{display:flex;flex-direction:column;gap:8px;margin:8px 0}
+.opt{display:flex;gap:10px;align-items:flex-start;border:2px solid var(--bd);border-radius:12px;padding:8px 12px;background:var(--btn);cursor:pointer;font-weight:600}
+.opt input{margin-top:5px;transform:scale(1.2);accent-color:var(--accent)}
+.opt:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.opt.right{border-color:var(--right);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--wrong);background:var(--bad-soft)}
+.feedback{border-radius:12px;padding:10px 12px;margin-top:8px;display:none;font-weight:600}
+.feedback.show{display:block}
+.feedback.good{background:var(--ok-soft);border:1.5px solid var(--right)}
+.feedback.bad{background:var(--bad-soft);border:1.5px solid var(--wrong)}
+
+/* Flip cards */
+.flip{perspective:900px;border:0;padding:0;background:none;text-align:left;width:100%;min-height:190px;color:var(--fg)}
+.flip .inner{position:relative;width:100%;min-height:190px;transition:transform .5s;transform-style:preserve-3d}
+.flip.on .inner{transform:rotateY(180deg)}
+.flip .face{position:absolute;inset:0;border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;justify-content:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:1.5px solid var(--bd)}
+.flip .front{background:var(--accent);color:var(--accent-c);align-items:center;text-align:center}
+.flip .front .word{font-family:'Fredoka One',cursive;font-size:1.8rem}
+.flip .front small{opacity:.9;font-weight:700}
+.flip .back{background:var(--bg);transform:rotateY(180deg)}
+.flip .back b{color:var(--accent-ink)}
+.flipcol{flex:0 1 260px;min-width:0}
+.flipcol.extra .front{background:var(--warm);color:var(--warm-c)}
+
+/* Stage + blocks */
+.lab{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
+.stagebox{flex:0 1 420px;min-width:0;width:100%}
+.stagebox canvas{width:100%;max-width:420px;aspect-ratio:1/1;display:block;border-radius:14px;border:3px solid var(--bd-h);background:#7fd3f0;touch-action:manipulation}
+.stagebox .btnrow{justify-content:flex-start}
+.status{font-size:.9rem;color:var(--muted);min-height:1.4em;font-weight:600}
+.codecol{flex:1 1 360px;min-width:0}
+.blocks{background:#f4f5f9;color:#222;border:1.5px solid var(--bd);border-radius:14px;padding:12px;font-size:.92rem;overflow-x:auto}
+.blocks .muted{color:#555}
+.stack{margin:0 0 12px}
+.blk{display:inline-block;color:#fff;border-radius:6px;padding:5px 10px;margin:2px 0;font-weight:700;white-space:nowrap}
+.blk .slot{display:inline-block;background:rgba(255,255,255,.92);color:#222;border-radius:5px;padding:0 6px;margin:0 2px;font-weight:700}
+.blk.hat{background:var(--blk-run);border-radius:14px 14px 6px 6px}
+.blk.ev{background:var(--blk-event);color:#2b2100;border-radius:14px 14px 6px 6px}
+.blk.sp{background:var(--blk-sprite)}
+.blk.bh{background:var(--blk-beh)}
+.stack .body{border-left:10px solid #ddd;margin-left:6px;padding-left:8px;display:flex;flex-direction:column;align-items:flex-start}
+.stack.run .body{border-color:var(--blk-run)}
+.stack.ev .body{border-color:var(--blk-event)}
+.legend{display:flex;flex-wrap:wrap;gap:8px;font-size:.82rem;margin-top:6px;font-weight:600}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend i{width:14px;height:14px;border-radius:3px;display:inline-block}
+
+.toggles{display:flex;flex-direction:column;gap:6px;margin:6px 0 10px}
+.toggles label{display:flex;gap:10px;align-items:center;border:1.5px solid var(--bd);border-radius:12px;padding:6px 10px;background:var(--btn);cursor:pointer;min-height:44px}
+.toggles input{transform:scale(1.25);accent-color:var(--accent)}
+
+/* Sprite editor */
+.sprites{display:flex;flex-wrap:wrap;gap:12px;margin:10px 0}
+.spcard{flex:0 1 260px;min-width:0;border:1.5px solid var(--bd);border-radius:14px;padding:12px;background:var(--card)}
+.spcard .sphead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.spcard .sphead b{font-size:1.05rem}
+.spcard .del{border:0;background:var(--bad-soft);color:var(--wrong);border-radius:8px;padding:3px 10px;font-size:.85rem;font-weight:800}
+.field{margin:6px 0}
+.field label{display:block;font-size:.85rem;font-weight:800;color:var(--muted)}
+.field select{width:100%;padding:6px 8px;border-radius:9px;border:1.5px solid var(--bd);background:var(--bg);color:var(--fg)}
+.field input[type=range]{width:100%;accent-color:var(--accent)}
+.beh{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:.9rem}
+.beh label{display:flex;gap:5px;align-items:center;font-weight:600;color:var(--fg)}
+.beh input{accent-color:var(--accent)}
+
+.checklist{list-style:none;padding:0;margin:6px 0}
+.checklist li{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px dashed var(--bd)}
+.checklist li:last-child{border-bottom:0}
+.tick{flex:0 0 26px;height:26px;border-radius:50%;border:2px solid var(--bd);display:grid;place-items:center;font-weight:900;color:#fff}
+.checklist li.done .tick{background:var(--right);border-color:var(--right)}
+
+/* Level cards */
+.lvl{display:flex;flex-direction:column;gap:6px}
+.lvl .tag{font-size:.78rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--warm-ink)}
+.lvl .nums{display:flex;gap:6px;flex-wrap:wrap}
+.lvlbtn{display:flex;align-items:center;gap:6px;border:2px solid var(--bd);border-radius:12px;padding:4px 10px;background:var(--btn);min-height:44px}
+.lvlbtn a{font-weight:800;text-decoration:none}
+.lvlbtn input{transform:scale(1.2);accent-color:var(--right)}
+.lvlbtn.done{border-color:var(--right);background:var(--ok-soft)}
+
+/* Quiz */
+.q{border:1.5px solid var(--bd);border-radius:14px;padding:14px 16px;margin:0 0 14px;background:var(--card)}
+.q .qn{font-weight:900;color:var(--accent-ink)}
+.q.right{border-color:var(--right)}
+.q.wrong{border-color:var(--wrong)}
+.scorebig{font-family:'Fredoka One',cursive;font-size:2.6rem}
+.pass{color:var(--right)} .notyet{color:var(--wrong)}
+.turnin{border:2px solid var(--warm);background:var(--warm-soft)}
+.turnin ol{margin:.4em 0 .4em;padding-left:1.4em}
+.turnin li{margin:0 0 12px}
+.turnin li .btn{margin-top:6px;display:inline-flex;align-items:center;text-decoration:none}
+.pdfmsg{border-radius:12px;padding:10px 12px;margin-top:6px;display:none;font-weight:600}
+.pdfmsg.show{display:block}
+.pdfmsg.good{background:var(--ok-soft);border:1.5px solid var(--right)}
+.pdfmsg.bad{background:var(--bad-soft);border:1.5px solid var(--wrong)}
+
+.site-footer{position:relative;z-index:1;text-align:center;padding:1.5rem max(1rem,4vw);font-size:.8rem;color:var(--footer-c);border-top:1px solid var(--footer-border)}
+.site-footer p{margin:.3em auto;max-width:90ch}
+.site-footer a{color:inherit}
+.site-footer .reset{background:none;border:1px solid var(--footer-border);color:var(--footer-c);border-radius:999px;padding:4px 12px;font-size:.75rem;font-weight:700;margin-top:.4rem}
+
+@media (max-width:600px){
+  body{font-size:16.5px}
+  .top-row{justify-content:center}
+  .theme-bar{flex:1 1 100%}
+}
+
+#printArea{display:none}
+@media print{
+  body{background:#fff;color:#000;font-size:12pt;display:block}
+  body>*:not(#printArea){display:none !important}
+  #printArea{display:block}
+  #printArea *{color:#000 !important;background:#fff !important;box-shadow:none !important}
+  #printArea table{width:100%;border-collapse:collapse}
+  #printArea td,#printArea th{border:1px solid #000;padding:5px 7px;text-align:left;vertical-align:top}
+  #printArea h1{font-size:16pt;margin:0 0 4pt;font-family:Arial,sans-serif}
+  #printArea h3{font-family:Arial,sans-serif}
+  #printArea .ans{border:1px solid #000;padding:6px 8px;min-height:30px;white-space:pre-wrap;margin:2px 0 8px}
+}
+.gridpick{display:grid;grid-template-columns:repeat(8,22px);gap:2px;margin-top:4px}
+.gridpick button{width:22px;height:22px;padding:0;border:1px solid #888;border-radius:3px;background:#fff;cursor:pointer}
+.gridpick button.on{background:#3b5bdb;border-color:#3b5bdb}
+.chip.num{min-width:44px;min-height:44px;padding:4px 0;text-align:center}
+.bnum{display:inline-block;background:#fff;color:#222;border-radius:50%;min-width:22px;height:22px;line-height:22px;text-align:center;font-size:.8rem;margin-right:6px}
+.codecol select{min-height:44px}
+</style>
+</head>
+<body class="theme-night">
+<div class="stars" id="stars"></div>
+
+<div class="wrapper head-wrap">
+  <div class="top-row">
+    <a class="back-link" href="/standard5/computer-science/">← Back to Computer Science</a>
+    <div class="theme-bar" id="themeBar">
+      <button type="button" data-t="night">🌙 Night</button>
+      <button type="button" data-t="sunny">☀️ Sunny</button>
+      <button type="button" data-t="cloudy">☁️ Cloudy</button>
+      <button type="button" data-t="nature">🌿 Nature</button>
+    </div>
+  </div>
+  <header class="lesson-head">
+    <div class="chip-row">
+      <span class="hchip">Standard 5 · Computer Science</span>
+      <span class="hchip">Course E · Lesson 7</span>
+      <span class="hchip">⏱ 45 minutes</span>
+      <span class="hchip bean" id="beanPill">🌱 0 beans</span>
+      <span class="hchip team" id="teamChip" style="display:none"></span>
+      <span class="hchip streak" id="streakChip" style="display:none"></span>
+    </div>
+    <h1>🏆 Variables as Score</h1>
+    <div class="signin" id="signinBar"></div>
+  </header>
+</div>
+
+<!-- Sticky progress bar + lesson parts -->
+<div class="progress-wrap">
+  <div class="hand-banner" id="handBanner" role="status" aria-live="polite"></div>
+  <div class="progress-inner">
+    <div class="progress-label" aria-live="polite"><span>Your progress</span><span id="progText">0 of 7 parts done · 0%</span></div>
+    <div class="progress-lane"><div class="progress-track"><div class="progress-fill" id="progBar"></div></div><span class="mascot" id="mascot" aria-hidden="true">🐠</span></div>
+    <nav class="stepper" id="stepper" aria-label="Lesson parts"></nav>
+    <div class="helper-chip" id="helperChip"></div>
+  </div>
+</div>
+
+<main class="wrapper">
+<div class="card guest-offer" id="guestOffer" style="display:none"></div>
+
+<!-- ============ PART 1: WARM UP ============ -->
+<section class="step" id="s-warm" data-title="Warm Up">
+  <span class="time">⏱ 5 minutes</span>
+  <h2>Part 1 · Warm Up: Read the Code</h2>
+
+  <div class="card info">
+    <h3>🎯 Today I can…</h3>
+    <p>Through a code review, word cards, a score demo, the Code.org levels, the Scoreboard Builder and a bug hunt, you will be able to:</p>
+    <ul class="clean">
+      <li>show a <b>variable</b> on the screen with a chosen starting value.</li>
+      <li>change a variable by a positive or a negative number when an <b>event</b> happens.</li>
+      <li>check for a winning score with a <b>conditional</b>, so an action runs only when the condition is true.</li>
+    </ul>
+  </div>
+
+  <div class="cards grow">
+    <div class="card"><h3>📦 Variable</h3><p>Stores information (data). The value can change while the program runs.</p></div>
+    <div class="card"><h3>❓ Condition</h3><p>Something a program checks to see whether it is true before it takes an action.</p></div>
+    <div class="card"><h3>🚦 Conditional</h3><p>A chunk of code that only runs if the condition is true.</p></div>
+  </div>
+
+  <div class="card">
+    <h3>📖 Code review: a game with a unicorn</h3>
+    <p>Read the code one line at a time. Point to each block as you read. Each block has a number.</p>
+    <div class="blocks" id="reviewGame"></div>
+  </div>
+
+  <div class="card">
+    <h3>🏷 Label the code</h3>
+    <p>Which block does each job? Tap a block number for each one. Then press <b>Check my labels</b>.</p>
+    <div class="sortlist" id="labelList"></div>
+    <div class="btnrow"><button class="btn" id="labelCheck">Check my labels</button><span id="labelScore" class="goal"></span></div>
+    <p class="bean-note" id="bn-label"></p>
+  </div>
+
+  <div class="card">
+    <h3>💬 How do you play this game? How do you win or lose?</h3>
+    <p class="starter">👆 Tap to finish the sentences.</p>
+    <div class="frame" data-frame="reflect"></div>
+  </div>
+</section>
+
+<!-- ============ PART 2: VOCABULARY ============ -->
+<section class="step" id="s-vocab" data-title="Vocabulary">
+  <span class="time">⏱ part of Warm Up</span>
+  <h2>Part 2 · Today’s Vocabulary</h2>
+  <p>Tap each card to flip it. Read the meaning and the example, then flip it back and say the meaning in your own words.</p>
+  <div class="cards" id="vocabCards"></div>
+  <p class="muted">Orange cards are extra words you will see on the Sprite Lab screen today.</p>
+</section>
+
+<!-- ============ PART 3: KEEPING SCORE ============ -->
+<section class="step" id="s-bridge" data-title="Keeping Score">
+  <span class="time">⏱ 5 minutes</span>
+  <h2>Part 3 · Keeping Score with a Variable</h2>
+
+  <div class="card info">
+    <h3>📦 A variable is like a box with a label</h3>
+    <p>The label is the name, like <b>score</b>. The box holds information, like the number <b>0</b>. The information inside the box can change while the game is played.</p>
+    <ol class="clean">
+      <li><b>Show the variable.</b> <span class="blk sp">show variable <span class="slot">score</span> at <span class="slot">📍</span></span> puts the name and the value on the screen.</li>
+      <li><b>Set the variable.</b> <span class="blk bh">set <span class="slot">score</span> to <span class="slot">0</span></span> gives the starting value.</li>
+      <li><b>Change the variable.</b> <span class="blk bh">change <span class="slot">score</span> by <span class="slot">1</span></span> adds to the value. A negative number, like <b>-1</b>, takes away.</li>
+      <li><b>Check the value.</b> <span class="blk ev">if <span class="slot">score</span> = <span class="slot">5</span></span> checks if the condition is true. If it is true, it runs the code inside.</li>
+    </ol>
+  </div>
+
+  <div class="lab">
+    <div class="stagebox">
+      <canvas id="demoStage" width="800" height="800" aria-label="Sprite stage with a coin and a score"></canvas>
+      <div class="btnrow">
+        <button class="btn ok" id="demoRun">▶ Run</button>
+        <button class="btn alt" id="demoReset">⟲ Reset</button>
+      </div>
+      <div class="status" id="demoStatus">Press Run, then click the coin.</div>
+    </div>
+    <div class="codecol">
+      <h3>Choose the blocks</h3>
+      <div class="toggles">
+        <label><input type="checkbox" id="dShow" checked> show variable <b>score</b></label>
+      </div>
+      <div class="field" style="margin-top:8px"><label for="dStart">set score to…</label>
+        <select id="dStart"><option value="0">0</option><option value="5">5</option></select></div>
+      <div class="field"><label for="dBy">when coin clicked → change score by…</label>
+        <select id="dBy"><option value="1">1</option><option value="2">2</option><option value="-1">-1</option></select></div>
+      <div class="toggles">
+        <label><input type="checkbox" id="dIf"> if score = <b>3</b> → do <b>starburst</b> effect</label>
+      </div>
+      <h3>The program</h3>
+      <div class="blocks" id="demoCode"></div>
+      <div class="legend">
+        <span><i style="background:var(--blk-run)"></i>runs right away</span>
+        <span><i style="background:var(--blk-event)"></i>event or condition (waits)</span>
+        <span><i style="background:var(--blk-sprite)"></i>sprite or show</span>
+        <span><i style="background:var(--blk-beh)"></i>set or change</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>Predict, then test</h3>
+  <p>Choose your prediction. Then set the blocks above, press <b>Run</b> and click the coin to test it before you press <b>Check</b>.</p>
+  <div id="predictBox"></div>
+  <p class="bean-note" id="bn-predict"></p>
+  <div class="card checkpoint" id="checkpointCard" style="margin-top:18px"></div>
+</section>
+
+<!-- ============ PART 4: CODE.ORG LEVELS ============ -->
+<section class="step" id="s-levels" data-title="Variables Levels">
+  <span class="time">⏱ 30 minutes</span>
+  <h2>Part 4 · Variables as Score on Code.org</h2>
+  <div class="card info">
+    <p class="goal">Goal: Add a variable to keep track of the score as it changes. Then check for a winning score.</p>
+    <p>Follow the instructions on each level, finish it, then tick the box. Read the hints and the feedback.</p>
+    <ul class="clean">
+      <li><b>Level 1:</b> try one of the games. How does the scoring work? Then click <b>Finish</b>.</li>
+      <li><b>Level 7 and Level 10:</b> drag each piece of code to the matching animation, then click <b>Submit</b>.</li>
+      <li><b>Level 11:</b> these games do not work! Choose one game and fix it.</li>
+      <li><b>Level 12:</b> free play. Design your own game with a score or health variable and a winning or losing condition.</li>
+    </ul>
+    <p class="muted">Sign in to Code.org with your class login first. <a id="lessonLink" target="_blank" rel="noopener">Open the whole lesson on Code.org ↗</a></p>
+  </div>
+  <div class="cards" id="levelCards"></div>
+
+  <div class="cards grow">
+    <div class="card tip">
+      <h3>🙋 Stuck?</h3>
+      <ol class="clean">
+        <li>Click the <b>light bulb</b> for a hint.</li>
+        <li>Read the feedback in the <b>yellow box</b> under the instructions.</li>
+        <li>Look back at <b>Part 3</b> for show, set, change and if.</li>
+        <li>Ask your partner, then use <b>🙋 I need help</b>.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>📶 Code.org will not load?</h3>
+      <p>Tell Mr. EdLo straight away. <b>Part 5: Scoreboard Builder</b> works without the internet. It is always open, so tap it in the part buttons and practise there while you wait.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PART 5: SCOREBOARD BUILDER ============ -->
+<section class="step" id="s-build" data-title="Scoreboard Builder">
+  <span class="time">⏱ practice &amp; debugging</span>
+  <h2>Part 5 · Scoreboard Builder and Bug Hunt</h2>
+  <div class="card info">
+    <p>Build a small game with a <b>coin</b> and a <b>bomb</b>. Choose what each click changes, then press <b>▶ Run</b> and click the sprites. Finish all 4 challenges. Then fix the 4 broken games in the Bug Hunt.</p>
+  </div>
+
+  <div class="lab">
+    <div class="stagebox">
+      <canvas id="buildStage" width="800" height="800" aria-label="Scoreboard game stage"></canvas>
+      <div class="btnrow">
+        <button class="btn ok" id="buildRun">▶ Run</button>
+        <button class="btn alt" id="buildStopBtn">■ Stop</button>
+      </div>
+      <div class="status" id="buildStatus">Press Run to start the program.</div>
+      <div class="card" style="margin-top:10px">
+        <h3>🏆 Challenges</h3>
+        <ul class="checklist" id="chalList"></ul>
+        <p class="bean-note" id="bn-build"></p>
+      </div>
+    </div>
+    <div class="codecol">
+      <div class="sprites" id="gameEditor"></div>
+      <div class="btnrow"><button class="btn alt" id="resetBuild">Start over</button></div>
+      <h3>My program</h3>
+      <div class="blocks" id="buildCode"></div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:22px">🐞 Bug Hunt: these games do not work!</h3>
+  <p>Read each program and the problem. Choose the best fix, then press <b>Check</b>.</p>
+  <div id="bugBox"></div>
+  <p class="bean-note" id="bn-bugs"></p>
+</section>
+
+<!-- ============ PART 6: WRAP UP ============ -->
+<section class="step" id="s-wrap" data-title="Wrap Up">
+  <span class="time">⏱ 5 minutes (then the quiz)</span>
+  <h2>Part 6 · Wrap Up: Read a Game with Two Variables</h2>
+  <div class="card info">
+    <h3>🧩 Look carefully at this game and the code that made it</h3>
+    <div class="blocks" id="wrapCode"></div>
+  </div>
+  <div class="card">
+    <p><b>1. Explain the variables.</b> <span class="starter">👆 Tap to finish the sentences.</span></p>
+    <div class="frame" data-frame="r1"></div>
+    <p style="margin-top:12px"><b>2. Look back at today’s three goals. How did it go?</b></p>
+    <div class="frame" data-frame="r2"></div>
+    <p style="margin-top:14px"><b>3. ✏️ Type ONE short sentence: what did you make change in a game today?</b></p>
+    <p class="starter">Example: “I made the score go up by 1 when I click the coin.”</p>
+    <input class="short" type="text" maxlength="160" autocomplete="off" data-bind="wrap.r3" aria-label="One short sentence: what did you make change in a game today?">
+  </div>
+  <button class="btn coral" data-goto="s-quiz">I’m ready for the quiz →</button>
+</section>
+
+<!-- ============ PART 7: QUIZ ============ -->
+<section class="step" id="s-quiz" data-title="Quiz">
+  <h2>Part 7 · Lesson Quiz</h2>
+  <div class="card info">
+    <p>10 questions · You need <b>7 out of 10 (70%)</b> to pass. If you do not pass, review the lesson parts named in your feedback and try again. Every attempt goes to Mr. EdLo’s record book.</p>
+    <p class="muted" id="quizHistory"></p>
+  </div>
+  <div id="quizNeedLogin" class="card tip" style="display:none">
+    <p><b>🔑 Sign in to take the quiz.</b> Your quiz result goes to Mr. EdLo’s record book with your name on it.</p>
+    <a class="btn" id="quizLoginBtn" href="/login/" style="display:inline-flex;align-items:center;text-decoration:none">Sign in</a>
+  </div>
+  <div id="quizArea"></div>
+  <div id="quizResult"></div>
+</section>
+
+<div class="todo" id="partTodo" style="display:none" role="status"></div>
+<div class="navrow" id="navRow">
+  <button class="btn alt" id="prevBtn">← Back</button>
+  <button class="btn alt" id="helpBtn" type="button">🙋 I need help</button>
+  <button class="btn" id="nextBtn">Next →</button>
+</div>
+</main>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="confetti" aria-hidden="true"></div>
+<div class="help-panel" id="helpPanel" role="dialog" aria-label="Help options"></div>
+
+<footer class="site-footer">
+  <p>© 2026 Mr. EdLo's Virtual Classroom — Standard 5 · Belize</p>
+  <p>Lesson content adapted from Code.org <i>CS Fundamentals Course E (2025), Lesson 7: Variables as Score</i>, licensed <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>. This page is shared under the same licence for non-commercial classroom use.</p>
+  <button type="button" class="reset" id="resetAll">Teacher: clear this student’s saved answers on this device and on his or her account (beans stay banked)</button>
+</footer>
+
+<div id="printArea"></div>
+
+<script>
+"use strict";
+/* ---------- Theme (site-wide: body.theme-*, saved in localStorage "vc-theme") ---------- */
+const THEMES = ["night","sunny","cloudy","nature"];
+function setTheme(t){
+  THEMES.forEach(x=>document.body.classList.remove("theme-"+x));
+  document.body.classList.add("theme-"+t);
+  document.querySelectorAll("#themeBar button").forEach(b=>b.classList.toggle("active", b.dataset.t===t));
+  try{ localStorage.setItem("vc-theme", t); }catch(e){}
+}
+document.querySelectorAll("#themeBar button").forEach(b=>b.addEventListener("click",()=>setTheme(b.dataset.t)));
+(function(){ let s=null; try{ s=localStorage.getItem("vc-theme"); }catch(e){} setTheme(THEMES.includes(s)?s:"night"); })();
+(function(){ const sc=document.getElementById("stars"); for(let i=0;i<70;i++){ const s=document.createElement("div"); s.className="star"; const z=Math.random()*2.2+1;
+  s.style.cssText="width:"+z+"px;height:"+z+"px;top:"+(Math.random()*100)+"%;left:"+(Math.random()*100)+"%;opacity:"+(Math.random()*.4+.15).toFixed(2); sc.appendChild(s);} })();
+/* ---------- Settings (edit these if Code.org changes its links) ---------- */
+const LESSON_URL = "https://studio.code.org/s/coursee-2025/lessons/7";
+const LEVEL_URL  = n => LESSON_URL + "/levels/" + n;
+const PASS_MARK  = 7;
+
+/* ---------- Site sign-in (/edlo-utils.js — the same account as every page on the site) ----------
+   The lesson stays PUBLIC (Edwin, July 19): signing in changes what a student EARNS, not what he
+   or she SEES. Signed in → beans 🌱 for the team + the quiz, saved to the record book.
+   Signed out → full lesson for practice; the quiz asks the student to sign in. */
+const SESSION = (typeof vcGetSession === "function") ? vcGetSession() : null;
+const WHO     = SESSION ? SESSION.username : "guest";
+function studentName(){ return SESSION ? (SESSION.full_name || SESSION.username || "") : ""; }
+function loginUrl(part){ return "/login/?next=" + encodeURIComponent(location.pathname + (part ? "?part=" + part : "")); }
+
+/* Saved answers are kept PER STUDENT ACCOUNT, so a second student on the same computer starts clean. */
+const STORE_BASE = "edlo-csE-L07-variables-as-score-v1";
+/* ---------- Teacher preview (Edwin, Oct 21) ----------
+   Open the page with ?preview and type the teacher code: every part opens (no part locks, no checkpoint),
+   the quiz works without signing in, and NOTHING is sent: no beans, no quiz rows in the record book.
+   Preview work is saved under its own key, apart from every student's. The switch is shared by all CS lessons
+   in this browser and stays on until "Exit preview" (or ?preview=off). Only the code's hash is in the page:
+   the locks pace students, they are not security. Teacher code: _source/checkpoint-codes.txt (gitignored). */
+const PREVIEW_HASH = "95535796";
+const PREVIEW = (function(){
+  const q = new URLSearchParams(location.search).get("preview");
+  try{
+    if(q === "off"){ localStorage.removeItem("vc-teacher-preview"); return false; }
+    if(localStorage.getItem("vc-teacher-preview") === PREVIEW_HASH) return true;
+  }catch(e){}
+  if(q === null) return false;
+  const c = (prompt("Teacher preview: type your teacher code") || "").trim();
+  if(fnv(c) !== PREVIEW_HASH){ if(c) alert("That is not the teacher code. The page opens as normal."); return false; }
+  try{ localStorage.setItem("vc-teacher-preview", PREVIEW_HASH); }catch(e){}
+  return true;
+})();
+const STORE_KEY  = STORE_BASE + "::" + (PREVIEW ? "teacher-preview" : WHO);
+const GUEST_KEY  = STORE_BASE + "::guest";
+try{   /* work saved by the first version of this page (Oct 7, before sign-in) counts as signed-out work */
+  const old = localStorage.getItem(STORE_BASE);
+  if(old && !localStorage.getItem(GUEST_KEY)) localStorage.setItem(GUEST_KEY, old);
+  if(old) localStorage.removeItem(STORE_BASE);
+}catch(e){}
+
+/* ---------- Progress saved to the student's ACCOUNT (Edwin, Oct 24) ----------
+   Signed in → the work is ALSO kept on the server (edlo-lms Worker → Cloudflare D1), so logging off Windows,
+   a wiped school computer or a different computer no longer starts the lesson over. The browser copy stays the
+   instant save; the account copy is sent when a part opens, after a quiz attempt, at most once a minute while
+   work changes, and when the student leaves the page or switches to Code.org. Opening the lesson loads the
+   account copy first. Guests and teacher preview stay on this device only. Helper: vcLessonSync() in
+   /edlo-utils.js (no server or old Worker → the page works exactly as before). */
+const SYNC = (SESSION && !PREVIEW && typeof vcLessonSync === "function")
+  ? vcLessonSync({ lessonKey: STORE_BASE, storeKey: STORE_KEY,
+                   beanPrefix: ()=>"vc-pts-" + LESSON.idBase + "-", beanSuffix: "-" + WHO })
+  : null;
+
+/* ---------- Saved state ---------- */
+function defaults(){
+  return {step:0,visited:{},flipped:{},
+    warm:{reflect:"",label:{},labelChecked:false,labelScore:null,labelFirst:null},
+    predict:{},levels:{},game:null,challenges:{},bugs:{},
+    wrap:{r1:"",r2:"",r3:""}, frames:{}, extra:{}, firstPick:{}, streak:0, bestStreak:0, legacy:null,
+    checkpoint:{passed:false}, help:{popped:{}, misses:{}, raised:false, hands:0, offers:0},
+    quiz:{attempts:0,best:null,last:null,passed:false,history:[],shown:{}}};
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(raw){
+      const d = defaults(), s = JSON.parse(raw);
+      for(const k in d){ if(s[k]!==undefined){ d[k] = (d[k] && typeof d[k]==="object" && !Array.isArray(d[k])) ? Object.assign(d[k], s[k]) : s[k]; } }
+      /* Saved BEFORE tap-to-answer (Oct 10)? Then the student typed full answers: keep them counting. */
+      if(d.legacy === null){ const w = s.warm || {}, r = s.wrap || {};
+        d.legacy = s.frames === undefined && [w.reflect, w.q1, w.q2, r.r1, r.r2].some(t => t && String(t).trim().length >= 3); }
+      /* Already past Part 3 before the checkpoint existed (Oct 10)? Don't lock them out again. */
+      if(s.checkpoint === undefined && s.visited && (s.visited["s-levels"] || s.visited["s-wrap"] || s.visited["s-quiz"])) d.checkpoint = {passed:true, auto:true};
+      return d;
+    }
+  }catch(e){}
+  return defaults();
+}
+let S = load();
+function save(){ if(SYNC && SYNC.isStale && SYNC.isStale()) return;   /* newer work in another tab — never save over it */
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); }catch(e){} if(SYNC) SYNC.touch(); updateProgress(); }
+const $ = id => document.getElementById(id);
+function esc(t){ return String(t).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function getPath(p){ return p.split(".").reduce((o,k)=>o[k], S); }
+function setPath(p,v){ const ks=p.split("."), last=ks.pop(); ks.reduce((o,k)=>o[k], S)[last]=v; }
+
+/* ---------- Tap-to-answer reflections (Edwin, Oct 10: many students type slowly) ----------
+   Each reflection is a sentence the student finishes by TAPPING choices. Opinion blanks have no wrong
+   answer; blanks with `ans` are checked (wrong picks are shown, and the part stays locked until fixed).
+   The finished sentence is saved to the old answer field, so the PDF reads it as a full sentence.
+   "Add my own words" is optional. The ONE required typed answer is the short sentence at Wrap Up (wrap.r3).
+   Answers typed before this change still count (S.legacy). */
+const FRAMES = {
+  reflect:{ path:"warm.reflect", parts:["I move the unicorn with ",
+    {k:"a", l:"I move the unicorn with…", o:["the arrow keys", "the mouse", "the space bar"], ans:[0], bad:"Not quite. Read block 4 again."},
+    ". I lose when ",
+    {k:"b", l:"I lose when…", o:["a fireball touches the unicorn", "I press Run", "the unicorn says hello"], ans:[0], bad:"Not quite. Read blocks 6 and 7 again."},
+    ". To win, this game needs ",
+    {k:"c", l:"To win, this game needs…", o:["a score to keep track of points", "more fireballs", "a darker background"], ans:[0], bad:"Think: how would a player know how well he or she is doing?"}, "."]},
+  r1:{ path:"wrap.r1", parts:["The two variables in this program are ",
+    {k:"a", l:"The two variables are…", o:["points and power", "cow and fireball", "star and scene"], ans:[0], bad:"Not quite. Look for the blocks that say “show variable” and “set … to”."},
+    ". The variable power ",
+    {k:"b", l:"Power…", o:["goes down by 1 when the cow touches a fireball", "goes up by 1 when the cow touches a star", "never changes"], ans:[0], bad:"Not quite. Find the event that changes power. Is the number positive or negative?"},
+    ". The variables start at different values because ",
+    {k:"c", l:"They start at different values because…", o:["points go up from 0, and power goes down from 100", "the computer chooses the numbers", "both variables always go up"], ans:[0], bad:"Not quite. Which variable goes up, and which goes down? (Part 3)"}, "."]},
+  r2:{ path:"wrap.r2", parts:["The goal I did best today was ",
+    {k:"a", l:"The goal I did best", o:["showing a variable with a starting value", "changing a variable up or down", "checking for a winning score"]},
+    ". It was ",
+    {k:"b", l:"How did the lesson feel? Tap a face.", o:["😀 easy", "🙂 a little easy", "😐 a little hard", "😟 hard"]},
+    " for me, because ",
+    {k:"c", l:"because…", o:["I followed the instructions on each level", "negative numbers were tricky at first", "I liked fixing the broken games", "I needed help from a partner"]}, "."]}
+};
+function frameBlanks(id){ return FRAMES[id].parts.filter(x=>typeof x !== "string"); }
+function framePicks(id){ return (S.frames && S.frames[id]) || null; }
+function blankOk(b, pick){ return pick !== undefined && (!b.ans || b.ans.indexOf(pick) !== -1); }
+function frameDone(id){
+  const p = framePicks(id);
+  if(!p || !Object.keys(p).length) return !!S.legacy && filled(getPath(FRAMES[id].path));
+  return frameBlanks(id).every(b=>blankOk(b, p[b.k]));
+}
+function frameSentence(id){
+  const p = framePicks(id) || {};
+  return FRAMES[id].parts.map(x=> typeof x === "string" ? x : (p[x.k] !== undefined ? x.o[p[x.k]].replace(/^\S+\s(?=[a-z])/u, m => /\p{Extended_Pictographic}/u.test(m) ? "" : m) : "____")).join("");
+}
+function answerText(id){
+  const own = S.extra && S.extra[id] && S.extra[id].trim() ? "  My own words: " + S.extra[id].trim() : "";
+  return (getPath(FRAMES[id].path) || "") + own;
+}
+function shortDone(){
+  if((S.wrap.r3 || "").trim().split(/\s+/).filter(Boolean).length >= 3) return true;
+  return !!S.legacy && filled(S.wrap.r2);       /* finished the Wrap Up before this question existed */
+}
+function renderFrame(id){
+  const el = document.querySelector('[data-frame="' + id + '"]'); if(!el) return;
+  const f = FRAMES[id], p = framePicks(id) || {}, legacyText = S.legacy && !Object.keys(p).length ? getPath(f.path) : "";
+  let sent = "", slots = "", fb = "";
+  f.parts.forEach(x=>{
+    if(typeof x === "string"){ sent += esc(x); return; }
+    const pick = p[x.k], ok = blankOk(x, pick);
+    sent += pick === undefined ? '<span class="blank empty">______</span>'
+          : '<span class="blank' + (ok ? "" : " bad") + '">' + esc(x.o[pick]) + "</span>";
+    slots += '<div class="slot"><div class="slot-l">' + esc(x.l) + '</div><div class="chips">'
+      + x.o.map((o,i)=>'<button type="button" class="chip' + (pick===i ? " sel" + (x.ans ? (ok ? " right" : " wrong") : "") : "")
+        + '" data-f="' + id + '" data-k="' + x.k + '" data-i="' + i + '">' + esc(o) + "</button>").join("") + "</div></div>";
+    if(pick !== undefined && !ok) fb += '<p class="ffb bad">✘ ' + esc(x.bad) + "</p>";
+  });
+  el.innerHTML = (legacyText ? '<p class="legacy">✔ Your typed answer is saved: “' + esc(legacyText) + '”. You may also tap an answer below.</p>' : "")
+    + '<div class="sentence">' + sent + "</div>" + slots + fb
+    + '<details' + (S.extra && S.extra[id] ? " open" : "") + '><summary>✏️ Add my own words (optional)</summary>'
+    + '<textarea data-extra="' + id + '" aria-label="My own words (optional)">' + esc((S.extra && S.extra[id]) || "") + "</textarea></details>";
+  el.querySelectorAll("button[data-f]").forEach(b=>b.addEventListener("click", ()=>pickBlank(b.dataset.f, b.dataset.k, +b.dataset.i)));
+  const ta = el.querySelector("textarea[data-extra]");
+  ta.addEventListener("input", ()=>{ S.extra[id] = ta.value; save(); });
+}
+function pickBlank(id, k, i){
+  if(!S.frames[id]) S.frames[id] = {};
+  S.frames[id][k] = i;
+  const b = frameBlanks(id).find(x=>x.k===k), key = id + "." + k;
+  if(b.ans && S.firstPick[key] === undefined){ S.firstPick[key] = b.ans.indexOf(i) !== -1; streakHit(S.firstPick[key]); }
+  if(b.ans && b.ans.indexOf(i) === -1) miss();
+  const complete = frameBlanks(id).every(x=>S.frames[id][x.k] !== undefined);
+  setPath(FRAMES[id].path, complete ? frameSentence(id) : "");
+  save(); renderFrame(id);
+}
+function renderFrames(){ Object.keys(FRAMES).forEach(renderFrame); }
+
+/* ---------- Fun layer (Edwin, Oct 10) — supports the learning, never replaces it ----------
+   🐠 mascot walks along the progress bar · 🎉 short confetti when a part unlocks · 🔥 first-try streak ·
+   👥 the student's team bean total (group competition) · 🏅 lesson badge for passing the quiz.
+   Rules: nothing fires while a quiz is open; every effect is under 2 s and never blocks a button;
+   no sound; "reduce motion" computers get no animation (messages only). */
+const BADGE = { name:"Score Keeper", icon:"🏅", why:"You passed Course E Lesson 7: Variables as Score." };
+const REDUCED = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+var quizBusy = false, lastTop = null;
+function confetti(){
+  if(REDUCED) return;
+  const box = $("confetti"), colors = ["#20C997","#FFA94D","#4DABF7","#FFD43B","#F783AC","#9775FA"];
+  for(let i=0;i<36;i++){ const d = document.createElement("i");
+    d.style.left = (Math.random()*100) + "%"; d.style.background = colors[i % colors.length];
+    d.style.setProperty("--dx", ((Math.random()-.5)*160) + "px"); d.style.setProperty("--rot", (Math.random()*720-360) + "deg");
+    d.style.animationDelay = (Math.random()*.25) + "s"; box.appendChild(d); }
+  setTimeout(()=>{ box.innerHTML = ""; }, 1900);
+}
+function celebrateUnlock(top){
+  confetti();
+  toast("🎉 Part " + (top+1) + " unlocked: " + sections[top].dataset.title + "!");
+  if(SYNC) SYNC.now();   /* a part just opened: put it on the account now */
+}
+function streakHit(ok){
+  if(ok){ S.streak = (S.streak||0) + 1; S.bestStreak = Math.max(S.bestStreak||0, S.streak);
+    if(S.streak >= 3 && S.streak % 2 === 1) toast("🔥 " + S.streak + " right in a row on the first try!"); }
+  else S.streak = 0;
+  renderStreak();
+}
+function renderStreak(){
+  const c = $("streakChip");
+  if((S.streak||0) >= 2){ c.textContent = "🔥 " + S.streak + " in a row"; c.style.display = ""; } else c.style.display = "none";
+}
+let teamTimer = 0;
+function refreshTeam(delay){
+  if(!SESSION || typeof vcGetLeaderboard !== "function") return;
+  clearTimeout(teamTimer);
+  teamTimer = setTimeout(()=>{
+    vcGetLeaderboard().then(r=>{
+      if(!r || !r.ok || !r.my_group) return;
+      const g = (r.groups || []).find(x=>String(x.group) === String(r.my_group)); if(!g) return;
+      const c = $("teamChip"); c.textContent = "👥 " + r.my_group + ": " + g.beans + " 🌱"; c.title = "Your team's beans in the group competition"; c.style.display = "";
+    }, ()=>{});
+  }, delay || 0);
+}
+
+/* ---------- Help layer + class checkpoint (Edwin, Oct 10) ----------
+   Students work through the lesson on their own; these keep the teacher and classmates in the loop.
+   • "Struggling?" card — after 2 wrong answers in a part, or 6 minutes in a part with no progress.
+     At most ONCE per part, never in the quiz, never while waiting at the checkpoint.
+     Choices: ask a helper · call Mr. EdLo · look back one part · I'm OK. "🙋 I need help" opens it any time.
+   • Helper badge — "✅ I can help with Parts 1–N" in the sticky bar, so stuck students can find a helper.
+   • Raise hand — a bright banner across the top of the screen until the student taps "Helped ✓".
+   • Class checkpoint after Part 3 — the page waits for the code Mr. EdLo says aloud after a 3–5 minute
+     class check. The code controls PACING, not security (only its hash is in the page).
+     Teacher's code list: standard5/computer-science/_source/checkpoint-codes.txt (gitignored). */
+const CHECKPOINT = { after:"s-bridge", hash:"3c5f2380", /* code for this lesson: see checkpoint-codes.txt */
+  questions:["What is a variable? Give an example from a game.", "Which block gives a variable its starting value, and which block changes it?",
+             "The score starts at 0 and goes up by 1 on each click. When does the code inside “if score = 3” run?"] };
+const HELP_MISSES = 2, HELP_MINUTES = 6;
+let partClock = { id:null, since:Date.now(), done:-1 };
+function fnv(s){ let h = 0x811c9dc5; for(const ch of s){ h ^= ch.codePointAt(0); h = Math.imul(h, 0x01000193) >>> 0; } return h.toString(16); }
+function checkpointPassed(){ return !!(S.checkpoint && S.checkpoint.passed); }
+function helpState(){ if(!S.help) S.help = {popped:{}, misses:{}, raised:false, hands:0, offers:0}; return S.help; }
+function firstName(){ return SESSION ? (SESSION.first_name || studentName() || "This student") : "This student"; }
+function miss(){
+  const id = sections[S.step].id, H = helpState();
+  if(id === "s-quiz" || quizBusy) return;
+  H.misses[id] = (H.misses[id] || 0) + 1;
+  if(H.misses[id] >= HELP_MISSES) offerHelp("misses");
+}
+function offerHelp(reason){
+  const id = sections[S.step].id, H = helpState();
+  if(reason !== "manual"){ if(PREVIEW) return; if(id === "s-quiz" || quizBusy || H.popped[id]) return; H.popped[id] = true; }
+  H.offers = (H.offers || 0) + 1; save();
+  const k = S.step, prev = k > 0 ? k - 1 : null, p = $("helpPanel");
+  const head = reason === "time" ? "⏱ You have been on this part for a while." : reason === "misses" ? "🤔 This one is tricky!" : "🆘 Let’s get you unstuck.";
+  p.innerHTML = "<p><b>" + head + "</b> Pick one:</p><div class=\"opts3\">"
+    + '<button type="button" class="btn alt" data-h="peer">👥 Ask a helper — find a classmate whose screen says “✅ I can help with Part ' + (k+1) + '”</button>'
+    + '<button type="button" class="btn coral" data-h="hand">🙋 Call Mr. EdLo</button>'
+    + (prev !== null ? '<button type="button" class="btn alt" data-h="back">🔁 Look back at Part ' + (prev+1) + ": " + esc(sections[prev].dataset.title) + "</button>" : "")
+    + '<button type="button" class="btn alt" data-h="ok">👍 I’m OK — keep going</button></div>';
+  p.classList.add("show");
+  p.querySelectorAll("[data-h]").forEach(b=>b.addEventListener("click", ()=>{
+    p.classList.remove("show");
+    const h = b.dataset.h;
+    if(h === "peer") toast("👥 Look around for a ✅ helper badge for Part " + (k+1) + ". Ask quietly!");
+    if(h === "hand") raiseHand(true);
+    if(h === "back") showStep(prev);
+  }));
+}
+function raiseHand(on){ const H = helpState(); H.raised = on; if(on) H.hands = (H.hands || 0) + 1; save(); renderHand();
+  if(on) toast("🙋 Your hand is up. Mr. EdLo will come to you. Keep trying while you wait!"); }
+function renderHand(){
+  const b = $("handBanner"), H = helpState();
+  if(!H.raised){ b.classList.remove("show"); b.innerHTML = ""; return; }
+  b.innerHTML = "<span>🙋 " + esc(firstName()) + " needs help with Part " + (S.step+1) + ": " + esc(sections[S.step].dataset.title) + "</span>"
+    + '<button type="button" id="handDown">Helped ✓</button>';
+  b.classList.add("show");
+  $("handDown").onclick = ()=>raiseHand(false);
+}
+function renderHelper(){
+  let n = 0; while(n < sections.length-1 && partDone(sections[n].id)) n++;
+  const c = $("helperChip");
+  if(n >= 1){ c.textContent = "✅ I can help with Part" + (n > 1 ? "s 1–" + n : " 1"); c.classList.add("show"); }
+  else c.classList.remove("show");
+}
+function renderCheckpoint(){
+  const el = $("checkpointCard"); if(!el) return;
+  const predDone = PREDICT.every((_,i)=>S.predict[i] && S.predict[i].checked);
+  if(checkpointPassed()){ el.className = "card checkpoint done"; el.innerHTML = "<b>✅ Class checkpoint done.</b> Part 4 is open — great work!"; return; }
+  el.className = "card checkpoint";
+  if(!predDone){ el.innerHTML = "<b>🛑 Class checkpoint comes next.</b> Get all 4 predictions correct first."; return; }
+  if(el.querySelector("#cpCode")) return;   /* keep what the student is typing */
+  el.innerHTML = "<h3>🛑 CHECKPOINT — Stop here!</h3><p><b>Mr. EdLo will do a quick class check.</b> While you wait, get ready to answer:</p><ol>"
+    + CHECKPOINT.questions.map(q=>"<li>" + esc(q) + "</li>").join("") + "</ol>"
+    + '<p>When Mr. EdLo gives the class code, type it here:</p><div class="btnrow"><input id="cpCode" type="text" maxlength="12" autocomplete="off" aria-label="Checkpoint code"><button type="button" class="btn" id="cpGo">Open Part 4</button></div><p class="status" id="cpMsg"></p>';
+  const go = ()=>{
+    const v = ($("cpCode").value || "").trim().toLowerCase().replace(/\s+/g, "");
+    if(fnv(v) === CHECKPOINT.hash){ S.checkpoint = {passed:true, date:new Date().toISOString()}; save(); renderCheckpoint(); }
+    else { $("cpMsg").textContent = "That is not the code yet. Wait for Mr. EdLo — you can look back at your answers while you wait."; }
+  };
+  $("cpGo").onclick = go;
+  $("cpCode").addEventListener("keydown", e=>{ if(e.key === "Enter") go(); });
+}
+/* "6 minutes without progress" clock — checked every 20 s */
+setInterval(()=>{
+  if(!sections[S.step]) return;
+  const id = sections[S.step].id;
+  if(id === "s-quiz" || quizBusy || partDone(id)) { partClock = {id, since:Date.now(), done:-1}; return; }
+  const list = todoFor(id), done = list.filter(t=>t.ok).length;
+  const waiting = id === CHECKPOINT.after && list.filter(t=>!t.ok).length === 1 && !checkpointPassed();
+  if(partClock.id !== id || partClock.done !== done || waiting){ partClock = {id, since:Date.now(), done}; return; }
+  if(Date.now() - partClock.since >= HELP_MINUTES * 60000) offerHelp("time");
+}, 20000);
+
+/* ---------- Steps / navigation ---------- */
+const sections = Array.from(document.querySelectorAll("section.step"));
+function buildStepper(){
+  $("stepper").innerHTML = sections.map((s,i)=>
+    `<button type="button" data-i="${i}"><span class="n">${i+1}</span>${esc(s.dataset.title)}</button>`).join("");
+  $("stepper").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>showStep(+b.dataset.i)));
+}
+/* PART LOCKS (Edwin, Oct 7): a part opens only when EVERY activity in the part before it is finished.
+   openUpTo() = the furthest part a student may open. Locks are worked out from the saved answers,
+   so they survive a reload and follow the signed-in student. */
+function openUpTo(){ let i = 0; while(i < sections.length-1 && partDone(sections[i].id)) i++; return i; }
+/* EXEMPT FROM THE LOCK (Edwin, Oct 7): the Scoreboard Builder is the no-internet backup, so it must open even
+   when Code.org cannot be reached and the Part 4 ticks are missing. It still has to be finished before Part 6. */
+const ALWAYS_OPEN = ["s-build"];
+function isLocked(k){ return !PREVIEW && k > openUpTo() && ALWAYS_OPEN.indexOf(sections[k].id) === -1; }
+function lockedMsg(k){
+  const left = todoFor(sections[k].id).filter(t=>!t.ok).map(t=>t.t);
+  return "🔒 Finish Part " + (k+1) + " first" + (left.length ? ": " + left.join(" · ") : ".");
+}
+function showStep(i){
+  i = Math.max(0, Math.min(sections.length-1, i));
+  const top = openUpTo();
+  if(isLocked(i)){ toast(lockedMsg(top)); i = isLocked(S.step) ? top : S.step; if(i === S.step && sections[i].classList.contains("on")) return; }
+  S.step = i; S.visited[sections[i].id] = true;
+  sections.forEach((s,k)=>s.classList.toggle("on", k===i));
+  $("stepper").querySelectorAll("button").forEach((b,k)=>{ b.classList.toggle("on", k===i); });
+  $("prevBtn").style.visibility = i===0 ? "hidden" : "visible";
+  $("nextBtn").style.visibility = i===sections.length-1 ? "hidden" : "visible";
+  if(sections[i].id==="s-quiz") renderQuizStart();
+  $("helpPanel").classList.remove("show"); renderHand();
+  if(sections[i].id!=="s-build") build.stop();
+  if(sections[i].id!=="s-bridge") demo.stop();
+  const on = $("stepper").querySelector("button.on"); if(on && on.scrollIntoView) on.scrollIntoView({inline:"center",block:"nearest"});
+  window.scrollTo({top:0,behavior:"smooth"});
+  save();
+}
+document.addEventListener("click", e=>{
+  const g = e.target.closest("[data-goto]");
+  if(g){ showStep(sections.findIndex(s=>s.id===g.dataset.goto)); }
+});
+$("prevBtn").onclick = ()=>showStep(S.step-1);
+$("nextBtn").onclick = ()=>showStep(S.step+1);
+
+/* ---------- Progress ---------- */
+function filled(t){ return t && t.trim().length >= 3; }
+/* Every activity of each part, with whether it is finished. A part is done when all are ok. */
+function todoFor(id){
+  const flipped = Object.keys(S.flipped||{}).filter(w=>VOCAB.some(v=>v.w===w)).length;
+  const labelRight = LABELS.filter(it=>S.warm.label[it.id]===it.a).length;
+  const predRight = PREDICT.filter((_,i)=>S.predict[i] && S.predict[i].checked).length;
+  switch(id){
+    case "s-warm": return [
+      {t:"label all 6 blocks correctly and press Check (" + (S.warm.labelChecked ? labelRight : 0) + " of 6)", ok:S.warm.labelChecked && labelRight===LABELS.length},
+      {t:"finish the sentences about how to play", ok:frameDone("reflect")}];
+    case "s-vocab": return [{t:"flip every word card (" + flipped + " of " + VOCAB.length + ")", ok:flipped===VOCAB.length}];
+    case "s-bridge":return [{t:"get all 4 predictions correct (" + predRight + " of 4)", ok:predRight===PREDICT.length},
+                            {t:"🛑 class checkpoint with Mr. EdLo (type the code he gives)", ok:checkpointPassed()}];
+    case "s-levels":return [{t:"finish and tick all 12 Code.org levels (" + levelsDone() + " of 12)", ok:levelsDone()===12}];
+    case "s-build": return [{t:"finish all 4 Scoreboard challenges (" + chalDone() + " of 4)", ok:chalDone()===CHALLENGES.length},
+                            {t:"fix all 4 games in the Bug Hunt (" + bugsDone() + " of 4)", ok:bugsDone()===BUGS.length}];
+    case "s-wrap":  return [{t:"finish sentence 1 (the two variables)", ok:frameDone("r1")}, {t:"finish sentence 2", ok:frameDone("r2")},
+                            {t:"type one short sentence about what you made change (3 words or more)", ok:shortDone()}];
+    case "s-quiz":  return [{t:"pass the quiz", ok:!!S.quiz.passed}];
+  }
+  return [];
+}
+function partDone(id){ return todoFor(id).every(t=>t.ok); }
+function updateProgress(){
+  const done = sections.filter(s=>partDone(s.id)).length;
+  const pct = Math.round(done/sections.length*100);
+  $("progBar").style.width = pct+"%";
+  $("progText").textContent = done+" of "+sections.length+" parts done · "+pct+"%";
+  $("mascot").style.left = Math.min(97, Math.max(2, pct)) + "%";
+  renderHelper(); renderCheckpoint();
+  const top = openUpTo();
+  if(lastTop !== null && top > lastTop && !quizBusy) celebrateUnlock(top);
+  lastTop = top;
+  $("stepper").querySelectorAll("button").forEach((b,k)=>{
+    const locked = isLocked(k);
+    b.classList.toggle("done", partDone(sections[k].id));
+    b.classList.toggle("locked", locked);
+    b.querySelector(".n").textContent = locked ? "🔒" : String(k+1);
+    b.title = locked ? lockedMsg(top) : "";
+    b.setAttribute("aria-disabled", locked ? "true" : "false");
+  });
+  /* the to-do box under the current part, and the Next button */
+  const i = S.step, box = $("partTodo");
+  const last = i === sections.length-1, nextLocked = !last && isLocked(i+1);
+  if(nextLocked){
+    /* `top` is the part that actually blocks the next one — usually this part, but it can be an earlier one
+       when the student is sitting in an exempt part (Scoreboard Builder opened without the Part 4 ticks). */
+    const blocker = Math.min(top, i), list = todoFor(sections[blocker].id);
+    box.innerHTML = "🔒 To open <b>Part " + (i+2) + ": " + esc(sections[i+1].dataset.title) + "</b>, finish everything in "
+      + (blocker === i ? "this part" : "<b>Part " + (blocker+1) + ": " + esc(sections[blocker].dataset.title) + "</b>") + ":"
+      + "<ul>" + list.map(t=>'<li class="' + (t.ok ? "ok" : "") + '">' + (t.ok ? "✔ " : "") + esc(t.t) + "</li>").join("") + "</ul>";
+    box.style.display = "block";
+  } else box.style.display = "none";
+  $("nextBtn").classList.toggle("waiting", nextLocked);
+  $("nextBtn").textContent = nextLocked ? "🔒 Next" : "Next →";
+}
+
+/* ---------- Text bindings ---------- */
+document.querySelectorAll("[data-bind]").forEach(el=>{
+  el.value = getPath(el.dataset.bind) || "";
+  el.addEventListener("input", ()=>{ setPath(el.dataset.bind, el.value); save(); });
+});
+
+/* ---------- Part 1: the unicorn game from the Code.org review slide ---------- */
+function slot(t){ return `<span class="slot">${esc(t)}</span>`; }
+function num(n){ return `<span class="bnum">${n}</span>`; }
+$("reviewGame").innerHTML =
+  '<div class="stack run"><span class="blk hat">when run</span><div class="body">'
+  + `<span class="blk bh">${num(1)} set background to ${slot("mountain scene")}</span>`
+  + `<span class="blk sp">${num(2)} make new ${slot("🦄 unicorn")} sprite at ${slot("📍")}</span>`
+  + `<span class="blk sp">${num(3)} make ${slot(3)} new ${slot("small")} ${slot("🔥 fireball")} sprites</span>`
+  + `<span class="blk bh">${num(4)} sprite ${slot("🦄 unicorn")} begins ${slot("moving with arrow keys")}</span>`
+  + `<span class="blk bh">${num(5)} ${slot("🦄 unicorn")} say ${slot("Avoid the fireballs!")}</span>`
+  + '</div></div>'
+  + `<div class="stack ev"><span class="blk ev">${num(6)} when ${slot("🦄 unicorn")} touches ${slot("🔥 fireball")}</span><div class="body">`
+  + `<span class="blk sp">${num(7)} remove ${slot("🦄 unicorn")}</span>`
+  + `<span class="blk bh">${num(8)} ${slot("🔥 fireball")} say ${slot("Game over!")}</span>`
+  + '</div></div>';
+
+const LABELS = [
+  {id:"bg",     t:"The mountain scene in the background", a:1, why:"Block 1 sets the background to the mountain scene."},
+  {id:"player", t:"The main player sprite", a:2, why:"Block 2 makes ONE new unicorn sprite: the player."},
+  {id:"enemy",  t:"The enemy sprites", a:3, why:"Block 3 makes 3 small fireball sprites: the enemies."},
+  {id:"move",   t:"The main character’s movement", a:4, why:"Block 4: the unicorn begins moving with the arrow keys."},
+  {id:"explain",t:"A sprite explains how to play", a:5, why:"Block 5: the unicorn says “Avoid the fireballs!”"},
+  {id:"touch",  t:"What happens when the sprites touch: the unicorn goes away", a:7, why:"Block 7, inside the touch event, removes the unicorn."}
+];
+function renderLabels(){
+  $("labelList").innerHTML = LABELS.map(it=>{
+    const v = S.warm.label[it.id];
+    return `<div class="sortitem" id="li-${it.id}"><span class="lbl">${esc(it.t)}</span>
+      <span class="choices">${[1,2,3,4,5,6,7,8].map(n=>`<button type="button" class="chip num ${v===n?"sel":""}" data-l="${it.id}" data-v="${n}" aria-label="Block ${n}">${n}</button>`).join("")}</span>
+      <span class="fb"></span></div>`;}).join("");
+  $("labelList").querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
+    S.warm.label[b.dataset.l] = +b.dataset.v; S.warm.labelChecked = false; save(); renderLabels();   /* a changed answer needs a fresh Check */
+  }));
+}
+$("labelCheck").onclick = ()=>{
+  const answered = LABELS.filter(it=>S.warm.label[it.id]).length;
+  if(answered < LABELS.length){ $("labelScore").textContent = "Label all "+LABELS.length+" first ("+answered+" done)."; return; }
+  let right = 0;
+  LABELS.forEach(it=>{
+    const el = $("li-"+it.id), ok = S.warm.label[it.id]===it.a; if(ok) right++;
+    el.classList.toggle("right", ok); el.classList.toggle("wrong", !ok);
+    el.querySelector(".fb").textContent = ok ? "✔ " + it.why : "✘ Not block " + S.warm.label[it.id] + ". Read the blocks again.";
+  });
+  if(S.warm.labelFirst===null){ S.warm.labelFirst = right; streakHit(right===LABELS.length); }     /* beans pay on the FIRST full check only */
+  S.warm.labelChecked = true; S.warm.labelScore = right; save(); settleBeans();
+  if(right < LABELS.length) miss();
+  $("labelScore").textContent = "You labelled "+right+" of "+LABELS.length+" correctly." + (right<LABELS.length ? " Change the red ones and check again." : " Excellent!");
+};
+
+/* ---------- Part 2: Vocabulary (the lesson plan's words; wording from the Lesson 7 slides) ---------- */
+const VOCAB = [
+  {w:"Variable", d:"Variables store information (data). The value stored in a variable can be updated throughout a program.", e:"The variable “score” starts at 0 and goes up when I collect a coin."},
+  {w:"Condition", d:"Something a program checks to see whether it is true before deciding to take an action.", e:"“score = 5” is a condition. It is true only when the score is 5."},
+  {w:"Conditionals", d:"A chunk of code that only runs if the condition is true.", e:"“if score = 5 → do starburst effect” only runs when the score is 5."},
+  {w:"Starting value", d:"The value a variable has when the program begins. The “set” block gives it.", e:"“set health to 5” gives the player 5 health at the start.", extra:true},
+  {w:"Negative number", d:"A number below zero, like -1. Changing a variable by a negative number makes it go down.", e:"“change health by -1” takes 1 away from health.", extra:true}
+];
+$("vocabCards").innerHTML = VOCAB.map((v,i)=>`
+  <div class="flipcol ${v.extra?"extra":""}">
+    <button type="button" class="flip" aria-label="Flip card: ${esc(v.w)}">
+      <div class="inner">
+        <div class="face front"><span class="word">${esc(v.w)}</span><small>${v.extra?"extra word · ":""}tap to flip</small></div>
+        <div class="face back"><p><b>${esc(v.w)}:</b> ${esc(v.d)}</p><p class="muted">Example: ${esc(v.e)}</p></div>
+      </div>
+    </button>
+  </div>`).join("");
+$("vocabCards").querySelectorAll(".flip").forEach((b,i)=>b.addEventListener("click",()=>{
+  b.classList.toggle("on");
+  if(!S.flipped) S.flipped = {};
+  if(!S.flipped[VOCAB[i].w]){ S.flipped[VOCAB[i].w] = true; save(); }
+}));
+
+/* ---------- Score stage ----------
+   A program: {vars:{name:{start, show}}, sprites:[{key, x, y, ev:{change, by, cond, cv, eq, act}}]}.
+   As on Code.org: "set" gives the starting value, "show variable" puts name and value on the screen,
+   "when X clicked → change V by N" adds N (a negative N takes away), and "if V = N" runs its action
+   only when the condition is true. x runs left to right and y from the BOTTOM up. */
+const SPRITES = { coin:{n:"coin", e:"🟡"}, bomb:{n:"bomb", e:"💣"} };
+const ACTS = { starburst:"do starburst effect", win:"say “You win!”", over:"say “Game over!”" };
+const EMOJI_FONT = '"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+function makeVarStage(canvas, hooks){
+  const ctx = canvas.getContext("2d"), SC = canvas.width / 400;
+  const st = {prog:null, vals:{}, running:false, raf:0, t:0, last:0, burst:0, says:{}, hooks:hooks||{}};
+  function drawBg(){
+    const g = ctx.createLinearGradient(0,0,0,400); g.addColorStop(0,"#2b2d6e"); g.addColorStop(1,"#5a3d8f");
+    ctx.fillStyle = g; ctx.fillRect(0,0,400,400);
+    ctx.fillStyle = "rgba(255,255,255,.08)"; for(let i=0;i<8;i++) ctx.fillRect(0, 50*i+24, 400, 2);
+  }
+  function drawCoin(x,y){
+    ctx.beginPath(); ctx.arc(x,y,30,0,Math.PI*2); ctx.fillStyle="#f2c230"; ctx.fill();
+    ctx.lineWidth=4; ctx.strokeStyle="#b8860b"; ctx.stroke();
+    ctx.fillStyle="#8a6200"; ctx.font="bold 30px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText("★", x, y+1);
+  }
+  function drawVars(){
+    if(!st.prog) return;
+    let x = 14;
+    Object.keys(st.prog.vars).forEach(name=>{
+      const v = st.prog.vars[name]; if(!v.show) return;
+      const txt = name + ": " + st.vals[name];
+      ctx.font = "bold 20px Arial"; const w = ctx.measureText(txt).width + 22;
+      ctx.fillStyle = "rgba(255,255,255,.92)"; ctx.beginPath();
+      if(ctx.roundRect) ctx.roundRect(x, 14, w, 34, 9); else ctx.rect(x, 14, w, 34); ctx.fill();
+      ctx.fillStyle = "#222"; ctx.textAlign = "left"; ctx.textBaseline = "middle"; ctx.fillText(txt, x+11, 31);
+      x += w + 10;
+    });
+  }
+  function drawBurst(){
+    if(!st.burst) return;
+    const k = Math.min(1, (st.t - st.burst) / 60);
+    if(k >= 1 && !REDUCED){ st.burst = 0; return; }
+    const r = REDUCED ? 150 : 40 + k*190;
+    ctx.save(); ctx.translate(200,200); ctx.globalAlpha = REDUCED ? .9 : 1-k*.8;
+    for(let i=0;i<16;i++){ ctx.rotate(Math.PI/8); ctx.fillStyle = i%2 ? "#ffd43b" : "#ff8787";
+      ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(r, -9); ctx.lineTo(r, 9); ctx.closePath(); ctx.fill(); }
+    ctx.restore();
+  }
+  function drawSay(s, text){
+    ctx.font = "bold 17px Arial"; const w = ctx.measureText(text).width + 20, bx = Math.max(6, Math.min(394-w, s.x - w/2)), by = s.y - 82;
+    ctx.fillStyle = "#fff"; ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(bx, by, w, 32, 10); else ctx.rect(bx, by, w, 32); ctx.fill();
+    ctx.fillStyle = "#222"; ctx.textAlign = "left"; ctx.textBaseline = "middle"; ctx.fillText(text, bx+10, by+16);
+  }
+  function render(){
+    ctx.setTransform(SC,0,0,SC,0,0); drawBg();
+    if(st.prog) st.prog.sprites.forEach(s=>{
+      const bob = st.running && !REDUCED ? Math.sin(st.t/18 + s.x)*4 : 0, y = 400 - s.y + bob;
+      if(s.key === "coin") drawCoin(s.x, y);
+      else { ctx.font = "60px "+EMOJI_FONT; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(SPRITES[s.key].e, s.x, y); }
+      const say = st.says[s.key]; if(say && (REDUCED || st.t - say.t < 120)) drawSay({x:s.x, y}, say.text);
+    });
+    drawBurst(); drawVars();
+  }
+  function frame(now){
+    const k = st.last ? Math.min(3,(now-st.last)/16.67) : 1; st.last = now; st.t += k;
+    render(); if(st.running) st.raf = requestAnimationFrame(frame);
+  }
+  st.load = function(prog){
+    st.prog = prog; st.vals = {}; st.burst = 0; st.says = {};
+    Object.keys(prog.vars).forEach(n=>{ st.vals[n] = +prog.vars[n].start; });
+  };
+  st.run = function(prog){ st.stop(); st.load(prog); st.running = true; st.last = 0; st.raf = requestAnimationFrame(frame); if(st.hooks.run) st.hooks.run(prog); };
+  st.stop = function(){ st.running = false; cancelAnimationFrame(st.raf); render(); };
+  st.clear = function(){ st.stop(); st.prog = null; render(); };
+  st.render = render;
+  canvas.addEventListener("click", ev=>{
+    if(!st.running || !st.prog) return;
+    const r = canvas.getBoundingClientRect(), x = (ev.clientX-r.left)*400/r.width, y = (ev.clientY-r.top)*400/r.height;
+    const s = st.prog.sprites.slice().reverse().find(s=>Math.hypot(x-s.x, y-(400-s.y)) <= 40);
+    if(!s) return;
+    const e = s.ev, info = {sprite:s.key, changed:null, fired:null};
+    if(e && e.change){ const old = st.vals[e.change], nw = old + (+e.by); st.vals[e.change] = nw;
+      info.changed = {name:e.change, old, nw, shown:!!st.prog.vars[e.change].show}; }
+    if(e && e.cond && st.vals[e.cv] === +e.eq){
+      info.fired = e.act;
+      if(e.act === "starburst") st.burst = st.t || 1;
+      else st.says[s.key] = {text: e.act === "win" ? "You win!" : "Game over!", t: st.t};
+    }
+    render();
+    if(st.hooks.click) st.hooks.click(info);
+  });
+  render();
+  return st;
+}
+
+/* Blocks view for a score program */
+function varBlocks(prog){
+  let h = '<div class="stack run"><span class="blk hat">when run</span><div class="body">';
+  h += `<span class="blk bh">set background to ${slot("space")}</span>`;
+  prog.sprites.forEach(s=>{ h += `<span class="blk sp">make new ${slot(SPRITES[s.key].e+" "+SPRITES[s.key].n)} sprite at ${slot("("+s.x+", "+s.y+")")}</span>`; });
+  Object.keys(prog.vars).forEach(n=>{ const v = prog.vars[n];
+    if(v.show) h += `<span class="blk sp">show variable ${slot(n)} at ${slot("📍")}</span>`;
+    h += `<span class="blk bh">set ${slot(n)} to ${slot(v.start)}</span>`; });
+  h += '</div></div>';
+  prog.sprites.forEach(s=>{
+    const e = s.ev; if(!e || !e.change) return;
+    const nm = SPRITES[s.key].e+" "+SPRITES[s.key].n;
+    h += `<div class="stack ev"><span class="blk ev">when ${slot(nm)} clicked</span><div class="body">`;
+    h += `<span class="blk bh">change ${slot(e.change)} by ${slot(e.by)}</span>`;
+    if(e.cond){ h += `<div class="stack ev"><span class="blk ev">if ${slot(e.cv)} = ${slot(e.eq)}</span><div class="body">`
+      + (e.act === "starburst" ? `<span class="blk bh">do ${slot("starburst")} effect</span>` : `<span class="blk bh">${slot(nm)} say ${slot(e.act === "win" ? "You win!" : "Game over!")}</span>`)
+      + '</div></div>'; }
+    h += '</div></div>';
+  });
+  return h;
+}
+
+/* ---------- Part 3: Demo ---------- */
+const demo = makeVarStage($("demoStage"), {click: info=>{
+  if(!info.changed){ $("demoStatus").textContent = "Click the coin."; return; }
+  const c = info.changed;
+  $("demoStatus").textContent = (c.shown ? "The score went from " + c.old + " to " + c.nw + "." : "The score changed, but nobody can see it: “show variable” is off.")
+    + (info.fired ? " The condition is true, so the starburst runs! 🎉" : "");
+}});
+function demoProgram(){
+  return { vars:{ score:{start:+$("dStart").value, show:$("dShow").checked} },
+           sprites:[{key:"coin", x:200, y:170, ev:{change:"score", by:+$("dBy").value, cond:$("dIf").checked, cv:"score", eq:3, act:"starburst"}}] };
+}
+function demoRefresh(){ $("demoCode").innerHTML = varBlocks(demoProgram()); }
+["dShow","dStart","dBy","dIf"].forEach(id=>$(id).addEventListener("change",()=>{ demoRefresh(); if(demo.running){ demo.stop(); $("demoStatus").textContent="You changed the program. Press Run again."; } }));
+$("demoRun").onclick = ()=>{ demo.run(demoProgram()); $("demoStatus").textContent = "Running! Click the coin and watch the score."; };
+$("demoReset").onclick = ()=>{ demo.clear(); $("demoStatus").textContent="Stage cleared. Press Run to start the program."; };
+demoRefresh(); demo.load(demoProgram()); demo.render();
+
+const PREDICT = [
+  {q:"Set score to 0, and change score by 1. Run it and click the coin 3 times. What will the score show?", o:["1","3","0"], a:1,
+   why:"The score starts at 0 and goes up by 1 on each click: 1, 2, 3."},
+  {q:"Now set score to 5, and change score by -1. Click the coin 2 times. What will the score show?", o:["7","3","-2"], a:1,
+   why:"A negative number takes away. 5, then 4, then 3."},
+  {q:"Set score to 0, change score by 1, and turn on “if score = 3 → do starburst effect”. When does the starburst happen?", o:["As soon as you press Run","On the 3rd click","On every click"], a:1,
+   why:"The condition “score = 3” is only true after the 3rd click, so the code inside only runs then."},
+  {q:"Turn OFF “show variable score”. Does the score still change when you click the coin?", o:["Yes, but nobody can see it","No, the score stops working","Yes, and it shows at the bottom"], a:0,
+   why:"The variable still stores and changes the value. “Show variable” only puts it on the screen."}
+];
+function renderPredict(){
+  $("predictBox").innerHTML = PREDICT.map((p,i)=>{
+    const st = S.predict[i] || {};
+    return `<div class="card" id="pr-${i}"><p><b>${i+1}. ${esc(p.q)}</b></p>
+      <div class="opts">${p.o.map((o,j)=>`<label class="opt"><input type="radio" name="pr${i}" value="${j}" ${st.choice===j?"checked":""}><span>${esc(o)}</span></label>`).join("")}</div>
+      <button class="btn alt" data-pr="${i}">Check</button>
+      <div class="feedback" id="prfb-${i}"></div></div>`;
+  }).join("");
+  $("predictBox").querySelectorAll("input").forEach(r=>r.addEventListener("change",()=>{
+    const i = +r.name.slice(2); S.predict[i] = Object.assign(S.predict[i]||{}, {choice:+r.value}); save();
+  }));
+  $("predictBox").querySelectorAll("[data-pr]").forEach(b=>b.addEventListener("click",()=>checkPredict(+b.dataset.pr)));
+  PREDICT.forEach((p,i)=>{ if(S.predict[i] && S.predict[i].checked) checkPredict(i, true); });
+}
+function checkPredict(i, quiet){
+  const st = S.predict[i], fb = $("prfb-"+i);
+  if(!st || st.choice===undefined){ fb.className="feedback show bad"; fb.textContent="Choose a prediction first."; return; }
+  const ok = st.choice === PREDICT[i].a;
+  fb.className = "feedback show " + (ok ? "good" : "bad");
+  fb.textContent = (ok ? "✔ Correct. " : "✘ Not quite. Test it with the blocks above. ") + (ok ? PREDICT[i].why : "");
+  if(!quiet && !ok) miss();
+  if(!quiet && st.first===undefined){ st.first = ok; streakHit(ok); save(); settleBeans(); }   /* beans pay on the FIRST check only */
+  if(ok){ st.checked = true; if(!quiet) save(); }
+}
+
+/* ---------- Part 4: Levels (live Code.org, read Nov 7: 12 levels) ---------- */
+$("lessonLink").href = LESSON_URL;
+const LEVEL_GROUPS = [
+  {tag:"Explore", title:"Intro to Variables: try a game", lv:[1]},
+  {tag:"Video", title:"Intro to Variables", lv:[2]},
+  {tag:"Read", title:"Use variables in a game", lv:[3]},
+  {tag:"Skill Building", title:"Show, set and change a variable", lv:[4,5,6]},
+  {tag:"Check", title:"Match the code (variables)", lv:[7]},
+  {tag:"Read", title:"Check the value", lv:[8]},
+  {tag:"Skill Building", title:"Winning score", lv:[9]},
+  {tag:"Check", title:"Match the code (conditionals)", lv:[10]},
+  {tag:"Practice", title:"Debugging: choose a game to fix", lv:[11]},
+  {tag:"Free Play", title:"Make your own game", lv:[12]}
+];
+const ALL_LEVELS = LEVEL_GROUPS.reduce((a,g)=>a.concat(g.lv),[]);
+function levelsDone(){ return ALL_LEVELS.filter(n=>S.levels[n]).length; }
+function renderLevels(){
+  $("levelCards").innerHTML = LEVEL_GROUPS.map(g=>`
+    <div class="card lvl"><span class="tag">${esc(g.tag)}</span><b>${esc(g.title)}</b>
+      <div class="nums">${g.lv.map(n=>`<span class="lvlbtn ${S.levels[n]?"done":""}"><a href="${LEVEL_URL(n)}" target="_blank" rel="noopener">Level ${n} ↗</a>
+        <input type="checkbox" data-lv="${n}" ${S.levels[n]?"checked":""} aria-label="Level ${n} finished"></span>`).join("")}</div>
+    </div>`).join("");
+  $("levelCards").querySelectorAll("[data-lv]").forEach(c=>c.addEventListener("change",()=>{
+    S.levels[c.dataset.lv] = c.checked; c.parentElement.classList.toggle("done", c.checked); save();
+  }));
+}
+
+/* ---------- Part 5: Scoreboard Builder ---------- */
+const STARTER = ()=>({ score:{start:0, show:false}, health:{start:5, show:false},
+  coin:{change:"score", by:1, cond:false, cv:"score", eq:5, act:"starburst"},
+  bomb:{on:false, change:"health", by:-1, cond:false, cv:"health", eq:0, act:"over"} });
+if(!S.game) S.game = STARTER();
+function gameProgram(){
+  const G = S.game, used = {};
+  const sprites = [{key:"coin", x:120, y:150, ev:G.coin}];
+  if(G.bomb.on) sprites.push({key:"bomb", x:280, y:150, ev:G.bomb});
+  sprites.forEach(s=>{ used[s.ev.change] = true; if(s.ev.cond) used[s.ev.cv] = true; });
+  ["score","health"].forEach(n=>{ if(G[n].show) used[n] = true; });
+  const vars = {}; ["score","health"].forEach(n=>{ if(used[n]) vars[n] = {start:G[n].start, show:G[n].show}; });
+  return {vars, sprites};
+}
+const CHALLENGES = [
+  {id:"show", t:"Show a variable on the screen: turn on “show variable” and press Run."},
+  {id:"up",   t:"Make a variable you can see go UP when you click a sprite."},
+  {id:"down", t:"Make a variable you can see go DOWN when you click a sprite (use a negative number)."},
+  {id:"win",  t:"Add an “if” condition to an event, then click until the condition is true and the action runs."}
+];
+function chalDone(){ return CHALLENGES.filter(c=>S.challenges[c.id]).length; }
+function renderChal(){
+  $("chalList").innerHTML = CHALLENGES.map(c=>`<li class="${S.challenges[c.id]?"done":""}"><span class="tick">${S.challenges[c.id]?"✓":""}</span><span>${esc(c.t)}</span></li>`).join("")
+    + (chalDone()===CHALLENGES.length ? '<li class="done"><span class="tick">★</span><span><b>All done! Free play:</b> try a health variable that goes down, with “Game over!” at 0.</span></li>' : "");
+}
+function award(id){ if(!S.challenges[id]){ S.challenges[id]=true; save(); renderChal(); settleBeans(); } }
+const build = makeVarStage($("buildStage"), {
+  run: prog=>{ if(Object.keys(prog.vars).some(n=>prog.vars[n].show)) award("show"); },
+  click: info=>{
+    const nm = SPRITES[info.sprite].n;
+    if(!info.changed){ $("buildStatus").textContent = "Nothing happened. The " + nm + " has no “when clicked” event."; return; }
+    const c = info.changed;
+    let msg = c.shown ? c.name + " went from " + c.old + " to " + c.nw + "." : c.name + " changed, but nobody can see it. Turn on “show variable " + c.name + "”.";
+    if(c.shown && c.nw > c.old) award("up");
+    if(c.shown && c.nw < c.old) award("down");
+    if(info.fired){ award("win"); msg += " The condition is true, so the code inside the “if” runs!"; }
+    $("buildStatus").textContent = msg;
+  }});
+function selectOpts(list, cur){ return list.map(v=>`<option value="${v}" ${String(v)===String(cur)?"selected":""}>${v}</option>`).join(""); }
+function eventFields(key){
+  const e = S.game[key], nm = SPRITES[key].n;
+  return `<div class="field"><label>when ${nm} clicked → change…</label>
+      <div class="btnrow" style="margin:0"><select data-e="${key}" data-k="change" aria-label="Variable to change">${selectOpts(["score","health"], e.change)}</select>
+      <span>by</span><select data-e="${key}" data-k="by" aria-label="Change by">${selectOpts([1,2,5,-1,-2], e.by)}</select></div></div>
+    <div class="field"><label><input type="checkbox" data-e="${key}" data-k="cond" ${e.cond?"checked":""}> then <b>if</b>…</label>
+      <div class="btnrow" style="margin:0"><select data-e="${key}" data-k="cv" aria-label="Variable to check">${selectOpts(["score","health"], e.cv)}</select>
+      <span>=</span><select data-e="${key}" data-k="eq" aria-label="Value to check">${selectOpts([0,1,2,3,4,5,6,8,10], e.eq)}</select>
+      <span>→</span><select data-e="${key}" data-k="act" aria-label="Action">${Object.keys(ACTS).map(a=>`<option value="${a}" ${a===e.act?"selected":""}>${ACTS[a]}</option>`).join("")}</select></div></div>`;
+}
+function renderEditor(){
+  const G = S.game;
+  $("gameEditor").innerHTML = `
+    <div class="spcard"><div class="sphead"><b>📦 Variables</b></div>
+      ${["score","health"].map(n=>`<div class="field"><label>${n}</label><div class="btnrow" style="margin:0">
+        <span>set ${n} to</span><select data-v="${n}" data-k="start" aria-label="Starting value of ${n}">${selectOpts([0,1,3,5,10], G[n].start)}</select>
+        <label><input type="checkbox" data-v="${n}" data-k="show" ${G[n].show?"checked":""}> show variable ${n}</label></div></div>`).join("")}
+      <p class="muted">A variable is in the program when a block uses it.</p></div>
+    <div class="spcard"><div class="sphead"><b>🟡 Coin</b></div>${eventFields("coin")}</div>
+    <div class="spcard"><div class="sphead"><b>💣 Bomb</b></div>
+      <div class="field"><label><input type="checkbox" data-e="bomb" data-k="on" ${G.bomb.on?"checked":""}> make a new bomb sprite</label></div>
+      ${G.bomb.on ? eventFields("bomb") : ""}</div>`;
+  $("gameEditor").querySelectorAll("[data-v]").forEach(inp=>inp.addEventListener("change",()=>{
+    const v = G[inp.dataset.v]; v[inp.dataset.k] = inp.type==="checkbox" ? inp.checked : +inp.value; edited();
+  }));
+  $("gameEditor").querySelectorAll("[data-e]").forEach(inp=>inp.addEventListener("change",()=>{
+    const e = G[inp.dataset.e], k = inp.dataset.k;
+    e[k] = inp.type==="checkbox" ? inp.checked : (k==="by" || k==="eq") ? +inp.value : inp.value;
+    edited(); if(k==="on") renderEditor();
+  }));
+}
+function edited(){
+  save(); $("buildCode").innerHTML = varBlocks(gameProgram());
+  if(build.running){ build.stop(); $("buildStatus").textContent = "You changed the program. Press ▶ Run to see your changes."; }
+}
+$("resetBuild").onclick = ()=>{ if(confirm("Start over with the first program? (Your challenge ticks stay.)")){ S.game = STARTER(); edited(); renderEditor(); build.clear(); $("buildStatus").textContent="Back to the starting program. Press Run."; } };
+$("buildRun").onclick = ()=>{
+  const p = gameProgram(); build.run(p);
+  $("buildStatus").textContent = Object.keys(p.vars).some(n=>p.vars[n].show) ? "Running! Click your sprites and watch the variables." : "Running! Click the coin. Can you see the score? (Hint: show variable.)";
+};
+$("buildStopBtn").onclick = ()=>{ build.stop(); $("buildStatus").textContent = "Program stopped."; };
+
+/* ---------- Part 5: Bug Hunt (the Level 11 idea: games with a problem in their variables) ---------- */
+const BUG_PROGS = {
+  b1:{ vars:{score:{start:0, show:false}}, sprites:[{key:"coin", x:200, y:150, ev:{change:"score", by:1, cond:false}}] },
+  b2:{ vars:{score:{start:0, show:true}},  sprites:[{key:"coin", x:200, y:150, ev:{change:"score", by:1, cond:false}}] },
+  b3:{ vars:{score:{start:0, show:true}},  sprites:[{key:"coin", x:200, y:150, ev:{change:"score", by:-1, cond:false}}] },
+  b4:{ vars:{score:{start:0, show:true}},  sprites:[{key:"coin", x:200, y:150, ev:{change:"score", by:2, cond:true, cv:"score", eq:5, act:"starburst"}}] }
+};
+const BUGS = [
+  {id:"b1", prob:"Coin Collector: “We don’t know what the score is!”",
+   o:["Add “show variable score” to the when run program","Change the score by 10 instead of 1","Make a second coin sprite"], a:0,
+   why:"The score changes, but it is never shown. “Show variable” puts it on the screen."},
+  {id:"b2", prob:"Coin Clicker: “Nothing happens when the player wins.”",
+   o:["Set the score to 10 at the start","Add “if score = 10 → do starburst effect” at the end of the event","Take away “show variable score”"], a:1,
+   why:"There is no condition to check for a winning score. The “if” block runs the celebration when the score reaches 10."},
+  {id:"b3", prob:"Coin Collector: “The score goes DOWN when I click a coin!”",
+   o:["Change the starting value to 1","Show the variable twice","Change “change score by -1” to “change score by 1”"], a:2,
+   why:"-1 takes away. A positive number, like 1, makes the score go up."},
+  {id:"b4", prob:"Coin Clicker: “I can never win!”",
+   o:["Change “if score = 5” to “if score = 6”","Change “change score by 2” to “change score by 3”","Take away “show variable score”"], a:0,
+   why:"The score goes 2, 4, 6… It is never exactly 5, so the condition is never true. 6 can happen. (Changing by 3 gives 3, 6, 9: still never 5.)"}
+];
+function renderBugs(){
+  $("bugBox").innerHTML = BUGS.map((b,i)=>{
+    const st = S.bugs[b.id] || {};
+    return `<div class="card" id="bug-${b.id}"><p><b>${i+1}. ${esc(b.prob)}</b></p>
+      <div class="blocks">${varBlocks(BUG_PROGS[b.id])}</div>
+      <p style="margin-top:8px">Which change fixes it?</p>
+      <div class="opts">${b.o.map((o,j)=>`<label class="opt"><input type="radio" name="bg${i}" value="${j}" ${st.choice===j?"checked":""}><span>${esc(o)}</span></label>`).join("")}</div>
+      <button class="btn alt" data-bug="${i}">Check</button>
+      <div class="feedback" id="bgfb-${i}"></div></div>`;
+  }).join("");
+  $("bugBox").querySelectorAll("input").forEach(r=>r.addEventListener("change",()=>{
+    const b = BUGS[+r.name.slice(2)]; S.bugs[b.id] = Object.assign(S.bugs[b.id]||{}, {choice:+r.value}); save();
+  }));
+  $("bugBox").querySelectorAll("[data-bug]").forEach(btn=>btn.addEventListener("click",()=>checkBug(+btn.dataset.bug)));
+  BUGS.forEach((b,i)=>{ if(S.bugs[b.id] && S.bugs[b.id].checked) checkBug(i, true); });
+}
+function checkBug(i, quiet){
+  const b = BUGS[i], st = S.bugs[b.id], fb = $("bgfb-"+i);
+  if(!st || st.choice===undefined){ fb.className="feedback show bad"; fb.textContent="Choose a fix first."; return; }
+  const ok = st.choice === b.a;
+  fb.className = "feedback show " + (ok ? "good" : "bad");
+  fb.textContent = ok ? "✔ Fixed! " + b.why : "✘ Not quite. Read the program one block at a time. What is missing or wrong?";
+  if(!quiet && !ok) miss();
+  if(!quiet && st.first===undefined){ st.first = ok; streakHit(ok); save(); settleBeans(); }   /* beans pay on the FIRST check only */
+  if(ok){ st.checked = true; if(!quiet) save(); }
+}
+function bugsDone(){ return BUGS.filter(b=>S.bugs[b.id] && S.bugs[b.id].checked).length; }
+
+/* ---------- Part 6: the review game from the Code.org Wrap Up slide (two variables) ---------- */
+$("wrapCode").innerHTML =
+  '<div class="stack run"><span class="blk hat">when run</span><div class="body">'
+  + `<span class="blk bh">set background to ${slot("scene")}</span>`
+  + `<span class="blk sp">show variable ${slot("points")} at ${slot("📍")}</span>`
+  + `<span class="blk bh">set ${slot("points")} to ${slot(0)}</span>`
+  + `<span class="blk sp">show variable ${slot("power")} at ${slot("📍")}</span>`
+  + `<span class="blk bh">set ${slot("power")} to ${slot(100)}</span>`
+  + `<span class="blk sp">make ${slot("some")} new ${slot("medium")} ${slot("⭐ star")} sprites</span>`
+  + `<span class="blk sp">make ${slot("some")} new ${slot("small")} ${slot("🔥 fireball")} sprites</span>`
+  + `<span class="blk sp">make new ${slot("🐄 cow")} sprite at ${slot("📍")}</span>`
+  + '</div></div>'
+  + `<div class="stack ev"><span class="blk ev">when ${slot("🐄 cow")} touches ${slot("🔥 fireball")}</span><div class="body"><span class="blk bh">change ${slot("power")} by ${slot(-1)}</span></div></div>`
+  + `<div class="stack ev"><span class="blk ev">when ${slot("🐄 cow")} touches ${slot("⭐ star")}</span><div class="body"><span class="blk bh">change ${slot("points")} by ${slot(1)}</span></div></div>`;
+
+/* ---------- Beans 🌱 — team points (same system as the Science lessons) ----------
+   vcSaveBeans writes an activity_type:'lesson' row; Group Totals adds it to the student's team
+   and the class goal. lesson_key groups this lesson so the SERVER enforces the 30-bean cap.
+   Beans pay only for answers the page can check itself, on the FIRST try:
+     label 6 (1 per block) · predict 8 (2 each) · Scoreboard challenges 8 (2 each) · Bug Hunt 8 (2 each) = 30.
+   Code.org level ticks and written answers pay nothing (the page cannot check them).
+   The device lock (vc-pts-<id>) includes the username, so a second student on the same
+   computer can still earn his or her own beans. */
+const LESSON = { idBase:"std5-cs-ce-l07", subject:"Computer Science", lo:"CS-E-L07", label:"CS Course E L07" };
+const LESSON_CAP = 30;
+const BEAN_ACTS = [
+  {act:"label",     note:"bn-label",     max:6, name:"Label the code",
+   earned:()=> S.warm.labelFirst},
+  {act:"predict",   note:"bn-predict",   max:8, name:"Predict questions",
+   earned:()=>{ const f = PREDICT.map((_,i)=>S.predict[i] ? S.predict[i].first : undefined);
+                return f.every(x=>x!==undefined) ? f.filter(Boolean).length*2 : null; }},
+].concat(CHALLENGES.map(c=>({act:"build-"+c.id, note:"bn-build", max:2, name:"Scoreboard: "+({show:"show a variable",up:"variable goes up",down:"variable goes down",win:"winning condition"}[c.id]||c.id),
+   earned:()=> S.challenges[c.id] ? 2 : null})))
+ .concat(BUGS.map((b,i)=>({act:"bug-"+b.id, note:"bn-bugs", max:2, name:"Bug Hunt "+(i+1),
+   earned:()=> (S.bugs[b.id] && S.bugs[b.id].first!==undefined) ? (S.bugs[b.id].first ? 2 : 0) : null})));
+function lockId(act){ return LESSON.idBase + "-" + act + "-" + WHO; }
+function beanLock(act){ try{ const r = localStorage.getItem("vc-pts-" + lockId(act)); return r ? JSON.parse(r) : null; }catch(e){ return null; } }
+function beansFor(act){ const l = beanLock(act); return l ? (+l.b || 0) : 0; }
+function beansBanked(){ return BEAN_ACTS.reduce((s,a)=>s + beansFor(a.act), 0); }
+const PENDING = new Set(); let pendingBeans = 0;
+function settleBeans(){
+  if(SESSION && !PREVIEW && typeof vcSaveBeans === "function"){
+    BEAN_ACTS.forEach(a=>{
+      const e = a.earned();
+      if(e===null || e===undefined || beanLock(a.act) || PENDING.has(a.act)) return;
+      const give = Math.max(0, Math.min(e, LESSON_CAP - beansBanked() - pendingBeans));
+      PENDING.add(a.act); pendingBeans += give;
+      vcSaveBeans(lockId(a.act), give, a.max, { subject:LESSON.subject, lo_code:LESSON.lo,
+        lesson_key:LESSON.idBase, activity_name:LESSON.label + " · " + a.name })
+      .then(res=>{
+        PENDING.delete(a.act); pendingBeans -= give;
+        if(res && res.ok){
+          if(SYNC && SYNC.beansChanged) SYNC.beansChanged();   /* bean lock written: put it on the account now */
+          const g = (res.granted != null) ? res.granted : give;
+          if(g > 0){ toast("🌱 +" + g + " bean" + (g===1?"":"s") + " for your team!"); refreshTeam(1500); }
+          else if(e > 0) toast("🌱 You reached this lesson’s " + LESSON_CAP + "-bean cap. Keep going for practice!");
+        } else if(!(res && res.locked)){
+          toast("⚠ Beans could not be saved just now. Reload this page later and they will be sent.");
+        }
+        renderBeans();
+      }, ()=>{ PENDING.delete(a.act); pendingBeans -= give; renderBeans(); });
+    });
+  }
+  renderBeans();
+}
+function renderBeans(){
+  $("beanPill").textContent = SESSION ? "🌱 " + beansBanked() + " / " + LESSON_CAP + " beans" : "🌱 Log in to earn beans";
+  const notes = {};
+  BEAN_ACTS.forEach(a=>{
+    const l = beanLock(a.act), e = a.earned();
+    if(!notes[a.note]) notes[a.note] = {got:0, max:0, done:0, any:false};
+    const n = notes[a.note]; n.max += a.max;
+    if(l){ n.got += (+l.b || 0); n.done++; n.any = true; } else if(e!==null && e!==undefined){ n.any = true; }
+  });
+  Object.keys(notes).forEach(id=>{
+    const el = $(id), n = notes[id]; if(!el) return;
+    if(!SESSION){ el.className = "bean-note show"; el.innerHTML = '🌱 <a href="' + loginUrl() + '">Log in</a> to earn up to ' + n.max + ' beans here for your team.'; return; }
+    if(!n.any){ el.className = "bean-note show"; el.textContent = "🌱 Up to " + n.max + " beans for your team — your FIRST try counts."; return; }
+    el.className = "bean-note show"; el.textContent = "🌱 You banked " + n.got + " of " + n.max + " beans here.";
+  });
+}
+const toastQ = []; let toastBusy = false;
+function toast(msg){ toastQ.push(msg); if(toastQ.length > 4) toastQ.splice(0, toastQ.length - 4); if(!toastBusy) nextToast(); }
+function nextToast(){ const t = $("toast"); if(!toastQ.length){ toastBusy = false; t.classList.remove("show"); return; }
+  toastBusy = true; t.textContent = toastQ.shift(); t.classList.add("show"); setTimeout(nextToast, 2600); }
+
+/* ---------- Sign-in bar + "Next student" ---------- */
+function renderSignin(){
+  const bar = $("signinBar");
+  if(SESSION){
+    bar.innerHTML = '<span>✓ Signed in as <b>' + esc(studentName()) + '</b> · your beans 🌱 and quiz result save to your account</span>'
+      + '<button type="button" class="btn alt" id="nextStudent">Next student ↪</button>';
+    $("nextStudent").onclick = ()=>{
+      if(!confirm("Hand this computer to the next student?\n\nYour work stays saved under your own name. The next student signs in with his or her own username.")) return;
+      try{ localStorage.removeItem("vc-session"); }catch(e){}
+      location.href = loginUrl();
+    };
+  } else {
+    bar.innerHTML = '<span>🔑 <a href="' + loginUrl() + '">Log in</a> to earn up to ' + LESSON_CAP + ' beans 🌱 for your team and to take the quiz. You can do the lesson without logging in, for practice.</span>';
+  }
+}
+function guestHasWork(raw){
+  try{
+    const g = JSON.parse(raw), w = g.warm || {}, txt = t => !!(t && String(t).trim());
+    if(Object.keys(g.frames||{}).length) return true;
+    return !!(w.labelChecked || Object.keys(w.label||{}).length || txt(w.reflect)
+      || Object.keys(g.predict||{}).length || Object.keys(g.bugs||{}).length || Object.values(g.levels||{}).some(Boolean)
+      || Object.values(g.challenges||{}).some(Boolean) || (g.wrap && (txt(g.wrap.r1) || txt(g.wrap.r2)))
+      || (g.quiz && g.quiz.attempts));
+  }catch(e){ return false; }
+}
+/* Work done on this computer BEFORE signing in: ask whether it belongs to this student. */
+function offerGuestWork(){
+  let guest = null;
+  try{ if(SESSION && !localStorage.getItem(STORE_KEY)) guest = localStorage.getItem(GUEST_KEY); }catch(e){}
+  if(!guest) return;
+  if(!guestHasWork(guest)){ try{ localStorage.removeItem(GUEST_KEY); }catch(e){} return; }   /* only opened the page — nothing to claim */
+  const box = $("guestOffer");
+  box.innerHTML = '<p><b>Some of this lesson was done on this computer before anyone signed in.</b> Is that your work, ' + esc(SESSION.first_name || studentName()) + '?</p>'
+    + '<div class="btnrow"><button type="button" class="btn" id="guestYes">Yes, add it to my account</button>'
+    + '<button type="button" class="btn alt" id="guestNo">No, start fresh</button></div>';
+  box.style.display = "block";
+  $("guestYes").onclick = ()=>{ try{ localStorage.setItem(STORE_KEY, guest); localStorage.removeItem(GUEST_KEY); }catch(e){} if(SYNC) SYNC.touch(); location.reload(); };
+  $("guestNo").onclick  = ()=>{ try{ localStorage.removeItem(GUEST_KEY); }catch(e){} box.style.display = "none"; };
+}
+
+/* ---------- Part 7: Quiz ----------
+   Lesson 7 quiz rules (Edwin, Nov 5): at least 3 read-the-program questions with the lesson's real blocks;
+   every attempt reshuffles the questions and the options; each question has 5 wrong options and shows 3,
+   and a retake replaces at least one wrong option shown last time (the right answer also moves). */
+const QUIZ = [
+  {id:"q1", q:"What is a variable?", right:"It stores information, and the value can change while the program runs",
+   wrong:["A sprite that moves with the arrow keys","A behavior that keeps going until it is told to stop","The background picture of a game","An action, like a key press, that makes something happen","A block that makes many sprites at one time"],
+   part:"Part 2: Vocabulary", why:"Variables store information (data). The value can be updated throughout a program."},
+  {id:"q2", q:"What is a condition?", right:"Something a program checks to see whether it is true before it takes an action",
+   wrong:["A block that always runs first","The starting value of a variable","How a sprite looks on the screen","A list of steps the computer follows from top to bottom","A sound that plays when you win"],
+   part:"Part 2: Vocabulary", why:"A condition is checked first. If it is true, the action is taken."},
+  {id:"q3", q:"Read the program. when run: set score to 0. when coin clicked: change score by 1. The player clicks the coin 4 times. What does the score show?", right:"4",
+   wrong:["0","1","3","5","-4"],
+   part:"Part 3: Keeping Score", why:"The score starts at 0 and goes up by 1 on each click: 1, 2, 3, 4."},
+  {id:"q4", q:"Read the program. when run: set health to 5. when bomb clicked: change health by -1. The player clicks the bomb 2 times. What does health show?", right:"3",
+   wrong:["7","5","4","-2","2"],
+   part:"Part 3: Keeping Score", why:"-1 takes 1 away on each click: 5, then 4, then 3."},
+  {id:"q5", q:"Read the program. when run: set score to 0. when coin clicked: change score by 1, then if score = 3 → do starburst effect. When does the starburst happen?", right:"On the 3rd click of the coin",
+   wrong:["As soon as the program runs","On the 1st click of the coin","Every time the coin is clicked","Never, because the score starts at 0","On the 4th click of the coin"],
+   part:"Part 3: Keeping Score", why:"The condition “score = 3” is true only after the 3rd click. Then the code inside runs."},
+  {id:"q6", q:"Read the program. when run: set score to 0. when coin clicked: change score by 2, then if score = 5 → do starburst effect. What happens?", right:"The starburst never happens, because the score is never exactly 5",
+   wrong:["The starburst happens on the 5th click","The starburst happens on the 3rd click","The starburst happens as soon as the program runs","The starburst happens on every click","The starburst happens on the 2nd click"],
+   part:"Part 5: Bug Hunt", why:"The score goes 2, 4, 6… It is never exactly 5, so the condition is never true."},
+  {id:"q7", q:"Which block puts the scoreboard (the name and the value of the score) on the screen?", right:"show variable score",
+   wrong:["set score to 0","change score by 1","if score = 5","set background to space","make new coin sprite"],
+   part:"Part 3: Keeping Score", why:"“Show variable” puts the variable’s name and value on the play space."},
+  {id:"q8", q:"Keisha wants health to go DOWN by 1 each time her player touches a fireball. Which block should she put in the event?", right:"change health by -1",
+   wrong:["change health by 1","set health to 1","set health to -1","show variable health","if health = 1"],
+   part:"Part 5: Scoreboard Builder", why:"“Change … by” changes the value, and a negative number makes it go down."},
+  {id:"q9", q:"In a game, points start at 0 and power starts at 100. Why do they start at different values?", right:"Points go up during the game, and power goes down",
+   wrong:["Points and power can never change","The computer always starts the first variable at 0","Points go down during the game, and power goes up","Bigger numbers make the game run faster","Power is a sprite, and points is a background"],
+   part:"Part 6: Wrap Up", why:"A variable that goes up can start at 0. A variable that goes down needs to start higher, like 100."},
+  {id:"q10", q:"The score is 2. What happens to the code inside “if score = 5”?", right:"It does not run, because the condition is false",
+   wrong:["It runs, because the score is a number","It runs 2 times","It changes the score to 5","It runs, and then the score goes back to 0","It makes the score go up by 3"],
+   part:"Part 3: Keeping Score", why:"A conditional only runs when its condition is true. 2 is not 5, so it does not run."}
+];
+QUIZ.forEach(q=>{ q.o = [q.right].concat(q.wrong); q.a = 0; });   /* option 0 is right; the page never shows them in this order */
+/* Pick 3 of the 5 wrong options. On a retake at least one of them was NOT shown last time, and the right answer moves. */
+function quizOptions(q){
+  const prev = S.quiz.shown && S.quiz.shown[q.id];
+  const wrongs = q.o.map((_,i)=>i).filter(i=>i!==q.a);
+  let pick;
+  if(prev && prev.w){
+    const fresh = shuffle(wrongs.filter(i=>prev.w.indexOf(i)===-1));
+    const rest = shuffle(wrongs.filter(i=>i!==fresh[0]));
+    pick = [fresh[0]].concat(rest.slice(0,2));
+  } else pick = shuffle(wrongs).slice(0,3);
+  let order = shuffle([q.a].concat(pick));
+  for(let t=0; prev && order.indexOf(q.a)===prev.pos && t<20; t++) order = shuffle(order);
+  return order;
+}
+let current = null;
+function renderQuizStart(){
+  $("quizHistory").textContent = S.quiz.attempts
+    ? "Attempts: "+S.quiz.attempts+" · Best score: "+S.quiz.best+"/10" + (S.quiz.passed ? " · PASSED ✔" : "") : "";
+  const needLogin = !SESSION && !PREVIEW;
+  $("quizNeedLogin").style.display = needLogin ? "block" : "none";
+  $("quizLoginBtn").href = loginUrl("quiz");
+  if(current) return;
+  if(S.quiz.attempts && !$("quizResult").innerHTML){ renderResult(S.quiz.lastDetail || null); showSaveState(); }
+  if(needLogin){ $("quizArea").innerHTML = ""; return; }
+  if(!$("quizResult").innerHTML){
+    $("quizArea").innerHTML = '<button class="btn coral" id="startQuiz">Start the quiz</button>';
+    $("startQuiz").onclick = startQuiz;
+  } else { $("quizArea").innerHTML = ""; }
+}
+function startQuiz(){
+  if(!SESSION && !PREVIEW){ renderQuizStart(); return; }
+  quizBusy = true;
+  current = shuffle(QUIZ).map(q=>({q, order:quizOptions(q), pick:null}));
+  $("quizResult").innerHTML = "";
+  $("quizArea").innerHTML = current.map((c,i)=>`
+    <div class="q" id="qq-${i}"><p><span class="qn">Question ${i+1} of ${current.length}.</span> ${esc(c.q.q)}</p>
+      <div class="opts">${c.order.map(oi=>`<label class="opt"><input type="radio" name="qq${i}" value="${oi}"><span>${esc(c.q.o[oi])}</span></label>`).join("")}</div>
+    </div>`).join("") + '<div class="btnrow"><button class="btn ok" id="submitQuiz" disabled>Submit my answers</button><span id="answeredCount" class="muted">0 of 10 answered</span></div>';
+  $("quizArea").querySelectorAll("input[type=radio]").forEach(r=>r.addEventListener("change",()=>{
+    current[+r.name.slice(2)].pick = +r.value;
+    const n = current.filter(c=>c.pick!==null).length;
+    $("answeredCount").textContent = n+" of "+current.length+" answered";
+    $("submitQuiz").disabled = n < current.length;
+  }));
+  $("submitQuiz").onclick = submitQuiz;
+  $("quizArea").scrollIntoView({behavior:"smooth"});
+}
+function gradeAnswers(answers){ return answers.filter(c=>c.pick===c.q.a).length; }
+function submitQuiz(){
+  quizBusy = false;
+  const score = gradeAnswers(current);
+  const passedNow = score >= PASS_MARK;
+  S.quiz.attempts++; S.quiz.last = score; S.quiz.best = Math.max(S.quiz.best||0, score);
+  if(passedNow) S.quiz.passed = true;
+  if(passedNow){ const firstBadge = !S.quiz.badge, perfect = score === QUIZ.length;
+    if(firstBadge || (perfect && !S.quiz.badge.perfect)) S.quiz.badge = { name:BADGE.name, perfect: perfect || !!(S.quiz.badge && S.quiz.badge.perfect), date:new Date().toISOString() };
+    setTimeout(()=>{ confetti(); toast(BADGE.icon + " Badge earned: " + BADGE.name + (perfect ? " 🌟 Perfect score!" : "")); }, 400); }
+  const marks = current.map(c=>c.q.id + (c.pick===c.q.a ? "✓" : "✗")).join(" ");
+  const entry = {score, date:new Date().toISOString(), n:S.quiz.attempts, marks, saved:false,
+                 attemptId:(typeof vcNewAttemptId==="function") ? vcNewAttemptId() : WHO + "-" + Date.now()};
+  S.quiz.history.push(entry);
+  S.quiz.lastDetail = current.map(c=>({id:c.q.id, pick:c.pick}));
+  S.quiz.shown = {}; current.forEach(c=>{ S.quiz.shown[c.q.id] = {w:c.order.filter(i=>i!==c.q.a), pos:c.order.indexOf(c.q.a)}; });   /* the next attempt changes these */
+  save(); if(SYNC) SYNC.now();
+  $("quizArea").innerHTML = ""; current = null;
+  renderResult(S.quiz.lastDetail);
+  renderQuizStart();
+  $("quizResult").scrollIntoView({behavior:"smooth"});
+  lmsSaveQuiz(entry);
+}
+
+/* ---------- Record book (Sheet) — every attempt is its own row ----------
+   Same helper as the Maths classwork (vcSubmitResult): kept on this computer first, retried
+   automatically, never written twice (attempt_id). activity_type 'quiz' adds no beans. */
+const ACTIVITY_NAME = "Std 5 CS · Course E L07 — Variables as Score Quiz";
+function lmsBadge(kind, html){ const b = $("lmsBadge"); if(!b) return; b.className = "lms-badge show " + kind; b.innerHTML = html; }
+const LMS_WAIT = "⚠ Your result has not reached Mr. EdLo’s record book yet. It is safe on this computer and will be sent the next time you sign in and open this page here.";
+function markSaved(){ S.quiz.history.forEach(h=>{ h.saved = true; }); save(); }
+async function lmsSaveQuiz(h){
+  if(PREVIEW){ lmsBadge("warn", "👩‍🏫 Teacher preview: this result was NOT sent to the record book."); return; }
+  if(!SESSION){ lmsBadge("warn", "⚠ Not signed in, so this result did not reach Mr. EdLo’s record book."); return; }
+  if(typeof vcSubmitResult !== "function"){ lmsBadge("warn", "⚠ The record book helper did not load (check the internet). Your PDF still shows your result."); return; }
+  lmsBadge("busy", "Sending your result to Mr. EdLo’s record book…");
+  const payload = { subject:LESSON.subject, lo_code:LESSON.lo, activity_type:"quiz", activity_name:ACTIVITY_NAME,
+                    score:h.score, max_score:QUIZ.length, attempt_id:h.attemptId,
+                    ai_feedback:"Attempt #" + h.n + " · " + h.marks + (h.score >= PASS_MARK ? " · PASS" : " · not yet") };
+  const r = await vcSubmitResult(payload, { onRetry:(n,of)=>lmsBadge("busy", "The record book is busy — trying again by itself (" + n + " of " + of + ")… please stay on this page.") });
+  if(r && r.ok){ h.saved = true; save(); lmsBadge("ok", "✓ Saved to your record — Mr. EdLo can see it. " + h.score + "/10" + (r.percent!=null ? " (" + r.percent + "%)" : "") + "."); }
+  else { lmsBadge("warn", LMS_WAIT + ' <button type="button" class="btn alt" id="lmsRetry">Try again</button>'); $("lmsRetry").onclick = lmsRetry; }
+}
+async function lmsRetry(){
+  lmsBadge("busy", "Sending…");
+  const r = (typeof vcSendUnsent === "function") ? await vcSendUnsent() : {ok:false};
+  if(r.ok){ markSaved(); lmsBadge("ok", "✓ Saved to your record — Mr. EdLo can see it."); }
+  else { lmsBadge("warn", "Still cannot reach the record book. Your result stays safe on this computer." + ' <button type="button" class="btn alt" id="lmsRetry">Try again</button>'); $("lmsRetry").onclick = lmsRetry; }
+}
+function showSaveState(){
+  const last = S.quiz.history[S.quiz.history.length-1];
+  if(!last || !SESSION || PREVIEW) return;
+  if(last.saved) lmsBadge("ok", "✓ Saved to your record — Mr. EdLo can see it.");
+  else { lmsBadge("warn", LMS_WAIT + ' <button type="button" class="btn alt" id="lmsRetry">Try again</button>'); $("lmsRetry").onclick = lmsRetry; }
+}
+function renderResult(detail){
+  if(S.quiz.last===null) return;
+  const score = S.quiz.last, passed = score >= PASS_MARK, reveal = S.quiz.passed;
+  let h = `<div class="card"><div class="scorebig ${passed?"pass":"notyet"}">${score} / 10 · ${score*10}%</div>
+    <p><b>${passed ? "🎉 You passed! Well done." : "Not yet. You need 7 out of 10 to pass. Review the parts below, then try again."}</b></p>
+    <div class="btnrow">${passed ? "" : '<button class="btn coral" id="retake">Try again</button>'}
+      ${passed ? '<button class="btn alt" id="retake">Practise again</button>' : ""}</div>
+    <p class="muted">${passed ? "" : "Correct answers are shown after you pass. "}Every attempt is recorded in your PDF and in Mr. EdLo’s record book.</p>
+    <div class="lms-badge" id="lmsBadge" role="status"></div></div>
+  ${S.quiz.badge ? `<div class="card badge-card"><div class="ico">${BADGE.icon}</div><div><b>Badge earned: ${esc(BADGE.name)}</b>${S.quiz.badge.perfect ? " 🌟" : ""}<br><span class="muted">${esc(BADGE.why)}${S.quiz.badge.perfect ? " Perfect score!" : ""}</span></div></div>` : ""}
+  <div class="card turnin" id="turnIn">
+    <h3>📤 Turn in your work on Google Classroom</h3>
+    <ol>
+      <li><b>Save your results.</b><br><button class="btn coral" id="savePdf">📄 Save my results as PDF</button>
+        <div class="pdfmsg" id="pdfMsg" role="status"></div></li>
+      <li><b>Open Google Classroom</b> and find the <b>Variables as Score</b> assignment.<br>
+        <a class="btn alt" href="https://classroom.google.com" target="_blank" rel="noopener">Open Google Classroom ↗</a></li>
+      <li>Click <b>Add or create</b> → <b>File</b>. Choose your PDF from the <b>Downloads</b> folder. Then click <b>Turn in</b>.</li>
+    </ol>
+    <p class="muted">${passed ? "" : "You may try the quiz again first. Save a new PDF after your last try and turn in that one. "}
+      No PDF? <button class="btn alt" id="printSlip" style="font-size:.85rem;padding:4px 10px">🖨 Print → Save as PDF instead</button></p>
+  </div>`;
+  if(detail){
+    h += detail.map((d,i)=>{
+      const q = QUIZ.find(x=>x.id===d.id), ok = d.pick===q.a;
+      return `<div class="q ${ok?"right":"wrong"}"><p><span class="qn">${ok?"✔":"✘"} Question ${i+1}.</span> ${esc(q.q)}</p>
+        <p>Your answer: <b>${esc(q.o[d.pick])}</b></p>
+        ${ok ? `<p class="muted">${esc(q.why)}</p>`
+             : reveal ? `<p>Correct answer: <b>${esc(q.o[q.a])}</b></p><p class="muted">${esc(q.why)}</p>`
+                      : `<p class="muted">Review <b>${esc(q.part)}</b> to find the answer.</p>`}</div>`;
+    }).join("");
+  }
+  $("quizResult").innerHTML = h;
+  const rt = $("retake"); if(rt) rt.onclick = startQuiz;
+  $("printSlip").onclick = printSlip;
+  $("savePdf").onclick = savePdf;
+}
+
+/* ---------- PDF results file (for Google Classroom) ---------- */
+function pdfText(t){
+  // Built-in PDF fonts cover Latin letters (including Spanish accents) but not emoji or symbols.
+  return String(t==null ? "" : t)
+    .replace(/[‘’ʼ]/g,"'").replace(/[“”]/g,'"')
+    .replace(/[–—]/g,"-").replace(/…/g,"...").replace(/·/g,"-")
+    .replace(/[^\x09\x0A\x0D\x20-\x7E\xA0-\xFF]/g,"").replace(/[ \t]+\n/g,"\n");
+}
+function fileSafe(t){
+  return (pdfText(t).normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Za-z0-9]+/g,"-").replace(/^-+|-+$/g,"") || "Student").slice(0,40);
+}
+function lastAttemptTime(){
+  const h = S.quiz.history[S.quiz.history.length-1];
+  const d = h ? new Date(h.date) : new Date();
+  return d.toLocaleString("en-GB",{day:"numeric",month:"long",year:"numeric",hour:"numeric",minute:"2-digit"});
+}
+function buildResultsPdf(){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({unit:"pt", format:"letter"});
+  const M = 54, PW = doc.internal.pageSize.getWidth(), PH = doc.internal.pageSize.getHeight(), W = PW - 2*M;
+  let y = M;
+  const need = h => { if(y + h > PH - M){ doc.addPage(); y = M; } };
+  const font = (size, bold) => { doc.setFont("helvetica", bold ? "bold" : "normal"); doc.setFontSize(size); };
+  const para = (s, size=11, bold=false, after=4, indent=0) => {
+    font(size, bold); const lh = size*1.3;
+    doc.splitTextToSize(pdfText(s), W-indent).forEach(l=>{ need(lh); doc.text(l, M+indent, y+size); y += lh; });
+    y += after;
+  };
+  const heading = s => { y += 8; need(40); para(s, 13, true, 2); doc.setLineWidth(1); doc.line(M, y, M+W, y); y += 8; };
+  const table = (rows, keyW=180) => {
+    rows.forEach(([k,v])=>{
+      font(10.5, false); const vl = doc.splitTextToSize(pdfText(v), W-keyW-16);
+      font(10.5, true);  const kl = doc.splitTextToSize(pdfText(k), keyW-16);
+      const h = Math.max(vl.length, kl.length)*14 + 10;
+      need(h); doc.setLineWidth(.6); doc.rect(M, y, W, h); doc.line(M+keyW, y, M+keyW, y+h);
+      font(10.5, true);  kl.forEach((l,i)=>doc.text(l, M+8, y+17+i*14));
+      font(10.5, false); vl.forEach((l,i)=>doc.text(l, M+keyW+8, y+17+i*14));
+      y += h;
+    });
+    y += 6;
+  };
+  const answerBox = (label, txt) => {
+    para(label, 10.5, true, 2);
+    font(10.5, false);
+    const lines = doc.splitTextToSize(pdfText(txt && txt.trim() ? txt.trim() : "(no answer)"), W-16);
+    let i = 0;
+    while(i < lines.length){            // split long answers across pages
+      need(14+10); const fit = Math.max(1, Math.min(lines.length-i, Math.floor((PH-M-y-10)/14)));
+      const h = fit*14 + 10; doc.setLineWidth(.6); doc.rect(M, y, W, h);
+      lines.slice(i, i+fit).forEach((l,k)=>doc.text(l, M+8, y+17+k*14));
+      y += h; i += fit;
+    }
+    y += 8;
+  };
+
+  const score = S.quiz.last, passed = score >= PASS_MARK, reveal = S.quiz.passed;
+  para("Mr. EdLo - Computer Science - Course E, Lesson 7", 10, false, 0);
+  para("Variables as Score: Quiz Results", 17, true, 6);
+  table([
+    ["Name", studentName() + (SESSION ? "  (" + SESSION.username + ")" : "")],
+    ["Submitted", lastAttemptTime()],
+    ["Quiz score (this attempt)", score+" / 10  ("+score*10+"%)"],
+    ["Result (pass mark 70%)", passed ? "PASSED" : "NOT YET PASSED"],
+    ["Best score / attempts", S.quiz.best+" / 10  -  "+S.quiz.attempts+" attempt"+(S.quiz.attempts===1?"":"s")],
+    ["Badge", S.quiz.badge ? BADGE.name + (S.quiz.badge.perfect ? " (perfect score)" : "") : "Not yet - pass the quiz to earn it"],
+    ["All attempts", S.quiz.history.map((a,i)=>"#"+(i+1)+": "+a.score+"/10").join(",  ")]
+  ]);
+
+  heading("Quiz answers (this attempt)");
+  (S.quiz.lastDetail||[]).forEach((d,i)=>{
+    const q = QUIZ.find(x=>x.id===d.id), ok = d.pick===q.a;
+    need(60);
+    para((i+1)+". "+q.q, 10.5, true, 1);
+    para("My answer: "+q.o[d.pick]+"   ["+(ok ? "CORRECT" : "NOT CORRECT")+"]", 10.5, false, 1, 14);
+    if(!ok && reveal) para("Correct answer: "+q.o[q.a], 10.5, false, 1, 14);
+    y += 5;
+  });
+
+  heading("Lesson completion");
+  table([
+    ["Label the code", S.warm.labelChecked ? S.warm.labelScore+" / 6 correct" : "Not done"],
+    ["Predict questions", PREDICT.filter((_,i)=>S.predict[i]&&S.predict[i].checked).length+" / 4 correct"],
+    ["Code.org levels ticked", levelsDone()+" / 12"],
+    ["Scoreboard challenges", chalDone()+" / 4"],
+    ["Bug Hunt games fixed", bugsDone()+" / 4"],
+    ["Class checkpoint", checkpointPassed() ? "Done" : "Not yet"],
+    ["Called Mr. EdLo for help", String((S.help && S.help.hands) || 0) + " time(s)"],
+    ["Reflection finished", partDone("s-wrap") ? "Yes" : "No"],
+    ["Best first-try streak", String(S.bestStreak || 0)],
+    ["Beans banked (this lesson)", beansBanked() + " / " + LESSON_CAP]
+  ]);
+
+  heading("My written answers");
+  answerBox("How do you play the unicorn game? How do you win or lose?", answerText("reflect"));
+  answerBox("The two variables (points and power):", answerText("r1"));
+  answerBox("Today's goals: how did it go?", answerText("r2"));
+  answerBox("What I made change in a game today (typed):", S.wrap.r3);
+
+  const n = doc.getNumberOfPages();
+  for(let p=1;p<=n;p++){
+    doc.setPage(p); font(8.5, false);
+    doc.text(pdfText(studentName()+"  -  Variables as Score  -  Page "+p+" of "+n), M, PH-28);
+  }
+  const fname = "CS-E-L07-VariablesAsScore_"+fileSafe(studentName())+"_"+score+"of10.pdf";
+  return {doc, fname};
+}
+function savePdf(){
+  const msg = $("pdfMsg");
+  if(!SESSION){ msg.className="pdfmsg show bad"; msg.innerHTML='Sign in first: <a href="'+loginUrl("quiz")+'">Log in</a>.'; return; }
+  if(!(window.jspdf && window.jspdf.jsPDF)){
+    msg.className = "pdfmsg show bad";
+    msg.innerHTML = "The PDF maker did not load (check the internet). Use <b>Print → Save as PDF</b> instead: in the print window, choose <b>Save as PDF</b> as the printer.";
+    return;
+  }
+  try{
+    const {doc, fname} = buildResultsPdf();
+    doc.save(fname);
+    msg.className = "pdfmsg show good";
+    msg.innerHTML = "✔ Saved <b>"+esc(fname)+"</b> to your Downloads folder. Now do step 2.";
+  }catch(e){
+    msg.className = "pdfmsg show bad";
+    msg.innerHTML = "Something went wrong making the PDF. Use <b>Print → Save as PDF</b> instead.";
+  }
+}
+
+/* ---------- Printable result slip (black & white) ---------- */
+function printSlip(){
+  const yes = b => b ? "Yes" : "No";
+  const ans = t => esc(t && t.trim() ? t.trim() : "(no answer)");
+  const today = new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("printArea").innerHTML = `
+    <h1>Result Slip · Computer Science Course E, Lesson 7: Variables as Score</h1>
+    <table>
+      <tr><th style="width:30%">Name</th><td>${esc(studentName())}</td></tr>
+      <tr><th>Date</th><td>${esc(today)}</td></tr>
+      <tr><th>Quiz score (latest)</th><td>${S.quiz.last===null?"-":S.quiz.last+" / 10 ("+S.quiz.last*10+"%)"}</td></tr>
+      <tr><th>Best score · Attempts</th><td>${S.quiz.best===null?"-":S.quiz.best+" / 10"} · ${S.quiz.attempts}</td></tr>
+      <tr><th>Result (pass mark 70%)</th><td><b>${S.quiz.passed?"PASSED":"NOT YET PASSED"}</b></td></tr>
+    </table>
+    <h3>Lesson completion</h3>
+    <table>
+      <tr><th>Label the code</th><td>${S.warm.labelChecked ? S.warm.labelScore+" / 6 correct" : "Not done"}</td></tr>
+      <tr><th>Predict questions</th><td>${PREDICT.filter((_,i)=>S.predict[i]&&S.predict[i].checked).length} / 4 correct</td></tr>
+      <tr><th>Code.org levels ticked</th><td>${levelsDone()} / 12</td></tr>
+      <tr><th>Scoreboard challenges</th><td>${chalDone()} / 4</td></tr>
+      <tr><th>Bug Hunt games fixed</th><td>${bugsDone()} / 4</td></tr>
+      <tr><th>Class checkpoint</th><td>${checkpointPassed() ? "Done" : "Not yet"}</td></tr>
+      <tr><th>Reflection finished</th><td>${yes(partDone("s-wrap"))}</td></tr>
+      <tr><th>Called Mr. EdLo for help</th><td>${(S.help && S.help.hands) || 0} time(s)</td></tr>
+      <tr><th>Badge</th><td>${S.quiz.badge ? esc(BADGE.name) + (S.quiz.badge.perfect ? " (perfect score)" : "") : "Not yet"}</td></tr>
+    </table>
+    <h3>Written answers</h3>
+    <p><b>How do you play the unicorn game? How do you win or lose?</b></p><div class="ans">${ans(answerText("reflect"))}</div>
+    <p><b>The two variables (points and power):</b></p><div class="ans">${ans(answerText("r1"))}</div>
+    <p><b>Today’s goals: how did it go?</b></p><div class="ans">${ans(answerText("r2"))}</div>
+    <p><b>What I made change in a game today (typed):</b></p><div class="ans">${ans(S.wrap.r3)}</div>
+    <p style="margin-top:14px">Teacher signature: ______________________________</p>`;
+  window.print();
+}
+
+/* ---------- Teacher reset ---------- */
+$("resetAll").onclick = ()=>{
+  if(confirm("Clear ALL saved answers and quiz results for this student — on this device and on his or her account? This cannot be undone.")){
+    try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+    if(SYNC) SYNC.clear().then(()=>location.reload()); else location.reload();
+  }
+};
+
+/* ---------- Start ---------- */
+if(new URLSearchParams(location.search).get("part")==="quiz") S.step = sections.findIndex(s=>s.id==="s-quiz");
+if(PREVIEW){
+  const pb = document.createElement("div");
+  pb.style.cssText = "background:#ffd84d;color:#222;padding:8px 16px;text-align:center;font-weight:700;font-size:.95rem;position:relative;z-index:50";
+  pb.innerHTML = '👩‍🏫 Teacher preview: every part is open · nothing is sent to the record book '
+    + '<button type="button" id="previewOff" style="margin-left:10px;padding:4px 12px;border-radius:8px;border:1px solid #222;background:#fff;color:#222;cursor:pointer;font-weight:700">Exit preview</button>';
+  document.body.prepend(pb);
+  $("previewOff").onclick = ()=>{ try{ localStorage.removeItem("vc-teacher-preview"); }catch(e){} location.href = location.pathname; };
+}
+renderSignin(); if(!PREVIEW) offerGuestWork(); renderFrames(); renderStreak(); refreshTeam(0);
+$("helpBtn").onclick = ()=>offerHelp("manual");
+buildStepper(); renderLabels(); renderPredict(); renderLevels(); renderBugs();
+renderEditor(); $("buildCode").innerHTML = varBlocks(gameProgram()); renderChal(); build.load(gameProgram()); build.render();
+S.step = isLocked(S.step || 0) ? openUpTo() : (S.step || 0);   /* keep an exempt part (Scoreboard Builder) across a reload */
+showStep(S.step);
+settleBeans();   /* sends any beans earned while the record book was unreachable */
+if(SESSION && typeof vcUnsent==="function" && vcUnsent().length){
+  vcSendUnsent().then(r=>{ if(r && r.ok){ markSaved(); if(S.quiz.last!==null) showSaveState(); } });
+}
+</script>
+</body>
+</html>
