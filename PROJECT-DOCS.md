@@ -1520,7 +1520,15 @@ Nothing is shared with `edlo-lms`, `VC-LMS` or `edlo-gemini`. Club members are N
 - **Typing test:** chime + flash "Time's up!" (or "You typed it all!"); **How to get better** box: most-missed keys,
   accuracy/speed advice, Shift tip for capitals, and "ready for the next level". **Shortcut Ninja:** Gold round ends
   with the chime + flash; every result lists the shortcuts the student missed most.
-- A background tab may ring up to about a minute late (browsers slow down timers in hidden tabs).
+- **Seen from other tabs** (Edwin: "the timer must show when TypingClub is open"): the countdown is also in the
+  **tab name** ("⏱ 12:34 · Warm-up", flashing "⏰ TIME'S UP!" at the end), and a small **floating window** stays on top
+  of every tab (Document Picture-in-Picture, Edge/Chrome). It opens in the same click as "Open TypingClub" (tested
+  Nov 6 in Chrome); closing it does not stop the timer and 📌 on the pill reopens it. It shows "Time's up!" for 2 min.
+- **Projector timer** (teacher dashboard → ⏱️ Projector timer): full-screen countdown for the whole class with
+  Warm-up / Mission / Show & Share presets (minutes editable beside each, remembered on that computer: `cc-pt-minutes`),
+  an "Other" timer, Pause, +1 min, Reset, the chime, and "▶ Start <next stage>" when time is up.
+- A background tab may ring up to about a minute late (browsers slow down timers in hidden tabs); the projector
+  timer is the class's main clock.
 
 ### Club XP + live standings (Edwin, Nov 6, 2026 — "I want this to be competitive")
 - **Why XP and not raw scores:** the club mixes Std 4–6; on raw typing speed Std 6 nearly always wins, so the youngest
