@@ -13,7 +13,9 @@
      Paste is blocked; the caret stays at the end; backspace is allowed. Self-contained page.
      OPEN/CLOSE: locked while the club is closed (teacher dashboard); the Apps Script refuses tests then anyway.
      SOUND + NOTICE (Nov 6): soft key clicks (🔊 on/off, cc-sound), a chime and a flashing "Time's up!" at the end,
-     and "How to get better" tips from the student's own result (most-missed keys, accuracy, speed, level). */
+     and "How to get better" tips from the student's own result (most-missed keys, accuracy, speed, level).
+     TEXTS (Nov 6): big pools themed by the 10 club weeks (THEMES) + general texts; each test mixes the current
+     club week's theme (teacher dashboard week) with random texts from the rest, so no two tests are the same. */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -444,7 +446,9 @@
   .stat { flex:0 1 160px; text-align:center; padding:.7rem; border-radius:14px; background:var(--card-bg); border:1.5px solid var(--card-border); }
   .stat b { display:block; font-family:'Fredoka One',cursive; font-weight:400; font-size:1.9rem; color:var(--cycle-color); }
   .stat span { font-size:.75rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--section-lbl); }
-  .passage { position:relative; height:12.5rem; overflow:hidden; padding:1rem 1.2rem; border-radius:16px; background:var(--card-bg); border:2px solid var(--card-border-h); font-size:1.45rem; line-height:2.2rem; white-space:pre-wrap; word-break:break-word; user-select:none; }
+  .passage { padding:1rem 1.2rem; border-radius:16px; background:var(--card-bg); border:2px solid var(--card-border-h); font-size:1.45rem; line-height:2.2rem; user-select:none; }
+  /* Exactly 6 whole lines are shown; the text moves up one whole line at a time as the student types. */
+  .passage-inner { position:relative; height:calc(6 * 2.2rem); overflow:hidden; white-space:pre-wrap; word-break:break-word; }
   .passage span.ok  { color:var(--good); }
   .passage span.err { color:var(--bad); background:rgba(255,80,80,.18); border-radius:3px; text-decoration:underline; }
   .passage span.cur { border-bottom:3px solid var(--top-badge-bg); background:rgba(128,128,128,.18); border-radius:3px; }
@@ -511,6 +515,7 @@
         <button class="lvl-btn silver" data-level="silver" type="button">Silver<small>1 minute · sentences</small></button>
         <button class="lvl-btn gold" data-level="gold" type="button">Gold<small>2 minutes · paragraphs</small></button>
       </div>
+      <p class="hint-line" id="themeLine" style="margin-top:.9rem"></p>
       <div class="row-btns" style="margin-top:.4rem"><button class="btn ghost" id="soundBtn"></button></div>
       <ul class="tips">
         <li>The clock starts when you type the first letter.</li>
@@ -526,9 +531,9 @@
         <div class="stat"><b id="sWpm">0</b><span>WPM</span></div>
         <div class="stat"><b id="sAcc">100%</b><span>Accuracy</span></div>
       </div>
-      <div class="passage" id="passage" aria-label="Text to type"></div>
+      <div class="passage" aria-label="Text to type"><div class="passage-inner" id="passage"></div></div>
       <textarea class="field type-box" id="typeBox" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Type here"></textarea>
-      <p class="hint-line" id="hintLine">Click in the box and start typing. The clock starts with your first letter.</p>
+      <p class="hint-line" id="hintLine">Click in the box and start typing. The clock starts with your first letter. The text moves up as you type.</p>
       <div class="row-btns"><button class="btn ghost" type="button" id="quitBtn">Stop and choose another level</button><button class="btn ghost" id="soundBtn2"></button></div>
     </section>
 
@@ -640,20 +645,126 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
   CC.statusChip($('status'), '/computer-club/typing-test/');
 
   // Open/Close: tests only while the club is in session (teacher dashboard). A test already running is not cut off.
+  var clubWeek = 1;
   function applyLock(st) {
+    if (st && st.week) clubWeek = st.week;
+    var th = themeFor(clubWeek);
+    $('themeLine').textContent = 'This week\'s typing theme: ' + th.name + ' (Week ' + clubWeek + ').';
     if (T && !T.done) return;
     var locked = !(st && st.club_open);
     $('typingLocked').classList.toggle('hidden', !locked);
     $('typingBody').classList.toggle('hidden', locked);
   }
   var T = null, timer = null;
-  applyLock(CC.cachedStatus());
-  CC.clubStatus().then(applyLock);
 
-  // ── Texts (original, written for the club) ──
-  var WORDS = ['as','ask','dad','sad','all','fall','hall','add','had','has','glass','salad','flag','half','lads',
-               'the','and','is','it','we','go','to','sun','fun','run','cat','dog','big','red','hat','sit','top',
-               'can','map','pen','cup','sea','bus','yes','day','fish','jump','look','play','book','home'];
+  // ── Texts (all original, written for the club; British spelling as used in Belize) ──
+  // Each test mixes the CURRENT club week's theme (from /status, set on the teacher dashboard)
+  // with texts from the rest of the pool, so the theme comes up often but no test is the same.
+  // To add texts: add them to the right week below. Keep Gold paragraphs about 280–320 characters
+  // and Silver sentences about 30–55 characters so scores stay comparable from week to week.
+  var WORDS = ('as ask dad sad all fall hall add had has glass salad flag half the and is it we go to sun fun run cat ' +
+    'dog big red hat sit top can map pen cup sea bus yes day fish jump look play book home sky tree leaf rain wind ' +
+    'boat road farm corn rice bean milk egg bread cake lime mango palm sand shell crab bird nest frog snake ant bee ' +
+    'hen goat pig cow horse duck owl fox bat jar box bag cap shoe sock shirt dress coat bed lamp door wall roof room ' +
+    'desk chair table plate fork spoon pot pan bowl water juice soup park bike ball game kite song drum band dance ' +
+    'draw read write paint clap smile laugh happy kind brave fast slow tall short hot cold warm wet dry new old good ' +
+    'nice small long soft hard loud quiet early late first last next open shut stop help give take make bake cook ' +
+    'wash swim walk climb sing sleep wake eat drink find keep hold pull push catch throw kick stand come went saw said ' +
+    'made gave took ran sat got put let not but for with from this that what when who how why where here there they ' +
+    'them our your his her its one two three four five six seven eight nine ten').split(' ');
+
+  var THEMES = {
+    1: { name: 'Shortcuts & the keyboard',
+      words: ['copy', 'paste', 'undo', 'save', 'keys', 'ctrl', 'enter', 'space'],
+      sentences: ['Press Ctrl and C to copy a word.', 'Ctrl and V will paste it back.', 'Undo a mistake with Ctrl and Z.',
+        'Save your work often with Ctrl and S.', 'The space bar is the longest key.', 'Keep your thumbs on the space bar.',
+        'The Enter key starts a new line.', 'Shortcuts help you work much faster.'],
+      paragraphs: [
+        'A keyboard shortcut is a quick way to give the computer an order. Instead of reaching for the mouse, you hold the Ctrl key and tap a letter. Ctrl and C copies, Ctrl and V pastes, and Ctrl and Z undoes a mistake. Expert users learn a few shortcuts every week until they become automatic.',
+        'Look closely at your keyboard. The letters are not in alphabetical order; they follow a layout called QWERTY, named after the first six letters on the top row. The two small bumps on the F and J keys help your fingers find the home row without looking down at your hands.'] },
+    2: { name: 'Know your computer',
+      words: ['mouse', 'screen', 'monitor', 'cable', 'printer', 'speaker', 'power', 'button'],
+      sentences: ['The monitor shows us words and pictures.', 'The mouse moves the arrow on the screen.',
+        'A keyboard lets us type letters and numbers.', 'The CPU is the brain of the computer.',
+        'Speakers let us hear music and sounds.', 'A printer puts our work on paper.',
+        'Never eat or drink near a computer.', 'Shut down the computer the right way.'],
+      paragraphs: [
+        'Every computer has parts we can touch, called hardware. The monitor, keyboard, mouse and speakers are hardware. Inside the case, the processor follows instructions very quickly, and the memory holds the work we are doing right now. When we save a file, it is stored safely on the hard drive.',
+        'The programs we use are called software. A web browser, a game and a drawing app are all software. Hardware without software is like a car without a driver; it cannot do anything on its own. When you click an icon, you are telling the software which job you want the computer to do next.'] },
+    3: { name: 'Files & folders',
+      words: ['file', 'folder', 'drive', 'name', 'move', 'delete', 'desktop', 'trash'],
+      sentences: ['Give every file a clear and simple name.', 'A folder can hold many different files.',
+        'Put your science notes in one folder.', 'Drag the file into the correct folder.',
+        'Do not delete a file you still need.', 'Check the trash before you empty it.',
+        'My poster is saved in Google Drive.', 'A neat desktop helps you find things.'],
+      paragraphs: [
+        'Files are like pieces of paper and folders are like the boxes we keep them in. If every page is thrown on the floor, finding your homework takes forever. A good name such as Belize Poster Final tells you what is inside before you open it, and a folder for each subject keeps everything tidy.',
+        'Google Drive stores your files online, so you can open them at school or at home. To stay organised, make a folder for each class, then move new files into the right place as soon as you create them. Once a week, look through your folders and delete the copies you no longer need.'] },
+    4: { name: 'Internet safety',
+      words: ['safe', 'password', 'private', 'kind', 'adult', 'share', 'link', 'block'],
+      sentences: ['Never share your password with a friend.', 'Ask an adult before you download a game.',
+        'Be kind when you write messages online.', 'Do not click on strange pop-up windows.',
+        'Keep your home address private online.', 'A strong password is long and hard to guess.',
+        'Tell a teacher if something online scares you.', 'Not everything on the internet is true.'],
+      paragraphs: [
+        'The internet is a wonderful place to learn, but we must stay safe while we explore it. Never give your full name, address, school or phone number to someone you meet online. If a message asks for your password or offers a prize that seems too good to be true, close it and tell a trusted adult.',
+        'A strong password is like a strong lock on your front door. Use a long phrase that is easy for you to remember but hard for others to guess, and never use the same password for every site. Remember to sign out when you finish on a shared computer, so the next person cannot open your account.'] },
+    5: { name: 'Smart searching',
+      words: ['search', 'word', 'find', 'fact', 'web', 'page', 'source', 'check'],
+      sentences: ['Use a few clear words when you search.', 'Read the title before you click a link.',
+        'Check more than one website for facts.', 'Add the word Belize to find local results.',
+        'Quotation marks search for exact words.', 'Good researchers write down their sources.',
+        'Some search results are advertisements.', 'Look for websites from schools or museums.'],
+      paragraphs: [
+        'A search engine looks through millions of web pages in less than a second. The words you type are called keywords, and choosing them well makes a big difference. Instead of asking a long question, try a few important words, such as jaguar habitat Belize, and then read the results carefully.',
+        'Not every website gives correct information. Before you trust a fact, ask who wrote the page and why. Is it a school, a museum or a news service, or just someone selling something? Good researchers check at least two different sources and write down where each fact came from.'] },
+    6: { name: 'Pixel art',
+      words: ['pixel', 'grid', 'colour', 'square', 'art', 'fill', 'zoom', 'shade'],
+      sentences: ['A pixel is one tiny square of colour.', 'Pictures on a screen are made of pixels.',
+        'Zoom in to see the pixels on a photo.', 'Fill each square with a bright colour.',
+        'My pixel art shows a red macaw.', 'Plan your picture on grid paper first.',
+        'Use only a few colours to keep it simple.', 'Save your artwork with a clear name.'],
+      paragraphs: [
+        'Every picture on a screen is made of tiny squares called pixels. Each pixel can show only one colour, but when millions of them sit side by side, our eyes see smooth photos and videos. Pixel artists work the other way around: they use a small grid and colour each square by hand to build a picture.',
+        'To make pixel art in Google Sheets, shrink the columns until each cell is a small square. Then choose a fill colour and click the cells one by one. Start with the outline, add the main colours, and finish with a few darker squares for shadows. A toucan, a flag or a fish are great first projects.'] },
+    7: { name: 'Badge design',
+      words: ['badge', 'logo', 'shape', 'font', 'icon', 'design', 'circle', 'bold'],
+      sentences: ['A good badge uses only a few colours.', 'Choose a font that is easy to read.',
+        'Canva has many shapes and icons to use.', 'Our club badge needs a computer picture.',
+        'Keep the design simple and bold.', 'Line up the shapes in the centre.',
+        'Ask a friend what your badge means to them.', 'Download the badge as a picture file.'],
+      paragraphs: [
+        'A badge or logo is a small picture that tells people who you are. The best logos are simple, so they still look good when they are printed very small. Designers choose two or three colours that go well together and one clear font, then remove anything that does not help the message.',
+        'In Canva, start with an empty square design and add a circle for the shape of your badge. Search the elements for a computer or keyboard icon and place it in the middle. Type the words Computer Club around the edge, change the colours to match our club, and share the link with your teacher.'] },
+    8: { name: 'Posters',
+      words: ['poster', 'title', 'event', 'date', 'time', 'place', 'print', 'bright'],
+      sentences: ['A poster needs a big and clear title.', 'Write the date, time and place of the event.',
+        'Use one large picture to catch the eye.', 'Leave some empty space around the words.',
+        'Check your spelling before you print.', 'Dark words on a light background are easy to read.',
+        'Our school fair is on Saturday morning.', 'Invite your family to the science show.'],
+      paragraphs: [
+        'A poster must catch the eye of someone walking past in only a few seconds. That is why the title should be large and short, and the most important facts, such as the date, time and place, should be easy to find. One strong picture works better than many small ones scattered around the page.',
+        'Before you print a poster, stand back and look at it from across the room. Can you read the title? Do the colours make the words clear, or do they hide them? Ask a classmate to tell you what the poster is about. If your friend can answer in one sentence, your design is doing its job.'] },
+    9: { name: 'Slide shows about Belize',
+      words: ['slide', 'show', 'reef', 'toucan', 'jaguar', 'tapir', 'orchid', 'river'],
+      sentences: ['Belmopan is the capital city of Belize.', 'The keel-billed toucan is our national bird.',
+        'The Belize Barrier Reef is full of life.', 'Each slide should share just one main idea.',
+        'Add a picture to every slide you make.', 'Practise your talk before you present it.',
+        'Animations should be short and simple.', 'Caracol is an ancient Maya city in Belize.'],
+      paragraphs: [
+        'A good slide show tells a story, one slide at a time. Each slide should have a short title, a few words and one clear picture. If you put too much writing on a slide, your audience will read instead of listening to you. Save the details for what you say out loud while the slide is showing.',
+        'Belize has many national symbols. The keel-billed toucan is our national bird, the Baird\'s tapir is our national animal and the black orchid is our national flower. The mahogany tree appears on our coat of arms because it was once very important to the country\'s history and trade.'] },
+    10: { name: 'Typing Olympics',
+      words: ['race', 'team', 'speed', 'medal', 'cheer', 'gold', 'finger', 'win'],
+      sentences: ['Sit up straight with both feet on the floor.', 'Keep your wrists relaxed above the keys.',
+        'Look at the screen, not at your fingers.', 'Accuracy comes first and speed comes next.',
+        'Each finger has its own keys to press.', 'Practise a little every day to improve.',
+        'Take a deep breath before the race begins.', 'Cheer for your teammates when they finish.'],
+      paragraphs: [
+        'Good typists sit up straight, keep their feet flat on the floor and let their wrists float just above the keyboard. Each finger has its own group of keys, so the hands hardly need to move. When you feel a finger reaching for the wrong key, slow down for a moment and find the home row again.',
+        'Our Typing Olympics is a celebration of how far we have come this term. Some members have doubled their speed, while others have learned to type with all ten fingers for the first time. Whatever your score, be proud of your progress, cheer for your teammates and keep practising after the club.'] }
+  };
+  // General texts (any week)
   var SENTENCES = [
     'The toucan sat in the tall tree.', 'We went to the beach in Placencia.', 'My dog likes to run in the yard.',
     'Rice and beans is my favourite lunch.', 'The bus was late because of the rain.', 'I can type with all ten fingers.',
@@ -667,6 +778,7 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
     'Good typists keep their eyes on the screen and their fingers on the home row. They do not rush. Instead, they type at a steady pace and fix mistakes as soon as they notice them. Speed grows a little every week when you practise for just a few minutes each day.',
     'Our Computer Club is a place to learn, to create, and to have fun together. Each week we take on a new mission, help our friends when they get stuck, and celebrate every badge that someone earns. Remember to sign in, save your work, and sign out when you are finished.'
   ];
+
   var LEVELS = {
     bronze: { name: 'Bronze', seconds: 60 },
     silver: { name: 'Silver', seconds: 60 },
@@ -678,21 +790,34 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
     for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
     return a;
   }
-  function makeText(level) {
-    if (level === 'bronze') {
+  function themeFor(week) {
+    var n = Number(week) || 1;
+    return THEMES[n] || THEMES[((n - 1) % 10) + 1];
+  }
+  function allExcept(key, theme) {
+    var out = key === 'sentences' ? SENTENCES.slice() : PARAGRAPHS.slice();
+    Object.keys(THEMES).forEach(function (k) { if (THEMES[k] !== theme) out = out.concat(THEMES[k][key]); });
+    return out;
+  }
+  function makeText(level, week) {
+    var theme = themeFor(week);
+    if (level === 'bronze') {                       // 90 easy words; about 1 in 3 from this week's theme
       var out = [], prev = '';
       while (out.length < 90) {
-        var w = WORDS[Math.floor(Math.random() * WORDS.length)];
+        var list = Math.random() < 0.3 ? theme.words : WORDS;
+        var w = list[Math.floor(Math.random() * list.length)];
         if (w !== prev) { out.push(w); prev = w; }
       }
       return out.join(' ');
     }
-    if (level === 'silver') {
-      var s = '';
-      while (s.length < 750) s += (s ? ' ' : '') + shuffle(SENTENCES).join(' ');
-      return s;
+    if (level === 'silver') {                       // this week's 8 sentences, then others from the pool
+      var parts = shuffle(theme.sentences), rest = shuffle(allExcept('sentences', theme)), len = parts.join(' ').length;
+      while (len < 750 && rest.length) { var x = rest.pop(); parts.push(x); len += x.length + 1; }
+      return parts.join(' ');
     }
-    return shuffle(PARAGRAPHS).join(' ');
+    var paras = shuffle(theme.paragraphs), others = shuffle(allExcept('paragraphs', theme)), plen = paras.join(' ').length;
+    while (plen < 1100 && others.length) { var y = others.pop(); paras.push(y); plen += y.length + 1; }
+    return paras.join(' ');                         // Gold: this week's 2 paragraphs + 2 from the other 22
   }
 
   // ── Test state (T and timer are declared above, with the lock) ──
@@ -702,7 +827,7 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
   }
 
   function start(level) {
-    var text = makeText(level);
+    var text = makeText(level, clubWeek);
     T = { level: level, text: text, typed: '', started: 0, seconds: LEVELS[level].seconds,
           rightKeys: 0, wrongKeys: 0, done: false, spans: [], missed: {} };
     var box = $('passage');
@@ -721,7 +846,7 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
     $('sWpm').textContent = '0';
     $('sAcc').textContent = '100%';
     $('timeBar').style.width = '100%';
-    $('hintLine').textContent = 'Click in the box and start typing. The clock starts with your first letter.';
+    $('hintLine').textContent = 'Click in the box and start typing. The clock starts with your first letter. The text moves up as you type.';
     show('screenTest');
     $('typeBox').focus();
   }
@@ -757,10 +882,13 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
       else if (i === T.typed.length) cls = 'cur';
       T.spans[i].className = cls;
     }
+    // Keep the line being typed as the 2nd visible line, moving by WHOLE lines (no half-cut lines).
     var cur = T.spans[Math.min(T.typed.length, T.spans.length - 1)];
     var box = $('passage');
-    var target = cur.offsetTop - box.clientHeight / 3;
-    if (target > box.scrollTop + 4 || target < box.scrollTop - 4) box.scrollTop = Math.max(0, target);
+    var lh = parseFloat(getComputedStyle(box).lineHeight) || 35;
+    var line = Math.round(cur.offsetTop / lh);
+    var target = Math.max(0, (line - 1) * lh);
+    if (Math.abs(target - box.scrollTop) > 2) box.scrollTop = target;
   }
 
   var tb = $('typeBox');
@@ -895,6 +1023,10 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
   $('menuBtn').addEventListener('click', function () { show('screenStart'); });
   CC.sound.toggle($('soundBtn'));
   CC.sound.toggle($('soundBtn2'));
+
+  // Lock check + this week's theme last, after the text pools above are loaded.
+  applyLock(CC.cachedStatus());
+  CC.clubStatus().then(applyLock);
   $('quitBtn').addEventListener('click', function () { if (T) { T.done = true; clearInterval(timer); } show('screenStart'); });
 })();
 </script>
