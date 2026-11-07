@@ -56,8 +56,13 @@ with timers, sounds and typing tips (#4), floating timer + tab-name countdown + 
 6-line typing box + themed text pools (#6). Details: 💻 Computer Club section below.
 - **Ranks plan approved (Nov 6, late): 🎖️ Cadet (the current 10 weeks) → ✈️ Pilot (12 missions) → 🚀 Commander (14 missions,
   returning members next year).** Nothing built yet. Rules in the 💻 Computer Club section → "Ranks"; full plan with both
-  mission lists: Computer Club project doc `claude/computer-club-stages-plan.md`. Build order: Week 2 → rank system → Cadet
-  Weeks 3–10 (one a week) → Pilot Mission 1 around Cadet Week 8.
+  mission lists: Computer Club project doc `claude/computer-club-stages-plan.md`.
+  **Build order (Nov 7) — only 2 Apps Script deploys for the rest of the year:** (1) next session, Step 1: one-time update
+  — all 10 Cadet missions in `MISSIONS` (`stage: 1`), one general badge rule for any scored mission, "not built yet"
+  labels on the dashboard switches, test kit in the repo; (2) Week 2 · Know Your Computer, website only; (3) rank-system
+  session = second deploy (Pilot ids, "finished" result type for Weeks 6–9 and Canva/Docs/Slides missions, rank lock,
+  Typing Boost, always-open Cadet weeks, hold switches) — **must be live before Cadet Week 6 (~Dec 11)** or Week 6 needs
+  its own deploy; (4) Cadet Weeks 3–10 one a week, website only; (5) Pilot Mission 1 around Cadet Week 8.
 - **Next session: build Week 2 · Know Your Computer.** Plan first and get Edwin's OK. Handoff with checklist and a draft
   plan: the Computer Club project doc `claude/computer-club-handoff.md`. Copy `missions/01-shortcut-ninja/` (the
   mission template), add `'know-your-computer': { week: 2, … }` to `MISSIONS` in the Apps Script (Edwin deploys a new
