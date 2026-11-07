@@ -29,8 +29,9 @@
  *    CC.missionOpen(status, id)      → true only if the club is in session AND that mission is switched open
  *    CC.sound.click(kind) / .chime() / .toggle(buttonEl) → key click, soft time's-up chime, 🔊 on/off (cc-sound)
  *    CC.flash(title, sub)            → big flashing notice ("⏰ Time's up!"), closes itself after 9 s
- *    CC.timer.start(label, minutes, next) / .stop() → club countdown (cc-timer); shown as a pill at the
- *                                      bottom of every club page; soft chime + flash when it ends
+ *    CC.timer.start(label, minutes, next) / .stop() → club countdown (cc-timer): a pill on every club page,
+ *                                      the countdown in the tab name, and a floating window on top of every tab
+ *                                      (call start() inside a click). Chime + flash + flashing tab name at the end.
  *
  *  OPEN/CLOSE: the teacher dashboard has a "Club in session" switch (3 hours, then it closes by itself)
  *  and one switch per mission. Pages lock themselves from /status (kept in cc-status); the Apps Script
@@ -317,6 +318,7 @@
     '.cc-timer{position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:150;display:flex;align-items:center;gap:.6rem;background:var(--card-bg);backdrop-filter:blur(8px);border:2px solid var(--top-badge-bg);color:var(--body-color);border-radius:999px;padding:.35rem .5rem .35rem 1rem;font:800 .9rem Nunito,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.3)}' +
     '.cc-timer-time{font-family:"Fredoka One",cursive;font-weight:400;font-size:1.25rem;min-width:3.2em;text-align:center;color:var(--cycle-color)}' +
     '.cc-timer-low{animation:ccPulse 1s ease-in-out infinite}' +
+    '.cc-timer-pin{background:transparent!important;border:2px solid var(--top-badge-bg)!important;font-size:.95rem}' +
     '.cc-timer-x{width:36px;height:36px;border-radius:50%;border:0;background:var(--top-badge-bg);color:var(--top-badge-c);font-weight:900;cursor:pointer}' +
     '@keyframes ccPulse{50%{box-shadow:0 0 0 6px rgba(255,90,90,.35)}}' +
     '.cc-flash{position:fixed;inset:0;z-index:400;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;background:rgba(0,0,0,.72);color:#fff;cursor:pointer;animation:ccFlash .5s ease-in-out 0s 4 alternate}' +
@@ -411,20 +413,87 @@
   }
 
   // ── Club timer: one countdown at a time, kept in cc-timer so it follows the student
-  //    from page to page. A small pill shows it at the bottom of every club page. ──
+  //    from page to page. Shown three ways (Edwin, Nov 6: "the timer must show when other tabs are open"):
+  //    1. a pill at the bottom of every club page;
+  //    2. the countdown in the TAB NAME ("⏱ 12:34 · Warm-up"), visible from any other tab;
+  //    3. a FLOATING WINDOW that stays on top of every tab (Document Picture-in-Picture: Edge/Chrome).
+  //       Browsers open it only from a click, so CC.timer.start() must be called inside the click
+  //       handler (it also works in the same click that opens TypingClub — tested Nov 6).
+  //       Closing the floating window does not stop the timer; the 📌 button on the pill reopens it.
   var TIMER_KEY = 'cc-timer';
-  var timerEl = null, timerTick = null;
+  var timerEl = null, timerTick = null, pipWin = null, baseTitle = document.title, titleFlash = null;
   function readTimer() { try { return JSON.parse(read(TIMER_KEY) || 'null'); } catch (e) { return null; } }
+  function canFloat() { return 'documentPictureInPicture' in window; }
+
   function startTimer(label, minutes, next) {
     write(TIMER_KEY, JSON.stringify({ label: label, next: next || '', end: Date.now() + minutes * 60000, minutes: minutes }));
     audio();                                   // the click that started it unlocks the sound
+    openFloat();                               // must run inside the same click
     runTimer();
   }
-  function stopTimer() { drop(TIMER_KEY); runTimer(); }
+  function stopTimer() { drop(TIMER_KEY); closeFloat(); restoreTitle(); runTimer(); }
   function mmss(ms) {
     var sec = Math.max(0, Math.ceil(ms / 1000));
     return Math.floor(sec / 60) + ':' + ('0' + (sec % 60)).slice(-2);
   }
+
+  // ── floating window ──
+  var PIP_CSS =
+    'html,body{margin:0;height:100%;background:#0d1f1a;color:#fff;font-family:Nunito,Segoe UI,Arial,sans-serif;overflow:hidden}' +
+    '.w{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6px}' +
+    '.l{font-weight:800;font-size:15px;opacity:.85}' +
+    '.t{font-weight:900;font-size:46px;line-height:1.05;color:#20C997;font-variant-numeric:tabular-nums;letter-spacing:1px}' +
+    '.low .t{color:#FF8787}' +
+    '.up{animation:f .5s ease-in-out infinite alternate}' +
+    '.up .t{font-size:30px;color:#FFD43B}' +
+    '.n{font-size:13px;font-weight:700;opacity:.85;margin-top:2px}' +
+    '@keyframes f{from{background:#0d1f1a}to{background:#5c4a00}}';
+  function openFloat() {
+    if (!canFloat() || pipWin) return;
+    try {
+      documentPictureInPicture.requestWindow({ width: 260, height: 130 }).then(function (w) {
+        pipWin = w;
+        var st = w.document.createElement('style'); st.textContent = PIP_CSS;
+        w.document.head.appendChild(st);
+        w.document.title = 'Club timer';
+        w.document.body.innerHTML = '<div class="w" id="w"><div class="l" id="l"></div><div class="t" id="t"></div><div class="n" id="n"></div></div>';
+        w.addEventListener('pagehide', function () { pipWin = null; });
+        drawFloat();
+      }).catch(function () { pipWin = null; });
+    } catch (e) { pipWin = null; }
+  }
+  function closeFloat() { if (pipWin) { try { pipWin.close(); } catch (e) {} pipWin = null; } }
+  function drawFloat(state) {
+    if (!pipWin) return;
+    var d = pipWin.document, t = readTimer(), box = d.getElementById('w');
+    if (!box) return;
+    if (state && state.up) {
+      box.className = 'w up';
+      d.getElementById('l').textContent = state.label;
+      d.getElementById('t').textContent = '⏰ Time\'s up!';
+      d.getElementById('n').textContent = state.next ? 'Next: ' + state.next : '';
+      return;
+    }
+    if (!t) return;
+    var left = t.end - Date.now();
+    box.className = 'w' + (left <= 60000 ? ' low' : '');
+    d.getElementById('l').textContent = '⏱️ ' + t.label;
+    d.getElementById('t').textContent = mmss(left);
+    d.getElementById('n').textContent = t.next ? 'Next: ' + t.next : '';
+  }
+
+  // ── tab name ──
+  function setTitle(text) { document.title = text + ' · ' + baseTitle; }
+  function restoreTitle() { clearInterval(titleFlash); titleFlash = null; document.title = baseTitle; }
+  function flashTitle(text) {
+    var on = false, n = 0;
+    clearInterval(titleFlash);
+    titleFlash = setInterval(function () {
+      document.title = (on = !on) ? text : baseTitle;
+      if (++n > 40) restoreTitle();           // about 40 seconds, then back to normal
+    }, 1000);
+  }
+
   function runTimer() {
     clearInterval(timerTick);
     var t = readTimer();
@@ -434,8 +503,11 @@
       timerEl.className = 'cc-timer';
       timerEl.setAttribute('role', 'timer');
       timerEl.innerHTML = '<span class="cc-timer-label"></span><b class="cc-timer-time"></b>' +
-                          '<button type="button" class="cc-timer-x" aria-label="Stop timer">✕</button>';
-      timerEl.querySelector('.cc-timer-x').addEventListener('click', stopTimer);
+                          (canFloat() ? '<button type="button" class="cc-timer-x cc-timer-pin" aria-label="Show the timer on top of every tab" title="Show on top of every tab">📌</button>' : '') +
+                          '<button type="button" class="cc-timer-x" aria-label="Stop timer" title="Stop timer">✕</button>';
+      timerEl.querySelector('.cc-timer-x:not(.cc-timer-pin)').addEventListener('click', stopTimer);
+      var pin = timerEl.querySelector('.cc-timer-pin');
+      if (pin) pin.addEventListener('click', openFloat);
       document.body.appendChild(timerEl);
     }
     timerEl.classList.remove('cc-hidden');
@@ -444,6 +516,8 @@
       var left = t.end - Date.now();
       timerEl.querySelector('.cc-timer-time').textContent = mmss(left);
       timerEl.classList.toggle('cc-timer-low', left <= 60000);
+      setTitle('⏱ ' + mmss(left) + ' · ' + t.label);
+      drawFloat();
       if (left <= 0) {
         clearInterval(timerTick);
         drop(TIMER_KEY);
@@ -452,12 +526,16 @@
         if (Date.now() - t.end < 10 * 60000) {
           chime();
           flash('⏰ Time\'s up!', t.label + ' is over.' + (t.next ? ' Next: ' + t.next + '.' : ''));
+          flashTitle('⏰ TIME\'S UP!');
+          drawFloat({ up: true, label: t.label + ' is over', next: t.next });
+          setTimeout(closeFloat, 2 * 60000);   // the floating "Time's up" stays 2 minutes
+        } else {
+          restoreTitle();
         }
       }
     }
     tick();
     timerTick = setInterval(tick, 1000);
-    window.dispatchEvent(new CustomEvent('cc-timer'));
   }
 
   window.CC = {

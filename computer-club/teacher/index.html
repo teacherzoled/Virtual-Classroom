@@ -478,6 +478,23 @@
   .switch[aria-checked="true"] span { left:36px; }
   .switch:disabled { opacity:.5; cursor:wait; }
   .state-open { color:var(--good); font-weight:800; }
+  .ptimer { position:fixed; inset:0; z-index:320; background:#0b1a16; color:#fff; display:flex; flex-direction:column; padding:1rem 1.5rem; font-family:'Nunito',sans-serif; }
+  .pt-top { display:flex; flex-wrap:wrap; justify-content:space-between; gap:.6rem; }
+  .pt-presets { display:flex; flex-wrap:wrap; gap:.6rem; align-items:center; }
+  .pt-b { min-height:44px; padding:.4rem 1rem; border-radius:12px; border:2px solid #20C997; background:transparent; color:#fff; font:800 1rem 'Nunito',sans-serif; cursor:pointer; }
+  .pt-b:hover { background:#20C997; color:#0b1a16; }
+  .pt-go { background:#20C997; color:#0b1a16; }
+  .pt-custom { display:inline-flex; align-items:center; gap:.4rem; font-weight:800; }
+  .pt-custom input { width:4.2em; min-height:44px; border-radius:10px; border:2px solid #20C997; background:#132b24; color:#fff; font:800 1.1rem 'Nunito',sans-serif; text-align:center; }
+  .pt-mid { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; border-radius:24px; }
+  .pt-label { font-family:'Fredoka One',cursive; font-size:clamp(1.8rem,4.5vw,3.4rem); color:#20C997; }
+  .pt-time { font-family:'Fredoka One',cursive; font-size:clamp(7rem,26vw,22rem); line-height:1; font-variant-numeric:tabular-nums; }
+  .pt-next { font-weight:800; font-size:clamp(1.1rem,2.6vw,2rem); opacity:.8; min-height:1.4em; }
+  .pt-ctrl { display:flex; flex-wrap:wrap; justify-content:center; gap:.7rem; margin-top:1.4rem; }
+  .pt-low .pt-time { color:#FF8787; }
+  .pt-up { animation:ptFlash .55s ease-in-out infinite alternate; }
+  .pt-up .pt-time { color:#FFD43B; font-size:clamp(4rem,14vw,12rem); }
+  @keyframes ptFlash { from { background:#0b1a16; } to { background:#4d3f00; } }
   .live { position:fixed; inset:0; z-index:310; background:#0b1a16; color:#fff; padding:1.2rem 2rem; overflow:auto; font-family:'Nunito',sans-serif; }
   .live-head { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:1rem; }
   .live-title { font-family:'Fredoka One',cursive; font-size:clamp(1.6rem,3.5vw,2.8rem); color:#20C997; }
@@ -545,6 +562,7 @@
       <button class="btn" type="button" id="refreshBtn">↻ Refresh</button>
       <button class="btn ghost" type="button" id="projectBtn">📽️ Show club code on projector</button>
       <button class="btn ghost" type="button" id="liveBtn">📺 Live leaderboard (projector)</button>
+      <button class="btn ghost" type="button" id="ptBtn">⏱️ Projector timer</button>
       <button class="btn ghost" type="button" id="lockBtn">🔒 Lock dashboard</button>
     </div>
     <p class="msg muted" id="loadedAt"></p>
@@ -638,6 +656,28 @@
 
 
 <!-- Full-screen overlays sit outside .wrapper so nothing on the page can draw over them. -->
+  <div class="ptimer hidden" id="ptimer" role="dialog" aria-label="Projector timer">
+    <div class="pt-top">
+      <div class="pt-presets">
+        <span class="pt-custom"><button class="pt-b" type="button" data-p="0">⌨️ Warm-up</button><input data-pm="0" type="number" min="1" max="90" aria-label="Warm-up minutes"> min</span>
+        <span class="pt-custom"><button class="pt-b" type="button" data-p="1">🎯 Mission</button><input data-pm="1" type="number" min="1" max="90" aria-label="Mission minutes"> min</span>
+        <span class="pt-custom"><button class="pt-b" type="button" data-p="2">🗣️ Show &amp; Share</button><input data-pm="2" type="number" min="1" max="90" aria-label="Show and Share minutes"> min</span>
+        <span class="pt-custom"><button class="pt-b" type="button" id="ptCustom">⏱️ Other</button><input id="ptMin" type="number" min="1" max="90" value="10" aria-label="Minutes"> min</span>
+      </div>
+      <button class="pt-b" type="button" id="ptClose">✕ Close</button>
+    </div>
+    <div class="pt-mid" id="ptMid">
+      <div class="pt-label" id="ptLabel">Choose a timer above</div>
+      <div class="pt-time" id="ptTime">--:--</div>
+      <div class="pt-next" id="ptNext"></div>
+      <div class="pt-ctrl">
+        <button class="pt-b" type="button" id="ptPause">⏸ Pause</button>
+        <button class="pt-b" type="button" id="ptPlus">+1 min</button>
+        <button class="pt-b" type="button" id="ptReset">↺ Reset</button>
+        <button class="pt-b pt-go hidden" type="button" id="ptNextBtn"></button>
+      </div>
+    </div>
+  </div>
   <div class="projector hidden" id="projector" title="Click to close">
     <div class="p-lbl">💻 Computer Club · Club code</div>
     <div class="p-code" id="pCode">-</div>
@@ -1048,6 +1088,84 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
   function closeLive() { $('live').classList.add('hidden'); clearInterval(liveTimer); }
   $('liveClose').addEventListener('click', closeLive);
 
+
+  // ── Projector timer: one big countdown for the whole class, run from the teacher's computer ──
+  var PRESETS = [
+    { label: 'Warm-up · TypingClub', min: 15, next: 'Mission', nextIdx: 1 },
+    { label: 'Mission', min: 25, next: 'Show & Share', nextIdx: 2 },
+    { label: 'Show & Share', min: 5, next: 'Sign out — see you next week!', nextIdx: -1 }
+  ];
+  // The three times can be changed beside each button; they are remembered on this computer (cc-pt-minutes).
+  try {
+    var savedMin = JSON.parse(localStorage.getItem('cc-pt-minutes') || 'null');
+    if (savedMin && savedMin.length === 3) savedMin.forEach(function (m, i) { if (m >= 1 && m <= 90) PRESETS[i].min = m; });
+  } catch (e) {}
+  Array.prototype.forEach.call(document.querySelectorAll('[data-pm]'), function (inp) {
+    var i = Number(inp.getAttribute('data-pm'));
+    inp.value = PRESETS[i].min;
+    inp.addEventListener('change', function () {
+      PRESETS[i].min = Math.min(90, Math.max(1, Math.round(Number(inp.value)) || PRESETS[i].min));
+      inp.value = PRESETS[i].min;
+      try { localStorage.setItem('cc-pt-minutes', JSON.stringify(PRESETS.map(function (p) { return p.min; }))); } catch (e) {}
+    });
+  });
+  var PT = { label: '', next: '', nextIdx: -1, end: 0, pausedLeft: 0, running: false, tick: null };
+  function ptFmt(ms) { var s = Math.max(0, Math.ceil(ms / 1000)); return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2); }
+  function ptStart(label, min, next, nextIdx) {
+    PT.label = label; PT.next = next || ''; PT.nextIdx = nextIdx;
+    PT.end = Date.now() + min * 60000; PT.pausedLeft = 0; PT.running = true;
+    $('ptMid').className = 'pt-mid';
+    $('ptNextBtn').classList.add('hidden');
+    $('ptPause').textContent = '⏸ Pause';
+    clearInterval(PT.tick); PT.tick = setInterval(ptDraw, 250); ptDraw();
+  }
+  function ptLeft() { return PT.running ? PT.end - Date.now() : PT.pausedLeft; }
+  function ptDraw() {
+    var left = ptLeft();
+    $('ptLabel').textContent = PT.label || 'Choose a timer above';
+    $('ptNext').textContent = PT.next ? 'Next: ' + PT.next : '';
+    if (!PT.label) { $('ptTime').textContent = '--:--'; return; }
+    $('ptTime').textContent = ptFmt(left);
+    $('ptMid').classList.toggle('pt-low', left <= 60000 && left > 0);
+    if (PT.running && left <= 0) {
+      PT.running = false; clearInterval(PT.tick);
+      $('ptMid').className = 'pt-mid pt-up';
+      $('ptTime').textContent = '⏰ TIME\'S UP!';
+      CC.sound.chime();
+      if (PT.nextIdx >= 0) {
+        var n = PRESETS[PT.nextIdx];
+        $('ptNextBtn').textContent = '▶ Start ' + n.label + ' · ' + n.min + ' min';   // uses the edited time
+        $('ptNextBtn').classList.remove('hidden');
+      }
+    }
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.pt-b[data-p]'), function (b) {
+    b.addEventListener('click', function () { var p = PRESETS[Number(b.getAttribute('data-p'))]; ptStart(p.label, p.min, p.next, p.nextIdx); });
+  });
+  $('ptCustom').addEventListener('click', function () {
+    var m = Math.min(90, Math.max(1, Number($('ptMin').value) || 10));
+    ptStart('Timer', m, '', -1);
+  });
+  $('ptNextBtn').addEventListener('click', function () { var p = PRESETS[PT.nextIdx]; ptStart(p.label, p.min, p.next, p.nextIdx); });
+  $('ptPause').addEventListener('click', function () {
+    if (!PT.label || ptLeft() <= 0) return;
+    if (PT.running) { PT.pausedLeft = PT.end - Date.now(); PT.running = false; clearInterval(PT.tick); this.textContent = '▶ Resume'; }
+    else { PT.end = Date.now() + PT.pausedLeft; PT.running = true; PT.tick = setInterval(ptDraw, 250); this.textContent = '⏸ Pause'; }
+    ptDraw();
+  });
+  $('ptPlus').addEventListener('click', function () {
+    if (!PT.label) return;
+    if (PT.running) PT.end += 60000; else if (ptLeft() > 0) PT.pausedLeft += 60000;
+    else { ptStart(PT.label, 1, PT.next, PT.nextIdx); return; }
+    ptDraw();
+  });
+  $('ptReset').addEventListener('click', function () {
+    PT.label = ''; PT.running = false; clearInterval(PT.tick); $('ptMid').className = 'pt-mid';
+    $('ptNextBtn').classList.add('hidden'); $('ptPause').textContent = '⏸ Pause'; ptDraw();
+  });
+  $('ptBtn').addEventListener('click', function () { $('ptimer').classList.remove('hidden'); ptDraw(); });
+  $('ptClose').addEventListener('click', function () { $('ptimer').classList.add('hidden'); });   // keeps counting
+
   // ── events ──
   $('codeForm').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -1061,7 +1179,7 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
   });
   $('projectBtn').addEventListener('click', function () { $('projector').classList.remove('hidden'); });
   $('projector').addEventListener('click', function () { $('projector').classList.add('hidden'); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { $('projector').classList.add('hidden'); closeLive(); } });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { $('projector').classList.add('hidden'); closeLive(); $('ptimer').classList.add('hidden'); } });
 
   $('sessionForm').addEventListener('submit', function (e) {
     e.preventDefault();
