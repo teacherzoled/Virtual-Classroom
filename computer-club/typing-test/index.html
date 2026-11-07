@@ -444,7 +444,9 @@
   .stat { flex:0 1 160px; text-align:center; padding:.7rem; border-radius:14px; background:var(--card-bg); border:1.5px solid var(--card-border); }
   .stat b { display:block; font-family:'Fredoka One',cursive; font-weight:400; font-size:1.9rem; color:var(--cycle-color); }
   .stat span { font-size:.75rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--section-lbl); }
-  .passage { position:relative; height:12.5rem; overflow:hidden; padding:1rem 1.2rem; border-radius:16px; background:var(--card-bg); border:2px solid var(--card-border-h); font-size:1.45rem; line-height:2.2rem; white-space:pre-wrap; word-break:break-word; user-select:none; }
+  .passage { padding:1rem 1.2rem; border-radius:16px; background:var(--card-bg); border:2px solid var(--card-border-h); font-size:1.45rem; line-height:2.2rem; user-select:none; }
+  /* Exactly 6 whole lines are shown; the text moves up one whole line at a time as the student types. */
+  .passage-inner { position:relative; height:calc(6 * 2.2rem); overflow:hidden; white-space:pre-wrap; word-break:break-word; }
   .passage span.ok  { color:var(--good); }
   .passage span.err { color:var(--bad); background:rgba(255,80,80,.18); border-radius:3px; text-decoration:underline; }
   .passage span.cur { border-bottom:3px solid var(--top-badge-bg); background:rgba(128,128,128,.18); border-radius:3px; }
@@ -526,9 +528,9 @@
         <div class="stat"><b id="sWpm">0</b><span>WPM</span></div>
         <div class="stat"><b id="sAcc">100%</b><span>Accuracy</span></div>
       </div>
-      <div class="passage" id="passage" aria-label="Text to type"></div>
+      <div class="passage" aria-label="Text to type"><div class="passage-inner" id="passage"></div></div>
       <textarea class="field type-box" id="typeBox" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Type here"></textarea>
-      <p class="hint-line" id="hintLine">Click in the box and start typing. The clock starts with your first letter.</p>
+      <p class="hint-line" id="hintLine">Click in the box and start typing. The clock starts with your first letter. The text moves up as you type.</p>
       <div class="row-btns"><button class="btn ghost" type="button" id="quitBtn">Stop and choose another level</button><button class="btn ghost" id="soundBtn2"></button></div>
     </section>
 
@@ -721,7 +723,7 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
     $('sWpm').textContent = '0';
     $('sAcc').textContent = '100%';
     $('timeBar').style.width = '100%';
-    $('hintLine').textContent = 'Click in the box and start typing. The clock starts with your first letter.';
+    $('hintLine').textContent = 'Click in the box and start typing. The clock starts with your first letter. The text moves up as you type.';
     show('screenTest');
     $('typeBox').focus();
   }
@@ -757,10 +759,13 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
       else if (i === T.typed.length) cls = 'cur';
       T.spans[i].className = cls;
     }
+    // Keep the line being typed as the 2nd visible line, moving by WHOLE lines (no half-cut lines).
     var cur = T.spans[Math.min(T.typed.length, T.spans.length - 1)];
     var box = $('passage');
-    var target = cur.offsetTop - box.clientHeight / 3;
-    if (target > box.scrollTop + 4 || target < box.scrollTop - 4) box.scrollTop = Math.max(0, target);
+    var lh = parseFloat(getComputedStyle(box).lineHeight) || 35;
+    var line = Math.round(cur.offsetTop / lh);
+    var target = Math.max(0, (line - 1) * lh);
+    if (Math.abs(target - box.scrollTop) > 2) box.scrollTop = target;
   }
 
   var tb = $('typeBox');
