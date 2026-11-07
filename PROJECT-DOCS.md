@@ -1515,8 +1515,10 @@ Nothing is shared with `edlo-lms`, `VC-LMS` or `edlo-gemini`. Club members are N
   would sit at the bottom every week. XP rewards effort and improvement, which anyone can win.
 - **XP rules** (constants `XP` at the top of the Apps Script; worked out from existing rows, nothing extra stored):
   attend +10 · mission round +5 and +5 per star (max 60 a day) · typing test +5 (max 25 a day) · beat your own best +10
-  (typing at 90%+, or a Gold score) · badge +25 · a level every 100 XP: Rookie, Explorer, Coder, Hacker, Wizard, Legend.
-  The daily caps stop XP farming by replaying Bronze.
+  (typing at 90%+, or a Gold score; **once a day** for typing and once a day per mission) · badge +25 · a level every
+  100 XP: Rookie, Explorer, Coder, Hacker, Wizard, Legend. The daily caps stop XP farming by replaying Bronze; the
+  once-a-day best bonus (Nov 6, after go-live) stops "sandbagging" (scoring 1, 2, 3… on purpose to collect +10 each time).
+  Most XP in one club day ≈ 115 (10 + 60 + 25 + 10 + 10) plus any new badges.
 - **Live bar** (`club.js`): sticky under the theme bar on every club page for a signed-in student: level, XP bar,
   "#4 of 22", "12 XP behind Ben T." Refreshes every 60 s and right after a result is saved; "Level up!" pop-up.
   The teacher page opts out (`<body data-cc-no-bar>`).
