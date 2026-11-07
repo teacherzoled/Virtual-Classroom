@@ -112,7 +112,9 @@ var XP = {
   MISSION_DAY_CAP: 60,        // most mission XP one student can earn in one day
   TYPING_TEST: 5,             // each typing test (any accuracy)
   TYPING_DAY_CAP: 25,         // most typing-test XP in one day
-  PERSONAL_BEST: 10,          // beating your own best (typing at 90%+, or a Gold mission score)
+  PERSONAL_BEST: 10,          // beating your own best (typing at 90%+, or a Gold mission score) —
+                              // at most ONCE A DAY for typing and once a day per mission, so playing
+                              // badly on purpose and then "improving" by 1 cannot farm XP
   BADGE: 25,                  // each badge
   PER_LEVEL: 100              // one level every 100 XP
 };
@@ -545,7 +547,7 @@ function xpRules() {
     'Come to club and sign in: +' + XP.ATTEND,
     'Finish a mission round: +' + XP.MISSION_ROUND + ', plus ' + XP.MISSION_STAR + ' per star (up to ' + XP.MISSION_DAY_CAP + ' a day)',
     'Do a typing test: +' + XP.TYPING_TEST + ' (up to ' + XP.TYPING_DAY_CAP + ' a day)',
-    'Beat your own best: +' + XP.PERSONAL_BEST + ' (typing at 90%+ accuracy, or a Gold score)',
+    'Beat your own best: +' + XP.PERSONAL_BEST + ' (once a day for typing at 90%+ accuracy, and once a day for each Gold mission)',
     'Earn a badge: +' + XP.BADGE,
     'Every ' + XP.PER_LEVEL + ' XP = a new level'
   ];
@@ -569,7 +571,7 @@ function computeStandings() {
     var p = S[String(r[3])]; if (p) p.parts.attend += XP.ATTEND;
   });
 
-  var missionDay = {}, goldBest = {};
+  var missionDay = {}, goldBest = {}, bestPaid = {};   // bestPaid[id|day|activity] → personal-best bonus already given
   rowsOf(TAB.RESULTS).forEach(function (r) {
     var id = String(r[3]), p = S[id]; if (!p) return;
     var day = id + '|' + dateStr(r[1]);
@@ -577,9 +579,12 @@ function computeStandings() {
     var add = Math.min(XP.MISSION_ROUND + XP.MISSION_STAR * (Number(r[11]) || 0), XP.MISSION_DAY_CAP - used);
     if (add > 0) { p.parts.missions += add; missionDay[day] = used + add; }
     if (r[8] === 'gold') {
-      var key = id + '|' + r[6], score = Number(r[9]) || 0;
-      if (goldBest[key] !== undefined && score > goldBest[key]) p.parts.bests += XP.PERSONAL_BEST;
-      if (goldBest[key] === undefined || score > goldBest[key]) goldBest[key] = score;
+      var key = id + '|' + r[6], score = Number(r[9]) || 0, paidKey = day + '|' + r[6];
+      if (goldBest[key] !== undefined && score > goldBest[key] && !bestPaid[paidKey]) {
+        p.parts.bests += XP.PERSONAL_BEST;
+        bestPaid[paidKey] = true;
+      }
+      if (goldBest[key] === undefined || score > goldBest[key]) goldBest[key] = score;   // the best still moves up
     }
   });
 
@@ -592,7 +597,10 @@ function computeStandings() {
     if (add > 0) { p.parts.typing += add; typingDay[day] = used + add; }
     var wpm = Number(r[8]) || 0, acc = Number(r[9]) || 0;
     if (acc >= 90) {
-      if (typeBest[id] !== undefined && wpm > typeBest[id]) p.parts.bests += XP.PERSONAL_BEST;
+      if (typeBest[id] !== undefined && wpm > typeBest[id] && !bestPaid[day + '|typing']) {
+        p.parts.bests += XP.PERSONAL_BEST;
+        bestPaid[day + '|typing'] = true;
+      }
       if (typeFirst[id] === undefined) typeFirst[id] = wpm;
       if (typeBest[id] === undefined || wpm > typeBest[id]) typeBest[id] = wpm;
     }
