@@ -557,7 +557,7 @@
     </div>
 
     <div id="screenResult" class="hidden">
-      <div class="stars-row" id="stars"></div>
+      <div class="stars-row" id="resultStars"></div>
       <div class="rank" id="rank"></div>
       <p class="lead" id="resultText" style="text-align:center"></p>
       <div class="save-line" id="saveLine"></div>
@@ -873,7 +873,7 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
         (stars === 3 && s.level === 'silver' ? ' Ready for the Gold speed round!' : '');
       maxScore = s.queue.length;
     }
-    $('stars').textContent = '★'.repeat(stars) + '☆'.repeat(3 - stars);
+    $('resultStars').textContent = '★'.repeat(stars) + '☆'.repeat(3 - stars);
     $('rank').textContent = rank;
     $('resultText').textContent = text;
     $('againBtn').dataset.level = s.level;
