@@ -27,6 +27,10 @@
  *    CC.refreshProgress()            → reloads the live XP bar now (also runs every 60 s)
  *    CC.cachedStatus() / CC.clubStatus() → { club_open, open_until, open_missions[], week } (cached / fresh)
  *    CC.missionOpen(status, id)      → true only if the club is in session AND that mission is switched open
+ *    CC.sound.click(kind) / .chime() / .toggle(buttonEl) → key click, soft time's-up chime, 🔊 on/off (cc-sound)
+ *    CC.flash(title, sub)            → big flashing notice ("⏰ Time's up!"), closes itself after 9 s
+ *    CC.timer.start(label, minutes, next) / .stop() → club countdown (cc-timer); shown as a pill at the
+ *                                      bottom of every club page; soft chime + flash when it ends
  *
  *  OPEN/CLOSE: the teacher dashboard has a "Club in session" switch (3 hours, then it closes by itself)
  *  and one switch per mission. Pages lock themselves from /status (kept in cc-status); the Apps Script
@@ -309,8 +313,152 @@
     '.cc-rank{white-space:nowrap}' +
     '.cc-ahead{color:var(--cycle-color)}' +
     '@media (max-width:480px){.cc-xp-inner{font-size:.8rem;gap:.35rem .7rem}.cc-track{flex-basis:100%;order:3}}' +
+    '.cc-hidden{display:none!important}' +
+    '.cc-timer{position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:150;display:flex;align-items:center;gap:.6rem;background:var(--card-bg);backdrop-filter:blur(8px);border:2px solid var(--top-badge-bg);color:var(--body-color);border-radius:999px;padding:.35rem .5rem .35rem 1rem;font:800 .9rem Nunito,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.3)}' +
+    '.cc-timer-time{font-family:"Fredoka One",cursive;font-weight:400;font-size:1.25rem;min-width:3.2em;text-align:center;color:var(--cycle-color)}' +
+    '.cc-timer-low{animation:ccPulse 1s ease-in-out infinite}' +
+    '.cc-timer-x{width:36px;height:36px;border-radius:50%;border:0;background:var(--top-badge-bg);color:var(--top-badge-c);font-weight:900;cursor:pointer}' +
+    '@keyframes ccPulse{50%{box-shadow:0 0 0 6px rgba(255,90,90,.35)}}' +
+    '.cc-flash{position:fixed;inset:0;z-index:400;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;background:rgba(0,0,0,.72);color:#fff;cursor:pointer;animation:ccFlash .5s ease-in-out 0s 4 alternate}' +
+    '.cc-flash-title{font-family:"Fredoka One",cursive;font-size:clamp(2.6rem,10vw,6rem);line-height:1.1;color:#FFD43B;text-shadow:0 4px 30px rgba(0,0,0,.5)}' +
+    '.cc-flash-sub{font:800 clamp(1.1rem,3vw,1.8rem) Nunito,sans-serif;margin-top:.8rem;max-width:900px}' +
+    '.cc-flash-hint{font:700 .9rem Nunito,sans-serif;opacity:.7;margin-top:1.4rem}' +
+    '@keyframes ccFlash{from{background:rgba(0,0,0,.72)}to{background:rgba(255,212,59,.35)}}' +
+    '@media (max-width:480px){.cc-timer{bottom:.6rem;font-size:.8rem}}' +
     '@keyframes ccIn{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}';
   document.head.appendChild(css);
+
+
+  // ── Sounds (Web Audio, made in code: no sound files) ──
+  // Browsers only allow sound after the student clicks or types on the page, so the audio is
+  // unlocked on the first click/keypress. If it is still locked, the on-screen notice still shows.
+  var SOUND_KEY = 'cc-sound';
+  var actx = null;
+  function audio() {
+    if (!actx) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      try { actx = new AC(); } catch (e) { return null; }
+    }
+    if (actx.state === 'suspended') { try { actx.resume(); } catch (e) {} }
+    return actx;
+  }
+  function soundOn() { return read(SOUND_KEY) !== 'off'; }
+  function setSound(on) { write(SOUND_KEY, on ? 'on' : 'off'); }
+  ['pointerdown', 'keydown'].forEach(function (ev) {
+    window.addEventListener(ev, function () { if (soundOn()) audio(); }, { capture: true, passive: true });
+  });
+
+  // Short soft "tick" like a keyboard key.
+  function click(kind) {
+    if (!soundOn()) return;
+    var a = audio(); if (!a || a.state !== 'running') return;
+    var t = a.currentTime, len = Math.floor(a.sampleRate * 0.03);
+    var buf = a.createBuffer(1, len, a.sampleRate), d = buf.getChannelData(0);
+    for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 4);
+    var src = a.createBufferSource(); src.buffer = buf;
+    var f = a.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = kind === 'wrong' ? 900 : 2600; f.Q.value = 0.9;
+    var g = a.createGain(); g.gain.value = kind === 'wrong' ? 0.22 : 0.14;
+    src.connect(f); f.connect(g); g.connect(a.destination);
+    src.start(t);
+  }
+
+  // Soft three-note chime for "time's up".
+  function chime() {
+    if (!soundOn()) return;
+    var a = audio(); if (!a) return;
+    var t = a.currentTime + 0.02;
+    [659.25, 830.61, 987.77].forEach(function (freq, i) {
+      var o = a.createOscillator(), g = a.createGain();
+      o.type = 'sine'; o.frequency.value = freq;
+      var start = t + i * 0.28;
+      g.gain.setValueAtTime(0.0001, start);
+      g.gain.exponentialRampToValueAtTime(0.16, start + 0.03);
+      g.gain.exponentialRampToValueAtTime(0.0001, start + 1.4);
+      o.connect(g); g.connect(a.destination);
+      o.start(start); o.stop(start + 1.5);
+    });
+  }
+
+  // A 🔊 on/off button; el = an empty <button>.
+  function soundToggle(el) {
+    if (!el) return;
+    function draw() {
+      el.textContent = soundOn() ? '🔊 Sound: on' : '🔇 Sound: off';
+      el.setAttribute('aria-pressed', soundOn() ? 'true' : 'false');
+    }
+    el.type = 'button';
+    el.addEventListener('click', function () { setSound(!soundOn()); draw(); if (soundOn()) click(); });
+    draw();
+  }
+
+  // ── Flashing notice ("Time's up!") — big, on top of the page, closes itself ──
+  function flash(title, sub) {
+    var old = document.querySelector('.cc-flash');
+    if (old && old.parentNode) old.parentNode.removeChild(old);
+    var box = document.createElement('div');
+    box.className = 'cc-flash';
+    box.setAttribute('role', 'alert');
+    var h = document.createElement('div'); h.className = 'cc-flash-title'; h.textContent = title;
+    box.appendChild(h);
+    if (sub) { var p = document.createElement('div'); p.className = 'cc-flash-sub'; p.textContent = sub; box.appendChild(p); }
+    var hint = document.createElement('div'); hint.className = 'cc-flash-hint'; hint.textContent = 'Click to close';
+    box.appendChild(hint);
+    function close() { if (box.parentNode) box.parentNode.removeChild(box); }
+    box.addEventListener('click', close);
+    document.body.appendChild(box);
+    setTimeout(close, 9000);
+  }
+
+  // ── Club timer: one countdown at a time, kept in cc-timer so it follows the student
+  //    from page to page. A small pill shows it at the bottom of every club page. ──
+  var TIMER_KEY = 'cc-timer';
+  var timerEl = null, timerTick = null;
+  function readTimer() { try { return JSON.parse(read(TIMER_KEY) || 'null'); } catch (e) { return null; } }
+  function startTimer(label, minutes, next) {
+    write(TIMER_KEY, JSON.stringify({ label: label, next: next || '', end: Date.now() + minutes * 60000, minutes: minutes }));
+    audio();                                   // the click that started it unlocks the sound
+    runTimer();
+  }
+  function stopTimer() { drop(TIMER_KEY); runTimer(); }
+  function mmss(ms) {
+    var sec = Math.max(0, Math.ceil(ms / 1000));
+    return Math.floor(sec / 60) + ':' + ('0' + (sec % 60)).slice(-2);
+  }
+  function runTimer() {
+    clearInterval(timerTick);
+    var t = readTimer();
+    if (!t) { if (timerEl) timerEl.classList.add('cc-hidden'); return; }
+    if (!timerEl) {
+      timerEl = document.createElement('div');
+      timerEl.className = 'cc-timer';
+      timerEl.setAttribute('role', 'timer');
+      timerEl.innerHTML = '<span class="cc-timer-label"></span><b class="cc-timer-time"></b>' +
+                          '<button type="button" class="cc-timer-x" aria-label="Stop timer">✕</button>';
+      timerEl.querySelector('.cc-timer-x').addEventListener('click', stopTimer);
+      document.body.appendChild(timerEl);
+    }
+    timerEl.classList.remove('cc-hidden');
+    timerEl.querySelector('.cc-timer-label').textContent = '⏱️ ' + t.label;
+    function tick() {
+      var left = t.end - Date.now();
+      timerEl.querySelector('.cc-timer-time').textContent = mmss(left);
+      timerEl.classList.toggle('cc-timer-low', left <= 60000);
+      if (left <= 0) {
+        clearInterval(timerTick);
+        drop(TIMER_KEY);
+        timerEl.classList.add('cc-hidden');
+        // Only ring if the time ran out recently (not when coming back to the page the next day).
+        if (Date.now() - t.end < 10 * 60000) {
+          chime();
+          flash('⏰ Time\'s up!', t.label + ' is over.' + (t.next ? ' Next: ' + t.next + '.' : ''));
+        }
+      }
+    }
+    tick();
+    timerTick = setInterval(tick, 1000);
+    window.dispatchEvent(new CustomEvent('cc-timer'));
+  }
 
   window.CC = {
     API: API,
@@ -325,6 +473,9 @@
     statusChip: statusChip,
     toastBadges: toastBadges,
     refreshProgress: refreshProgress,
+    sound: { click: click, chime: chime, on: soundOn, toggle: soundToggle },
+    flash: flash,
+    timer: { start: startTimer, stop: stopTimer, current: readTimer },
     cachedStatus: cachedStatus,
     clubStatus: clubStatus,
     missionOpen: missionOpen,
@@ -334,6 +485,6 @@
   // Try to send anything left over from a dropped connection.
   window.addEventListener('online', sendUnsent);
   setTimeout(sendUnsent, 1500);
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', startLive);
-  else startLive();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { startLive(); runTimer(); });
+  else { startLive(); runTimer(); }
 })();

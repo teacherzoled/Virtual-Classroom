@@ -11,7 +11,9 @@
      every result is saved to the club Sheet (Typing tab) through /computer-club/club.js.
      WPM = correctly typed characters ÷ 5 ÷ minutes. Accuracy = right keys ÷ all keys typed.
      Paste is blocked; the caret stays at the end; backspace is allowed. Self-contained page.
-     OPEN/CLOSE: locked while the club is closed (teacher dashboard); the Apps Script refuses tests then anyway. */
+     OPEN/CLOSE: locked while the club is closed (teacher dashboard); the Apps Script refuses tests then anyway.
+     SOUND + NOTICE (Nov 6): soft key clicks (🔊 on/off, cc-sound), a chime and a flashing "Time's up!" at the end,
+     and "How to get better" tips from the student's own result (most-missed keys, accuracy, speed, level). */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -455,6 +457,10 @@
   .result-big .wpm { font-family:'Fredoka One',cursive; font-size:clamp(3rem,12vw,5rem); line-height:1; color:var(--cycle-color); }
   .result-big .unit { font-weight:800; color:var(--section-lbl); letter-spacing:.08em; text-transform:uppercase; }
   .save-line { text-align:center; font-weight:800; margin-top:1rem; }
+  .better { margin:1.2rem auto 0; max-width:720px; text-align:left; border:2px dashed var(--card-border-h); border-radius:14px; padding:.9rem 1.2rem; }
+  .better h3 { font-family:'Fredoka One',cursive; font-weight:400; font-size:1.2rem; color:var(--cycle-color); margin-bottom:.4rem; }
+  .better li { margin:.35rem 0 .35rem 1.2rem; font-weight:700; color:var(--card-desc); line-height:1.5; }
+  .better li b { color:var(--body-color); }
   .tips { margin-top:1.5rem; }
   .tips li { margin:.3rem 0 .3rem 1.2rem; color:var(--card-desc); font-weight:600; }
 </style>
@@ -505,6 +511,7 @@
         <button class="lvl-btn silver" data-level="silver" type="button">Silver<small>1 minute · sentences</small></button>
         <button class="lvl-btn gold" data-level="gold" type="button">Gold<small>2 minutes · paragraphs</small></button>
       </div>
+      <div class="row-btns" style="margin-top:.4rem"><button class="btn ghost" id="soundBtn"></button></div>
       <ul class="tips">
         <li>The clock starts when you type the first letter.</li>
         <li>Wrong letters turn red. Use Backspace to fix them: accuracy counts!</li>
@@ -522,7 +529,7 @@
       <div class="passage" id="passage" aria-label="Text to type"></div>
       <textarea class="field type-box" id="typeBox" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Type here"></textarea>
       <p class="hint-line" id="hintLine">Click in the box and start typing. The clock starts with your first letter.</p>
-      <div class="row-btns"><button class="btn ghost" type="button" id="quitBtn">Stop and choose another level</button></div>
+      <div class="row-btns"><button class="btn ghost" type="button" id="quitBtn">Stop and choose another level</button><button class="btn ghost" id="soundBtn2"></button></div>
     </section>
 
     <section class="panel hidden" id="screenResult">
@@ -536,6 +543,10 @@
         <div class="stat"><b id="rLvl">-</b><span>Level</span></div>
       </div>
       <p class="hint-line" id="rMsg"></p>
+      <div class="better">
+        <h3>💡 How to get better</h3>
+        <ul id="rTips"></ul>
+      </div>
       <div class="save-line" id="rSave"></div>
       <div class="row-btns">
         <button class="btn" type="button" id="againBtn">Try again</button>
@@ -693,7 +704,7 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
   function start(level) {
     var text = makeText(level);
     T = { level: level, text: text, typed: '', started: 0, seconds: LEVELS[level].seconds,
-          rightKeys: 0, wrongKeys: 0, done: false, spans: [] };
+          rightKeys: 0, wrongKeys: 0, done: false, spans: [], missed: {} };
     var box = $('passage');
     box.textContent = '';
     for (var i = 0; i < text.length; i++) {
@@ -736,7 +747,7 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
     $('sTime').textContent = left;
     $('timeBar').style.width = (left / T.seconds * 100) + '%';
     $('sWpm').textContent = Math.round(wpmNow(true));
-    if (left <= 0) finish();
+    if (left <= 0) finish('time');
   }
 
   function paint(from, to) {
@@ -772,23 +783,29 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
       if (val.slice(0, prev.length) !== prev) { tb.value = prev; return; }   // edit in the middle: undo it
       if (!T.started) { T.started = Date.now(); timer = setInterval(tick, 250); $('hintLine').textContent = 'Keep going! Fix red letters with Backspace.'; }
       for (var i = prev.length; i < val.length; i++) {
-        if (val[i] === T.text[i]) T.rightKeys++; else T.wrongKeys++;
+        if (val[i] === T.text[i]) { T.rightKeys++; CC.sound.click(); }
+        else { T.wrongKeys++; T.missed[T.text[i]] = (T.missed[T.text[i]] || 0) + 1; CC.sound.click('wrong'); }
       }
     } else if (prev.slice(0, val.length) !== val) {
       tb.value = prev; return;
+    } else if (val.length < prev.length) {
+      CC.sound.click();                       // backspace
     }
     T.typed = val;
     tb.value = val;
     paint(Math.max(0, Math.min(prev.length, val.length) - 1), Math.max(prev.length, val.length) + 1);
     $('sAcc').textContent = accNow() + '%';
-    if (T.typed.length >= T.text.length) finish();
+    if (T.typed.length >= T.text.length) finish('done');
   });
 
-  function finish() {
+  function finish(why) {
     if (!T || T.done) return;
     T.done = true;
     clearInterval(timer);
     tb.disabled = true;
+    CC.sound.chime();
+    if (why === 'done') CC.flash('🏁 You typed it all!', 'Amazing! Scroll down to see your score and how to get even better.');
+    else CC.flash('⏰ Time\'s up!', 'Hands off the keyboard. Here is your score and how to get better.');
     var secs = Math.min(T.seconds, Math.max(1, Math.round(elapsed())));
     var wpm = T.started ? wpmNow() : 0;
     var acc = accNow();
@@ -800,9 +817,43 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
     $('rMsg').textContent = acc >= 90
       ? (acc >= 97 ? 'Super accurate! Now try to go a little faster.' : 'Great accuracy! This score counts for badges.')
       : 'Slow down a little and aim for 90% accuracy. Accuracy first, then speed!';
+    drawTips(wpm, acc);
     show('screenResult');
     $('againBtn').dataset.level = T.level;
     save({ level: T.level, duration_s: secs, wpm: wpm, accuracy: acc, errors: T.wrongKeys, chars_typed: chars });
+  }
+
+
+  // "How to get better": tips from this student's own result (missed keys, accuracy, speed, level).
+  function keyName(ch) {
+    if (ch === ' ') return 'Space';
+    if (/[a-z]/.test(ch)) return ch.toUpperCase();
+    if (/[A-Z]/.test(ch)) return 'Shift + ' + ch;
+    return ch;
+  }
+  function drawTips(wpm, acc) {
+    var out = [];
+    var missed = Object.keys(T.missed).map(function (k) { return [k, T.missed[k]]; })
+      .sort(function (a, b) { return b[1] - a[1]; }).slice(0, 3);
+    if (missed.length) {
+      out.push(['Keys you missed most: ', missed.map(function (m) { return keyName(m[0]) + ' (' + m[1] + ')'; }).join(', ') +
+                '. Practise them on TypingClub during warm-up.']);
+    }
+    if (acc < 90) out.push(['Slow down a little. ', 'Accuracy first: aim for 90% or more, then build speed. Fast and wrong does not count!']);
+    else if (acc >= 97 && wpm < 30) out.push(['Super accurate! ', 'Next time push a little faster: you can afford a few more risks.']);
+    if (wpm < 15) out.push(['Home row: ', 'keep your fingers on A S D F and J K L ; and your eyes on the screen, not on the keyboard.']);
+    var shiftMiss = Object.keys(T.missed).some(function (k) { return /[A-Z.,!?']/.test(k); });
+    if (shiftMiss) out.push(['Capitals and punctuation: ', 'hold Shift with the little finger of the OTHER hand, then press the letter.']);
+    if (T.level === 'bronze' && acc >= 90 && wpm >= 20) out.push(['Level up! ', 'You are ready for the Silver test (sentences).']);
+    if (T.level === 'silver' && acc >= 90 && wpm >= 28) out.push(['Level up! ', 'You are ready for the Gold 2-minute test.']);
+    if (!out.length) out.push(['Great test! ', 'Practise a few minutes every day and you will beat your best.']);
+    var ul = $('rTips'); ul.textContent = '';
+    out.slice(0, 4).forEach(function (t) {
+      var li = document.createElement('li');
+      var b = document.createElement('b'); b.textContent = t[0];
+      li.appendChild(b); li.appendChild(document.createTextNode(t[1]));
+      ul.appendChild(li);
+    });
   }
 
   function save(r) {
@@ -842,6 +893,8 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
   });
   $('againBtn').addEventListener('click', function () { start(this.dataset.level); });
   $('menuBtn').addEventListener('click', function () { show('screenStart'); });
+  CC.sound.toggle($('soundBtn'));
+  CC.sound.toggle($('soundBtn2'));
   $('quitBtn').addEventListener('click', function () { if (T) { T.done = true; clearInterval(timer); } show('screenStart'); });
 })();
 </script>
