@@ -24,6 +24,8 @@
  *    CC.newAttemptId()
  *    CC.statusChip(el, nextUrl)      → fills el with "Signed in as …" or a Sign in button
  *    CC.toastBadges(badges)          → shows a badge pop-up
+ *    CC.img(name, size) / CC.badgeIcon(badge, size) / CC.levelIcon(level, size)
+ *                                    → <img> from /computer-club/assets/ (badge: emoji if no picture)
  *    CC.refreshProgress()            → reloads the live XP bar now (also runs every 60 s)
  *    CC.cachedStatus() / CC.clubStatus() → { club_open, open_until, open_missions[], week } (cached / fresh)
  *    CC.missionOpen(status, id)      → true only if the club is in session AND that mission is switched open
@@ -172,6 +174,45 @@
   var REFRESH_MS = 60000;
   var barEl = null, refreshTimer = null, soonTimer = null;
 
+
+  // ── Club pictures (computer-club/assets/*.webp, 256×256, transparent) ──────────────────────
+  // Badge id → picture. A badge with no picture here still shows its emoji from the Apps Script.
+  var ASSETS = '/computer-club/assets/';
+  var BADGE_IMG = {
+    'shortcut-ninja': 'm01-shortcut-ninja', 'know-your-computer': 'm02-know-your-computer',
+    'folder-detective': 'm03-folder-detective', 'safe-surfer': 'm04-safe-surfer',
+    'search-sleuth': 'm05-search-sleuth', 'pixel-artist': 'm06-pixel-artist',
+    'badge-designer': 'm07-badge-designer', 'poster-pro': 'm08-poster-pro',
+    'slide-show-star': 'm09-slide-show-star', 'typing-olympics': 'm10-typing-olympics',
+    'typing-15': 'b-typing-15', 'typing-25': 'b-typing-25', 'typing-35': 'b-typing-35',
+    'stage-1-complete': 'r-cadet', 'stage-2-complete': 'r-pilot', 'stage-3-complete': 'r-commander'
+  };
+  var LEVEL_IMG = ['x1-rookie', 'x2-explorer', 'x3-coder', 'x4-hacker', 'x5-wizard', 'x6-legend'];
+
+  function img(name, size, alt) {
+    var i = document.createElement('img');
+    i.src = ASSETS + name + '.webp';
+    i.width = size; i.height = size;
+    i.alt = alt || '';
+    i.className = 'cc-img';
+    i.decoding = 'async';
+    return i;
+  }
+  // Picture for a badge ({id, icon, name}); falls back to the emoji in a <span>.
+  function badgeIcon(b, size) {
+    var name = b && BADGE_IMG[b.id];
+    if (name) return img(name, size || 40, '');
+    var sp = document.createElement('span');
+    sp.className = 'cc-emoji';
+    sp.textContent = (b && b.icon) || '🏅';
+    return sp;
+  }
+  // Picture for an XP level (1 = Rookie … 6+ = Legend).
+  function levelIcon(level, size) {
+    var n = Math.max(1, Math.min(Number(level) || 1, LEVEL_IMG.length));
+    return img(LEVEL_IMG[n - 1], size || 28, '');
+  }
+
   function levelKey(s) { return 'cc-last-level::' + s.id; }
 
   function buildBar() {
@@ -182,7 +223,7 @@
     barEl.setAttribute('aria-label', 'My club progress');
     barEl.innerHTML =                                   // fixed markup only; data goes in with textContent
       '<a class="cc-xp-inner" href="/computer-club/#standings" title="See the club standings">' +
-        '<span class="cc-lvl">Lv 1</span>' +
+        '<span class="cc-lvl"><img class="cc-lvl-ico" src="' + ASSETS + 'x1-rookie.webp" width="26" height="26" alt=""><span class="cc-lvl-txt">Lv 1</span></span>' +
         '<span class="cc-track"><span class="cc-fill"></span><span class="cc-track-txt">Loading your XP…</span></span>' +
         '<span class="cc-rank"></span>' +
         '<span class="cc-ahead"></span>' +
@@ -196,7 +237,8 @@
   function drawBar(st) {
     if (!barEl || !st || !st.me) return;
     var m = st.me;
-    barEl.querySelector('.cc-lvl').textContent = 'Lv ' + m.level + ' · ' + m.level_name;
+    barEl.querySelector('.cc-lvl-txt').textContent = 'Lv ' + m.level + ' · ' + m.level_name;
+    barEl.querySelector('.cc-lvl-ico').src = levelIcon(m.level).src;
     barEl.querySelector('.cc-fill').style.width = Math.round(m.into_level / m.per_level * 100) + '%';
     barEl.querySelector('.cc-track-txt').textContent =
       m.xp + ' XP · ' + (m.per_level - m.into_level) + ' to Level ' + (m.level + 1);
@@ -218,7 +260,7 @@
       drawBar(st);
       var last = Number(read(levelKey(s)) || 0);
       if (last && st.me.level > last) {
-        toastBadges([{ icon: '⭐', name: 'Level ' + st.me.level + ' · ' + st.me.level_name }], 'Level up!');
+        toastBadges([{ icon: '⭐', level: st.me.level, name: 'Level ' + st.me.level + ' · ' + st.me.level_name }], 'Level up!');
       }
       write(levelKey(s), String(st.me.level));
       try { window.dispatchEvent(new CustomEvent('cc-standings', { detail: st })); } catch (e) {}
@@ -287,7 +329,9 @@
     box.appendChild(h);
     badges.forEach(function (b) {
       var p = document.createElement('div');
-      p.textContent = (b.icon || '🏅') + ' ' + b.name;
+      p.className = 'cc-toast-item';
+      p.appendChild(b.level ? levelIcon(b.level, 44) : badgeIcon(b, 44));
+      p.appendChild(document.createTextNode(' ' + b.name));
       box.appendChild(p);
     });
     document.body.appendChild(box);
@@ -307,7 +351,11 @@
     '.cc-toast-out{opacity:0;transition:opacity .6s}' +
     '.cc-xp{position:sticky;top:0;z-index:60;background:var(--bg);border-bottom:2px solid var(--top-badge-bg);box-shadow:0 4px 14px rgba(0,0,0,.18)}' +
     '.cc-xp-inner{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1rem;max-width:1400px;margin:0 auto;padding:.5rem max(1rem,4vw);color:var(--body-color);text-decoration:none;font:800 .88rem Nunito,sans-serif}' +
-    '.cc-lvl{background:var(--top-badge-bg);color:var(--top-badge-c);border-radius:999px;padding:.25rem .8rem;font-family:"Fredoka One",cursive;font-weight:400;white-space:nowrap}' +
+    '.cc-lvl{display:inline-flex;align-items:center;gap:.35rem;background:var(--top-badge-bg);color:var(--top-badge-c);border-radius:999px;padding:.15rem .8rem .15rem .25rem;font-family:"Fredoka One",cursive;font-weight:400;white-space:nowrap}' +
+    '.cc-lvl-ico{width:26px;height:26px;display:block}' +
+    '.cc-toast-item{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:.3rem}' +
+    '.cc-toast-item .cc-img{width:44px;height:44px;flex-shrink:0}' +
+    '.cc-toast-item .cc-emoji{font-size:1.8rem;line-height:1}' +
     '.cc-track{position:relative;flex:1 1 220px;min-width:160px;height:26px;border-radius:999px;background:var(--card-bg);border:1.5px solid var(--card-border-h);overflow:hidden}' +
     '.cc-fill{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--top-badge-bg);opacity:.85;transition:width .8s ease}' +
     '.cc-track-txt{position:relative;display:block;text-align:center;line-height:23px;font-size:.8rem;text-shadow:0 0 4px var(--bg)}' +
@@ -557,7 +605,10 @@
     cachedStatus: cachedStatus,
     clubStatus: clubStatus,
     missionOpen: missionOpen,
-    untilText: untilText
+    untilText: untilText,
+    img: img,
+    badgeIcon: badgeIcon,
+    levelIcon: levelIcon
   };
 
   // Try to send anything left over from a dropped connection.

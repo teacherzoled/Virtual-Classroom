@@ -325,6 +325,10 @@
   .card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; border-radius:18px 18px 0 0; background:var(--accent); }
   .card-num   { font-size:.68rem; font-weight:800; letter-spacing:.08em; color:var(--section-lbl); margin-bottom:.35rem; text-transform:uppercase; }
   .card-icon  { font-size:2.2rem; margin-bottom:.7rem; line-height:1; }
+  .card-icon img { display:block; width:72px; height:72px; }
+  .lab-icon img  { display:block; width:64px; height:64px; }
+  .medal-img { display:block; width:72px; height:72px; margin-bottom:.5rem; }
+  .badge-item .ico img { display:block; width:56px; height:56px; margin:0 auto; }
   .card-title { font-family:'Fredoka One',cursive; font-size:1.15rem; margin-bottom:.25rem; color:var(--accent); line-height:1.2; }
   .card-desc  { font-size:.78rem; color:var(--card-desc); font-weight:600; line-height:1.4; transition:color .4s; }
   .card-tags  { display:flex; gap:5px; flex-wrap:wrap; margin-top:.55rem; }
@@ -442,8 +446,6 @@
   .step-num { width:44px; height:44px; border-radius:50%; display:grid; place-items:center; background:var(--top-badge-bg); color:var(--top-badge-c); font-family:'Fredoka One',cursive; font-size:1.3rem; margin-bottom:.7rem; }
   .card .btn { margin-top:.9rem; font-size:.9rem; }
   .card-note { font-size:.72rem; font-weight:700; color:var(--card-desc); margin-top:.5rem; }
-  .medal { width:58px; height:58px; border-radius:50%; display:grid; place-items:center; color:#fff; font-family:'Fredoka One',cursive; font-size:1.5rem; margin-bottom:.6rem; box-shadow:inset 0 -4px 0 rgba(0,0,0,.2); }
-  .medal.bronze { background:var(--bronze); } .medal.silver { background:var(--silver); } .medal.gold { background:var(--gold); color:#1a1300; }
   .level-note { text-align:center; color:var(--card-desc); font-weight:700; font-size:.85rem; margin-top:.9rem; }
   .board-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; }
   .board-grid .panel { flex:0 1 420px; }
@@ -569,9 +571,9 @@
     <div class="cycle-divider-line"></div>
   </div>
   <div class="grid">
-    <div class="card static"><div class="medal bronze">B</div><div class="card-title">Bronze</div><div class="card-desc">I'm getting started. I like hints and step-by-step help.</div></div>
-    <div class="card static"><div class="medal silver">S</div><div class="card-title">Silver</div><div class="card-desc">I know the basics. I'm ready for fewer hints and more to do.</div></div>
-    <div class="card static"><div class="medal gold">G</div><div class="card-title">Gold</div><div class="card-desc">I want the expert challenge: speed rounds and no hints!</div></div>
+    <div class="card static"><img class="medal-img" src="/computer-club/assets/l-bronze.webp" width="72" height="72" alt=""><div class="card-title">Bronze</div><div class="card-desc">I'm getting started. I like hints and step-by-step help.</div></div>
+    <div class="card static"><img class="medal-img" src="/computer-club/assets/l-silver.webp" width="72" height="72" alt=""><div class="card-title">Silver</div><div class="card-desc">I know the basics. I'm ready for fewer hints and more to do.</div></div>
+    <div class="card static"><img class="medal-img" src="/computer-club/assets/l-gold.webp" width="72" height="72" alt=""><div class="card-title">Gold</div><div class="card-desc">I want the expert challenge: speed rounds and no hints!</div></div>
   </div>
   <p class="level-note">Any member can choose any level. Earn 3 stars, then try the next level up!</p>
 
@@ -581,7 +583,7 @@
   </div>
   <div class="grid">
     <a class="lab-card" id="labTyping" href="/computer-club/typing-test/">
-      <div class="lab-icon">⌨️</div>
+      <div class="lab-icon"><img src="/computer-club/assets/p-typing-test.webp" width="64" height="64" alt=""></div>
       <div class="lab-body">
         <div class="lab-title">Typing Test</div>
         <div class="lab-desc">1 or 2 minutes. Measure your speed (WPM) and accuracy. Beat your best and earn typing badges.</div>
@@ -589,7 +591,7 @@
       </div>
     </a>
     <a class="lab-card" id="labMission" href="/computer-club/missions/01-shortcut-ninja/">
-      <div class="lab-icon" id="labIcon">🥷</div>
+      <div class="lab-icon" id="labIcon"><img src="/computer-club/assets/m01-shortcut-ninja.webp" width="64" height="64" alt=""></div>
       <div class="lab-body">
         <div class="lab-title" id="labTitle">Week 1 · Shortcut Ninja</div>
         <div class="lab-desc" id="labDesc">Master the keyboard shortcuts that make you super fast.</div>
@@ -605,62 +607,62 @@
   <p class="level-note" id="weekNote" style="margin:-.3rem 0 1rem">Missions open during Computer Club, when Mr. EdLo switches them on.</p>
   <div class="grid">
     <a class="card mission" data-week="1" data-mission="shortcut-ninja" href="/computer-club/missions/01-shortcut-ninja/">
-      <div class="card-num">Week 1</div><div class="card-icon">🥷</div>
+      <div class="card-num">Week 1</div><div class="card-icon"><img src="/computer-club/assets/m01-shortcut-ninja.webp" width="72" height="72" alt=""></div>
       <div class="card-title">Shortcut Ninja</div>
       <div class="card-desc">Copy, paste, undo and more, without the mouse</div>
       <div class="card-tags"><span class="strand games">Games &amp; challenges</span></div>
       <span class="card-arrow">→</span>
     </a>
     <div class="card soon mission" data-week="2">
-      <div class="card-num">Week 2</div><div class="card-icon">🖥️</div>
+      <div class="card-num">Week 2</div><div class="card-icon"><img src="/computer-club/assets/m02-know-your-computer.webp" width="72" height="72" alt=""></div>
       <div class="card-title">Know Your Computer</div>
       <div class="card-desc">Scavenger hunt: find and name the parts of a computer</div>
       <div class="card-tags"><span class="strand skills">Computer skills</span></div>
     </div>
     <div class="card soon mission" data-week="3">
-      <div class="card-num">Week 3</div><div class="card-icon">🗂️</div>
+      <div class="card-num">Week 3</div><div class="card-icon"><img src="/computer-club/assets/m03-folder-detective.webp" width="72" height="72" alt=""></div>
       <div class="card-title">Folder Detective</div>
       <div class="card-desc">Sort a messy pile of files into neat folders in Google Drive</div>
       <div class="card-tags"><span class="strand skills">Computer skills</span></div>
     </div>
     <div class="card soon mission" data-week="4">
-      <div class="card-num">Week 4</div><div class="card-icon">🛡️</div>
+      <div class="card-num">Week 4</div><div class="card-icon"><img src="/computer-club/assets/m04-safe-surfer.webp" width="72" height="72" alt=""></div>
       <div class="card-title">Safe Surfer</div>
       <div class="card-desc">Spot the scam, protect your password, stay safe online</div>
       <div class="card-tags"><span class="strand skills">Computer skills</span></div>
     </div>
     <div class="card soon mission" data-week="5">
-      <div class="card-num">Week 5</div><div class="card-icon">🔎</div>
+      <div class="card-num">Week 5</div><div class="card-icon"><img src="/computer-club/assets/m05-search-sleuth.webp" width="72" height="72" alt=""></div>
       <div class="card-title">Search Sleuth</div>
       <div class="card-desc">Race to find answers using smart search words</div>
       <div class="card-tags"><span class="strand games">Games &amp; challenges</span></div>
     </div>
     <div class="card soon mission" data-week="6">
-      <div class="card-num">Week 6</div><div class="card-icon">🟪</div>
+      <div class="card-num">Week 6</div><div class="card-icon"><img src="/computer-club/assets/m06-pixel-artist.webp" width="72" height="72" alt=""></div>
       <div class="card-title">Pixel Artist</div>
       <div class="card-desc">Create a picture one square at a time in Google Sheets</div>
       <div class="card-tags"><span class="strand create">Digital creativity</span></div>
     </div>
     <div class="card soon mission" data-week="7">
-      <div class="card-num">Week 7</div><div class="card-icon">🎨</div>
+      <div class="card-num">Week 7</div><div class="card-icon"><img src="/computer-club/assets/m07-badge-designer.webp" width="72" height="72" alt=""></div>
       <div class="card-title">Badge Designer</div>
       <div class="card-desc">Design our Computer Club badge in Canva</div>
       <div class="card-tags"><span class="strand create">Digital creativity</span></div>
     </div>
     <div class="card soon mission" data-week="8">
-      <div class="card-num">Week 8</div><div class="card-icon">📣</div>
+      <div class="card-num">Week 8</div><div class="card-icon"><img src="/computer-club/assets/m08-poster-pro.webp" width="72" height="72" alt=""></div>
       <div class="card-title">Poster Pro</div>
       <div class="card-desc">Make an eye-catching poster for a school event in Canva</div>
       <div class="card-tags"><span class="strand create">Digital creativity</span></div>
     </div>
     <div class="card soon mission" data-week="9">
-      <div class="card-num">Week 9</div><div class="card-icon">🎞️</div>
+      <div class="card-num">Week 9</div><div class="card-icon"><img src="/computer-club/assets/m09-slide-show-star.webp" width="72" height="72" alt=""></div>
       <div class="card-title">Slide Show Star</div>
       <div class="card-desc">Build an animated Google Slides show about Belize</div>
       <div class="card-tags"><span class="strand create">Digital creativity</span></div>
     </div>
     <div class="card soon mission" data-week="10">
-      <div class="card-num">Week 10</div><div class="card-icon">🏅</div>
+      <div class="card-num">Week 10</div><div class="card-icon"><img src="/computer-club/assets/m10-typing-olympics.webp" width="72" height="72" alt=""></div>
       <div class="card-title">Typing Olympics</div>
       <div class="card-desc">Team typing races and our end-of-term showcase</div>
       <div class="card-tags"><span class="strand games">Games &amp; challenges</span></div>
@@ -860,7 +862,7 @@ window.addEventListener('resize', () => { resize(); initBits(38); });
     if (newest) {
       lab.classList.remove('hidden');
       lab.setAttribute('href', newest.getAttribute('data-href'));
-      $('labIcon').textContent = newest.querySelector('.card-icon').textContent;
+      $('labIcon').innerHTML = newest.querySelector('.card-icon').innerHTML;   // static page markup (the card's picture)
       $('labTitle').textContent = 'Week ' + newest.getAttribute('data-week') + ' · ' + newest.querySelector('.card-title').textContent;
       $('labDesc').textContent = newest.querySelector('.card-desc').textContent;
     } else {
@@ -964,7 +966,7 @@ window.addEventListener('resize', () => { resize(); initBits(38); });
     var shelf = $('myBadges'); shelf.textContent = '';
     (me.all_badges || []).forEach(function (b) {
       var d = el('div', 'badge-item' + (owned[b.id] ? '' : ' locked'));
-      d.appendChild(el('span', 'ico', b.icon));
+      var ico = el('span', 'ico'); ico.appendChild(CC.badgeIcon(b, 56)); d.appendChild(ico);
       d.appendChild(document.createTextNode(b.name));
       shelf.appendChild(d);
     });

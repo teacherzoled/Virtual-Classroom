@@ -285,6 +285,7 @@
   .badge { display:inline-block; background:var(--top-badge-bg); color:var(--top-badge-c); font-size:.75rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:4px 14px; border-radius:999px; margin-bottom:1rem; animation:pop .5s cubic-bezier(.36,1.5,.6,1) .3s both; }
   @keyframes pop { from{opacity:0;transform:scale(.7)} to{opacity:1;transform:scale(1)} }
   h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.8rem,8vw,3.8rem); line-height:1.1; margin-bottom:.5rem; background:var(--h1-grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .title-ico { display:block; width:104px; height:104px; margin:0 auto .3rem; }
   .subtitle { font-size:1.05rem; font-weight:600; color:var(--subtitle-c); transition:color .4s; }
 
   /* Welcome */
@@ -481,7 +482,8 @@
 
   <header>
     <div class="badge">Computer Club</div>
-    <h1>🔑 Club Sign-in</h1>
+    <img class="title-ico" src="/computer-club/assets/p-sign-in.webp" width="104" height="104" alt="">
+    <h1>Club Sign-in</h1>
     <p class="subtitle">Sign in at the start of every club session</p>
   </header>
 
