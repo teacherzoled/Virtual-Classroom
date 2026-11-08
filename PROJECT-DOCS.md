@@ -1599,8 +1599,8 @@ Nothing is shared with `edlo-lms`, `VC-LMS` or `edlo-gemini`. Club members are N
   that mission's badge) · `p-sign-in / p-typing-test / p-teacher` page titles · `b-typing-15/25/35` typing badges ·
   `x1–x6` XP levels (live bar + level-up pop-up; level 6+ = Legend) · `l-bronze/silver/gold` the hub's "Pick your level"
   · `r-cadet/pilot/commander` saved for the rank system. Badge id → picture lives in `BADGE_IMG` in `club.js`
-  (`CC.badgeIcon` falls back to the Apps Script emoji), so **no Apps Script deploy** for pictures. Small UI symbols and
-  the 💻 in the hub title stay emoji (the title waits for the students' Week 7 logo). **New mission:** its card uses
+  (`CC.badgeIcon` falls back to the Apps Script emoji), so **no Apps Script deploy** for pictures. Small UI symbols stay
+  emoji. The hub title shows `x3-coder` (laptop) until the students' Week 7 club logo replaces it. **New mission:** its card uses
   `<img src="/computer-club/assets/mNN-….webp" width="72" height="72" alt="">`; its page title uses `.title-ico`.
   Raw PNGs go in `computer-club/assets/originals/` (ignored by git).
 - **Boards (hub, "Club Standings"):** Overall XP top 10 (+ the student's own row and the student just ahead) ·

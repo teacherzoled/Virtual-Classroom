@@ -287,6 +287,7 @@
   .badge { display:inline-block; background:var(--top-badge-bg); color:var(--top-badge-c); font-size:.75rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:4px 14px; border-radius:999px; margin-bottom:1rem; animation:pop .5s cubic-bezier(.36,1.5,.6,1) .3s both; }
   @keyframes pop { from{opacity:0;transform:scale(.7)} to{opacity:1;transform:scale(1)} }
   h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.8rem,8vw,3.8rem); line-height:1.1; margin-bottom:.5rem; background:var(--h1-grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .title-ico { display:block; width:104px; height:104px; margin:0 auto .3rem; }
   .subtitle { font-size:1.05rem; font-weight:600; color:var(--subtitle-c); transition:color .4s; }
 
   /* Welcome */
@@ -325,9 +326,11 @@
   .card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; border-radius:18px 18px 0 0; background:var(--accent); }
   .card-num   { font-size:.68rem; font-weight:800; letter-spacing:.08em; color:var(--section-lbl); margin-bottom:.35rem; text-transform:uppercase; }
   .card-icon  { font-size:2.2rem; margin-bottom:.7rem; line-height:1; }
-  .card-icon img { display:block; width:72px; height:72px; }
+  .card-icon img { display:block; width:72px; height:72px; margin:0 auto; }
   .lab-icon img  { display:block; width:64px; height:64px; }
-  .medal-img { display:block; width:72px; height:72px; margin-bottom:.5rem; }
+  .medal-img { display:block; width:72px; height:72px; margin:0 auto .5rem; }
+  /* picture + title centred on mission and level cards (Edwin, Nov 7) */
+  .card.mission .card-icon, .card.mission .card-title, .medal-card .medal-img, .medal-card .card-title { align-self:center; text-align:center; }
   .badge-item .ico img { display:block; width:56px; height:56px; margin:0 auto; }
   .card-title { font-family:'Fredoka One',cursive; font-size:1.15rem; margin-bottom:.25rem; color:var(--accent); line-height:1.2; }
   .card-desc  { font-size:.78rem; color:var(--card-desc); font-weight:600; line-height:1.4; transition:color .4s; }
@@ -514,7 +517,8 @@
 
   <header>
     <div class="badge">Standards 4–6 &nbsp;·&nbsp; Every week</div>
-    <h1>💻 Computer Club</h1>
+    <img class="title-ico" src="/computer-club/assets/x3-coder.webp" width="104" height="104" alt="">   <!-- until the students' Week 7 club logo -->
+    <h1>Computer Club</h1>
     <p class="subtitle">Type faster, work smarter, create something cool &amp; win challenges</p>
   </header>
 
@@ -571,9 +575,9 @@
     <div class="cycle-divider-line"></div>
   </div>
   <div class="grid">
-    <div class="card static"><img class="medal-img" src="/computer-club/assets/l-bronze.webp" width="72" height="72" alt=""><div class="card-title">Bronze</div><div class="card-desc">I'm getting started. I like hints and step-by-step help.</div></div>
-    <div class="card static"><img class="medal-img" src="/computer-club/assets/l-silver.webp" width="72" height="72" alt=""><div class="card-title">Silver</div><div class="card-desc">I know the basics. I'm ready for fewer hints and more to do.</div></div>
-    <div class="card static"><img class="medal-img" src="/computer-club/assets/l-gold.webp" width="72" height="72" alt=""><div class="card-title">Gold</div><div class="card-desc">I want the expert challenge: speed rounds and no hints!</div></div>
+    <div class="card static medal-card"><img class="medal-img" src="/computer-club/assets/l-bronze.webp" width="72" height="72" alt=""><div class="card-title">Bronze</div><div class="card-desc">I'm getting started. I like hints and step-by-step help.</div></div>
+    <div class="card static medal-card"><img class="medal-img" src="/computer-club/assets/l-silver.webp" width="72" height="72" alt=""><div class="card-title">Silver</div><div class="card-desc">I know the basics. I'm ready for fewer hints and more to do.</div></div>
+    <div class="card static medal-card"><img class="medal-img" src="/computer-club/assets/l-gold.webp" width="72" height="72" alt=""><div class="card-title">Gold</div><div class="card-desc">I want the expert challenge: speed rounds and no hints!</div></div>
   </div>
   <p class="level-note">Any member can choose any level. Earn 3 stars, then try the next level up!</p>
 
