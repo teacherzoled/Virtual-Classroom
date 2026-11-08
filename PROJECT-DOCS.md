@@ -1357,6 +1357,7 @@ Virtual-Classroom/
 ├── computer-club/                      ← Computer Club, Standards 4–6 — ROOT (Nov 6, 2026; own Worker + Sheet)
 │   ├── index.html                      ← Club hub (routine, levels, mission map, badges, leaderboard)
 │   ├── club.js                         ← Club shared JS: sign-in session + unsent-results queue
+│   ├── assets/                         ← Club pictures (Nov 7): 28 × 256px WebP from the ChatGPT pack; originals/ = git-ignored drop folder
 │   ├── sign-in/                        ← Club code → name → PIN (= attendance)
 │   ├── typing-test/                    ← Saved typing tests (WPM, accuracy)
 │   ├── missions/01-shortcut-ninja/     ← Week 1 mission (MISSION TEMPLATE — copy for the next one)
@@ -1592,6 +1593,16 @@ Nothing is shared with `edlo-lms`, `VC-LMS` or `edlo-gemini`. Club members are N
 - **Live bar** (`club.js`): sticky under the theme bar on every club page for a signed-in student: level, XP bar,
   "#4 of 22", "12 XP behind Ben T." Refreshes every 60 s and right after a result is saved; "Level up!" pop-up.
   The teacher page opts out (`<body data-cc-no-bar>`).
+- **Pictures (Nov 7):** emoji identity icons replaced by a ChatGPT image pack (soft 3D clay, transparent; prompts in the
+  Computer Club project doc `claude/computer-club-image-prompts.md`). Files: `computer-club/assets/*.webp`, 256×256,
+  trimmed + centred, ~16 KB each (438 KB for 28). `m01–m10` mission icons (hub cards, "this week" card, mission page title,
+  that mission's badge) · `p-sign-in / p-typing-test / p-teacher` page titles · `b-typing-15/25/35` typing badges ·
+  `x1–x6` XP levels (live bar + level-up pop-up; level 6+ = Legend) · `l-bronze/silver/gold` the hub's "Pick your level"
+  · `r-cadet/pilot/commander` saved for the rank system. Badge id → picture lives in `BADGE_IMG` in `club.js`
+  (`CC.badgeIcon` falls back to the Apps Script emoji), so **no Apps Script deploy** for pictures. Small UI symbols and
+  the 💻 in the hub title stay emoji (the title waits for the students' Week 7 logo). **New mission:** its card uses
+  `<img src="/computer-club/assets/mNN-….webp" width="72" height="72" alt="">`; its page title uses `.title-ico`.
+  Raw PNGs go in `computer-club/assets/originals/` (ignored by git).
 - **Boards (hub, "Club Standings"):** Overall XP top 10 (+ the student's own row and the student just ahead) ·
   Standard vs Standard (AVERAGE XP per member) · Most Improved typing (best 90%+ WPM minus first 90%+ WPM) ·
   Fastest typist per standard (top 5) · Shortcut Ninja Gold · "How to earn XP". Students never see the bottom of the list.
