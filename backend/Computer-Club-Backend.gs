@@ -1,6 +1,6 @@
 /**
  * ═══════════════════════════════════════════════════════════════
- *  Computer Club Backend — Google Apps Script (Nov 6, 2026)
+ *  Computer Club Backend — Google Apps Script (Nov 6, 2026; Version 3: Nov 9, 2026)
  *
  *  ⚠️ LOCAL MASTER COPY — mirrors the Apps Script attached to the
  *  "Computer Club Records" Google Sheet (Extensions → Apps Script).
@@ -68,14 +68,9 @@ var PIN_LOCK_MIN   = 10;
 // ─────────────────────────────────────────────
 // BADGES — one place for every badge rule.
 // Each rule is checked after a result is saved; a badge is given once per student.
+// Mission badges are made from MISSIONS below (badge id = mission id, one per mission, rule = missionPassed).
 // ─────────────────────────────────────────────
-var BADGES = [
-  { id: 'shortcut-ninja', name: 'Shortcut Ninja', icon: '🥷', kind: 'mission',
-    test: function (r) {
-      return r.mission_id === 'shortcut-ninja' &&
-        ((r.level === 'gold' && r.score >= 12) ||
-         ((r.level === 'bronze' || r.level === 'silver') && r.stars >= 2));
-    } },
+var TYPING_BADGES = [
   { id: 'typing-15', name: 'Speedy Fingers (15 WPM)', icon: '⌨️', kind: 'typing',
     test: function (t) { return t.wpm >= 15 && t.accuracy >= 90; } },
   { id: 'typing-25', name: 'Keyboard Racer (25 WPM)', icon: '🏎️', kind: 'typing',
@@ -93,11 +88,48 @@ var BADGES = [
 //      connection still arrive after the club closes. Sign-in and opening missions stop at close.
 //   2. that mission is switched open (Settings → open_missions, a comma list of ids)
 // The teacher flips both on the dashboard. Results for a closed or unlisted mission are refused here.
-// ⚠️ Add each new mission here before students use it (an unknown id is refused).
+// All 10 Cadet (Stage 1) missions are listed already (Nov 9), so building a Cadet mission page needs NO deploy.
+// The dashboard greys out the switch of a mission whose page is not built yet (BUILT list in teacher/index.html).
+// An unknown id is still refused.
+//   badge      → badge name for that mission (badge id = mission id; picture: BADGE_IMG in club.js)
+//   icon       → emoji fallback for the badge
+//   gold_target→ optional: a Gold round must ALSO reach this score to pass (see missionPassed)
 // ─────────────────────────────────────────────
 var MISSIONS = {
-  'shortcut-ninja': { week: 1, name: 'Shortcut Ninja' }
+  'shortcut-ninja':     { week: 1,  stage: 1, name: 'Shortcut Ninja',     badge: 'Shortcut Ninja',   icon: '🥷', gold_target: 12 },
+  'know-your-computer': { week: 2,  stage: 1, name: 'Know Your Computer', badge: 'Hardware Hero',    icon: '🖥️' },
+  'folder-detective':   { week: 3,  stage: 1, name: 'Folder Detective',   badge: 'Folder Detective', icon: '🗂️' },
+  'safe-surfer':        { week: 4,  stage: 1, name: 'Safe Surfer',        badge: 'Safe Surfer',      icon: '🛡️' },
+  'search-sleuth':      { week: 5,  stage: 1, name: 'Search Sleuth',      badge: 'Search Sleuth',    icon: '🔎' },
+  'pixel-artist':       { week: 6,  stage: 1, name: 'Pixel Artist',       badge: 'Pixel Artist',     icon: '🟪' },
+  'badge-designer':     { week: 7,  stage: 1, name: 'Badge Designer',     badge: 'Badge Designer',   icon: '🎨' },
+  'poster-pro':         { week: 8,  stage: 1, name: 'Poster Pro',         badge: 'Poster Pro',       icon: '📣' },
+  'slide-show-star':    { week: 9,  stage: 1, name: 'Slide Show Star',    badge: 'Slide Show Star',  icon: '🎞️' },
+  'typing-olympics':    { week: 10, stage: 1, name: 'Typing Olympics',    badge: 'Typing Olympian',  icon: '🏅' }
 };
+
+/**
+ * One rule for every scored mission (Nov 9): a round passes with 2+ stars at ANY level
+ * (each mission page sets its own star thresholds). If the mission has a gold_target, a Gold
+ * round must ALSO reach that score. Shortcut Ninja: Gold page gives 2 stars at 12+ and
+ * gold_target is 12, so its badge works exactly as before.
+ */
+function missionPassed(r) {
+  var m = MISSIONS[r.mission_id];
+  if (!m || MISSION_LEVELS.indexOf(r.level) === -1 || !(r.stars >= 2)) return false;
+  if (r.level === 'gold' && m.gold_target && !(r.score >= m.gold_target)) return false;
+  return true;
+}
+
+// Every badge: one per mission (in week order), then the typing badges.
+var BADGES = Object.keys(MISSIONS)
+  .sort(function (a, b) { return MISSIONS[a].week - MISSIONS[b].week; })
+  .map(function (id) {
+    return { id: id, name: MISSIONS[id].badge, icon: MISSIONS[id].icon, kind: 'mission',
+             test: function (r) { return r.mission_id === id && missionPassed(r); } };
+  })
+  .concat(TYPING_BADGES);
+
 var CLUB_OPEN_HOURS = 3;
 var SAVE_GRACE_MIN  = 30;   // after the club closes, results made in club may still arrive (dropped internet)
 
@@ -350,22 +382,28 @@ function handleMe(body) {
   var mine = rowsOf(TAB.BADGES).filter(function (b) { return String(b[1]) === who.id; })
     .map(function (b) { return badgeOut(String(b[3]), b[0]); });
 
-  var gold = 0;
+  var gold = {};   // mission id → my best Gold score (every mission page reads its own)
   rowsOf(TAB.RESULTS).forEach(function (r) {
-    if (String(r[3]) === who.id && r[6] === 'shortcut-ninja' && r[8] === 'gold') gold = Math.max(gold, Number(r[9]) || 0);
+    if (String(r[3]) !== who.id || r[8] !== 'gold') return;
+    var mid = String(r[6]), v = Number(r[9]) || 0;
+    if (gold[mid] === undefined || v > gold[mid]) gold[mid] = v;
   });
   return { ok: true, student: { id: who.id, name: st.display_name, standard: st.standard },
-           badges: mine, best_wpm: bestWpm(who.id), shortcut_gold_best: gold, all_badges: badgeList(),
+           badges: mine, best_wpm: bestWpm(who.id),
+           gold_best: gold, shortcut_gold_best: gold['shortcut-ninja'] || 0,   // shortcut_gold_best: kept for the Week 1 page
+           all_badges: badgeList(),
            typingclub_url: safeUrl(getSettings().typingclub_url) };
 }
 
 // ─────────────────────────────────────────────
-// LEADERBOARD — { token } → top 10 typing (best WPM, accuracy ≥ 90) + top 10 Shortcut Ninja Gold
+// LEADERBOARD — { token } → top 10 typing (best WPM, accuracy ≥ 90) + top 10 Gold per mission
+//   shortcut_gold = gold_boards['shortcut-ninja'] (kept for the pages already live)
 // ─────────────────────────────────────────────
 function handleLeaderboard(body) {
   var who = checkToken(body.token);
   if (!who.ok) return { ok: false, auth: true, error: who.error };
-  return { ok: true, typing: topTyping(10), shortcut_gold: topShortcutGold(10) };
+  var gb = goldBoards(10);
+  return { ok: true, typing: topTyping(10), shortcut_gold: gb['shortcut-ninja'] || [], gold_boards: gb };
 }
 
 function topTyping(n) {
@@ -378,14 +416,18 @@ function topTyping(n) {
   return topN(best, n);
 }
 
-function topShortcutGold(n) {
-  var best = {};
+// { mission id → top n Gold scores } for every mission that has a Gold result (one pass over the tab).
+function goldBoards(n) {
+  var per = {};
   rowsOf(TAB.RESULTS).forEach(function (r) {
-    if (r[6] !== 'shortcut-ninja' || r[8] !== 'gold') return;
-    var id = String(r[3]), v = Number(r[9]) || 0;
+    var mid = String(r[6]), id = String(r[3]);
+    if (r[8] !== 'gold' || !MISSIONS[mid]) return;
+    var best = per[mid] = per[mid] || {}, v = Number(r[9]) || 0;
     if (!best[id] || v > best[id].value) best[id] = { name: String(r[4]), standard: r[5], value: v };
   });
-  return topN(best, n);
+  var out = {};
+  Object.keys(per).forEach(function (mid) { out[mid] = topN(per[mid], n); });
+  return out;
 }
 
 function topN(map, n) {
@@ -431,10 +473,11 @@ function handleTeacherData(body) {
   var sessions = rowsOf(TAB.SESSIONS).map(function (r) {
     return { date: dateStr(r[0]), week: r[1], mission: r[2] };
   });
+  var gb = goldBoards(10);
   return { ok: true, settings: publicSettings(), access: access(), missions: missionList(),
            students: students, attendance: attendance,
            typing: typing, results: results, badges: badges, sessions: sessions,
-           leaderboard: { typing: topTyping(10), shortcut_gold: topShortcutGold(10) },
+           leaderboard: { typing: topTyping(10), shortcut_gold: gb['shortcut-ninja'] || [], gold_boards: gb },
            all_badges: badgeList() };
 }
 
@@ -486,7 +529,7 @@ function handleSetAccess(body) {
 }
 
 function missionList() {
-  return Object.keys(MISSIONS).map(function (id) { return { id: id, week: MISSIONS[id].week, name: MISSIONS[id].name }; })
+  return Object.keys(MISSIONS).map(function (id) { return { id: id, week: MISSIONS[id].week, stage: MISSIONS[id].stage, name: MISSIONS[id].name }; })
     .sort(function (a, b) { return a.week - b.week; });
 }
 
@@ -507,6 +550,7 @@ function handleStandings(body) {
   var mine = null, idx = -1;
   for (var i = 0; i < all.ranking.length; i++) if (all.ranking[i].id === who.id) { mine = all.ranking[i]; idx = i; }
   if (!mine) return { ok: false, auth: true, error: 'Account not active' };
+  var gb = goldBoards(10);
   var ahead = null;
   for (var j = idx - 1; j >= 0; j--) {
     if (all.ranking[j].xp > mine.xp) { ahead = { name: all.ranking[j].name, gap: all.ranking[j].xp - mine.xp }; break; }
@@ -520,7 +564,8 @@ function handleStandings(body) {
     most_improved: all.most_improved.slice(0, 10),
     fastest_by_standard: all.fastest_by_standard,
     battle: all.battle,
-    shortcut_gold: topShortcutGold(10),
+    shortcut_gold: gb['shortcut-ninja'] || [],   // kept for the pages already live
+    gold_boards: gb,
     xp_rules: xpRules(),
     updated: all.updated
   };
@@ -529,11 +574,12 @@ function handleStandings(body) {
 function handleTeacherStandings(body) {
   var t = checkTeacher(body);
   if (!t.ok) return t;
-  var all = computeStandings();
+  var all = computeStandings(), gb = goldBoards(10);
   return { ok: true, ranking: all.ranking.map(function (r) {
              var o = publicRow(r); o.parts = r.parts; o.id = r.id; return o; }),
            most_improved: all.most_improved.slice(0, 10), fastest_by_standard: all.fastest_by_standard,
-           battle: all.battle, shortcut_gold: topShortcutGold(10), xp_rules: xpRules(), updated: all.updated };
+           battle: all.battle, shortcut_gold: gb['shortcut-ninja'] || [],
+           gold_boards: gb, xp_rules: xpRules(), updated: all.updated };
 }
 
 function publicRow(r) {

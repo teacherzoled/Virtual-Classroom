@@ -127,6 +127,9 @@ every PIN becomes a `sha256:…` hash, and `active` becomes `YES`. Check **Execu
 - A sign-in lasts 6 hours (one club session) on that computer. **Sign out** on a shared computer.
 - Results that cannot be sent (no internet) stay on that computer and are sent automatically later;
   each result has an attempt id, so it is never recorded twice.
-- Badges are given once per student, by the rules in `BADGES` at the top of the Apps Script:
-  Shortcut Ninja (Bronze/Silver 2+ stars or Gold 12+), Speedy Fingers 15 WPM, Keyboard Racer 25 WPM,
-  Typing Champion 35 WPM. Typing badges and the leaderboard need **90%+ accuracy**.
+- Badges are given once per student. Each of the 10 Cadet missions has one badge (list in `MISSIONS` at the top of the
+  Apps Script): passed with **2+ stars** at any level; Shortcut Ninja's Gold also needs 12+.
+  Typing: Speedy Fingers 15 WPM, Keyboard Racer 25 WPM, Typing Champion 35 WPM. Typing badges and the leaderboard need
+  **90%+ accuracy**.
+- The dashboard lists all 10 Cadet missions. A mission whose page is not built yet says **Not built yet** and its
+  switch is greyed out.

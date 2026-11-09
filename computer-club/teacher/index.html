@@ -479,6 +479,7 @@
   .switch[aria-checked="true"] { background:var(--good); border-color:var(--good); }
   .switch[aria-checked="true"] span { left:36px; }
   .switch:disabled { opacity:.5; cursor:wait; }
+  .switch.unbuilt:disabled { opacity:.3; cursor:not-allowed; }
   .state-open { color:var(--good); font-weight:800; }
   .ptimer { position:fixed; inset:0; z-index:320; background:#0b1a16; color:#fff; display:flex; flex-direction:column; padding:1rem 1.5rem; font-family:'Nunito',sans-serif; }
   .pt-top { display:flex; flex-wrap:wrap; justify-content:space-between; gap:.6rem; }
@@ -769,6 +770,9 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
   var MISSIONS = ['Shortcut Ninja', 'Know Your Computer', 'Folder Detective', 'Safe Surfer', 'Search Sleuth',
                   'Pixel Artist', 'Badge Designer', 'Poster Pro', 'Slide Show Star', 'Typing Olympics'];
   var MISSION_NAMES = { 'shortcut-ninja': 'Shortcut Ninja' };
+  // Mission pages that exist. A mission not in this list shows "Not built yet" and its switch is greyed out.
+  // ⚠️ When a new mission page goes live, add its id here (same pull request). No Apps Script deploy needed.
+  var BUILT = ['shortcut-ninja'];
   var CODE_KEY = 'cc-teacher-code';
   var $ = function (id) { return document.getElementById(id); };
   var D = null;
@@ -841,11 +845,14 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
       var name = el('div');
       name.appendChild(el('div', 'sw-name', 'Week ' + m.week + ' · ' + m.name));
       var on = acc.open_missions.indexOf(m.id) !== -1;
-      name.appendChild(el('div', on ? 'state-open' : 'muted', on ? (acc.club_open ? 'Open to students' : 'Switched on (opens when the club is in session)') : 'Closed'));
-      var b = el('button', 'switch'); b.type = 'button'; b.setAttribute('role', 'switch');
+      var built = BUILT.indexOf(m.id) !== -1;
+      name.appendChild(el('div', on ? 'state-open' : 'muted', !built ? 'Not built yet' :
+        on ? (acc.club_open ? 'Open to students' : 'Switched on (opens when the club is in session)') : 'Closed'));
+      var b = el('button', 'switch' + (built ? '' : ' unbuilt')); b.type = 'button'; b.setAttribute('role', 'switch');
       b.setAttribute('aria-checked', on ? 'true' : 'false'); b.setAttribute('aria-label', m.name);
       b.appendChild(el('span'));
-      b.addEventListener('click', function () { setAccess({ mission_id: m.id, mission_open: !on }, b); });
+      if (!built) { b.disabled = true; b.title = 'This mission page is not built yet'; rw.classList.add('unbuilt-row'); }
+      else b.addEventListener('click', function () { setAccess({ mission_id: m.id, mission_open: !on }, b); });
       rw.appendChild(name); rw.appendChild(b); box.appendChild(rw);
     });
   }

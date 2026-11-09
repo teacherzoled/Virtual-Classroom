@@ -59,14 +59,15 @@ with timers, sounds and typing tips (#4), floating timer + tab-name countdown + 
   mission lists: Computer Club project doc `claude/computer-club-stages-plan.md`.
   **Build order (Nov 7) — only 2 Apps Script deploys for the rest of the year:** (1) next session, Step 1: one-time update
   — all 10 Cadet missions in `MISSIONS` (`stage: 1`), one general badge rule for any scored mission, "not built yet"
-  labels on the dashboard switches, test kit in the repo (**done Nov 9, PR: `tools/computer-club-tests/`**); (2) Week 2 · Know Your Computer, website only; (3) rank-system
+  labels on the dashboard switches (**built Nov 9: Apps Script Version 3, PR "Cadet missions"; Edwin deploys it**),
+  test kit in the repo (**done Nov 9, PR #11: `tools/computer-club-tests/`**); (2) Week 2 · Know Your Computer, website only; (3) rank-system
   session = second deploy (Pilot ids, "finished" result type for Weeks 6–9 and Canva/Docs/Slides missions, rank lock,
   Typing Boost, always-open Cadet weeks, hold switches) — **must be live before Cadet Week 6 (~Dec 11)** or Week 6 needs
   its own deploy; (4) Cadet Weeks 3–10 one a week, website only; (5) Pilot Mission 1 around Cadet Week 8.
 - **Next session: build Week 2 · Know Your Computer.** Plan first and get Edwin's OK. Handoff with checklist and a draft
   plan: the Computer Club project doc `claude/computer-club-handoff.md`. Copy `missions/01-shortcut-ninja/` (the
-  mission template), add `'know-your-computer': { week: 2, … }` to `MISSIONS` in the Apps Script (Edwin deploys a new
-  version), and light the Week 2 card on the hub.
+  mission template), light the Week 2 card on the hub and add `'know-your-computer'` to `BUILT` in
+  `teacher/index.html`. **No Apps Script change** (Version 3 already lists it; badge "Hardware Hero").
 - **Working rules that held:** one step at a time with Edwin's screenshots; branch → PR → merge only after Edwin says
   "merge it"; then `git pull --ff-only` into his local folder (needs delete permission once per session, or git leaves
   `.git/index.lock`).
@@ -1548,7 +1549,13 @@ Nothing is shared with `edlo-lms`, `VC-LMS` or `edlo-gemini`. Club members are N
   5 wrong PINs = 10-minute wait. Session lasts 6 hours (`localStorage` **`cc-session`**).
 - **Results:** `CC.submit()` keeps each result on the computer (`cc-unsent::<id>`) until the Worker confirms it; every
   result has an `attempt_id`, so a resend never makes a second row. Signed-out play is practice (not saved).
-- **Badges:** rules in `BADGES` at the top of the Apps Script, once per student. Typing badges + leaderboard need 90%+ accuracy.
+- **Badges:** once per student. One badge per mission, made from `MISSIONS` (badge id = mission id), passed by
+  **`missionPassed`**: 2+ stars at any level (each page sets its own star thresholds); a mission with `gold_target`
+  also needs that Gold score (Shortcut Ninja: 12, so its badge works as before). Typing badges in `TYPING_BADGES`;
+  they and the typing leaderboard need 90%+ accuracy.
+- **Gold bests and boards (Version 3, Nov 9):** `me` returns `gold_best: { missionId: score }` (a new mission page reads
+  `me.gold_best[MISSION_ID]`; `shortcut_gold_best` stays for Week 1). `leaderboard`, `standings`, `teacher-data` and
+  `teacher-standings` return `gold_boards: { missionId: top 10 }` beside the old `shortcut_gold`.
 - **TypingClub card:** signed out → school login page; signed in → the class sign-up link from Settings.
 
 ### Timers, sounds and tips (Edwin, Nov 6, 2026)
@@ -1669,11 +1676,14 @@ Edwin: new members and returning members each need their own path, each longer a
 ### Adding a mission
 1. Copy `computer-club/missions/01-shortcut-ninja/` to `missions/NN-name/`; change `MISSION_ID`, content and game.
 2. Hub: light its card (remove `soon`, make it an `<a>` with `data-mission="<id>"` and the href; keep `data-week`).
-3. Apps Script: add `'<id>': { week: N, name: '…' }` to `MISSIONS`. That also gives it a switch on the dashboard
-   (results are refused until it is listed).
-4. On club day, switch it on in the dashboard's Open / Close panel.
-5. Badge? Add a rule to `BADGES`. After any Apps Script change: update `backend/Computer-Club-Backend.gs` and
-   deploy a **new version**.
+3. Apps Script: **nothing for Cadet Weeks 2–10** (all listed in `MISSIONS` since Version 3, each with its badge). Check
+   that `MISSION_ID` matches the id there. For the "Your best" note, read `me.gold_best[MISSION_ID]`. Set the Gold star
+   thresholds on the page: 2+ stars = mission passed = badge.
+4. Dashboard: add the id to `BUILT` in `computer-club/teacher/index.html` (until then its switch says "Not built yet"
+   and is greyed out).
+5. On club day, switch it on in the dashboard's Open / Close panel.
+   (A mission NOT in `MISSIONS`, e.g. Pilot ones, needs an Apps Script change: update `backend/Computer-Club-Backend.gs`
+   and deploy a **new version**.)
 6. Test: add a browser test for the new mission to `tools/computer-club-tests/` (copy the closest one) and run
    `tools/computer-club-tests/run-all.sh` before the pull request. It runs the real `.gs` and the real Worker against a
    mock Sheet (no live data touched); see its README.
