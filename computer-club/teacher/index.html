@@ -769,10 +769,10 @@ topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'
   // Week → mission list. Keep in step with the mission cards on /computer-club/index.html.
   var MISSIONS = ['Shortcut Ninja', 'Know Your Computer', 'Folder Detective', 'Safe Surfer', 'Search Sleuth',
                   'Pixel Artist', 'Badge Designer', 'Poster Pro', 'Slide Show Star', 'Typing Olympics'];
-  var MISSION_NAMES = { 'shortcut-ninja': 'Shortcut Ninja' };
+  var MISSION_NAMES = { 'shortcut-ninja': 'Shortcut Ninja', 'know-your-computer': 'Know Your Computer' };
   // Mission pages that exist. A mission not in this list shows "Not built yet" and its switch is greyed out.
   // ⚠️ When a new mission page goes live, add its id here (same pull request). No Apps Script deploy needed.
-  var BUILT = ['shortcut-ninja'];
+  var BUILT = ['shortcut-ninja', 'know-your-computer'];
   var CODE_KEY = 'cc-teacher-code';
   var $ = function (id) { return document.getElementById(id); };
   var D = null;
