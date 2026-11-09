@@ -13,5 +13,5 @@ stop()  { kill $SRV 2>/dev/null; wait $SRV 2>/dev/null; }
 # Chain: e2e sets club code BYTE7 + opens the club; the next three continue on the SAME mock Sheet (e2e-week changes the code to WEEK3, so it runs last).
 start; for t in e2e e2e2 e2e-xp2 e2e-week; do run $t; done; stop
 # Standalone tests: a fresh mock Sheet each.
-for t in e2e-stars e2e-switch e2e-box e2e-pools e2e-xp e2e-timer e2e-float; do start; run $t; stop; done
+for t in e2e-missions e2e-stars e2e-switch e2e-box e2e-pools e2e-xp e2e-timer e2e-float; do start; run $t; stop; done
 exit $fail
