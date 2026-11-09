@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 2 · Know Your Computer · Computer Club · Mr. EdLo's Virtual Classroom</title>
+<link rel="icon" href="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  /* Computer Club · Week 2 mission: Know Your Computer — Nov 9, 2026 (copied from the Week 1 template).
+     MISSION TEMPLATE: copy this page for the next mission (set MISSION_ID). Fixed sections: goal → Step 1 Learn →
+     Step 2 Play (levelled game, result saved) → Step 3 Use it for real → Step 4 Show & Share → Teacher notes.
+     Each finished game sends ONE row to the club Sheet (Mission Results) through /computer-club/club.js:
+     mission_id 'know-your-computer'. Badge "Hardware Hero" = 2+ stars at any level (Apps Script missionPassed;
+     Gold stars set on this page: 2★ = 10 correct, 3★ = 16). Part pictures: c02-*.webp (realistic, Nov 9).
+     Self-contained page.
+     OPEN/CLOSE: the page shows only while the club is in session AND this mission is switched open on the
+     teacher dashboard; the Apps Script refuses results otherwise (MISSIONS + Settings switches). */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  /* overflow-x:hidden goes on body (and .wrapper) — NOT on html (Mobile Rules). */
+
+  /* ═══ THEME VARIABLES — copied unchanged from standard5/science/index.html ═══ */
+  :root, body.theme-night {
+    --bg:            #0d1f1a;
+    --body-color:    #ffffff;
+    --card-bg:       rgba(255,255,255,0.06);
+    --card-border:   rgba(255,255,255,0.09);
+    --card-border-h: rgba(32,201,151,0.40);
+    --card-shadow:   rgba(0,0,0,0.45);
+    --card-desc:     rgba(255,255,255,0.48);
+    --section-lbl:   rgba(255,255,255,0.32);
+    --subtitle-c:    rgba(255,255,255,0.52);
+    --welcome-bg:    linear-gradient(135deg,#0d2b22,#102d25);
+    --welcome-border:rgba(32,201,151,0.15);
+    --welcome-text:  rgba(255,255,255,0.65);
+    --header-name:   rgba(255,255,255,0.55);
+    --badge-bg:      rgba(32,201,151,0.12);
+    --badge-border:  rgba(32,201,151,0.22);
+    --badge-color:   rgba(32,201,151,0.85);
+    --top-badge-bg:  #20C997;
+    --top-badge-c:   #0d1f1a;
+    --h1-grad:       linear-gradient(135deg,#fff 0%,#20C997 55%,#69DB7C 100%);
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.50) 100%);
+    --footer-border: rgba(255,255,255,0.07);
+    --footer-name:   rgba(255,255,255,0.38);
+    --footer-tag:    rgba(255,255,255,0.43);
+    --footer-copy:   rgba(255,255,255,0.18);
+    --back-top-bg:   #20C997;
+    --back-top-c:    #0d1f1a;
+    --back-color:    rgba(255,255,255,0.38);
+    --back-hover:    #20C997;
+    --radial1:       rgba(32,201,151,0.12);
+    --radial2:       rgba(105,219,124,0.08);
+    --star-show:     1;
+    --tab-border:    rgba(255,255,255,0.12);
+    --tab-color:     rgba(255,255,255,0.40);
+    --tab-hover-b:   rgba(32,201,151,0.35);
+    --tab-hover-c:   #20C997;
+    --tab-active-bg: #20C997;
+    --tab-active-c:  #0d1f1a;
+    --tab-shadow:    rgba(32,201,151,0.30);
+    --cycle-bg:      rgba(32,201,151,0.07);
+    --cycle-border:  rgba(32,201,151,0.18);
+    --cycle-color:   #20C997;
+    --mol-color:     rgba(32,201,151,0.25);
+    --graded-bg:     rgba(255,215,0,0.12);
+    --graded-border: rgba(255,215,0,0.28);
+    --graded-color:  #FFD43B;
+    --grad-bar:      linear-gradient(90deg,#20C997,#69DB7C,#4DABF7,#9775FA);
+  }
+
+  body.theme-sunny {
+    --bg:            #fffbea;
+    --body-color:    #2d2000;
+    --card-bg:       rgba(255,255,255,0.75);
+    --card-border:   rgba(200,150,0,0.18);
+    --card-border-h: rgba(200,120,0,0.45);
+    --card-shadow:   rgba(180,100,0,0.18);
+    --card-desc:     rgba(80,50,0,0.55);
+    --section-lbl:   rgba(120,80,0,0.50);
+    --subtitle-c:    rgba(100,60,0,0.65);
+    --welcome-bg:    linear-gradient(135deg,#fff8d6,#ffeea0);
+    --welcome-border:rgba(200,150,0,0.25);
+    --welcome-text:  rgba(80,50,0,0.70);
+    --header-name:   #b35c00;
+    --badge-bg:      rgba(255,180,0,0.15);
+    --badge-border:  rgba(255,160,0,0.30);
+    --badge-color:   #8a4800;
+    --top-badge-bg:  #FF922B;
+    --top-badge-c:   #fff;
+    --h1-grad:       linear-gradient(135deg,#b35c00 0%,#e67e00 50%,#f5a623 100%);
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(255,200,50,0.18) 100%);
+    --footer-border: rgba(200,150,0,0.20);
+    --footer-name:   rgba(100,60,0,0.50);
+    --footer-tag:    rgba(100,60,0,0.55);
+    --footer-copy:   rgba(100,60,0,0.30);
+    --back-top-bg:   #FF922B;
+    --back-top-c:    #fff;
+    --back-color:    rgba(120,80,0,0.55);
+    --back-hover:    #b35c00;
+    --radial1:       rgba(255,220,80,0.25);
+    --radial2:       rgba(255,160,30,0.18);
+    --star-show:     0;
+    --tab-border:    rgba(200,150,0,0.30);
+    --tab-color:     rgba(120,80,0,0.60);
+    --tab-hover-b:   rgba(200,120,0,0.50);
+    --tab-hover-c:   #b35c00;
+    --tab-active-bg: #FF922B;
+    --tab-active-c:  #fff;
+    --tab-shadow:    rgba(255,146,43,0.30);
+    --cycle-bg:      rgba(255,180,0,0.12);
+    --cycle-border:  rgba(200,150,0,0.30);
+    --cycle-color:   #8a4800;
+    --mol-color:     rgba(200,140,0,0.20);
+    --graded-bg:     rgba(180,100,0,0.10);
+    --graded-border: rgba(180,100,0,0.28);
+    --graded-color:  #a05c00;
+    --grad-bar:      linear-gradient(90deg,#FF922B,#f5a623,#0077cc,#7a3abf);
+  }
+
+  body.theme-cloudy {
+    --bg:            #e8edf2;
+    --body-color:    #1c2533;
+    --card-bg:       rgba(255,255,255,0.72);
+    --card-border:   rgba(100,130,160,0.18);
+    --card-border-h: rgba(80,110,150,0.40);
+    --card-shadow:   rgba(50,80,120,0.15);
+    --card-desc:     rgba(40,60,90,0.55);
+    --section-lbl:   rgba(60,90,130,0.50);
+    --subtitle-c:    rgba(40,65,100,0.65);
+    --welcome-bg:    linear-gradient(135deg,#dce6f0,#c8d8e8);
+    --welcome-border:rgba(100,140,180,0.22);
+    --welcome-text:  rgba(30,55,85,0.70);
+    --header-name:   #2c5282;
+    --badge-bg:      rgba(100,140,200,0.12);
+    --badge-border:  rgba(80,120,180,0.25);
+    --badge-color:   #2c5282;
+    --top-badge-bg:  #4A90D9;
+    --top-badge-c:   #fff;
+    --h1-grad:       linear-gradient(135deg,#1a365d 0%,#2b6cb0 50%,#4299e1 100%);
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(100,140,200,0.15) 100%);
+    --footer-border: rgba(80,120,180,0.18);
+    --footer-name:   rgba(30,60,100,0.50);
+    --footer-tag:    rgba(30,60,100,0.55);
+    --footer-copy:   rgba(30,60,100,0.30);
+    --back-top-bg:   #4A90D9;
+    --back-top-c:    #fff;
+    --back-color:    rgba(60,90,130,0.55);
+    --back-hover:    #2c5282;
+    --radial1:       rgba(150,190,240,0.30);
+    --radial2:       rgba(100,140,200,0.20);
+    --star-show:     0;
+    --tab-border:    rgba(80,120,180,0.28);
+    --tab-color:     rgba(60,90,130,0.60);
+    --tab-hover-b:   rgba(80,110,150,0.50);
+    --tab-hover-c:   #2c5282;
+    --tab-active-bg: #4A90D9;
+    --tab-active-c:  #fff;
+    --tab-shadow:    rgba(74,144,217,0.30);
+    --cycle-bg:      rgba(100,140,200,0.12);
+    --cycle-border:  rgba(80,120,180,0.28);
+    --cycle-color:   #2c5282;
+    --mol-color:     rgba(80,120,180,0.20);
+    --graded-bg:     rgba(100,70,0,0.08);
+    --graded-border: rgba(120,80,0,0.25);
+    --graded-color:  #7a5000;
+    --grad-bar:      linear-gradient(90deg,#4A90D9,#4299e1,#0d9488,#7c3aed);
+  }
+
+  body.theme-nature {
+    --bg:            #f0f7ee;
+    --body-color:    #1a2e10;
+    --card-bg:       rgba(255,255,255,0.72);
+    --card-border:   rgba(60,120,40,0.18);
+    --card-border-h: rgba(40,100,20,0.40);
+    --card-shadow:   rgba(20,80,10,0.15);
+    --card-desc:     rgba(30,70,15,0.55);
+    --section-lbl:   rgba(40,90,20,0.50);
+    --subtitle-c:    rgba(30,75,15,0.65);
+    --welcome-bg:    linear-gradient(135deg,#d8f0ce,#c4e8b8);
+    --welcome-border:rgba(60,140,30,0.22);
+    --welcome-text:  rgba(20,65,10,0.70);
+    --header-name:   #276221;
+    --badge-bg:      rgba(60,140,30,0.12);
+    --badge-border:  rgba(50,120,20,0.28);
+    --badge-color:   #276221;
+    --top-badge-bg:  #4CAF50;
+    --top-badge-c:   #fff;
+    --h1-grad:       linear-gradient(135deg,#1b4d0f 0%,#2e7d1a 50%,#66bb44 100%);
+    --footer-bg:     linear-gradient(180deg,transparent 0%,rgba(60,140,30,0.12) 100%);
+    --footer-border: rgba(50,120,20,0.18);
+    --footer-name:   rgba(20,70,10,0.50);
+    --footer-tag:    rgba(20,70,10,0.55);
+    --footer-copy:   rgba(20,70,10,0.30);
+    --back-top-bg:   #4CAF50;
+    --back-top-c:    #fff;
+    --back-color:    rgba(40,90,20,0.55);
+    --back-hover:    #276221;
+    --radial1:       rgba(100,200,60,0.22);
+    --radial2:       rgba(60,160,30,0.16);
+    --star-show:     0;
+    --tab-border:    rgba(50,120,20,0.28);
+    --tab-color:     rgba(40,90,20,0.60);
+    --tab-hover-b:   rgba(40,100,20,0.50);
+    --tab-hover-c:   #276221;
+    --tab-active-bg: #4CAF50;
+    --tab-active-c:  #fff;
+    --tab-shadow:    rgba(76,175,80,0.30);
+    --cycle-bg:      rgba(60,140,30,0.12);
+    --cycle-border:  rgba(50,120,20,0.28);
+    --cycle-color:   #276221;
+    --mol-color:     rgba(50,120,20,0.18);
+    --graded-bg:     rgba(80,50,0,0.08);
+    --graded-border: rgba(100,60,0,0.22);
+    --graded-color:  #6b3f00;
+    --grad-bar:      linear-gradient(90deg,#4CAF50,#66bb44,#1565c0,#4a148c);
+  }
+
+
+  /* ═══════════════════════════════════════════
+     BASE
+  ═══════════════════════════════════════════ */
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--body-color);
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.5s ease, color 0.5s ease;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, var(--radial1) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, var(--radial2) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+    transition: background 0.5s ease;
+  }
+
+  .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; opacity: var(--star-show,1); transition: opacity 0.5s ease; }
+  .star  { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--d,3s) ease-in-out infinite var(--delay,0s); opacity: 0; }
+  @keyframes twinkle {
+    0%,100% { opacity:0; transform:scale(1); }
+    50%      { opacity:var(--op,0.5); transform:scale(1.3); }
+  }
+
+  
+  .wrapper { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 0 max(1rem, 4vw) 2rem; flex: 1; overflow-x: hidden; width: 100%; }
+
+  /* Theme bar */
+  .theme-bar {
+    position: relative; z-index: 10;
+    display: flex; justify-content: center; gap: 0.5rem;
+    padding: 0.55rem max(1rem, 4vw);
+    background: rgba(0,0,0,0.22);
+    border-bottom: 1px solid rgba(0,0,0,0.12);
+    flex-wrap: wrap;
+  }
+  body.theme-sunny  .theme-bar,
+  body.theme-cloudy .theme-bar,
+  body.theme-nature .theme-bar { background: rgba(0,0,0,0.05); }
+  .theme-btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.85rem; padding: 5px 18px; border-radius: 999px;
+    min-height: 44px; min-width: 44px;
+    border: 2px solid transparent;
+    background: rgba(128,128,128,0.12);
+    color: var(--body-color); cursor: pointer; opacity: 0.6;
+    transition: all 0.22s ease;
+  }
+  .theme-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .theme-btn.active { opacity:1; background:var(--top-badge-bg); color:var(--top-badge-c); box-shadow:0 3px 12px rgba(0,0,0,.20); }
+
+  /* Site header */
+  .site-header { display:flex; align-items:center; justify-content:space-between; padding:1.2rem 0 0; gap:.75rem; flex-wrap:wrap; animation:fadeDown 0.6s ease both; }
+  .site-header-logo { display:flex; align-items:center; gap:.75rem; text-decoration:none; min-width:0; }
+  .site-header-logo img { height:48px; width:auto; border-radius:10px; box-shadow:0 4px 14px rgba(0,0,0,.25); }
+  .site-header-logo span { font-family:'Fredoka One',cursive; font-size:1.15rem; color:var(--header-name); letter-spacing:.02em; transition:color .4s; }
+  .header-badge { display:inline-block; background:var(--badge-bg); border:1px solid var(--badge-border); color:var(--badge-color); font-size:.72rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:5px 14px; border-radius:999px; transition:all .4s; }
+
+  .back-link { display:inline-flex; align-items:center; gap:6px; margin-top:1.4rem; min-height:44px; font-size:.8rem; font-weight:700; color:var(--back-color); text-decoration:none; transition:color .2s; letter-spacing:.04em; }
+  .back-link:hover { color:var(--back-hover); }
+
+  /* Header */
+  header { text-align:center; padding:2rem 0 1.5rem; animation:fadeDown .7s ease both; }
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-24px)} to{opacity:1;transform:translateY(0)} }
+  .badge { display:inline-block; background:var(--top-badge-bg); color:var(--top-badge-c); font-size:.75rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:4px 14px; border-radius:999px; margin-bottom:1rem; animation:pop .5s cubic-bezier(.36,1.5,.6,1) .3s both; }
+  @keyframes pop { from{opacity:0;transform:scale(.7)} to{opacity:1;transform:scale(1)} }
+  h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.8rem,8vw,3.8rem); line-height:1.1; margin-bottom:.5rem; background:var(--h1-grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .title-ico { display:block; width:104px; height:104px; margin:0 auto .3rem; }
+  .subtitle { font-size:1.05rem; font-weight:600; color:var(--subtitle-c); transition:color .4s; }
+
+  /* Welcome */
+  .welcome { background:var(--welcome-bg); border:1.5px solid var(--welcome-border); border-radius:18px; padding:1.25rem 1.5rem; display:flex; align-items:center; gap:1rem; margin-bottom:.5rem; animation:fadeDown .7s ease .2s both; transition:background .4s,border-color .4s; }
+  .welcome-icon { font-size:2rem; flex-shrink:0; }
+  .welcome-text { font-size:.9rem; color:var(--welcome-text); line-height:1.6; transition:color .4s; min-width:0; word-break:break-word; }
+  .welcome-text strong { color:var(--body-color); }
+
+  @keyframes riseUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+  /* Cycle divider */
+  .cycle-divider { display:flex; align-items:center; gap:.75rem; margin:2.2rem 0 1rem; animation:riseUp .4s ease both; }
+  .cycle-divider-label { font-family:'Fredoka One',cursive; font-size:.78rem; letter-spacing:.07em; text-transform:uppercase; background:var(--cycle-bg); border:1px solid var(--cycle-border); color:var(--cycle-color); padding:5px 14px; border-radius:999px; white-space:normal; text-align:center; flex-shrink:0; transition:all .4s; }
+  .cycle-divider-line  { flex:1; height:1px; background:var(--cycle-border); transition:background .4s; }
+
+  /* Note strip */
+  .note-strip { display:flex; align-items:flex-start; gap:.85rem; background:var(--cycle-bg); border:1.5px solid var(--cycle-border); border-radius:16px; padding:1rem 1.15rem; margin:1.5rem 0 .5rem; transition:all .4s; }
+  .note-icon { font-size:1.5rem; flex-shrink:0; line-height:1; }
+  .note-text { font-size:.82rem; color:var(--card-desc); line-height:1.55; min-width:0; word-break:break-word; }
+  .note-text strong { color:var(--body-color); }
+
+  /* Cards — the card accent is the theme's readable accent (dark on light themes) */
+  .grid { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; }
+  .grid .card { flex:0 1 260px; }
+  .card, .lab-card { --accent: var(--cycle-color); }
+
+  .card {
+    position:relative; display:flex; flex-direction:column; align-items:flex-start;
+    padding:1.4rem 1.3rem 1.2rem; border-radius:18px;
+    background:var(--card-bg); border:1.5px solid var(--card-border);
+    text-decoration:none; color:var(--body-color); overflow:hidden;
+    transition:transform .22s cubic-bezier(.22,.68,0,1.2),border-color .2s,box-shadow .2s,background .4s;
+    animation:riseUp .5s ease both; cursor:pointer;
+  }
+  .card:hover { transform:translateY(-6px) scale(1.02); border-color:var(--card-border-h); box-shadow:0 12px 40px var(--card-shadow); }
+  .card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; border-radius:18px 18px 0 0; background:var(--accent); }
+  .card-num   { font-size:.68rem; font-weight:800; letter-spacing:.08em; color:var(--section-lbl); margin-bottom:.35rem; text-transform:uppercase; }
+  .card-icon  { font-size:2.2rem; margin-bottom:.7rem; line-height:1; }
+  .card-title { font-family:'Fredoka One',cursive; font-size:1.15rem; margin-bottom:.25rem; color:var(--accent); line-height:1.2; }
+  .card-desc  { font-size:.78rem; color:var(--card-desc); font-weight:600; line-height:1.4; transition:color .4s; }
+  .card-tags  { display:flex; gap:5px; flex-wrap:wrap; margin-top:.55rem; }
+  .tag { font-size:.6rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:999px; background:var(--cycle-bg); color:var(--section-lbl); border:1px solid var(--card-border); }
+  .graded-badge { font-size:.6rem; font-weight:800; letter-spacing:.07em; text-transform:uppercase; padding:2px 9px; border-radius:999px; background:var(--graded-bg); color:var(--graded-color); border:1px solid var(--graded-border); transition:all .4s; }
+
+  .card-arrow { position:absolute; bottom:1rem; right:1.1rem; font-size:1rem; opacity:0; transform:translateX(-6px); transition:opacity .2s,transform .2s; color:var(--accent); }
+  .card:hover .card-arrow { opacity:1; transform:translateX(0); }
+
+  /* Coming-soon (light up a card by deleting the word  soon  from its class) */
+  .card.soon, .lab-card.soon { opacity:.46; pointer-events:none; cursor:default; padding-top:2.1rem; }
+  .card.soon::after, .lab-card.soon::after {
+    content:'Coming Soon'; position:absolute; top:.65rem; right:.8rem;
+    font-size:.58rem; font-weight:800; letter-spacing:.07em; text-transform:uppercase;
+    background:var(--badge-bg); border:1px solid var(--badge-border); border-radius:999px;
+    padding:2px 8px; color:var(--badge-color);
+  }
+
+  .card:nth-child(1){animation-delay:.05s}.card:nth-child(2){animation-delay:.10s}.card:nth-child(3){animation-delay:.15s}
+  .card:nth-child(4){animation-delay:.20s}.card:nth-child(5){animation-delay:.25s}.card:nth-child(6){animation-delay:.30s}
+  .card:nth-child(n+7){animation-delay:.35s}
+
+  /* Lab / link cards */
+  .lab-card {
+    flex:0 1 420px;
+    position:relative; display:flex; align-items:flex-start; gap:1.1rem;
+    padding:1.3rem 1.4rem 1.2rem; border-radius:18px;
+    background:var(--card-bg); border:1.5px solid var(--card-border);
+    text-decoration:none; color:var(--body-color); overflow:hidden;
+    transition:transform .22s cubic-bezier(.22,.68,0,1.2),border-color .2s,box-shadow .2s,background .4s;
+    animation:riseUp .5s ease both; cursor:pointer;
+  }
+  .lab-card:hover { transform:translateY(-5px) scale(1.015); border-color:var(--card-border-h); box-shadow:0 10px 32px var(--card-shadow); }
+  .lab-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; border-radius:18px 18px 0 0; background:var(--accent); }
+  .lab-icon  { font-size:2.4rem; flex-shrink:0; line-height:1; margin-top:2px; }
+  .lab-body  { flex:1; min-width:0; }
+  .lab-title { font-family:'Fredoka One',cursive; font-size:1.15rem; color:var(--accent); line-height:1.2; margin-bottom:4px; }
+  .lab-desc  { font-size:.78rem; color:var(--card-desc); font-weight:600; line-height:1.45; word-break:break-word; }
+  .lab-meta  { display:flex; gap:6px; flex-wrap:wrap; margin-top:.55rem; }
+  .lab-tag   { font-size:.6rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:2px 9px; border-radius:999px; background:var(--badge-bg); color:var(--badge-color); border:1px solid var(--badge-border); }
+
+  /* Footer */
+  .site-footer { position:relative; z-index:1; background:var(--footer-bg); border-top:1px solid var(--footer-border); padding:2rem max(1rem, 4vw); margin-top:3rem; display:flex; flex-direction:column; align-items:center; gap:.5rem; transition:background .4s,border-color .4s; }
+  .site-footer::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--grad-bar); }
+  .footer-logo { display:flex; align-items:center; gap:.6rem; margin-bottom:.4rem; }
+  .footer-logo img { height:36px; width:auto; border-radius:8px; opacity:.75; }
+  .footer-logo span { font-family:'Fredoka One',cursive; font-size:1rem; color:var(--footer-name); transition:color .4s; }
+  .footer-tagline { font-size:.82rem; font-weight:700; color:var(--footer-tag); letter-spacing:.03em; font-style:italic; text-align:center; transition:color .4s; }
+  .footer-copy    { font-size:.72rem; color:var(--footer-copy); font-weight:600; letter-spacing:.04em; margin-top:.2rem; text-align:center; transition:color .4s; }
+
+  #back-to-top { display:none; position:fixed; bottom:1.5rem; right:1.5rem; z-index:99; background:var(--back-top-bg); color:var(--back-top-c); border:none; border-radius:12px; width:44px; height:44px; font-size:1.2rem; font-weight:900; cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,.25); transition:background .2s,transform .2s,color .4s; align-items:center; justify-content:center; }
+  #back-to-top:hover { transform:translateY(-3px); filter:brightness(1.1); }
+
+  /* Zoom control */
+  #zoom-btn { position:fixed; bottom:1.5rem; left:1.5rem; z-index:99; background:var(--back-top-bg); color:var(--back-top-c); border:none; border-radius:12px; min-width:44px; height:44px; padding:0 12px; font-family:'Fredoka One',cursive; font-size:.95rem; cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,.25); display:flex; align-items:center; gap:7px; transition:background .2s,transform .2s,color .4s; }
+  #zoom-btn:hover { transform:translateY(-3px); filter:brightness(1.1); }
+  .zoom-dots { display:flex; gap:3px; }
+  .zoom-dot { width:5px; height:5px; border-radius:50%; background:currentColor; opacity:.32; }
+  .zoom-dot.on { opacity:1; }
+  html.zoom-1 { font-size:115%; }
+  html.zoom-2 { font-size:130%; }
+  html.zoom-3 { font-size:150%; }
+
+  @media (max-width:700px) {
+    .grid .card, .lab-card { flex:0 1 100%; }
+  }
+  @media (max-width:640px) {
+    .cycle-divider { flex-wrap:wrap; justify-content:center; }
+    .cycle-divider-label { width:100%; text-align:center; }
+    .cycle-divider-line { display:none; }
+    .site-header { flex-direction:column; align-items:flex-start; gap:.5rem; }
+    .welcome { flex-direction:column; align-items:flex-start; }
+    #zoom-btn, #back-to-top { bottom:1rem; }
+    #zoom-btn { left:1rem; }
+    #back-to-top { right:1rem; }
+  }
+
+
+  /* ═══════════════════════════════════════════
+     COMPUTER CLUB additions (Nov 6, 2026)
+  ═══════════════════════════════════════════ */
+  body.theme-night { --good:#69DB7C; --bad:#FF6B6B; --input-bg:rgba(255,255,255,0.08); --input-c:#fff; }
+  body.theme-sunny, body.theme-cloudy, body.theme-nature { --good:#2e7d1a; --bad:#c62828; --input-bg:#ffffff; --input-c:#1c2533; }
+  :root { --bronze:#a8662f; --silver:#5f6b78; --gold:#c9970c; --skills:#1f8a5e; --create:#8340a8; --games:#c0601a; }
+
+  .status-bar { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:.6rem; margin:.4rem 0 1rem; min-height:44px; }
+  .panel { background:var(--card-bg); border:1.5px solid var(--card-border); border-radius:18px; padding:1.3rem 1.4rem; transition:background .4s; }
+  .panel p { color:var(--card-desc); font-weight:600; line-height:1.55; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:.4rem; min-height:44px; padding:.6rem 1.2rem; border-radius:12px; border:0; cursor:pointer; font:800 1rem 'Nunito',sans-serif; background:var(--top-badge-bg); color:var(--top-badge-c); text-decoration:none; transition:transform .15s, filter .15s; }
+  .btn:hover { transform:translateY(-2px); filter:brightness(1.08); }
+  .btn.ghost { background:transparent; color:var(--body-color); border:2px solid var(--top-badge-bg); }
+  .btn:disabled { opacity:.5; cursor:default; transform:none; }
+  .row-btns { display:flex; flex-wrap:wrap; justify-content:center; gap:.7rem; margin-top:1rem; }
+  .hidden { display:none !important; }
+  .good { color:var(--good); } .bad { color:var(--bad); }
+
+  .levels { display:flex; flex-wrap:wrap; justify-content:center; gap:.8rem; }
+  .lvl-btn { flex:0 1 220px; min-height:44px; border:0; border-radius:14px; cursor:pointer; padding:.9rem 1rem; color:#fff; font:800 1.05rem 'Nunito',sans-serif; box-shadow:inset 0 -4px 0 rgba(0,0,0,.2); transition:transform .12s; }
+  .lvl-btn small { display:block; font-weight:700; font-size:.85rem; margin-top:.2rem; opacity:.95; }
+  .lvl-btn:hover, .lvl-btn:focus-visible { transform:translateY(-2px); }
+  .lvl-btn.bronze { background:var(--bronze); } .lvl-btn.silver { background:var(--silver); } .lvl-btn.gold { background:var(--gold); color:#1a1300; }
+
+  kbd { font-family:'Nunito',sans-serif; font-weight:800; font-size:1rem; background:#fff; color:#1e2a3a; border:2px solid #c5cfdb; border-bottom-width:4px; border-radius:8px; padding:.15rem .55rem; min-width:2.1rem; text-align:center; display:inline-block; }
+
+  .strand { display:inline-block; font-size:.62rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:2px 9px; border-radius:999px; color:#fff; }
+  .strand.skills { background:var(--skills); } .strand.create { background:var(--create); } .strand.games { background:var(--games); }
+
+  .field { width:100%; min-height:48px; padding:.6rem .9rem; border-radius:12px; border:2px solid var(--card-border-h); background:var(--input-bg); color:var(--input-c); font:700 1.1rem 'Nunito',sans-serif; }
+  .field:focus { outline:3px solid var(--top-badge-bg); outline-offset:1px; }
+  .msg { min-height:1.6rem; font-weight:800; margin-top:.7rem; text-align:center; }
+
+  .goal { margin:1rem 0 .5rem; }
+  .step-label { display:inline-block; background:var(--top-badge-bg); color:var(--top-badge-c); border-radius:999px; padding:.1rem .7rem; font-size:.75rem; margin-right:.4rem; }
+  .lead { color:var(--card-desc); font-weight:600; margin:.2rem 0 1rem; line-height:1.6; }
+  .keys { display:flex; align-items:center; gap:.35rem; margin:.5rem 0 .4rem; flex-wrap:wrap; }
+  .lvl-tag { display:inline-block; font-size:.62rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:2px 9px; border-radius:999px; color:#fff; margin-top:.55rem; }
+  .lvl-tag.bronze { background:var(--bronze); } .lvl-tag.silver { background:var(--silver); }
+  .card.static { cursor:default; }
+
+  .game { max-width:860px; margin:0 auto; text-align:center; outline:none; }
+  .hud { display:flex; justify-content:space-between; flex-wrap:wrap; gap:.5rem; font-weight:800; color:var(--section-lbl); }
+  .bar { height:14px; background:var(--card-border); border-radius:999px; overflow:hidden; margin:.7rem 0 1.2rem; }
+  .bar > div { height:100%; width:0; background:var(--top-badge-bg); transition:width .25s ease; }
+  .ask { color:var(--card-desc); font-weight:700; font-size:1.05rem; }
+  .action { font-family:'Fredoka One',cursive; font-size:clamp(2rem,7vw,3.4rem); margin:.2rem 0 .6rem; color:var(--body-color); }
+  .hint { min-height:2.6rem; display:flex; justify-content:center; align-items:center; gap:.35rem; flex-wrap:wrap; }
+  .feedback { min-height:1.8rem; font-weight:800; font-size:1.1rem; margin:.6rem 0; }
+  .pop { animation:popA .3s ease; } .shake { animation:shakeA .35s ease; }
+  @keyframes popA { 50% { transform:scale(1.12); } }
+  @keyframes shakeA { 20%,60% { transform:translateX(-8px); } 40%,80% { transform:translateX(8px); } }
+  .stars-row { font-size:2.6rem; letter-spacing:.3rem; color:var(--gold); }
+  .rank { font-family:'Fredoka One',cursive; font-size:2rem; margin:.3rem 0; }
+  .save-line { font-weight:800; margin-top:.6rem; }
+
+  .pad-wrap { display:flex; flex-wrap:wrap; gap:1.2rem; justify-content:center; }
+  .pad-wrap textarea { flex:1 1 340px; min-height:200px; resize:vertical; font-size:1.1rem; }
+  .tasks { flex:0 1 340px; list-style:none; }
+  .tasks li { background:var(--card-bg); border:2px solid var(--card-border); border-radius:12px; padding:.6rem .9rem; margin-bottom:.5rem; display:flex; gap:.6rem; align-items:center; font-weight:700; }
+  .tasks li .box { flex:0 0 26px; height:26px; border-radius:7px; border:2px solid var(--card-border-h); display:grid; place-items:center; font-weight:800; color:transparent; }
+  .tasks li.done { border-color:var(--good); }
+  .tasks li.done .box { background:var(--good); border-color:var(--good); color:#fff; }
+
+  .share-list li { margin:.4rem 0 .4rem 1.2rem; color:var(--card-desc); font-weight:600; }
+  .share-list strong { color:var(--body-color); }
+  details.teacher { margin-top:2rem; }
+  details.teacher summary { cursor:pointer; font-weight:800; min-height:44px; display:flex; align-items:center; }
+  details.teacher li { margin:.35rem 0 .35rem 1.2rem; color:var(--card-desc); font-weight:600; font-size:.9rem; }
+
+  /* ── Week 2 · Know Your Computer (Nov 9, 2026) ── */
+  /* Part pictures are realistic black/grey objects: they sit on a light "photo tile" in every theme. */
+  .ph { background:#f3f5f8; border-radius:14px; display:grid; place-items:center; }
+  .ph img { display:block; width:100%; height:auto; max-width:110px; }
+  .group-h { font-family:'Fredoka One',cursive; font-weight:400; font-size:1.25rem; margin:1.2rem 0 .6rem; color:var(--body-color); }
+  .muted-note { font-family:'Nunito',sans-serif; font-size:.85rem; font-weight:700; color:var(--card-desc); }
+  .part-card .ph { padding:.5rem; margin-bottom:.6rem; }
+  .clue { font-family:'Fredoka One',cursive; font-size:clamp(1.3rem,4.2vw,2rem); margin:.2rem auto .4rem; max-width:680px; color:var(--body-color); line-height:1.3; }
+  .answers { display:grid; grid-template-columns:repeat(auto-fill,minmax(128px,1fr)); gap:.6rem; margin-top:.6rem; }
+  .ans { min-height:44px; border:2px solid var(--card-border); border-radius:14px; background:var(--card-bg); color:var(--body-color); cursor:pointer; padding:.45rem; font:800 .9rem 'Nunito',sans-serif; display:flex; flex-direction:column; align-items:center; gap:.35rem; transition:transform .12s, border-color .2s; }
+  .ans .ph { width:100%; padding:.3rem; }
+  .ans .ph img { max-width:76px; }
+  .ans:hover, .ans:focus-visible { transform:translateY(-2px); border-color:var(--top-badge-bg); }
+  .ans.glow { border-color:var(--gold); box-shadow:0 0 0 4px rgba(201,151,12,.45); }
+  .ans.wrong { border-color:var(--bad); }
+  .hunt { list-style:none; display:flex; flex-wrap:wrap; gap:.7rem; justify-content:center; }
+  .hunt li { flex:0 1 260px; background:var(--card-bg); border:2px solid var(--card-border); border-radius:14px; padding:.6rem; display:flex; gap:.7rem; align-items:center; }
+  .hunt li .ph { flex:0 0 72px; padding:.25rem; }
+  .hunt li .hn { flex:1; font-weight:800; }
+  .hunt li .hb { display:flex; flex-direction:column; gap:.35rem; margin-top:.4rem; }
+  .hunt li .hb button { min-height:44px; border-radius:10px; border:2px solid var(--card-border-h); background:transparent; color:var(--body-color); font:800 .85rem 'Nunito',sans-serif; cursor:pointer; }
+  .hunt li.found { border-color:var(--good); }
+  .hunt li.found .found-btn { background:var(--good); border-color:var(--good); color:#fff; }
+  .hunt li.none { opacity:.6; }
+  .hunt li.none .none-btn { background:var(--card-border); }
+</style>
+</head>
+<body class="theme-night">
+<div class="stars" id="stars"></div>
+
+<div class="theme-bar">
+  <button class="theme-btn active" onclick="setTheme('night',this)">🌙 Night</button>
+  <button class="theme-btn" onclick="setTheme('sunny',this)">☀️ Sunny</button>
+  <button class="theme-btn" onclick="setTheme('cloudy',this)">☁️ Cloudy</button>
+  <button class="theme-btn" onclick="setTheme('nature',this)">🌿 Nature</button>
+</div>
+
+<div class="wrapper">
+
+  <div class="site-header">
+    <a class="site-header-logo" href="/">
+      <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+      <span>Mr. EdLo's Virtual Classroom</span>
+    </a>
+    <span class="header-badge">Computer Club &nbsp;·&nbsp; Standards 4–6</span>
+  </div>
+
+  <a class="back-link" href="/computer-club/">← Back to Computer Club</a>
+
+
+  <header>
+    <div class="badge">Week 2 &nbsp;·&nbsp; Computer skills</div>
+    <img class="title-ico" src="/computer-club/assets/m02-know-your-computer.webp" width="104" height="104" alt="">
+    <h1>Know Your Computer</h1>
+    <p class="subtitle">Every expert knows the tools. Meet the parts of the computer in front of you!</p>
+  </header>
+
+  <div class="status-bar" id="status"></div>
+
+  <section class="panel hidden" id="missionLocked" style="text-align:center;margin:1.5rem auto;max-width:720px">
+    <div style="font-size:3rem">🔒</div>
+    <h3 style="font-family:'Fredoka One',cursive;font-weight:400;font-size:1.6rem;margin:.4rem 0;color:var(--cycle-color)" id="lockTitle">This mission is locked</h3>
+    <p id="lockText">Missions open during Computer Club, when Mr. EdLo switches them on.</p>
+    <div class="row-btns"><a class="btn" href="/computer-club/">← Back to Computer Club</a></div>
+  </section>
+
+  <div id="missionBody">
+  <div class="welcome goal">
+    <div class="welcome-icon">🎯</div>
+    <div class="welcome-text"><strong>Today's goal:</strong> Identify the 12 main parts of a computer from what each part does.</div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="cycle-divider">
+    <span class="cycle-divider-label"><span class="step-label">Step 1</span>Learn the parts</span>
+    <div class="cycle-divider-line"></div>
+  </div>
+  <p class="lead">All of these parts are <strong>hardware</strong>: parts of the computer you can touch. The programs you use, like a web browser or a game, are <strong>software</strong>.
+    Bronze members learn the first 6. Silver and Gold members learn all 12.</p>
+  <h3 class="group-h">On your desk</h3>
+  <div class="grid" id="cardsDesk"></div>
+  <h3 class="group-h">Look closer</h3>
+  <div class="grid" id="cardsCloser"></div>
+  <h3 class="group-h">Inside the mini PC <span class="muted-note">(never open it: you can't see these, but they are working right now!)</span></h3>
+  <div class="grid" id="cardsInside"></div>
+
+  <!-- STEP 2 -->
+  <div class="cycle-divider">
+    <span class="cycle-divider-label"><span class="step-label">Step 2</span>Play: Part Detective</span>
+    <div class="cycle-divider-line"></div>
+  </div>
+  <section class="panel game" id="game" tabindex="-1" aria-live="polite">
+
+    <div id="screenStart">
+      <p class="lead" style="text-align:center">Read the clue, then click the part it describes.</p>
+      <div class="levels">
+        <button class="lvl-btn bronze" data-level="bronze" type="button">Bronze<small>6 parts · hint after 1 miss</small></button>
+        <button class="lvl-btn silver" data-level="silver" type="button">Silver<small>12 parts · hint after 2 misses</small></button>
+        <button class="lvl-btn gold" data-level="gold" type="button">Gold<small>60-second speed round · no hints</small></button>
+      </div>
+      <p class="msg" id="bestNote"></p>
+      <div class="row-btns" style="margin-top:.3rem"><button class="btn ghost" id="soundBtn"></button></div>
+    </div>
+
+    <div id="screenPlay" class="hidden">
+      <div class="hud"><span id="hudLeft">Clue 1 of 6</span><span id="hudRight">Streak: 0</span></div>
+      <div class="bar"><div id="barFill"></div></div>
+      <p class="ask">🔎 Which part am I?</p>
+      <div class="clue" id="clue"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="answers" id="answers"></div>
+      <button class="btn ghost" id="quitBtn" type="button" style="margin-top:1rem">Stop and choose another level</button>
+    </div>
+
+    <div id="screenResult" class="hidden">
+      <div class="stars-row" id="resultStars"></div>
+      <div class="rank" id="rank"></div>
+      <p class="lead" id="resultText" style="text-align:center"></p>
+      <div class="save-line" id="saveLine"></div>
+      <div class="row-btns">
+        <button class="btn" id="againBtn" type="button">Play again</button>
+        <button class="btn ghost" id="menuBtn" type="button">Choose another level</button>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- STEP 3 -->
+  <div class="cycle-divider">
+    <span class="cycle-divider-label"><span class="step-label">Step 3</span>Use it for real: Desk Hunt</span>
+    <div class="cycle-divider-line"></div>
+  </div>
+  <p class="lead">Find each part at <strong>your own computer</strong>. Point to it, then click <strong>Found it</strong>. If your desk does not have that part, click <strong>Not at my desk</strong>.</p>
+  <ul class="hunt" id="hunt"></ul>
+  <div class="msg good" id="huntMsg"></div>
+
+  <!-- STEP 4 -->
+  <div class="cycle-divider">
+    <span class="cycle-divider-label"><span class="step-label">Step 4</span>Show &amp; Share</span>
+    <div class="cycle-divider-line"></div>
+  </div>
+  <div class="panel">
+    <ul class="share-list">
+      <li><strong>Bronze:</strong> Show your stars. Point to one part on your desk and tell a friend its job.</li>
+      <li><strong>Silver:</strong> Name the three parts inside the mini PC. Which one forgets everything when the power goes off?</li>
+      <li><strong>Gold:</strong> Tell the club your best speed score. Can anyone beat it next week?</li>
+    </ul>
+  </div>
+
+  <details class="panel teacher">
+    <summary>🧑‍🏫 Teacher notes</summary>
+    <ul>
+      <li><strong>Timing (25 min mission):</strong> Step 1 · 5 min together on the projector · Step 2 · 12 min · Step 3 · 8 min · Step 4 in the 5-minute Show &amp; Share.</li>
+      <li><strong>Levels:</strong> Bronze = the 6 parts on the desk; Silver and Gold = all 12. Move up after 3 stars.</li>
+      <li><strong>Badge (automatic):</strong> Bronze or Silver with 4 or fewer misses (2+ stars), or Gold with 10+ correct → Hardware Hero. Every finished game is one row in Mission Results.</li>
+      <li><strong>Common mix-up 1:</strong> many people call the whole box "the CPU". Here the box is the <em>system unit (mini PC)</em>; the CPU is the processor chip inside it.</li>
+      <li><strong>Common mix-up 2:</strong> memory (RAM) and storage. Memory holds what is open now and forgets at power-off; storage keeps saved files.</li>
+      <li><strong>Safety:</strong> students never open the mini PC. The inside parts are only shown in pictures. The Desk Hunt is not recorded.</li>
+    </ul>
+  </details>
+  </div><!-- /missionBody -->
+
+</div><!-- /wrapper -->
+
+<footer class="site-footer">
+  <div class="footer-logo">
+    <img src="https://i.postimg.cc/bwyD9j9w/Teacher-ed-Logo.png" alt="Mr. EdLo Logo">
+    <span>Mr. EdLo's Virtual Classroom</span>
+  </div>
+  <p class="footer-tagline">Explore, discover, and learn something new every day!</p>
+  <p class="footer-copy">© 2026 Mr. EdLo's Virtual Classroom — Computer Club · Belize · All rights reserved.</p>
+</footer>
+
+<button id="zoom-btn" title="Change text size" aria-label="Change text size">
+  <span id="zoom-label">A</span>
+  <span class="zoom-dots">
+    <span class="zoom-dot on"></span><span class="zoom-dot"></span><span class="zoom-dot"></span><span class="zoom-dot"></span>
+  </span>
+</button>
+
+<button id="back-to-top" title="Back to top" aria-label="Back to top">↑</button>
+
+
+<script>
+
+/* Stars */
+const sc = document.getElementById('stars');
+for (let i = 0; i < 80; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const sz = Math.random()*2.5+1;
+  s.style.cssText = 'width:'+sz+'px;height:'+sz+'px;top:'+(Math.random()*100)+'%;left:'+(Math.random()*100)+'%;--d:'+(Math.random()*4+2).toFixed(1)+'s;--delay:-'+(Math.random()*6).toFixed(1)+'s;--op:'+(Math.random()*0.4+0.15).toFixed(2)+';';
+  sc.appendChild(s);
+}
+
+/* Theme */
+const THEMES = ['night','sunny','cloudy','nature'];
+function setTheme(theme, btn) {
+  THEMES.forEach(t => document.body.classList.remove('theme-'+t));
+  document.body.classList.add('theme-'+theme);
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  try { localStorage.setItem('vc-theme', theme); } catch(e) {}
+}
+(function(){
+  let saved = null;
+  try { saved = localStorage.getItem('vc-theme'); } catch(e) {}
+  if (saved && THEMES.includes(saved)) {
+    THEMES.forEach(t => document.body.classList.remove('theme-'+t));
+    document.body.classList.add('theme-'+saved);
+    document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase().includes(saved)));
+  }
+})();
+
+/* Zoom */
+const ZOOM_LABELS = ['A','A+','A++','A+++'];
+let zoomLevel = 0;
+function applyZoom(level) {
+  zoomLevel = level;
+  document.documentElement.classList.remove('zoom-1','zoom-2','zoom-3');
+  if (level > 0) document.documentElement.classList.add('zoom-'+level);
+  document.getElementById('zoom-label').textContent = ZOOM_LABELS[level];
+  document.querySelectorAll('.zoom-dot').forEach((d,i) => d.classList.toggle('on', i <= level));
+  try { localStorage.setItem('vc-zoom', String(level)); } catch(e) {}
+}
+document.getElementById('zoom-btn').addEventListener('click', () => applyZoom((zoomLevel+1) % 4));
+(function(){
+  let z = 0;
+  try { z = parseInt(localStorage.getItem('vc-zoom') || '0', 10); } catch(e) {}
+  if (isNaN(z) || z < 0 || z > 3) z = 0;
+  applyZoom(z);
+})();
+
+/* Back to top */
+const topBtn = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => { topBtn.style.display = window.scrollY > 300 ? 'flex' : 'none'; });
+topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+</script>
+<script src="/computer-club/club.js"></script>
+<script>
+(function () {
+  var MISSION_ID = 'know-your-computer';
+  var PAGE = '/computer-club/missions/02-know-your-computer/';
+  // group: desk (Bronze) · closer (Silver) · inside (Silver, inside the mini PC). Two clues each: the clue never names the part.
+  var PARTS = [
+    { id: 'monitor', name: 'Monitor', group: 'desk',
+      job: 'Shows your work as words, pictures and videos.',
+      clues: ['I show words and pictures on my screen.', 'You look at me to see what the computer is doing.'] },
+    { id: 'keyboard', name: 'Keyboard', group: 'desk',
+      job: 'Has keys to type letters, numbers and commands.',
+      clues: ['You press my keys to type letters and numbers.', 'The space bar, Shift and Enter all live on me.'] },
+    { id: 'mouse', name: 'Mouse', group: 'desk',
+      job: 'Moves the arrow on the screen so you can point and click.',
+      clues: ['Slide me on the desk and the arrow on the screen moves too.', 'Click my buttons to choose things on the screen.'] },
+    { id: 'mini-pc', name: 'System unit (mini PC)', group: 'desk',
+      job: 'The box that holds the processor, memory and storage. The other parts plug into it.',
+      clues: ['I am the box that holds the processor, memory and storage.', 'The monitor, keyboard and mouse all plug into me.'] },
+    { id: 'speakers', name: 'Speakers', group: 'desk',
+      job: 'Play sounds, music and voices.',
+      clues: ['I let you hear music and sounds.', 'Turn me up to hear the voices in a video.'] },
+    { id: 'printer', name: 'Printer', group: 'desk',
+      job: 'Puts your work on paper.',
+      clues: ['I put your work on paper.', 'Click Print and a page comes out of me.'] },
+    { id: 'webcam', name: 'Webcam', group: 'closer',
+      job: 'A small camera, so people can see you in a video call.',
+      clues: ['I am a small camera for video calls.', 'My lens lets people see your face online.'] },
+    { id: 'usb-port', name: 'USB port', group: 'closer',
+      job: 'A slot where you plug in a flash drive or a cable.',
+      clues: ['Plug a flash drive into me.', 'I am the small slot where cables and flash drives go.'] },
+    { id: 'power-button', name: 'Power button', group: 'closer',
+      job: 'Turns the computer on. To turn it off, shut down from the Start menu.',
+      clues: ['Press me to turn the computer on.', 'I wear a circle with a short line at the top.'] },
+    { id: 'processor', name: 'Processor (CPU)', group: 'inside',
+      job: 'The brain of the computer: it follows instructions very fast.',
+      clues: ['I am the brain of the computer.', 'I follow millions of instructions every second.'] },
+    { id: 'memory', name: 'Memory (RAM)', group: 'inside',
+      job: 'Holds the work you have open right now. It forgets everything when the power goes off.',
+      clues: ['I hold the work you have open right now.', 'I forget everything when the power goes off.'] },
+    { id: 'storage', name: 'Storage (SSD)', group: 'inside',
+      job: 'Keeps your files and programs, even when the computer is off.',
+      clues: ['I keep your files safe, even when the computer is off.', 'Your saved pictures and documents live on me.'] }
+  ];
+  var BY_ID = {}; PARTS.forEach(function (p) { BY_ID[p.id] = p; });
+  var HUNT = ['monitor', 'keyboard', 'mouse', 'mini-pc', 'speakers', 'printer', 'webcam', 'usb-port', 'power-button'];
+  var GOLD_SECONDS = 60, GOLD_2STAR = 10, GOLD_3STAR = 16;
+  var LOCAL_BEST = 'cc-kyc-gold-best';
+  var $ = function (id) { return document.getElementById(id); };
+
+  CC.statusChip($('status'), PAGE);
+
+  // ── Open/Close (same rule as every mission page) ──
+  function applyLock(st) {
+    var locked = !CC.missionOpen(st, MISSION_ID);
+    $('missionLocked').classList.toggle('hidden', !locked);
+    $('missionBody').classList.toggle('hidden', locked);
+    if (locked) {
+      var clubOpen = !!(st && st.club_open);
+      $('lockTitle').textContent = clubOpen ? 'This mission is locked' : 'Computer Club is closed';
+      $('lockText').textContent = clubOpen
+        ? 'Mr. EdLo opens each mission during Computer Club. Check back in a moment!'
+        : 'Missions open during Computer Club, when Mr. EdLo switches them on. See you there!';
+    }
+  }
+  applyLock(CC.cachedStatus());
+  CC.clubStatus().then(applyLock);
+
+  function shuffle(a) {
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+  function photo(p, size) {
+    var t = el('div', 'ph');
+    var i = document.createElement('img');
+    i.src = '/computer-club/assets/c02-' + p.id + '.webp'; i.width = size; i.height = size; i.alt = p.name; i.decoding = 'async';
+    t.appendChild(i);
+    return t;
+  }
+  function readLocalBest() { try { return parseInt(localStorage.getItem(LOCAL_BEST), 10) || 0; } catch (e) { return 0; } }
+  function saveLocalBest(n) { try { localStorage.setItem(LOCAL_BEST, String(n)); } catch (e) {} }
+  function flash(e, cls) { e.classList.remove(cls); void e.offsetWidth; e.classList.add(cls); }
+
+  // ── Step 1 cards ──
+  var GROUP_BOX = { desk: 'cardsDesk', closer: 'cardsCloser', inside: 'cardsInside' };
+  PARTS.forEach(function (p) {
+    var c = el('div', 'card static part-card');
+    c.appendChild(photo(p, 110));
+    c.appendChild(el('div', 'card-title', p.name));
+    c.appendChild(el('div', 'card-desc', p.job));
+    var bronze = p.group === 'desk';
+    c.appendChild(el('span', 'lvl-tag ' + (bronze ? 'bronze' : 'silver'), bronze ? 'Bronze' : 'Silver'));
+    $(GROUP_BOX[p.group]).appendChild(c);
+  });
+
+  // ── Gold best: from the club record when signed in, else this computer ──
+  var goldBest = readLocalBest();
+  function updateBestNote() { $('bestNote').textContent = goldBest ? 'Your Gold best: ' + goldBest + ' correct' : ''; }
+  var sess = CC.session();
+  if (sess) {
+    goldBest = 0;
+    CC.call('/me', { token: sess.token }).then(function (me) {
+      if (me && me.ok) { goldBest = (me.gold_best && me.gold_best[MISSION_ID]) || 0; updateBestNote(); }
+    });
+  }
+  updateBestNote();
+
+  // ── Step 2 game: Part Detective ──
+  var state = null, timerId = null;
+  function showScreen(name) {
+    ['screenStart', 'screenPlay', 'screenResult'].forEach(function (s) { $(s).classList.toggle('hidden', s !== name); });
+  }
+  function pool(level) { return level === 'bronze' ? PARTS.filter(function (p) { return p.group === 'desk'; }) : PARTS; }
+  function pickClue(p, level) { return level === 'bronze' ? p.clues[0] : p.clues[Math.floor(Math.random() * 2)]; }
+  function nextGold(prevId) {
+    var pick;
+    do { pick = PARTS[Math.floor(Math.random() * PARTS.length)]; } while (pick.id === prevId);
+    return pick;
+  }
+  function start(level) {
+    var parts = pool(level);
+    state = { level: level, queue: level === 'gold' ? [] : shuffle(parts), index: 0, current: null, clue: '',
+              missesThis: 0, totalMisses: 0, missed: {}, correct: 0, streak: 0, bestStreak: 0, timeLeft: GOLD_SECONDS };
+    state.current = level === 'gold' ? nextGold(null) : state.queue[0];
+    state.clue = pickClue(state.current, level);
+    // answer cards: this level's parts, in a fresh order each round
+    var box = $('answers'); box.textContent = '';
+    shuffle(parts).forEach(function (p) {
+      var b = el('button', 'ans'); b.type = 'button'; b.dataset.part = p.id;
+      b.appendChild(photo(p, 76)); b.appendChild(el('span', '', p.name));
+      b.addEventListener('click', function () { answer(p.id, b); });
+      box.appendChild(b);
+    });
+    showScreen('screenPlay');
+    $('feedback').textContent = ''; $('feedback').className = 'feedback';
+    clearInterval(timerId);
+    if (level === 'gold') timerId = setInterval(tick, 1000);
+    render();
+    // scroll the game to the top, just below the sticky XP bar (taller on phones)
+    var bar = document.querySelector('.cc-xp'), off = (bar ? bar.offsetHeight : 0) + 10;
+    window.scrollTo({ top: $('game').getBoundingClientRect().top + window.pageYOffset - off, behavior: 'smooth' });
+  }
+  function tick() {
+    if (!state) return;
+    state.timeLeft -= 1;
+    if (state.timeLeft <= 0) {
+      state.timeLeft = 0; render();
+      CC.sound.chime();
+      CC.flash('⏰ Time\'s up!', 'Hands off the mouse! Let\'s see your Gold score.');
+      finish(); return;
+    }
+    render();
+  }
+  function render() {
+    var s = state;
+    $('clue').textContent = '"' + s.clue + '"';
+    if (s.level === 'gold') {
+      $('hudLeft').textContent = 'Time: ' + s.timeLeft + 's  ·  Correct: ' + s.correct;
+      $('barFill').style.width = (s.timeLeft / GOLD_SECONDS * 100) + '%';
+    } else {
+      $('hudLeft').textContent = 'Clue ' + (s.index + 1) + ' of ' + s.queue.length;
+      $('barFill').style.width = (s.index / s.queue.length * 100) + '%';
+    }
+    $('hudRight').textContent = 'Streak: ' + s.streak;
+    var hintAt = s.level === 'bronze' ? 1 : s.level === 'silver' ? 2 : 99;
+    Array.prototype.forEach.call(document.querySelectorAll('#answers .ans'), function (b) {
+      b.classList.remove('wrong');
+      b.classList.toggle('glow', s.missesThis >= hintAt && b.dataset.part === s.current.id);
+    });
+  }
+  function advance() {
+    var s = state;
+    s.missesThis = 0;
+    if (s.level === 'gold') s.current = nextGold(s.current.id);
+    else {
+      s.index += 1;
+      if (s.index >= s.queue.length) { finish(); return; }
+      s.current = s.queue[s.index];
+    }
+    s.clue = pickClue(s.current, s.level);
+    render();
+  }
+  function answer(id, btn) {
+    var s = state;
+    if (!s) return;
+    if (id === s.current.id) {
+      CC.sound.click('');
+      s.correct += 1; s.streak += 1;
+      if (s.streak > s.bestStreak) s.bestStreak = s.streak;
+      $('feedback').className = 'feedback good';
+      $('feedback').textContent = (s.streak >= 3 ? 'Correct! ' + s.streak + ' in a row! ' : 'Correct! ') + 'That was the ' + BY_ID[id].name + '.';
+      flash($('clue'), 'pop');
+      advance();
+    } else {
+      CC.sound.click('wrong');
+      s.missesThis += 1; s.totalMisses += 1; s.streak = 0;
+      s.missed[s.current.id] = (s.missed[s.current.id] || 0) + 1;
+      $('feedback').className = 'feedback bad';
+      $('feedback').textContent = 'Not the ' + BY_ID[id].name + '. Read the clue again!';
+      flash($('clue'), 'shake');
+      if (s.level === 'gold' && s.missesThis >= 3) { advance(); return; }
+      render();
+      btn.classList.add('wrong');
+    }
+  }
+  function finish() {
+    var s = state;
+    clearInterval(timerId);
+    state = null;
+    var stars, rank, text, maxScore;
+    if (s.level === 'gold') {
+      var isNew = s.correct > goldBest;
+      if (isNew) { goldBest = s.correct; if (!CC.session()) saveLocalBest(s.correct); }
+      stars = s.correct >= GOLD_3STAR ? 3 : s.correct >= GOLD_2STAR ? 2 : 1;
+      rank = stars === 3 ? 'Master Detective' : stars === 2 ? 'Hardware Hero' : 'Detective in Training';
+      text = 'You found ' + s.correct + ' parts in 60 seconds. Best streak: ' + s.bestStreak + '.' + (isNew ? ' New personal best!' : ' Your best: ' + goldBest + '.');
+      maxScore = 0;
+    } else {
+      stars = s.totalMisses <= 1 ? 3 : s.totalMisses <= 4 ? 2 : 1;
+      var name = s.level === 'bronze' ? 'Bronze' : 'Silver';
+      rank = stars === 3 ? name + ' Detective!' : stars === 2 ? name + ' Detective' : 'Detective in Training';
+      text = 'You found all ' + s.queue.length + ' parts with ' + s.totalMisses + (s.totalMisses === 1 ? ' miss' : ' misses') +
+        '. Best streak: ' + s.bestStreak + '.' +
+        (stars === 3 && s.level === 'bronze' ? ' Ready for Silver next time!' : '') +
+        (stars === 3 && s.level === 'silver' ? ' Ready for the Gold speed round!' : '');
+      maxScore = s.queue.length;
+    }
+    $('resultStars').textContent = '★'.repeat(stars) + '☆'.repeat(3 - stars);
+    $('rank').textContent = rank;
+    var tricky = Object.keys(s.missed).sort(function (a, b) { return s.missed[b] - s.missed[a]; }).slice(0, 3)
+      .map(function (id) { return BY_ID[id].name; });
+    if (tricky.length) text += ' Look again at these in Step 1: ' + tricky.join(', ') + '.';
+    $('resultText').textContent = text;
+    $('againBtn').dataset.level = s.level;
+    showScreen('screenResult');
+    updateBestNote();
+    saveResult({ mission_id: MISSION_ID, activity: 'Part Detective', level: s.level, score: s.correct, max_score: maxScore,
+                 stars: stars, misses: s.totalMisses, best_streak: s.bestStreak, detail: rank });
+  }
+
+  function saveResult(r) {
+    var line = $('saveLine');
+    line.className = 'save-line';
+    if (!CC.session()) {
+      line.textContent = '';
+      var a = document.createElement('a');
+      a.className = 'btn ghost';
+      a.href = '/computer-club/sign-in/?next=' + PAGE;
+      a.textContent = '🔑 Practice round (not saved). Sign in to save your results';
+      line.appendChild(a);
+      return;
+    }
+    line.textContent = 'Saving…';
+    CC.submit('/save-result', r).then(function (res) {
+      if (res.ok) {
+        line.className = 'save-line good';
+        line.textContent = '✓ Saved to your club record. Show your teacher!';
+        CC.toastBadges(res.badges);
+      } else if (res.queued) {
+        line.textContent = res.auth ? '⏳ Kept on this computer. Sign in again and it will be sent.'
+                                    : '⏳ No internet right now. Your result is kept on this computer and will be sent automatically.';
+      } else {
+        line.className = 'save-line bad';
+        line.textContent = 'Not saved: ' + (res.error || 'please tell Mr. EdLo');
+      }
+      CC.statusChip($('status'), PAGE);
+    });
+  }
+
+  function backToMenu() { clearInterval(timerId); state = null; showScreen('screenStart'); updateBestNote(); }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.lvl-btn'), function (b) {
+    b.addEventListener('click', function () { start(b.dataset.level); });
+  });
+  $('againBtn').addEventListener('click', function () { start(this.dataset.level); });
+  $('menuBtn').addEventListener('click', backToMenu);
+  $('quitBtn').addEventListener('click', backToMenu);
+  CC.sound.toggle($('soundBtn'));
+
+  // ── Step 3 Desk Hunt (not recorded) ──
+  var hunt = {};
+  function huntUpdate() {
+    var found = 0, answered = 0;
+    HUNT.forEach(function (id) { if (hunt[id]) answered++; if (hunt[id] === 'found') found++; });
+    $('huntMsg').textContent = answered === HUNT.length
+      ? 'You found ' + found + ' of ' + HUNT.length + ' parts at your desk. The processor, memory and storage are hiding inside the mini PC!'
+      : '';
+  }
+  HUNT.forEach(function (id) {
+    var p = BY_ID[id];
+    var li = el('li'); li.dataset.part = id;
+    li.appendChild(photo(p, 72));
+    var right = el('div', 'hn', p.name);
+    var btns = el('div', 'hb');
+    var f = el('button', 'found-btn', '✓ Found it'); f.type = 'button';
+    var n = el('button', 'none-btn', 'Not at my desk'); n.type = 'button';
+    f.addEventListener('click', function () { hunt[id] = 'found'; li.className = 'found'; CC.sound.click(''); huntUpdate(); });
+    n.addEventListener('click', function () { hunt[id] = 'none'; li.className = 'none'; huntUpdate(); });
+    btns.appendChild(f); btns.appendChild(n); right.appendChild(btns);
+    li.appendChild(right);
+    $('hunt').appendChild(li);
+  });
+})();
+</script>
+</body>
+</html>

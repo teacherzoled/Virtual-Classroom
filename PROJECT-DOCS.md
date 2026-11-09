@@ -64,10 +64,15 @@ with timers, sounds and typing tips (#4), floating timer + tab-name countdown + 
   session = second deploy (Pilot ids, "finished" result type for Weeks 6–9 and Canva/Docs/Slides missions, rank lock,
   Typing Boost, always-open Cadet weeks, hold switches) — **must be live before Cadet Week 6 (~Dec 11)** or Week 6 needs
   its own deploy; (4) Cadet Weeks 3–10 one a week, website only; (5) Pilot Mission 1 around Cadet Week 8.
-- **Next session: build Week 2 · Know Your Computer.** Plan first and get Edwin's OK. Handoff with checklist and a draft
-  plan: the Computer Club project doc `claude/computer-club-handoff.md`. Copy `missions/01-shortcut-ninja/` (the
-  mission template), light the Week 2 card on the hub and add `'know-your-computer'` to `BUILT` in
-  `teacher/index.html`. **No Apps Script change** (Version 3 already lists it; badge "Hardware Hero").
+- **Week 2 · Know Your Computer: BUILT Nov 9** (`computer-club/missions/02-know-your-computer/`, website only, no deploy).
+  Goal: *Identify the 12 main parts of a computer from what each part does* (Edwin's club: desktops with a **mini PC**,
+  so the box is "System unit (mini PC)" and the CPU is the chip inside it). Step 1 cards in three groups (on your desk =
+  Bronze 6 · look closer · inside the mini PC); Step 2 **Part Detective** (clue → click the part; Bronze 6 parts, hint glow
+  after 1 miss; Silver 12, hint after 2; Gold 60 s, no hints, **2★ = 10 correct, 3★ = 16**, Edwin may adjust after the
+  first club day); Step 3 **Desk Hunt** (9 visible parts, Found it / Not at my desk, not recorded). Badge Hardware Hero
+  via `missionPassed`. Realistic part pictures `c02-*.webp` (Edwin, Nov 9: real-looking parts for a recognise-the-part
+  mission; clay style stays for identity items). Test: `e2e-kyc.py`.
+- **Next: rank-system session (deploy 2)**, plan first: must be live before Cadet Week 6 (~Dec 11).
 - **Working rules that held:** one step at a time with Edwin's screenshots; branch → PR → merge only after Edwin says
   "merge it"; then `git pull --ff-only` into his local folder (needs delete permission once per session, or git leaves
   `.git/index.lock`).
@@ -1607,7 +1612,10 @@ Nothing is shared with `edlo-lms`, `VC-LMS` or `edlo-gemini`. Club members are N
   `x1–x6` XP levels (live bar + level-up pop-up; level 6+ = Legend) · `l-bronze/silver/gold` the hub's "Pick your level"
   · `r-cadet/pilot/commander` saved for the rank system. Badge id → picture lives in `BADGE_IMG` in `club.js`
   (`CC.badgeIcon` falls back to the Apps Script emoji), so **no Apps Script deploy** for pictures. Small UI symbols stay
-  emoji. The hub title shows `x3-coder` (laptop) until the students' Week 7 club logo replaces it. **New mission:** its card uses
+  emoji. **Mission content pictures (Nov 9):** `c02-*.webp` (12 computer parts, Week 2) are **realistic** unbranded product
+  shots, not clay: students must recognise the real part on their desk. They sit on a light photo tile (`.ph`) in every
+  theme (black objects vanish on the night theme). ~9 KB each, 111 KB for 12. Prompts: project doc
+  `claude/computer-club-week2-part-prompts.md`. The hub title shows `x3-coder` (laptop) until the students' Week 7 club logo replaces it. **New mission:** its card uses
   `<img src="/computer-club/assets/mNN-….webp" width="72" height="72" alt="">`; its page title uses `.title-ico`.
   Raw PNGs go in `computer-club/assets/originals/` (ignored by git).
 - **Boards (hub, "Club Standings"):** Overall XP top 10 (+ the student's own row and the student just ahead) ·
