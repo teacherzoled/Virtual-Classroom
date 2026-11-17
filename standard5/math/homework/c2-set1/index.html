@@ -840,7 +840,7 @@ body.theme-night .lms-badge.busy{color:#74C0FC;}
   <header>
     <div class="badge">Standard 5 &nbsp;·&nbsp; Mathematics · Cycle 2 · Homework</div>
     <h1>🏠 Problem Set 1 — Patterns, Progressions &amp; Mental Calculation</h1>
-    <p class="subtitle">Standard 5 Mathematics · Cycle 2 · Homework · MA 2.16–2.17, MA 3.25 · 40 marks · 10 questions · Due Monday, November 16</p>
+    <p class="subtitle">Standard 5 Mathematics · Cycle 2 · Homework · MA 2.16–2.17, MA 3.25 · 40 marks · 10 questions · Due Friday, November 20</p>
   </header>
 
   <!-- LOCK SCREEN -->
@@ -912,7 +912,7 @@ const PK_KEY     = 'vc-passkey';
 const WORKER_URL = 'https://edlo-gemini.smartstandardsix.workers.dev/';
 const IDLE_SECONDS = 90;   /* idle-blur; 90s minimum for a maths check so thinking time never blurs */
 const TOTAL_POINTS = 40;
-const REVEAL_FROM = "2026-11-17";   /* answers + explanations show from this date (device clock; homework only) */
+const REVEAL_FROM = "2026-11-21";   /* answers + explanations show from this date (device clock; homework only) */
 
 /* ═══ SITE SESSION (from /edlo-utils.js — the same sign-in every Science test uses) ═══ */
 const SUBJECT       = "Mathematics";
@@ -1034,7 +1034,7 @@ function answerDisplay(it,raw){
   if(it.type==='match'){ const r=Array.isArray(raw)?raw:[]; return it.parts.map((p,i)=>p.label+': '+(p.kind==='money'?'$':'')+(r[i]||'(blank)')).join('  ·  '); }
   return (raw&&raw.length)?raw:'(blank)'; }
 function revealed(){ const d=new Date(); const t=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); return t>=REVEAL_FROM; }
-const REVEAL_TEXT='Answers and explanations open on Tuesday, November 17 — after everyone has handed in.';
+const REVEAL_TEXT='Answers and explanations open on Saturday, November 21 — after everyone has handed in.';
 
 /* ═══ SUBMIT → PASSKEY → GRADE (server-side, KV) ═══ */
 function handleSubmit(){ if(testSubmitted)return; if(QNUMS.filter(qnAnswered).length<QNUMS.length)return; clearTimeout(idleTimer);

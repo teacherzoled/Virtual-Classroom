@@ -753,9 +753,9 @@ would silently close or un-schedule the test.
    (c) ✅ DONE (Edwin tested, works as expected, Oct 25) — Open `tests/c1-unit2/_source/…_ONLINE_ADMIN.html?dev=1` locally: **Auto-Fill must score 56/56, Fill Wrong 0/56**.
    (d) Teacher Dashboard → 🔐 Open & Close Tests → the test should be listed; open it (or schedule it) on Fri Oct 30
    and close it after. All 56 marks are online — nothing to mark by hand.
-15. **Deploy Maths Cycle 2 Problem Set 1 — Patterns, Progressions & Mental Calculation (homework) — goes out Fri Nov 13, due Mon Nov 16.**
+15. **Deploy Maths Cycle 2 Problem Set 1 — Patterns, Progressions & Mental Calculation (homework) — goes out Fri Nov 13, due ~~Mon Nov 16~~ **Fri Nov 20** (extended Nov 17).**
    KV `sy2627-std5-c2-homework1-math`, 19 items / 10 questions, 40 marks (37 Worker-marked, 3 AI-marked: q9a). MA 2.16–2.17, MA 3.25.
-   Masters: Maths folder `Assessment/Cycle Two/homework/Problem Set 1/`. Homework = no anti-cheat; answers + explanations show from Tue Nov 17.
+   Masters: Maths folder `Assessment/Cycle Two/homework/Problem Set 1/`. Homework = no anti-cheat; answers + explanations show from ~~Tue Nov 17~~ **Sat Nov 21** (`REVEAL_FROM` moved with the due date, Nov 17).
    (a) ✅ DONE — KV entry present on the live Worker (Nov 12 check: `mode:'questions'` → `open:false`, not `NO_KEY_FOR_TEST`).
    (b) ✅ DONE Nov 12 — student page placed at `homework/c2-set1/index.html` (checked: no answers, no DEV code, questions only from KV);
    ADMIN + KV JSON in the gitignored `homework/c2-set1/_source/`; hub card retitled from the old placeholder
